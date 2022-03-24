@@ -13,6 +13,7 @@ A project by [multi](https://multi.coop)
 ## Project setup
 
 ```
+nvm use
 npm install
 ```
 
