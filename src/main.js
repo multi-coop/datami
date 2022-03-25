@@ -3,7 +3,7 @@ import vueCustomElement from 'vue-custom-element'
 import './registerServiceWorker'
 import store from './store'
 
-import GitributeFile from './components/gitribute-file.vue'
+import GitributeFile from './components/edition/gitribute-file.vue'
 
 Vue.config.productionTip = false
 

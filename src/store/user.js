@@ -1,6 +1,8 @@
 export const user = {
   state: {
-    test: 'testing user'
+    test: 'testing user',
+    tokenGitlab: undefined,
+    tokenGithub: undefined
   },
   getters: {
   },
