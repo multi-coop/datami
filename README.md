@@ -54,32 +54,32 @@ An open source project by **[multi](https://multi.coop)**
 
 ## Project setup
 
-```
+```bash
 nvm use
 npm install
 ```
 
 ### Compiles and hot-reloads for development
 
-```
+```bash
 npm run serve
 ```
 
 ### Compiles and minifies for production
 
-```
+```bash
 npm run build
 ```
 
 ### Run your unit tests
 
-```
+```bash
 npm run test:unit
 ```
 
 ### Lints and fixes files
 
-```
+```bash
 npm run lint
 ```
 
