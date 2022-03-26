@@ -1,4 +1,12 @@
-# gitribute
+<!-- ![LOGO-GITRIBUTE](./src/assets/logo_GITRIBUTE.png) -->
+
+<img src="./src/assets/logo_GITRIBUTE.png" alt="drawing" width="120" style="float: left; margin-right:10px"/>
+
+# Gitribute
+
+**Contribute easily with git** (but without seing it)
+
+<br>
 
 This project aims to create a serie of widgets to interact with Gitlab or Github :
 
@@ -6,7 +14,9 @@ This project aims to create a serie of widgets to interact with Gitlab or Github
 - allow unidentified users to push on a separate branch and automatically create a pull request ;
 - create a set of components for modular uses : dataviz, edition, ...
 
-A project by [multi](https://multi.coop)
+---
+
+An open source project by **[multi](https://multi.coop)**
 
 ---
 
