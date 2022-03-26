@@ -4,13 +4,13 @@
 
 <!-- # Gitribute -->
 
-**Contribute easily with git** (but without seing it)
+**Contribute easily with git** (but without seeing it)
 
 <br>
 
 This project aims to create a serie of widgets to interact with Gitlab or Github :
 
-- edit data stored on github or gitla (csv or md files) ;
+- edit data stored on github or gitlab (csv or md files) ;
 - allow unidentified users to push on a separate branch and automatically create a pull request ;
 - create a set of components for modular uses : dataviz, edition, ...
 
