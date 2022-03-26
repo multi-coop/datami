@@ -38,26 +38,26 @@
       </div>
       <div class="column is-half">
         <p>
-          response:
+          fileInfos:
           <br>
           <code>
             <pre>
-            {{ response }}
+            {{ fileInfos }}
           </pre>
           </code>
         </p>
       </div>
-      <!-- <div class="column is-half">
+      <div class="column is-half">
         <p>
-          gitInfos:
+          fileRaw:
           <br>
           <code>
             <pre>
-            {{ gitInfos }}
+            {{ fileRaw }}
           </pre>
           </code>
         </p>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -88,7 +88,8 @@ export default {
       debug: true,
       fileType: undefined,
       gitObj: undefined,
-      response: undefined
+      fileInfos: undefined,
+      fileRaw: undefined
     }
   },
   computed: {
@@ -114,7 +115,8 @@ export default {
     // console.log('C > mount > GitributeFile > this.gitInfos : ', this.gitInfos)
     this.gitObj = this.getGitInfosObj(this.gitfile)
     this.fileType = this.gitObj.filetype
-    this.response = await this.getFileData(this.gitObj)
+    this.fileInfos = await this.getFileData(this.gitObj)
+    this.fileRaw = await this.getFileDataRaw(this.gitObj)
   },
   methods: {
     ...mapActions({

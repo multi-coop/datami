@@ -9,7 +9,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@gitbeaker/browser": "^35.6.0",
     "axios": "^0.26.0",
     "core-js": "^3.8.3",
     "gray-matter": "^4.0.3",

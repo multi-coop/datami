@@ -21,21 +21,26 @@ export const gitProviders = {
 }
 
 export const buildApiRoots = (gitInfos) => {
-  let apiRepo, apiFile
+  let apiRepo, apiFile, apiFileBase, apiFileRaw
   if (gitInfos.provider === 'github') {
     // cf : https://docs.github.com/en/rest/reference/repos#contents
     apiRepo = `${gitInfos.api}/repos/${gitInfos.orga}/${gitInfos.repo}`
-    apiFile = `${apiRepo}/contents/${gitInfos.filepath}?ref=${gitInfos.branch}`
+    apiFileBase = `${apiRepo}/contents/${gitInfos.filepath}`
+    apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
+    apiFileRaw = `${gitInfos.rawRoot}${gitInfos.filepath}`
   } else {
     // cf : https://docs.gitlab.com/ee/api/repository_files.html
     const URIrepo = encodeURIComponent(`${gitInfos.orga}/${gitInfos.repo}`)
     const URIfilepath = encodeURIComponent(gitInfos.filepath)
     apiRepo = `${gitInfos.api}/projects/${URIrepo}`
-    apiFile = `${apiRepo}/repository/files/${URIfilepath}?ref=${gitInfos.branch}`
+    apiFileBase = `${apiRepo}/repository/files/${URIfilepath}`
+    apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
+    apiFileRaw = `${apiFileBase}/raw?ref=${gitInfos.branch}`
   }
   return {
     repo: apiRepo,
-    file: apiFile
+    file: apiFile,
+    fileRaw: apiFileRaw
   }
 }
 
@@ -61,7 +66,6 @@ export const extractGitInfos = (str) => {
     gitRef = gitProviders.gitlab
     const urlCut = str.split('//')
     const host = urlCut[1].split('/')[0]
-    // console.log('-U- utilsGitUrl > extractGitInfos > host : ', host)
     trimmed = str.replace(gitRef.root, '')
     split = trimmed.split('/')
     orga = split[0]
@@ -109,6 +113,7 @@ export const extractGitInfos = (str) => {
   const apiRoots = buildApiRoots(gitInfos)
   gitInfos.apiRepo = apiRoots.repo
   gitInfos.apiFile = apiRoots.file
+  gitInfos.apiFileRaw = apiRoots.fileRaw
 
   return gitInfos
 }
