@@ -81,6 +81,10 @@ export default {
     usertoken: {
       default: '',
       type: String
+    },
+    locale: {
+      default: 'en',
+      type: String
     }
   },
   data () {
