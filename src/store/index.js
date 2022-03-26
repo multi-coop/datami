@@ -11,22 +11,35 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     test: 'testing',
-    gitInfos: undefined
+    gitInfos: []
   },
   getters: {
+    getGitObj: (state) => {
+      return state.gitInfos
+    },
+    getGitInfosObj: (state) => (id) => {
+      const gitInfosObj = state.gitInfos.find(gitObj => gitObj.id === id)
+      return gitInfosObj
+    }
   },
   mutations: {
-    setGitInfos (state, gitInfos) {
-      // console.log('S-index > M > setGitInfos > gitInfos : ', gitInfos)
-      state.gitInfos = gitInfos
+    setGitInfos (state, gitInfosObject) {
+      // console.log('S-index > M > setGitInfos > gitInfosObject : ', gitInfosObject)
+      const index = state.gitInfos.findIndex(item => item.id === gitInfosObject.id)
+      if (index !== -1) {
+        Vue.set(state.gitInfos, index, gitInfosObject)
+      } else {
+        state.gitInfos.push(gitInfosObject)
+      }
+      // state.gitInfos[gitInfosObject.id] = gitInfosObject
     }
   },
   actions: {
     getGitInfos ({ commit }, gitUrl) {
       // console.log('S-index > A > getGitInfos > gitUrl : ', gitUrl)
-      const gitInfos = extractGitInfos(gitUrl)
-      // console.log('S-index > A > getGitInfos > gitInfos : ', gitInfos)
-      commit('setGitInfos', gitInfos)
+      const gitInfosObject = extractGitInfos(gitUrl)
+      // console.log('S-index > A > getGitInfos > gitInfosObject : ', gitInfosObject)
+      commit('setGitInfos', gitInfosObject)
     }
   },
   modules: {

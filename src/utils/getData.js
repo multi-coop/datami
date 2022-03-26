@@ -3,15 +3,10 @@ import axios from 'axios'
 
 export const $axios = axios
 
-export const convertFileUrl = (gitInfos) => {
-  const url = `${gitInfos.gitRawRoot}${gitInfos.remainingString}`
-  console.log('U > convertUrl > url : ', url)
-  return url
-}
-
-export async function getData (gitInfos, headers = undefined) {
-  const url = convertFileUrl(gitInfos)
-  console.log('U > getUrl > url : ', url)
+export async function getFileData (gitInfos, headers = undefined) {
+  const url = gitInfos.apiFile
+  console.log('\n-U- getData > getFileData > url : ', url)
   const req = await $axios.get(url)
   console.log('U > getUrl > req : ', req)
+  return req.data
 }

@@ -13,6 +13,42 @@
       class="columns is-multiline">
       <div class="column is-half">
         <p>
+          gitfile:
+          <code>
+            {{ gitfile }}
+          </code>
+        </p>
+        <p>
+          fileType:
+          <code>
+            {{ fileType }}
+          </code>
+        </p>
+      </div>
+      <div class="column is-half">
+        <p>
+          gitObj:
+          <br>
+          <code>
+            <pre>
+            {{ gitObj }}
+          </pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-half">
+        <p>
+          response:
+          <br>
+          <code>
+            <pre>
+            {{ response }}
+          </pre>
+          </code>
+        </p>
+      </div>
+      <!-- <div class="column is-half">
+        <p>
           gitInfos:
           <br>
           <code>
@@ -21,27 +57,13 @@
           </pre>
           </code>
         </p>
-      </div>
-      <div class="column is-half">
-        <p>
-          gitfile:
-          <br>
-          <code>
-            <pre>
-            {{ gitfile }}
-          </pre>
-          </code>
-          https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/jailbreak-devient-multi-fr.md
-          <br>
-          https://gitlab.com/multi-coop/gitribute-content-test/-/raw/main/texts/jailbreak-devient-multi-fr.md
-        </p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixin } from '@/utils/mixins.js'
 
 export default {
@@ -64,7 +86,9 @@ export default {
   data () {
     return {
       debug: true,
-      fileType: undefined
+      fileType: undefined,
+      gitObj: undefined,
+      response: undefined
     }
   },
   computed: {
@@ -74,17 +98,23 @@ export default {
       user: (state) => state['git-user'].test,
       filters: (state) => state['git-filters'].test,
       data: (state) => state['git-data'].test
+    }),
+    ...mapGetters({
+      getGitObj: 'getGitObj',
+      getGitInfosObj: 'getGitInfosObj'
     })
   },
   beforeMount () {
-    console.log('C > beforeMount > GitributeFile > this.gitfile : ', this.gitfile)
-    if (!this.gitInfos) {
+    console.log('\nC > beforeMount > GitributeFile > this.gitfile : ', this.gitfile)
+    if (!this.getGitInfos[this.gitfile]) {
       this.getGitInfos(this.gitfile)
     }
   },
-  mounted () {
-    console.log('C > mount > GitributeFile > this.gitInfos : ', this.gitInfos)
-    this.getData(this.gitInfos)
+  async mounted () {
+    // console.log('C > mount > GitributeFile > this.gitInfos : ', this.gitInfos)
+    this.gitObj = this.getGitInfosObj(this.gitfile)
+    this.fileType = this.gitObj.filetype
+    this.response = await this.getFileData(this.gitObj)
   },
   methods: {
     ...mapActions({
