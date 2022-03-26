@@ -1,8 +1,8 @@
-<!-- ![LOGO-GITRIBUTE](./src/assets/logo_GITRIBUTE.png) -->
+![LOGO-GITRIBUTE](./src/assets/logo_GITRIBUTE_title.png)
 
-<img src="./src/assets/logo_GITRIBUTE.png" alt="drawing" width="120" style="float: left; margin-right:10px"/>
+<!-- <img src="./src/assets/logo_GITRIBUTE_title.png" alt="drawing" width="120" style="float: left; margin-right:10px"/> -->
 
-# Gitribute
+<!-- # Gitribute -->
 
 **Contribute easily with git** (but without seing it)
 
