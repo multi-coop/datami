@@ -41,8 +41,8 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
-  - [ ] On each preview (for every file type), switch between preview and edition ;
-  - [ ] Add a `Save` button + dialog : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
+  - [ ] On each preview (for every file type), switch between preview and edition view ;
+  - [ ] Add a `Save` button + dialog + actions : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
 
 ... and just for a POC, that's would be greaaaaat ...
 
