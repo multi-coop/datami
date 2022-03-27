@@ -10,6 +10,8 @@ export const defaultCsvOptions = {
   asJson: false
 }
 
+// cf : https://stackoverflow.com/questions/28543821/convert-csv-lines-into-javascript-objects
+
 export const parseLine = (line) => JSON.parse(`[${line}]`)
 
 export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
