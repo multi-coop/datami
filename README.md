@@ -30,7 +30,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] Skeleton for `vue-custom-element` / `vuejs` : vuex, dependencies, linting, ... ;
 - [x] First utils functions and mixins to process a file's gitlab/github url ;
   - [x] Get all git infos from file's url ;
-  - [x] Get file's raw data from provider ;
+  - [x] Get file's raw data from provider ;
 - [ ] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
 - [ ] Prepare a simple multi-language / translation solution ;
 - [ ] Create the first main components :
@@ -38,11 +38,11 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [ ] Preview for a `.csv` file ;
   - [ ] Preview for a `.json` or `.geojson` file ;
   - [ ] Component to update user's token (if user has a specific one for direct commits) ;
-- [ ] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
+- [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
   - [ ] On each preview (for every file type), switch between preview and edition ;
-  - [ ] `Save` button + dialog : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
+  - [ ] Add a `Save` button + dialog : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
 
 ... and just for a POC, that's would be greaaaaat ...
 
