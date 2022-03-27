@@ -27,7 +27,7 @@ This project is currently under early development...
 
 The **roadmap** for a first proof of concept (POC) is the following :
 
-- [x] Skeleton for `vue-custom-element` / `vuejs` ;
+- [x] Skeleton for `vue-custom-element` / `vuejs` : vuex, dependencies, linting, ... ;
 - [x] First utils functions and mixins to process a file's gitlab/github url ;
   - [x] Get all git infos from file's url ;
   - [x] Get file's raw data from provider ;

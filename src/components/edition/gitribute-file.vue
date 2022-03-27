@@ -59,6 +59,19 @@
         </p>
       </div>
     </div>
+
+    <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+    <div v-if="['csv'].includes(fileType)">
+      TO DO >>> csv preview component
+    </div>
+
+    <div v-if="['json', 'geojson'].includes(fileType)">
+      TO DO >>> json preview component
+    </div>
+
+    <div v-if="['md'].includes(fileType)">
+      TO DO >>> md preview component
+    </div>
   </div>
 </template>
 
@@ -78,6 +91,10 @@ export default {
       default: '',
       type: String
     },
+    options: {
+      default: 'en',
+      type: String
+    },
     usertoken: {
       default: '',
       type: String
@@ -93,7 +110,8 @@ export default {
       fileType: undefined,
       gitObj: undefined,
       fileInfos: undefined,
-      fileRaw: undefined
+      fileRaw: undefined,
+      fileOptions: undefined
     }
   },
   computed: {
@@ -114,6 +132,8 @@ export default {
     if (!this.getGitInfos[this.gitfile]) {
       this.getGitInfos(this.gitfile)
     }
+    // build options object
+    this.fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
   },
   async mounted () {
     // console.log('C > mount > GitributeFile > this.gitInfos : ', this.gitInfos)
