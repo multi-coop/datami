@@ -252,3 +252,13 @@ We only used open source packages and technologies, coz' that's what we do... :
 - [`Material Design`](https://materialdesignicons.com/) fonts: for icons ;
 - [`Axios`](https://www.npmjs.com/package/axios): for requests to Github or Gitlab API ;
 - and a lot of Stackoverflow...
+
+---
+
+# Schema
+
+We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brainstorming process...
+
+<br>
+
+![SCHEMA-GITRIBUTE](./src/assets/Multi-gitribute-schema-01.png)
