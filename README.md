@@ -245,10 +245,10 @@ We only used open source packages and technologies, coz' that's what we do... :
 
 - `Vue.js` (2.x) : yes we like this framework a lot...
 - `VueX`: the store ;
-- `vue-custom-element`: wrapper for vue web components ;
-- `gray-matter`: package to convert `md` or `yaml` content to object ;
-- `Showdown` : package to convert `md` content to `html` ;
-- `Bulma` and `Buefy` : as UI frameworks for vue ;
-- `Material Design` fonts: for icons ;
-- `Axios`: for requests to Github or Gitlab API ;
+- [`vue-custom-element`](https://github.com/karol-f/vue-custom-element): wrapper for vue web components ;
+- [`gray-matter`](https://www.npmjs.com/package/gray-matter): package to convert `md` or `yaml` content to object ;
+- [`Showdown`](https://www.npmjs.com/package/showdown) : package to convert `md` content to `html` ;
+- [`Bulma`](https://bulma.io/) and [`Buefy`](https://buefy.org/) : as UI frameworks for vue ;
+- [`Material Design`](https://materialdesignicons.com/) fonts: for icons ;
+- [`Axios`](https://www.npmjs.com/package/axios): for requests to Github or Gitlab API ;
 - and a lot of Stackoverflow...
