@@ -101,14 +101,14 @@ module.exports = {
       selfClosingTag: 'never'
     }],
     'vue/html-indent': [
-      "error",
+      'error',
       2,
       {
-        "attribute": 1,
-        "baseIndent": 1,
-        "closeBracket": 0,
-        "alignAttributesVertically": true,
-        "ignores": []
+        attribute: 1,
+        baseIndent: 1,
+        closeBracket: 0,
+        alignAttributesVertically: true,
+        ignores: []
       }
     ],
     'vue/script-indent': ['error', 2, {
@@ -121,7 +121,7 @@ module.exports = {
         max: 1
       },
       multiline: {
-        max: 1,
+        max: 1
         // allowFirstLine: false
       }
     }],

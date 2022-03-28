@@ -45,7 +45,7 @@ export const buildApiRoots = (gitInfos) => {
 }
 
 export const extractGitInfos = (str) => {
-  // console.log('-U- utilsGitUrl > extractGitInfos > str : ', str)
+  // console.log('\nU > utilsGitUrl > extractGitInfos > str : ', str)
   let provider, orga, repo, branch, rawRoot, publicRoot, remaining, api
   let gitRef, trimmed, split, rawUrl
   let filefullname, filename, filetype

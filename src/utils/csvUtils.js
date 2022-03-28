@@ -1,8 +1,8 @@
 export const separators = [
-  { sep: ',', name: 'comma' },
-  { sep: '|', name: 'pipe' },
-  { sep: ';', name: 'semicolon' },
-  { sep: '\t', name: 'tab' }
+  { separator: ',', name: 'comma' },
+  { separator: '|', name: 'pipe' },
+  { separator: ';', name: 'semicolon' },
+  { separator: '\t', name: 'tab' }
 ]
 
 export const defaultCsvOptions = {
@@ -15,32 +15,47 @@ export const defaultCsvOptions = {
 export const parseLine = (line) => JSON.parse(`[${line}]`)
 
 export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
+  // console.log('\nU > csvToObject > csvRaw : \n', csvRaw)
+  // console.log('U > csvToObject > options : ', options)
+  let headers, reduced
+
   // split data into lines
   const [headerLine, ...lines] = csvRaw.split('\n')
 
   // get headers
-  const headers = parseLine(headerLine)
+  if (options.asJson) {
+    headers = parseLine(headerLine)
+  } else {
+    headers = headerLine.split(options.separator)
+  }
+  headers = options.abstractHeaders ? { ...headers } : headers
+  // console.log('U > csvToObject > headers : ', headers)
+  // console.log('U > csvToObject > lines : ', lines)
 
   // create object from parsing lines
   const objects = lines
+    .filter(l => l !== '')
     .map((line, index) => {
       let lineParsed
 
       // parse line
       if (options.asJson) {
-        lineParsed = line.split(options.separator)
-      } else {
         lineParsed = parseLine(line)
+      } else {
+        lineParsed = line.split(options.separator)
       }
+      // console.log(`U > csvToObject > ${index} - lineParsed : `, lineParsed)
 
       // reduce values array
-      return lineParsed.reduce(
-        // reducer callback
-        (object, value, index) => ({
-          ...object,
-          [headers[index]]: value
-        })
-      )
+      if (options.abstractHeaders) {
+        reduced = { ...lineParsed }
+      } else {
+        reduced = lineParsed.reduce((ac, a, idx) => ({ ...ac, [headers[idx]]: a }), {})
+      }
+
+      // console.log(`U > csvToObject > ${index} - reduced : `, reduced)
+      // console.log('...')
+      return reduced
     })
 
   // return csv object

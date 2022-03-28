@@ -53,17 +53,32 @@
           </div>
         </div>
 
-        <!-- PREVIEWS - SWITCH BY FILE TYPE -->
-        <div v-if="['csv'].includes(fileType)">
-          TO DO >>> csv preview component
-        </div>
+        <!-- TO DO - USER NAVBAR -->
 
-        <div v-if="['json', 'geojson'].includes(fileType)">
-          TO DO >>> json preview component
+        <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+
+        <div v-if="['csv'].includes(fileType)">
+          <PreviewCsv
+            :git-obj="gitObj"
+            :file-infos="fileInfos"
+            :file-options="fileOptions"
+            :file-raw="fileRaw"/>
         </div>
 
         <div v-if="['md'].includes(fileType)">
-          TO DO >>> md preview component
+          <PreviewMd
+            :git-obj="gitObj"
+            :file-infos="fileInfos"
+            :file-options="fileOptions"
+            :file-raw="fileRaw"/>
+        </div>
+
+        <div v-if="['json', 'geojson'].includes(fileType)">
+          <PreviewJson
+            :git-obj="gitObj"
+            :file-infos="fileInfos"
+            :file-options="fileOptions"
+            :file-raw="fileRaw"/>
         </div>
       </div>
     </div>
@@ -73,9 +88,17 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixin } from '@/utils/mixins.js'
+import PreviewCsv from '@/components/previews/PreviewCsv'
+import PreviewMd from '@/components/previews/PreviewMd'
+import PreviewJson from '@/components/previews/PreviewJson'
 
 export default {
   name: 'GitributeFile',
+  components: {
+    PreviewCsv,
+    PreviewMd,
+    PreviewJson
+  },
   mixins: [mixin],
   props: {
     msg: {

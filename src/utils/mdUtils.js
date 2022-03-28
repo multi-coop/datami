@@ -1,8 +1,12 @@
 import matter from 'gray-matter'
 
+global.Buffer = global.Buffer || require("buffer").Buffer; // eslint-disable-line
+
 export const $matter = matter
 
-export const mdToObject = (mdRaw) => {
+export const mdToObject = (mdRaw, options) => {
+  console.log('\nU > mdToObject > mdRaw : \n', mdRaw)
+  console.log('U > mdToObject > options : ', options)
   const mdData = matter(mdRaw)
   const fileData = {
     data: mdData.data,
