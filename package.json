@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.26.0",
+    "buefy": "^0.9.19",
     "core-js": "^3.8.3",
     "gray-matter": "^4.0.3",
     "register-service-worker": "^1.7.2",

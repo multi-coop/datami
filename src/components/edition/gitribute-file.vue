@@ -1,76 +1,71 @@
 <template>
-  <div class="">
-    <h1>{{ msg }}</h1>
-    <!--
-    <h2>{{ user }}</h2>
-    <h2>{{ data }}</h2>
-    <h2>{{ filters }}</h2>
-    -->
+  <div class="container">
+    <div class="content px-4 py-4">
+      <div class="">
+        <p class="is-size-3">
+          <b-icon
+            icon="home"/>
+          {{ msg }}
+        </p>
 
-    <!-- DEBUG -->
-    <div
-      v-if="debug"
-      class="columns is-multiline">
-      <div class="column is-half">
-        <p>
-          gitfile:
-          <code>
-            {{ gitfile }}
-          </code>
-        </p>
-        <p>
-          fileType:
-          <code>
-            {{ fileType }}
-          </code>
-        </p>
-      </div>
-      <div class="column is-half">
-        <p>
-          gitObj:
-          <br>
-          <code>
-            <pre>
-            {{ gitObj }}
-          </pre>
-          </code>
-        </p>
-      </div>
-      <div class="column is-half">
-        <p>
-          fileInfos:
-          <br>
-          <code>
-            <pre>
-            {{ fileInfos }}
-          </pre>
-          </code>
-        </p>
-      </div>
-      <div class="column is-half">
-        <p>
-          fileRaw:
-          <br>
-          <code>
-            <pre>
-            {{ fileRaw }}
-          </pre>
-          </code>
-        </p>
-      </div>
-    </div>
+        <!-- DEBUG -->
+        <div
+          v-if="debug"
+          class="columns is-multiline">
+          <div class="column is-full">
+            <p>
+              gitfile:
+              <code>
+                {{ gitfile }}
+              </code>
+            </p>
+            <p>
+              fileType:
+              <code>{{ fileType }}</code>
+            </p>
+          </div>
+          <div class="column is-one-third">
+            <p>
+              gitObj:
+              <br>
+              <code>
+                <pre>{{ gitObj }}</pre>
+              </code>
+            </p>
+          </div>
+          <div class="column is-one-third">
+            <p>
+              fileInfos:
+              <br>
+              <code>
+                <pre>{{ fileInfos }}</pre>
+              </code>
+            </p>
+          </div>
+          <div class="column is-one-third">
+            <p>
+              fileRaw:
+              <br>
+              <code>
+                <pre>{{ fileRaw }}</pre>
+              </code>
+            </p>
+          </div>
+        </div>
 
-    <!-- PREVIEWS - SWITCH BY FILE TYPE -->
-    <div v-if="['csv'].includes(fileType)">
-      TO DO >>> csv preview component
-    </div>
+        <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+        <div v-if="['csv'].includes(fileType)">
+          TO DO >>> csv preview component
+        </div>
 
-    <div v-if="['json', 'geojson'].includes(fileType)">
-      TO DO >>> json preview component
-    </div>
+        <div v-if="['json', 'geojson'].includes(fileType)">
+          TO DO >>> json preview component
+        </div>
 
-    <div v-if="['md'].includes(fileType)">
-      TO DO >>> md preview component
+        <div v-if="['md'].includes(fileType)">
+          TO DO >>> md preview component
+        </div>
+      </div>
     </div>
   </div>
 </template>
