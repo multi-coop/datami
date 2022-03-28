@@ -5,6 +5,7 @@ import store from './store'
 
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.min.css'
+import '@mdi/font/css/materialdesignicons.min.css'
 
 import GitributeFile from './components/edition/gitribute-file.vue'
 
