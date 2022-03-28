@@ -1,6 +1,5 @@
 <template>
-  <div class="">
-    PreviewMd
+  <div class="PreviewMd">
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -13,15 +12,25 @@
         </p>
       </div>
     </div>
+    <div>
+      <ShowDown
+        :markdown="content"
+        flavor="github"/>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
+import ShowDown from '@/components/previews/ShowDown'
 
 export default {
   name: 'PreviewMd',
+  components: {
+    ShowDown
+    // VueShowdown
+  },
   mixins: [mixinMd],
   props: {
     gitObj: {
@@ -39,12 +48,16 @@ export default {
     fileRaw: {
       default: '',
       type: String
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
     return {
-      debug: true,
-      data: undefined
+      data: null,
+      content: null
     }
   },
   computed: {
@@ -58,7 +71,9 @@ export default {
       if (next && next !== '') {
         // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
         // console.log('C > PreviewMd > watch > fileRaw > this.fileOptions : ', this.fileOptions)
-        this.data = this.mdToObject(next, this.fileOptions)
+        const dataRaw = this.mdToObject(next, this.fileOptions)
+        this.data = dataRaw.data
+        this.content = dataRaw.content
       }
     }
   },

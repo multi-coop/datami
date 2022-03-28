@@ -7,18 +7,18 @@
             icon="home"/>
           {{ msg }}
         </p>
+        <p>
+          gitfile:
+          <code>
+            {{ gitfile }}
+          </code>
+        </p>
 
         <!-- DEBUG -->
         <div
           v-if="debug"
           class="columns is-multiline">
           <div class="column is-full">
-            <p>
-              gitfile:
-              <code>
-                {{ gitfile }}
-              </code>
-            </p>
             <p>
               fileType:
               <code>{{ fileType }}</code>
@@ -62,7 +62,8 @@
             :git-obj="gitObj"
             :file-infos="fileInfos"
             :file-options="fileOptions"
-            :file-raw="fileRaw"/>
+            :file-raw="fileRaw"
+            :debug="debug"/>
         </div>
 
         <div v-if="['md'].includes(fileType)">
@@ -70,7 +71,8 @@
             :git-obj="gitObj"
             :file-infos="fileInfos"
             :file-options="fileOptions"
-            :file-raw="fileRaw"/>
+            :file-raw="fileRaw"
+            :debug="debug"/>
         </div>
 
         <div v-if="['json', 'geojson'].includes(fileType)">
@@ -78,7 +80,8 @@
             :git-obj="gitObj"
             :file-infos="fileInfos"
             :file-options="fileOptions"
-            :file-raw="fileRaw"/>
+            :file-raw="fileRaw"
+            :debug="debug"/>
         </div>
       </div>
     </div>
@@ -120,11 +123,14 @@ export default {
     locale: {
       default: 'en',
       type: String
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
     return {
-      debug: true,
       fileType: undefined,
       gitObj: undefined,
       fileInfos: undefined,

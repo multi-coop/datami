@@ -14,10 +14,12 @@
     "buefy": "^0.9.19",
     "buffer": "^6.0.3",
     "core-js": "^3.8.3",
+    "document-register-element": "^1.14.10",
     "gray-matter": "^4.0.3",
     "register-service-worker": "^1.7.2",
     "vue": "^2.6.14",
     "vue-custom-element": "^3.3.0",
+    "vue-showdown": "^3.1.0",
     "vuex": "^3.6.2",
     "webpack": "^5.70.0"
   },

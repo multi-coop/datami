@@ -4,7 +4,7 @@
 
 ---
 <!-- # Gitribute -->
-**Contribute easily with git** (but without seeing it)
+**Contribute easily with git** (but without having to use Github or Gitlab)
 
 ---
 
@@ -21,7 +21,7 @@ This project aims to create a serie of widgets to interact with Gitlab or Github
 
 ---
 
-## Work in progress... be patient guys :)
+## Work in progress... be patient guys (or help us by contributing) :)
 
 This project is currently under early development...
 
@@ -31,13 +31,15 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] First utils functions and mixins to process a file's gitlab/github url ;
   - [x] Get all git infos from file's url ;
   - [x] Get file's raw data from provider ;
-- [ ] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
+  - [x] Format file's raw data to expected structures (from `md` or `csv` to objects) ;
+- [x] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
 - [ ] Prepare a simple multi-language / translation solution ;
-- [ ] Create the first main components :
-  - [ ] Preview for a `.md` file ;
-  - [ ] Preview for a `.csv` file ;
+- [x] Create the first main components :
+  - [x] Preview for a `.md` file ;
+  - [x] Preview for a `.csv` file ;
   - [ ] Preview for a `.json` or `.geojson` file ;
   - [ ] Component to update user's token (if user has a specific one for direct commits) ;
+  - [ ] Component to switch between french and english ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
@@ -91,7 +93,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## How to integrate widgets
 
-### CURRENTLY UNDER EARLY DEVELOPMENT
+### CURRENTLY UNDER EARLY DEVELOPMENT - not deployed yet on netlify
 
 Widgets need two files in order to work :
 
@@ -110,9 +112,17 @@ Widgets can then be called directly into the page as custom html elements.
 
 ---
 
-# Widgets config
+# Widgets configuration
 
-The widget's tag is : `<multi-gitribute-file/>`
+We plan to develop several widgets, all able to interact but also being able to be used independently.
+
+---
+
+## 1. `<multi-gitribute-file>`
+
+The first widget's tag is : `<multi-gitribute-file/>`
+
+This widget allows to preview and edit a file stored on Gitlab or Github.
 
 The widget takes several parameters, following this structure :
 
@@ -121,8 +131,124 @@ The widget takes several parameters, following this structure :
     locale="fr"
     gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/jailbreak-devient-multi-fr.md"
     msg="gitribute for gitlab file" 
-    usertoken=""
+    usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
+    locale="fr"
   ></multi-gitribute-file>
 ```
 
+```html
+  <multi-gitribute-file
+    gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" 
+    options='{
+      "separator":",",
+      "abstractHeaders":"true"
+    }' 
+    msg="gitribute for gitlab file - csv (comma separator)" 
+    usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
+    locale="en"
+    debug="false"
+  ></multi-gitribute-file>
+```
+
+### Options
+
+This widget can take several parameters, some of them depends on your input file's type (`csv`, `json`, `md`, ...)
+
+#### All file types
+
+```yaml
+gitfile:
+  - description : the URL of a file stored on Gitlab or Github
+  - type: string
+  - required: true
+  - note: |
+    if you know the adress of a file on Github or Gitlab, 
+    just copy-paste the url from your browser
+```
+
+```yaml
+msg:
+  - description : the message you want to display on top of the widget
+  - type: string
+  - required: false
+  - default: null
+```
+
+```yaml
+usertoken:
+  - description : the user token allowing to commit / update a file on its repo
+  - type: string
+  - required: false
+  - default: null
+  - note: |
+    If null, you can only read the file and not update it. 
+    To be allowed to push on the file's repo you'll have at least 
+    to create a ghost user acting as an anonymous contributor 
+```
+
+```yaml
+locale:
+  - description : the language you want to use by default
+  - required: false
+  - type: string
+  - default: 'en'
+  - allowed values: [ ',', ';', '|', '\t' ]
+```
+
+```yaml
+debug:
+  - description : just for debugging
+  - required: false
+  - type: boolean
+  - default: false
+```
+
+### For `md` files
+
+```yaml
+options:
+  - (no options for now)
+```
+
+### For `json` files
+
+```yaml
+options:
+  - (no options for now)
+```
+
+### For `csv` or `tsv` files
+
+```yaml
+options:
+  - description : JSON object containing the options allowing your csv to be parsed correctly
+  - required: false
+  - default: {
+      separator: ";", 
+      abstractHeaders: "false"
+    }
+  - fields: 
+    - separator: 
+      description: character separating the columns in your csv source
+      type: string
+      allowed values: [ ",", ";", "|", "\t" ]
+    - abstractHeaders:
+      description: another way (quicker) to parse your csv and render it in a table
+      type: boolean
+```
+
 ---
+
+# Stack
+
+We only used open source packages and technologies, coz' that's what we do... :
+
+- `Vue.js` (2.x) : yes we like this framework a lot...
+- `VueX`: the store ;
+- `vue-custom-element`: wrapper for vue web components ;
+- `gray-matter`: package to convert `md` or `yaml` content to object ;
+- `Showdown` : package to convert `md` content to `html` ;
+- `Bulma` and `Buefy` : as UI frameworks for vue ;
+- `Material Design` fonts: for icons ;
+- `Axios`: for requests to Github or Gitlab API ;
+- and a lot of Stackoverflow...

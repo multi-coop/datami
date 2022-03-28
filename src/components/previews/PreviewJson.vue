@@ -1,6 +1,5 @@
 <template>
-  <div class="">
-    PreviewJson
+  <div class="PreviewJson">
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -38,11 +37,14 @@ export default {
     fileRaw: {
       default: undefined,
       type: String
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
     return {
-      debug: true,
       data: undefined
     }
   },
