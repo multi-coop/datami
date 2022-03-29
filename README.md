@@ -266,7 +266,7 @@ We only used open source packages and technologies, coz' that's what we do... :
 
 ---
 
-# Schema
+# Schema / architecture
 
 We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brainstorming process...
 
