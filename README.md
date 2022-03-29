@@ -269,4 +269,4 @@ We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brains
 
 <br>
 
-![SCHEMA-GITRIBUTE](./src/assets/Multi-gitribute-schema-01.png)
+![SCHEMA-GITRIBUTE](./src/assets/Multi-gitribute-schema-02.png)
