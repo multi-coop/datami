@@ -2,7 +2,7 @@ import Vue from 'vue'
 import vueCustomElement from 'vue-custom-element'
 import 'document-register-element/build/document-register-element'
 import './registerServiceWorker'
-import store from './store'
+import { store } from './store'
 
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.min.css'

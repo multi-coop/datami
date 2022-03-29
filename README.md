@@ -33,7 +33,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [x] Get file's raw data from provider ;
   - [x] Format file's raw data to expected structures (from `md` or `csv` to objects) ;
 - [x] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
-- [ ] Prepare a simple multi-language / translation solution ;
+- [x] Prepare a simple multi-language / translation solution ;
 - [x] Create the first main components :
   - [x] Preview for a `.md` file ;
   - [x] Preview for a `.csv` file ;
@@ -44,7 +44,8 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
   - [ ] On each preview (for every file type), switch between preview and edition view ;
-  - [ ] Add a `Save` button + dialog + actions : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
+  - [ ]  Add a `Save` button + dialog + actions : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
+- [ ] Deploy on Netlify for test purposes.
 
 ... and just for a POC, that's would be greaaaaat ...
 
@@ -192,7 +193,7 @@ locale:
   - required: false
   - type: string
   - default: 'en'
-  - allowed values: [ ',', ';', '|', '\t' ]
+  - allowed values: [ 'en', 'fr' ]
 ```
 
 ```yaml
@@ -235,6 +236,10 @@ options:
     - abstractHeaders:
       description: another way (quicker) to parse your csv and render it in a table
       type: boolean
+    - tagseparator: 
+      description: character separating a column's values into tags
+      type: string
+      allowed values: [ ",", ";", "|", "-", "_" ]
 ```
 
 ---

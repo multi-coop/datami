@@ -83,6 +83,9 @@
             :file-raw="fileRaw"
             :debug="debug"/>
         </div>
+
+        <!-- CREDITS -->
+        <GitributeCredits/>
       </div>
     </div>
   </div>
@@ -94,13 +97,15 @@ import { mixin } from '@/utils/mixins.js'
 import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
+import GitributeCredits from '@/components/credits/GitributeCredits'
 
 export default {
   name: 'GitributeFile',
   components: {
     PreviewCsv,
     PreviewMd,
-    PreviewJson
+    PreviewJson,
+    GitributeCredits
   },
   mixins: [mixin],
   props: {
@@ -152,7 +157,7 @@ export default {
     })
   },
   beforeMount () {
-    console.log('\nC > beforeMount > GitributeFile > this.gitfile : ', this.gitfile)
+    // console.log('\nC > beforeMount > GitributeFile > this.gitfile : ', this.gitfile)
     if (!this.getGitInfos[this.gitfile]) {
       this.getGitInfos(this.gitfile)
     }

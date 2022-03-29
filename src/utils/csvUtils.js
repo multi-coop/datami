@@ -7,6 +7,7 @@ export const separators = [
 
 export const defaultCsvOptions = {
   separator: ';',
+  tagseparator: '-',
   asJson: false
 }
 

@@ -60,24 +60,25 @@ export default {
     }),
     data () {
       const data = this.dataRaw && this.dataRaw.data
+      // if (this.fileOptions.tagseparator) return
       return data
     },
     columns () {
       const columns = this.dataRaw && this.dataRaw.headers
       // console.log('C > PreviewCsv > columns > columns : ', columns)
-      if (!columns) { return null }
+      if (!columns) return null
       if (this.fileOptions.abstractHeaders) {
-        return Object.entries(columns).map(entry => {
-          return {
-            field: entry[0],
-            label: entry[1]
-          }
-        })
-      } else {
-        return columns.map(h => {
-          return { field: h, label: h }
-        })
+        return Object.entries(columns)
+          .map(entry => {
+            return {
+              field: entry[0],
+              label: entry[1]
+            }
+          })
       }
+      return columns.map(h => {
+        return { field: h, label: h }
+      })
     }
   },
   watch: {

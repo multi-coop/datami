@@ -1,4 +1,5 @@
 export const user = {
+  namespaced: true,
   state: {
     test: 'testing user',
     locale: 'en',
@@ -6,6 +7,9 @@ export const user = {
     tokenGithub: undefined
   },
   getters: {
+    getLocale: (state) => {
+      return state.locale
+    }
   },
   mutations: {
   },
