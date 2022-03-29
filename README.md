@@ -128,6 +128,7 @@ This widget allows to preview and edit a file stored on Gitlab or Github.
 The widget takes several parameters, following this structure :
 
 ```html
+  <!-- Example for loading a distant .md file -->
   <multi-gitribute-file 
     locale="fr"
     gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/jailbreak-devient-multi-fr.md"
@@ -138,6 +139,7 @@ The widget takes several parameters, following this structure :
 ```
 
 ```html
+  <!-- Example for loading a distant .csv file -->
   <multi-gitribute-file
     gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" 
     options='{
