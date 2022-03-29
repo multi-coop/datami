@@ -251,7 +251,7 @@ options:
 
 We only used open source packages and technologies, coz' that's what we do... :
 
-- [`Vue.js` (2.x)(<https://v2.vuejs.org/v2/guide/?redirect=true>)] : yes we like this framework a lot...
+- [`Vue.js` (2.x)](https://v2.vuejs.org/v2/guide) : yes we like this framework a lot...
 - [`VueX`](https://vuex.vuejs.org/): the store ;
 - [`vue-custom-element`](https://github.com/karol-f/vue-custom-element): wrapper for vue web components ;
 - [`gray-matter`](https://www.npmjs.com/package/gray-matter): package to convert `md` or `yaml` content to object ;
