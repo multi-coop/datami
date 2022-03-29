@@ -195,7 +195,7 @@ locale:
   - default: 'en'
   - allowed values: [ 'en', 'fr' ]
   - notes: |
-    This parameters allows you to inject a locale component by componenet.
+    This parameter allows you to inject a locale component by componenet.
     But we'll have a selector to allow the user to apply a locale globally, overiding default injected locales.
 ```
 
@@ -251,8 +251,8 @@ options:
 
 We only used open source packages and technologies, coz' that's what we do... :
 
-- `Vue.js` (2.x) : yes we like this framework a lot...
-- `VueX`: the store ;
+- [`Vue.js` (2.x)(<https://v2.vuejs.org/v2/guide/?redirect=true>)] : yes we like this framework a lot...
+- [`VueX`](https://vuex.vuejs.org/): the store ;
 - [`vue-custom-element`](https://github.com/karol-f/vue-custom-element): wrapper for vue web components ;
 - [`gray-matter`](https://www.npmjs.com/package/gray-matter): package to convert `md` or `yaml` content to object ;
 - [`Showdown`](https://www.npmjs.com/package/showdown) : package to convert `md` content to `html` ;
