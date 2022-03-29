@@ -273,3 +273,9 @@ We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brains
 <br>
 
 ![SCHEMA-GITRIBUTE](./src/assets/Multi-gitribute-schema-02.png)
+
+# Wireframes for components
+
+## Widget for `csv` preview and edition
+
+![GITRIBUTE-WIREFRAME-EDIT-CSV](./src/assets/Multi-gitribute-wireframe-edit-01.png)
