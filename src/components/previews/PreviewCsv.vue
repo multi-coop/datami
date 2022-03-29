@@ -44,7 +44,7 @@ export default {
       type: String
     },
     locale: {
-      default: undefined,
+      default: '',
       type: String
     },
     debug: {

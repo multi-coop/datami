@@ -194,6 +194,9 @@ locale:
   - type: string
   - default: 'en'
   - allowed values: [ 'en', 'fr' ]
+  - notes: |
+    This parameters allows you to inject a locale component by componenet.
+    But we'll have a selector to allow the user to apply a locale globally, overiding default injected locales.
 ```
 
 ```yaml

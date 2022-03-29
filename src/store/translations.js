@@ -25,7 +25,7 @@ export const translations = {
       if (!locale || updateLocaleGlobally) {
         loc = rootGetters['git-user/getLocale']
       } else {
-        loc = state.allowedLocales.includes(locale) ? locale : 'fr'
+        loc = state.allowedLocales.includes(locale) ? locale : 'en'
       }
       // console.log('S > translatioons > G > getTranslation > loc : ', loc)
       return state.dict[key][loc] || key

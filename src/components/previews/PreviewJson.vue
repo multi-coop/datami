@@ -39,7 +39,7 @@ export default {
       type: String
     },
     locale: {
-      default: 'en',
+      default: '',
       type: String
     },
     debug: {
