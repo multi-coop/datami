@@ -35,6 +35,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
 - [x] Prepare a simple multi-language / translation solution ;
 - [x] Create the first main components :
+  - [ ] For each file type create a loading skeleton while waiting raw file to load ;
   - [x] Preview for a `.md` file ;
   - [x] Preview for a `.csv` file ;
   - [ ] Preview for a `.json` or `.geojson` file ;
