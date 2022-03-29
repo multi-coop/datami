@@ -47,6 +47,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [ ] On each preview (for every file type), switch between preview and edition view ;
   - [ ]  Add a `Save` button + dialog + actions : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
 - [ ] Deploy on Netlify for test purposes.
+- [ ] A good documentation for each web component (at least in the readme)
 
 ... and just for a POC, that would be greaaaaat ...
 
