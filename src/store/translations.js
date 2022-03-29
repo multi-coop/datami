@@ -2,6 +2,7 @@ export const translations = {
   namespaced: true,
   state: {
     test: 'translations',
+    allowedLocales: ['en', 'fr'],
     dict: {
       reclaim: {
         en: 'An open source widget coded with 🤍  by',
@@ -14,12 +15,20 @@ export const translations = {
     }
   },
   getters: {
-    getTranslation: (state, getters, rootState, rootGetters) => (key) => {
-      // console.log('\nS > translatioons > G > getTranslation > rootGetters : ', rootGetters)
+    getTranslation: (state, getters, rootState, rootGetters) => (key, locale = undefined) => {
       // console.log('S > translatioons > G > getTranslation > key : ', key)
-      const locale = rootGetters['git-user/getLocale']
+      // console.log('S > translatioons > G > getTranslation > rootGetters : ', rootGetters)
       // console.log('S > translatioons > G > getTranslation > locale : ', locale)
-      return state.dict[key][locale] || key
+      const updateLocaleGlobally = rootState['git-user'].localeIsGlobal
+      // console.log('S > translatioons > G > getTranslation > updateLocaleGlobally : ', updateLocaleGlobally)
+      let loc
+      if (!locale || updateLocaleGlobally) {
+        loc = rootGetters['git-user/getLocale']
+      } else {
+        loc = state.allowedLocales.includes(locale) ? locale : 'fr'
+      }
+      // console.log('S > translatioons > G > getTranslation > loc : ', loc)
+      return state.dict[key][loc] || key
     }
   },
   mutations: {

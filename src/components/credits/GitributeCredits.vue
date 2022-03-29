@@ -3,7 +3,7 @@
     <!-- CREDITS -->
     <div class="column is-full is-italic has-text-centered">
       <span class="has-text-grey is-size-6">
-        {{ t('reclaim') }}
+        {{ t('reclaim', locale) }}
       </span>
       <a
         href="https://multi.coop"
@@ -17,7 +17,7 @@
         outlined
         size="is-small"
         class="ml-3">
-        {{ t('code') }}
+        {{ t('code', locale) }}
       </b-button>
     </div>
   </div>
@@ -28,6 +28,12 @@ import { mapState, mapGetters } from 'vuex'
 
 export default ({
   name: 'GitributeCredits',
+  props: {
+    locale: {
+      default: '',
+      type: String
+    }
+  },
   computed: {
     ...mapState({
       testTranslation: (state) => state['git-translations'].test
@@ -35,6 +41,9 @@ export default ({
     ...mapGetters({
       t: 'git-translations/getTranslation'
     })
+  },
+  beforeMount () {
+    // console.log('\nC > GitributeCredits > beforeMount > this.locale : ', this.locale)
   }
 })
 </script>

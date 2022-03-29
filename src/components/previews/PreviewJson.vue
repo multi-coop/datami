@@ -38,6 +38,10 @@ export default {
       default: undefined,
       type: String
     },
+    locale: {
+      default: 'en',
+      type: String
+    },
     debug: {
       default: false,
       type: Boolean

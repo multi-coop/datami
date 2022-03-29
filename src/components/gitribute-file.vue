@@ -63,6 +63,7 @@
             :file-infos="fileInfos"
             :file-options="fileOptions"
             :file-raw="fileRaw"
+            :locale="locale"
             :debug="debug"/>
         </div>
 
@@ -72,6 +73,7 @@
             :file-infos="fileInfos"
             :file-options="fileOptions"
             :file-raw="fileRaw"
+            :locale="locale"
             :debug="debug"/>
         </div>
 
@@ -81,11 +83,13 @@
             :file-infos="fileInfos"
             :file-options="fileOptions"
             :file-raw="fileRaw"
+            :locale="locale"
             :debug="debug"/>
         </div>
 
         <!-- CREDITS -->
-        <GitributeCredits/>
+        <GitributeCredits
+          :locale="locale"/>
       </div>
     </div>
   </div>
@@ -126,7 +130,7 @@ export default {
       type: String
     },
     locale: {
-      default: 'en',
+      default: '',
       type: String
     },
     debug: {
@@ -170,10 +174,12 @@ export default {
     this.fileType = this.gitObj.filetype
     this.fileInfos = await this.getFileData(this.gitObj)
     this.fileRaw = await this.getFileDataRaw(this.gitObj)
+    // this.updateLocale(this.locale)
   },
   methods: {
     ...mapActions({
       getGitInfos: 'getGitInfos'
+      // updateLocale: 'git-user/updateLocale'
     })
   }
 }

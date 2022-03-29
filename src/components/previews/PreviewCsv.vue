@@ -43,6 +43,10 @@ export default {
       default: '',
       type: String
     },
+    locale: {
+      default: undefined,
+      type: String
+    },
     debug: {
       default: false,
       type: Boolean

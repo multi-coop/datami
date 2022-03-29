@@ -49,6 +49,10 @@ export default {
       default: '',
       type: String
     },
+    locale: {
+      default: 'en',
+      type: String
+    },
     debug: {
       default: false,
       type: Boolean
