@@ -11,6 +11,10 @@ export const translations = {
       code: {
         en: 'Source code',
         fr: 'Code source'
+      },
+      file: {
+        en: 'File',
+        fr: 'Fichier'
       }
     }
   },

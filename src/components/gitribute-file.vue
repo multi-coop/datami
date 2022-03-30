@@ -1,103 +1,101 @@
 <template>
-  <div class="container">
-    <div class="content px-4 py-4">
-      <div class="">
-        <p class="is-size-3">
-          <b-icon
-            icon="home"/>
-          {{ msg }}
-        </p>
+  <div class="section">
+    <!-- TO DO - USER NAVBAR -->
+    <div class="container mb-4">
+      <NavbarSkeleton
+        v-if="gitObj"
+        :title="title"
+        :git-obj="gitObj"
+        :file-infos="fileInfos"/>
+    </div>
+
+    <!-- DEBUG -->
+    <div
+      v-if="debug"
+      class=" container columns is-multiline">
+      <div class="column is-full">
         <p>
-          gitfile:
+          fileType:
+          <code>{{ fileType }}</code>
+        </p>
+      </div>
+      <div class="column is-one-third">
+        <p>
+          gitObj:
+          <br>
           <code>
-            {{ gitfile }}
+            <pre>{{ gitObj }}</pre>
           </code>
         </p>
-
-        <!-- DEBUG -->
-        <div
-          v-if="debug"
-          class="columns is-multiline">
-          <div class="column is-full">
-            <p>
-              fileType:
-              <code>{{ fileType }}</code>
-            </p>
-          </div>
-          <div class="column is-one-third">
-            <p>
-              gitObj:
-              <br>
-              <code>
-                <pre>{{ gitObj }}</pre>
-              </code>
-            </p>
-          </div>
-          <div class="column is-one-third">
-            <p>
-              fileInfos:
-              <br>
-              <code>
-                <pre>{{ fileInfos }}</pre>
-              </code>
-            </p>
-          </div>
-          <div class="column is-one-third">
-            <p>
-              fileRaw:
-              <br>
-              <code>
-                <pre>{{ fileRaw }}</pre>
-              </code>
-            </p>
-          </div>
-        </div>
-
-        <!-- TO DO - USER NAVBAR -->
-
-        <!-- PREVIEWS - SWITCH BY FILE TYPE -->
-
-        <div v-if="['csv'].includes(fileType)">
-          <PreviewCsv
-            :git-obj="gitObj"
-            :file-infos="fileInfos"
-            :file-options="fileOptions"
-            :file-raw="fileRaw"
-            :locale="locale"
-            :debug="debug"/>
-        </div>
-
-        <div v-if="['md'].includes(fileType)">
-          <PreviewMd
-            :git-obj="gitObj"
-            :file-infos="fileInfos"
-            :file-options="fileOptions"
-            :file-raw="fileRaw"
-            :locale="locale"
-            :debug="debug"/>
-        </div>
-
-        <div v-if="['json', 'geojson'].includes(fileType)">
-          <PreviewJson
-            :git-obj="gitObj"
-            :file-infos="fileInfos"
-            :file-options="fileOptions"
-            :file-raw="fileRaw"
-            :locale="locale"
-            :debug="debug"/>
-        </div>
-
-        <!-- CREDITS -->
-        <GitributeCredits
-          :locale="locale"/>
+      </div>
+      <div class="column is-one-third">
+        <p>
+          fileInfos:
+          <br>
+          <code>
+            <pre>{{ fileInfos }}</pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-one-third">
+        <p>
+          fileRaw:
+          <br>
+          <code>
+            <pre>{{ fileRaw }}</pre>
+          </code>
+        </p>
       </div>
     </div>
+
+    <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+
+    <div
+      v-if="['csv'].includes(fileType)"
+      class="container">
+      <PreviewCsv
+        :git-obj="gitObj"
+        :file-infos="fileInfos"
+        :file-options="fileOptions"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
+    </div>
+
+    <div
+      v-if="['md'].includes(fileType)"
+      class="container">
+      <PreviewMd
+        :git-obj="gitObj"
+        :file-infos="fileInfos"
+        :file-options="fileOptions"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
+    </div>
+
+    <div
+      v-if="['json', 'geojson'].includes(fileType)"
+      class="container">
+      <PreviewJson
+        :git-obj="gitObj"
+        :file-infos="fileInfos"
+        :file-options="fileOptions"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
+    </div>
+
+    <!-- CREDITS -->
+    <GitributeCredits
+      :locale="locale"/>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixin } from '@/utils/mixins.js'
+import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
 import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
@@ -106,6 +104,7 @@ import GitributeCredits from '@/components/credits/GitributeCredits'
 export default {
   name: 'GitributeFile',
   components: {
+    NavbarSkeleton,
     PreviewCsv,
     PreviewMd,
     PreviewJson,
@@ -113,7 +112,7 @@ export default {
   },
   mixins: [mixin],
   props: {
-    msg: {
+    title: {
       default: 'gitribute',
       type: String
     },
@@ -161,7 +160,7 @@ export default {
     })
   },
   beforeMount () {
-    // console.log('\nC > beforeMount > GitributeFile > this.gitfile : ', this.gitfile)
+    // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     if (!this.getGitInfos[this.gitfile]) {
       this.getGitInfos(this.gitfile)
     }
@@ -169,7 +168,7 @@ export default {
     this.fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
   },
   async mounted () {
-    // console.log('C > mount > GitributeFile > this.gitInfos : ', this.gitInfos)
+    // console.log('C > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
     this.gitObj = this.getGitInfosObj(this.gitfile)
     this.fileType = this.gitObj.filetype
     this.fileInfos = await this.getFileData(this.gitObj)

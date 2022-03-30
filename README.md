@@ -134,7 +134,7 @@ The widget takes several parameters, following this structure :
   <multi-gitribute-file 
     locale="fr"
     gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/jailbreak-devient-multi-fr.md"
-    msg="gitribute for gitlab file" 
+    title="gitribute for gitlab file" 
     usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
     locale="fr"
   ></multi-gitribute-file>
@@ -148,7 +148,7 @@ The widget takes several parameters, following this structure :
       "separator":",",
       "abstractHeaders":"true"
     }' 
-    msg="gitribute for gitlab file - csv (comma separator)" 
+    title="gitribute for gitlab file - csv (comma separator)" 
     usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
     locale="en"
     debug="false"
@@ -172,8 +172,8 @@ gitfile:
 ```
 
 ```yaml
-msg:
-  - description : the message you want to display on top of the widget
+title:
+  - description : the file title you want to display on top of the widget
   - type: string
   - required: false
   - default: null

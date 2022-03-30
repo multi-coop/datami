@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewJson">
+  <div class="PreviewJson content">
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -56,6 +56,7 @@ export default {
     ...mapState({
     }),
     ...mapGetters({
+      t: 'git-translations/getTranslation'
     })
   },
   watch: {

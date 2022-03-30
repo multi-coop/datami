@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewCsv">
+  <div class="PreviewCsv content">
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -61,6 +61,7 @@ export default {
     ...mapState({
     }),
     ...mapGetters({
+      t: 'git-translations/getTranslation'
     }),
     data () {
       const data = this.dataRaw && this.dataRaw.data
