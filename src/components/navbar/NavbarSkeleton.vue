@@ -1,19 +1,35 @@
 <template>
   <div class="NavbarSkeleton content">
-    <!-- FILE TITLE -->
-    <div class="">
-      <p class="is-size-3">
-        <b-icon
-          :icon="fileIcon"/>
-        {{ title }}
-      </p>
+    <div class="columns is-multiline">
+      <!-- FILE TITLE -->
+      <div class="column is-9">
+        <p class="is-size-3">
+          <b-icon :icon="fileIcon"/>
+          {{ title }}
+          <b-tooltip
+            :label="t('fileInfos')"
+            position="is-right">
+            <b-icon icon="dots-horizontal"/>
+          </b-tooltip>
+        </p>
+      </div>
+      <!-- USER BUTTONS -->
+      <div class="column is-3 is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
+        <ButtonReloadFile/>
+        <ButtonDownloadFile/>
+        <ButtonChangeLocale/>
+        <ButtonChangeUserToken/>
+      </div>
+
       <!-- FILE INFOS -->
-      <p>
-        {{ t('file')}} :
-        <code>
-          {{ gitObj.id }}
-        </code>
-      </p>
+      <div class="column is-full">
+        <p>
+          {{ t('file')}} :
+          <code>
+            {{ gitObj.id }}
+          </code>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -21,8 +37,19 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 
+import ButtonReloadFile from '@/components/user/ButtonReloadFile'
+import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
+import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
+import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
+
 export default {
   name: 'NavbarSkeleton',
+  components: {
+    ButtonReloadFile,
+    ButtonDownloadFile,
+    ButtonChangeLocale,
+    ButtonChangeUserToken
+  },
   props: {
     title: {
       default: 'gitribute',

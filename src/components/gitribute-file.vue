@@ -49,7 +49,7 @@
     </div>
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
-
+    <!-- PREVIEWS CSV -->
     <div
       v-if="['csv'].includes(fileType)"
       class="container">
@@ -62,6 +62,7 @@
         :debug="debug"/>
     </div>
 
+    <!-- PREVIEWS MD -->
     <div
       v-if="['md'].includes(fileType)"
       class="container">
@@ -74,6 +75,7 @@
         :debug="debug"/>
     </div>
 
+    <!-- PREVIEWS JSON -->
     <div
       v-if="['json', 'geojson'].includes(fileType)"
       class="container">
@@ -173,12 +175,10 @@ export default {
     this.fileType = this.gitObj.filetype
     this.fileInfos = await this.getFileData(this.gitObj)
     this.fileRaw = await this.getFileDataRaw(this.gitObj)
-    // this.updateLocale(this.locale)
   },
   methods: {
     ...mapActions({
       getGitInfos: 'getGitInfos'
-      // updateLocale: 'git-user/updateLocale'
     })
   }
 }
