@@ -4,6 +4,7 @@
 
 <script>
 import showdown from 'showdown'
+import table from 'showdown-table'
 
 export default {
   name: 'ShowDown',
@@ -47,7 +48,17 @@ export default {
   },
   computed: {
     converter () {
+      // Create a showdown converter instance
+      // const instance = new showdown.Converter({ extensions: [table] })
       const instance = new showdown.Converter()
+      // console.log('C > ShowDown > instance : \n', instance)
+
+      // Set up the md table extension and add it to converter
+      const instanceTableExt = table(instance)
+      // console.log('C > ShowDown > instanceTableExt : \n', instanceTableExt)
+      instance.addExtension(instanceTableExt)
+
+      // Other setups
       if (this.flavor !== null) {
         instance.setFlavor(this.flavor)
       }
