@@ -1,12 +1,14 @@
 <template>
   <div class="ButtonDownloadFile">
     <b-tooltip
-      :label="t('download')"
-      position="is-bottom">
+      :label="t('downloadFile')"
+      type="is-dark"
+      position="is-left">
       <b-button
         size="is-small"
         class="ml-1"
-        icon-left="download">
+        icon-left="download"
+        @click="DownloadFile()">
       </b-button>
     </b-tooltip>
   </div>
@@ -29,6 +31,11 @@ export default {
     ...mapGetters({
       t: 'git-translations/getTranslation'
     })
+  },
+  methods: {
+    DownloadFile () {
+      return 'TO DO...'
+    }
   }
 }
 </script>

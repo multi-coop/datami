@@ -2,7 +2,8 @@
   <div class="ButtonChangeUserToken">
     <b-tooltip
       :label="t('changeToken')"
-      position="is-bottom">
+      type="is-dark"
+      position="is-left">
       <b-button
         size="is-small"
         class="ml-1"

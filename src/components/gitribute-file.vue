@@ -6,7 +6,8 @@
         v-if="gitObj"
         :title="title"
         :git-obj="gitObj"
-        :file-infos="fileInfos"/>
+        :file-infos="fileInfos"
+        :locale="locale"/>
     </div>
 
     <!-- DEBUG -->

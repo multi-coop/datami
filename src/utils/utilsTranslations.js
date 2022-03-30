@@ -30,14 +30,18 @@ export const buildDict = (languages) => {
 const availableLanguaguages = [
   {
     locale: 'fr',
+    label: 'Français',
     dict: fr
   },
   {
     locale: 'en',
+    label: 'English',
     dict: en
   }
 ]
-export const allowedLanguages = availableLanguaguages.map(l => l.locale)
+export const allowedLanguages = availableLanguaguages
+  .map(l => { return { locale: l.locale, label: l.label } })
+  .sort((a, b) => (a.label > b.label) ? 1 : -1)
 export const dicts = buildDict(availableLanguaguages)
 
 export const translate = (key, locale) => {

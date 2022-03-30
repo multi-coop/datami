@@ -8,6 +8,7 @@
           {{ title }}
           <b-tooltip
             :label="t('fileInfos')"
+            type="is-dark"
             position="is-right">
             <b-icon icon="dots-horizontal"/>
           </b-tooltip>
@@ -17,7 +18,8 @@
       <div class="column is-3 is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
         <ButtonReloadFile/>
         <ButtonDownloadFile/>
-        <ButtonChangeLocale/>
+        <ButtonChangeLocale
+          :locale="locale"/>
         <ButtonChangeUserToken/>
       </div>
 
@@ -62,6 +64,10 @@ export default {
     fileInfos: {
       default: undefined,
       type: Object
+    },
+    locale: {
+      default: 'en',
+      type: String
     }
   },
   data () {
@@ -89,9 +95,9 @@ export default {
       t: 'git-translations/getTranslation'
     }),
     fileIcon () {
-      console.log('\nC > NavbarSkeleton > fileIcon > this.gitObj : ', this.gitObj)
+      // console.log('\nC > NavbarSkeleton > fileIcon > this.gitObj : ', this.gitObj)
       const iconObj = this.icons.find(t => t.allowedTypes.includes(this.gitObj.filetype))
-      console.log('C > NavbarSkeleton > fileIcon > iconObj : ', iconObj)
+      // console.log('C > NavbarSkeleton > fileIcon > iconObj : ', iconObj)
       return iconObj.icon || this.icons[0].icon
     }
   }
