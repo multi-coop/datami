@@ -279,7 +279,7 @@ We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brains
 
 ## Widget for `csv` preview and edition
 
-![GITRIBUTE-WIREFRAME-EDIT-CSV](./src/assets/Multi-gitribute-wireframe-edit-01.png)
+![GITRIBUTE-WIREFRAME-EDIT-CSV](./src/assets/Multi-gitribute-wireframe-edit-02.png)
 
 ## Dialog before saving changes
 
