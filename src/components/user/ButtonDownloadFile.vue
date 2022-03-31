@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonDownloadFile">
     <b-tooltip
-      :label="t('downloadFile')"
+      :label="t('downloadFile', locale)"
       type="is-dark"
       position="is-left">
       <b-button
@@ -20,6 +20,10 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'ButtonDownloadFile',
   props: {
+    locale: {
+      default: 'en',
+      type: String
+    }
   },
   data () {
     return {

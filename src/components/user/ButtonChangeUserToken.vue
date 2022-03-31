@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonChangeUserToken">
     <b-tooltip
-      :label="t('changeToken')"
+      :label="t('changeToken', locale)"
       type="is-dark"
       position="is-left">
       <b-button
@@ -19,6 +19,10 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'ButtonChangeUserToken',
   props: {
+    locale: {
+      default: 'en',
+      type: String
+    }
   },
   data () {
     return {

@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonReloadFile">
     <b-tooltip
-      :label="t('reloadFile')"
+      :label="t('reloadFile', locale)"
       type="is-dark"
       position="is-left">
       <b-button
@@ -20,6 +20,10 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'ButtonReloadFile',
   props: {
+    locale: {
+      default: 'en',
+      type: String
+    }
   },
   data () {
     return {

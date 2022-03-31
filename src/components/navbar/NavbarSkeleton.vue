@@ -7,7 +7,7 @@
           <b-icon :icon="fileIcon"/>
           {{ title }}
           <b-tooltip
-            :label="t('fileInfos')"
+            :label="t('fileInfos', locale)"
             type="is-dark"
             position="is-right">
             <b-icon icon="dots-horizontal"/>
@@ -16,17 +16,20 @@
       </div>
       <!-- USER BUTTONS -->
       <div class="column is-3 is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
-        <ButtonReloadFile/>
-        <ButtonDownloadFile/>
+        <ButtonReloadFile
+          :locale="locale"/>
+        <ButtonDownloadFile
+          :locale="locale"/>
         <ButtonChangeLocale
           :locale="locale"/>
-        <ButtonChangeUserToken/>
+        <ButtonChangeUserToken
+          :locale="locale"/>
       </div>
 
       <!-- FILE INFOS -->
       <div class="column is-full">
         <p>
-          {{ t('file')}} :
+          {{ t('file', locale)}} :
           <code>
             {{ gitObj.id }}
           </code>
