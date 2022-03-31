@@ -8,16 +8,17 @@
 
 ---
 
-This project aims to create a serie of widgets to interact with Gitlab or Github :
+This project aims to create a serie of widgets to interact with files stored on Gitlab or Github :
 
 - **Edit data stored on github or gitlab** (csv or md files) ;
 - **Allow unidentified users to push on a separate branch** and automatically create a pull request ;
 - **Create a set of components for modular uses** :
   - preview for `.csv`, `.md`, `.json` files, with several choices for preview (table, cards list, ...) ;
-  - files edition ;
+  - files edition interfaces ;
   - dataviz for `.csv` files (barcharts, pies, ...) ;
+  - user preferences: language, user token, ...
   - etc...
-- **Web integration as modualr web component**
+- **Web integration as modular web component**
 
 ---
 
@@ -27,7 +28,7 @@ This project is currently under early development...
 
 The **roadmap** for a first proof of concept (POC) is the following :
 
-- [x] Skeleton for `vue-custom-element` / `vuejs` : vuex, dependencies, linting, ... ;
+- [x] Skeleton for `vue-custom-element` / `vuejs` : vuex (shared store between all web components), dependencies, linting, ... ;
 - [x] First utils functions and mixins to process a file's gitlab/github url ;
   - [x] Get all git infos from file's url ;
   - [x] Get file's raw data from provider ;
@@ -35,7 +36,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
 - [x] Prepare a simple multi-language / translation solution ;
 - [x] Create the first main components :
-  - [ ] For each file type create a loading skeleton while waiting raw file to load ;
+  - [ ] For each file type create a loading skeleton while waiting raw file to finish loading ;
   - [x] Preview for a `.md` file ;
   - [x] Preview for a `.csv` file ;
   - [ ] Preview for a `.json` or `.geojson` file ;
@@ -44,10 +45,12 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
-  - [ ] On each preview (for every file type), switch between preview and edition view ;
-  - [ ]  Add a `Save` button + dialog + actions : after edition on client's side, acting as a commit to the file's git repo on a separate branch + merge request (commit and request by default done the "ghost user") ;
+  - [ ] On each preview (for every file type), switch between 'preview' and 'edition' views ;
+  - [ ]  Add a `Save` button + dialog + actions : 
+    - after edition on client's side, acting as a commit to the file's git repo on a separate branch 
+    - create a merge request (commit and request by default done the "ghost user") ;
 - [ ] Deploy on Netlify for test purposes.
-- [ ] A good documentation for each web component (at least in the readme)
+- [ ] A good documentation for each web component (at least in this readme for now)
 
 ... and just for a POC, that would be greaaaaat ...
 
@@ -256,14 +259,14 @@ options:
 We only used open source packages and technologies, coz' that's what we do... :
 
 - [`Vue.js` (2.x)](https://v2.vuejs.org/v2/guide) : yes we like this framework a lot...
-- [`VueX`](https://vuex.vuejs.org/): the store ;
+- [`VueX`](https://vuex.vuejs.org/): the data store shared for every web component ;
 - [`vue-custom-element`](https://github.com/karol-f/vue-custom-element): wrapper for vue web components ;
 - [`gray-matter`](https://www.npmjs.com/package/gray-matter): package to convert `md` or `yaml` content to object ;
-- [`Showdown`](https://www.npmjs.com/package/showdown) : package to convert `md` content to `html` ;
+- [`Showdown`](https://www.npmjs.com/package/showdown) and [`showdown-table` extension](https://github.com/showdownjs/table-extension#readme): package to convert `md` content to `html` (see [docs for showdown extensions](https://github.com/showdownjs/showdown#extensions));
 - [`Bulma`](https://bulma.io/) and [`Buefy`](https://buefy.org/) : as UI frameworks for vue ;
 - [`Material Design`](https://materialdesignicons.com/) fonts: for icons ;
 - [`Axios`](https://www.npmjs.com/package/axios): for requests to Github or Gitlab API ;
-- and a lot of Stackoverflow...
+- ...and a lot of Stackoverflow help...
 
 ---
 
