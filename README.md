@@ -282,8 +282,12 @@ We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brains
 
 ## Widget for `csv` preview and edition
 
-![GITRIBUTE-WIREFRAME-EDIT-CSV](./src/assets/Multi-gitribute-wireframe-edit-02.png)
+![GITRIBUTE-WIREFRAME-EDIT-CSV](./src/assets/Multi-gitribute-wireframe-edit-csv-02.png)
 
-## Dialog before saving changes
+## Widget for `md` preview and edition
+
+![GITRIBUTE-WIREFRAME-EDIT-MD](./src/assets/Multi-gitribute-wireframe-edit-md-01.png)
+
+## Dialog component before saving changes on any file type
 
 ![GITRIBUTE-WIREFRAME-DIALOG_SAVE](./src/assets/Multi-gitribute-wireframe-commit_dialog-01.png)
