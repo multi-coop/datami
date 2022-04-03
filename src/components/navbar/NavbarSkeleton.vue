@@ -1,40 +1,38 @@
 <template>
   <div class="NavbarSkeleton content">
-    <div class="columns is-multiline">
+    <div class="columns is-multiline mb-4">
       <!-- FILE TITLE -->
       <div class="column is-9">
-        <p class="is-size-3">
-          <b-icon :icon="fileIcon"/>
-          {{ title }}
-          <b-tooltip
-            :label="t('fileInfos', locale)"
-            type="is-dark"
-            position="is-right">
-            <b-icon icon="dots-horizontal"/>
-          </b-tooltip>
-        </p>
+        <FileTitle
+          :title="title"
+          :git-obj="gitObj"
+          :fileIcon="fileIcon"
+          :locale="locale"/>
       </div>
       <!-- USER BUTTONS -->
       <div class="column is-3 is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
         <ButtonReloadFile
+          :git-obj="gitObj"
           :locale="locale"/>
         <ButtonDownloadFile
+          :git-obj="gitObj"
           :locale="locale"/>
         <ButtonChangeLocale
           :locale="locale"/>
         <ButtonChangeUserToken
+          :git-obj="gitObj"
           :locale="locale"/>
       </div>
 
       <!-- FILE INFOS -->
-      <div class="column is-full">
+      <!-- <div class="column is-full">
         <p>
-          {{ t('file', locale)}} :
+          {{ t('file', locale) }} :
           <code>
             {{ gitObj.id }}
           </code>
         </p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -42,6 +40,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 
+import FileTitle from '@/components/navbar/FileTitle'
 import ButtonReloadFile from '@/components/user/ButtonReloadFile'
 import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
 import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
@@ -50,6 +49,7 @@ import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
 export default {
   name: 'NavbarSkeleton',
   components: {
+    FileTitle,
     ButtonReloadFile,
     ButtonDownloadFile,
     ButtonChangeLocale,

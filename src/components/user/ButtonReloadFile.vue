@@ -8,18 +8,22 @@
         size="is-small"
         class="ml-1"
         icon-left="reload"
-        @click="ReloadFile()">
-      </b-button>
+        :loading="loading"
+        @click="ReloadFile()"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'ButtonReloadFile',
   props: {
+    gitObj: {
+      default: undefined,
+      type: Object
+    },
     locale: {
       default: 'en',
       type: String
@@ -27,18 +31,32 @@ export default {
   },
   data () {
     return {
+      loading: false
     }
   },
   computed: {
-    ...mapState({
-    }),
     ...mapGetters({
+      fileNeedsReload: 'git-data/fileNeedsReload',
       t: 'git-translations/getTranslation'
-    })
+    }),
+    fileIsReloading () {
+      // console.log('C > ButtonReloadFile > this.gitObj : ', this.gitObj)
+      return this.gitObj && this.fileNeedsReload(this.gitObj.id)
+    }
+  },
+  watch: {
+    fileIsReloading (next) {
+      if (!next) { this.loading = false }
+    }
   },
   methods: {
+    ...mapActions({
+      updateReloading: 'git-data/updateReloading'
+    }),
     ReloadFile () {
-      return 'TO DO...'
+      this.loading = true
+      // console.log('C > ButtonReloadFile > ReloadFile > this.gitObj : ', this.gitObj)
+      this.updateReloading({ fileId: this.gitObj.id, action: 'add' })
     }
   }
 }

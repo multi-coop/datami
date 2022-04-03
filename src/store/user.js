@@ -2,9 +2,7 @@ export const user = {
   namespaced: true,
   state: {
     test: 'testing user store',
-    userLocale: 'en',
-    tokenGitlab: undefined,
-    tokenGithub: undefined
+    userLocale: 'en'
   },
   getters: {
     getUserLocale: (state) => {

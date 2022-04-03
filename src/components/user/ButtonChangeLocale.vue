@@ -9,11 +9,10 @@
           class="ml-1"
           icon-left="translate"
           aria-haspopup="true"
-          aria-controls="dropdown-locales">
-        </b-button>
+          aria-controls="dropdown-locales"/>
         <div
-          class="dropdown-menu"
           id="dropdown-locales"
+          class="dropdown-menu"
           role="menu">
           <div class="dropdown-content">
             <div class="dropdown-item">
@@ -25,7 +24,7 @@
             <a
               v-for="loc in allowedLocales"
               :key="loc.locale"
-              :class="`dropdown-item ${ loc.locale === currentLocale(locale) ? 'is-active' : ''}`"
+              :class="`dropdown-item ${ loc.locale === currentLocale(locale) ? 'is-active is-dark' : ''}`"
               @click="changeLocale(loc.locale)">
               <span
                 :class="`${ loc.locale === currentLocale(locale) ? 'has-text-weight-bold' : ''}`">
@@ -94,3 +93,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .is-active {
+    background-color: #000000 !important;
+  }
+</style>

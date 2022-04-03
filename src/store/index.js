@@ -36,7 +36,7 @@ const defaultStore = {
     }
   },
   actions: {
-    getGitInfos ({ commit }, gitUrl) {
+    buildGitInfos ({ commit }, gitUrl) {
       // console.log('S-index > A > getGitInfos > gitUrl : ', gitUrl)
       const gitInfosObject = extractGitInfos(gitUrl)
       // console.log('S-index > A > getGitInfos > gitInfosObject : ', gitInfosObject)
