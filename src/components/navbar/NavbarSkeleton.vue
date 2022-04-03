@@ -6,6 +6,7 @@
         <FileTitle
           :title="title"
           :git-obj="gitObj"
+          :file-type-family="fileTypeFamily"
           :fileIcon="fileIcon"
           :locale="locale"/>
       </div>
@@ -67,6 +68,10 @@ export default {
     fileInfos: {
       default: undefined,
       type: Object
+    },
+    fileTypeFamily: {
+      default: '',
+      type: String
     },
     locale: {
       default: 'en',

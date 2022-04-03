@@ -29,15 +29,23 @@
           <p>
             {{ t('fileName', locale) }} :
             <code>
-              {{ gitObj.filename }}
+              {{ gitObj.filefullname }}
             </code>
           </p>
           <p>
             {{ t('fileType', locale) }} :
+            <b-icon :icon="fileIcon"/>
             <code>
               {{ gitObj.filetype }}
               -
               ({{ t(fileTypeFamily, locale) }})
+            </code>
+          </p>
+          <p>
+            {{ t('provider', locale) }} :
+            <b-icon :icon="gitObj.provider"/>
+            <code>
+              {{ gitObj.provider }}
             </code>
           </p>
           <p>
