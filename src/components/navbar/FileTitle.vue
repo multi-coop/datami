@@ -34,7 +34,7 @@
           </p>
           <p>
             {{ t('fileType', locale) }} :
-            <b-icon :icon="fileIcon"/>
+            <b-icon :icon="fileIcon"/>&nbsp;
             <code>
               {{ gitObj.filetype }}
               -
@@ -43,16 +43,20 @@
           </p>
           <p>
             {{ t('provider', locale) }} :
-            <b-icon :icon="gitObj.provider"/>
+            <b-icon :icon="gitObj.provider"/>&nbsp;
             <code>
               {{ gitObj.provider }}
             </code>
           </p>
           <p>
             {{ t('fileUrl', locale) }} :
-            <code>
-              {{ gitObj.id }}
-            </code>
+            <a
+              target="_blank"
+              :href="gitObj.id">
+              <code>
+                {{ gitObj.id }}
+              </code>
+            </a>
           </p>
         </div>
       </div>

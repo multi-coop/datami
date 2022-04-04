@@ -18,10 +18,10 @@
         <ButtonDownloadFile
           :git-obj="gitObj"
           :locale="locale"/>
-        <ButtonChangeLocale
-          :locale="locale"/>
         <ButtonChangeUserToken
           :git-obj="gitObj"
+          :locale="locale"/>
+        <ButtonChangeLocale
           :locale="locale"/>
       </div>
 

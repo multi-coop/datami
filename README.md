@@ -36,12 +36,12 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
 - [x] Prepare a simple multi-language / translation solution ;
 - [x] Create the first main components :
-  - [ ] For each file type create a loading skeleton while waiting raw file to finish loading ;
+  - [x] For each file type create a loading skeleton while waiting raw file to finish loading ;
   - [x] Preview for a `.md` file ;
   - [x] Preview for a `.csv` file ;
   - [ ] Preview for a `.json` or `.geojson` file ;
-  - [ ] Component to update user's token (if user has a specific one for direct commits) ;
-  - [ ] Component to switch between french and english ;
+  - [x] Component to update user's token (if user has a specific one for direct commits) ;
+  - [x] Component to switch between french and english ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
