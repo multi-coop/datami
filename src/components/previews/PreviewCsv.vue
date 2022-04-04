@@ -1,5 +1,6 @@
 <template>
   <div class="PreviewCsv content">
+    <!-- DEBUG -->
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -12,6 +13,9 @@
         </p>
       </div>
     </div>
+    <EditNavbarSkeleton
+      :git-obj="gitObj"
+      :locale="locale"/>
     <b-table
       v-if="dataRaw"
       :data="data"
@@ -23,8 +27,13 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixinCsv } from '@/utils/mixins.js'
 
+import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+
 export default {
   name: 'PreviewCsv',
+  components: {
+    EditNavbarSkeleton
+  },
   mixins: [mixinCsv],
   props: {
     gitObj: {

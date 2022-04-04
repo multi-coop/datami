@@ -1,5 +1,6 @@
 <template>
   <div class="PreviewJson content">
+    <!-- DEBUG -->
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -12,14 +13,22 @@
         </p>
       </div>
     </div>
+    <EditNavbarSkeleton
+      :git-obj="gitObj"
+      :locale="locale"/>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
+import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+
 export default {
   name: 'PreviewJson',
+  components: {
+    EditNavbarSkeleton
+  },
   mixins: [],
   props: {
     gitObj: {

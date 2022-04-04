@@ -1,5 +1,6 @@
 <template>
   <div class="PreviewMd content">
+    <!-- DEBUG -->
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -12,6 +13,9 @@
         </p>
       </div>
     </div>
+    <EditNavbarSkeleton
+      :git-obj="gitObj"
+      :locale="locale"/>
     <div>
       <ShowDown
         :markdown="content"
@@ -25,9 +29,12 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
 import ShowDown from '@/components/previews/ShowDown'
 
+import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+
 export default {
   name: 'PreviewMd',
   components: {
+    EditNavbarSkeleton,
     ShowDown
     // VueShowdown
   },

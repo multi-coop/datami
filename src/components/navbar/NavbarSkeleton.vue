@@ -7,7 +7,7 @@
           :title="title"
           :git-obj="gitObj"
           :file-type-family="fileTypeFamily"
-          :fileIcon="fileIcon"
+          :file-icon="fileIcon"
           :locale="locale"/>
       </div>
       <!-- USER BUTTONS -->
@@ -24,22 +24,12 @@
         <ButtonChangeLocale
           :locale="locale"/>
       </div>
-
-      <!-- FILE INFOS -->
-      <!-- <div class="column is-full">
-        <p>
-          {{ t('file', locale) }} :
-          <code>
-            {{ gitObj.id }}
-          </code>
-        </p>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import ButtonReloadFile from '@/components/user/ButtonReloadFile'
@@ -97,8 +87,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-    }),
     ...mapGetters({
       t: 'git-translations/getTranslation'
     }),
