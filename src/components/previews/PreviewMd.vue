@@ -29,14 +29,21 @@
       <!-- DIFF VIEW -->
       <div
         v-show="currentViewMode === 'diff'"
-        :class="`column is-half`">
+        :class="`column is-full`">
         <!-- <ShowDownEditDiff
           :edited.sync="edited"
           :content="content"/> -->
-        <pre><code>{{ edited }}</code></pre>
+        <!-- <pre><code>{{ edited }}</code></pre> -->
+        <div
+          v-if="content"
+          v-html="getDiffHtml"/>
+        <!-- <code v-if="content">
+          {{ getDiff }}
+        </code> -->
       </div>
       <!-- PREVIEW -->
       <div
+        v-show="currentViewMode !== 'diff'"
         :class="`column`">
         <ShowDown
           :markdown="currentViewMode === 'diff' ? content : edited"
@@ -50,6 +57,10 @@
 import { mapGetters } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
 import ShowDown from '@/components/previews/ShowDown'
+import { createTwoFilesPatch } from 'diff'
+
+import * as Diff2Html from 'diff2html'
+import 'diff2html/bundles/css/diff2html.min.css'
 
 export default {
   name: 'PreviewMd',
@@ -103,6 +114,22 @@ export default {
       let result = 2
       if (this.edited) { result = this.edited.split(/\r\n|\r|\n/).length + result }
       return result
+    },
+    getDiff () {
+      // console.log('C > PreviewMd > getDiff  > diffChars : \n', diffChars)
+      const fileName = this.gitObj.filefullname
+      const diffStr = createTwoFilesPatch(fileName, fileName, this.content, this.edited)
+      return diffStr
+    },
+    getDiffHtml () {
+      const diff = this.getDiff
+      const options = {
+        drawFileList: false,
+        matching: 'lines',
+        outputFormat: 'side-by-side'
+        // outputFormat: 'line-by-line'
+      }
+      return Diff2Html.html(diff, options)
     }
   },
   watch: {
