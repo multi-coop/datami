@@ -16,19 +16,11 @@
         </p>
       </div>
     </div>
-    <!-- FILE NAVBAR BUTTONS -->
-    <EditNavbarSkeleton
-      :git-obj="gitObj"
-      :view-mode="currentViewMode"
-      :locale="locale"/>
     <div class="columns is-mobile">
       <!-- EDIT VIEW -->
       <div
         v-show="currentViewMode === 'edit'"
         :class="`column is-half`">
-        <!-- <ShowDownEdit
-          :edited.sync="edited"
-          :content="content"/> -->
         <b-input
           v-model="edited"
           type="textarea"
@@ -41,12 +33,13 @@
         <!-- <ShowDownEditDiff
           :edited.sync="edited"
           :content="content"/> -->
+        <pre><code>{{ edited }}</code></pre>
       </div>
       <!-- PREVIEW -->
       <div
         :class="`column`">
         <ShowDown
-          :markdown="edited"
+          :markdown="currentViewMode === 'diff' ? content : edited"
           flavor="github"/>
       </div>
     </div>
@@ -57,18 +50,11 @@
 import { mapGetters } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
 import ShowDown from '@/components/previews/ShowDown'
-// import ShowDownEdit from '@/components/previews/ShowDownEdit'
-// import ShowDownEditDiff from '@/components/previews/ShowDownEditDiff'
-
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 
 export default {
   name: 'PreviewMd',
   components: {
-    EditNavbarSkeleton,
     ShowDown
-    // ShowDownEdit,
-    // ShowDownEditDiff
   },
   mixins: [mixinMd],
   props: {
@@ -99,7 +85,7 @@ export default {
   },
   data () {
     return {
-      viewMode: 'preview',
+      // viewMode: 'preview',
       data: null,
       content: null,
       edited: null

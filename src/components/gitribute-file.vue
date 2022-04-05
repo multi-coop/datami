@@ -59,9 +59,18 @@
       </p>
     </div>
 
+    <!-- LOADERS -->
     <SkeletonCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
     <SkeletonMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
     <SkeletonMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>
+
+    <!-- FILE NAVBAR BUTTONS -->
+    <EditNavbarSkeleton
+      v-if="!fileIsReloading"
+      :git-obj="gitObj"
+      :file-type-family="fileTypeFamily"
+      :view-mode="currentViewMode"
+      :locale="locale"/>
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
     <!-- PREVIEWS CSV -->
@@ -116,6 +125,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mixin } from '@/utils/mixins.js'
 import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
+import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
@@ -127,6 +137,7 @@ export default {
   name: 'GitributeFile',
   components: {
     NavbarSkeleton,
+    EditNavbarSkeleton,
     PreviewCsv,
     PreviewMd,
     PreviewJson,
@@ -182,13 +193,17 @@ export default {
     ...mapGetters({
       getGitObj: 'getGitObj',
       getGitInfosObj: 'getGitInfosObj',
-      fileNeedsReload: 'git-data/fileNeedsReload'
+      fileNeedsReload: 'git-data/fileNeedsReload',
+      getViewMode: 'git-data/getViewMode'
     }),
     fileIsReloading () {
       // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
       const resp = !this.gitObj || this.fileNeedsReload(this.gitObj.id)
       // console.log('C > GitributeFile > fileIsReloading > resp : ', resp)
       return resp
+    },
+    currentViewMode () {
+      return this.getViewMode(this.gitObj.id)
     }
   },
   watch: {

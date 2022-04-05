@@ -13,30 +13,23 @@
         </p>
       </div>
     </div>
-    <EditNavbarSkeleton
-      :git-obj="gitObj"
-      :locale="locale"/>
     <p>
-      currentViewMode: {{ currentViewMode }}
+      currentViewMode : <code>{{ currentViewMode }}</code>
     </p>
-    <b-table
-      v-if="dataRaw"
-      :data="tableData"
-      :columns="columns"/>
+    <div v-if="dataRaw">
+      <b-table
+        :data="tableData"
+        :columns="columns"/>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { mixinCsv } from '@/utils/mixins.js'
-
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 
 export default {
   name: 'PreviewCsv',
-  components: {
-    EditNavbarSkeleton
-  },
   mixins: [mixinCsv],
   props: {
     gitObj: {
@@ -66,7 +59,8 @@ export default {
   },
   data () {
     return {
-      dataRaw: undefined
+      dataRaw: undefined,
+      edited: undefined
     }
   },
   computed: {
@@ -107,19 +101,8 @@ export default {
         // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
         // console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         this.dataRaw = this.csvToObject(next, this.fileOptions)
+        this.edited = this.csvToObject(next, this.fileOptions)
       }
-    }
-  },
-  beforeMount () {
-    // console.log('C > PreviewCsv > beforeMount > ...')
-  },
-  mounted () {
-  },
-  methods: {
-    ...mapActions({
-    }),
-    changeView (e) {
-      console.log('C > PreviewCsv > changeView > e : ', e)
     }
   }
 }

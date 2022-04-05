@@ -13,22 +13,18 @@
         </p>
       </div>
     </div>
-    <EditNavbarSkeleton
-      :git-obj="gitObj"
-      :locale="locale"/>
+    <!-- PREVIEW -->
+    <div>
+      <code><pre>{{ data }}</pre></code>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-
 export default {
   name: 'PreviewJson',
-  components: {
-    EditNavbarSkeleton
-  },
   mixins: [],
   props: {
     gitObj: {
@@ -58,7 +54,8 @@ export default {
   },
   data () {
     return {
-      data: undefined
+      data: undefined,
+      edited: null
     }
   },
   computed: {

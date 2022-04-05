@@ -11,7 +11,7 @@
       <div
         v-if="viewMode !== 'preview'"
         class="column is-8">
-        buttons edition for <code>.{{ gitObj.filetype }}</code> file
+        buttons edition for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
       </div>
       <!-- SAVE/COMMIT -->
       <div
@@ -21,7 +21,8 @@
           type="is-dark"
           expanded
           icon-left="check"
-          size="is-small">
+          size="is-small"
+          @click="CommitChanges(gitObj.id)">
           {{ t( 'save', locale) }}
         </b-button>
       </div>
@@ -44,6 +45,10 @@ export default {
       default: undefined,
       type: Object
     },
+    fileTypeFamily: {
+      default: null,
+      type: String
+    },
     viewMode: {
       default: 'preview',
       type: String
@@ -61,6 +66,12 @@ export default {
     ...mapGetters({
       t: 'git-translations/getTranslation'
     })
+  },
+  methods: {
+    CommitChanges (fileId) {
+      console.log('C > EditNavbarSkeleton > CommitChanges > fileId :', fileId)
+      this.$emit('commitChanges', fileId)
+    }
   }
 }
 </script>
