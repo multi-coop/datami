@@ -16,15 +16,18 @@
     <EditNavbarSkeleton
       :git-obj="gitObj"
       :locale="locale"/>
+    <p>
+      currentViewMode: {{ currentViewMode }}
+    </p>
     <b-table
       v-if="dataRaw"
-      :data="data"
+      :data="tableData"
       :columns="columns"/>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { mixinCsv } from '@/utils/mixins.js'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
@@ -67,13 +70,16 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-    }),
     ...mapGetters({
-      t: 'git-translations/getTranslation'
+      t: 'git-translations/getTranslation',
+      getViewMode: 'git-data/getViewMode'
     }),
-    data () {
+    currentViewMode () {
+      return this.getViewMode(this.gitObj.id)
+    },
+    tableData () {
       const data = this.dataRaw && this.dataRaw.data
+      // TO DO => split cell content into tags if option says so
       // if (this.fileOptions.tagseparator) return
       return data
     },
@@ -111,7 +117,10 @@ export default {
   },
   methods: {
     ...mapActions({
-    })
+    }),
+    changeView (e) {
+      console.log('C > PreviewCsv > changeView > e : ', e)
+    }
   }
 }
 </script>

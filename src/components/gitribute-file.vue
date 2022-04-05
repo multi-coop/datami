@@ -10,6 +10,7 @@
         :file-infos="fileInfos"
         :locale="locale"/>
     </div>
+
     <!-- DEBUG -->
     <div
       v-if="debug"
@@ -48,13 +49,13 @@
         </p>
       </div>
       <p>
+        fileTypeFamily: {{ fileTypeFamily }}
+      </p>
+      <p>
         fileIsReloading: {{ fileIsReloading }}
       </p>
       <p>
         reloading: {{ reloading }}
-      </p>
-      <p>
-        fileTypeFamily: {{ fileTypeFamily }}
       </p>
     </div>
 
@@ -185,11 +186,14 @@ export default {
     }),
     fileIsReloading () {
       // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
-      return this.gitObj && this.fileNeedsReload(this.gitObj.id)
+      const resp = !this.gitObj || this.fileNeedsReload(this.gitObj.id)
+      // console.log('C > GitributeFile > fileIsReloading > resp : ', resp)
+      return resp
     }
   },
   watch: {
     fileIsReloading (next) {
+      // console.log('C > GitributeFile > watch > fileIsReloading > next : ', next)
       if (next) { this.reloadFile() }
     }
   },
@@ -206,10 +210,9 @@ export default {
     // console.log('C > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
     // console.log('C > GitributeFile > mount > this.usertoken : ', this.usertoken)
     this.gitObj = this.getGitInfosObj(this.gitfile)
-    this.updateToken({ fileId: this.gitObj.id, token: this.usertoken })
     this.fileType = this.gitObj.filetype
+    this.updateToken({ fileId: this.gitObj.id, token: this.usertoken })
     this.fileInfos = await this.getFileData(this.gitObj)
-    this.updateReloading({ fileId: this.gitObj.id, action: 'add' })
     this.reloadFile()
   },
   methods: {
@@ -219,8 +222,9 @@ export default {
       updateReloading: 'git-data/updateReloading'
     }),
     async reloadFile () {
+      this.updateReloading({ fileId: this.gitObj.id, isLoading: true })
       this.fileRaw = await this.getFileDataRaw(this.gitObj)
-      this.updateReloading({ fileId: this.gitObj.id, action: 'remove' })
+      this.updateReloading({ fileId: this.gitObj.id, isLoading: false })
     }
   }
 }

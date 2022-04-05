@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 
@@ -62,11 +62,13 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-    }),
     ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
+      t: 'git-translations/getTranslation',
+      getViewMode: 'git-data/getViewMode'
+    }),
+    currentViewMode () {
+      return this.getViewMode(this.gitObj.id)
+    }
   },
   watch: {
     fileRaw (next) {

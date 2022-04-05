@@ -12,10 +12,14 @@ export default {
   edit: 'Editer',
   change: 'Changer',
   save: 'Sauver',
+  cancel: 'Annuler',
   fileInfos: 'Informations sur le fichier',
   reloadFile: 'Recharger le fichier',
   downloadFile: 'Télécharger le fichier',
   changeLocale: 'Choisir la langue',
   userToken: "Votre jeton d'accès",
-  changeToken: "Changer votre jeton d'accès"
+  changeToken: "Changer votre jeton d'accès",
+  editView: 'Editer',
+  diffView: 'Comparer',
+  previewView: 'Aperçu'
 }

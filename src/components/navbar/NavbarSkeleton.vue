@@ -1,6 +1,6 @@
 <template>
   <div class="NavbarSkeleton content">
-    <div class="columns is-multiline mb-4">
+    <div class="columns is-multiline is-mobile mb-4">
       <!-- FILE TITLE -->
       <div class="column is-9">
         <FileTitle

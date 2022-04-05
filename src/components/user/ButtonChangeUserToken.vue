@@ -26,10 +26,10 @@
           <b-field
             :label="editToken ? t('changeToken', locale) : t('userToken', locale)">
             <b-input
+              v-model="usertoken"
               icon="lock"
               :disabled="!editToken"
-              expanded
-              v-model="usertoken"/>
+              expanded/>
             <p class="control">
               <b-button
                 :type="editToken ? 'is-dark' : 'is-light'"

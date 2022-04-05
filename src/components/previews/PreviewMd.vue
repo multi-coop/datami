@@ -11,23 +11,54 @@
             <pre>{{ data }}</pre>
           </code>
         </p>
+        <p>
+          currentViewMode : {{ currentViewMode }}
+        </p>
       </div>
     </div>
+    <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
       :git-obj="gitObj"
+      :view-mode="currentViewMode"
       :locale="locale"/>
-    <div>
-      <ShowDown
-        :markdown="content"
-        flavor="github"/>
+    <div class="columns is-mobile">
+      <!-- EDIT VIEW -->
+      <div
+        v-show="currentViewMode === 'edit'"
+        :class="`column is-half`">
+        <!-- <ShowDownEdit
+          :edited.sync="edited"
+          :content="content"/> -->
+        <b-input
+          v-model="edited"
+          type="textarea"
+          :rows="numberLines"/>
+      </div>
+      <!-- DIFF VIEW -->
+      <div
+        v-show="currentViewMode === 'diff'"
+        :class="`column is-half`">
+        <!-- <ShowDownEditDiff
+          :edited.sync="edited"
+          :content="content"/> -->
+      </div>
+      <!-- PREVIEW -->
+      <div
+        :class="`column`">
+        <ShowDown
+          :markdown="edited"
+          flavor="github"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
 import ShowDown from '@/components/previews/ShowDown'
+// import ShowDownEdit from '@/components/previews/ShowDownEdit'
+// import ShowDownEditDiff from '@/components/previews/ShowDownEditDiff'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 
@@ -36,7 +67,8 @@ export default {
   components: {
     EditNavbarSkeleton,
     ShowDown
-    // VueShowdown
+    // ShowDownEdit,
+    // ShowDownEditDiff
   },
   mixins: [mixinMd],
   props: {
@@ -67,16 +99,25 @@ export default {
   },
   data () {
     return {
+      viewMode: 'preview',
       data: null,
-      content: null
+      content: null,
+      edited: null
     }
   },
   computed: {
-    ...mapState({
-    }),
     ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
+      t: 'git-translations/getTranslation',
+      getViewMode: 'git-data/getViewMode'
+    }),
+    currentViewMode () {
+      return this.getViewMode(this.gitObj.id)
+    },
+    numberLines () {
+      let result = 2
+      if (this.edited) { result = this.edited.split(/\r\n|\r|\n/).length + result }
+      return result
+    }
   },
   watch: {
     fileRaw (next) {
@@ -86,16 +127,9 @@ export default {
         const dataRaw = this.mdToObject(next, this.fileOptions)
         this.data = dataRaw.data
         this.content = dataRaw.content
+        this.edited = dataRaw.content
       }
     }
-  },
-  beforeMount () {
-  },
-  mounted () {
-  },
-  methods: {
-    ...mapActions({
-    })
   }
 }
 </script>

@@ -69,9 +69,7 @@ export default {
     },
     inputMarkdown () {
       // from props
-      if (this.markdown !== null) {
-        return this.markdown
-      }
+      if (this.markdown !== null) return this.markdown
       // fall back to empty string
       return ''
     },

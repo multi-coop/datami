@@ -42,3 +42,8 @@ export const mixinMd = {
     mdToObject
   }
 }
+
+export const mixinJson = {
+  methods: {
+  }
+}
