@@ -20,9 +20,9 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ButtonReloadFile',
   props: {
-    gitObj: {
-      default: undefined,
-      type: Object
+    fileId: {
+      default: null,
+      type: String
     },
     locale: {
       default: 'en',
@@ -37,8 +37,12 @@ export default {
   computed: {
     ...mapGetters({
       fileNeedsReload: 'git-data/fileNeedsReload',
-      t: 'git-translations/getTranslation'
+      t: 'git-translations/getTranslation',
+      getGitInfosObj: 'getGitInfosObj'
     }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    },
     fileIsReloading () {
       // console.log('C > ButtonReloadFile > this.gitObj : ', this.gitObj)
       return this.gitObj && this.fileNeedsReload(this.gitObj.uuid)

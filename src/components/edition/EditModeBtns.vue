@@ -1,10 +1,12 @@
 <template>
   <div class="EditModeBtns content">
+    <!-- DEBUG -->
     <div v-if="debug">
       <p>
         currentViewMode: {{ currentViewMode }}
       </p>
     </div>
+    <!-- BUTTONS -->
     <b-field custom-class="is-small">
       <p
         v-for="btn in buttons"
@@ -34,9 +36,9 @@ import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
 export default {
   name: 'EditModeBtns',
   props: {
-    gitObj: {
+    fileId: {
       default: undefined,
-      type: Object
+      type: String
     },
     locale: {
       default: 'en',
@@ -56,7 +58,7 @@ export default {
       getViewMode: 'git-data/getViewMode'
     }),
     currentViewMode () {
-      return this.getViewMode(this.gitObj.uuid)
+      return this.getViewMode(this.fileId)
     }
   },
   beforeMount () {
@@ -69,7 +71,7 @@ export default {
     changeMode (code) {
       // this.active = code
       // console.log('\nC > EditModeBtns > changeMode > code : ', code)
-      this.changeViewMode({ fileId: this.gitObj.uuid, mode: code })
+      this.changeViewMode({ fileId: this.fileId, mode: code })
     }
   }
 }

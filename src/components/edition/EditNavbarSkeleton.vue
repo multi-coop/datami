@@ -1,6 +1,8 @@
 <template>
   <div class="EditNavbarSkeleton container">
-    <div class="columns is-multiline mb-2">
+    <div
+      v-if="gitObj"
+      class="columns is-multiline mb-2">
       <!-- EDITION OPTIONS -->
       <div
         class="column is-6">
@@ -9,7 +11,7 @@
       <!-- FILE TITLE -->
       <div class="column is-3">
         <EditModeBtns
-          :git-obj="gitObj"
+          :file-id="fileId"
           :locale="locale"/>
       </div>
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
@@ -45,9 +47,9 @@ export default {
     EditModeBtns
   },
   props: {
-    gitObj: {
+    fileId: {
       default: undefined,
-      type: Object
+      type: String
     },
     fileTypeFamily: {
       default: null,
@@ -66,8 +68,12 @@ export default {
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode'
+      getViewMode: 'git-data/getViewMode',
+      getGitInfosObj: 'getGitInfosObj'
     }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    },
     currentViewMode () {
       return this.getViewMode(this.gitObj.uuid)
     }

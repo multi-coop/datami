@@ -1,3 +1,5 @@
+import { authorizedFileTypes as fileTypes } from '@/utils/fileTypesUtils.js'
+
 export const gitProviders = {
   github: {
     root: 'https://github.com/',
@@ -108,6 +110,7 @@ export const extractGitInfos = (str) => {
     filepath: remaining,
     filename: filename,
     filetype: filetype,
+    filefamily: (fileTypes[filetype] && fileTypes[filetype].family) || 'other',
     filefullname: filefullname
   }
   const apiRoots = buildApiRoots(gitInfos)

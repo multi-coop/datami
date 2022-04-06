@@ -27,13 +27,9 @@ export default {
   name: 'PreviewJson',
   mixins: [],
   props: {
-    gitObj: {
-      default: undefined,
-      type: Object
-    },
-    fileInfos: {
-      default: undefined,
-      type: Object
+    fileId: {
+      default: null,
+      type: String
     },
     fileOptions: {
       default: undefined,
@@ -63,6 +59,9 @@ export default {
       t: 'git-translations/getTranslation',
       getViewMode: 'git-data/getViewMode'
     }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    },
     currentViewMode () {
       return this.getViewMode(this.gitObj.uuid)
     }

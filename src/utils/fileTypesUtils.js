@@ -1,13 +1,10 @@
 export const authorizedFileTypes = {
-  // text: ['txt', 'md'],
-  // table: ['csv', 'tsv'],
-  // json: ['json', 'geojson']
-  txt: { type: 'text' },
-  md: { type: 'text' },
-  csv: { type: 'table' },
-  tsv: { type: 'table' },
-  json: { type: 'json' },
-  geojson: { type: 'json' }
+  txt: { family: 'text' },
+  md: { family: 'text' },
+  csv: { family: 'table' },
+  tsv: { family: 'table' },
+  json: { family: 'json' },
+  geojson: { family: 'json' }
 }
 
 export const filesViewsOptions = [

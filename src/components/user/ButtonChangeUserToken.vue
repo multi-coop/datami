@@ -27,14 +27,14 @@
             :label="editToken ? t('changeToken', locale) : t('userToken', locale)">
             <b-input
               v-model="usertoken"
-              icon="lock"
+              :icon="editToken ? 'lock-open' : 'lock'"
               :disabled="!editToken"
               expanded/>
             <p class="control">
               <b-button
                 :type="editToken ? 'is-dark' : 'is-light'"
                 :inverted="!editToken"
-                :icon-left="editToken ? 'check' : 'lock-open' "
+                :icon-left="editToken ? 'check' : 'pencil' "
                 :label="editToken ? t('save', locale) : t('change', locale)"
                 @click="inputAction()"/>
             </p>
@@ -51,9 +51,9 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'ButtonChangeUserToken',
   props: {
-    gitObj: {
-      default: undefined,
-      type: Object
+    fileId: {
+      default: null,
+      type: String
     },
     locale: {
       default: 'en',
@@ -70,10 +70,15 @@ export default {
   computed: {
     ...mapGetters({
       getFileToken: 'git-data/getFileToken',
-      t: 'git-translations/getTranslation'
-    })
+      t: 'git-translations/getTranslation',
+      getGitInfosObj: 'getGitInfosObj'
+    }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    }
   },
-  beforeMount () {
+  mounted () {
+    // console.log('C > ButtonChangeUserToken > this.gitObj : ', this.gitObj)
     const originalToken = this.getFileToken(this.gitObj.uuid)
     // console.log('C > ButtonChangeUserToken > originalToken : ', originalToken)
     this.usertoken = originalToken
@@ -87,6 +92,7 @@ export default {
         // console.log('C > ButtonChangeUserToken > this.usertoken : ', this.usertoken)
         this.updateToken({ fileId: this.gitObj.uuid, token: this.usertoken })
         this.editToken = false
+        this.showContent = false
       } else {
         this.editToken = true
       }

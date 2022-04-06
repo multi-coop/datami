@@ -35,24 +35,6 @@
         </div>
       </div>
     </div>
-    <!-- <b-dropdown
-      :triggers="['hover']"
-      position="is-bottom-right"
-      append-to-body
-      aria-role="list">
-      <template #trigger>
-        <b-button
-          size="is-small"
-          class="ml-1"
-          icon-right="translate"/>
-      </template>
-      <b-dropdown-item
-        v-for="loc in allowedLocales"
-        :key="loc.locale"
-        aria-role="listitem">
-        {{ loc.label }}
-      </b-dropdown-item>
-    </b-dropdown> -->
   </div>
 </template>
 
@@ -65,11 +47,6 @@ export default {
     locale: {
       default: 'en',
       type: String
-    }
-  },
-  data () {
-    return {
-      // showLocales: false
     }
   },
   computed: {

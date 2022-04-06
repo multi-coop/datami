@@ -22,9 +22,9 @@ export default {
   name: 'ButtonDownloadFile',
   mixins: [mixinDownload],
   props: {
-    gitObj: {
-      default: undefined,
-      type: Object
+    fileId: {
+      default: null,
+      type: String
     },
     locale: {
       default: 'en',
@@ -40,8 +40,12 @@ export default {
     ...mapState({
     }),
     ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
+      t: 'git-translations/getTranslation',
+      getGitInfosObj: 'getGitInfosObj'
+    }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    }
   },
   methods: {
     async DownloadFile () {

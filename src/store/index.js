@@ -18,15 +18,15 @@ const defaultStore = {
     getGitObj: (state) => {
       return state.gitInfos
     },
-    getGitInfosObj: (state) => (id) => {
-      const gitInfosObj = state.gitInfos.find(gitObj => gitObj.id === id)
+    getGitInfosObj: (state) => (uuid) => {
+      const gitInfosObj = state.gitInfos.find(gitObj => gitObj.uuid === uuid)
       return gitInfosObj
     }
   },
   mutations: {
     setGitInfos (state, gitInfosObject) {
       // console.log('S-index > M > setGitInfos > gitInfosObject : ', gitInfosObject)
-      const index = state.gitInfos.findIndex(item => item.id === gitInfosObject.id)
+      const index = state.gitInfos.findIndex(item => item.uuid === gitInfosObject.uuid)
       if (index !== -1) {
         Vue.set(state.gitInfos, index, gitInfosObject)
       } else {

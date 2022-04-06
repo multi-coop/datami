@@ -5,21 +5,19 @@
       <div class="column is-9">
         <FileTitle
           :title="title"
-          :git-obj="gitObj"
-          :file-type-family="fileTypeFamily"
-          :file-icon="fileIcon"
+          :file-id="fileId"
           :locale="locale"/>
       </div>
       <!-- USER BUTTONS -->
       <div class="column is-3 is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
         <ButtonReloadFile
-          :git-obj="gitObj"
+          :file-id="fileId"
           :locale="locale"/>
         <ButtonDownloadFile
-          :git-obj="gitObj"
+          :file-id="fileId"
           :locale="locale"/>
         <ButtonChangeUserToken
-          :git-obj="gitObj"
+          :file-id="fileId"
           :locale="locale"/>
         <ButtonChangeLocale
           :locale="locale"/>
@@ -51,16 +49,8 @@ export default {
       default: 'gitribute',
       type: String
     },
-    gitObj: {
-      default: undefined,
-      type: Object
-    },
-    fileInfos: {
-      default: undefined,
-      type: Object
-    },
-    fileTypeFamily: {
-      default: '',
+    fileId: {
+      default: null,
       type: String
     },
     locale: {
@@ -68,34 +58,10 @@ export default {
       type: String
     }
   },
-  data () {
-    return {
-      icons: [
-        {
-          icon: 'note-text-outline',
-          allowedTypes: ['md']
-        },
-        {
-          icon: 'table',
-          allowedTypes: ['csv', 'tsv']
-        },
-        {
-          icon: 'code-json',
-          allowedTypes: ['json', 'geojson']
-        }
-      ]
-    }
-  },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation'
-    }),
-    fileIcon () {
-      // console.log('\nC > NavbarSkeleton > fileIcon > this.gitObj : ', this.gitObj)
-      const iconObj = this.icons.find(t => t.allowedTypes.includes(this.gitObj.filetype))
-      // console.log('C > NavbarSkeleton > fileIcon > iconObj : ', iconObj)
-      return iconObj.icon || this.icons[0].icon
-    }
+    })
   }
 }
 </script>

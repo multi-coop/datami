@@ -1,13 +1,11 @@
 <template>
   <div class="section">
-    <!-- TO DO - USER NAVBAR -->
+    <!-- USER NAVBAR -->
     <div class="container mb-4">
       <NavbarSkeleton
         v-if="gitObj"
         :title="title"
-        :file-type-family="fileTypeFamily"
-        :git-obj="gitObj"
-        :file-infos="fileInfos"
+        :file-id="fileId"
         :locale="locale"/>
     </div>
 
@@ -67,7 +65,7 @@
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
       v-if="!fileIsReloading"
-      :git-obj="gitObj"
+      :file-id="fileId"
       :file-type-family="fileTypeFamily"
       :view-mode="currentViewMode"
       :locale="locale"/>
@@ -79,8 +77,7 @@
       class="container">
       <PreviewCsv
         v-show="!fileIsReloading"
-        :git-obj="gitObj"
-        :file-infos="fileInfos"
+        :file-id="fileId"
         :file-options="fileOptions"
         :file-raw="fileRaw"
         :locale="locale"
@@ -93,8 +90,7 @@
       class="container">
       <PreviewMd
         v-show="!fileIsReloading"
-        :git-obj="gitObj"
-        :file-infos="fileInfos"
+        :file-id="fileId"
         :file-options="fileOptions"
         :file-raw="fileRaw"
         :locale="locale"
@@ -107,8 +103,7 @@
       class="container">
       <PreviewJson
         v-show="!fileIsReloading"
-        :git-obj="gitObj"
-        :file-infos="fileInfos"
+        :file-id="fileId"
         :file-options="fileOptions"
         :file-raw="fileRaw"
         :locale="locale"
@@ -178,8 +173,9 @@ export default {
   },
   data () {
     return {
+      fileId: undefined,
       fileType: undefined,
-      gitObj: undefined,
+      // gitObj: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
       fileOptions: undefined
@@ -200,6 +196,9 @@ export default {
       fileNeedsReload: 'git-data/fileNeedsReload',
       getViewMode: 'git-data/getViewMode'
     }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    },
     fileIsReloading () {
       // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
       const resp = !this.gitObj || this.fileNeedsReload(this.gitObj.uuid)
@@ -218,24 +217,28 @@ export default {
   },
   beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
-    if (!this.getGitInfosObj[this.gitfile]) {
-      const gitInfosObject = extractGitInfos(this.gitfile)
-      const fileUuid = uuidv4()
-      gitInfosObject.uuid = fileUuid
+    const gitInfosObject = extractGitInfos(this.gitfile)
+    const fileUuid = uuidv4()
+    gitInfosObject.uuid = fileUuid
+    this.fileId = gitInfosObject.uuid
+    this.fileType = gitInfosObject.filetype
+    if (!this.getGitInfosObj[this.fileId]) {
+      // this.gitObj = gitInfosObject
+      this.updateToken({ fileId: gitInfosObject.uuid, token: this.usertoken })
       this.addGitInfos(gitInfosObject)
       // console.log('\nC > GitributeFile > beforeMount > gitInfos : ', gitInfos)
     }
+    // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
     // build options object
     this.fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
   },
   async mounted () {
-    // console.log('C > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
+    // console.log('\nC > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
+    // console.log('C > GitributeFile > mount > this.gitObj : ', this.gitObj)
     // console.log('C > GitributeFile > mount > this.usertoken : ', this.usertoken)
-    this.gitObj = this.getGitInfosObj(this.gitfile)
-    this.fileType = this.gitObj.filetype
-    this.updateToken({ fileId: this.gitObj.uuid, token: this.usertoken })
-    this.fileInfos = await this.getFileData(this.gitObj)
-    this.reloadFile()
+    // this.fileInfos = await this.getFileData(this.gitObj)
+    // console.log('C > GitributeFile > mount > this.fileInfos : ', this.fileInfos)
+    await this.reloadFile()
   },
   methods: {
     ...mapActions({
@@ -244,8 +247,17 @@ export default {
       updateReloading: 'git-data/updateReloading'
     }),
     async reloadFile () {
+      // Update reloading in store - true
       this.updateReloading({ fileId: this.gitObj.uuid, isLoading: true })
+
+      // Request API for file infos
+      this.fileInfos = await this.getFileData(this.gitObj)
+      // console.log('C > GitributeFile > reloadFile > this.fileInfos : ', this.fileInfos)
+
+      // Request API for file content
       this.fileRaw = await this.getFileDataRaw(this.gitObj)
+
+      // Update reloading in store - false
       this.updateReloading({ fileId: this.gitObj.uuid, isLoading: false })
     }
   }
