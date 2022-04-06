@@ -23,26 +23,23 @@
       <div
         v-show="currentViewMode !== 'preview'"
         class="column is-6 has-text-centered">
-        <span class="is-size-6 has-text-weight-bold has-text-grey-light">
-          <b-icon
-            :icon="getIconEdit"
-            size="is-small"/>
-          {{ t( 'edited', locale) }}
-        </span>
-      </div>
-      <!-- DIVIDER -->
-      <div
-        v-show="currentViewMode !== 'preview'"
-        class="divider is-vertical mx-0">
-        ...
+        <div
+          v-show="currentViewMode !== 'preview'"
+          class="divider my-0">
+          <span class="is-capitalized is-size-6 has-text-grey-light">
+            <b-icon
+              :icon="getIconEdit"
+              size="is-small"/>
+            {{ t( 'edited', locale) }}
+          </span>
+        </div>
       </div>
       <!-- ORIGINAL -->
       <div
         class="column has-text-centered">
-        <!-- <hr v-show="currentViewMode === 'preview'"> -->
         <div
           v-show="currentViewMode === 'preview'"
-          class="divider is-horizontal my-0">
+          class="divider my-0">
           <span class="is-capitalized is-size-6 has-text-grey-light">
             <b-icon
               :icon="getIconPreview"
@@ -53,18 +50,28 @@
         <span
           v-show="currentViewMode === 'diff'"
           class="is-size-6 has-text-weight-bold has-text-grey-light">
-          <b-icon
-            :icon="getIconPreview"
-            size="is-small"/>
-          {{ t( 'original', locale) }}
+          <div
+            class="divider my-0 pl-4">
+            <span class="is-capitalized is-size-6 has-text-grey-light">
+              <b-icon
+                :icon="getIconPreview"
+                size="is-small"/>
+              {{ t( 'original', locale) }}
+            </span>
+          </div>
         </span>
         <span
           v-show="currentViewMode === 'edit'"
           class="is-size-6 has-text-weight-bold has-text-grey-light">
-          <b-icon
-            :icon="getIconPreview"
-            size="is-small"/>
-          {{ t( 'editedPreview', locale) }}
+          <div
+            class="divider my-0 pl-4">
+            <span class="is-capitalized is-size-6 has-text-grey-light">
+              <b-icon
+                :icon="getIconPreview"
+                size="is-small"/>
+              {{ t( 'editedPreview', locale) }}
+            </span>
+          </div>
         </span>
       </div>
     </div>

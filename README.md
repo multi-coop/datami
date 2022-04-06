@@ -46,6 +46,9 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
   - [ ] On each preview (for every file type), switch between 'preview' and 'edition' views ;
+    - [ ] for `csv` files (`.csv` and `.tsv` types)
+    - [x] for `text` files (`.md` types)
+    - [ ] for `json` files (`.json` and `.geojson` types)
   - [ ]  Add a `Save` button + dialog + actions :
     - after edition on client's side, acting as a commit to the file's git repo on a separate branch
     - create a merge request (commit and request by default done the "ghost user") ;
