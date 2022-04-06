@@ -1,5 +1,5 @@
 <template>
-  <div class="SkeletonCSV container">
+  <div class="LoaderCSV container">
     <table class="table">
       <thead>
         <th
@@ -32,10 +32,10 @@
 <script>
 
 export default {
-  name: 'SkeletonCSV',
+  name: 'LoaderCSV',
   data () {
     return {
-      columns: 5,
+      columns: 8,
       rows: 3,
       cellWidth: '120px'
     }

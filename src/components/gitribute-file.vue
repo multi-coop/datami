@@ -49,6 +49,8 @@
     </div>
 
     <!-- LOADERS -->
+    <LoaderEditNavbar v-if="fileIsReloading"/>
+    <!-- <LoaderEditNavbar/> -->
     <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
     <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
     <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>
@@ -132,6 +134,7 @@ import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
 
+import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderCSV from '@/components/loaders/LoaderCSV'
 import LoaderMD from '@/components/loaders/LoaderMD'
 
@@ -146,6 +149,7 @@ export default {
     PreviewCsv,
     PreviewMd,
     PreviewJson,
+    LoaderEditNavbar,
     LoaderCSV,
     LoaderMD,
     GitributeCredits

@@ -1,7 +1,7 @@
 <template>
-  <div class="SkeletonMD container">
+  <div class="LoaderMD container">
     <!-- FAKE TITLE -->
-    <h1>
+    <h1 class="mb-4">
       <b-skeleton
         size="is-medium"
         animated
@@ -51,6 +51,6 @@
 <script>
 
 export default {
-  name: 'SkeletonMD'
+  name: 'LoaderMD'
 }
 </script>
