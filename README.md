@@ -46,13 +46,23 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
   - [ ] On each preview (for every file type), switch between 'preview' and 'edition' views ;
-  - [ ]  Add a `Save` button + dialog + actions : 
-    - after edition on client's side, acting as a commit to the file's git repo on a separate branch 
+  - [ ]  Add a `Save` button + dialog + actions :
+    - after edition on client's side, acting as a commit to the file's git repo on a separate branch
     - create a merge request (commit and request by default done the "ghost user") ;
-- [ ] Deploy on Netlify for test purposes.
+- [x] Deploy on Netlify for test purposes => [test deploy here](https://multi-gitribute-test.netlify.app/)
 - [ ] A good documentation for each web component (at least in this readme for now)
 
 ... and just for a POC, that would be greaaaaat ...
+
+---
+
+## Websites
+
+### Test deploy
+
+Website : [multi-gitribute-test](https://multi-gitribute-test.netlify.app/)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/693b562e-5ff8-4101-9cdb-157f7be2d3d2/deploy-status)](https://app.netlify.com/sites/multi-gitribute-test/deploys)
 
 ---
 
