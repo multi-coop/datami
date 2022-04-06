@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { viewModes } from '@/utils/fileTypesUtils.js'
 
 export const data = {
@@ -35,7 +36,7 @@ export const data = {
       if (state.edit.includes(fileId)) return 'edit'
     },
     getCommitData: (state) => (fileId) => {
-      console.log('\nS-data > M > setState > state.buffer : ', state.buffer)
+      // console.log('\nS-data > M > setState > state.buffer : ', state.buffer)
       return state.buffer.find(commitData => commitData.uuid === fileId)
     }
   },
@@ -54,7 +55,12 @@ export const data = {
       state[key] = state[key].filter(uuid => uuid !== fileId)
     },
     addToBuffer (state, commitData) {
-      state.buffer.push(commitData)
+      const index = state.buffer.findIndex(item => item.uuid === commitData.uuid)
+      if (index !== -1) {
+        Vue.set(state.buffer, index, commitData)
+      } else {
+        state.buffer.push(commitData)
+      }
       // console.log('S-data > M > addToBuffer > state.buffer : ', state.buffer)
     },
     removeFromBuffer (state, commitData) {
@@ -96,10 +102,10 @@ export const data = {
       })
     },
     updateBuffer ({ commit }, { gitObj, edited, newBranch, token, addToBuffer }) {
-      console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
+      // console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
       // console.log('S-data > A > updateBuffer > edited : ', edited)
-      console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
-      console.log('S-data > A > updateBuffer > token : ', token)
+      // console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
+      // console.log('S-data > A > updateBuffer > token : ', token)
       const commitData = { uuid: gitObj.uuid }
       if (addToBuffer) {
         commitData.gitObj = gitObj

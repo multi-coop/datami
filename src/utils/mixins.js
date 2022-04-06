@@ -1,5 +1,5 @@
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
-import { $axios, getFileData, getFileDataRaw } from '@/utils/getData.js'
+import { getFileData, getFileDataRaw } from '@/utils/getData.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
 import { csvToObject } from '@/utils/csvUtils.js'
 import { $matter, mdToObject } from '@/utils/mdUtils.js'
@@ -14,7 +14,7 @@ export const mixin = {
   },
   methods: {
     extractGitInfos,
-    $axios,
+    // $axios,
     getFileData,
     getFileDataRaw
   }

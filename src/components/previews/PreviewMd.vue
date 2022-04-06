@@ -267,6 +267,11 @@ export default {
         this.edited = dataRaw.content
       }
     },
+    edited (next) {
+      if (next) {
+        this.bufferizeEdited()
+      }
+    },
     fileIsSaving (next) {
       if (next) {
         console.log('C > PreviewMd > watch > fileIsSaving > next : ', next)

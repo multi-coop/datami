@@ -1,6 +1,6 @@
-import axios from 'axios'
+// import axios from 'axios'
 
-export const $axios = axios
+// export const $axios = axios
 
 export async function getFileData (gitObj, headers = undefined) {
   // get correct API url

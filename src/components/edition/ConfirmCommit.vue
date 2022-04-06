@@ -62,6 +62,7 @@
                   <h5 class="has-text-centered mt-4">
                     {{ t('editedPreview', locale) }}
                   </h5>
+                  <pre><code>{{ edited }}</code></pre>
                 </b-tab-item>
 
                 <!-- FILE INFOS -->
@@ -141,7 +142,11 @@ export default {
       t: 'git-translations/getTranslation',
       getCommitData: 'git-data/getCommitData',
       getFileReqInfosObj: 'getFileReqInfosObj'
-    })
+    }),
+    edited () {
+      const commitData = this.getCommitData(this.fileId)
+      return commitData && commitData.edited
+    }
   },
   beforeMount () {
     const now = Date.now()
