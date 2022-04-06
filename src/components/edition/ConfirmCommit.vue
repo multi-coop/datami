@@ -129,7 +129,10 @@
 
 import { mapGetters, mapActions } from 'vuex'
 
-import { putCommit } from '@/utils/getData.js'
+import {
+  postNewBranch
+  // putCommit
+} from '@/utils/getData.js'
 
 import GitObjInfos from '@/components/previews/GitObjInfos'
 
@@ -211,9 +214,14 @@ export default {
       const fileReqInfos = this.getFileReqInfosObj(this.fileId)
       commitData.fileReqInfos = fileReqInfos
       console.log('C > ConfirmCommit > confirmCommit > commitDfileReqInfosata :', fileReqInfos)
-      // send request
-      const resp = await putCommit(commitData)
-      console.log('C > ConfirmCommit > confirmCommit > resp :', resp)
+
+      // send requests
+      // create new branch
+      const respBranch = await postNewBranch(commitData)
+      console.log('C > ConfirmCommit > confirmCommit > respBranch :', respBranch)
+      // put commit
+      // const respCommit = await putCommit(commitData)
+      // console.log('C > ConfirmCommit > confirmCommit > respCommit :', respCommit)
     }
   }
 }
