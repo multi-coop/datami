@@ -36,7 +36,7 @@ export default {
   data () {
     return {
       columns: 8,
-      rows: 3,
+      rows: 5,
       cellWidth: '120px'
     }
   }
