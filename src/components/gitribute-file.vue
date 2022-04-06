@@ -278,3 +278,11 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.no-text-transform {
+  text-transform: none!important;
+}
+
+</style>

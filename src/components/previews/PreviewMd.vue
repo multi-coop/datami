@@ -26,7 +26,7 @@
         <div
           v-show="currentViewMode !== 'preview'"
           class="divider my-0">
-          <span class="is-capitalized is-size-6 has-text-grey-light">
+          <span class="no-text-transform is-size-6 has-text-grey-light">
             <b-icon
               :icon="getIconEdit"
               size="is-small"/>
@@ -40,7 +40,7 @@
         <div
           v-show="currentViewMode === 'preview'"
           class="divider my-0">
-          <span class="is-capitalized is-size-6 has-text-grey-light">
+          <span class="no-text-transform is-size-6 has-text-grey-light">
             <b-icon
               :icon="getIconPreview"
               size="is-small"/>
@@ -52,7 +52,7 @@
           class="is-size-6 has-text-weight-bold has-text-grey-light">
           <div
             class="divider my-0 pl-4">
-            <span class="is-capitalized is-size-6 has-text-grey-light">
+            <span class="no-text-transform is-size-6 has-text-grey-light">
               <b-icon
                 :icon="getIconPreview"
                 size="is-small"/>
@@ -65,7 +65,7 @@
           class="is-size-6 has-text-weight-bold has-text-grey-light">
           <div
             class="divider my-0 pl-4">
-            <span class="is-capitalized is-size-6 has-text-grey-light">
+            <span class="no-text-transform is-size-6 has-text-grey-light">
               <b-icon
                 :icon="getIconPreview"
                 size="is-small"/>

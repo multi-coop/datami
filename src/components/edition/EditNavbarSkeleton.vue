@@ -4,8 +4,7 @@
       v-if="gitObj"
       class="columns is-multiline mb-2">
       <!-- EDITION OPTIONS -->
-      <div
-        class="column is-6">
+      <div class="column is-6">
         Buttons for <code>{{ currentViewMode }}</code> view
         for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
       </div>
