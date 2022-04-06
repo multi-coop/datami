@@ -70,16 +70,12 @@ export default {
   computed: {
     ...mapGetters({
       getFileToken: 'git-data/getFileToken',
-      t: 'git-translations/getTranslation',
-      getGitInfosObj: 'getGitInfosObj'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    }
+      t: 'git-translations/getTranslation'
+    })
   },
   mounted () {
     // console.log('C > ButtonChangeUserToken > this.gitObj : ', this.gitObj)
-    const originalToken = this.getFileToken(this.gitObj.uuid)
+    const originalToken = this.getFileToken(this.fileId)
     // console.log('C > ButtonChangeUserToken > originalToken : ', originalToken)
     this.usertoken = originalToken
   },
@@ -90,7 +86,7 @@ export default {
     inputAction () {
       if (this.editToken) {
         // console.log('C > ButtonChangeUserToken > this.usertoken : ', this.usertoken)
-        this.updateToken({ fileId: this.gitObj.uuid, token: this.usertoken })
+        this.updateToken({ fileId: this.fileId, token: this.usertoken })
         this.editToken = false
         this.showContent = false
       } else {

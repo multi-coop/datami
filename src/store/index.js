@@ -11,8 +11,8 @@ Vue.use(Vuex)
 
 const defaultStore = {
   state: {
-    test: 'testing index store',
-    gitInfos: []
+    gitInfos: [],
+    fileReqInfos: []
   },
   getters: {
     getGitObj: (state) => {
@@ -21,6 +21,10 @@ const defaultStore = {
     getGitInfosObj: (state) => (uuid) => {
       const gitInfosObj = state.gitInfos.find(gitObj => gitObj.uuid === uuid)
       return gitInfosObj
+    },
+    getFileReqInfosObj: (state) => (uuid) => {
+      const fileReqInfosObj = state.fileReqInfos.find(fileReq => fileReq.uuid === uuid)
+      return fileReqInfosObj
     }
   },
   mutations: {
@@ -31,6 +35,15 @@ const defaultStore = {
         Vue.set(state.gitInfos, index, gitInfosObject)
       } else {
         state.gitInfos.push(gitInfosObject)
+      }
+    },
+    setFileInfos (state, fileReqInfosObject) {
+      // console.log('S-index > M > setFileInfos > fileReqInfosObject : ', fileReqInfosObject)
+      const index = state.fileReqInfos.findIndex(item => item.uuid === fileReqInfosObject.uuid)
+      if (index !== -1) {
+        Vue.set(state.fileReqInfos, index, fileReqInfosObject)
+      } else {
+        state.fileReqInfos.push(fileReqInfosObject)
       }
     }
   },
@@ -43,6 +56,9 @@ const defaultStore = {
     },
     addGitInfos ({ commit }, gitInfosObject) {
       commit('setGitInfos', gitInfosObject)
+    },
+    addFileReqInfos ({ commit }, fileReqInfos) {
+      commit('setFileInfos', fileReqInfos)
     }
   }
 }

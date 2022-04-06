@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
 import ShowDown from '@/components/previews/ShowDown'
 
@@ -186,7 +186,9 @@ export default {
     ...mapGetters({
       t: 'git-translations/getTranslation',
       getViewMode: 'git-data/getViewMode',
-      getGitInfosObj: 'getGitInfosObj'
+      getGitInfosObj: 'getGitInfosObj',
+      getFileToken: 'git-data/getFileToken',
+      fileNeedsSaving: 'git-data/fileNeedsSaving'
     }),
     gitObj () {
       return this.fileId && this.getGitInfosObj(this.fileId)
@@ -248,6 +250,10 @@ export default {
       })
       // console.log('C > PreviewMd > getDiffHtmlChars  > diffText : \n', diffText)
       return diffText
+    },
+    fileIsSaving () {
+      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
+      return resp
     }
   },
   watch: {
@@ -260,6 +266,27 @@ export default {
         this.content = dataRaw.content
         this.edited = dataRaw.content
       }
+    },
+    fileIsSaving (next) {
+      if (next) {
+        console.log('C > PreviewMd > watch > fileIsSaving > next : ', next)
+        this.bufferizeEdited()
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateBuffer: 'git-data/updateBuffer'
+    }),
+    bufferizeEdited () {
+      const fileFullnameClean = this.gitObj.filefullname.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')
+      const commitData = {
+        gitObj: this.gitObj,
+        edited: this.edited,
+        newBranch: `branch-${fileFullnameClean}-${this.fileId}`,
+        token: this.getFileToken(this.fileId)
+      }
+      this.updateBuffer({ ...commitData, addToBuffer: true })
     }
   }
 }

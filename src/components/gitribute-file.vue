@@ -46,15 +46,6 @@
           </code>
         </p>
       </div>
-      <p>
-        fileTypeFamily: {{ fileTypeFamily }}
-      </p>
-      <p>
-        fileIsReloading: {{ fileIsReloading }}
-      </p>
-      <p>
-        reloading: {{ reloading }}
-      </p>
     </div>
 
     <!-- LOADERS -->
@@ -64,50 +55,59 @@
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
-      v-if="!fileIsReloading"
+      v-if="!fileIsReloading && !fileIsSaving"
       :file-id="fileId"
       :file-type-family="fileTypeFamily"
       :view-mode="currentViewMode"
       :locale="locale"/>
 
+    <!-- CONFIRM COMMIT MODAL -->
+    <ConfirmCommit
+      v-show="fileIsSaving"
+      :file-id="fileId"
+      :locale="locale"
+      :debug="debug"/>
+
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
     <!-- PREVIEWS CSV -->
-    <div
-      v-if="fileTypeFamily === 'table'"
-      class="container">
-      <PreviewCsv
-        v-show="!fileIsReloading"
-        :file-id="fileId"
-        :file-options="fileOptions"
-        :file-raw="fileRaw"
-        :locale="locale"
-        :debug="debug"/>
-    </div>
+    <div v-show="!fileIsSaving">
+      <div
+        v-if="fileTypeFamily === 'table'"
+        class="container">
+        <PreviewCsv
+          v-show="!fileIsReloading"
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :file-raw="fileRaw"
+          :locale="locale"
+          :debug="debug"/>
+      </div>
 
-    <!-- PREVIEWS MD -->
-    <div
-      v-if="fileTypeFamily === 'text'"
-      class="container">
-      <PreviewMd
-        v-show="!fileIsReloading"
-        :file-id="fileId"
-        :file-options="fileOptions"
-        :file-raw="fileRaw"
-        :locale="locale"
-        :debug="debug"/>
-    </div>
+      <!-- PREVIEWS MD -->
+      <div
+        v-if="fileTypeFamily === 'text'"
+        class="container">
+        <PreviewMd
+          v-show="!fileIsReloading"
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :file-raw="fileRaw"
+          :locale="locale"
+          :debug="debug"/>
+      </div>
 
-    <!-- PREVIEWS JSON -->
-    <div
-      v-if="fileTypeFamily === 'json'"
-      class="container">
-      <PreviewJson
-        v-show="!fileIsReloading"
-        :file-id="fileId"
-        :file-options="fileOptions"
-        :file-raw="fileRaw"
-        :locale="locale"
-        :debug="debug"/>
+      <!-- PREVIEWS JSON -->
+      <div
+        v-if="fileTypeFamily === 'json'"
+        class="container">
+        <PreviewJson
+          v-show="!fileIsReloading"
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :file-raw="fileRaw"
+          :locale="locale"
+          :debug="debug"/>
+      </div>
     </div>
 
     <!-- CREDITS -->
@@ -124,12 +124,17 @@ import { mixin } from '@/utils/mixins.js'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 
 import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
+
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+import ConfirmCommit from '@/components/edition/ConfirmCommit'
+
 import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
+
 import LoaderCSV from '@/components/loaders/LoaderCSV'
 import LoaderMD from '@/components/loaders/LoaderMD'
+
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
 export default {
@@ -137,6 +142,7 @@ export default {
   components: {
     NavbarSkeleton,
     EditNavbarSkeleton,
+    ConfirmCommit,
     PreviewCsv,
     PreviewMd,
     PreviewJson,
@@ -194,6 +200,7 @@ export default {
       getGitObj: 'getGitObj',
       getGitInfosObj: 'getGitInfosObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
+      fileNeedsSaving: 'git-data/fileNeedsSaving',
       getViewMode: 'git-data/getViewMode'
     }),
     gitObj () {
@@ -201,8 +208,12 @@ export default {
     },
     fileIsReloading () {
       // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
-      const resp = !this.gitObj || this.fileNeedsReload(this.gitObj.uuid)
+      const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
       // console.log('C > GitributeFile > fileIsReloading > resp : ', resp)
+      return resp
+    },
+    fileIsSaving () {
+      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
       return resp
     },
     currentViewMode () {
@@ -213,6 +224,11 @@ export default {
     fileIsReloading (next) {
       // console.log('C > GitributeFile > watch > fileIsReloading > next : ', next)
       if (next) { this.reloadFile() }
+    },
+    fileIsSaving (next) {
+      if (next) {
+        console.log('C > GitributeFile > watch > fileIsSaving > next : ', next)
+      }
     }
   },
   beforeMount () {
@@ -224,7 +240,7 @@ export default {
     this.fileType = gitInfosObject.filetype
     if (!this.getGitInfosObj[this.fileId]) {
       // this.gitObj = gitInfosObject
-      this.updateToken({ fileId: gitInfosObject.uuid, token: this.usertoken })
+      this.updateToken({ fileId: this.fileId, token: this.usertoken })
       this.addGitInfos(gitInfosObject)
       // console.log('\nC > GitributeFile > beforeMount > gitInfos : ', gitInfos)
     }
@@ -243,22 +259,26 @@ export default {
   methods: {
     ...mapActions({
       addGitInfos: 'addGitInfos',
+      addFileReqInfos: 'addFileReqInfos',
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading'
     }),
     async reloadFile () {
       // Update reloading in store - true
-      this.updateReloading({ fileId: this.gitObj.uuid, isLoading: true })
+      this.updateReloading({ fileId: this.fileId, isLoading: true })
 
       // Request API for file infos
-      this.fileInfos = await this.getFileData(this.gitObj)
+      const fileInfos = await this.getFileData(this.gitObj)
+      fileInfos.uuid = this.fileId
+      this.addFileReqInfos(fileInfos)
+      this.fileInfos = fileInfos
       // console.log('C > GitributeFile > reloadFile > this.fileInfos : ', this.fileInfos)
 
       // Request API for file content
       this.fileRaw = await this.getFileDataRaw(this.gitObj)
 
       // Update reloading in store - false
-      this.updateReloading({ fileId: this.gitObj.uuid, isLoading: false })
+      this.updateReloading({ fileId: this.fileId, isLoading: false })
     }
   }
 }

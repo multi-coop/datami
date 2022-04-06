@@ -7,6 +7,25 @@ export const authorizedFileTypes = {
   geojson: { family: 'json' }
 }
 
+export const typesIcons = [
+  {
+    icon: 'note-text-outline',
+    allowedTypes: ['md']
+  },
+  {
+    icon: 'table',
+    allowedTypes: ['csv', 'tsv']
+  },
+  {
+    icon: 'code-json',
+    allowedTypes: ['json', 'geojson']
+  },
+  {
+    icon: 'file',
+    allowedTypes: ['other']
+  }
+]
+
 export const filesViewsOptions = [
   { code: 'edit', icon: 'pencil', textCode: 'editView' },
   { code: 'diff', icon: 'arrow-left-right', textCode: 'diffView' },

@@ -3,7 +3,6 @@ import { allowedLanguages, translate } from '@/utils/utilsTranslations.js'
 export const translations = {
   namespaced: true,
   state: {
-    test: 'translations store',
     locale: 'en',
     localeIsGlobal: false,
     defaultLocale: 'en',

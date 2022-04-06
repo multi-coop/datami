@@ -3,14 +3,17 @@ import { viewModes } from '@/utils/fileTypesUtils.js'
 export const data = {
   namespaced: true,
   state: {
-    test: 'data module',
     loadedData: {},
     tokens: {},
+
     reloading: [],
+    saving: [],
 
     preview: [],
     edit: [],
-    diff: []
+    diff: [],
+
+    buffer: []
 
   },
   getters: {
@@ -18,8 +21,10 @@ export const data = {
       return state.loadedData[fileId]
     },
     fileNeedsReload: (state) => (fileId) => {
-      // console.log('S-data > G > fileNeedsReload > state.reloading : ', state.reloading)
       return state.reloading.includes(fileId)
+    },
+    fileNeedsSaving: (state) => (fileId) => {
+      return state.saving.includes(fileId)
     },
     getFileToken: (state) => (fileId) => {
       return state.tokens[fileId]
@@ -28,6 +33,10 @@ export const data = {
       if (state.preview.includes(fileId)) return 'preview'
       if (state.diff.includes(fileId)) return 'diff'
       if (state.edit.includes(fileId)) return 'edit'
+    },
+    getCommitData: (state) => (fileId) => {
+      console.log('\nS-data > M > setState > state.buffer : ', state.buffer)
+      return state.buffer.find(commitData => commitData.uuid === fileId)
     }
   },
   mutations: {
@@ -42,7 +51,15 @@ export const data = {
       state[key].push(fileId)
     },
     removeFromState (state, { key, fileId }) {
-      state[key] = state[key].filter(id => id !== fileId)
+      state[key] = state[key].filter(uuid => uuid !== fileId)
+    },
+    addToBuffer (state, commitData) {
+      state.buffer.push(commitData)
+      // console.log('S-data > M > addToBuffer > state.buffer : ', state.buffer)
+    },
+    removeFromBuffer (state, commitData) {
+      state.buffer = state.buffer.filter(data => data.uuid !== commitData.uuid)
+      // console.log('S-data > M > removeFromBuffer > state.buffer : ', state.buffer)
     }
   },
   actions: {
@@ -58,6 +75,13 @@ export const data = {
         commit('removeFromState', { key: 'reloading', fileId: fileId })
       }
     },
+    updateSaving ({ commit }, { fileId, isSaving }) {
+      if (isSaving) {
+        commit('addToState', { key: 'saving', fileId: fileId })
+      } else {
+        commit('removeFromState', { key: 'saving', fileId: fileId })
+      }
+    },
     updateToken ({ commit }, { fileId, token }) {
       // console.log('S-data > A > updateToken > fileId : ', fileId)
       commit('setState', { key: 'tokens', fileId: fileId, data: token })
@@ -70,6 +94,22 @@ export const data = {
       switchOffModes.forEach(v => {
         commit('removeFromState', { key: v, fileId: fileId })
       })
+    },
+    updateBuffer ({ commit }, { gitObj, edited, newBranch, token, addToBuffer }) {
+      console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
+      // console.log('S-data > A > updateBuffer > edited : ', edited)
+      console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
+      console.log('S-data > A > updateBuffer > token : ', token)
+      const commitData = { uuid: gitObj.uuid }
+      if (addToBuffer) {
+        commitData.gitObj = gitObj
+        commitData.edited = edited
+        commitData.newBranch = newBranch
+        commitData.token = token
+        commit('addToBuffer', commitData)
+      } else {
+        commit('removeFromBuffer', commitData)
+      }
     }
   }
 }

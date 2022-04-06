@@ -6,7 +6,8 @@
       <!-- EDITION OPTIONS -->
       <div
         class="column is-6">
-        buttons edition for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
+        Buttons for <code>{{ currentViewMode }}</code> view
+        for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
       </div>
       <!-- FILE TITLE -->
       <div class="column is-3">
@@ -75,26 +76,27 @@ export default {
       return this.fileId && this.getGitInfosObj(this.fileId)
     },
     currentViewMode () {
-      return this.getViewMode(this.gitObj.uuid)
+      return this.getViewMode(this.fileId)
     }
   },
   methods: {
     ...mapActions({
-      changeViewMode: 'git-data/changeViewMode'
+      changeViewMode: 'git-data/changeViewMode',
+      updateSaving: 'git-data/updateSaving'
     }),
     toggleButton () {
       if (this.currentViewMode === 'preview') {
         this.changeMode('edit')
       } else {
-        this.commitChanges(this.gitObj.uuid)
+        this.commitChanges()
       }
-    },
-    commitChanges (fileId) {
-      console.log('C > EditNavbarSkeleton > commitChanges > fileId :', fileId)
     },
     changeMode (code) {
       // console.log('C > EditNavbarSkeleton > changeMode > code :', code)
-      this.changeViewMode({ fileId: this.gitObj.uuid, mode: code })
+      this.changeViewMode({ fileId: this.fileId, mode: code })
+    },
+    commitChanges () {
+      this.updateSaving({ fileId: this.fileId, isSaving: true })
     }
   }
 }

@@ -2,6 +2,7 @@ export default {
   reclaim: 'Un widget open source codé avec 🤍  &nbsp; par',
   code: 'Code source',
   file: 'Fichier',
+  fileSource: 'Fichier source',
   fileName: 'Nom du fichier',
   fileType: 'Type du fichier',
   fileFamily: 'Famille de fichier',
@@ -15,6 +16,7 @@ export default {
   edit: 'Editer',
   change: 'Changer',
   save: 'Sauver',
+  send: 'Envoyer',
   cancel: 'Annuler',
   fileInfos: 'Informations sur le fichier',
   reloadFile: 'Recharger le fichier',
@@ -27,5 +29,12 @@ export default {
   previewView: 'Aperçu',
   original: 'Contenu original',
   edited: 'Contenu édité',
-  editedPreview: 'Aperçu des changements'
+  editedPreview: 'Aperçu des modifications',
+  changes: 'Modifications',
+  commitChanges: 'Proposer vos modifications',
+  optional: 'Optionnel',
+  user: 'Utilisateur',
+  userIntro: 'Vous pouvez laisser un meessage au propriétaire du fichier',
+  userEmail: 'Email',
+  userMessage: 'Message'
 }
