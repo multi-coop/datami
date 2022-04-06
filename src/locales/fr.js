@@ -32,9 +32,10 @@ export default {
   editedPreview: 'Aperçu des modifications',
   changes: 'Modifications',
   commitChanges: 'Proposer vos modifications',
+  commitBranch: 'Branche de commit',
   optional: 'Optionnel',
   user: 'Utilisateur',
-  userIntro: 'Vous pouvez laisser un meessage au propriétaire du fichier',
+  userIntro: 'Vous pouvez laisser un message au propriétaire du fichier',
   userEmail: 'Email',
   userMessage: 'Message'
 }

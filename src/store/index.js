@@ -25,6 +25,10 @@ const defaultStore = {
     getFileReqInfosObj: (state) => (uuid) => {
       const fileReqInfosObj = state.fileReqInfos.find(fileReq => fileReq.uuid === uuid)
       return fileReqInfosObj
+    },
+    buildNewBranchName: (state) => (filefullname, fileId) => {
+      const fileFullnameClean = filefullname.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')
+      return `branch-${fileFullnameClean}-${fileId}`
     }
   },
   mutations: {

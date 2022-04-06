@@ -63,7 +63,7 @@
 
     <!-- CONFIRM COMMIT MODAL -->
     <ConfirmCommit
-      v-show="fileIsSaving"
+      v-show="fileIsSaving && !fileIsReloading"
       :file-id="fileId"
       :locale="locale"
       :debug="debug"/>
@@ -224,11 +224,6 @@ export default {
     fileIsReloading (next) {
       // console.log('C > GitributeFile > watch > fileIsReloading > next : ', next)
       if (next) { this.reloadFile() }
-    },
-    fileIsSaving (next) {
-      if (next) {
-        console.log('C > GitributeFile > watch > fileIsSaving > next : ', next)
-      }
     }
   },
   beforeMount () {

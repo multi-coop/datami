@@ -77,7 +77,9 @@
     </div>
 
     <!-- VIEWS -->
-    <div class="columns is-mobile">
+    <div
+      v-if="edited"
+      class="columns is-mobile">
       <!-- EDIT VIEW -->
       <div
         v-show="currentViewMode === 'edit'"
@@ -176,7 +178,7 @@ export default {
   },
   data () {
     return {
-      // viewMode: 'preview',
+      contentIsSet: false,
       data: null,
       content: null,
       edited: null
@@ -187,6 +189,7 @@ export default {
       t: 'git-translations/getTranslation',
       getViewMode: 'git-data/getViewMode',
       getGitInfosObj: 'getGitInfosObj',
+      buildNewBranchName: 'buildNewBranchName',
       getFileToken: 'git-data/getFileToken',
       fileNeedsSaving: 'git-data/fileNeedsSaving'
     }),
@@ -264,7 +267,13 @@ export default {
         const dataRaw = this.mdToObject(next, this.fileOptions)
         this.data = dataRaw.data
         this.content = dataRaw.content
-        this.edited = dataRaw.content
+        if (!this.contentIsSet) { this.contentIsSet = true }
+      }
+    },
+    contentIsSet (next) {
+      // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
+      if (next) {
+        this.edited = this.content
       }
     },
     edited (next) {
@@ -274,7 +283,7 @@ export default {
     },
     fileIsSaving (next) {
       if (next) {
-        console.log('C > PreviewMd > watch > fileIsSaving > next : ', next)
+        // console.log('C > PreviewMd > watch > fileIsSaving > next : ', next)
         this.bufferizeEdited()
       }
     }
@@ -284,11 +293,10 @@ export default {
       updateBuffer: 'git-data/updateBuffer'
     }),
     bufferizeEdited () {
-      const fileFullnameClean = this.gitObj.filefullname.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')
       const commitData = {
         gitObj: this.gitObj,
         edited: this.edited,
-        newBranch: `branch-${fileFullnameClean}-${this.fileId}`,
+        newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId),
         token: this.getFileToken(this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })

@@ -32,8 +32,14 @@
                   </h5>
                   <div class="columns is-centered mt-3">
                     <div class="column is-10">
-                      <b-field
-                        :label="t('userEmail', locale)">
+                      <b-field class="mt-4">
+                        <!-- EMAIL -->
+                        <template #label>
+                          <b-icon
+                            icon="at"
+                            size="is-small"/>&nbsp;
+                          {{ t('userEmail', locale) }}
+                        </template>
                         <b-input
                           v-model="userEmail"
                           type="email"
@@ -42,8 +48,14 @@
                           icon-right-clickable
                           @icon-right-click="clearEmail"/>
                       </b-field>
-                      <b-field
-                        :label="t('userMessage', locale)">
+                      <!-- MESSAGE -->
+                      <b-field class="mt-4">
+                        <template #label>
+                          <b-icon
+                            icon="email"
+                            size="is-small"/>&nbsp;
+                          {{ t('userEmail', locale) }}
+                        </template>
                         <b-input
                           v-model="userMessage"
                           type="textarea"
@@ -52,6 +64,16 @@
                           icon-right-clickable
                           @icon-right-click="clearMessage"/>
                       </b-field>
+                      <!-- COMMIT BRANCH -->
+                      <p class="has-text-weight-bold">
+                        <b-icon
+                          icon="source-branch"
+                          size="is-small"/>&nbsp;
+                        {{ t('commitBranch', locale) }}
+                      </p>
+                      <p class="">
+                        <code>{{ commitBranch }}</code>
+                      </p>
                     </div>
                   </div>
                 </b-tab-item>
@@ -59,7 +81,7 @@
                 <!-- CHANGES -->
                 <b-tab-item
                   :label="t('changes', locale)">
-                  <h5 class="has-text-centered mt-4">
+                  <h5 class="has-text-centered mt-4 mb-5">
                     {{ t('editedPreview', locale) }}
                   </h5>
                   <pre><code>{{ edited }}</code></pre>
@@ -68,7 +90,7 @@
                 <!-- FILE INFOS -->
                 <b-tab-item
                   :label="t('fileSource', locale)">
-                  <h5 class="has-text-centered mt-4">
+                  <h5 class="has-text-centered mt-4 mb-5">
                     {{ t('fileInfos', locale) }}
                   </h5>
                   <!-- TILES -->
@@ -140,20 +162,33 @@ export default {
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',
+      getGitInfosObj: 'getGitInfosObj',
+      buildNewBranchName: 'buildNewBranchName',
       getCommitData: 'git-data/getCommitData',
       getFileReqInfosObj: 'getFileReqInfosObj'
     }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    },
+    commitData () {
+      return this.getCommitData(this.fileId)
+    },
     edited () {
-      const commitData = this.getCommitData(this.fileId)
+      const commitData = this.commitData
       return commitData && commitData.edited
+    },
+    commitBranch () {
+      const commitData = this.commitData
+      return commitData && commitData.newBranch
     }
   },
   beforeMount () {
+    const commitBranch = this.commitBranch || this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
     const now = Date.now()
     const today = new Date(now)
     const stringDate = today.toLocaleDateString()
     const stringTime = today.toLocaleTimeString()
-    const defaultMessage = `Commit on branch '${this.fileId}'\nDate: ${stringDate}\nTime: ${stringTime}`
+    const defaultMessage = `Commit on branch '${commitBranch}'\nDate: ${stringDate}\nTime: ${stringTime}`
     this.userMessage = defaultMessage
   },
   methods: {

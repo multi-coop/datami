@@ -32,6 +32,7 @@ export default {
   editedPreview: 'Edited content preview',
   changes: 'Changes',
   commitChanges: 'Submit your modifications',
+  commitBranch: 'Commit branch',
   optional: 'Optional',
   user: 'User',
   userIntro: "You can add a personalized message to the file's owner",
