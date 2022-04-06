@@ -1,5 +1,5 @@
 export default {
-  reclaim: 'Un widget open source codé avec 🤍  par',
+  reclaim: 'Un widget open source codé avec 🤍  &nbsp; par',
   code: 'Code source',
   file: 'Fichier',
   fileName: 'Nom du fichier',
@@ -21,5 +21,8 @@ export default {
   changeToken: "Changer votre jeton d'accès",
   editView: 'Editer',
   diffView: 'Comparer',
-  previewView: 'Aperçu'
+  previewView: 'Aperçu',
+  original: 'Contenu original',
+  edited: 'Contenu édité',
+  editedPreview: 'Aperçu des changements'
 }

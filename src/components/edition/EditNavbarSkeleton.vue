@@ -1,29 +1,33 @@
 <template>
-  <div class="EditNavbarSkeleton content">
-    <div class="columns is-multiline mb-4">
+  <div class="EditNavbarSkeleton container">
+    <div class="columns is-multiline mb-2">
+      <!-- EDITION OPTIONS -->
+      <div
+        class="column is-6">
+        buttons edition for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
+      </div>
       <!-- FILE TITLE -->
-      <div class="column is-2">
+      <div class="column is-3">
         <EditModeBtns
           :git-obj="gitObj"
           :locale="locale"/>
       </div>
-      <!-- EDITION OPTIONS -->
+      <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <div
-        v-if="viewMode !== 'preview'"
-        class="column is-8">
-        buttons edition for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
-      </div>
-      <!-- SAVE/COMMIT -->
-      <div
-        v-if="viewMode !== 'preview'"
-        class="column is-2">
+        class="column is-3">
         <b-button
           type="is-dark"
           expanded
-          icon-left="check"
+          :loading="loading"
+          :icon-left="currentViewMode === 'preview' ? 'pencil' : 'check' "
           size="is-small"
-          @click="CommitChanges(gitObj.id)">
-          {{ t( 'save', locale) }}
+          @click="toggleButton()">
+          <span v-if="currentViewMode === 'preview'">
+            {{ t( 'edit', locale) }}
+          </span>
+          <span v-else>
+            {{ t( 'save', locale) }}
+          </span>
         </b-button>
       </div>
     </div>
@@ -31,7 +35,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import EditModeBtns from '@/components/edition/EditModeBtns'
 
@@ -49,10 +53,6 @@ export default {
       default: null,
       type: String
     },
-    viewMode: {
-      default: 'preview',
-      type: String
-    },
     locale: {
       default: 'en',
       type: String
@@ -60,17 +60,35 @@ export default {
   },
   data () {
     return {
+      loading: false
     }
   },
   computed: {
     ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
+      t: 'git-translations/getTranslation',
+      getViewMode: 'git-data/getViewMode'
+    }),
+    currentViewMode () {
+      return this.getViewMode(this.gitObj.uuid)
+    }
   },
   methods: {
-    CommitChanges (fileId) {
-      console.log('C > EditNavbarSkeleton > CommitChanges > fileId :', fileId)
-      this.$emit('commitChanges', fileId)
+    ...mapActions({
+      changeViewMode: 'git-data/changeViewMode'
+    }),
+    toggleButton () {
+      if (this.currentViewMode === 'preview') {
+        this.changeMode('edit')
+      } else {
+        this.commitChanges(this.gitObj.uuid)
+      }
+    },
+    commitChanges (fileId) {
+      console.log('C > EditNavbarSkeleton > commitChanges > fileId :', fileId)
+    },
+    changeMode (code) {
+      // console.log('C > EditNavbarSkeleton > changeMode > code :', code)
+      this.changeViewMode({ fileId: this.gitObj.uuid, mode: code })
     }
   }
 }

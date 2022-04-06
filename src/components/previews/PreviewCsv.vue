@@ -19,6 +19,10 @@
     <div v-if="dataRaw">
       <b-table
         :data="tableData"
+        narrowed
+        hoverable
+        sticky-header
+        striped
         :columns="columns"/>
     </div>
   </div>
@@ -69,7 +73,7 @@ export default {
       getViewMode: 'git-data/getViewMode'
     }),
     currentViewMode () {
-      return this.getViewMode(this.gitObj.id)
+      return this.getViewMode(this.gitObj.uuid)
     },
     tableData () {
       const data = this.dataRaw && this.dataRaw.data

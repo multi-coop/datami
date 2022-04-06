@@ -1,5 +1,5 @@
 <template>
-  <div class="SkeletonMD content">
+  <div class="SkeletonMD container">
     <!-- FAKE TITLE -->
     <h1>
       <b-skeleton

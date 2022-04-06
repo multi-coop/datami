@@ -32,23 +32,19 @@ const defaultStore = {
       } else {
         state.gitInfos.push(gitInfosObject)
       }
-      // state.gitInfos[gitInfosObject.id] = gitInfosObject
     }
   },
   actions: {
     buildGitInfos ({ commit }, gitUrl) {
-      // console.log('S-index > A > getGitInfos > gitUrl : ', gitUrl)
+      // console.log('S-index > A > buildGitInfos > gitUrl : ', gitUrl)
       const gitInfosObject = extractGitInfos(gitUrl)
-      // console.log('S-index > A > getGitInfos > gitInfosObject : ', gitInfosObject)
+      // console.log('S-index > A > buildGitInfos > gitInfosObject : ', gitInfosObject)
+      commit('setGitInfos', gitInfosObject)
+    },
+    addGitInfos ({ commit }, gitInfosObject) {
       commit('setGitInfos', gitInfosObject)
     }
   }
-  // modules: {
-  //   'git-translations': translations,
-  //   'git-user': user,
-  //   'git-filters': filters,
-  //   'git-data': data
-  // }
 }
 
 export const store = new Vuex.Store({

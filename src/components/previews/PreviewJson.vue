@@ -64,7 +64,7 @@ export default {
       getViewMode: 'git-data/getViewMode'
     }),
     currentViewMode () {
-      return this.getViewMode(this.gitObj.id)
+      return this.getViewMode(this.gitObj.uuid)
     }
   },
   watch: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="SkeletonCSV">
+  <div class="SkeletonCSV container">
     <table class="table">
       <thead>
         <th

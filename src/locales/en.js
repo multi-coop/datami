@@ -1,5 +1,5 @@
 export default {
-  reclaim: 'An open source widget coded with 🤍  by',
+  reclaim: 'An open source widget coded with 🤍  &nbsp; by',
   code: 'Source code',
   file: 'File',
   fileName: 'File name',
@@ -21,5 +21,8 @@ export default {
   changeToken: 'Change your user token',
   editView: 'Edit',
   diffView: 'Compare',
-  previewView: 'Preview'
+  previewView: 'Preview',
+  original: 'Original content',
+  edited: 'Edited content',
+  editedPreview: 'Edited content preview'
 }

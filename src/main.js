@@ -8,6 +8,8 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.min.css'
 import '@mdi/font/css/materialdesignicons.min.css'
 
+import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
+
 // import { VueShowdown, VueShowdownPlugin } from 'vue-showdown'
 
 import GitributeFile from './components/gitribute-file.vue'

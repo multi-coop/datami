@@ -2,9 +2,9 @@
   <div class="columns is-centered is-multiline mt-6">
     <!-- CREDITS -->
     <div class="column is-full is-italic has-text-centered">
-      <span class="has-text-grey is-size-6">
-        {{ t('reclaim', locale) }}
-      </span>
+      <span
+        class="has-text-grey is-size-6"
+        v-html="t('reclaim', locale)"/>
       <a
         href="https://multi.coop"
         target="_blank">

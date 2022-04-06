@@ -1,4 +1,3 @@
-
 export const gitProviders = {
   github: {
     root: 'https://github.com/',
@@ -97,6 +96,7 @@ export const extractGitInfos = (str) => {
 
   const gitInfos = {
     id: str,
+    uuid: undefined,
     provider: provider,
     api: api,
     orga: orga,

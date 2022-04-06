@@ -41,7 +41,7 @@ export default {
     }),
     fileIsReloading () {
       // console.log('C > ButtonReloadFile > this.gitObj : ', this.gitObj)
-      return this.gitObj && this.fileNeedsReload(this.gitObj.id)
+      return this.gitObj && this.fileNeedsReload(this.gitObj.uuid)
     }
   },
   watch: {
@@ -56,7 +56,7 @@ export default {
     ReloadFile () {
       this.loading = true
       // console.log('C > ButtonReloadFile > ReloadFile > this.gitObj : ', this.gitObj)
-      this.updateReloading({ fileId: this.gitObj.id, isLoading: true })
+      this.updateReloading({ fileId: this.gitObj.uuid, isLoading: true })
     }
   }
 }

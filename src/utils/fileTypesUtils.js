@@ -12,7 +12,7 @@ export const authorizedFileTypes = {
 
 export const filesViewsOptions = [
   { code: 'edit', icon: 'pencil', textCode: 'editView' },
-  { code: 'diff', icon: 'table-border', textCode: 'diffView' },
+  { code: 'diff', icon: 'arrow-left-right', textCode: 'diffView' },
   { code: 'preview', icon: 'eye', textCode: 'previewView' }
 ]
 

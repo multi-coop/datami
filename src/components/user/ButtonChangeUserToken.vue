@@ -74,7 +74,7 @@ export default {
     })
   },
   beforeMount () {
-    const originalToken = this.getFileToken(this.gitObj.id)
+    const originalToken = this.getFileToken(this.gitObj.uuid)
     // console.log('C > ButtonChangeUserToken > originalToken : ', originalToken)
     this.usertoken = originalToken
   },
@@ -85,7 +85,7 @@ export default {
     inputAction () {
       if (this.editToken) {
         // console.log('C > ButtonChangeUserToken > this.usertoken : ', this.usertoken)
-        this.updateToken({ fileId: this.gitObj.id, token: this.usertoken })
+        this.updateToken({ fileId: this.gitObj.uuid, token: this.usertoken })
         this.editToken = false
       } else {
         this.editToken = true

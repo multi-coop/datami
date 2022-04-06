@@ -16,35 +16,105 @@
         </p>
       </div>
     </div>
+
+    <!-- HELPERS -->
+    <div class="columns is-mobile">
+      <!-- EDITED -->
+      <div
+        v-show="currentViewMode !== 'preview'"
+        class="column is-6 has-text-centered">
+        <span class="is-size-6 has-text-weight-bold has-text-grey-light">
+          <b-icon
+            :icon="getIconEdit"
+            size="is-small"/>
+          {{ t( 'edited', locale) }}
+        </span>
+      </div>
+      <!-- DIVIDER -->
+      <div
+        v-show="currentViewMode !== 'preview'"
+        class="divider is-vertical mx-0">
+        ...
+      </div>
+      <!-- ORIGINAL -->
+      <div
+        class="column has-text-centered">
+        <!-- <hr v-show="currentViewMode === 'preview'"> -->
+        <div
+          v-show="currentViewMode === 'preview'"
+          class="divider is-horizontal my-0">
+          <span class="is-capitalized	is-size-6 has-text-grey-light">
+            <b-icon
+              :icon="getIconPreview"
+              size="is-small"/>
+            {{ t( 'previewView', locale) }}
+          </span>
+        </div>
+        <span
+          v-show="currentViewMode === 'diff'"
+          class="is-size-6 has-text-weight-bold has-text-grey-light">
+          <b-icon
+            :icon="getIconPreview"
+            size="is-small"/>
+          {{ t( 'original', locale) }}
+        </span>
+        <span
+          v-show="currentViewMode === 'edit'"
+          class="is-size-6 has-text-weight-bold has-text-grey-light">
+          <b-icon
+            :icon="getIconPreview"
+            size="is-small"/>
+          {{ t( 'editedPreview', locale) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- VIEWS -->
     <div class="columns is-mobile">
       <!-- EDIT VIEW -->
       <div
         v-show="currentViewMode === 'edit'"
-        :class="`column is-half`">
+        :class="`column is-half pr-3`">
         <b-input
           v-model="edited"
           type="textarea"
           :rows="numberLines"/>
       </div>
+
       <!-- DIFF VIEW -->
-      <div
+      <!-- <div
         v-show="currentViewMode === 'diff'"
         :class="`column is-full`">
-        <!-- <ShowDownEditDiff
-          :edited.sync="edited"
-          :content="content"/> -->
-        <!-- <pre><code>{{ edited }}</code></pre> -->
         <div
           v-if="content"
-          v-html="getDiffHtml"/>
-        <!-- <code v-if="content">
-          {{ getDiff }}
-        </code> -->
+          v-html="getDiffHtmlUnified"/>
+      </div> -->
+      <div
+        v-show="currentViewMode === 'diff'"
+        :class="`column is-half pr-6`">
+        <ShowDown
+          v-if="content"
+          :markdown="getDiffHtmlChars"
+          flavor="github"/>
       </div>
+
+      <!-- DIVIDER -->
+      <div
+        v-show="currentViewMode !== 'preview'"
+        class="divider is-vertical mx-0">
+        <b-icon
+          v-if="currentViewMode === 'diff'"
+          :icon="getIconDiff"
+          size="is-small"/>
+        <b-icon
+          v-if="currentViewMode === 'edit'"
+          :icon="getIconEdit"
+          size="is-small"/>
+      </div>
+
       <!-- PREVIEW -->
       <div
-        v-show="currentViewMode !== 'diff'"
-        :class="`column`">
+        :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
         <ShowDown
           :markdown="currentViewMode === 'diff' ? content : edited"
           flavor="github"/>
@@ -57,7 +127,11 @@
 import { mapGetters } from 'vuex'
 import { mixinMd } from '@/utils/mixins.js'
 import ShowDown from '@/components/previews/ShowDown'
-import { createTwoFilesPatch } from 'diff'
+
+import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
+
+// see : https://github.com/kpdecker/jsdiff
+import { createTwoFilesPatch, diffWords } from 'diff'
 
 import * as Diff2Html from 'diff2html'
 import 'diff2html/bundles/css/diff2html.min.css'
@@ -108,21 +182,36 @@ export default {
       getViewMode: 'git-data/getViewMode'
     }),
     currentViewMode () {
-      return this.getViewMode(this.gitObj.id)
+      return this.getViewMode(this.gitObj.uuid)
+    },
+    getIconDiff () {
+      return filesViewsOptions.find(i => i.code === 'diff').icon
+    },
+    getIconEdit () {
+      return filesViewsOptions.find(i => i.code === 'edit').icon
+    },
+    getIconPreview () {
+      return filesViewsOptions.find(i => i.code === 'preview').icon
     },
     numberLines () {
       let result = 2
       if (this.edited) { result = this.edited.split(/\r\n|\r|\n/).length + result }
       return result
     },
-    getDiff () {
-      // console.log('C > PreviewMd > getDiff  > diffChars : \n', diffChars)
+    getUnifiedDiff () {
+      // console.log('C > PreviewMd > getUnifiedDiff  > createTwoFilesPatch : \n', createTwoFilesPatch)
       const fileName = this.gitObj.filefullname
       const diffStr = createTwoFilesPatch(fileName, fileName, this.content, this.edited)
       return diffStr
     },
-    getDiffHtml () {
-      const diff = this.getDiff
+    getCharDiff () {
+      // console.log('C > PreviewMd > getCharDiff  > diffChars : \n', diffChars)
+      // const diffStr = diffChars(this.content, this.edited)
+      const diffStr = diffWords(this.content, this.edited)
+      return diffStr
+    },
+    getDiffHtmlUnified () {
+      const diff = this.getUnifiedDiff
       const options = {
         drawFileList: false,
         matching: 'lines',
@@ -130,6 +219,25 @@ export default {
         // outputFormat: 'line-by-line'
       }
       return Diff2Html.html(diff, options)
+    },
+    getDiffHtmlChars () {
+      const diff = this.getCharDiff
+      // console.log('C > PreviewMd > getDiffHtmlChars  > diff : \n', diff)
+      let diffText = ''
+      diff.forEach((part) => {
+        // green for additions, red for deletions
+        // grey for common parts
+        let fragment
+        const spanClass = part.added ? 'git-ins' : part.removed ? 'git-del' : null
+        if (spanClass) {
+          fragment = `<span class="${spanClass}">${part.value}</span>`
+        } else {
+          fragment = part.value
+        }
+        diffText += fragment
+      })
+      // console.log('C > PreviewMd > getDiffHtmlChars  > diffText : \n', diffText)
+      return diffText
     }
   },
   watch: {
@@ -146,3 +254,17 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.git-ins {
+  text-decoration: none !important;
+  background-color: #d4fcbc !important;
+}
+.git-del {
+  text-decoration: line-through !important;
+  background-color: #fbb6c2 !important;
+  color: #555 !important;
+}
+
+</style>

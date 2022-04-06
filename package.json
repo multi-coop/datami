@@ -9,10 +9,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@creativebulma/bulma-divider": "^1.1.0",
     "@mdi/font": "^6.6.96",
     "axios": "^0.26.0",
     "buefy": "^0.9.19",
     "buffer": "^6.0.3",
+    "bulma-extensions": "^6.2.7",
     "core-js": "^3.8.3",
     "diff": "^5.0.0",
     "diff2html": "^3.4.16",
@@ -21,6 +23,7 @@
     "register-service-worker": "^1.7.2",
     "showdown": "^2.0.3",
     "showdown-table": "^1.0.1",
+    "uuid": "^8.3.2",
     "vue": "^2.6.14",
     "vue-custom-element": "^3.3.0",
     "vue-showdown": "^3.1.0",

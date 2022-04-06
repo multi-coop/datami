@@ -60,9 +60,9 @@
     </div>
 
     <!-- LOADERS -->
-    <SkeletonCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
-    <SkeletonMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
-    <SkeletonMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>
+    <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
+    <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
+    <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
@@ -123,14 +123,18 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
+
 import { mixin } from '@/utils/mixins.js'
+import { extractGitInfos } from '@/utils/utilsGitUrl.js'
+
 import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
-import SkeletonCSV from '@/components/loaders/SkeletonCSV'
-import SkeletonMD from '@/components/loaders/SkeletonMD'
+import LoaderCSV from '@/components/loaders/LoaderCSV'
+import LoaderMD from '@/components/loaders/LoaderMD'
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
 export default {
@@ -141,8 +145,8 @@ export default {
     PreviewCsv,
     PreviewMd,
     PreviewJson,
-    SkeletonCSV,
-    SkeletonMD,
+    LoaderCSV,
+    LoaderMD,
     GitributeCredits
   },
   mixins: [mixin],
@@ -198,12 +202,12 @@ export default {
     }),
     fileIsReloading () {
       // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
-      const resp = !this.gitObj || this.fileNeedsReload(this.gitObj.id)
+      const resp = !this.gitObj || this.fileNeedsReload(this.gitObj.uuid)
       // console.log('C > GitributeFile > fileIsReloading > resp : ', resp)
       return resp
     },
     currentViewMode () {
-      return this.getViewMode(this.gitObj.id)
+      return this.getViewMode(this.gitObj.uuid)
     }
   },
   watch: {
@@ -215,7 +219,10 @@ export default {
   beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     if (!this.getGitInfosObj[this.gitfile]) {
-      this.buildGitInfos(this.gitfile)
+      const gitInfosObject = extractGitInfos(this.gitfile)
+      const fileUuid = uuidv4()
+      gitInfosObject.uuid = fileUuid
+      this.addGitInfos(gitInfosObject)
       // console.log('\nC > GitributeFile > beforeMount > gitInfos : ', gitInfos)
     }
     // build options object
@@ -226,20 +233,20 @@ export default {
     // console.log('C > GitributeFile > mount > this.usertoken : ', this.usertoken)
     this.gitObj = this.getGitInfosObj(this.gitfile)
     this.fileType = this.gitObj.filetype
-    this.updateToken({ fileId: this.gitObj.id, token: this.usertoken })
+    this.updateToken({ fileId: this.gitObj.uuid, token: this.usertoken })
     this.fileInfos = await this.getFileData(this.gitObj)
     this.reloadFile()
   },
   methods: {
     ...mapActions({
-      buildGitInfos: 'buildGitInfos',
+      addGitInfos: 'addGitInfos',
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading'
     }),
     async reloadFile () {
-      this.updateReloading({ fileId: this.gitObj.id, isLoading: true })
+      this.updateReloading({ fileId: this.gitObj.uuid, isLoading: true })
       this.fileRaw = await this.getFileDataRaw(this.gitObj)
-      this.updateReloading({ fileId: this.gitObj.id, isLoading: false })
+      this.updateReloading({ fileId: this.gitObj.uuid, isLoading: false })
     }
   }
 }

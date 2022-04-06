@@ -13,7 +13,7 @@
         <b-tooltip
           :label="t(btn.textCode, locale)"
           type="is-dark"
-          position="is-right">
+          position="is-top">
           <b-button
             :icon-left="btn.icon"
             :type="currentViewMode === btn.code ? 'is-dark' : ''"
@@ -56,7 +56,7 @@ export default {
       getViewMode: 'git-data/getViewMode'
     }),
     currentViewMode () {
-      return this.getViewMode(this.gitObj.id)
+      return this.getViewMode(this.gitObj.uuid)
     }
   },
   beforeMount () {
@@ -69,7 +69,7 @@ export default {
     changeMode (code) {
       // this.active = code
       // console.log('\nC > EditModeBtns > changeMode > code : ', code)
-      this.changeViewMode({ fileId: this.gitObj.id, mode: code })
+      this.changeViewMode({ fileId: this.gitObj.uuid, mode: code })
     }
   }
 }
