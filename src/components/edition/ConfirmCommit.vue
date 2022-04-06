@@ -54,7 +54,7 @@
                           <b-icon
                             icon="email"
                             size="is-small"/>&nbsp;
-                          {{ t('userEmail', locale) }}
+                          {{ t('userMessage', locale) }}
                         </template>
                         <b-input
                           v-model="userMessage"
