@@ -43,7 +43,7 @@
         <div
           v-show="currentViewMode === 'preview'"
           class="divider is-horizontal my-0">
-          <span class="is-capitalized	is-size-6 has-text-grey-light">
+          <span class="is-capitalized is-size-6 has-text-grey-light">
             <b-icon
               :icon="getIconPreview"
               size="is-small"/>
@@ -75,10 +75,13 @@
       <div
         v-show="currentViewMode === 'edit'"
         :class="`column is-half pr-3`">
-        <b-input
-          v-model="edited"
-          type="textarea"
-          :rows="numberLines"/>
+        <b-field>
+          <b-input
+            v-model="edited"
+            custom-class="has-background-light"
+            type="textarea"
+            :rows="numberLines"/>
+        </b-field>
       </div>
 
       <!-- DIFF VIEW -->
