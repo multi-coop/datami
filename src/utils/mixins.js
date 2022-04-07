@@ -1,5 +1,5 @@
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
-import { getFileData, getFileDataRaw } from '@/utils/getData.js'
+import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
 import { csvToObject } from '@/utils/csvUtils.js'
 import { $matter, mdToObject } from '@/utils/mdUtils.js'

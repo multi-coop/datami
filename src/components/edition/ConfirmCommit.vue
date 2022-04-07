@@ -30,27 +30,9 @@
                   <h5 class="has-text-centered mt-4">
                     {{ t('userIntro', locale) }}
                   </h5>
-                  <div class="columns is-centered mt-3">
-                    <div class="column is-10">
-                      <b-field class="mt-4">
-                        <!-- EMAIL -->
-                        <template #label>
-                          <b-icon
-                            icon="at"
-                            size="is-small"/>&nbsp;
-                          {{ t('userEmail', locale) }}
-                        </template>
-                        <b-input
-                          v-model="userEmail"
-                          :readonly="isCommitting"
-                          :disabled="isCommitting"
-                          type="email"
-                          :placeholder="t('optional', locale)"
-                          icon-right="close-circle"
-                          icon-right-clickable
-                          @icon-right-click="clearEmail"/>
-                      </b-field>
-                      <!-- MESSAGE -->
+                  <div class="columns is-centered is-multiline mt-3">
+                    <!-- MESSAGE -->
+                    <div class="column is-10 py-0">
                       <b-field class="mt-4">
                         <template #label>
                           <b-icon
@@ -68,7 +50,69 @@
                           icon-right-clickable
                           @icon-right-click="clearMessage"/>
                       </b-field>
-                      <!-- COMMIT BRANCH -->
+                    </div>
+                    <!-- NAME -->
+                    <div class="column is-5 py-0">
+                      <b-field>
+                        <template #label>
+                          <b-icon
+                            icon="account"
+                            size="is-small"/>&nbsp;
+                          {{ t('userName', locale) }}
+                        </template>
+                        <b-input
+                          v-model="userName"
+                          :readonly="isCommitting"
+                          :disabled="isCommitting"
+                          maxlength="50"
+                          :placeholder="t('optional', locale)"
+                          icon-right="close-circle"
+                          icon-right-clickable
+                          @icon-right-click="clearName"/>
+                      </b-field>
+                    </div>
+                    <!-- SURNAME -->
+                    <div class="column is-5 py-0">
+                      <b-field>
+                        <template #label>
+                          <b-icon
+                            icon="account"
+                            size="is-small"/>&nbsp;
+                          {{ t('userSurname', locale) }}
+                        </template>
+                        <b-input
+                          v-model="userSurname"
+                          :readonly="isCommitting"
+                          :disabled="isCommitting"
+                          maxlength="50"
+                          :placeholder="t('optional', locale)"
+                          icon-right="close-circle"
+                          icon-right-clickable
+                          @icon-right-click="clearSurname"/>
+                      </b-field>
+                    </div>
+                    <!-- EMAIL -->
+                    <div class="column is-10 pt-0">
+                      <b-field class="mt-1">
+                        <template #label>
+                          <b-icon
+                            icon="at"
+                            size="is-small"/>&nbsp;
+                          {{ t('userEmail', locale) }}
+                        </template>
+                        <b-input
+                          v-model="userEmail"
+                          :readonly="isCommitting"
+                          :disabled="isCommitting"
+                          type="email"
+                          :placeholder="t('optional', locale)"
+                          icon-right="close-circle"
+                          icon-right-clickable
+                          @icon-right-click="clearEmail"/>
+                      </b-field>
+                    </div>
+                    <!-- COMMIT BRANCH -->
+                    <div class="column is-10 mt-0">
                       <p class="has-text-weight-bold">
                         <b-icon
                           icon="source-branch"
@@ -135,10 +179,7 @@
 
 import { mapGetters, mapActions } from 'vuex'
 
-import {
-  postNewBranch
-  // putCommit
-} from '@/utils/getData.js'
+import { sendContribution } from '@/utils/gitProvidersAPI.js'
 
 import GitObjInfos from '@/components/previews/GitObjInfos'
 
@@ -164,6 +205,8 @@ export default {
   data () {
     return {
       activeTab: 0,
+      userName: undefined,
+      userSurname: undefined,
       userEmail: undefined,
       userMessage: '',
       loading: false
@@ -213,6 +256,12 @@ export default {
       updateCommitting: 'git-data/updateCommitting',
       updateReqErrors: 'git-data/updateReqErrors'
     }),
+    clearName () {
+      this.userName = ''
+    },
+    clearSurname () {
+      this.userSurname = ''
+    },
     clearEmail () {
       this.userEmail = ''
     },
@@ -242,21 +291,17 @@ export default {
       commitData.token = token
       console.log('C > ConfirmCommit > confirmCommit > token :', token)
 
-      // Send requests...
+      // Send contribution request...
+      const respContribution = await sendContribution(commitData)
+      console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
+      const respContributionErrors = respContribution.errors
 
-      // post new branch
-      const respBranch = await postNewBranch(commitData)
-      console.log('C > ConfirmCommit > confirmCommit > respBranch :', respBranch)
-      const respBranchErrors = respBranch.errors
-
-      // put commit
-      // const respCommit = await putCommit(commitData)
-      // console.log('C > ConfirmCommit > confirmCommit > respCommit :', respCommit)
+      // clean store
       this.updateCommitting({ fileId: this.fileId, isCommitting: false })
 
       // update errors if any
-      if (respBranchErrors) {
-        const errors = [...respBranchErrors]
+      if (respContributionErrors && respContributionErrors.length) {
+        const errors = [...respContributionErrors]
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
       }
     }

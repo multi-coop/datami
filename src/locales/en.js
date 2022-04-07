@@ -36,6 +36,8 @@ export default {
   optional: 'Optional',
   user: 'User',
   userIntro: "You can add a personalized message to the file's owner",
+  userName: 'Name',
+  userSurname: 'Surname',
   userEmail: 'Email',
   userMessage: 'Message',
   error: 'Error',

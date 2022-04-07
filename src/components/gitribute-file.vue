@@ -308,7 +308,7 @@ export default {
       this.fileRaw = fileRaw
 
       // update errors if any
-      if (fileInfosErrors || fileRawErrors) {
+      if (fileInfosErrors.length || fileRawErrors.length) {
         const errors = [...fileInfosErrors, ...fileRawErrors]
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
       }

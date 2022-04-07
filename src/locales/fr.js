@@ -36,6 +36,8 @@ export default {
   optional: 'Optionnel',
   user: 'Utilisateur',
   userIntro: 'Vous pouvez laisser un message au propriétaire du fichier',
+  userName: 'Prénom',
+  userSurname: 'Nom',
   userEmail: 'Email',
   userMessage: 'Message',
   error: 'Erreur',

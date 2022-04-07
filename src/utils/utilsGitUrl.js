@@ -125,7 +125,7 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
   console.log('\nU > utilsGitUrl > buildGitRequestOptions > method : ', method)
   console.log('U > utilsGitUrl > buildGitRequestOptions > provider : ', provider)
   console.log('U > utilsGitUrl > buildGitRequestOptions > token : ', token)
-  console.log('U > utilsGitUrl > buildGitRequestOptions > body : ', body)
+  // console.log('U > utilsGitUrl > buildGitRequestOptions > body : ', body)
   const requestOptions = {
     method: method
   }
@@ -150,22 +150,54 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
 }
 
 export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token = undefined) {
+  console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
+
   let errors
+  let newBranchAlreadyExists = false
   let urlPostBranch
+
+  // specific to gitlab
+  let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
+  let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
+
+  // specific to github
   let prePostRequestUrl, prePostResponse, prePostResponseData, revisionHash
+
   let postBody
+
   switch (gitObj.provider) {
     case 'gitlab':
-      prePostRequestUrl = `${gitObj.apiRepo}/repository/branches/${sourceBranch}`
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostRequestUrl : ', prePostRequestUrl)
+      // check source branch
+      prePostCheckSourceBranch = `${gitObj.apiRepo}/repository/branches/${sourceBranch}`
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranch : ', prePostCheckSourceBranch)
+      prePostCheckSourceBranchResp = await fetch(prePostCheckSourceBranch)
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp : ', prePostCheckSourceBranchResp)
+      prePostCheckSourceBranchData = await prePostCheckSourceBranchResp.json()
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchData : ', prePostCheckSourceBranchData)
+      if (!prePostCheckSourceBranchResp.ok) {
+        errors = []
+        const err = {
+          function: 'postNewBranch',
+          code: prePostCheckSourceBranchResp.status,
+          message: prePostCheckSourceBranchData.message
+        }
+        errors.push(err)
+      }
 
-      prePostResponse = await fetch(prePostRequestUrl)
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostResponse : ', prePostResponse)
-      prePostResponseData = await prePostResponse.json()
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostResponseData : ', prePostResponseData)
+      // check target branch
+      prePostCheckTargetBranch = `${gitObj.apiRepo}/repository/branches/${newBranch}`
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
+      prePostCheckTargetBranchResp = await fetch(prePostCheckTargetBranch)
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
+      prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
+
+      // TO DO - CATCH IF BRANCH ALREADY EXISTS
+      if (prePostCheckTargetBranchResp.ok) { newBranchAlreadyExists = true }
 
       urlPostBranch = `${gitObj.apiRepo}/repository/branches?branch=${newBranch}&ref=${sourceBranch}`
       break
+
     case 'github':
       // cf : https://stackoverflow.com/questions/9506181/github-api-create-branch#:~:text=So%20it%20should%20be%20possible,heads%20'%20in%20the%20ref%20parameter.&text=Find%20the%20revision%20you%20want%20to%20branch%20from.&text=You%20will%20need%20to%20use,your%20branch%20will%20be%20created!
       // GET from : https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
@@ -175,6 +207,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
       // console.log('U > utilsGitUrl > buildPostBranchUrl > github > prePostRequestUrl : ', prePostRequestUrl)
 
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
+      // if () { newBranchAlreadyExists = true }
 
       prePostResponse = await fetch(prePostRequestUrl)
       // console.log('U > utilsGitUrl > buildPostBranchUrl > github > prePostResponse : ', prePostResponse)
@@ -193,6 +226,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
   }
   return {
     url: urlPostBranch,
+    newBranchAlreadyExists: newBranchAlreadyExists,
     body: postBody,
     errors: errors
   }
