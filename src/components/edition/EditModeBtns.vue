@@ -7,7 +7,7 @@
       </p>
     </div>
     <!-- BUTTONS -->
-    <b-field custom-class="is-small">
+    <b-field custom-class="is-small edit-mode-btns">
       <p
         v-for="btn in buttons"
         :key="btn.code"
@@ -76,3 +76,11 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.EditModeBtns > .field > .field-body > .field.has-addons {
+  justify-content: center !important;
+}
+
+</style>

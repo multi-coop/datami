@@ -4,19 +4,20 @@
       v-if="gitObj"
       class="columns is-multiline mb-2">
       <!-- EDITION OPTIONS -->
-      <div class="column is-6">
+      <!-- <div class="column is-5">
         Buttons for <code>{{ currentViewMode }}</code> view
         for <code>.{{ gitObj.filetype }}</code> file (<code>{{ fileTypeFamily }}</code>)
-      </div>
-      <!-- FILE TITLE -->
-      <div class="column is-3">
+        &nbsp;
+      </div> -->
+      <!-- VIEW CHOICES -->
+      <div class="column is-2 is-offset-5">
         <EditModeBtns
           :file-id="fileId"
           :locale="locale"/>
       </div>
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <div
-        class="column is-3">
+        class="column is-3 is-offset-2">
         <b-button
           type="is-dark"
           expanded
