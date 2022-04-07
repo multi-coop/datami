@@ -48,6 +48,18 @@
       </div>
     </div>
 
+    <!-- ERRORS -->
+    <div
+      v-if="errors && errors.length"
+      class="mb-6">
+      <NotificationErrors
+        v-for="(error, index) in errors"
+        :key="`error-${fileId}-${index}-${error.code}`"
+        :file-id="fileId"
+        :error="error"
+        :locale="locale"/>
+    </div>
+
     <!-- LOADERS -->
     <LoaderEditNavbar v-if="fileIsReloading"/>
     <!-- <LoaderEditNavbar/> -->
@@ -71,6 +83,7 @@
       :debug="debug"/>
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+
     <!-- PREVIEWS CSV -->
     <div v-show="!fileIsSaving">
       <div
@@ -127,6 +140,8 @@ import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 
 import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
 
+import NotificationErrors from '@/components/errors/NotificationErrors'
+
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
@@ -144,6 +159,7 @@ export default {
   name: 'GitributeFile',
   components: {
     NavbarSkeleton,
+    NotificationErrors,
     EditNavbarSkeleton,
     ConfirmCommit,
     PreviewCsv,
@@ -194,18 +210,20 @@ export default {
   computed: {
     ...mapState({
       // test: (state) => state.test,
-      gitInfos: (state) => state.gitInfos,
+      // gitInfos: (state) => state.gitInfos,
       // user: (state) => state['git-user'].test,
       // filters: (state) => state['git-filters'].test,
       // data: (state) => state['git-data'].test,
-      reloading: (state) => state['git-data'].reloading
+      // allErrors: (state) => state['git-data'].errors
+      // reloading: (state) => state['git-data'].reloading
     }),
     ...mapGetters({
       getGitObj: 'getGitObj',
       getGitInfosObj: 'getGitInfosObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
       fileNeedsSaving: 'git-data/fileNeedsSaving',
-      getViewMode: 'git-data/getViewMode'
+      getViewMode: 'git-data/getViewMode',
+      getReqErrors: 'git-data/getReqErrors'
     }),
     gitObj () {
       return this.fileId && this.getGitInfosObj(this.fileId)
@@ -221,7 +239,11 @@ export default {
       return resp
     },
     currentViewMode () {
-      return this.getViewMode(this.gitObj.uuid)
+      // return this.getViewMode(this.gitObj.uuid)
+      return this.getViewMode(this.fileId)
+    },
+    errors () {
+      return this.getReqErrors(this.fileId)
     }
   },
   watch: {
@@ -260,21 +282,36 @@ export default {
       addGitInfos: 'addGitInfos',
       addFileReqInfos: 'addFileReqInfos',
       updateToken: 'git-data/updateToken',
-      updateReloading: 'git-data/updateReloading'
+      updateReloading: 'git-data/updateReloading',
+      updateReqErrors: 'git-data/updateReqErrors'
     }),
     async reloadFile () {
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
+      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // Request API for file infos
-      const fileInfos = await this.getFileData(this.gitObj)
+      const respData = await this.getFileData(this.gitObj)
+      // console.log('\nC > GitributeFile > reloadFile > respData : ', respData)
+      const fileInfos = respData.data
+      const fileInfosErrors = respData.errors
       fileInfos.uuid = this.fileId
       this.addFileReqInfos(fileInfos)
       this.fileInfos = fileInfos
       // console.log('C > GitributeFile > reloadFile > this.fileInfos : ', this.fileInfos)
 
       // Request API for file content
-      this.fileRaw = await this.getFileDataRaw(this.gitObj)
+      const respDataRaw = await this.getFileDataRaw(this.gitObj)
+      // console.log('C > GitributeFile > reloadFile > respDataRaw : ', respDataRaw)
+      const fileRaw = respDataRaw.data
+      const fileRawErrors = respDataRaw.errors
+      this.fileRaw = fileRaw
+
+      // update errors if any
+      if (fileInfosErrors || fileRawErrors) {
+        const errors = [...fileInfosErrors, ...fileRawErrors]
+        this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
+      }
 
       // Update reloading in store - false
       this.updateReloading({ fileId: this.fileId, isLoading: false })

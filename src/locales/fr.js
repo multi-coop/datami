@@ -37,5 +37,9 @@ export default {
   user: 'Utilisateur',
   userIntro: 'Vous pouvez laisser un message au propriétaire du fichier',
   userEmail: 'Email',
-  userMessage: 'Message'
+  userMessage: 'Message',
+  error: 'Erreur',
+  errorFunction: 'Erreur de la fonction',
+  errorCode: "Code d'erreur",
+  errorMessage: "Message d'erreur"
 }

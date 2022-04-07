@@ -9,12 +9,14 @@ export const data = {
 
     reloading: [],
     saving: [],
+    committing: [],
 
     preview: [],
     edit: [],
     diff: [],
 
-    buffer: []
+    buffer: [],
+    errors: []
 
   },
   getters: {
@@ -35,9 +37,17 @@ export const data = {
       if (state.diff.includes(fileId)) return 'diff'
       if (state.edit.includes(fileId)) return 'edit'
     },
+    fileIsCommitting: (state) => (fileId) => {
+      return state.committing.includes(fileId)
+    },
     getCommitData: (state) => (fileId) => {
-      // console.log('\nS-data > M > setState > state.buffer : ', state.buffer)
+      // console.log('\nS-data > G > getCommitData > state.buffer : ', state.buffer)
       return state.buffer.find(commitData => commitData.uuid === fileId)
+    },
+    getReqErrors: (state) => (fileId) => {
+      // console.log('\nS-data > G > getErrors > state.errors : ', state.errors)
+      const fileErrors = state.errors.find(err => err.uuid === fileId)
+      return fileErrors && fileErrors.errors
     }
   },
   mutations: {
@@ -66,6 +76,20 @@ export const data = {
     removeFromBuffer (state, commitData) {
       state.buffer = state.buffer.filter(data => data.uuid !== commitData.uuid)
       // console.log('S-data > M > removeFromBuffer > state.buffer : ', state.buffer)
+    },
+    addToErrors (state, reqErrors) {
+      const index = state.errors.findIndex(err => err.uuid === reqErrors.uuid)
+      if (index !== -1) {
+        Vue.set(state.errors, index, reqErrors)
+      } else {
+        state.errors.push(reqErrors)
+      }
+      // console.log('S-data > M > addToErrors > state.errors : ', state.errors)
+    },
+    removeFromErrors (state, reqErrors) {
+      // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
+      state.errors = state.errors.filter(err => err.uuid !== reqErrors.uuid)
+      // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
     }
   },
   actions: {
@@ -86,6 +110,13 @@ export const data = {
         commit('addToState', { key: 'saving', fileId: fileId })
       } else {
         commit('removeFromState', { key: 'saving', fileId: fileId })
+      }
+    },
+    updateCommitting ({ commit }, { fileId, isCommitting }) {
+      if (isCommitting) {
+        commit('addToState', { key: 'committing', fileId: fileId })
+      } else {
+        commit('removeFromState', { key: 'committing', fileId: fileId })
       }
     },
     updateToken ({ commit }, { fileId, token }) {
@@ -115,6 +146,20 @@ export const data = {
         commit('addToBuffer', commitData)
       } else {
         commit('removeFromBuffer', commitData)
+      }
+    },
+    updateReqErrors ({ commit }, { fileId, errors, addToErrors }) {
+      // console.log('\nS-data > A > updateReqErrors > fileId : ', fileId)
+      // console.log('S-data > A > updateReqErrors > errors : ', errors)
+      // console.log('S-data > A > updateReqErrors > addToErrors : ', addToErrors)
+      const reqErrorData = {
+        uuid: fileId,
+        errors: errors
+      }
+      if (addToErrors) {
+        commit('addToErrors', reqErrorData)
+      } else {
+        commit('removeFromErrors', reqErrorData)
       }
     }
   }

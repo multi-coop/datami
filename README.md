@@ -146,9 +146,8 @@ This widget allows to preview and edit a file stored on Gitlab or Github.
 The widget takes several parameters, following this structure :
 
 ```html
-  <!-- Example for loading a distant .md file -->
+  <!-- Example for loading and contribute to a distant .md file from Gitlab -->
   <multi-gitribute-file 
-    locale="fr"
     gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/jailbreak-devient-multi-fr.md"
     title="gitribute for gitlab file" 
     usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
@@ -157,7 +156,7 @@ The widget takes several parameters, following this structure :
 ```
 
 ```html
-  <!-- Example for loading a distant .csv file -->
+  <!-- Example for loading and contribute to a distant .csv file from Github -->
   <multi-gitribute-file
     gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" 
     options='{
@@ -171,11 +170,13 @@ The widget takes several parameters, following this structure :
   ></multi-gitribute-file>
 ```
 
-### Options
+### Options parameters
 
 This widget can take several parameters, some of them depends on your input file's type (`csv`, `json`, `md`, ...)
 
-#### All file types
+#### Parameters for all file types
+
+##### `gitfile` parameter
 
 ```yaml
 gitfile:
@@ -187,6 +188,8 @@ gitfile:
     just copy-paste the url from your browser
 ```
 
+##### `title` parameter
+
 ```yaml
 title:
   - description : the file title you want to display on top of the widget
@@ -194,6 +197,8 @@ title:
   - required: false
   - default: null
 ```
+
+##### `usertoken` parameter
 
 ```yaml
 usertoken:
@@ -207,6 +212,29 @@ usertoken:
     to create a ghost user acting as an anonymous contributor 
 ```
 
+**Notes**
+
+The `usertoken` parameter is one of the most important features of this project. You will need a private token to push to a repository and make all the operations we want to automatize for an open contribution :
+
+- **Create a new branch** againt a reference branch ;
+- **Push a commit** to the new branch ;
+- **Create a merge request** from the new branch onto the reference branch.
+
+Our strategy to simplify those operations for 'normal' people (who does not give a s*** to git) was to create one or several "ghost users", so we could set the repositories' permissions and tokens in advance.
+
+So you can read more on those topics here =>
+
+- More about **Gitlab** :
+  - API documentation : [docs](https://docs.gitlab.com/ee/api/)
+  - Create a private token : [docs](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
+  - Manage permissions : [docs](https://docs.gitlab.com/ee/user/permissions.html)
+- More about **Github** :
+  - API documentation : [docs](https://docs.github.com/en/rest)
+  - Create a private token : [docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+  - Manage permissions : [docs](https://docs.github.com/en/organizations/managing-access-to-your-organizations-repositories/repository-roles-for-an-organization)
+
+##### `locale` parameter
+
 ```yaml
 locale:
   - description : the language you want to use by default
@@ -219,6 +247,8 @@ locale:
     But we'll have a selector to allow the user to apply a locale globally, overiding default injected locales.
 ```
 
+##### `debug` parameter
+
 ```yaml
 debug:
   - description : just for debugging
@@ -227,21 +257,27 @@ debug:
   - default: false
 ```
 
-### For `md` files
+### Parameters for `md` files
+
+##### `options` parameter
 
 ```yaml
 options:
   - (no options for now)
 ```
 
-### For `json` files
+### Parameters for `json` and `geojson` files
+
+##### `options` parameter
 
 ```yaml
 options:
   - (no options for now)
 ```
 
-### For `csv` or `tsv` files
+### Parameters for `csv` and `tsv` files
+
+##### `options` parameter
 
 ```yaml
 options:
@@ -278,7 +314,9 @@ We only used open source packages and technologies, coz' that's what we do... :
 - [`Showdown`](https://www.npmjs.com/package/showdown) and [`showdown-table` extension](https://github.com/showdownjs/table-extension#readme): package to convert `md` content to `html` (see [docs for showdown extensions](https://github.com/showdownjs/showdown#extensions));
 - [`Bulma`](https://bulma.io/) and [`Buefy`](https://buefy.org/) : as UI frameworks for vue ;
 - [`Material Design`](https://materialdesignicons.com/) fonts: for icons ;
-- [`Axios`](https://www.npmjs.com/package/axios): for requests to Github or Gitlab API ;
+- [`Fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch): for requests to Github's or Gitlab's API ;
+- [`JSDiff`](https://github.com/kpdecker/jsdiff) : to get diff between an original content and its edited version
+- [`Diff2html`](https://www.npmjs.com/package/diff2html) : to display diff like in github / gitlab
 - ...and a lot of Stackoverflow help...
 
 ---

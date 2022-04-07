@@ -190,7 +190,6 @@ export default {
       getViewMode: 'git-data/getViewMode',
       getGitInfosObj: 'getGitInfosObj',
       buildNewBranchName: 'buildNewBranchName',
-      getFileToken: 'git-data/getFileToken',
       fileNeedsSaving: 'git-data/fileNeedsSaving'
     }),
     gitObj () {
@@ -296,8 +295,7 @@ export default {
       const commitData = {
         gitObj: this.gitObj,
         edited: this.edited,
-        newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId),
-        token: this.getFileToken(this.fileId)
+        newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })
     }

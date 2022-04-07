@@ -42,6 +42,8 @@
                         </template>
                         <b-input
                           v-model="userEmail"
+                          :readonly="isCommitting"
+                          :disabled="isCommitting"
                           type="email"
                           :placeholder="t('optional', locale)"
                           icon-right="close-circle"
@@ -58,6 +60,8 @@
                         </template>
                         <b-input
                           v-model="userMessage"
+                          :readonly="isCommitting"
+                          :disabled="isCommitting"
                           type="textarea"
                           maxlength="500"
                           icon-right="close-circle"
@@ -108,6 +112,7 @@
               class="card-footer-item mx-3"
               icon-left="close"
               type=""
+              :loading="isCommitting"
               @click="cancelCommit()">
               {{ t('cancel', locale) }}
             </b-button>
@@ -115,6 +120,7 @@
               class="card-footer-item mx-3"
               icon-left="check"
               type="is-dark"
+              :loading="isCommitting"
               @click="confirmCommit()">
               {{ t('send', locale) }}
             </b-button>
@@ -159,7 +165,8 @@ export default {
     return {
       activeTab: 0,
       userEmail: undefined,
-      userMessage: ''
+      userMessage: '',
+      loading: false
     }
   },
   computed: {
@@ -168,7 +175,9 @@ export default {
       getGitInfosObj: 'getGitInfosObj',
       buildNewBranchName: 'buildNewBranchName',
       getCommitData: 'git-data/getCommitData',
-      getFileReqInfosObj: 'getFileReqInfosObj'
+      getFileToken: 'git-data/getFileToken',
+      getFileReqInfosObj: 'getFileReqInfosObj',
+      fileIsCommitting: 'git-data/fileIsCommitting'
     }),
     gitObj () {
       return this.fileId && this.getGitInfosObj(this.fileId)
@@ -183,6 +192,10 @@ export default {
     commitBranch () {
       const commitData = this.commitData
       return commitData && commitData.newBranch
+    },
+    isCommitting () {
+      // console.log('C > ConfirmCommit > this.gitObj : ', this.gitObj)
+      return this.fileIsCommitting(this.fileId)
     }
   },
   beforeMount () {
@@ -196,7 +209,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      updateSaving: 'git-data/updateSaving'
+      updateSaving: 'git-data/updateSaving',
+      updateCommitting: 'git-data/updateCommitting',
+      updateReqErrors: 'git-data/updateReqErrors'
     }),
     clearEmail () {
       this.userEmail = ''
@@ -208,20 +223,42 @@ export default {
       this.updateSaving({ fileId: this.fileId, isSaving: false })
     },
     async confirmCommit () {
-      console.log('C > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
+      console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
+      this.loading = true
+      this.updateCommitting({ fileId: this.fileId, isCommitting: true })
+      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
+
+      // get commit data
       const commitData = this.getCommitData(this.fileId)
       console.log('C > ConfirmCommit > confirmCommit > commitData :', commitData)
+
+      // get file request infos
       const fileReqInfos = this.getFileReqInfosObj(this.fileId)
       commitData.fileReqInfos = fileReqInfos
-      console.log('C > ConfirmCommit > confirmCommit > commitDfileReqInfosata :', fileReqInfos)
+      console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
 
-      // send requests
-      // create new branch
+      // get token
+      const token = this.getFileToken(this.fileId)
+      commitData.token = token
+      console.log('C > ConfirmCommit > confirmCommit > token :', token)
+
+      // Send requests...
+
+      // post new branch
       const respBranch = await postNewBranch(commitData)
       console.log('C > ConfirmCommit > confirmCommit > respBranch :', respBranch)
+      const respBranchErrors = respBranch.errors
+
       // put commit
       // const respCommit = await putCommit(commitData)
       // console.log('C > ConfirmCommit > confirmCommit > respCommit :', respCommit)
+      this.updateCommitting({ fileId: this.fileId, isCommitting: false })
+
+      // update errors if any
+      if (respBranchErrors) {
+        const errors = [...respBranchErrors]
+        this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
+      }
     }
   }
 }

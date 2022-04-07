@@ -51,7 +51,8 @@ export default {
     async DownloadFile () {
       this.loading = true
       console.log('C > ButtonDownloadFile > DownloadFile > this.gitObj : ', this.gitObj)
-      const fileRaw = await this.getFileDataRaw(this.gitObj)
+      const respFileRaw = await this.getFileDataRaw(this.gitObj)
+      const fileRaw = respFileRaw.data
       const fileName = this.gitObj.filefullname
       const fileUrl = window.URL.createObjectURL(new Blob([fileRaw]))
       console.log('C > ButtonDownloadFile > DownloadFile > fileUrl : ', fileUrl)

@@ -149,24 +149,38 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
   return requestOptions
 }
 
-export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch) {
+export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token = undefined) {
+  let errors
   let urlPostBranch
   let prePostRequestUrl, prePostResponse, prePostResponseData, revisionHash
   let postBody
   switch (gitObj.provider) {
     case 'gitlab':
+      prePostRequestUrl = `${gitObj.apiRepo}/repository/branches/${sourceBranch}`
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostRequestUrl : ', prePostRequestUrl)
+
+      prePostResponse = await fetch(prePostRequestUrl)
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostResponse : ', prePostResponse)
+      prePostResponseData = await prePostResponse.json()
+      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostResponseData : ', prePostResponseData)
+
       urlPostBranch = `${gitObj.apiRepo}/repository/branches?branch=${newBranch}&ref=${sourceBranch}`
       break
     case 'github':
       // cf : https://stackoverflow.com/questions/9506181/github-api-create-branch#:~:text=So%20it%20should%20be%20possible,heads%20'%20in%20the%20ref%20parameter.&text=Find%20the%20revision%20you%20want%20to%20branch%20from.&text=You%20will%20need%20to%20use,your%20branch%20will%20be%20created!
       // GET from : https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
+
+      // build url for prePostRequest
       prePostRequestUrl = `${gitObj.apiRepo}/git/refs/heads/${sourceBranch}`
       // console.log('U > utilsGitUrl > buildPostBranchUrl > github > prePostRequestUrl : ', prePostRequestUrl)
+
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
+
       prePostResponse = await fetch(prePostRequestUrl)
       // console.log('U > utilsGitUrl > buildPostBranchUrl > github > prePostResponse : ', prePostResponse)
       prePostResponseData = await prePostResponse.json()
       // console.log('U > utilsGitUrl > buildPostBranchUrl > github > prePostResponseData : ', prePostResponseData)
+      // Copy sha
       revisionHash = prePostResponseData.object.sha
       // console.log('U > utilsGitUrl > buildPostBranchUrl > github > revisionHash : ', revisionHash)
       // url to POST to : https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs
@@ -179,6 +193,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch) {
   }
   return {
     url: urlPostBranch,
-    body: postBody
+    body: postBody,
+    errors: errors
   }
 }

@@ -37,5 +37,9 @@ export default {
   user: 'User',
   userIntro: "You can add a personalized message to the file's owner",
   userEmail: 'Email',
-  userMessage: 'Message'
+  userMessage: 'Message',
+  error: 'Error',
+  errorFunction: 'Error from function',
+  errorCode: 'Error code',
+  errorMessage: 'Error message'
 }

@@ -28,7 +28,7 @@ const defaultStore = {
     },
     buildNewBranchName: (state) => (filefullname, fileId) => {
       const fileFullnameClean = filefullname.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')
-      return `branch-${fileFullnameClean}-${fileId}`
+      return `gitribute-${fileFullnameClean}-${fileId}`
     }
   },
   mutations: {
