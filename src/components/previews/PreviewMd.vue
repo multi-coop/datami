@@ -86,6 +86,13 @@
         :class="`column is-half pr-3`">
         <b-field>
           <b-input
+            v-model="dataEdited"
+            custom-class="has-background-light"
+            type="textarea"
+            :rows="numberLinesData"/>
+        </b-field>
+        <b-field>
+          <b-input
             v-model="edited"
             custom-class="has-background-light"
             type="textarea"
@@ -104,6 +111,11 @@
       <div
         v-show="currentViewMode === 'diff'"
         :class="`column is-half pr-6`">
+        <ShowDown
+          v-if="data"
+          class="mb-3"
+          :markdown="formatAsYaml(getDiffHtmlCharsData)"
+          flavor="github"/>
         <ShowDown
           v-if="content"
           :markdown="getDiffHtmlChars"
@@ -128,7 +140,11 @@
       <div
         :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
         <ShowDown
-          :data-as-markdown="currentViewMode === 'diff' ? dataAsMarkdown : dataAsMarkdown"
+          v-if="data"
+          class="mb-3"
+          :markdown="currentViewMode === 'diff' ? dataAsMarkdown : currentViewMode === 'edit' ? formatAsYaml(dataEdited) : ''"
+          flavor="github"/>
+        <ShowDown
           :markdown="currentViewMode === 'diff' ? content : edited"
           flavor="github"/>
       </div>
@@ -181,6 +197,7 @@ export default {
     return {
       contentIsSet: false,
       data: null,
+      dataEdited: null,
       content: null,
       edited: null
     }
@@ -200,8 +217,7 @@ export default {
       return this.getViewMode(this.gitObj.uuid)
     },
     dataAsMarkdown () {
-      const data = this.objectToMd('', this.data)
-      return '```yaml\n' + data + '\n```\n'
+      return this.objectAsMarkdown(this.data)
     },
     getIconDiff () {
       return filesViewsOptions.find(i => i.code === 'diff').icon
@@ -217,6 +233,13 @@ export default {
       if (this.edited) { result = this.edited.split(/\r\n|\r|\n/).length + result }
       return result
     },
+    numberLinesData () {
+      let result = 0
+      if (this.dataEdited) {
+        result = this.dataEdited.split(/\r\n|\r|\n/).length - 1
+      }
+      return result
+    },
     getUnifiedDiff () {
       // console.log('C > PreviewMd > getUnifiedDiff  > createTwoFilesPatch : \n', createTwoFilesPatch)
       const fileName = this.gitObj.filefullname
@@ -227,6 +250,11 @@ export default {
       // console.log('C > PreviewMd > getCharDiff  > diffChars : \n', diffChars)
       // const diffStr = diffChars(this.content, this.edited)
       const diffStr = diffWords(this.content, this.edited)
+      return diffStr
+    },
+    getCharDiffData () {
+      const dataAsMarkdown = this.getDataString(this.data)
+      const diffStr = diffWords(dataAsMarkdown, this.dataEdited)
       return diffStr
     },
     getDiffHtmlUnified () {
@@ -240,22 +268,11 @@ export default {
       return Diff2Html.html(diff, options)
     },
     getDiffHtmlChars () {
-      const diff = this.getCharDiff
-      // console.log('C > PreviewMd > getDiffHtmlChars  > diff : \n', diff)
-      let diffText = ''
-      diff.forEach((part) => {
-        // green for additions, red for deletions
-        // grey for common parts
-        let fragment
-        const spanClass = part.added ? 'git-ins' : part.removed ? 'git-del' : null
-        if (spanClass) {
-          fragment = `<span class="${spanClass}">${part.value}</span>`
-        } else {
-          fragment = part.value
-        }
-        diffText += fragment
-      })
-      // console.log('C > PreviewMd > getDiffHtmlChars  > diffText : \n', diffText)
+      const diffText = this.diffHtmlChars(this.getCharDiff)
+      return diffText
+    },
+    getDiffHtmlCharsData () {
+      const diffText = this.diffHtmlChars(this.getCharDiffData)
       return diffText
     },
     fileIsSaving () {
@@ -278,9 +295,15 @@ export default {
       // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
       if (next) {
         this.edited = this.content
+        this.dataEdited = this.objectToMd('', this.data)
       }
     },
     edited (next) {
+      if (next) {
+        this.bufferizeEdited()
+      }
+    },
+    dataEdited (next) {
       if (next) {
         this.bufferizeEdited()
       }
@@ -296,8 +319,37 @@ export default {
     ...mapActions({
       updateBuffer: 'git-data/updateBuffer'
     }),
+    formatAsYaml (str) {
+      return '```yaml\n' + str + '\n```\n'
+    },
+    getDataString (obj) {
+      return this.objectToMd('', obj)
+    },
+    objectAsMarkdown (obj) {
+      const dataString = this.getDataString(obj)
+      return this.formatAsYaml(dataString)
+    },
+    diffHtmlChars (diff) {
+      // console.log('C > PreviewMd > getDiffHtmlChars  > diff : \n', diff)
+      let diffText = ''
+      diff.forEach((part) => {
+        // green for additions, red for deletions
+        // grey for common parts
+        let fragment
+        const spanClass = part.added ? 'git-ins' : part.removed ? 'git-del' : null
+        if (spanClass) {
+          fragment = `<span class="${spanClass}">${part.value}</span>`
+        } else {
+          fragment = part.value
+        }
+        diffText += fragment
+      })
+      // console.log('C > PreviewMd > getDiffHtmlChars  > diffText : \n', diffText)
+      return diffText
+    },
     bufferizeEdited () {
-      const edited = this.objectToMd(this.edited, this.data)
+      // const edited = this.objectToMd(this.edited, this.data)
+      const edited = `${this.dataEdited}\n${this.edited}`
       const commitData = {
         gitObj: this.gitObj,
         // edited: this.edited,

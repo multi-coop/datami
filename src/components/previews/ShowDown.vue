@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div
-      class="mb-3"
-      v-html="outputHtmlData"/>
     <div v-html="outputHtml"/>
   </div>
 </template>
@@ -18,11 +15,6 @@ export default {
      * Raw markdown content
      */
     markdown: {
-      type: String,
-      required: false,
-      default: null
-    },
-    dataAsMarkdown: {
       type: String,
       required: false,
       default: null
@@ -83,21 +75,11 @@ export default {
       // fall back to empty string
       return ''
     },
-    inputMarkdownData () {
-      // from props
-      if (this.dataAsMarkdown !== null) return this.dataAsMarkdown
-      // fall back to empty string
-      return ''
-    },
     outputHtml () {
       // console.log('C > ShowDown > outputHtml > this.converter : ', this.converter)
       // console.log('C > ShowDown > outputHtml > this.inputMarkdown : ', this.inputMarkdown)
       const output = this.converter.makeHtml(this.inputMarkdown)
       // console.log('C > ShowDown > outputHtml > output : ', output)
-      return output
-    },
-    outputHtmlData () {
-      const output = this.converter.makeHtml(this.inputMarkdownData)
       return output
     }
   }
