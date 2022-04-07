@@ -239,6 +239,21 @@ export default {
     isCommitting () {
       // console.log('C > ConfirmCommit > this.gitObj : ', this.gitObj)
       return this.fileIsCommitting(this.fileId)
+    },
+    buildCommitMessage () {
+      let msg = this.userMessage
+      const hasMore = [
+        this.userName,
+        this.userSurname,
+        this.userEmail
+      ].findIndex(s => s !== '')
+      if (hasMore !== -1) {
+        msg += '\n----\n\nContribution from:\n'
+        if (this.userName) { msg += `\nName : ${this.userName}` }
+        if (this.userSurname) { msg += `\nSurname : ${this.userSurname}` }
+        if (this.userEmail) { msg += `\nEmail : ${this.userEmail}` }
+      }
+      return msg
     }
   },
   beforeMount () {
@@ -290,6 +305,9 @@ export default {
       const token = this.getFileToken(this.fileId)
       commitData.token = token
       console.log('C > ConfirmCommit > confirmCommit > token :', token)
+
+      // append commit message
+      commitData.message = this.buildCommitMessage
 
       // Send contribution request...
       const respContribution = await sendContribution(commitData)
