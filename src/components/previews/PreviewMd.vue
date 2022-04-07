@@ -83,18 +83,24 @@
       <!-- EDIT VIEW -->
       <div
         v-show="currentViewMode === 'edit'"
-        :class="`column is-half pr-3`">
+        :class="`column is-half pr-6`">
+        <p class="is-italic">
+          {{ t('yamlPart', locale) }}
+        </p>
         <b-field>
           <b-input
             v-model="dataEdited"
-            custom-class="has-background-light"
+            custom-class="edit-md mb-4"
             type="textarea"
             :rows="numberLinesData"/>
         </b-field>
+        <p class="is-italic">
+          {{ t('textPart', locale) }}
+        </p>
         <b-field>
           <b-input
             v-model="edited"
-            custom-class="has-background-light"
+            custom-class="edit-md"
             type="textarea"
             :rows="numberLines"/>
         </b-field>
@@ -111,11 +117,20 @@
       <div
         v-show="currentViewMode === 'diff'"
         :class="`column is-half pr-6`">
-        <ShowDown
+        <!-- <ShowDown
           v-if="data"
           class="mb-3"
           :markdown="formatAsYaml(getDiffHtmlCharsData)"
-          flavor="github"/>
+          flavor="github"/> -->
+        <p class="is-italic">
+          {{ t('yamlPart', locale) }}
+        </p>
+        <div
+          class="diff-data"
+          v-html="getDiffHtmlCharsData"/>
+        <p class="is-italic">
+          {{ t('textPart', locale) }}
+        </p>
         <ShowDown
           v-if="content"
           :markdown="getDiffHtmlChars"
@@ -139,11 +154,25 @@
       <!-- PREVIEW -->
       <div
         :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
-        <ShowDown
+        <!-- <ShowDown
           v-if="data"
           class="mb-3"
           :markdown="currentViewMode === 'diff' ? dataAsMarkdown : currentViewMode === 'edit' ? formatAsYaml(dataEdited) : ''"
-          flavor="github"/>
+          flavor="github"/> -->
+        <p
+          v-if="currentViewMode !== 'preview'"
+          class="is-italic">
+          {{ t('yamlPart', locale) }}
+        </p>
+        <div
+          v-if="currentViewMode !== 'preview'"
+          class="diff-data"
+          v-html="currentViewMode === 'diff' ? getDataString(data) : dataEdited"/>
+        <p
+          v-if="currentViewMode !== 'preview'"
+          class="is-italic">
+          {{ t('textPart', locale) }}
+        </p>
         <ShowDown
           :markdown="currentViewMode === 'diff' ? content : edited"
           flavor="github"/>
@@ -364,6 +393,23 @@ export default {
 
 <style>
 
+.edit-md {
+  color: white;
+  font-family: monospace;
+  background-color: #191919;
+}
+.diff-data {
+  overflow-x: auto;
+  white-space: pre;
+  background-color: #f5f5f5;
+  padding: 1.25em 1.5em;
+  font-size: .875em;
+  word-wrap: normal;
+  font-weight: 400;
+  -webkit-font-smoothing: auto;
+  font-family: monospace;
+  margin-bottom: 3em;
+}
 .git-ins {
   text-decoration: none !important;
   background-color: #d4fcbc !important;

@@ -30,6 +30,8 @@ export default {
   original: 'Original content',
   edited: 'Edited content',
   editedPreview: 'Edited content preview',
+  yamlPart: 'Data part',
+  textPart: 'Text part',
   changes: 'Changes',
   commitChanges: 'Submit your modifications',
   commitBranch: 'Commit branch',
