@@ -139,6 +139,7 @@ export default {
       updateBuffer: 'git-data/updateBuffer'
     }),
     bufferizeEdited () {
+      // TO DO => ObjToCsv function to rebuild the csv string from table object
       const commitData = {
         gitObj: this.gitObj,
         edited: this.edited,

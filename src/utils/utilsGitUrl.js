@@ -231,3 +231,34 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
     errors: errors
   }
 }
+
+export const buildPutCommitReqData = (gitObj, branch, edited, message, author) => {
+  let url
+  let bodyObj = {}
+  switch (gitObj.provider) {
+    case 'gitlab':
+      url = `${gitObj.apiFile}`
+      bodyObj = {
+        branch: branch,
+        author_email: author.email,
+        author_name: author.nameComplete,
+        content: edited,
+        commit_message: message
+      }
+      break
+    case 'github':
+      url = `${gitObj.apiFile}`
+      bodyObj = {
+        branch: branch,
+        author_email: author.email,
+        author_name: author.name,
+        content: edited,
+        commit_message: message
+      }
+      break
+  }
+  return {
+    url: url,
+    body: bodyObj
+  }
+}

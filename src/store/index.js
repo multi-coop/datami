@@ -27,8 +27,11 @@ const defaultStore = {
       return fileReqInfosObj
     },
     buildNewBranchName: (state) => (filefullname, fileId) => {
+      const now = Date.now()
+      const today = new Date(now)
+      const stringDate = today.toISOString().substring(0, 10)
       const fileFullnameClean = filefullname.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')
-      return `gitribute-${fileFullnameClean}-${fileId}`
+      return `gitribute-${stringDate}-${fileFullnameClean}-${fileId}`
     }
   },
   mutations: {

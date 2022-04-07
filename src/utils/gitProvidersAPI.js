@@ -1,4 +1,4 @@
-import { buildGitRequestOptions, buildPostBranchUrl } from '@/utils/utilsGitUrl'
+import { buildGitRequestOptions, buildPostBranchUrl, buildPutCommitReqData } from '@/utils/utilsGitUrl'
 
 export async function getFileData (gitObj) {
   const errors = []
@@ -135,23 +135,38 @@ export async function putCommitToBranch (commitData) {
   GITHUB :
   ...
   */
-  // build request options
   const errors = []
   const method = 'PUT'
   const token = commitData.token
+  const branch = commitData.newBranch
+  const author = commitData.author
+  const message = commitData.message
+  const edited = commitData.edited
   const provider = commitData.gitObj.provider
-  const body = JSON.stringify(commitData.edited)
+
+  // build body
+  const reqData = buildPutCommitReqData(commitData.gitObj, branch, edited, message, author)
+  console.log('U > gitProvidersAPI > putCommitToBranch > reqData : ', reqData)
+  const body = reqData.body
+
+  // build request options
   const requestOptions = buildGitRequestOptions(method, provider, token, body)
   console.log('U > gitProvidersAPI > putCommitToBranch > requestOptions : ', requestOptions)
 
-  // build correct API url
-  // const newBranch = commitData.newBranch
-  // const url = `${commitData.gitObj.apiRepo}`
-
   // test with pure fetch
-  // const req = await fetch(url, requestOptions)
-  // console.log('U > gitProvidersAPI > getFileDataRaw > getUrl > req : ', req)
-  const resp = 'putCommitToBranch resp ... work in progress'
+  const req = await fetch(reqData.url, requestOptions)
+  console.log('U > gitProvidersAPI > getFileDataRaw > getUrl > req : ', req)
+
+  const resp = await req.json()
+  console.log('U > gitProvidersAPI > getFileDataRaw > resp : ', resp)
+  if (!req.ok) {
+    const err = {
+      function: 'putCommitToBranch',
+      code: req.status,
+      message: resp.message
+    }
+    errors.push(err)
+  }
 
   return {
     data: resp,

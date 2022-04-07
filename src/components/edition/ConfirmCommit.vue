@@ -272,16 +272,16 @@ export default {
       updateReqErrors: 'git-data/updateReqErrors'
     }),
     clearName () {
-      this.userName = ''
+      this.userName = undefined
     },
     clearSurname () {
-      this.userSurname = ''
+      this.userSurname = undefined
     },
     clearEmail () {
-      this.userEmail = ''
+      this.userEmail = undefined
     },
     clearMessage () {
-      this.userMessage = ''
+      this.userMessage = undefined
     },
     cancelCommit () {
       this.updateSaving({ fileId: this.fileId, isSaving: false })
@@ -306,8 +306,17 @@ export default {
       commitData.token = token
       console.log('C > ConfirmCommit > confirmCommit > token :', token)
 
-      // append commit message
+      // append commit message and infos
       commitData.message = this.buildCommitMessage
+      const authorEmail = this.userEmail ? this.userEmail : 'contributor@multi.coop'
+      const authorName = this.userName ? this.userName : 'anonymous contributor'
+      const authorSurname = this.userSurname ? this.userSurname : 'contributor'
+      commitData.author = {
+        email: authorEmail,
+        name: authorName,
+        surname: authorSurname,
+        nameComplete: `${authorName} ${authorSurname}`
+      }
 
       // Send contribution request...
       const respContribution = await sendContribution(commitData)
