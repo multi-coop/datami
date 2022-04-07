@@ -1,5 +1,9 @@
 import { buildGitRequestOptions, buildPostBranchUrl, buildPutCommitReqData } from '@/utils/utilsGitUrl'
 
+// no use for axios (less dependencies, native function)
+// see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
+// see https://www.atecna.ca/fr/blog/fetch-vs-axios/
+
 export async function getFileData (gitObj) {
   const errors = []
 
@@ -133,6 +137,7 @@ export async function putCommitToBranch (commitData) {
      "https://gitlab.example.com/api/v4/projects/13083/repository/files/app%2Fproject%2Erb"
   ---
   GITHUB :
+  PUT /repos/{owner}/{repo}/contents/{path}
   ...
   */
   const errors = []
@@ -144,8 +149,8 @@ export async function putCommitToBranch (commitData) {
   const edited = commitData.edited
   const provider = commitData.gitObj.provider
 
-  // build body
-  const reqData = buildPutCommitReqData(commitData.gitObj, branch, edited, message, author)
+  // build body and data
+  const reqData = await buildPutCommitReqData(commitData.gitObj, branch, edited, message, author)
   console.log('U > gitProvidersAPI > putCommitToBranch > reqData : ', reqData)
   const body = reqData.body
 
@@ -155,10 +160,10 @@ export async function putCommitToBranch (commitData) {
 
   // test with pure fetch
   const req = await fetch(reqData.url, requestOptions)
-  console.log('U > gitProvidersAPI > getFileDataRaw > getUrl > req : ', req)
+  console.log('U > gitProvidersAPI > putCommitToBranch > req : ', req)
 
   const resp = await req.json()
-  console.log('U > gitProvidersAPI > getFileDataRaw > resp : ', resp)
+  console.log('U > gitProvidersAPI > putCommitToBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
       function: 'putCommitToBranch',

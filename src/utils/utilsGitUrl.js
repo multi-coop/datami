@@ -21,6 +21,13 @@ export const gitProviders = {
   }
 }
 
+export const b64encode = (str) => {
+  return btoa(unescape(encodeURIComponent(str)))
+}
+export const b64decode = (str) => {
+  return decodeURIComponent(escape(atob(str)))
+}
+
 export const buildApiRoots = (gitInfos) => {
   let apiRepo, apiFile, apiFileBase, apiFileRaw
   if (gitInfos.provider === 'github') {
@@ -152,7 +159,7 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
 export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token = undefined) {
   console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
 
-  let errors
+  const errors = []
   let newBranchAlreadyExists = false
   let urlPostBranch
 
@@ -175,7 +182,6 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
       prePostCheckSourceBranchData = await prePostCheckSourceBranchResp.json()
       console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchData : ', prePostCheckSourceBranchData)
       if (!prePostCheckSourceBranchResp.ok) {
-        errors = []
         const err = {
           function: 'postNewBranch',
           code: prePostCheckSourceBranchResp.status,
@@ -232,9 +238,13 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
   }
 }
 
-export const buildPutCommitReqData = (gitObj, branch, edited, message, author) => {
+export async function buildPutCommitReqData (gitObj, branch, edited, message, author) {
   let url
   let bodyObj = {}
+
+  // specific to github
+  let prePostRequestUrl, prePostResponse, prePostResponseData, revisionHash, base64Content
+
   switch (gitObj.provider) {
     case 'gitlab':
       url = `${gitObj.apiFile}`
@@ -247,16 +257,46 @@ export const buildPutCommitReqData = (gitObj, branch, edited, message, author) =
       }
       break
     case 'github':
+      // TO DO
+      // see https://docs.github.com/en/rest/reference/repos#create-or-update-file-contents
+      // https://docs.github.com/rest/reference/repos#create-or-update-file-contents
+
       url = `${gitObj.apiFile}`
+
+      // build url for prePostRequest
+      prePostRequestUrl = `${gitObj.apiFile}`
+      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostRequestUrl : ', prePostRequestUrl)
+
+      // TO DO - CATCH IF BRANCH ALREADY EXISTS
+      // if () { newBranchAlreadyExists = true }
+
+      prePostResponse = await fetch(prePostRequestUrl)
+      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponse : ', prePostResponse)
+      prePostResponseData = await prePostResponse.json()
+      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponseData : ', prePostResponseData)
+
+      // Copy sha
+      revisionHash = prePostResponseData.sha
+      console.log('U > utilsGitUrl > buildPutCommitReqData > github > revisionHash : ', revisionHash)
+
+      // encode content / edited
+      base64Content = b64encode(edited)
+      console.log('U > utilsGitUrl > buildPutCommitReqData > github > base64Content : ', base64Content)
+
       bodyObj = {
         branch: branch,
-        author_email: author.email,
-        author_name: author.name,
-        content: edited,
-        commit_message: message
+        committer: {
+          email: author.email,
+          name: author.name
+        },
+        sha: revisionHash,
+        content: base64Content,
+        message: message
       }
       break
   }
+
+  // results
   return {
     url: url,
     body: bodyObj
