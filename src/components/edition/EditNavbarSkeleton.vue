@@ -10,7 +10,7 @@
         &nbsp;
       </div> -->
       <!-- VIEW CHOICES -->
-      <div class="column is-2 is-offset-5">
+      <div class="column pl-5 is-2 is-offset-5">
         <EditModeBtns
           :file-id="fileId"
           :locale="locale"/>
