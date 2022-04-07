@@ -15,3 +15,8 @@ export const mdToObject = (mdRaw, options) => {
   }
   return fileData
 }
+
+export const objectToMd = (content, data) => {
+  const mdString = matter.stringify(content, data)
+  return mdString
+}

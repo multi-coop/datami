@@ -128,6 +128,7 @@
       <div
         :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
         <ShowDown
+          :data-as-markdown="currentViewMode === 'diff' ? dataAsMarkdown : dataAsMarkdown"
           :markdown="currentViewMode === 'diff' ? content : edited"
           flavor="github"/>
       </div>
@@ -197,6 +198,10 @@ export default {
     },
     currentViewMode () {
       return this.getViewMode(this.gitObj.uuid)
+    },
+    dataAsMarkdown () {
+      const data = this.objectToMd('', this.data)
+      return '```yaml\n' + data + '\n```\n'
     },
     getIconDiff () {
       return filesViewsOptions.find(i => i.code === 'diff').icon
@@ -292,9 +297,11 @@ export default {
       updateBuffer: 'git-data/updateBuffer'
     }),
     bufferizeEdited () {
+      const edited = this.objectToMd(this.edited, this.data)
       const commitData = {
         gitObj: this.gitObj,
-        edited: this.edited,
+        // edited: this.edited,
+        edited: edited,
         newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })
