@@ -18,62 +18,10 @@
     </div>
 
     <!-- HELPERS -->
-    <div class="columns is-mobile">
-      <!-- EDITED -->
-      <div
-        v-show="currentViewMode !== 'preview'"
-        class="column is-6 has-text-centered">
-        <div
-          class="divider my-0">
-          <span class="no-text-transform is-size-6 has-text-grey-light">
-            <b-icon
-              :icon="getIconEdit"
-              size="is-small"/>
-            {{ t( `preview.${ currentViewMode === 'diff' ? 'edited' : 'edition'}`, locale) }}
-          </span>
-        </div>
-      </div>
-      <!-- ORIGINAL -->
-      <div
-        class="column has-text-centered">
-        <div
-          v-show="currentViewMode === 'preview'"
-          class="divider my-0">
-          <span class="no-text-transform is-size-6 has-text-grey-light">
-            <b-icon
-              :icon="getIconPreview"
-              size="is-small"/>
-            {{ t( 'preview.previewView', locale) }}
-          </span>
-        </div>
-        <span
-          v-show="currentViewMode === 'diff'"
-          class="is-size-6 has-text-weight-bold has-text-grey-light">
-          <div
-            class="divider my-0 pl-4">
-            <span class="no-text-transform is-size-6 has-text-grey-light">
-              <b-icon
-                :icon="getIconPreview"
-                size="is-small"/>
-              {{ t( 'preview.original', locale) }}
-            </span>
-          </div>
-        </span>
-        <span
-          v-show="currentViewMode === 'edit'"
-          class="is-size-6 has-text-weight-bold has-text-grey-light">
-          <div
-            class="divider my-0 pl-4">
-            <span class="no-text-transform is-size-6 has-text-grey-light">
-              <b-icon
-                :icon="getIconPreview"
-                size="is-small"/>
-              {{ t( 'preview.editedPreview', locale) }}
-            </span>
-          </div>
-        </span>
-      </div>
-    </div>
+    <PreviewHelpers
+      :file-id="fileId"
+      :file-family="'text'"
+      :locale="locale"/>
 
     <!-- VIEWS -->
     <div
@@ -142,11 +90,11 @@
         class="divider is-vertical mx-0">
         <b-icon
           v-if="currentViewMode === 'diff'"
-          :icon="getIconDiff"
+          :icon="getIcon(currentViewMode)"
           size="is-small"/>
         <b-icon
           v-if="currentViewMode === 'edit'"
-          :icon="getIconEdit"
+          :icon="getIcon(currentViewMode)"
           size="is-small"/>
       </div>
 
@@ -182,13 +130,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { mixinMd } from '@/utils/mixins.js'
+import { mixinIcons, mixinDiff, mixinMd } from '@/utils/mixins.js'
+
+import PreviewHelpers from '@/components/previews/PreviewHelpers'
 import ShowDown from '@/components/previews/ShowDown'
 
-import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
-
-// see : https://github.com/kpdecker/jsdiff
-import { createTwoFilesPatch, diffWords } from 'diff'
+// // see : https://github.com/kpdecker/jsdiff
+// import { createTwoFilesPatch, diffWords } from 'diff'
 
 import * as Diff2Html from 'diff2html'
 import 'diff2html/bundles/css/diff2html.min.css'
@@ -196,9 +144,14 @@ import 'diff2html/bundles/css/diff2html.min.css'
 export default {
   name: 'PreviewMd',
   components: {
+    PreviewHelpers,
     ShowDown
   },
-  mixins: [mixinMd],
+  mixins: [
+    mixinIcons,
+    mixinDiff,
+    mixinMd
+  ],
   props: {
     fileId: {
       default: null,
@@ -247,15 +200,6 @@ export default {
     dataAsMarkdown () {
       return this.objectAsMarkdown(this.data)
     },
-    getIconDiff () {
-      return filesViewsOptions.find(i => i.code === 'diff').icon
-    },
-    getIconEdit () {
-      return filesViewsOptions.find(i => i.code === 'edit').icon
-    },
-    getIconPreview () {
-      return filesViewsOptions.find(i => i.code === 'preview').icon
-    },
     numberLines () {
       let result = 2
       if (this.edited) { result = this.edited.split(/\r\n|\r|\n/).length + result }
@@ -271,18 +215,18 @@ export default {
     getUnifiedDiff () {
       // console.log('C > PreviewMd > getUnifiedDiff  > createTwoFilesPatch : \n', createTwoFilesPatch)
       const fileName = this.gitObj.filefullname
-      const diffStr = createTwoFilesPatch(fileName, fileName, this.content, this.edited)
+      const diffStr = this.createTwoFilesPatch(fileName, fileName, this.content, this.edited)
       return diffStr
     },
     getCharDiff () {
       // console.log('C > PreviewMd > getCharDiff  > diffChars : \n', diffChars)
       // const diffStr = diffChars(this.content, this.edited)
-      const diffStr = diffWords(this.content, this.edited)
+      const diffStr = this.diffWords(this.content, this.edited)
       return diffStr
     },
     getCharDiffData () {
       const dataAsMarkdown = this.getDataString(this.data)
-      const diffStr = diffWords(dataAsMarkdown, this.dataEdited)
+      const diffStr = this.diffWords(dataAsMarkdown, this.dataEdited)
       return diffStr
     },
     getDiffHtmlUnified () {

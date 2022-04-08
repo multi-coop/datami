@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ShowDown">
     <div v-html="outputHtml"/>
   </div>
 </template>

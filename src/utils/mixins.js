@@ -2,7 +2,11 @@ import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
 import { csvToObject } from '@/utils/csvUtils.js'
-import { $matter, mdToObject, objectToMd } from '@/utils/mdUtils.js'
+import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
+import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
+
+// see : https://github.com/kpdecker/jsdiff
+import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixin = {
   computed: {
@@ -20,9 +24,24 @@ export const mixin = {
   }
 }
 
+export const mixinIcons = {
+  methods: {
+    getIcon (view) {
+      return filesViewsOptions.find(i => i.code === view).icon
+    }
+  }
+}
+
 export const mixinDownload = {
   methods: {
     getFileDataRaw
+  }
+}
+
+export const mixinDiff = {
+  methods: {
+    createTwoFilesPatch,
+    diffWords
   }
 }
 
@@ -34,7 +53,7 @@ export const mixinCsv = {
 
 export const mixinMd = {
   methods: {
-    $matter,
+    // $matter,
     mdToObject,
     objectToMd
   }

@@ -160,8 +160,7 @@ The widget takes several parameters, following this structure :
   <multi-gitribute-file
     gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" 
     options='{
-      "separator":",",
-      "abstractHeaders":"true"
+      "separator":","
     }' 
     title="gitribute for gitlab file - csv (comma separator)" 
     usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
@@ -292,9 +291,6 @@ options:
       description: character separating the columns in your csv source
       type: string
       allowed values: [ ",", ";", "|", "\t" ]
-    - abstractHeaders:
-      description: another way (quicker) to parse your csv and render it in a table
-      type: boolean
     - tagseparator: 
       description: character separating a column's values into tags
       type: string

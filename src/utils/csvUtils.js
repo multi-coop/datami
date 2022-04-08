@@ -29,7 +29,8 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
   } else {
     headers = headerLine.split(options.separator)
   }
-  headers = options.abstractHeaders ? { ...headers } : headers
+  // headers = options.abstractHeaders ? { ...headers } : headers
+  headers = { ...headers }
   // console.log('U > csvToObject > headers : ', headers)
   // console.log('U > csvToObject > lines : ', lines)
 
@@ -48,11 +49,12 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
       // console.log(`U > csvToObject > ${index} - lineParsed : `, lineParsed)
 
       // reduce values array
-      if (options.abstractHeaders) {
-        reduced = { ...lineParsed }
-      } else {
-        reduced = lineParsed.reduce((ac, a, idx) => ({ ...ac, [headers[idx]]: a }), {})
-      }
+      // if (options.abstractHeaders) {
+      //   reduced = { ...lineParsed }
+      // } else {
+      //   reduced = lineParsed.reduce((ac, a, idx) => ({ ...ac, [headers[idx]]: a }), {})
+      // }
+      reduced = { ...lineParsed }
 
       // console.log(`U > csvToObject > ${index} - reduced : `, reduced)
       // console.log('...')

@@ -13,6 +13,12 @@
         </p>
       </div>
     </div>
+
+    <PreviewHelpers
+      :file-id="fileId"
+      :file-family="'json'"
+      :locale="locale"/>
+
     <!-- PREVIEW -->
     <div>
       <code><pre>{{ data }}</pre></code>
@@ -22,10 +28,16 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { mixinDiff, mixinJson } from '@/utils/mixins.js'
+
+import PreviewHelpers from '@/components/previews/PreviewHelpers'
 
 export default {
   name: 'PreviewJson',
-  mixins: [],
+  components: {
+    PreviewHelpers
+  },
+  mixins: [mixinDiff, mixinJson],
   props: {
     fileId: {
       default: null,
