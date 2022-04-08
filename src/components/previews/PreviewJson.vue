@@ -62,6 +62,7 @@ export default {
   },
   data () {
     return {
+      beginEdit: false,
       data: undefined,
       edited: null
     }

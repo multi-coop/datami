@@ -69,3 +69,25 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
 
   return csv
 }
+
+export const ObjectToCsv = (headers, data, options = defaultCsvOptions) => {
+  // console.log('\nU > ObjectToCsv > headers : \n', headers)
+  // console.log('U > ObjectToCsv > data : \n', data)
+  // console.log('U > ObjectToCsv > options : ', options)
+
+  let csvOut = ''
+
+  // build headers - 1st line
+  const headersLabels = headers.map(h => h.label).join(options.separator)
+  csvOut += `${headersLabels}\n`
+  // console.log('U > ObjectToCsv > csvOut : ', csvOut)
+
+  // build rows
+  data.forEach(d => {
+    // console.log('U > ObjectToCsv > d : ', d)
+    const dataStr = headers.map(h => d[h.field]).join(options.separator)
+    csvOut += `${dataStr}\n`
+  })
+
+  return csvOut
+}

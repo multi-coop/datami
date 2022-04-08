@@ -1,7 +1,7 @@
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
-import { csvToObject } from '@/utils/csvUtils.js'
+import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
 import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
 import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
 
@@ -47,7 +47,8 @@ export const mixinDiff = {
 
 export const mixinCsv = {
   methods: {
-    csvToObject
+    csvToObject,
+    ObjectToCsv
   }
 }
 

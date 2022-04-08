@@ -177,6 +177,7 @@ export default {
   data () {
     return {
       contentIsSet: false,
+      beginEdit: false,
       data: null,
       dataEdited: null,
       content: null,

@@ -89,6 +89,7 @@ export default {
   data () {
     return {
       dataIsSet: false,
+      beginEdit: false,
       dataRaw: undefined,
       data: null,
       dataColumns: undefined,
@@ -208,9 +209,13 @@ export default {
     },
     bufferizeEdited () {
       // TO DO => ObjToCsv function to rebuild the csv string from table object
+
+      const editedCsv = this.ObjectToCsv(this.editedColumns, this.edited, this.fileOptions)
+      console.log('\nC > PreviewMd > bufferizeEdited > editedCsv : ', editedCsv)
+
       const commitData = {
         gitObj: this.gitObj,
-        edited: this.edited,
+        edited: editedCsv,
         newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })
