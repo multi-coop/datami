@@ -22,6 +22,7 @@ export default {
     fileInfos: "File's informations"
   },
   preview: {
+    edition: 'Edition',
     editView: 'Edit',
     diffView: 'Compare',
     previewView: 'Preview',

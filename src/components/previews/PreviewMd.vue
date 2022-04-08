@@ -24,13 +24,12 @@
         v-show="currentViewMode !== 'preview'"
         class="column is-6 has-text-centered">
         <div
-          v-show="currentViewMode !== 'preview'"
           class="divider my-0">
           <span class="no-text-transform is-size-6 has-text-grey-light">
             <b-icon
               :icon="getIconEdit"
               size="is-small"/>
-            {{ t( 'preview.edited', locale) }}
+            {{ t( `preview.${ currentViewMode === 'diff' ? 'edited' : 'edition'}`, locale) }}
           </span>
         </div>
       </div>
