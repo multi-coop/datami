@@ -27,9 +27,9 @@ export const typesIcons = [
 ]
 
 export const filesViewsOptions = [
-  { code: 'edit', icon: 'pencil', textCode: 'editView' },
-  { code: 'diff', icon: 'arrow-left-right', textCode: 'diffView' },
-  { code: 'preview', icon: 'eye', textCode: 'previewView' }
+  { code: 'edit', icon: 'pencil', textCode: 'preview.editView' },
+  { code: 'diff', icon: 'arrow-left-right', textCode: 'preview.diffView' },
+  { code: 'preview', icon: 'eye', textCode: 'preview.previewView' }
 ]
 
 export const viewModes = filesViewsOptions.map(v => v.code)

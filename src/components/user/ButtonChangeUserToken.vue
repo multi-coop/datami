@@ -4,7 +4,7 @@
       <!-- TRIGGER BUTTON -->
       <div class="dropdown-trigger">
         <b-tooltip
-          :label="t('changeToken', locale)"
+          :label="t('actions.changeToken', locale)"
           type="is-dark"
           position="is-top">
           <b-button
@@ -24,7 +24,7 @@
         role="menu">
         <div class="dropdown-content px-3 py-3">
           <b-field
-            :label="editToken ? t('changeToken', locale) : t('userToken', locale)">
+            :label="editToken ? t('actions.changeToken', locale) : t('user.userToken', locale)">
             <b-input
               v-model="usertoken"
               :icon="editToken ? 'lock-open' : 'lock'"
@@ -35,7 +35,7 @@
                 :type="editToken ? 'is-dark' : 'is-light'"
                 :inverted="!editToken"
                 :icon-left="editToken ? 'check' : 'pencil' "
-                :label="editToken ? t('save', locale) : t('change', locale)"
+                :label="editToken ? t('actions.save', locale) : t('actions.change', locale)"
                 @click="inputAction()"/>
             </p>
           </b-field>

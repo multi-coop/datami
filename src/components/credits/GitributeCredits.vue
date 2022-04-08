@@ -4,7 +4,7 @@
     <div class="column is-full is-italic has-text-centered">
       <span
         class="has-text-grey is-size-6"
-        v-html="t('reclaim', locale)"/>
+        v-html="t('credits.reclaim', locale, true)"/>
       <a
         href="https://multi.coop"
         target="_blank">
@@ -17,7 +17,7 @@
         outlined
         size="is-small"
         class="ml-3">
-        {{ t('code', locale) }}
+        {{ t('credits.code', locale) }}
       </b-button>
     </div>
   </div>

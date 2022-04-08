@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonReloadFile">
     <b-tooltip
-      :label="t('reloadFile', locale)"
+      :label="t('actions.reloadFile', locale)"
       type="is-dark"
       position="is-left">
       <b-button

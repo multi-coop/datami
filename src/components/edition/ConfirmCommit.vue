@@ -6,7 +6,7 @@
           <!-- HEADER -->
           <header class="card-header">
             <p class="card-header-title">
-              {{ t('commitChanges', locale) }}
+              {{ t('actions.commitChanges', locale) }}
             </p>
             <button
               class="card-header-icon"
@@ -26,9 +26,9 @@
                 class="">
                 <!-- USER INFOS -->
                 <b-tab-item
-                  :label="t('userMessage', locale)">
+                  :label="t('user.userMessage', locale)">
                   <h5 class="has-text-centered mt-4">
-                    {{ t('userIntro', locale) }}
+                    {{ t('user.userIntro', locale) }}
                   </h5>
                   <div class="columns is-centered is-multiline mt-3">
                     <!-- MESSAGE -->
@@ -38,7 +38,7 @@
                           <b-icon
                             icon="email"
                             size="is-small"/>&nbsp;
-                          {{ t('userMessage', locale) }}
+                          {{ t('user.userMessage', locale) }}
                         </template>
                         <b-input
                           v-model="userMessage"
@@ -58,14 +58,14 @@
                           <b-icon
                             icon="account"
                             size="is-small"/>&nbsp;
-                          {{ t('userName', locale) }}
+                          {{ t('user.userName', locale) }}
                         </template>
                         <b-input
                           v-model="userName"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           maxlength="50"
-                          :placeholder="t('optional', locale)"
+                          :placeholder="t('global.optional', locale)"
                           icon-right="close-circle"
                           icon-right-clickable
                           @icon-right-click="clearName"/>
@@ -78,14 +78,14 @@
                           <b-icon
                             icon="account"
                             size="is-small"/>&nbsp;
-                          {{ t('userSurname', locale) }}
+                          {{ t('user.userSurname', locale) }}
                         </template>
                         <b-input
                           v-model="userSurname"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           maxlength="50"
-                          :placeholder="t('optional', locale)"
+                          :placeholder="t('global.optional', locale)"
                           icon-right="close-circle"
                           icon-right-clickable
                           @icon-right-click="clearSurname"/>
@@ -98,14 +98,14 @@
                           <b-icon
                             icon="at"
                             size="is-small"/>&nbsp;
-                          {{ t('userEmail', locale) }}
+                          {{ t('user.userEmail', locale) }}
                         </template>
                         <b-input
                           v-model="userEmail"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           type="email"
-                          :placeholder="t('optional', locale)"
+                          :placeholder="t('global.optional', locale)"
                           icon-right="close-circle"
                           icon-right-clickable
                           @icon-right-click="clearEmail"/>
@@ -117,7 +117,7 @@
                         <b-icon
                           icon="source-branch"
                           size="is-small"/>&nbsp;
-                        {{ t('commitBranch', locale) }}
+                        {{ t('git.commitBranch', locale) }}
                       </p>
                       <p class="">
                         <code>{{ commitBranch }}</code>
@@ -128,18 +128,18 @@
 
                 <!-- CHANGES -->
                 <b-tab-item
-                  :label="t('changes', locale)">
+                  :label="t('preview.changes', locale)">
                   <h5 class="has-text-centered mt-4 mb-5">
-                    {{ t('editedPreview', locale) }}
+                    {{ t('preview.editedPreview', locale) }}
                   </h5>
                   <pre><code>{{ edited }}</code></pre>
                 </b-tab-item>
 
                 <!-- FILE INFOS -->
                 <b-tab-item
-                  :label="t('fileSource', locale)">
+                  :label="t('file.fileSource', locale)">
                   <h5 class="has-text-centered mt-4 mb-5">
-                    {{ t('fileInfos', locale) }}
+                    {{ t('file.fileInfos', locale) }}
                   </h5>
                   <!-- TILES -->
                   <GitObjInfos
@@ -158,7 +158,7 @@
               type=""
               :loading="isCommitting"
               @click="cancelCommit()">
-              {{ t('cancel', locale) }}
+              {{ t('actions.cancel', locale) }}
             </b-button>
             <b-button
               class="card-footer-item mx-3"
@@ -166,7 +166,7 @@
               type="is-dark"
               :loading="isCommitting"
               @click="confirmCommit()">
-              {{ t('send', locale) }}
+              {{ t('actions.send', locale) }}
             </b-button>
           </footer>
         </div>

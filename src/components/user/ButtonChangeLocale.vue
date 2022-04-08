@@ -17,7 +17,7 @@
           <div class="dropdown-content">
             <div class="dropdown-item">
               <span class="is-italic">
-                {{ t('changeLocale', locale) }}
+                {{ t('actions.changeLocale', locale) }}
               </span>
             </div>
             <hr class="dropdown-divider">

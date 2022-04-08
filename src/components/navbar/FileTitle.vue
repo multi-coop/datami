@@ -6,7 +6,7 @@
       @mouseleave="hover = false">
       <div class="dropdown-trigger">
         <b-tooltip
-          :label="t('fileInfos', locale)"
+          :label="t('file.fileInfos', locale)"
           type="is-dark"
           position="is-right">
           <div class="is-flex is-align-items-center">

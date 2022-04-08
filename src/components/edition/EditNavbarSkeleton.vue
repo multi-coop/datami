@@ -26,10 +26,10 @@
           size="is-small"
           @click="toggleButton()">
           <span v-if="currentViewMode === 'preview'">
-            {{ t( 'edit', locale) }}
+            {{ t('actions.edit', locale) }}
           </span>
           <span v-else>
-            {{ t( 'save', locale) }}
+            {{ t('actions.save', locale) }}
           </span>
         </b-button>
       </div>

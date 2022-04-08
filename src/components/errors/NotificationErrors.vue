@@ -11,7 +11,7 @@
         </div>
         <div class="column is-3 has-text-centered">
           <h4 class="has-text-weight-bold mb-2">
-            {{ t('errorFunction', locale) }}
+            {{ t('errors.errorFunction', locale) }}
           </h4>
           <p>
             <code>
@@ -21,7 +21,7 @@
         </div>
         <div class="column is-3 has-text-centered">
           <h4 class="has-text-weight-bold mb-2">
-            {{ t('errorCode', locale) }}
+            {{ t('errors.errorCode', locale) }}
           </h4>
           <p>
             <code>
@@ -31,7 +31,7 @@
         </div>
         <div class="column is-5 has-text-centered">
           <h4 class="has-text-weight-bold mb-2">
-            {{ t('errorMessage', locale) }}
+            {{ t('errors.errorMessage', locale) }}
           </h4>
           <p>
             {{ error.message }}

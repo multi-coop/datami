@@ -30,7 +30,7 @@
             <b-icon
               :icon="getIconEdit"
               size="is-small"/>
-            {{ t( 'edited', locale) }}
+            {{ t( 'preview.edited', locale) }}
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@
             <b-icon
               :icon="getIconPreview"
               size="is-small"/>
-            {{ t( 'previewView', locale) }}
+            {{ t( 'preview.previewView', locale) }}
           </span>
         </div>
         <span
@@ -56,7 +56,7 @@
               <b-icon
                 :icon="getIconPreview"
                 size="is-small"/>
-              {{ t( 'original', locale) }}
+              {{ t( 'preview.original', locale) }}
             </span>
           </div>
         </span>
@@ -69,7 +69,7 @@
               <b-icon
                 :icon="getIconPreview"
                 size="is-small"/>
-              {{ t( 'editedPreview', locale) }}
+              {{ t( 'preview.editedPreview', locale) }}
             </span>
           </div>
         </span>
@@ -85,7 +85,7 @@
         v-show="currentViewMode === 'edit'"
         :class="`column is-half pr-6`">
         <p class="is-italic">
-          {{ t('yamlPart', locale) }}
+          {{ t('preview.yamlPart', locale) }}
         </p>
         <b-field>
           <b-input
@@ -95,7 +95,7 @@
             :rows="numberLinesData"/>
         </b-field>
         <p class="is-italic">
-          {{ t('textPart', locale) }}
+          {{ t('preview.textPart', locale) }}
         </p>
         <b-field>
           <b-input
@@ -123,13 +123,13 @@
           :markdown="formatAsYaml(getDiffHtmlCharsData)"
           flavor="github"/> -->
         <p class="is-italic">
-          {{ t('yamlPart', locale) }}
+          {{ t('preview.yamlPart', locale) }}
         </p>
         <div
           class="diff-data"
           v-html="getDiffHtmlCharsData"/>
         <p class="is-italic">
-          {{ t('textPart', locale) }}
+          {{ t('preview.textPart', locale) }}
         </p>
         <ShowDown
           v-if="content"
@@ -162,7 +162,7 @@
         <p
           v-if="currentViewMode !== 'preview'"
           class="is-italic">
-          {{ t('yamlPart', locale) }}
+          {{ t('preview.yamlPart', locale) }}
         </p>
         <div
           v-if="currentViewMode !== 'preview'"
@@ -171,7 +171,7 @@
         <p
           v-if="currentViewMode !== 'preview'"
           class="is-italic">
-          {{ t('textPart', locale) }}
+          {{ t('preview.textPart', locale) }}
         </p>
         <ShowDown
           :markdown="currentViewMode === 'diff' ? content : edited"

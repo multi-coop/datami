@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonDownloadFile">
     <b-tooltip
-      :label="t('downloadFile', locale)"
+      :label="t('actions.downloadFile', locale)"
       type="is-dark"
       position="is-top">
       <b-button
