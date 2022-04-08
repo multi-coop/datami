@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     emitChange (event) {
-      console.log('C > EditCell > emitChange > event : ', event)
+      // console.log('C > EditCell > emitChange > event : ', event)
       this.input = event
       const payload = {
         val: this.input,

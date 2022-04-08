@@ -19,6 +19,7 @@
         :field="col.field"
         :label="col.label">
         <template #header="{ column }">
+          <!-- EDITION HEADERS-->
           <div v-if="view === 'edit'">
             <b-field>
               <EditCell
@@ -28,17 +29,30 @@
                 @updateCellValue="emitUpdate"/>
             </b-field>
           </div>
-          <div v-else>
+          <!-- DIFF HEADERS -->
+          <div v-if="view === 'diff'">
+            <div
+              v-if="isInChanges (true, col.field)">
+              <span v-html="getDiffHtmlChars (true, col.field)"/>
+            </div>
+            <span v-else>
+              {{ column.label }}
+            </span>
+          </div>
+          <!-- PREVIEW HEADERS -->
+          <div v-if="view === 'preview'">
             {{ column.label }}
           </div>
         </template>
         <template #default="props">
+          <!-- DEBUG -->
           <div
             v-if="false"
             class="mb-3">
             row: <code>{{ props.row }}</code><br>
             <code>row index</code>: <code>{{ props.index }}</code><br>
           </div>
+          <!-- EDITION -->
           <div v-if="view === 'edit'">
             <b-field>
               <EditCell
@@ -49,9 +63,17 @@
                 @updateCellValue="emitUpdate"/>
             </b-field>
           </div>
+          <!-- DIFF -->
           <div v-if="view === 'diff'">
-            diff : {{ props.row[col.field] }}
+            <!-- TO DO -->
+            <div v-if="isInChanges(false, col.field, props.index)">
+              <span v-html="getDiffHtmlChars(false, col.field, props.index)"/>
+            </div>
+            <span v-else>
+              {{ props.row[col.field] }}
+            </span>
           </div>
+          <!-- PREVIEW -->
           <div v-if="view === 'preview'">
             {{ props.row[col.field] }}
           </div>
@@ -110,6 +132,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mixinDiff } from '@/utils/mixins.js'
 
 import EditCell from '@/components/edition/EditCell'
 
@@ -118,6 +141,7 @@ export default {
   components: {
     EditCell
   },
+  mixins: [mixinDiff],
   props: {
     fileId: {
       default: null,
@@ -126,6 +150,10 @@ export default {
     fileOptions: {
       default: undefined,
       type: Object
+    },
+    view: {
+      default: '',
+      type: String
     },
     data: {
       default: undefined,
@@ -143,9 +171,13 @@ export default {
       default: undefined,
       type: Array
     },
-    view: {
-      default: '',
-      type: String
+    changesData: {
+      default: undefined,
+      type: Array
+    },
+    changesColumns: {
+      default: undefined,
+      type: Array
     },
     locale: {
       default: '',
@@ -204,6 +236,23 @@ export default {
     emitUpdate (event) {
       // console.log('C > GitributeTable > emitUpdate > event : ', event)
       this.$emit('updateEdited', event)
+    },
+    getCharDiff (content, edited) {
+      const diffStr = this.diffWords(content, edited)
+      return diffStr
+    },
+    getDiffHtmlChars (isHeader, field, rowIndex) {
+      const changes = this.isInChanges(isHeader, field, rowIndex)
+      const charDiff = this.getCharDiff(changes.oldVal, changes.val)
+      const diffText = this.diffHtmlChars(charDiff)
+      return diffText
+    },
+    isInChanges (isHeader, field, rowIndex) {
+      if (isHeader) {
+        return this.changesColumns.find(h => h.field === field)
+      } else {
+        return this.changesData.find(r => r.field === field && r.row === rowIndex)
+      }
     }
   }
 }

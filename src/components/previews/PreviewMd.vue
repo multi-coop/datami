@@ -271,8 +271,8 @@ export default {
         this.dataEdited = this.objectToMd('', this.data)
       }
     },
-    edited (next) {
-      if (next) {
+    edited (next, prev) {
+      if (next && !prev) {
         this.bufferizeEdited()
       }
     },
@@ -301,24 +301,6 @@ export default {
     objectAsMarkdown (obj) {
       const dataString = this.getDataString(obj)
       return this.formatAsYaml(dataString)
-    },
-    diffHtmlChars (diff) {
-      // console.log('C > PreviewMd > getDiffHtmlChars  > diff : \n', diff)
-      let diffText = ''
-      diff.forEach((part) => {
-        // green for additions, red for deletions
-        // grey for common parts
-        let fragment
-        const spanClass = part.added ? 'git-ins' : part.removed ? 'git-del' : null
-        if (spanClass) {
-          fragment = `<span class="${spanClass}">${part.value}</span>`
-        } else {
-          fragment = part.value
-        }
-        diffText += fragment
-      })
-      // console.log('C > PreviewMd > getDiffHtmlChars  > diffText : \n', diffText)
-      return diffText
     },
     bufferizeEdited () {
       // const edited = this.objectToMd(this.edited, this.data)

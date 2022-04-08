@@ -38,11 +38,13 @@
       <GitributeTable
         :file-id="fileId"
         :file-options="fileOptions"
+        :view="currentViewMode"
         :data="data"
         :columns="dataColumns"
         :data-edited="edited"
         :columns-edited="editedColumns"
-        :view="currentViewMode"
+        :changes-data="changesData"
+        :changes-columns="changesColumns"
         :locale="locale"
         :debug="debug"
         @updateEdited="updateEdited"/>
@@ -94,7 +96,9 @@ export default {
       data: null,
       dataColumns: undefined,
       edited: undefined,
-      editedColumns: undefined
+      editedColumns: undefined,
+      changesData: [],
+      changesColumns: []
     }
   },
   computed: {
@@ -143,8 +147,8 @@ export default {
         this.editedColumns = this.dataColumns
       }
     },
-    edited (next) {
-      if (next) {
+    edited (next, prev) {
+      if (next && !prev) {
         this.bufferizeEdited()
       }
     },
@@ -178,17 +182,18 @@ export default {
       // return columns
     },
     updateEdited (event) {
-      console.log('\nC > PreviewMd > updateEdited > event : ', event)
-      let toEdit, newObj
+      // console.log('\nC > PreviewMd > updateEdited > event : ', event)
+      let toEdit, newObj, oldVal
       let rowIndex
       const isHeader = event.isHeader
       const colField = event.colField
       const val = event.val
-      console.log('C > PreviewMd > updateEdited > isHeader : ', isHeader)
-      console.log('C > PreviewMd > updateEdited > colField : ', colField)
-      console.log('C > PreviewMd > updateEdited > val : ', val)
+      // console.log('C > PreviewMd > updateEdited > isHeader : ', isHeader)
+      // console.log('C > PreviewMd > updateEdited > colField : ', colField)
+      // console.log('C > PreviewMd > updateEdited > val : ', val)
       if (isHeader) {
         // update edited headers
+        oldVal = this.dataColumns.find(i => i.field === colField).label
         newObj = { label: val, field: colField }
         toEdit = this.editedColumns.map(i => {
           if (i.field === colField) return newObj
@@ -198,6 +203,7 @@ export default {
       } else {
         // update edited data
         rowIndex = event.rowIndex
+        oldVal = this.data.find((row, i) => i === rowIndex)[colField]
         newObj = { ...this.edited[rowIndex] }
         newObj[colField] = val
         toEdit = this.edited.map((row, idx) => {
@@ -205,6 +211,39 @@ export default {
           else return row
         })
         this.edited = toEdit
+      }
+      // set changes
+      const changeObj = {
+        field: colField,
+        val: val,
+        oldVal: oldVal,
+        row: rowIndex
+      }
+      this.setChanges(changeObj, isHeader)
+    },
+    setChanges (changeObj, isHeader) {
+      let changeIndex, copyChanges
+      // check index in changes
+      if (isHeader) {
+        copyChanges = [...this.changesColumns]
+        changeIndex = copyChanges.findIndex(h => h.field === changeObj.field)
+      } else {
+        copyChanges = [...this.changesData]
+        changeIndex = copyChanges.findIndex(h => {
+          return (h.field === changeObj.field && h.row === changeObj.row)
+        })
+      }
+      // set in copy
+      if (changeIndex !== -1) {
+        copyChanges[changeIndex] = changeObj
+      } else {
+        copyChanges.push(changeObj)
+      }
+      // set in local store
+      if (isHeader) {
+        this.changesColumns = copyChanges
+      } else {
+        this.changesData = copyChanges
       }
     },
     bufferizeEdited () {

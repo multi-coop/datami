@@ -41,7 +41,25 @@ export const mixinDownload = {
 export const mixinDiff = {
   methods: {
     createTwoFilesPatch,
-    diffWords
+    diffWords,
+    diffHtmlChars (diff) {
+      // console.log('C > mixins > diffHtmlChars  > diff : \n', diff)
+      let diffText = ''
+      diff.forEach((part) => {
+        // green for additions, red for deletions
+        // grey for common parts
+        let fragment
+        const spanClass = part.added ? 'git-ins' : part.removed ? 'git-del' : null
+        if (spanClass) {
+          fragment = `<span class="${spanClass}">${part.value}</span>`
+        } else {
+          fragment = part.value
+        }
+        diffText += fragment
+      })
+      // console.log('C > mixins > diffHtmlChars  > diffText : \n', diffText)
+      return diffText
+    }
   }
 }
 
