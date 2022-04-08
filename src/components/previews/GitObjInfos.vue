@@ -17,7 +17,7 @@
               v-if="info.link"
               target="_blank"
               :href="gitObj[info.key]">
-              {{ t([info.linkTxt], locale) }}
+              {{ t(info.linkTxt, locale) }}
             </a>
             <code v-else>
               {{ gitObj[info.key] }}
@@ -55,8 +55,8 @@ export default {
         { txt: 'git.branch', key: 'branch', icon: 'source-branch' },
         { txt: 'file.fileType', key: 'filetype', icon: '' },
         { txt: 'file.fileFamily', key: 'filefamily', icon: '' },
-        { txt: 'file.fileUrl', key: 'id', icon: 'open-in-new', link: true, linkTxt: 'linkToFile' },
-        { txt: 'file.fileUrlRaw', key: 'fileraw', icon: 'open-in-new', link: true, linkTxt: 'linkToFile' }
+        { txt: 'file.fileUrl', key: 'id', icon: 'open-in-new', link: true, linkTxt: 'file.linkToFile' },
+        { txt: 'file.fileUrlRaw', key: 'fileraw', icon: 'open-in-new', link: true, linkTxt: 'file.linkToFileRaw' }
       ]
     }
   },
