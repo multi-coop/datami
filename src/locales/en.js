@@ -49,6 +49,7 @@ export default {
     // }
   },
   user: {
+    userToken: 'Your access token',
     user: 'User',
     userIntro: "You can add a personalized message to the file's owner",
     userName: 'Name',

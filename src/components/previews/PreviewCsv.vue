@@ -211,7 +211,7 @@ export default {
       // TO DO => ObjToCsv function to rebuild the csv string from table object
 
       const editedCsv = this.ObjectToCsv(this.editedColumns, this.edited, this.fileOptions)
-      console.log('\nC > PreviewMd > bufferizeEdited > editedCsv : ', editedCsv)
+      // console.log('\nC > PreviewMd > bufferizeEdited > editedCsv : ', editedCsv)
 
       const commitData = {
         gitObj: this.gitObj,
