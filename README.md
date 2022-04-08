@@ -50,8 +50,8 @@ The **roadmap** for a first proof of concept (POC) is the following :
     - [x] for `text` files (`.md` types)
     - [ ] for `json` files (`.json` and `.geojson` types)
   - [ ]  Add a `Save` button + dialog + actions :
-    - after edition on client's side, acting as a commit to the file's git repo on a separate branch
-    - create a merge request (commit and request by default done the "ghost user") ;
+    - [x] after edition on client's side, acting as a commit to the file's git repo on a separate branch
+    - [ ] create a merge request (commit and request by default done the "ghost user") ;
 - [x] Deploy on Netlify for test purposes => [test deploy here](https://multi-gitribute-test.netlify.app/)
 - [ ] A good documentation for each web component (at least in this readme for now)
 
