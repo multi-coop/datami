@@ -85,13 +85,18 @@ export const extractGitInfos = (str) => {
 
   rawRoot = `${gitRef.raw}${orga}/${repo}`
   const publicRootUrl = `${gitRef.root}${orga}/${repo}`
+  let fileraw
 
   if (orga === 'github') {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
+    // https://raw.githubusercontent.com/multi-coop/gitribute-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
+    fileraw = `${rawRoot}${remaining}`
   } else {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
+    // https://gitlab.com/multi-coop/gitribute-content-test/-/raw/main/texts/markdown/test-file-gitribute-fr.md
+    fileraw = `${rawRoot}${remaining}`
   }
 
   // if file in remaining string
@@ -113,6 +118,7 @@ export const extractGitInfos = (str) => {
     branch: branch || 'master',
     repoUrl: publicRootUrl,
     rawRoot: rawRoot,
+    fileraw: fileraw,
     publicRoot: publicRoot,
     filepath: remaining,
     filename: filename,
@@ -124,6 +130,8 @@ export const extractGitInfos = (str) => {
   gitInfos.apiRepo = apiRoots.repo
   gitInfos.apiFile = apiRoots.file
   gitInfos.apiFileRaw = apiRoots.fileRaw
+
+  // console.log('\nU > utilsGitUrl > extractGitInfos > gitInfos : ', gitInfos)
 
   return gitInfos
 }

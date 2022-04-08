@@ -18,7 +18,9 @@ export default {
     fileType: 'Type du fichier',
     fileFamily: 'Famille de fichier',
     fileUrl: 'URL du fichier source',
+    fileUrlRaw: 'URL du fichier source (brut)',
     linkToFile: 'Lien vers le fichier source',
+    linkToFileRaw: 'Lien vers le fichier source (brut)',
     fileInfos: 'Informations sur le fichier'
   },
   preview: {
