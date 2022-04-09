@@ -246,6 +246,16 @@ locale:
     But we'll have a selector to allow the user to apply a locale globally, overiding default injected locales.
 ```
 
+##### `onlypreview` parameter
+
+```yaml
+onlypreview:
+  - description : displays only the preview and hide the edit mode
+  - required: false
+  - type: boolean
+  - default: false
+```
+
 ##### `debug` parameter
 
 ```yaml

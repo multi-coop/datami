@@ -17,6 +17,7 @@
           :file-id="fileId"
           :locale="locale"/>
         <ButtonChangeUserToken
+          v-if="!onlyPreview"
           :file-id="fileId"
           :locale="locale"/>
         <ButtonChangeLocale
@@ -52,6 +53,10 @@ export default {
     fileId: {
       default: null,
       type: String
+    },
+    onlyPreview: {
+      default: false,
+      type: Boolean
     },
     locale: {
       default: 'en',

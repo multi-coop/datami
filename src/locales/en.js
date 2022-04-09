@@ -41,6 +41,7 @@ export default {
     save: 'Save',
     send: 'Send',
     cancel: 'Cancel',
+    search: 'Search',
     reloadFile: 'Reload the file',
     downloadFile: 'Download the file',
     changeLocale: 'Choose the language',
@@ -49,6 +50,18 @@ export default {
     // nest: {
     //   test: 'test nested actions'
     // }
+  },
+  editCsv: {
+    noSelect: 'Aucun',
+    addRow: 'Add a new row',
+    importData: 'Import/overwrite the data',
+    sortBy: 'Sort by a field',
+    sortAscending: 'Ascending sorting',
+    sortDescending: 'Descending sorting',
+    filterBy: 'Filter by a field and a value',
+    deleteARow: 'Delete a row (you need to select one at least)',
+    deleteRow: 'Delete the row',
+    deleteRows: 'Delete selected rows'
   },
   user: {
     userToken: 'Your access token',

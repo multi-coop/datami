@@ -56,6 +56,9 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
       // }
       reduced = { ...lineParsed }
 
+      // add row/line index
+      reduced.id = index
+
       // console.log(`U > csvToObject > ${index} - reduced : `, reduced)
       // console.log('...')
       return reduced

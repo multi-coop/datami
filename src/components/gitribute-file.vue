@@ -6,6 +6,7 @@
         v-if="gitObj"
         :title="title"
         :file-id="fileId"
+        :only-preview="onlypreview"
         :locale="locale"/>
     </div>
 
@@ -61,7 +62,7 @@
     </div>
 
     <!-- LOADERS -->
-    <LoaderEditNavbar v-if="fileIsReloading"/>
+    <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/>
     <!-- <LoaderEditNavbar/> -->
     <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
     <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
@@ -70,6 +71,7 @@
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
       v-if="!fileIsReloading && !fileIsSaving"
+      :only-preview="onlypreview"
       :file-id="fileId"
       :file-type-family="fileTypeFamily"
       :view-mode="currentViewMode"
@@ -91,6 +93,7 @@
         class="container">
         <PreviewCsv
           v-show="!fileIsReloading"
+          :only-preview="onlypreview"
           :file-id="fileId"
           :file-options="fileOptions"
           :file-raw="fileRaw"
@@ -104,6 +107,7 @@
         class="container">
         <PreviewMd
           v-show="!fileIsReloading"
+          :only-preview="onlypreview"
           :file-id="fileId"
           :file-options="fileOptions"
           :file-raw="fileRaw"
@@ -117,6 +121,7 @@
         class="container">
         <PreviewJson
           v-show="!fileIsReloading"
+          :only-preview="onlypreview"
           :file-id="fileId"
           :file-options="fileOptions"
           :file-raw="fileRaw"
@@ -191,6 +196,10 @@ export default {
     locale: {
       default: '',
       type: String
+    },
+    onlypreview: {
+      default: false,
+      type: Boolean
     },
     debug: {
       default: false,

@@ -1,130 +1,148 @@
 <template>
   <div class="GitributeTable content">
-    <!-- TABLE -->
-    <b-table
-      :data="dataForView"
-      narrowed
-      hoverable
-      sticky-header
-      :checkable="view === 'edit'"
-      :sticky-checkbox="view === 'edit'"
-      :checked-rows.sync="checkedRows"
-      striped>
-      <!-- LOOP COLUMNS -->
-      <!-- width="40" -->
-      <!-- numeric -->
-      <b-table-column
-        v-for="col in columnsForView"
-        :key="col.field"
-        :field="col.field"
-        :label="col.label">
-        <template #header="{ column }">
-          <!-- EDITION HEADERS-->
-          <div v-if="view === 'edit'">
-            <b-field>
-              <EditCell
-                :is-header="true"
-                :col-field="column.field"
-                :input-data="column.label"
-                @updateCellValue="emitUpdate"/>
-            </b-field>
-          </div>
-          <!-- DIFF HEADERS -->
-          <div v-if="view === 'diff'">
-            <div
-              v-if="isInChanges (true, col.field)">
-              <span v-html="getDiffHtmlChars (true, col.field)"/>
-            </div>
-            <span v-else>
-              {{ column.label }}
-            </span>
-          </div>
-          <!-- PREVIEW HEADERS -->
-          <div v-if="view === 'preview'">
-            {{ column.label }}
-          </div>
-        </template>
-        <template #default="props">
-          <!-- DEBUG -->
-          <div
-            v-if="false"
-            class="mb-3">
-            row: <code>{{ props.row }}</code><br>
-            <code>row index</code>: <code>{{ props.index }}</code><br>
-          </div>
-          <!-- EDITION -->
-          <div v-if="view === 'edit'">
-            <b-field>
-              <EditCell
-                :is-header="false"
-                :col-field="col.field"
-                :row-index="props.index"
-                :input-data="props.row[col.field]"
-                @updateCellValue="emitUpdate"/>
-            </b-field>
-          </div>
-          <!-- DIFF -->
-          <div v-if="view === 'diff'">
-            <!-- TO DO -->
-            <div v-if="isInChanges(false, col.field, props.index)">
-              <span v-html="getDiffHtmlChars(false, col.field, props.index)"/>
-            </div>
-            <span v-else>
-              {{ props.row[col.field] }}
-            </span>
-          </div>
-          <!-- PREVIEW -->
-          <div v-if="view === 'preview'">
-            {{ props.row[col.field] }}
-          </div>
-        </template>
-      </b-table-column>
-    </b-table>
-    <!-- DEBUG -->
-    <div
-      v-if="debug"
-      class="columns is-multiline">
-      <div class="column is-6">
-        <p>
-          checkedRows:
-          <br>
-          <pre><code>{{ checkedRows }}</code></pre>
-        </p>
+    <div class="columns is-multiline is-mobile">
+      <!-- EDIT CSV NAVABAR -->
+      <div class="column is-12">
+        <EditCsvSkeleton
+          :file-id="fileId"
+          :view="view"
+          :columns="columnsEdited"
+          :checked-rows="checkedRows"
+          :locale="locale"
+          @action="processAction"/>
       </div>
-      <div class="column is-6">
-        <p>
-          fileOptions:
-          <br>
-          <pre><code>{{ fileOptions }}</code></pre>
-        </p>
+
+      <!-- TABLE -->
+      <div class="column is-12">
+        <b-table
+          :data="dataForView"
+          narrowed
+          hoverable
+          sticky-header
+          :checkable="view === 'edit'"
+          :sticky-checkbox="view === 'edit'"
+          :checked-rows.sync="checkedRows"
+          striped>
+          <!-- LOOP COLUMNS -->
+          <!-- width="40" -->
+          <!-- numeric -->
+          <b-table-column
+            v-for="col in columnsForView"
+            :key="col.field"
+            :field="col.field"
+            :label="col.label">
+            <template #header="{ column }">
+              <!-- EDITION HEADERS-->
+              <div v-if="view === 'edit'">
+                <b-field>
+                  <EditCell
+                    :is-header="true"
+                    :col-field="column.field"
+                    :input-data="column.label"
+                    @updateCellValue="emitUpdate"/>
+                </b-field>
+              </div>
+              <!-- DIFF HEADERS -->
+              <div v-if="view === 'diff'">
+                <div
+                  v-if="isInChanges (true, col.field)">
+                  <span v-html="getDiffHtmlChars (true, col.field)"/>
+                </div>
+                <span v-else>
+                  {{ column.label }}
+                </span>
+              </div>
+              <!-- PREVIEW HEADERS -->
+              <div v-if="view === 'preview'">
+                {{ column.label }}
+              </div>
+            </template>
+            <template #default="props">
+              <!-- DEBUG -->
+              <div
+                v-if="false"
+                class="mb-3">
+                row: <code>{{ props.row }}</code><br>
+                <code>row index</code>: <code>{{ props.index }}</code><br>
+              </div>
+              <!-- EDITION -->
+              <div v-if="view === 'edit'">
+                <b-field>
+                  <EditCell
+                    :is-header="false"
+                    :col-field="col.field"
+                    :row-index="props.index"
+                    :input-data="props.row[col.field]"
+                    @updateCellValue="emitUpdate"/>
+                </b-field>
+              </div>
+              <!-- DIFF -->
+              <div v-if="view === 'diff'">
+                <!-- TO DO -->
+                <div v-if="isInChanges(false, col.field, props.index)">
+                  <span v-html="getDiffHtmlChars(false, col.field, props.index)"/>
+                </div>
+                <span v-else>
+                  {{ props.row[col.field] }}
+                </span>
+              </div>
+              <!-- PREVIEW -->
+              <div v-if="view === 'preview'">
+                {{ props.row[col.field] }}
+              </div>
+            </template>
+          </b-table-column>
+        </b-table>
       </div>
-      <div class="column is-3">
-        <p>
-          columns:
-          <br>
-          <pre><code>{{ columns }}</code></pre>
-        </p>
-      </div>
-      <div class="column is-3">
-        <p>
-          data:
-          <br>
-          <pre><code>{{ data }}</code></pre>
-        </p>
-      </div>
-      <div class="column is-3">
-        <p>
-          columnsEdited :
-          <br>
-          <pre><code>{{ columnsEdited }}</code></pre>
-        </p>
-      </div>
-      <div class="column is-3">
-        <p>
-          dataEdited:
-          <br>
-          <pre><code>{{ dataEdited }}</code></pre>
-        </p>
+
+      <!-- DEBUG -->
+      <div
+        v-if="debug"
+        class="column is-12">
+        <div class="columns is-multiline">
+          <div class="column is-6">
+            <p>
+              checkedRows:
+              <br>
+              <pre><code>{{ checkedRows }}</code></pre>
+            </p>
+          </div>
+          <div class="column is-6">
+            <p>
+              fileOptions:
+              <br>
+              <pre><code>{{ fileOptions }}</code></pre>
+            </p>
+          </div>
+          <div class="column is-3">
+            <p>
+              columns:
+              <br>
+              <pre><code>{{ columns }}</code></pre>
+            </p>
+          </div>
+          <div class="column is-3">
+            <p>
+              data:
+              <br>
+              <pre><code>{{ data }}</code></pre>
+            </p>
+          </div>
+          <div class="column is-3">
+            <p>
+              columnsEdited :
+              <br>
+              <pre><code>{{ columnsEdited }}</code></pre>
+            </p>
+          </div>
+          <div class="column is-3">
+            <p>
+              dataEdited:
+              <br>
+              <pre><code>{{ dataEdited }}</code></pre>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -134,11 +152,13 @@
 import { mapGetters } from 'vuex'
 import { mixinDiff } from '@/utils/mixins.js'
 
-import EditCell from '@/components/edition/EditCell'
+import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
+import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'GitributeTable',
   components: {
+    EditCsvSkeleton,
     EditCell
   },
   mixins: [mixinDiff],
@@ -233,6 +253,10 @@ export default {
     }
   },
   methods: {
+    // TO DO
+    processAction (event) {
+      console.log('\nC > GitributeTable > processAction > event : ', event)
+    },
     emitUpdate (event) {
       // console.log('C > GitributeTable > emitUpdate > event : ', event)
       this.$emit('updateEdited', event)

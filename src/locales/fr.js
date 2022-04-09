@@ -41,6 +41,7 @@ export default {
     save: 'Sauver',
     send: 'Envoyer',
     cancel: 'Annuler',
+    search: 'Rechercher',
     reloadFile: 'Recharger le fichier',
     downloadFile: 'Télécharger le fichier',
     changeLocale: 'Choisir la langue',
@@ -49,6 +50,18 @@ export default {
     // nest: {
     //   test: 'test nested actions'
     // }
+  },
+  editCsv: {
+    noSelect: 'Aucun',
+    addRow: 'Ajouter une nouvelle ligne',
+    importData: 'Importer/écraser les données',
+    sortBy: 'Trier par un champ',
+    sortAscending: 'Trier par ordre croissant',
+    sortDescending: 'Trier par ordre décroissant',
+    filterBy: 'Filtrer par un champ et une valeur',
+    deleteARow: 'Supprimer une ligne (sélectionner une ligne au minimum)',
+    deleteRow: 'Supprimer la ligne',
+    deleteRows: 'Supprimer les lignes'
   },
   user: {
     userToken: "Votre jeton d'accès",

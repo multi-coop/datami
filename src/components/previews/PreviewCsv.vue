@@ -25,8 +25,8 @@
         </p>
       </div>
     </div>
-
     <PreviewHelpers
+      v-if="!onlyPreview"
       :file-id="fileId"
       :file-family="'table'"
       :locale="locale"/>
@@ -82,6 +82,10 @@ export default {
     locale: {
       default: '',
       type: String
+    },
+    onlyPreview: {
+      default: false,
+      type: Boolean
     },
     debug: {
       default: false,

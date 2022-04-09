@@ -6,7 +6,7 @@
       icon="pencil-outline"/>
     <b-field>
       <b-input
-        :custom-class="`g-cell ${isHeader ? 'g-header' : ''}`"
+        :custom-class="`g-cell py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         size="is-small"
         expanded

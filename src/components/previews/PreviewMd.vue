@@ -19,6 +19,7 @@
 
     <!-- HELPERS -->
     <PreviewHelpers
+      v-if="!onlyPreview"
       :file-id="fileId"
       :file-family="'text'"
       :locale="locale"/>
@@ -168,6 +169,10 @@ export default {
     locale: {
       default: '',
       type: String
+    },
+    onlyPreview: {
+      default: false,
+      type: Boolean
     },
     debug: {
       default: false,
