@@ -25,6 +25,13 @@
         class="dropdown-menu file-infos"
         role="menu">
         <div class="dropdown-content px-3 py-3 is-size-6">
+          <p class="has-text-centered has-text-weight-bold">
+            <b-icon
+              size="is-small"
+              class="mr-3 has-text-grey-light"
+              icon="information-outline"/>
+            {{ t('file.fileInfos', locale) }}
+          </p>
           <!-- TILES -->
           <GitObjInfos
             :file-id="fileId"

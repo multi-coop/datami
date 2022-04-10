@@ -1,7 +1,8 @@
 <template>
   <div class="columns is-centered is-multiline mt-6">
     <!-- CREDITS -->
-    <div class="column is-full is-italic has-text-centered">
+    <div
+      class="column is-full is-italic has-text-centered">
       <span
         class="has-text-grey is-size-6"
         v-html="t('credits.reclaim', locale, true)"/>
@@ -9,6 +10,10 @@
         href="https://multi.coop"
         target="_blank">
         multi
+        <!-- <img
+          :src="require('@/assets/multi-logo-01.png')"
+          class="mini-logo"
+          alt="The multi Logo"> -->
       </a>
       <b-button
         icon-left="gitlab"
@@ -47,3 +52,9 @@ export default ({
   }
 })
 </script>
+
+<style>
+.mini-logo {
+  width: 70px !important;
+}
+</style>
