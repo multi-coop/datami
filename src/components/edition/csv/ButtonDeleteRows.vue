@@ -47,10 +47,9 @@ export default {
     }
   },
   methods: {
-    SendActionToParent (event) {
-      // console.log('\nC > ButtonDeleteRows > SendActions > event : ', event)
+    SendActionToParent () {
       const payload = {
-        action: 'deleteRow',
+        action: 'openDeleteRowsDialog',
         rows: this.checkedRows
       }
       this.$emit('action', payload)

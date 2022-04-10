@@ -20,10 +20,6 @@ export default {
   name: 'ButtonAddRow',
   mixins: [],
   props: {
-    headers: {
-      default: null,
-      type: Array
-    },
     locale: {
       default: 'en',
       type: String
@@ -41,7 +37,7 @@ export default {
     SendActionToParent () {
       // console.log('\nC > ButtonAddRow > SendActions > this.headers : ', this.headers)
       const payload = {
-        action: 'addRow'
+        action: 'openAddRowDialog'
       }
       this.$emit('action', payload)
     }

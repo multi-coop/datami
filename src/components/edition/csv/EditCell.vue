@@ -1,7 +1,8 @@
 <template>
   <div class="EditCell is-flex is-align-items-center">
+    <!-- <code>{{ inputData }}</code> -->
     <b-icon
-      class="mr-1"
+      class="mr-1 ml-0"
       size="is-small"
       icon="pencil-outline"/>
     <b-field>
@@ -32,14 +33,23 @@ export default {
       default: null,
       type: [String, Number]
     },
-    rowIndex: {
+    isAdded: {
+      default: false,
+      type: Boolean
+    },
+    rowId: {
       default: null,
-      type: Number
+      type: String
     }
   },
   data () {
     return {
       input: undefined
+    }
+  },
+  watch: {
+    inputData (next) {
+      this.input = this.inputData
     }
   },
   beforeMount () {
@@ -51,10 +61,11 @@ export default {
       this.input = event
       const payload = {
         val: this.input,
+        added: this.isAdded,
         colField: this.colField
       }
       if (!this.isHeader) {
-        payload.rowIndex = this.rowIndex
+        payload.id = this.rowId
       } else {
         payload.isHeader = this.isHeader
       }
@@ -70,7 +81,7 @@ export default {
 
 .g-cell {
   background-color: transparent;
-  border: none;
+  /* border: none; */
 }
 .g-header {
   font-size: .85em!important;

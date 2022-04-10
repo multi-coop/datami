@@ -7,6 +7,7 @@
       <b-button
         size="is-small"
         class="ml-1"
+        disabled
         :icon-left="'upload'"
         @click="SendActionToParent"/>
     </b-tooltip>

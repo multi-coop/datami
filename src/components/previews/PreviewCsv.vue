@@ -47,13 +47,16 @@
         :changes-columns="changesColumns"
         :locale="locale"
         :debug="debug"
-        @updateEdited="updateEdited"/>
+        @updateEdited="updateEdited"
+        @deleteRows="deleteRowsEvent"
+        @addRow="addRowEvent"/>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
 import { mixinDiff, mixinCsv } from '@/utils/mixins.js'
 
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
@@ -186,11 +189,12 @@ export default {
       // return columns
     },
     updateEdited (event) {
-      // console.log('\nC > PreviewMd > updateEdited > event : ', event)
-      let toEdit, newObj, oldVal
-      let rowIndex
+      console.log('\nC > PreviewMd > updateEdited > event : ', event)
+      let toEdit, newObj, oldEditedObj, originalObj, oldVal
+      let rowId
       const isHeader = event.isHeader
       const colField = event.colField
+      const wasAdded = event.added
       const val = event.val
       // console.log('C > PreviewMd > updateEdited > isHeader : ', isHeader)
       // console.log('C > PreviewMd > updateEdited > colField : ', colField)
@@ -199,50 +203,84 @@ export default {
         // update edited headers
         oldVal = this.dataColumns.find(i => i.field === colField).label
         newObj = { label: val, field: colField }
-        toEdit = this.editedColumns.map(i => {
-          if (i.field === colField) return newObj
-          else return i
+        toEdit = this.editedColumns.map(c => {
+          if (c.field === colField) return newObj
+          else return c
         })
         this.editedColumns = toEdit
       } else {
-        // update edited data
-        rowIndex = event.rowIndex
-        oldVal = this.data.find((row, i) => i === rowIndex)[colField]
-        newObj = { ...this.edited[rowIndex] }
+        // retrieve previous object and value in edited
+        rowId = event.id
+        oldEditedObj = this.edited.find((row) => row.id === rowId)
+        // retrieve previous original value
+        if (!wasAdded) {
+          originalObj = this.data.find((row) => row.id === rowId)
+          oldVal = originalObj && originalObj[colField]
+          // console.log('C > PreviewMd > updateEdited > oldVal : ', oldVal)
+        } else {
+          originalObj = { ...oldEditedObj }
+        }
+        // console.log('C > PreviewMd > updateEdited > oldEditedObj : ', oldEditedObj)
+
+        newObj = { ...oldEditedObj }
         newObj[colField] = val
-        toEdit = this.edited.map((row, idx) => {
-          if (idx === rowIndex) return newObj
+        // console.log('C > PreviewMd > updateEdited > newObj : ', newObj)
+        // console.log('C > PreviewMd > updateEdited > this.edited (A) : ', this.edited)
+        // reset edited
+        toEdit = this.edited.map((row) => {
+          if (row.id === rowId) return newObj
           else return row
         })
-        this.edited = toEdit
+        this.edited = [...toEdit]
+        // console.log('C > PreviewMd > updateEdited > this.edited (B) : ', this.edited)
       }
       // set changes
       const changeObj = {
+        action: 'diff',
+        id: rowId,
         field: colField,
         val: val,
-        oldVal: oldVal,
-        row: rowIndex
+        oldVal: oldVal
       }
       this.setChanges(changeObj, isHeader)
     },
     setChanges (changeObj, isHeader) {
-      let changeIndex, copyChanges
-      // check index in changes
+      let copyChanges
+      let changeId //, isDeleted
+      const action = changeObj.action
+      const isDiff = changeObj.oldVal !== changeObj.val
+      console.log('\nC > PreviewMd > addRowEvent > changeObj : ', changeObj)
+      console.log('C > PreviewMd > addRowEvent > isDiff : ', isDiff)
       if (isHeader) {
+        changeId = changeObj.field
+        // create a filtered copy of changesColumns
         copyChanges = [...this.changesColumns]
-        changeIndex = copyChanges.findIndex(h => h.field === changeObj.field)
+        copyChanges = copyChanges.filter(ch => ch.field !== changeId)
       } else {
+        changeId = changeObj.id
+        // create a filtered copy of changesData
         copyChanges = [...this.changesData]
-        changeIndex = copyChanges.findIndex(h => {
-          return (h.field === changeObj.field && h.row === changeObj.row)
-        })
+        if (action === 'diff') {
+          copyChanges = copyChanges.filter(ch => {
+            const sameId = ch.id === changeId
+            const sameField = ch.field === changeObj.field
+            const same = sameField && sameId
+            return !same
+          })
+        }
+        if (changeObj.action === 'deleted') {
+          copyChanges = copyChanges.filter(ch => {
+            const same = ch.id === changeObj.id
+            return !same
+          })
+        }
       }
       // set in copy
-      if (changeIndex !== -1) {
-        copyChanges[changeIndex] = changeObj
-      } else {
-        copyChanges.push(changeObj)
-      }
+      const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
+      if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
+      if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
+      console.log('C > PreviewMd > addRowEvent > copyChanges : ', copyChanges)
+
       // set in local store
       if (isHeader) {
         this.changesColumns = copyChanges
@@ -250,9 +288,40 @@ export default {
         this.changesData = copyChanges
       }
     },
-    bufferizeEdited () {
-      // TO DO => ObjToCsv function to rebuild the csv string from table object
+    addRowEvent (event) {
+      console.log('\nC > PreviewMd > addRowEvent > event : ', event)
+      // update edited
+      const newRowId = uuidv4()
+      const newRow = { ...event.row, id: newRowId, added: true }
+      console.log('C > PreviewMd > addRowEvent > newRow : ', newRow)
+      console.log('C > PreviewMd > addRowEvent > this.edited : ', this.edited)
+      this.edited.push(newRow)
+      // console.log('C > PreviewMd > addRowEvent > this.edited : ', this.edited)
 
+      // update changesData
+      const changeObj = {
+        action: 'added',
+        id: newRow.id
+      }
+      this.setChanges(changeObj)
+    },
+    deleteRowsEvent (event) {
+      console.log('\nC > PreviewMd > deleteRowEvent > event : ', event)
+      const toDeleteIndices = event.rows.map(rowToDelete => rowToDelete.id)
+      const edited = [...this.edited]
+      this.edited = edited.filter(r => !toDeleteIndices.includes(r.id))
+      // console.log('C > PreviewMd > deleteRowEvent > this.edited : ', this.edited)
+
+      // update changesData
+      toDeleteIndices.forEach(rowId => {
+        const changeObj = {
+          action: 'deleted',
+          id: rowId
+        }
+        this.setChanges(changeObj)
+      })
+    },
+    bufferizeEdited () {
       const editedCsv = this.ObjectToCsv(this.editedColumns, this.edited, this.fileOptions)
       // console.log('\nC > PreviewMd > bufferizeEdited > editedCsv : ', editedCsv)
 

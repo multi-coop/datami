@@ -63,7 +63,7 @@
 
     <!-- LOADERS -->
     <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/>
-    <!-- <LoaderEditNavbar/> -->
+    <!-- <LoaderCSV/> -->
     <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
     <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
     <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>

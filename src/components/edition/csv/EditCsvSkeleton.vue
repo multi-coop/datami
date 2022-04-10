@@ -6,7 +6,6 @@
         v-if="view === 'edit'"
         :class="`column is-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-left`">
         <ButtonAddRow
-          :headers="columns"
           :locale="locale"
           @action="SendActionToParent"/>
         <ButtonImportData
@@ -28,7 +27,7 @@
       <div
         v-if="view === 'edit'"
         :class="`column is-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-right`">
-        <ButtonDeleteRow
+        <ButtonDeleteRows
           :checked-rows="checkedRows"
           :locale="locale"
           @action="SendActionToParent"/>
@@ -61,7 +60,7 @@ import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
 import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import ButtonSortBy from '@/components/edition/csv/ButtonSortBy'
 import ButtonFilterBy from '@/components/edition/csv/ButtonFilterBy'
-import ButtonDeleteRow from '@/components/edition/csv/ButtonDeleteRow'
+import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
   name: 'EditCsvSkeleton',
@@ -70,7 +69,7 @@ export default {
     ButtonImportData,
     ButtonSortBy,
     ButtonFilterBy,
-    ButtonDeleteRow
+    ButtonDeleteRows
   },
   props: {
     fileId: {

@@ -1,6 +1,7 @@
 export default {
   global: {
     optional: 'Optional',
+    enterValue: 'Entrer une valeur',
     test: 'test nested global'
   },
   git: {
@@ -54,6 +55,7 @@ export default {
   editCsv: {
     noSelect: 'Aucun',
     addRow: 'Add a new row',
+    addTheNewRow: 'Add the new row',
     importData: 'Import/overwrite the data',
     sortBy: 'Sort by a field',
     sortAscending: 'Ascending sorting',
