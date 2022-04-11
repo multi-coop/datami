@@ -3,6 +3,7 @@
     <b-field
       horizontal
       custom-class="gt-label-filter mr-2 is-align-content-center">
+      <!-- LABEL SLOT -->
       <template #label>
         <div class="is-flex">
           <b-tooltip
@@ -21,6 +22,7 @@
       <!-- FIELD SELECTOR -->
       <b-select
         size="is-small"
+        class="mr-0"
         :placeholder="getActiveHeader"
         @input="updateActiveHeader">
         <option
@@ -41,6 +43,7 @@
       <b-input
         v-if="activeHeader"
         v-model="searchValue"
+        class="gt-filter-input"
         size="is-small"
         icon="magnify"
         type="search"
@@ -54,7 +57,7 @@
         <b-button
           size="is-small"
           type="is-dark"
-          class="ml-1"
+          class="ml-0"
           :icon-left="'close'"
           @click="SendActionToParent"/>
       </b-tooltip>
@@ -145,5 +148,10 @@ export default {
 <style>
 .gt-label-filter {
   padding-top: 0.1em!important;
+}
+.ButtonFilterBy > .field > .field-body > .field {
+  margin-right: 0!important;
+  /* :nth-last-child(2) */
+  /* margin-right: .75em!important; */
 }
 </style>
