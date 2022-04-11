@@ -49,7 +49,8 @@
         :debug="debug"
         @updateEdited="updateEdited"
         @deleteRows="deleteRowsEvent"
-        @addRow="addRowEvent"/>
+        @addRow="addRowEvent"
+        @sortRows="sortEdited"/>
     </div>
   </div>
 </template>
@@ -321,6 +322,24 @@ export default {
         this.setChanges(changeObj)
       })
     },
+    sortEdited (event) {
+      // console.log('\nC > PreviewMd > sortEdited > event : ', event)
+      const sorting = event.value
+      const sortingField = sorting.header && sorting.header.field
+      const sortIsAscending = sorting.ascending
+      if (sortingField) {
+        // sort by a field
+        if (sortIsAscending) {
+          this.edited = this.edited.sort((a, b) => a[sortingField] > b[sortingField] ? 1 : -1)
+        } else {
+          this.edited = this.edited.sort((a, b) => a[sortingField] < b[sortingField] ? 1 : -1)
+        }
+      } else {
+        // default : sort by id
+        this.edited = this.edited.sort((a, b) => a.id > b.id ? 1 : -1)
+      }
+    },
+    // BUFFER
     bufferizeEdited () {
       const editedCsv = this.ObjectToCsv(this.editedColumns, this.edited, this.fileOptions)
       // console.log('\nC > PreviewMd > bufferizeEdited > editedCsv : ', editedCsv)

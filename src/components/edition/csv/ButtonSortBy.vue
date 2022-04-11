@@ -27,7 +27,8 @@
         </option>
         <option
           :value="undefined">
-          {{ t('editCsv.noSelect', locale) }}
+          <!-- {{ t('editCsv.noSelect', locale) }} -->
+          {{ defaultLabel }}
         </option>
       </b-select>
       <!-- ASCENDING / DESCENDING -->
@@ -78,7 +79,8 @@ export default {
   data () {
     return {
       activeHeader: undefined,
-      isAscending: true
+      isAscending: true,
+      defaultLabel: '---'
     }
   },
   computed: {
@@ -87,7 +89,8 @@ export default {
     }),
     getActiveHeader () {
       const activeHeaderLabel = this.activeHeader && this.activeHeader.label
-      return activeHeaderLabel || this.t('editCsv.noSelect', this.locale)
+      // return activeHeaderLabel || this.t('editCsv.noSelect', this.locale)
+      return activeHeaderLabel || this.defaultLabel
     }
   },
   methods: {

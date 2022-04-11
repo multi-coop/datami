@@ -265,7 +265,9 @@ export default {
       checkedRows: [],
       showAddRowDialog: false,
       showImportDataDialog: false,
-      showDeleteRowsDialog: false
+      showDeleteRowsDialog: false,
+      sortingByField: undefined,
+      sortingAscending: true
     }
   },
   computed: {
@@ -362,6 +364,12 @@ export default {
         case 'deleteRows':
           this.$emit('deleteRows', event)
           this.checkedRows = []
+          break
+        // SORTING
+        case 'sortBy':
+          this.sortingByField = event.value.header
+          this.sortingAscending = event.value.ascending
+          this.$emit('sortRows', event)
           break
       }
     },
