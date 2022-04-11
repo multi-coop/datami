@@ -59,3 +59,17 @@ export const setFromPath = (obj, path, value, separator = '.') => {
     return o[p]
   }, obj)
 }
+
+export function debounce (fn, delay = 500) {
+  // console.log('\nU > globalUtils > debounce > fn : ', fn)
+  // console.log('U > globalUtils > debounce > delay : ', delay)
+  let timeoutID = null
+  return function () {
+    clearTimeout(timeoutID)
+    const args = arguments
+    const that = this
+    timeoutID = setTimeout(function () {
+      fn.apply(that, args)
+    }, delay)
+  }
+}

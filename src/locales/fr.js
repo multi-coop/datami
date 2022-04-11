@@ -52,15 +52,22 @@ export default {
     //   test: 'test nested actions'
     // }
   },
+  sort: {
+    label: 'Tri',
+    sortBy: 'Trier par un champ',
+    sortAscending: 'Trier par ordre croissant',
+    sortDescending: 'Trier par ordre décroissant'
+  },
+  filters: {
+    label: 'Filtrer',
+    filterBy: 'Filtrer par un champ et une valeur',
+    removeFilters: 'Supprimer tous les filtres'
+  },
   editCsv: {
     noSelect: 'Aucun',
     addRow: 'Ajouter une nouvelle ligne',
     addTheNewRow: 'Ajouter la nouvelle ligne',
     importData: 'Importer/écraser les données',
-    sortBy: 'Trier par un champ',
-    sortAscending: 'Trier par ordre croissant',
-    sortDescending: 'Trier par ordre décroissant',
-    filterBy: 'Filtrer par un champ et une valeur',
     deleteARow: 'Supprimer une ligne (sélectionner une ligne au minimum)',
     deleteRow: 'Supprimer la ligne',
     deleteRows: 'Supprimer les lignes'

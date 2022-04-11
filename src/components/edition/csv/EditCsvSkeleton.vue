@@ -14,13 +14,17 @@
           @action="SendActionToParent"/>
       </div>
       <div
-        :class="`column is-${view === 'edit' ? '10' : 'full'} is-flex is-flex-direction-row is-align-items-center is-justify-content-center`">
+        :class="`column is-${view === 'edit' ? '4' : '4 is-offset-1'} is-flex is-flex-direction-row is-align-items-center is-justify-content-center`">
         <ButtonSortBy
           :headers="columns"
           :locale="locale"
           @action="SendActionToParent"/>
+      </div>
+      <div
+        :class="`column is-${view === 'edit' ? '6' : '6'} is-flex is-flex-direction-row is-align-items-center is-justify-content-center`">
         <ButtonFilterBy
           :headers="columns"
+          :is-active-tags="isActiveTags"
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
@@ -88,6 +92,10 @@ export default {
       default: null,
       type: Array
     },
+    isActiveTags: {
+      default: null,
+      type: Boolean
+    },
     locale: {
       default: 'en',
       type: String
@@ -97,15 +105,9 @@ export default {
       type: Boolean
     }
   },
-  data () {
-    return {
-    }
-  },
-  computed: {
-  },
   methods: {
     SendActionToParent (event) {
-      // console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
+      console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
       this.$emit('action', event)
     }
   }

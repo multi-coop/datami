@@ -9,8 +9,20 @@
           :view="view"
           :columns="columnsEdited"
           :checked-rows="checkedRows"
+          :is-active-tags="!!filterTags.length"
           :locale="locale"
           @action="processAction"/>
+      </div>
+
+      <!-- FILTER TAGS -->
+      <div
+        v-if="filterTags"
+        class="column is-12">
+        <FilterTags
+          :headers="columnsEdited"
+          :tags="filterTags"
+          :locale="locale"
+          @removeTag="removeTag"/>
       </div>
 
       <!-- DIALOGS -->
@@ -124,9 +136,10 @@
         v-if="debug"
         class="column is-12">
         <div class="columns is-multiline">
+          <!-- LOCAL OPTIONS -->
           <div
-            v-if="false"
-            class="column is-6">
+            v-if="true"
+            class="column is-4">
             <p>
               checkedRows:
               <br>
@@ -134,8 +147,17 @@
             </p>
           </div>
           <div
-            v-if="false"
-            class="column is-6">
+            v-if="true"
+            class="column is-4">
+            <p>
+              filterTags:
+              <br>
+              <pre><code>{{ filterTags }}</code></pre>
+            </p>
+          </div>
+          <div
+            v-if="true"
+            class="column is-4">
             <p>
               fileOptions:
               <br>
@@ -143,28 +165,36 @@
             </p>
           </div>
           <!-- EDITED -->
-          <div class="column is-3">
+          <div
+            v-if="true"
+            class="column is-3">
             <p>
               columnsEdited :
               <br>
               <pre><code>{{ columnsEdited }}</code></pre>
             </p>
           </div>
-          <div class="column is-3">
+          <div
+            v-if="true"
+            class="column is-3">
             <p>
               dataEdited:
               <br>
               <pre><code>{{ dataEdited }}</code></pre>
             </p>
           </div>
-          <div class="column is-3">
+          <div
+            v-if="true"
+            class="column is-3">
             <p>
               changesData:
               <br>
               <pre><code>{{ changesData }}</code></pre>
             </p>
           </div>
-          <div class="column is-3">
+          <div
+            v-if="true"
+            class="column is-3">
             <p>
               changesColumns:
               <br>
@@ -201,6 +231,7 @@ import { mapGetters } from 'vuex'
 import { mixinDiff } from '@/utils/mixins.js'
 
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
+import FilterTags from '@/components/filters/FilterTags'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 import EditCell from '@/components/edition/csv/EditCell'
@@ -209,6 +240,7 @@ export default {
   name: 'GitributeTable',
   components: {
     EditCsvSkeleton,
+    FilterTags,
     DialogAddRow,
     DialogDeleteRows,
     EditCell
@@ -263,42 +295,58 @@ export default {
   data () {
     return {
       checkedRows: [],
+      // DIALOGS
       showAddRowDialog: false,
       showImportDataDialog: false,
       showDeleteRowsDialog: false,
+      // SORTING
       sortingByField: undefined,
-      sortingAscending: true
+      sortingAscending: true,
+      // FILTERS
+      filterTags: []
     }
   },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation'
     }),
+    dataEditedFiltered () {
+      let data = [...this.dataEdited]
+      const filters = this.filterTags
+      console.log('\nC > GitributeTable > dataEditedFiltered > filters : ', filters)
+      filters.forEach(filter => {
+        data = data.filter(row => {
+          const rowVal = row[filter.field].toLowerCase()
+          const filterVal = filter.value.toLowerCase()
+          return rowVal.includes(filterVal)
+        })
+      })
+      return data
+    },
     dataForView () {
       let data
+      const dataFiltered = this.dataEditedFiltered
       let originalIndices, editedIndices, concat, uniquesIndices
       switch (this.view) {
         case 'edit':
-          data = this.dataEdited
+          data = dataFiltered
           break
         case 'diff':
-          // TO DO : CHANGE TO CONTATENATE DELETED ROWS
           originalIndices = this.data.map(r => r.id)
-          editedIndices = this.dataEdited.map(r => r.id)
+          editedIndices = dataFiltered.map(r => r.id)
           concat = [...originalIndices, ...editedIndices]
           uniquesIndices = [...new Set(concat)]
           // console.log('\nC > GitributeTable > dataForView > diff > uniquesIndices : ', uniquesIndices)
           data = uniquesIndices.map(i => {
-            let row = this.dataEdited.find(r => r.id === i)
+            let row = dataFiltered.find(r => r.id === i)
             if (!row) {
               row = this.data.find(r => r.id === i)
             }
             return row
           })
-          // data = this.dataEdited
           break
         case 'preview':
-          data = this.dataEdited
+          data = dataFiltered
           break
       }
       return data
@@ -371,6 +419,10 @@ export default {
           this.sortingAscending = event.value.ascending
           this.$emit('sortRows', event)
           break
+        // FILTERING
+        case 'filterBy':
+          this.processFilter(event.value)
+          break
       }
     },
     emitUpdate (event) {
@@ -426,6 +478,34 @@ export default {
       if (wasAdded) bool = true
       // isFirstRow && console.log('C > GitributeTable > isInChanges > bool : ', bool)
       return bool
+    },
+    processFilter (filter) {
+      console.log('C > GitributeTable > processFilter > filter : ', filter)
+      const active = !!filter.field
+      const reset = filter.reset
+      if (!reset && active) {
+        this.processFilterValue(filter)
+      }
+      if (reset) {
+        this.filterTags = []
+      }
+    },
+    processFilterValue (tag, remove = false) {
+      console.log('C > GitributeTable > processFilterValue > tag : ', tag)
+      console.log('C > GitributeTable > processFilterValue > remove : ', remove)
+      if (!remove) {
+        this.filterTags.push(tag)
+      } else {
+        this.filterTags = this.filterTags.filter(t => {
+          const sameField = t.field === tag.field
+          const sameValue = t.value === tag.value
+          return !(sameField && sameValue)
+        })
+      }
+    },
+    removeTag (tag) {
+      console.log('\nC > GitributeTable > removeTag > tag : ', tag)
+      this.processFilterValue(tag, true)
     }
   }
 }

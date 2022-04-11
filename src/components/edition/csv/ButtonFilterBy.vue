@@ -1,54 +1,81 @@
 <template>
   <div class="ButtonFilterBy px-2">
-    <b-field>
-      <b-tooltip
-        :label="t(`editCsv.filterBy`, locale)"
-        type="is-dark"
-        position="is-top">
-        <p class="control mb-0">
-          <span class="button is-static is-small">
+    <b-field
+      horizontal
+      custom-class="gt-label-filter mr-2 is-align-content-center">
+      <template #label>
+        <div class="is-flex">
+          <b-tooltip
+            :label="t(`filters.filterBy`, locale)"
+            type="is-dark"
+            position="is-top">
             <b-icon
               icon="filter"
+              class="mr-2"
               size="is-small"/>
-          </span>
-        </p>
-      </b-tooltip>
+          </b-tooltip>
+          {{ t('filters.label', locale) }}
+        </div>
+      </template>
+
+      <!-- FIELD SELECTOR -->
       <b-select
         size="is-small"
         :placeholder="getActiveHeader"
         @input="updateActiveHeader">
+        <option
+          :value="undefined">
+          <!-- {{ t('filters.noSelect', locale) }} -->
+          {{ defaultLabel }}
+        </option>
         <option
           v-for="h in headers"
           :key="h.field"
           :value="h">
           {{ h.label }}
         </option>
-        <option
-          :value="undefined">
-          {{ t('editCsv.noSelect', locale) }}
-        </option>
       </b-select>
+
+      <!-- FILTER VALUE FROM USER INPUT -->
+      <!-- INPUT -->
       <b-input
+        v-if="activeHeader"
         v-model="searchValue"
         size="is-small"
         icon="magnify"
         type="search"
-        :placeholder="`${t('actions.search', locale)}...`"
-        @input="updateSearch"/>
+        :placeholder="`${t('actions.search', locale)}...`"/>
+      <!-- RESET -->
+      <b-tooltip
+        v-if="isActiveTags"
+        :label="t(`filters.removeFilters`, locale)"
+        type="is-dark"
+        position="is-top">
+        <b-button
+          size="is-small"
+          type="is-dark"
+          class="ml-1"
+          :icon-left="'close'"
+          @click="SendActionToParent"/>
+      </b-tooltip>
     </b-field>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { debounce } from '@/utils/globalUtils'
 
 export default {
   name: 'ButtonFilterBy',
-  mixins: [],
   props: {
     headers: {
       default: null,
       type: Array
+    },
+    isActiveTags: {
+      default: null,
+      type: Boolean
     },
     locale: {
       default: 'en',
@@ -57,8 +84,10 @@ export default {
   },
   data () {
     return {
+      counter: 0,
       activeHeader: undefined,
-      searchValue: undefined
+      searchValue: undefined,
+      defaultLabel: '---'
     }
   },
   computed: {
@@ -67,31 +96,54 @@ export default {
     }),
     getActiveHeader () {
       const activeHeaderLabel = this.activeHeader && this.activeHeader.label
-      return activeHeaderLabel || this.t('editCsv.noSelect', this.locale)
+      return activeHeaderLabel || this.defaultLabel
     }
+  },
+  watch: {
+    searchValue: debounce(function () {
+      this.SendActionToParent()
+    }, 750)
   },
   methods: {
     updateActiveHeader (event) {
-      // console.log('\nC > ButtonFilterBy > updateActiveHeader > event : ', event)
+      console.log('\nC > ButtonFilterBy > updateActiveHeader > event : ', event)
       this.activeHeader = event
-      this.SendActionToParent()
     },
-    updateSearch () {
-      // console.log('\nC > ButtonFilterBy > updateSearch > event : ', event)
-      this.SendActionToParent()
+    // updateSearch (event) {
+    //   console.log('\nC > ButtonFilterBy > updateSearch > event : ', event)
+    //   // this.SendActionToParent()
+    //   this.debounce(this.SendActionToParent(), 500)
+    // },
+    removeAllFilters () {
+      console.log('\nC > ButtonFilterBy > removeAllFilters > ... : ')
+      this.SendActionToParent(true)
     },
-    SendActionToParent () {
-      // console.log('\nC > ButtonFilterBy > SendActions > event : ', event)
+    SendActionToParent (remove = false) {
+      console.log('\nC > ButtonFilterBy > SendActionToParent > ... : ')
       const filterPayload = {
-        header: this.activeHeader,
-        searchValue: this.searchValue
+        id: this.counter,
+        field: this.activeHeader && this.activeHeader.field,
+        value: this.searchValue,
+        reset: remove
       }
       const payload = {
         action: 'filterBy',
         value: filterPayload
       }
-      this.$emit('action', payload)
+      if (remove) {
+        this.$emit('action', payload)
+      }
+      if (this.searchValue && this.searchValue.length) {
+        this.$emit('action', payload)
+        this.searchValue = undefined
+      }
     }
   }
 }
 </script>
+
+<style>
+.gt-label-filter {
+  padding-top: 0.1em!important;
+}
+</style>

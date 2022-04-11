@@ -1,3 +1,4 @@
+import { debounce } from '@/utils/globalUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
@@ -35,6 +36,12 @@ export const mixinIcons = {
 export const mixinDownload = {
   methods: {
     getFileDataRaw
+  }
+}
+
+export const mixinInput = {
+  methods: {
+    debounce
   }
 }
 

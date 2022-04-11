@@ -52,15 +52,22 @@ export default {
     //   test: 'test nested actions'
     // }
   },
+  sort: {
+    label: 'Sort',
+    sortBy: 'Sort by a field',
+    sortAscending: 'Ascending sorting',
+    sortDescending: 'Descending sorting'
+  },
+  filters: {
+    label: 'Filter',
+    filterBy: 'Filter by a field and a value',
+    removeFilters: 'Reset all the filters'
+  },
   editCsv: {
     noSelect: 'Aucun',
     addRow: 'Add a new row',
     addTheNewRow: 'Add the new row',
     importData: 'Import/overwrite the data',
-    sortBy: 'Sort by a field',
-    sortAscending: 'Ascending sorting',
-    sortDescending: 'Descending sorting',
-    filterBy: 'Filter by a field and a value',
     deleteARow: 'Delete a row (you need to select one at least)',
     deleteRow: 'Delete the row',
     deleteRows: 'Delete selected rows'

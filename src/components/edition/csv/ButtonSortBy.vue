@@ -1,39 +1,44 @@
 <template>
   <div class="ButtonSortBy px-2">
-    <b-field>
-      <b-tooltip
-        :label="t(`editCsv.sortBy`, locale)"
-        type="is-dark"
-        position="is-top">
-        <p class="control mb-0">
-          <span class="button is-static is-small">
+    <b-field
+      horizontal
+      custom-class="gt-label-sort mr-2 is-align-content-center">
+      <template #label>
+        <div class="is-flex">
+          <b-tooltip
+            :label="t(`sort.sortBy`, locale)"
+            type="is-dark"
+            position="is-top">
             <b-icon
               icon="sort"
+              class="mr-2"
               size="is-small"/>
-          </span>
-        </p>
-      </b-tooltip>
-      <!-- icon="sort" -->
+          </b-tooltip>
+          {{ t('sort.label', locale) }}
+        </div>
+      </template>
+
       <!-- SORT SELECTION BY FIELD -->
       <b-select
         size="is-small"
         :placeholder="getActiveHeader"
         @input="updateActiveHeader">
         <option
+          :value="undefined">
+          <!-- {{ t('sort.noSelect', locale) }} -->
+          {{ defaultLabel }}
+        </option>
+        <option
           v-for="h in headers"
           :key="h.field"
           :value="h">
           {{ h.label }}
         </option>
-        <option
-          :value="undefined">
-          <!-- {{ t('editCsv.noSelect', locale) }} -->
-          {{ defaultLabel }}
-        </option>
       </b-select>
+
       <!-- ASCENDING / DESCENDING -->
       <b-tooltip
-        :label="t(`editCsv.sortAscending`, locale)"
+        :label="t(`sort.sortAscending`, locale)"
         type="is-dark"
         position="is-top">
         <p class="control mb-0">
@@ -45,7 +50,7 @@
         </p>
       </b-tooltip>
       <b-tooltip
-        :label="t(`editCsv.sortDescending`, locale)"
+        :label="t(`sort.sortDescending`, locale)"
         type="is-dark"
         position="is-top">
         <p class="control mb-0">
@@ -119,3 +124,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.gt-label-sort {
+  padding-top: 0.1em!important;
+}
+</style>

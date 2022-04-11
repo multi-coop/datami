@@ -2,15 +2,24 @@
   <div class="LoaderCSV container">
     <div class="columns is-mobile is-multiline mb-5 pb-4">
       <!-- FAKE EDIT NAVBAR -->
-      <div class="column is-10 is-offset-1 pt-0">
+      <!-- FAKE SORTINGS -->
+      <div class="column is-4 is-offset-1 pt-0">
         <b-skeleton
           position="is-centered"
           size="is-large"
           animated
-          width="50%"/>
+          width="80%"/>
+      </div>
+      <!-- FAKE FILTERS -->
+      <div class="column is-6 pt-0">
+        <b-skeleton
+          position="is-centered"
+          size="is-large"
+          animated
+          width="75%"/>
       </div>
       <!-- FAKE TABLE -->
-      <div class="column is-12">
+      <div class="column is-12 mt-4">
         <table class="table">
           <thead>
             <th
