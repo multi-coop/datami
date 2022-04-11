@@ -16,7 +16,7 @@
 
       <!-- FILTER TAGS -->
       <div
-        v-if="filterTags"
+        v-if="filterTags && filterTags.length"
         class="column is-12">
         <FilterTags
           :headers="columnsEdited"
