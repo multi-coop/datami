@@ -313,7 +313,9 @@ options:
         description: number of items per page
         default: 20
         type: number
-        notes: must be > 1, or the default value will be used
+        notes: 
+        - must be > 1 and within allowed values, or a default value will be used (the closest value from allowed values array)
+        - values : [3, 5, 10, 15, 20, 25, 50, 100]
 ```
 
 ---
