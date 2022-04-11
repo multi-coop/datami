@@ -76,7 +76,7 @@ export default {
     prevPage: 'Page précédente',
     nextPage: 'Page suivante',
     currentPage: 'Page actuelle',
-    itemsPerPage: 'items par page'
+    itemsPerPage: 'éléments par page'
   },
   editCsv: {
     noSelect: 'Aucun',
