@@ -2,12 +2,6 @@
   <div class="LoaderEditNavbar container">
     <!-- FAKE EDIT NAVBAR -->
     <div class="columns is-mobile mb-5 pb-4">
-      <!-- <div class="column is-5">
-        <b-skeleton
-          size="is-large"
-          animated
-          width="70%"/>
-      </div> -->
       <div class="column is-2 is-offset-5">
         <b-skeleton
           position="is-centered"

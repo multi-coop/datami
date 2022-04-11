@@ -3,15 +3,15 @@
     <div class="columns is-mobile is-multiline mb-5 pb-4">
       <!-- FAKE EDIT NAVBAR -->
       <!-- FAKE SORTINGS -->
-      <div class="column is-4 is-offset-1 pt-0">
+      <div class="column is-4 is-offset-2 pt-4">
         <b-skeleton
           position="is-centered"
           size="is-large"
           animated
-          width="80%"/>
+          width="75%"/>
       </div>
       <!-- FAKE FILTERS -->
-      <div class="column is-6 pt-0">
+      <div class="column is-4 pt-4">
         <b-skeleton
           position="is-centered"
           size="is-large"
@@ -19,7 +19,7 @@
           width="75%"/>
       </div>
       <!-- FAKE TABLE -->
-      <div class="column is-12 mt-4">
+      <div class="column is-12 mt-2">
         <table class="table">
           <thead>
             <th

@@ -9,7 +9,7 @@ import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
 
-export const mixin = {
+export const mixinGit = {
   computed: {
     fileTypeFamily () {
       // const FileType = this.fileTypes[this.fileType]

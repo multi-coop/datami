@@ -78,6 +78,7 @@ export function debounce (fn, delay = 500) {
 export const itemsPerPageChoices = [3, 5, 10, 15, 20, 25, 50, 100]
 
 export const getClosest = (array, goal) => {
+  // https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array
   return array.reduce((prev, curr) => {
     return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev)
   })

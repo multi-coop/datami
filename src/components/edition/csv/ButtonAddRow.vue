@@ -7,7 +7,7 @@
       <b-button
         size="is-small"
         class="ml-1"
-        :icon-left="'plus'"
+        icon-left="table-row-plus-after"
         @click="SendActionToParent"/>
     </b-tooltip>
   </div>

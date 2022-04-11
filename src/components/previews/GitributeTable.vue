@@ -2,7 +2,7 @@
   <div class="GitributeTable content">
     <div class="columns is-multiline is-mobile">
       <!-- EDIT CSV NAVABAR -->
-      <div class="column is-12">
+      <div class="column is-12 pt-0">
         <EditCsvSkeleton
           v-show="!isAnyDialogOpen"
           :file-id="fileId"

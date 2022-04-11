@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonSortBy px-2">
     <b-field
-      horizontal
+      grouped
       custom-class="gt-label-sort mr-2 is-align-content-center">
       <template #label>
         <div class="is-flex">
@@ -21,11 +21,11 @@
       <!-- SORT SELECTION BY FIELD -->
       <b-select
         size="is-small"
+        class="gt-label-sort-select mr-0"
         :placeholder="getActiveHeader"
         @input="updateActiveHeader">
         <option
           :value="undefined">
-          <!-- {{ t('sort.noSelect', locale) }} -->
           {{ defaultLabel }}
         </option>
         <option

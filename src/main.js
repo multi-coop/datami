@@ -22,6 +22,7 @@ Vue.use(Buefy, {
 })
 
 GitributeFile.store = store
+GitributeExploWiki.store = store
 
 Vue.use(vueCustomElement, {
   shadow: true

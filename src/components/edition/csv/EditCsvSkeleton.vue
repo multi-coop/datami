@@ -4,7 +4,7 @@
       <!-- EDIT BUTTONS -->
       <div
         v-if="view === 'edit'"
-        :class="`column is-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-left`">
+        :class="`column is-1 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonAddRow
           :locale="locale"
           @action="SendActionToParent"/>
@@ -14,14 +14,14 @@
           @action="SendActionToParent"/>
       </div>
       <div
-        :class="`column is-${view === 'edit' ? '4' : '4 is-offset-1'} is-flex is-flex-direction-row is-align-items-center is-justify-content-center`">
+        :class="`column is-${view === 'edit' ? '4' : '4 is-offset-2'} is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonSortBy
           :headers="columns"
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
       <div
-        :class="`column is-${view === 'edit' ? '6' : '6'} is-flex is-flex-direction-row is-align-items-center is-justify-content-center`">
+        :class="`column is-${view === 'edit' ? '6' : '4'} is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonFilterBy
           :headers="columns"
           :is-active-tags="isActiveTags"
@@ -30,7 +30,7 @@
       </div>
       <div
         v-if="view === 'edit'"
-        :class="`column is-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-right`">
+        :class="`column is-1 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonDeleteRows
           :checked-rows="checkedRows"
           :locale="locale"

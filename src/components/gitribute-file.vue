@@ -1,13 +1,25 @@
 <template>
   <div class="section">
-    <!-- USER NAVBAR -->
     <div class="container mb-4">
-      <NavbarSkeleton
-        v-if="gitObj"
-        :title="title"
-        :file-id="fileId"
-        :only-preview="onlypreview"
-        :locale="locale"/>
+      <div class="columns is-mobile mb-4">
+        <!-- FILE TITLE -->
+        <div class="column is-9">
+          <FileTitle
+            :show-file-infos="showFileInfos"
+            :title="title"
+            :file-id="fileId"
+            :locale="locale"
+            @toggleInfos="showFileInfos = !showFileInfos"/>
+        </div>
+        <!-- USER NAVBAR -->
+        <div class="column is-3">
+          <UserOptions
+            v-if="gitObj"
+            :file-id="fileId"
+            :only-preview="onlypreview"
+            :locale="locale"/>
+        </div>
+      </div>
     </div>
 
     <!-- DEBUG -->
@@ -48,6 +60,15 @@
         </p>
       </div>
     </div>
+
+    <!-- FILE INFOS -->
+    <DialogFileInfos
+      v-show="showFileInfos"
+      v-model="showFileInfos"
+      :file-id="fileId"
+      :locale="locale"
+      :debug="debug"
+      @closeDialogFileInfos="showFileInfos = false"/>
 
     <!-- ERRORS -->
     <div
@@ -140,14 +161,16 @@
 import { mapGetters, mapActions } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
-import { mixin } from '@/utils/mixins.js'
+import { mixinGit } from '@/utils/mixins.js'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 
-import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
+import FileTitle from '@/components/navbar/FileTitle'
+import UserOptions from '@/components/user/UserOptions'
 
 import NotificationErrors from '@/components/errors/NotificationErrors'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+import DialogFileInfos from '@/components/previews/DialogFileInfos'
 import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
 import PreviewCsv from '@/components/previews/PreviewCsv'
@@ -163,9 +186,11 @@ import GitributeCredits from '@/components/credits/GitributeCredits'
 export default {
   name: 'GitributeFile',
   components: {
-    NavbarSkeleton,
+    FileTitle,
+    UserOptions,
     NotificationErrors,
     EditNavbarSkeleton,
+    DialogFileInfos,
     ConfirmCommit,
     PreviewCsv,
     PreviewMd,
@@ -175,7 +200,7 @@ export default {
     LoaderMD,
     GitributeCredits
   },
-  mixins: [mixin],
+  mixins: [mixinGit],
   props: {
     title: {
       default: 'gitribute',
@@ -213,7 +238,8 @@ export default {
       // gitObj: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
-      fileOptions: undefined
+      fileOptions: undefined,
+      showFileInfos: false
     }
   },
   computed: {

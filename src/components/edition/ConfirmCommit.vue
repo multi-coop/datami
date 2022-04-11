@@ -6,6 +6,9 @@
           <!-- HEADER -->
           <header class="card-header">
             <p class="card-header-title">
+              <b-icon
+                class="mr-3"
+                icon="content-save-outline"/>
               {{ t('actions.commitChanges', locale) }}
             </p>
             <button

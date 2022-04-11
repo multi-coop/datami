@@ -8,7 +8,7 @@
             <p class="card-header-title mb-0">
               <b-icon
                 class="mr-3"
-                :icon="icon"/>
+                icon="table-row-plus-after"/>
               {{ t('editCsv.addRow', locale) }}
             </p>
             <button
@@ -56,7 +56,7 @@
             </b-button>
             <b-button
               class="card-footer-item mx-3"
-              :icon-left="icon"
+              icon-left="plus-thick"
               type="is-dark"
               @click="sendNewRowToParent">
               {{ t('editCsv.addTheNewRow', locale) }}
@@ -100,7 +100,6 @@ export default {
   },
   data () {
     return {
-      icon: 'plus-thick',
       temp: {}
     }
   },

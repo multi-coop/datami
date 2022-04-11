@@ -1,7 +1,7 @@
 <template>
   <div class="ButtonFilterBy px-2">
     <b-field
-      horizontal
+      grouped
       custom-class="gt-label-filter mr-2 is-align-content-center">
       <!-- LABEL SLOT -->
       <template #label>
@@ -43,7 +43,7 @@
       <b-input
         v-if="activeHeader"
         v-model="searchValue"
-        class="gt-filter-input"
+        class="gt-filter-input mr-0"
         size="is-small"
         icon="magnify"
         type="search"

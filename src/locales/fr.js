@@ -54,7 +54,7 @@ export default {
     // }
   },
   sort: {
-    label: 'Tri',
+    label: 'Trier',
     sortBy: 'Trier par un champ',
     sortAscending: 'Trier par ordre croissant',
     sortDescending: 'Trier par ordre décroissant'
