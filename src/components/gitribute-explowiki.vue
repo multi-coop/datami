@@ -65,61 +65,25 @@
     <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/>
     <!-- <LoaderCSV/> -->
     <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
-    <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
-    <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
-      v-if="!fileIsReloading && !fileIsSaving"
+      v-if="!fileIsReloading"
       :only-preview="onlypreview"
       :file-id="fileId"
       :file-type-family="fileTypeFamily"
       :view-mode="currentViewMode"
       :locale="locale"/>
 
-    <!-- CONFIRM COMMIT MODAL -->
-    <ConfirmCommit
-      v-show="fileIsSaving && !fileIsReloading"
-      :file-id="fileId"
-      :locale="locale"
-      :debug="debug"/>
-
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
 
+    <!-- PREVIEWS CARDS -->
     <!-- PREVIEWS CSV -->
-    <div v-show="!fileIsSaving">
+    <div>
       <div
         v-if="fileTypeFamily === 'table'"
         class="container">
         <PreviewCsv
-          v-show="!fileIsReloading"
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-options="fileOptions"
-          :file-raw="fileRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
-
-      <!-- PREVIEWS MD -->
-      <div
-        v-if="fileTypeFamily === 'text'"
-        class="container">
-        <PreviewMd
-          v-show="!fileIsReloading"
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-options="fileOptions"
-          :file-raw="fileRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
-
-      <!-- PREVIEWS JSON -->
-      <div
-        v-if="fileTypeFamily === 'json'"
-        class="container">
-        <PreviewJson
           v-show="!fileIsReloading"
           :only-preview="onlypreview"
           :file-id="fileId"
@@ -148,31 +112,23 @@ import NavbarSkeleton from '@/components/navbar/NavbarSkeleton'
 import NotificationErrors from '@/components/errors/NotificationErrors'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
 import PreviewCsv from '@/components/previews/PreviewCsv'
-import PreviewMd from '@/components/previews/PreviewMd'
-import PreviewJson from '@/components/previews/PreviewJson'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderCSV from '@/components/loaders/LoaderCSV'
-import LoaderMD from '@/components/loaders/LoaderMD'
 
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
 export default {
-  name: 'GitributeFile',
+  name: 'GitributeExploWiki',
   components: {
     NavbarSkeleton,
     NotificationErrors,
     EditNavbarSkeleton,
-    ConfirmCommit,
     PreviewCsv,
-    PreviewMd,
-    PreviewJson,
     LoaderEditNavbar,
     LoaderCSV,
-    LoaderMD,
     GitributeCredits
   },
   mixins: [mixin],
@@ -181,7 +137,7 @@ export default {
       default: 'gitribute',
       type: String
     },
-    gitfile: {
+    wikifile: {
       default: '',
       type: String
     },
@@ -189,17 +145,9 @@ export default {
       default: 'en',
       type: String
     },
-    usertoken: {
-      default: '',
-      type: String
-    },
     locale: {
       default: '',
       type: String
-    },
-    onlypreview: {
-      default: false,
-      type: Boolean
     },
     debug: {
       default: false,
@@ -208,6 +156,7 @@ export default {
   },
   data () {
     return {
+      onlypreview: true,
       fileId: undefined,
       fileType: undefined,
       // gitObj: undefined,
@@ -221,7 +170,6 @@ export default {
       getGitObj: 'getGitObj',
       getGitInfosObj: 'getGitInfosObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
-      fileNeedsSaving: 'git-data/fileNeedsSaving',
       getViewMode: 'git-data/getViewMode',
       getReqErrors: 'git-data/getReqErrors'
     }),
@@ -229,13 +177,9 @@ export default {
       return this.fileId && this.getGitInfosObj(this.fileId)
     },
     fileIsReloading () {
-      // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
+      // console.log('C > GitributeExploWiki > fileIsReloading > this.gitInfos : ', this.gitInfos)
       const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
-      // console.log('C > GitributeFile > fileIsReloading > resp : ', resp)
-      return resp
-    },
-    fileIsSaving () {
-      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
+      // console.log('C > GitributeExploWiki > fileIsReloading > resp : ', resp)
       return resp
     },
     currentViewMode () {
@@ -248,40 +192,33 @@ export default {
   },
   watch: {
     fileIsReloading (next) {
-      // console.log('C > GitributeFile > watch > fileIsReloading > next : ', next)
+      // console.log('C > GitributeExploWiki > watch > fileIsReloading > next : ', next)
       if (next) { this.reloadFile() }
     }
   },
   beforeMount () {
-    // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
-    const gitInfosObject = extractGitInfos(this.gitfile)
+    console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
+    const gitInfosObject = extractGitInfos(this.wikifile)
     const fileUuid = uuidv4()
     gitInfosObject.uuid = fileUuid
-    // console.log("C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
+    console.log('C > GitributeExploWiki > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid
     this.fileType = gitInfosObject.filetype
     if (!this.getGitInfosObj[this.fileId]) {
       // this.gitObj = gitInfosObject
-      this.updateToken({ fileId: this.fileId, token: this.usertoken })
       this.addGitInfos(gitInfosObject)
     }
-    // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
+    console.log('C > GitributeExploWiki > beforeMount > this.gitObj : ', this.gitObj)
     // build options object
     this.fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
   },
   async mounted () {
-    // console.log('\nC > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
-    // console.log('C > GitributeFile > mount > this.gitObj : ', this.gitObj)
-    // console.log('C > GitributeFile > mount > this.usertoken : ', this.usertoken)
-    // this.fileInfos = await this.getFileData(this.gitObj)
-    // console.log('C > GitributeFile > mount > this.fileInfos : ', this.fileInfos)
     await this.reloadFile()
   },
   methods: {
     ...mapActions({
       addGitInfos: 'addGitInfos',
       addFileReqInfos: 'addFileReqInfos',
-      updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors'
     }),
@@ -292,17 +229,17 @@ export default {
 
       // Request API for file infos
       const respData = await this.getFileData(this.gitObj)
-      // console.log('\nC > GitributeFile > reloadFile > respData : ', respData)
+      // console.log('\nC > GitributeExploWiki > reloadFile > respData : ', respData)
       const fileInfos = respData.data
       const fileInfosErrors = respData.errors
       fileInfos.uuid = this.fileId
       this.addFileReqInfos(fileInfos)
       this.fileInfos = fileInfos
-      // console.log('C > GitributeFile > reloadFile > this.fileInfos : ', this.fileInfos)
+      // console.log('C > GitributeExploWiki > reloadFile > this.fileInfos : ', this.fileInfos)
 
       // Request API for file content
       const respDataRaw = await this.getFileDataRaw(this.gitObj)
-      // console.log('C > GitributeFile > reloadFile > respDataRaw : ', respDataRaw)
+      // console.log('C > GitributeExploWiki > reloadFile > respDataRaw : ', respDataRaw)
       const fileRaw = respDataRaw.data
       const fileRawErrors = respDataRaw.errors
       this.fileRaw = fileRaw

@@ -13,6 +13,7 @@ import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 // import { VueShowdown, VueShowdownPlugin } from 'vue-showdown'
 
 import GitributeFile from './components/gitribute-file.vue'
+import GitributeExploWiki from './components/gitribute-explowiki.vue'
 
 Vue.config.productionTip = false
 
@@ -26,3 +27,4 @@ Vue.use(vueCustomElement, {
   shadow: true
 })
 Vue.customElement('multi-gitribute-file', GitributeFile)
+Vue.customElement('multi-gitribute-explowiki', GitributeExploWiki)

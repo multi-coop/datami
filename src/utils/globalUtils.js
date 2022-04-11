@@ -61,6 +61,7 @@ export const setFromPath = (obj, path, value, separator = '.') => {
 }
 
 export function debounce (fn, delay = 500) {
+  // cf : https://stackoverflow.com/questions/42199956/how-to-implement-debounce-in-vue2
   // console.log('\nU > globalUtils > debounce > fn : ', fn)
   // console.log('U > globalUtils > debounce > delay : ', delay)
   let timeoutID = null
@@ -72,4 +73,17 @@ export function debounce (fn, delay = 500) {
       fn.apply(that, args)
     }, delay)
   }
+}
+
+export const itemsPerPageChoices = [3, 5, 10, 15, 20, 25, 50, 100]
+
+export const getClosest = (array, goal) => {
+  return array.reduce((prev, curr) => {
+    return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev)
+  })
+}
+
+export const paginate = (array, pageSize, pageNumber) => {
+  // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+  return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
 }

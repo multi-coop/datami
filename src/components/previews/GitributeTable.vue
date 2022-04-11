@@ -19,6 +19,7 @@
         v-if="filterTags && filterTags.length"
         class="column is-12">
         <FilterTags
+          v-show="!isAnyDialogOpen"
           :headers="columnsEdited"
           :tags="filterTags"
           :locale="locale"
@@ -45,7 +46,7 @@
         v-show="!isAnyDialogOpen"
         class="column is-12">
         <b-table
-          :data="dataForView"
+          :data="dataEditedPaginated"
           :checkable="view === 'edit'"
           :sticky-checkbox="view === 'edit'"
           :checked-rows.sync="checkedRows"
@@ -131,12 +132,61 @@
         </b-table>
       </div>
 
+      <!-- PAGINATION -->
+      <div
+        v-show="!isAnyDialogOpen"
+        class="column is-12">
+        <PagesNavigation
+          :total-items="totalItemsDataEdited"
+          :items-per-page="itemsPerPage"
+          :items-per-page-choices="itemsPerPageChoices"
+          :default-current="currentPage"
+          :debug="false"
+          :locale="locale"
+          @action="processAction"/>
+      </div>
+
       <!-- DEBUG -->
       <div
         v-if="debug"
         class="column is-12">
         <div class="columns is-multiline">
           <!-- LOCAL OPTIONS -->
+          <div
+            v-if="true"
+            class="column is-4">
+            <p>
+              fileOptions:
+              <br>
+              <pre><code>{{ fileOptions }}</code></pre>
+            </p>
+          </div>
+          <!-- PAGINATION -->
+          <div
+            v-if="true"
+            class="column is-2">
+            <p>
+              currentPage:
+              <br>
+              <pre><code>{{ currentPage }}</code></pre>
+            </p>
+            <p>
+              itemsPerPage:
+              <br>
+              <pre><code>{{ itemsPerPage }}</code></pre>
+            </p>
+          </div>
+          <!-- DATA EDITED PAGINATED -->
+          <div
+            v-if="true"
+            class="column is-6">
+            <p>
+              dataEditedPaginated:
+              <br>
+              <pre><code>{{ dataEditedPaginated }}</code></pre>
+            </p>
+          </div>
+          <!-- CHECKED ROWS -->
           <div
             v-if="true"
             class="column is-4">
@@ -153,15 +203,6 @@
               filterTags:
               <br>
               <pre><code>{{ filterTags }}</code></pre>
-            </p>
-          </div>
-          <div
-            v-if="true"
-            class="column is-4">
-            <p>
-              fileOptions:
-              <br>
-              <pre><code>{{ fileOptions }}</code></pre>
             </p>
           </div>
           <!-- EDITED -->
@@ -228,13 +269,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { mixinDiff } from '@/utils/mixins.js'
+import { mixinDiff, mixinPagination } from '@/utils/mixins.js'
 
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 import EditCell from '@/components/edition/csv/EditCell'
+import PagesNavigation from '@/components/pagination/PagesNavigation'
 
 export default {
   name: 'GitributeTable',
@@ -243,9 +285,13 @@ export default {
     FilterTags,
     DialogAddRow,
     DialogDeleteRows,
-    EditCell
+    EditCell,
+    PagesNavigation
   },
-  mixins: [mixinDiff],
+  mixins: [
+    mixinDiff,
+    mixinPagination
+  ],
   props: {
     fileId: {
       default: null,
@@ -295,25 +341,52 @@ export default {
   data () {
     return {
       checkedRows: [],
+
       // DIALOGS
       showAddRowDialog: false,
       showImportDataDialog: false,
       showDeleteRowsDialog: false,
+
       // SORTING
       sortingByField: undefined,
       sortingAscending: true,
+
       // FILTERS
-      filterTags: []
+      filterTags: [],
+
+      // PAGINATION
+      itemsPerPage: undefined,
+      itemsPerPageDefault: 20,
+      currentPage: 1
     }
   },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation'
     }),
+    paginationFromFileOptions () {
+      // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
+      const pagination = {
+        itemsPerPage: this.itemsPerPageDefault
+      }
+      const hasPaginationOptions = this.fileOptions && this.fileOptions.pagination
+      if (hasPaginationOptions) {
+        // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
+        Object.keys(hasPaginationOptions).forEach(key => {
+          pagination[key] = hasPaginationOptions[key]
+        })
+      }
+      if (pagination.itemsPerPage < 1) pagination.itemsPerPage = 20
+      if (!this.itemsPerPageChoices.includes(pagination.itemsPerPage)) {
+        const goal = pagination.itemsPerPage
+        pagination.itemsPerPage = this.getClosest(this.itemsPerPageChoices, goal)
+      }
+      return pagination
+    },
     dataEditedFiltered () {
       let data = [...this.dataEdited]
       const filters = this.filterTags
-      console.log('\nC > GitributeTable > dataEditedFiltered > filters : ', filters)
+      // console.log('\nC > GitributeTable > dataEditedFiltered > filters : ', filters)
       filters.forEach(filter => {
         data = data.filter(row => {
           const rowVal = row[filter.field].toLowerCase()
@@ -322,6 +395,17 @@ export default {
         })
       })
       return data
+    },
+    totalItemsDataEdited () {
+      return this.dataEditedFiltered.length
+    },
+    dataEditedPaginated () {
+      const data = [...this.dataForView]
+      const page = this.currentPage
+      const perPage = this.itemsPerPage
+      // console.log('\nC > GitributeTable > dataEditedPaginated > page : ', page)
+      // console.log('C > GitributeTable > dataEditedPaginated > perPage : ', perPage)
+      return this.paginate(data, perPage, page)
     },
     dataForView () {
       let data
@@ -389,10 +473,15 @@ export default {
       console.log('\nC > GitributeTable > watch > edited > next : ', next)
     }
   },
+  beforeMount () {
+    // build pagination options
+    const pagination = this.paginationFromFileOptions
+    // console.log('\nC > GitributeTable > beforeMount > pagination : ', pagination)
+    this.itemsPerPage = pagination.itemsPerPage
+  },
   methods: {
-    // TO DO
     processAction (event) {
-      console.log('\nC > GitributeTable > processAction > event : ', event)
+      // console.log('\nC > GitributeTable > processAction > event : ', event)
       switch (event.action) {
         // ADD ROW
         case 'openAddRowDialog':
@@ -422,6 +511,11 @@ export default {
         // FILTERING
         case 'filterBy':
           this.processFilter(event.value)
+          break
+        // PAGINATION
+        case 'changePage':
+          this.currentPage = event.value.currentPage
+          this.itemsPerPage = event.value.itemsPerPage
           break
       }
     },

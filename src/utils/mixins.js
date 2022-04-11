@@ -1,4 +1,4 @@
-import { debounce } from '@/utils/globalUtils'
+import { debounce, itemsPerPageChoices, paginate, getClosest } from '@/utils/globalUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
@@ -67,6 +67,18 @@ export const mixinDiff = {
       // console.log('C > mixins > diffHtmlChars  > diffText : \n', diffText)
       return diffText
     }
+  }
+}
+
+export const mixinPagination = {
+  data () {
+    return {
+      itemsPerPageChoices: itemsPerPageChoices
+    }
+  },
+  methods: {
+    paginate,
+    getClosest
   }
 }
 

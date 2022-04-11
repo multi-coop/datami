@@ -305,6 +305,15 @@ options:
       description: character separating a column's values into tags
       type: string
       allowed values: [ ",", ";", "|", "-", "_" ]
+    - pagination: 
+      description: pagination settings
+      type: object
+      fields:
+      - itemsPerPage:
+        description: number of items per page
+        default: 20
+        type: number
+        notes: must be > 1, or the default value will be used
 ```
 
 ---

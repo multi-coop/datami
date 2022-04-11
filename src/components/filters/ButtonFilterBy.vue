@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     updateActiveHeader (event) {
-      console.log('\nC > ButtonFilterBy > updateActiveHeader > event : ', event)
+      // console.log('\nC > ButtonFilterBy > updateActiveHeader > event : ', event)
       this.activeHeader = event
     },
     // updateSearch (event) {
@@ -115,11 +115,11 @@ export default {
     //   this.debounce(this.SendActionToParent(), 500)
     // },
     removeAllFilters () {
-      console.log('\nC > ButtonFilterBy > removeAllFilters > ... : ')
+      // console.log('\nC > ButtonFilterBy > removeAllFilters > ... : ')
       this.SendActionToParent(true)
     },
     SendActionToParent (remove = false) {
-      console.log('\nC > ButtonFilterBy > SendActionToParent > ... : ')
+      // console.log('\nC > ButtonFilterBy > SendActionToParent > ... : ')
       const filterPayload = {
         id: this.counter,
         field: this.activeHeader && this.activeHeader.field,

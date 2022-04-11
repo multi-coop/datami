@@ -62,8 +62,8 @@
 
 import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
 import ButtonImportData from '@/components/edition/csv/ButtonImportData'
-import ButtonSortBy from '@/components/edition/csv/ButtonSortBy'
-import ButtonFilterBy from '@/components/edition/csv/ButtonFilterBy'
+import ButtonSortBy from '@/components/sorting/ButtonSortBy'
+import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     SendActionToParent (event) {
-      console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
+      // console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
       this.$emit('action', event)
     }
   }

@@ -29,6 +29,7 @@ export default {
     editView: 'Editer',
     diffView: 'Comparer',
     previewView: 'Aperçu',
+    cardsView: 'Liste',
     original: 'Contenu original',
     edited: 'Contenu édité',
     editedPreview: 'Aperçu des modifications',
@@ -63,6 +64,19 @@ export default {
     filterBy: 'Filtrer par un champ et une valeur',
     removeFilter: 'Supprimer ce filtre',
     removeFilters: 'Supprimer tous les filtres'
+  },
+  pagination: {
+    items: 'éléments',
+    itemsTotal: 'sur un total de',
+    page: 'Page',
+    pageN: 'Page n°',
+    pages: 'pages',
+    pageToPages: 'sur',
+    perPage: 'Par page',
+    prevPage: 'Page précédente',
+    nextPage: 'Page suivante',
+    currentPage: 'Page actuelle',
+    itemsPerPage: 'items par page'
   },
   editCsv: {
     noSelect: 'Aucun',
