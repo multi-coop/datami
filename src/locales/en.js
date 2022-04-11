@@ -61,6 +61,7 @@ export default {
   filters: {
     label: 'Filter',
     filterBy: 'Filter by a field and a value',
+    removeFilter: 'Remove this filter',
     removeFilters: 'Reset all the filters'
   },
   editCsv: {

@@ -1,6 +1,6 @@
 <template>
   <div class="FilterTags container is-flex is-flex-direction-row is-align-content-center is-justify-content-center">
-    <div
+    <!-- <div
       v-for="(tag, idx) in tags"
       :key="`${tag.field}-${tag.value}`"
       class="is-flex">
@@ -12,7 +12,8 @@
         aria-close-label="Close tag"
         @close="removeTag(tag)">
         <span class="mr-2">
-          {{ getFieldLabel(tag.field) }} : "{{ tag.value }}"
+          {{ getFieldLabel(tag.field) }} :
+          "{{ tag.value }}"
         </span>
       </b-tag>
       <span
@@ -20,11 +21,49 @@
         class="px-2 py-1">
         +
       </span>
-    </div>
+    </div> -->
+    <b-field
+      grouped
+      group-multiline>
+      <div
+        v-for="tag in tags"
+        :key="`${tag.field}-${tag.value}`"
+        class="control">
+        <b-taglist
+          attached
+          closable
+          aria-close-label="Close tag">
+          <b-tag>
+            {{ getFieldLabel(tag.field) }}
+          </b-tag>
+          <b-tag
+            type="is-dark">
+            <span class="px-2">
+              {{ tag.value }}
+            </span>
+            <b-tooltip
+              :label="t(`filters.removeFilter`, locale)"
+              type="is-dark"
+              position="is-top">
+              <b-icon
+                size="is-small"
+                icon="close"
+                @click.native="removeTag(tag)"/>
+            </b-tooltip>
+          </b-tag>
+        </b-taglist>
+        <!-- <span
+          v-if="tags.length > 1 && idx !== tags.length - 1"
+          class="px-2 py-1">
+          +
+        </span> -->
+      </div>
+    </b-field>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'FilterTags',
@@ -41,6 +80,11 @@ export default {
       default: null,
       type: String
     }
+  },
+  computed: {
+    ...mapGetters({
+      t: 'git-translations/getTranslation'
+    })
   },
   methods: {
     getFieldLabel (field) {
