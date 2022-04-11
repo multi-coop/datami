@@ -43,14 +43,14 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [x] Component to update user's token (if user has a specific one for direct commits) ;
   - [x] Component to switch between french and english ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
-- [ ] `PUT` functions to update file stored on gitlab/github ;
 - [ ] Other main components :
   - [ ] On each preview (for every file type), switch between 'preview' and 'edition' views ;
-    - [ ] for `csv` files (`.csv` and `.tsv` types)
+    - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
     - [ ] for `json` files (`.json` and `.geojson` types)
   - [ ]  Add a `Save` button + dialog + actions :
-    - [x] after edition on client's side, acting as a commit to the file's git repo on a separate branch
+    - [x] `POST` create a separate branch on the file's repo ;
+    - [x] `PUT` after edition on client's side, acting as a commit to the file's git repo on a separate branch ;
     - [ ] create a merge request (commit and request by default done the "ghost user") ;
 - [x] Deploy on Netlify for test purposes => [test deploy here](https://multi-gitribute-test.netlify.app/)
 - [ ] A good documentation for each web component (at least in this readme for now)
@@ -293,8 +293,11 @@ options:
   - description : JSON object containing the options allowing your csv to be parsed correctly
   - required: false
   - default: {
-      separator: ";", 
-      abstractHeaders: "false"
+      separator: ";",
+      tagseparator: "-",
+      pagination: {
+        itemsPerPage: 5
+      }
     }
   - fields: 
     - separator: 
