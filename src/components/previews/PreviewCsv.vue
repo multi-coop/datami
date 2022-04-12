@@ -25,32 +25,42 @@
         </p>
       </div>
     </div>
-    <PreviewHelpers
-      v-if="!onlyPreview"
-      :file-id="fileId"
-      :file-family="'table'"
-      :locale="locale"/>
 
-    <!-- WORK IN PROGRESS -->
-    <!-- PREVIEWS -->
-    <div v-if="data">
-      <!-- ORIGINAL DATA -->
-      <GitributeTable
+    <!-- LOADERS -->
+    <div v-if="fileIsLoading">
+      <LoaderEditNavbar v-if="!onlyPreview"/>
+      <LoaderCSV/>
+    </div>
+
+    <div v-if="!fileIsLoading">
+      <!-- HELPERS -->
+      <PreviewHelpers
+        v-if="!onlyPreview"
         :file-id="fileId"
-        :file-options="fileOptions"
-        :view="currentViewMode"
-        :data="data"
-        :columns="dataColumns"
-        :data-edited="edited"
-        :columns-edited="editedColumns"
-        :changes-data="changesData"
-        :changes-columns="changesColumns"
-        :locale="locale"
-        :debug="debug"
-        @updateEdited="updateEdited"
-        @deleteRows="deleteRowsEvent"
-        @addRow="addRowEvent"
-        @sortRows="sortEdited"/>
+        :file-family="'table'"
+        :locale="locale"/>
+
+      <!-- WORK IN PROGRESS -->
+      <!-- PREVIEWS -->
+      <div v-if="data">
+        <!-- ORIGINAL DATA -->
+        <GitributeTable
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :view="currentViewMode"
+          :data="data"
+          :columns="dataColumns"
+          :data-edited="edited"
+          :columns-edited="editedColumns"
+          :changes-data="changesData"
+          :changes-columns="changesColumns"
+          :locale="locale"
+          :debug="debug"
+          @updateEdited="updateEdited"
+          @deleteRows="deleteRowsEvent"
+          @addRow="addRowEvent"
+          @sortRows="sortEdited"/>
+      </div>
     </div>
   </div>
 </template>
@@ -60,12 +70,17 @@ import { mapGetters, mapActions } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 import { mixinDiff, mixinCsv } from '@/utils/mixins.js'
 
+import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+import LoaderCSV from '@/components/loaders/LoaderCSV'
+
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 import GitributeTable from '@/components/previews/GitributeTable'
 
 export default {
   name: 'PreviewCsv',
   components: {
+    LoaderEditNavbar,
+    LoaderCSV,
     PreviewHelpers,
     GitributeTable
   },
@@ -78,6 +93,14 @@ export default {
     fileOptions: {
       default: undefined,
       type: Object
+    },
+    fileIsLoading: {
+      default: true,
+      type: Boolean
+    },
+    fileIsSaving: {
+      default: true,
+      type: Boolean
     },
     fileRaw: {
       default: '',
@@ -130,11 +153,11 @@ export default {
     dataColumnsDiff () {
       const diff = this.dataColumns
       return diff
-    },
-    fileIsSaving () {
-      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
-      return resp
     }
+    // fileIsSaving () {
+    //   const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
+    //   return resp
+    // }
   },
   watch: {
     fileRaw (next) {

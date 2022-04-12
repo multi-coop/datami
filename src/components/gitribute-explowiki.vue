@@ -83,9 +83,9 @@
     </div>
 
     <!-- LOADERS -->
-    <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/>
+    <!-- <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/> -->
     <!-- <LoaderCSV/> -->
-    <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
+    <!-- <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/> -->
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
@@ -99,20 +99,20 @@
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
 
     <!-- PREVIEWS CARDS -->
+    <!-- TO DO  -->
+
     <!-- PREVIEWS CSV -->
-    <div>
-      <div
-        v-if="fileTypeFamily === 'table'"
-        class="container">
-        <PreviewCsv
-          v-show="!fileIsReloading"
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-options="fileOptions"
-          :file-raw="fileRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
+    <div
+      v-if="fileTypeFamily === 'table'"
+      class="container">
+      <PreviewCsv
+        :only-preview="onlypreview"
+        :file-id="fileId"
+        :file-options="fileOptions"
+        :file-is-loading="fileIsReloading"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
     </div>
 
     <!-- CREDITS -->
@@ -138,8 +138,8 @@ import DialogFileInfos from '@/components/previews/DialogFileInfos'
 
 import PreviewCsv from '@/components/previews/PreviewCsv'
 
-import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderCSV from '@/components/loaders/LoaderCSV'
+// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+// import LoaderCSV from '@/components/loaders/LoaderCSV'
 
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
@@ -152,8 +152,8 @@ export default {
     EditNavbarSkeleton,
     DialogFileInfos,
     PreviewCsv,
-    LoaderEditNavbar,
-    LoaderCSV,
+    // LoaderEditNavbar,
+    // LoaderCSV,
     GitributeCredits
   },
   mixins: [mixinGit],
@@ -186,6 +186,7 @@ export default {
   data () {
     return {
       onlypreview: true,
+      // file infos
       fileId: undefined,
       fileType: undefined,
       fileInfos: undefined,

@@ -83,11 +83,10 @@
     </div>
 
     <!-- LOADERS -->
-    <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/>
-    <!-- <LoaderCSV/> -->
-    <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/>
-    <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/>
-    <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/>
+    <!-- <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/> -->
+    <!-- <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/> -->
+    <!-- <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/> -->
+    <!-- <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/> -->
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
@@ -108,48 +107,53 @@
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
 
     <!-- PREVIEWS CSV -->
-    <div v-show="!fileIsSaving">
-      <div
-        v-if="fileTypeFamily === 'table'"
-        class="container">
-        <PreviewCsv
-          v-show="!fileIsReloading"
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-options="fileOptions"
-          :file-raw="fileRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
-
-      <!-- PREVIEWS MD -->
-      <div
-        v-if="fileTypeFamily === 'text'"
-        class="container">
-        <PreviewMd
-          v-show="!fileIsReloading"
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-options="fileOptions"
-          :file-raw="fileRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
-
-      <!-- PREVIEWS JSON -->
-      <div
-        v-if="fileTypeFamily === 'json'"
-        class="container">
-        <PreviewJson
-          v-show="!fileIsReloading"
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-options="fileOptions"
-          :file-raw="fileRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
+    <!-- <div v-show="!fileIsSaving"> -->
+    <div
+      v-if="fileTypeFamily === 'table'"
+      class="container">
+      <PreviewCsv
+        :only-preview="onlypreview"
+        :file-id="fileId"
+        :file-options="fileOptions"
+        :file-is-loading="fileIsReloading"
+        :file-is-saving="fileIsSaving"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
     </div>
+
+    <!-- PREVIEWS MD -->
+    <div
+      v-if="fileTypeFamily === 'text'"
+      class="container">
+      <!-- v-show="!fileIsReloading" -->
+      <PreviewMd
+        :only-preview="onlypreview"
+        :file-id="fileId"
+        :file-options="fileOptions"
+        :file-is-loading="fileIsReloading"
+        :file-is-saving="fileIsSaving"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
+    </div>
+
+    <!-- PREVIEWS JSON -->
+    <div
+      v-if="fileTypeFamily === 'json'"
+      class="container">
+      <!-- v-show="!fileIsReloading" -->
+      <PreviewJson
+        :only-preview="onlypreview"
+        :file-id="fileId"
+        :file-options="fileOptions"
+        :file-is-loading="fileIsReloading"
+        :file-is-saving="fileIsSaving"
+        :file-raw="fileRaw"
+        :locale="locale"
+        :debug="debug"/>
+    </div>
+    <!-- </div> -->
 
     <!-- CREDITS -->
     <GitributeCredits
@@ -177,9 +181,9 @@ import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
 
-import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderCSV from '@/components/loaders/LoaderCSV'
-import LoaderMD from '@/components/loaders/LoaderMD'
+// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+// import LoaderCSV from '@/components/loaders/LoaderCSV'
+// import LoaderMD from '@/components/loaders/LoaderMD'
 
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
@@ -195,9 +199,9 @@ export default {
     PreviewCsv,
     PreviewMd,
     PreviewJson,
-    LoaderEditNavbar,
-    LoaderCSV,
-    LoaderMD,
+    // LoaderEditNavbar,
+    // LoaderCSV,
+    // LoaderMD,
     GitributeCredits
   },
   mixins: [mixinGit],
@@ -233,9 +237,9 @@ export default {
   },
   data () {
     return {
+      // file infos
       fileId: undefined,
       fileType: undefined,
-      // gitObj: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
       fileOptions: undefined,

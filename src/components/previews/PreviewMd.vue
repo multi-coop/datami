@@ -17,113 +17,104 @@
       </div>
     </div>
 
-    <!-- HELPERS -->
-    <PreviewHelpers
-      v-if="!onlyPreview"
-      :file-id="fileId"
-      :file-family="'text'"
-      :locale="locale"/>
+    <!-- LOADERS -->
+    <div v-if="fileIsLoading">
+      <LoaderEditNavbar v-if="!onlyPreview"/>
+      <LoaderMD/>
+    </div>
 
-    <!-- VIEWS -->
-    <div
-      v-if="edited"
-      class="columns is-mobile">
-      <!-- EDIT VIEW -->
+    <div v-if="!fileIsLoading">
+      <!-- HELPERS -->
+      <PreviewHelpers
+        v-if="!onlyPreview"
+        :file-id="fileId"
+        :file-family="'text'"
+        :locale="locale"/>
+
+      <!-- VIEWS -->
       <div
-        v-show="currentViewMode === 'edit'"
-        :class="`column is-half pr-6`">
-        <p class="is-italic">
-          {{ t('preview.yamlPart', locale) }}
-        </p>
-        <b-field>
-          <b-input
-            v-model="dataEdited"
-            custom-class="edit-md mb-4"
-            type="textarea"
-            :rows="numberLinesData"/>
-        </b-field>
-        <p class="is-italic">
-          {{ t('preview.textPart', locale) }}
-        </p>
-        <b-field>
-          <b-input
-            v-model="edited"
-            custom-class="edit-md"
-            type="textarea"
-            :rows="numberLines"/>
-        </b-field>
-      </div>
-
-      <!-- DIFF VIEW -->
-      <!-- <div
-        v-show="currentViewMode === 'diff'"
-        :class="`column is-full`">
+        v-if="edited"
+        class="columns is-mobile">
+        <!-- EDIT VIEW -->
         <div
-          v-if="content"
-          v-html="getDiffHtmlUnified"/>
-      </div> -->
-      <div
-        v-show="currentViewMode === 'diff'"
-        :class="`column is-half pr-6`">
-        <!-- <ShowDown
-          v-if="data"
-          class="mb-3"
-          :markdown="formatAsYaml(getDiffHtmlCharsData)"
-          flavor="github"/> -->
-        <p class="is-italic">
-          {{ t('preview.yamlPart', locale) }}
-        </p>
-        <div
-          class="diff-data"
-          v-html="getDiffHtmlCharsData"/>
-        <p class="is-italic">
-          {{ t('preview.textPart', locale) }}
-        </p>
-        <ShowDown
-          v-if="content"
-          :markdown="getDiffHtmlChars"
-          flavor="github"/>
-      </div>
+          v-show="currentViewMode === 'edit'"
+          :class="`column is-half pr-6`">
+          <p class="is-italic">
+            {{ t('preview.yamlPart', locale) }}
+          </p>
+          <b-field>
+            <b-input
+              v-model="dataEdited"
+              custom-class="edit-md mb-4"
+              type="textarea"
+              :rows="numberLinesData"/>
+          </b-field>
+          <p class="is-italic">
+            {{ t('preview.textPart', locale) }}
+          </p>
+          <b-field>
+            <b-input
+              v-model="edited"
+              custom-class="edit-md"
+              type="textarea"
+              :rows="numberLines"/>
+          </b-field>
+        </div>
 
-      <!-- DIVIDER -->
-      <div
-        v-show="currentViewMode !== 'preview'"
-        class="divider is-vertical mx-0">
-        <b-icon
-          v-if="currentViewMode === 'diff'"
-          :icon="getIcon(currentViewMode)"
-          size="is-small"/>
-        <b-icon
-          v-if="currentViewMode === 'edit'"
-          :icon="getIcon(currentViewMode)"
-          size="is-small"/>
-      </div>
-
-      <!-- PREVIEW -->
-      <div
-        :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
-        <!-- <ShowDown
-          v-if="data"
-          class="mb-3"
-          :markdown="currentViewMode === 'diff' ? dataAsMarkdown : currentViewMode === 'edit' ? formatAsYaml(dataEdited) : ''"
-          flavor="github"/> -->
-        <p
-          v-if="currentViewMode !== 'preview'"
-          class="is-italic">
-          {{ t('preview.yamlPart', locale) }}
-        </p>
+        <!-- DIFF VIEW -->
         <div
-          v-if="currentViewMode !== 'preview'"
-          class="diff-data"
-          v-html="currentViewMode === 'diff' ? getDataString(data) : dataEdited"/>
-        <p
-          v-if="currentViewMode !== 'preview'"
-          class="is-italic">
-          {{ t('preview.textPart', locale) }}
-        </p>
-        <ShowDown
-          :markdown="currentViewMode === 'diff' ? content : edited"
-          flavor="github"/>
+          v-show="currentViewMode === 'diff'"
+          :class="`column is-half pr-6`">
+          <p class="is-italic">
+            {{ t('preview.yamlPart', locale) }}
+          </p>
+          <div
+            class="diff-data"
+            v-html="getDiffHtmlCharsData"/>
+          <p class="is-italic">
+            {{ t('preview.textPart', locale) }}
+          </p>
+          <ShowDown
+            v-if="content"
+            :markdown="getDiffHtmlChars"
+            flavor="github"/>
+        </div>
+
+        <!-- DIVIDER -->
+        <div
+          v-show="currentViewMode !== 'preview'"
+          class="divider is-vertical mx-0">
+          <b-icon
+            v-if="currentViewMode === 'diff'"
+            :icon="getIcon(currentViewMode)"
+            size="is-small"/>
+          <b-icon
+            v-if="currentViewMode === 'edit'"
+            :icon="getIcon(currentViewMode)"
+            size="is-small"/>
+        </div>
+
+        <!-- PREVIEW -->
+        <div
+          :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
+          <p
+            v-if="currentViewMode !== 'preview'"
+            class="is-italic">
+            {{ t('preview.yamlPart', locale) }}
+          </p>
+          <div
+            v-if="currentViewMode !== 'preview'"
+            class="diff-data"
+            v-html="currentViewMode === 'diff' ? getDataString(data) : dataEdited"/>
+          <p
+            v-if="currentViewMode !== 'preview'"
+            class="is-italic">
+            {{ t('preview.textPart', locale) }}
+          </p>
+          <ShowDown
+            :markdown="currentViewMode === 'diff' ? content : edited"
+            flavor="github"/>
+        </div>
       </div>
     </div>
   </div>
@@ -132,6 +123,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { mixinIcons, mixinDiff, mixinMd } from '@/utils/mixins.js'
+
+import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+import LoaderMD from '@/components/loaders/LoaderMD'
 
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 import ShowDown from '@/components/previews/ShowDown'
@@ -145,6 +139,8 @@ import 'diff2html/bundles/css/diff2html.min.css'
 export default {
   name: 'PreviewMd',
   components: {
+    LoaderEditNavbar,
+    LoaderMD,
     PreviewHelpers,
     ShowDown
   },
@@ -161,6 +157,14 @@ export default {
     fileOptions: {
       default: undefined,
       type: Object
+    },
+    fileIsLoading: {
+      default: true,
+      type: Boolean
+    },
+    fileIsSaving: {
+      default: true,
+      type: Boolean
     },
     fileRaw: {
       default: '',
@@ -252,11 +256,11 @@ export default {
     getDiffHtmlCharsData () {
       const diffText = this.diffHtmlChars(this.getCharDiffData)
       return diffText
-    },
-    fileIsSaving () {
-      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
-      return resp
     }
+    // fileIsSaving () {
+    //   const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
+    //   return resp
+    // }
   },
   watch: {
     fileRaw (next) {
