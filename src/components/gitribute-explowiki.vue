@@ -82,11 +82,6 @@
         :locale="locale"/>
     </div>
 
-    <!-- LOADERS -->
-    <!-- <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/> -->
-    <!-- <LoaderCSV/> -->
-    <!-- <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/> -->
-
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
       v-if="!fileIsReloading"
@@ -138,9 +133,6 @@ import DialogFileInfos from '@/components/previews/DialogFileInfos'
 
 import PreviewCsv from '@/components/previews/PreviewCsv'
 
-// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-// import LoaderCSV from '@/components/loaders/LoaderCSV'
-
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
 export default {
@@ -152,8 +144,6 @@ export default {
     EditNavbarSkeleton,
     DialogFileInfos,
     PreviewCsv,
-    // LoaderEditNavbar,
-    // LoaderCSV,
     GitributeCredits
   },
   mixins: [mixinGit],
