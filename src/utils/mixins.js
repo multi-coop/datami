@@ -4,7 +4,7 @@ import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
 import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
 import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
-import { nodeTypes, objToNodes, nodeToObj } from '@/utils/jsonUtils.js'
+import { nodeTypes, objToNodes, setEditInNode, nodeToObj } from '@/utils/jsonUtils.js'
 import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
 
 // see : https://github.com/kpdecker/jsdiff
@@ -101,6 +101,7 @@ export const mixinMd = {
 export const mixinJson = {
   methods: {
     objToNodes,
+    setEditInNode,
     nodeToObj
   }
 }

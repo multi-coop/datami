@@ -159,6 +159,13 @@ export const objToNodes = (obj, label) => {
   return node
 }
 
+// TO DO
+export const setEditInNode = (node, modif) => {
+  console.log('\nU > jsonUtils > objToNodes > node : ', node)
+  console.log('U > jsonUtils > objToNodes > modif : ', modif)
+  return node
+}
+
 export const nodeToObj = (node, isRoot = false) => {
   // console.log('\nU > jsonUtils > objToNodes > node : ', node)
   const nodeType = node.nodeType

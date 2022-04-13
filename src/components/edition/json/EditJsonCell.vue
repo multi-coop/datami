@@ -33,7 +33,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'EditJsonCell',
@@ -43,6 +43,10 @@ export default {
       type: String
     },
     nodeId: {
+      default: null,
+      type: String
+    },
+    nodeType: {
       default: null,
       type: String
     },
@@ -74,7 +78,9 @@ export default {
   data () {
     return {
       input: undefined,
-      edit: true
+      edit: true,
+      isNum: false,
+      isBool: false
     }
   },
   computed: {
@@ -92,6 +98,9 @@ export default {
     this.edit = !this.isLabel
   },
   methods: {
+    ...mapActions({
+
+    }),
     emitChange (event) {
       // console.log('C > EditJsonCell > emitChange > event : ', event)
       this.input = event
@@ -100,8 +109,8 @@ export default {
         nodeId: this.nodeId,
         val: this.input
       }
-      console.log('C > EditJsonCell > emitChange > payload : ', payload)
-      this.$emit('updateJsonCellValue', payload)
+      // console.log('C > EditJsonCell > emitChange > payload : ', payload)
+      this.$emit('updateJson', payload)
     }
   }
 }

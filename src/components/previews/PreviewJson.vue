@@ -78,7 +78,8 @@
             :nodes="edited.nodes"
             :depth="0"
             :locale="locale"
-            :default-depth="defaultDepth"/>
+            :default-depth="defaultDepth"
+            @updateJson="UpdateEditedJson"/>
         </div>
 
         <!-- DIFF VIEW -->
@@ -276,6 +277,10 @@ export default {
         newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })
+    },
+    UpdateEditedJson (event) {
+      console.log('C > PreviewJson > UpdateEditedJson > event : ', event)
+      this.edited = this.setEditInNode(this.edited, event)
     }
   }
 }

@@ -32,7 +32,8 @@
               :icon="'code-braces'"
               :has-value="hasValue"
               :show-children="showChildren"
-              :locale="locale"/>
+              :locale="locale"
+              @updateJson="SendActionToParent"/>
           </span>
           <span
             v-else
@@ -77,10 +78,12 @@
             <EditJsonCell
               :file-id="fileId"
               :node-id="nodeId"
+              :node-type="nodeType"
               :input-data="value"
               :is-label="false"
               :icon="getNodeTypeIcon"
-              :locale="locale"/>
+              :locale="locale"
+              @updateJson="SendActionToParent"/>
           </span>
           <span v-if="view === 'diff'">
             <span :class="`is-size-7 ${getValueClass}`">
@@ -111,7 +114,8 @@
         :nodes="node.nodes"
         :depth="depth + 1"
         :locale="locale"
-        :default-depth="defaultDepth"/>
+        :default-depth="defaultDepth"
+        @updateJson="SendActionToParent"/>
     </div>
   </div>
 </template>
@@ -199,6 +203,9 @@ export default {
   methods: {
     toggleChildren () {
       if (!this.hasValue) this.showChildren = !this.showChildren
+    },
+    SendActionToParent (event) {
+      this.$emit('updateJson', event)
     }
   }
 }
