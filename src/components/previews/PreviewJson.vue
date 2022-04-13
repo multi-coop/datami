@@ -2,13 +2,29 @@
   <div class="PreviewJson content">
     <!-- DEBUG -->
     <div
-      v-if="debug"
+      v-if="false"
       class="columns is-multiline">
-      <div class="column is-full">
+      <div class="column is-4">
         <p>
           data:
           <code>
             <pre>{{ data }}</pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-4">
+        <p>
+          edited:
+          <code>
+            <pre>{{ edited }}</pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-4">
+        <p>
+          (target) testJsonTree:
+          <code>
+            <pre>{{ testJsonTree }}</pre>
           </code>
         </p>
       </div>
@@ -36,7 +52,14 @@
           v-show="currentViewMode === 'edit'"
           :class="`column is-half pr-6`">
           🚧 work in progress - edition
-          <code><pre>{{ data }}</pre></code>
+          <!-- <code><pre>{{ data }}</pre></code> -->
+          <JsonTree
+            :view="currentViewMode"
+            :label="edited.label"
+            :node-type="edited.nodeType"
+            :nodes="edited.nodes"
+            :depth="0"
+            :default-depth="defaultDepth"/>
         </div>
 
         <!-- DIFF VIEW -->
@@ -44,7 +67,14 @@
           v-show="currentViewMode === 'diff'"
           :class="`column is-half pr-6`">
           🚧 work in progress - diff
-          <code><pre>{{ data }}</pre></code>
+          <!-- <code><pre>{{ data }}</pre></code> -->
+          <JsonTree
+            :view="currentViewMode"
+            :label="edited.label"
+            :node-type="edited.nodeType"
+            :nodes="edited.nodes"
+            :depth="0"
+            :default-depth="defaultDepth"/>
         </div>
 
         <!-- DIVIDER -->
@@ -65,7 +95,14 @@
         <div
           :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
           🚧 work in progress - preview edited
-          <code><pre>{{ data }}</pre></code>
+          <!-- <code><pre>{{ data }}</pre></code> -->
+          <JsonTree
+            :view="currentViewMode"
+            :label="edited.label"
+            :node-type="edited.nodeType"
+            :nodes="edited.nodes"
+            :depth="0"
+            :default-depth="defaultDepth"/>
         </div>
       </div>
     </div>
@@ -81,12 +118,15 @@ import LoaderMD from '@/components/loaders/LoaderMD'
 
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 
+import JsonTree from '@/components/previews/JsonTree'
+
 export default {
   name: 'PreviewJson',
   components: {
     LoaderEditNavbar,
     LoaderMD,
-    PreviewHelpers
+    PreviewHelpers,
+    JsonTree
   },
   mixins: [mixinIcons, mixinDiff, mixinJson],
   props: {
@@ -128,7 +168,64 @@ export default {
       contentIsSet: false,
       beginEdit: false,
       data: undefined,
-      edited: null
+      edited: null,
+      defaultDepth: 3,
+      testJsonTree: {
+        label: 'root',
+        nodeType: 'arr',
+        nodes: [
+          {
+            label: 'item1',
+            nodeType: 'arr',
+            nodes: [
+              {
+                label: 'item1.1',
+                nodeType: 'num',
+                value: 110
+              },
+              {
+                label: 'item1.2',
+                nodeType: 'obj',
+                nodes: [
+                  {
+                    label: 'item1.2.1',
+                    nodeType: 'str',
+                    value: 'a str test'
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            label: 'item2',
+            nodeType: 'str',
+            value: 'another str test'
+          }
+        ]
+      },
+      testJson: {
+        '1-obj': {
+          '1.1-obj': {
+            '1.1.1-str': 'test',
+            '1.1.2-num': 10,
+            '1.1.3-bool': true,
+            '1.1.4-arr': [1, 2, 3]
+          },
+          '1.2-arr': [
+            {
+              '1.2.1-obj': {
+                'third-str': 'test',
+                'third-num': 10,
+                'third-bool': true
+              }
+            },
+            'str in 1.2'
+          ],
+          '1.3-str': 'test',
+          '1.4-num': 10,
+          '1.5-bool': true
+        }
+      }
     }
   },
   computed: {
@@ -149,14 +246,15 @@ export default {
   watch: {
     fileRaw (next) {
       if (next) {
-        this.data = this.fileRaw
+        this.data = JSON.parse(this.fileRaw)
+        // this.data = this.testJson
         if (!this.contentIsSet) { this.contentIsSet = true }
       }
     },
     contentIsSet (next) {
-      // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
       if (next) {
-        this.edited = this.data
+        console.log('C > PreviewMd > watch > contentIsSet > next :', next)
+        this.edited = this.objToNodes(this.data, 'root')
       }
     },
     edited (next, prev) {
