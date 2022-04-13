@@ -223,6 +223,15 @@ export default {
   watch: {
     fileRaw (next) {
       if (next) {
+        // update default depth from file options
+        let defaultDepth = this.defaultDepth
+        const depthFromOptions = this.fileOptions.defaultDepth
+        if (depthFromOptions) {
+          if (depthFromOptions > 1) { defaultDepth = depthFromOptions }
+          if (depthFromOptions === 'all') { defaultDepth = undefined }
+        }
+        this.defaultDepth = defaultDepth
+
         // const dataParsed = JSON.parse(this.fileRaw)
         // this.data = JSON.parse(this.fileRaw)
         // this.data = this.testJson

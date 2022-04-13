@@ -281,7 +281,15 @@ options:
 
 ```yaml
 options:
-  - (no options for now)
+  - description : JSON object containing the options allowing your json to be parsed correctly
+  - required: false
+  - default: {
+      defaultDepth: 3,
+    }
+  - fields: 
+    - defaultDepth: 
+      description: default visible depth of the JSON preview
+      type: number | "all"
 ```
 
 ### Parameters for `csv` and `tsv` files

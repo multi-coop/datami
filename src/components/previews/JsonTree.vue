@@ -109,7 +109,9 @@
         :parent-type="nodeType"
         :node-type="node.nodeType"
         :nodes="node.nodes"
-        :depth="depth + 1"/>
+        :depth="depth + 1"
+        :locale="locale"
+        :default-depth="defaultDepth"/>
     </div>
   </div>
 </template>
