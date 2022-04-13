@@ -89,9 +89,9 @@ export default {
     })
   },
   watch: {
-    inputData (next) {
-      this.input = this.inputData
-    }
+    // inputData (next) {
+    //   this.input = this.inputData
+    // }
   },
   beforeMount () {
     this.input = this.inputData
@@ -107,6 +107,7 @@ export default {
       const payload = {
         fileId: this.fileId,
         nodeId: this.nodeId,
+        isLabel: this.isLabel,
         val: this.input
       }
       // console.log('C > EditJsonCell > emitChange > payload : ', payload)

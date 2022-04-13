@@ -60,11 +60,11 @@
       <!-- VIEWS -->
       <div
         v-if="edited"
-        class="columns is-mobile">
+        class="columns is-centered">
         <!-- EDIT VIEW -->
         <div
           v-show="currentViewMode === 'edit'"
-          :class="`column is-6 pr-6`">
+          :class="`column is-8`">
           <div class="my-3 has-text-centered">
             🚧 work in progress - edition
           </div>
@@ -80,6 +80,16 @@
             :locale="locale"
             :default-depth="defaultDepth"
             @updateJson="UpdateEditedJson"/>
+        </div>
+        <div
+          v-if="debug && currentViewMode === 'edit'"
+          class="column is-4">
+          <p>
+            edited:
+            <code>
+              <pre>{{ edited }}</pre>
+            </code>
+          </p>
         </div>
 
         <!-- DIFF VIEW -->
@@ -104,21 +114,22 @@
 
         <!-- DIVIDER -->
         <div
-          v-show="currentViewMode !== 'preview'"
+          v-show="currentViewMode === 'diff'"
           class="divider is-vertical mx-0">
+          <!-- v-if="currentViewMode === 'diff'" -->
           <b-icon
-            v-if="currentViewMode === 'diff'"
             :icon="getIcon(currentViewMode)"
             size="is-small"/>
-          <b-icon
+          <!-- <b-icon
             v-if="currentViewMode === 'edit'"
             :icon="getIcon(currentViewMode)"
-            size="is-small"/>
+            size="is-small"/> -->
         </div>
 
         <!-- PREVIEW -->
         <div
-          :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
+          v-show="currentViewMode !== 'edit'"
+          :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : 'is-8'}`">
           <div class="my-3 has-text-centered">
             🚧 work in progress - preview edited
           </div>

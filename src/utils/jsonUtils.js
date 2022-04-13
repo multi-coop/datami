@@ -161,8 +161,21 @@ export const objToNodes = (obj, label) => {
 
 // TO DO
 export const setEditInNode = (node, modif) => {
-  console.log('\nU > jsonUtils > objToNodes > node : ', node)
-  console.log('U > jsonUtils > objToNodes > modif : ', modif)
+  // console.log('\nU > jsonUtils > objToNodes > node : ', node)
+  // console.log('U > jsonUtils > objToNodes > modif : ', modif)
+  const isTargetNode = node.id === modif.nodeId
+  const isTargetLabel = modif.isLabel
+  const hasNodes = !!node.nodes
+  // console.log('U > jsonUtils > objToNodes > isTargetNode : ', isTargetNode)
+  if (isTargetNode) {
+    if (!isTargetLabel) node.value = modif.val
+    if (isTargetLabel) node.label = modif.val
+  }
+  if (!isTargetNode && hasNodes) {
+    node.nodes = node.nodes.map(subnode => {
+      return setEditInNode(subnode, modif)
+    })
+  }
   return node
 }
 

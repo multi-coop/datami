@@ -43,18 +43,18 @@ export default {
   data () {
     return {
       settings: {
-        table: {
-          edit: ['edition'],
-          diff: ['edited'],
-          preview: ['edited']
-        },
         text: {
           edit: ['edition', 'edited'],
           diff: ['edited', 'original'],
           preview: ['edited']
         },
+        table: {
+          edit: ['edition'],
+          diff: ['edited'],
+          preview: ['edited']
+        },
         json: {
-          edit: ['edition', 'edited'],
+          edit: ['edition'],
           diff: ['edited', 'original'],
           preview: ['edited']
         }
