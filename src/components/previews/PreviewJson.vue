@@ -2,7 +2,7 @@
   <div class="PreviewJson content">
     <!-- DEBUG -->
     <div
-      v-if="false"
+      v-if="debug"
       class="columns is-multiline">
       <div class="column is-4">
         <p>
@@ -21,10 +21,10 @@
         </p>
       </div>
       <div class="column is-4">
-        <p>
-          (target) testJsonTree:
+        <p v-if="fileRaw">
+          (target) JSON.parse(fileRaw):
           <code>
-            <pre>{{ testJsonTree }}</pre>
+            <pre>{{ JSON.parse(fileRaw) }}</pre>
           </code>
         </p>
       </div>
@@ -50,8 +50,10 @@
         <!-- EDIT VIEW -->
         <div
           v-show="currentViewMode === 'edit'"
-          :class="`column is-half pr-6`">
-          🚧 work in progress - edition
+          :class="`column is-6 pr-6`">
+          <div class="my-3 has-text-centered">
+            🚧 work in progress - edition
+          </div>
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
             :view="currentViewMode"
@@ -59,6 +61,7 @@
             :node-type="edited.nodeType"
             :nodes="edited.nodes"
             :depth="0"
+            :locale="locale"
             :default-depth="defaultDepth"/>
         </div>
 
@@ -66,7 +69,9 @@
         <div
           v-show="currentViewMode === 'diff'"
           :class="`column is-half pr-6`">
-          🚧 work in progress - diff
+          <div class="my-3 has-text-centered">
+            🚧 work in progress - diff
+          </div>
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
             :view="currentViewMode"
@@ -74,6 +79,7 @@
             :node-type="edited.nodeType"
             :nodes="edited.nodes"
             :depth="0"
+            :locale="locale"
             :default-depth="defaultDepth"/>
         </div>
 
@@ -94,14 +100,17 @@
         <!-- PREVIEW -->
         <div
           :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
-          🚧 work in progress - preview edited
+          <div class="my-3 has-text-centered">
+            🚧 work in progress - preview edited
+          </div>
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
-            :view="currentViewMode"
+            :view="'preview'"
             :label="edited.label"
             :node-type="edited.nodeType"
             :nodes="edited.nodes"
             :depth="0"
+            :locale="locale"
             :default-depth="defaultDepth"/>
         </div>
       </div>
@@ -169,63 +178,63 @@ export default {
       beginEdit: false,
       data: undefined,
       edited: null,
-      defaultDepth: 3,
-      testJsonTree: {
-        label: 'root',
-        nodeType: 'arr',
-        nodes: [
-          {
-            label: 'item1',
-            nodeType: 'arr',
-            nodes: [
-              {
-                label: 'item1.1',
-                nodeType: 'num',
-                value: 110
-              },
-              {
-                label: 'item1.2',
-                nodeType: 'obj',
-                nodes: [
-                  {
-                    label: 'item1.2.1',
-                    nodeType: 'str',
-                    value: 'a str test'
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            label: 'item2',
-            nodeType: 'str',
-            value: 'another str test'
-          }
-        ]
-      },
-      testJson: {
-        '1-obj': {
-          '1.1-obj': {
-            '1.1.1-str': 'test',
-            '1.1.2-num': 10,
-            '1.1.3-bool': true,
-            '1.1.4-arr': [1, 2, 3]
-          },
-          '1.2-arr': [
-            {
-              '1.2.1-obj': {
-                'third-str': 'test',
-                'third-num': 10,
-                'third-bool': true
-              }
-            },
-            'str in 1.2'
-          ],
-          '1.3-str': 'test',
-          '1.4-num': 10,
-          '1.5-bool': true
-        }
-      }
+      defaultDepth: 3
+      // testJsonTree: {
+      //   label: 'root',
+      //   nodeType: 'arr',
+      //   nodes: [
+      //     {
+      //       label: 'item1',
+      //       nodeType: 'arr',
+      //       nodes: [
+      //         {
+      //           label: 'item1.1',
+      //           nodeType: 'num',
+      //           value: 110
+      //         },
+      //         {
+      //           label: 'item1.2',
+      //           nodeType: 'obj',
+      //           nodes: [
+      //             {
+      //               label: 'item1.2.1',
+      //               nodeType: 'str',
+      //               value: 'a str test'
+      //             }
+      //           ]
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       label: 'item2',
+      //       nodeType: 'str',
+      //       value: 'another str test'
+      //     }
+      //   ]
+      // },
+      // testJson: {
+      //   '1-obj': {
+      //     '1.1-obj': {
+      //       '1.1.1-str': 'test',
+      //       '1.1.2-num': 10,
+      //       '1.1.3-bool': true,
+      //       '1.1.4-arr': [1, 2, 3]
+      //     },
+      //     '1.2-arr': [
+      //       {
+      //         '1.2.1-obj': {
+      //           'third-str': 'test',
+      //           'third-num': 10,
+      //           'third-bool': true
+      //         }
+      //       },
+      //       'str in 1.2'
+      //     ],
+      //     '1.3-str': 'test',
+      //     '1.4-num': 10,
+      //     '1.5-bool': true
+      //   }
+      // }
     }
   },
   computed: {
@@ -246,7 +255,8 @@ export default {
   watch: {
     fileRaw (next) {
       if (next) {
-        this.data = JSON.parse(this.fileRaw)
+        // const dataParsed = JSON.parse(this.fileRaw)
+        // this.data = JSON.parse(this.fileRaw)
         // this.data = this.testJson
         if (!this.contentIsSet) { this.contentIsSet = true }
       }
@@ -254,7 +264,9 @@ export default {
     contentIsSet (next) {
       if (next) {
         console.log('C > PreviewMd > watch > contentIsSet > next :', next)
-        this.edited = this.objToNodes(this.data, 'root')
+        const dataParsed = JSON.parse(this.fileRaw)
+        this.data = this.objToNodes(dataParsed, 'root')
+        this.edited = this.objToNodes(dataParsed, 'root')
       }
     },
     edited (next, prev) {
@@ -280,7 +292,7 @@ export default {
     }),
     bufferizeEdited () {
       // const edited = this.objectToMd(this.edited, this.data)
-      const edited = `${this.dataEdited}\n${this.edited}`
+      const edited = this.edited
       const commitData = {
         gitObj: this.gitObj,
         // edited: this.edited,

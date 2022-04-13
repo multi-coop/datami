@@ -87,6 +87,15 @@ export default {
     deleteRow: 'Delete the row',
     deleteRows: 'Delete selected rows'
   },
+  editJson: {
+    editLabel: 'edit field name',
+    arr: 'list',
+    obj: 'object',
+    str: 'text',
+    num: 'number',
+    float: 'float',
+    bool: 'boolean'
+  },
   user: {
     userToken: 'Your access token',
     user: 'User',

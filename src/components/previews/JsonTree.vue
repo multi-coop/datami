@@ -1,57 +1,104 @@
 <template>
   <div class="json-tree">
-    <!-- NODE LABEL -->
+    <!-- NODE -->
     <div
-      :style="indent"
-      @click="toggleChildren">
-      <div class="">
-        <!-- CHEVRON TO OPEN/CLOSE NODE -->
-        <b-icon
-          v-if="!hasValue"
-          size="is-small"
-          class="mr-2"
-          :icon="showChildren ? 'chevron-down' : 'chevron-right'"/>
-        <b-icon
-          v-else
-          size="is-small"
-          class="mr-2"
-          icon="dot"/>
-        <!-- NODE LABEL -->
-        <span class="">
-          <code :class="showChildren ? '' : 'has-text-grey'">
-            {{ label }}
-          </code>
-        </span>
-        <!-- NODE TYPE ICON -->
-        <b-icon
-          class="ml-4"
-          size="is-small"
-          :icon="getNodeTypeIcon"/>
-        <!--  -->
-        <b-icon
-          v-if="!showChildren"
-          class="ml-4"
-          type="is-gray"
-          size="is-small"
-          icon="dots-horizontal"/>
-        <!-- VALUE IF ANY + EDITABLE -->
-        <span v-if="hasValue">
-          <span class="mx-5">
+      class="my-1"
+      :style="indent">
+      <!-- NODE LABEL IF ANY + EDITABLE -->
+      <div class="is-flex is-direction-row is-align-items-start">
+        <div
+          :class="`is-flex is-flex-direction-row is-align-items-${view === 'edit' ? 'center' : 'center'}`">
+          <!-- CHEVRON TO OPEN/CLOSE NODE -->
+          <span @click="toggleChildren">
+            <b-icon
+              v-if="!hasValue"
+              size="is-small"
+              class="mr-2"
+              :icon="showChildren ? 'chevron-down' : 'chevron-right'"/>
+            <b-icon
+              v-else
+              size="is-small"
+              class="mr-2"
+              icon="dot"/>
+          </span>
+
+          <!-- NODE LABEL + EDITABLE -->
+          <span v-if="view === 'edit' && depth !== 0 && parentType !== 'arr'">
+            <EditJsonCell
+              :is-label="true"
+              :input-data="label"
+              :icon="'code-braces'"
+              :locale="locale"/>
+          </span>
+          <span
+            v-else
+            @click="toggleChildren">
+            <code :class="showChildren ? '' : 'has-text-grey'">
+              {{ label }}
+            </code>
+          </span>
+
+          <!-- DOUBLE DOTS -->
+          <span class="mx-2">
             :
           </span>
-          <span :class="getValueClass">
-            {{ value }}
+
+          <!-- NODE TYPE ICON -->
+          <b-tooltip
+            v-if="view !== 'edit' || depth === 0"
+            :label="t(`editJson.${nodeType}`, locale)"
+            type="is-dark"
+            position="is-right">
+            <b-icon
+              class="mx-3"
+              size="is-small"
+              :icon="getNodeTypeIcon"
+              @click.native="toggleChildren"/>
+          </b-tooltip>
+
+          <!-- SHOW CHILDREN -->
+          <b-icon
+            v-if="!hasValue && !showChildren"
+            class=""
+            type="is-gray"
+            size="is-small"
+            icon="dots-horizontal"
+            @click.native="toggleChildren"/>
+        </div>
+
+        <!-- NODE VALUE IF ANY + EDITABLE -->
+        <div
+          v-if="hasValue">
+          <span v-if="view === 'edit'">
+            <EditJsonCell
+              :is-label="false"
+              :icon="getNodeTypeIcon"
+              :input-data="value"
+              :locale="locale"/>
           </span>
-        </span>
+          <span v-if="view === 'diff'">
+            <span :class="`is-size-7 ${getValueClass}`">
+              {{ value }} - diff
+            </span>
+          </span>
+          <span v-if="view === 'preview'">
+            <span :class="`is-size-7 ${getValueClass}`">
+              {{ value }}
+            </span>
+          </span>
+        </div>
       </div>
     </div>
+
     <!-- LOOP CHILDREN NODES -->
     <div v-if="showChildren">
       <json-tree
         v-for="node in nodes"
         :key="node.id"
+        :view="view"
         :label="node.label"
         :value="node.value"
+        :parent-type="nodeType"
         :node-type="node.nodeType"
         :nodes="node.nodes"
         :depth="depth + 1"/>
@@ -64,8 +111,13 @@
 import { mapGetters } from 'vuex'
 import { mixinJsonNode } from '@/utils/mixins.js'
 
+import EditJsonCell from '@/components/edition/json/EditJsonCell'
+
 export default {
   name: 'JsonTree',
+  components: {
+    EditJsonCell
+  },
   mixins: [mixinJsonNode],
   props: {
     view: {
@@ -80,6 +132,10 @@ export default {
       default: null,
       type: [String, Boolean, Number]
     },
+    parentType: {
+      default: null,
+      type: String
+    },
     nodeType: {
       default: null,
       type: String
@@ -91,6 +147,10 @@ export default {
     depth: {
       default: null,
       type: Number
+    },
+    locale: {
+      default: null,
+      type: String
     },
     defaultDepth: {
       default: undefined,

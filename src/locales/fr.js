@@ -87,6 +87,15 @@ export default {
     deleteRow: 'Supprimer la ligne',
     deleteRows: 'Supprimer les lignes'
   },
+  editJson: {
+    editLabel: 'éditer le nom du champ',
+    arr: 'liste',
+    obj: 'objet',
+    str: 'texte',
+    num: 'nombre entier',
+    float: 'nombre décimal',
+    bool: 'booléen'
+  },
   user: {
     userToken: "Votre jeton d'accès",
     user: 'Utilisateur',
