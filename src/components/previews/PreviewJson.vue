@@ -12,6 +12,18 @@
           </code>
         </p>
       </div>
+    </div>
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-4">
+        <p v-if="fileRaw">
+          (target) JSON.parse(fileRaw):
+          <code>
+            <pre>{{ JSON.parse(fileRaw) }}</pre>
+          </code>
+        </p>
+      </div>
       <div class="column is-4">
         <p>
           edited:
@@ -20,11 +32,13 @@
           </code>
         </p>
       </div>
-      <div class="column is-4">
-        <p v-if="fileRaw">
-          (target) JSON.parse(fileRaw):
+      <div
+        v-if="edited"
+        class="column is-4">
+        <p>
+          getObjectFromNodes:
           <code>
-            <pre>{{ JSON.parse(fileRaw) }}</pre>
+            <pre>{{ getObjectFromNodes }}</pre>
           </code>
         </p>
       </div>
@@ -178,63 +192,8 @@ export default {
       beginEdit: false,
       data: undefined,
       edited: null,
-      defaultDepth: 3
-      // testJsonTree: {
-      //   label: 'root',
-      //   nodeType: 'arr',
-      //   nodes: [
-      //     {
-      //       label: 'item1',
-      //       nodeType: 'arr',
-      //       nodes: [
-      //         {
-      //           label: 'item1.1',
-      //           nodeType: 'num',
-      //           value: 110
-      //         },
-      //         {
-      //           label: 'item1.2',
-      //           nodeType: 'obj',
-      //           nodes: [
-      //             {
-      //               label: 'item1.2.1',
-      //               nodeType: 'str',
-      //               value: 'a str test'
-      //             }
-      //           ]
-      //         }
-      //       ]
-      //     },
-      //     {
-      //       label: 'item2',
-      //       nodeType: 'str',
-      //       value: 'another str test'
-      //     }
-      //   ]
-      // },
-      // testJson: {
-      //   '1-obj': {
-      //     '1.1-obj': {
-      //       '1.1.1-str': 'test',
-      //       '1.1.2-num': 10,
-      //       '1.1.3-bool': true,
-      //       '1.1.4-arr': [1, 2, 3]
-      //     },
-      //     '1.2-arr': [
-      //       {
-      //         '1.2.1-obj': {
-      //           'third-str': 'test',
-      //           'third-num': 10,
-      //           'third-bool': true
-      //         }
-      //       },
-      //       'str in 1.2'
-      //     ],
-      //     '1.3-str': 'test',
-      //     '1.4-num': 10,
-      //     '1.5-bool': true
-      //   }
-      // }
+      defaultDepth: 3,
+      jsonSpaces: 2
     }
   },
   computed: {
@@ -250,6 +209,9 @@ export default {
     },
     currentViewMode () {
       return this.getViewMode(this.gitObj.uuid)
+    },
+    getObjectFromNodes () {
+      return this.nodeToObj(this.edited)
     }
   },
   watch: {
@@ -292,11 +254,10 @@ export default {
     }),
     bufferizeEdited () {
       // const edited = this.objectToMd(this.edited, this.data)
-      const edited = this.edited
+      const edited = this.getObjectFromNodes
       const commitData = {
         gitObj: this.gitObj,
-        // edited: this.edited,
-        edited: edited,
+        edited: JSON.stringify(edited, null, this.jsonSpaces),
         newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })

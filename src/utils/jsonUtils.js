@@ -153,32 +153,33 @@ export const objToNodes = (obj, label) => {
     }
     node.nodes = nodes
   }
-  // if (nodes.length > 1) {
-  //   node.nodes = nodes
-  // }
-  // node.nodes = nodes
   return node
 }
 
-export const nodeToObj = (node) => {
-  console.log('\nU > jsonUtils > objToNodes > node : ', node)
+export const nodeToObj = (node, isRoot = false) => {
+  // console.log('\nU > jsonUtils > objToNodes > node : ', node)
   const nodeType = node.nodeType
-  const label = node.label
-  console.log('U > jsonUtils > objToNodes > nodeType : ', nodeType)
+  // const label = node.label
+  // console.log('U > jsonUtils > objToNodes > nodeType : ', nodeType)
   let obj
   if (nodeType === 'arr') {
     obj = []
-    obj.nodes.forEach(item => {
-      console.log('U > jsonUtils > objToNodes > item : ', item)
-      obj.push(item)
+    node.nodes.forEach(subNode => {
+      // console.log('U > jsonUtils > objToNodes > subNode : ', subNode)
+      const newObj = nodeToObj(subNode)
+      obj.push(newObj)
     })
   }
   if (nodeType === 'obj') {
     obj = {}
-    obj[label] = {}
-    obj.nodes.forEach(item => {
-      console.log('U > jsonUtils > objToNodes > item : ', item)
+    node.nodes.forEach(subNode => {
+      // console.log('U > jsonUtils > objToNodes > subNode : ', subNode)
+      const newObj = nodeToObj(subNode)
+      obj[subNode.label] = newObj
     })
+  }
+  if (nodeType !== 'obj' && nodeType !== 'arr') {
+    obj = node.value
   }
   return obj
 }
