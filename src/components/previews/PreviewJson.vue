@@ -14,7 +14,7 @@
       </div>
     </div>
     <div
-      v-if="debug"
+      v-if="false"
       class="columns is-multiline">
       <div class="column is-4">
         <p v-if="fileRaw">
@@ -70,7 +70,9 @@
           </div>
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
+            :file-id="fileId"
             :view="currentViewMode"
+            :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
             :nodes="edited.nodes"
@@ -88,7 +90,9 @@
           </div>
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
+            :file-id="fileId"
             :view="currentViewMode"
+            :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
             :nodes="edited.nodes"
@@ -119,7 +123,9 @@
           </div>
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
+            :file-id="fileId"
             :view="'preview'"
+            :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
             :nodes="edited.nodes"

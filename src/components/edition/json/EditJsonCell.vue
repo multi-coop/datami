@@ -12,7 +12,9 @@
         @input="emitChange"/>
     </b-field>
     <span v-show="!edit">
-      <code>{{ input }}</code>
+      <code :class="!showChildren || hasValue ? 'has-text-grey' : ''">
+        {{ input }}
+      </code>
     </span>
     <b-tooltip
       v-if="isLabel"
@@ -20,7 +22,7 @@
       type="is-dark"
       position="is-right">
       <b-icon
-        class="ml-2"
+        class="ml-2 mr-4"
         size="is-small"
         type="is-gray"
         :icon="`pencil-${edit ? 'off-' : ''}outline`"
@@ -36,9 +38,13 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'EditJsonCell',
   props: {
-    isLabel: {
-      default: false,
-      type: Boolean
+    fileId: {
+      default: null,
+      type: String
+    },
+    nodeId: {
+      default: null,
+      type: String
     },
     inputData: {
       default: null,
@@ -47,6 +53,18 @@ export default {
     icon: {
       default: null,
       type: String
+    },
+    isLabel: {
+      default: false,
+      type: Boolean
+    },
+    showChildren: {
+      default: false,
+      type: Boolean
+    },
+    hasValue: {
+      default: false,
+      type: Boolean
     },
     locale: {
       default: null,
@@ -78,10 +96,12 @@ export default {
       // console.log('C > EditJsonCell > emitChange > event : ', event)
       this.input = event
       const payload = {
+        fileId: this.fileId,
+        nodeId: this.nodeId,
         val: this.input
       }
       console.log('C > EditJsonCell > emitChange > payload : ', payload)
-      // this.$emit('updateJsonCellValue', payload)
+      this.$emit('updateJsonCellValue', payload)
     }
   }
 }

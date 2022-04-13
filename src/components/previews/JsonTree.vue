@@ -25,28 +25,27 @@
           <!-- NODE LABEL + EDITABLE -->
           <span v-if="view === 'edit' && depth !== 0 && parentType !== 'arr'">
             <EditJsonCell
-              :is-label="true"
+              :file-id="fileId"
+              :node-id="nodeId"
               :input-data="label"
+              :is-label="true"
               :icon="'code-braces'"
+              :has-value="hasValue"
+              :show-children="showChildren"
               :locale="locale"/>
           </span>
           <span
             v-else
             @click="toggleChildren">
-            <code :class="showChildren ? '' : 'has-text-grey'">
+            <code :class="!showChildren || hasValue ? 'has-text-grey' : ''">
               {{ label }}
             </code>
-          </span>
-
-          <!-- DOUBLE DOTS -->
-          <span class="mx-2">
-            :
           </span>
 
           <!-- NODE TYPE ICON -->
           <b-tooltip
             v-if="view !== 'edit' || depth === 0"
-            :label="t(`editJson.${nodeType}`, locale)"
+            :label="`${t(`editJson.${nodeType}`, locale)}`"
             type="is-dark"
             position="is-right">
             <b-icon
@@ -55,6 +54,11 @@
               :icon="getNodeTypeIcon"
               @click.native="toggleChildren"/>
           </b-tooltip>
+
+          <!-- DOUBLE DOTS -->
+          <!-- <span class="mx-2">
+            :
+          </span> -->
 
           <!-- SHOW CHILDREN -->
           <b-icon
@@ -71,9 +75,11 @@
           v-if="hasValue">
           <span v-if="view === 'edit'">
             <EditJsonCell
+              :file-id="fileId"
+              :node-id="nodeId"
+              :input-data="value"
               :is-label="false"
               :icon="getNodeTypeIcon"
-              :input-data="value"
               :locale="locale"/>
           </span>
           <span v-if="view === 'diff'">
@@ -95,7 +101,9 @@
       <json-tree
         v-for="node in nodes"
         :key="node.id"
+        :file-id="fileId"
         :view="view"
+        :node-id="node.id"
         :label="node.label"
         :value="node.value"
         :parent-type="nodeType"
@@ -120,8 +128,16 @@ export default {
   },
   mixins: [mixinJsonNode],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     view: {
       default: 'preview',
+      type: String
+    },
+    nodeId: {
+      default: null,
       type: String
     },
     label: {

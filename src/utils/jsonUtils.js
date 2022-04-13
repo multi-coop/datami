@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 /*
 const testJsonTree = {
   label: 'root',
@@ -98,6 +100,7 @@ export const objToNodes = (obj, label) => {
   // console.log('\nU > jsonUtils > objToNodes > label : ', label)
   // console.log('U > jsonUtils > objToNodes > obj : ', obj)
   const node = {
+    id: uuidv4(),
     label: label,
     nodeType: undefined
   }
