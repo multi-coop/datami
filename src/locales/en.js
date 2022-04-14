@@ -88,7 +88,11 @@ export default {
     deleteRows: 'Delete selected rows'
   },
   editJson: {
-    editLabel: 'edit field name',
+    nodeType: 'Node type',
+    openNode: 'Open the node',
+    closeNode: 'close the node',
+    editLabel: 'Edit field name',
+    addNode: 'Add a node',
     arr: 'list',
     obj: 'object',
     str: 'text',

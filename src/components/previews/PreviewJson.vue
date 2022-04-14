@@ -47,7 +47,7 @@
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
       <LoaderEditNavbar v-if="!onlyPreview"/>
-      <LoaderMD/>
+      <LoaderJSON/>
     </div>
 
     <div v-if="!fileIsLoading">
@@ -68,7 +68,6 @@
           <div class="my-3 has-text-centered">
             🚧 work in progress - edition
           </div>
-          <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
             :file-id="fileId"
             :view="currentViewMode"
@@ -96,10 +95,9 @@
         <div
           v-show="currentViewMode === 'diff'"
           :class="`column is-half pr-6`">
-          <div class="my-3 has-text-centered">
+          <!-- <div class="my-3 has-text-centered">
             🚧 work in progress - diff
-          </div>
-          <!-- <code><pre>{{ data }}</pre></code> -->
+          </div> -->
           <JsonTree
             :file-id="fileId"
             :view="currentViewMode"
@@ -109,30 +107,26 @@
             :nodes="edited.nodes"
             :depth="0"
             :locale="locale"
-            :default-depth="defaultDepth"/>
+            :default-depth="defaultDepth"
+            :changes-nodes="changesNodes"/>
         </div>
 
         <!-- DIVIDER -->
         <div
           v-show="currentViewMode === 'diff'"
           class="divider is-vertical mx-0">
-          <!-- v-if="currentViewMode === 'diff'" -->
           <b-icon
             :icon="getIcon(currentViewMode)"
             size="is-small"/>
-          <!-- <b-icon
-            v-if="currentViewMode === 'edit'"
-            :icon="getIcon(currentViewMode)"
-            size="is-small"/> -->
         </div>
 
         <!-- PREVIEW -->
         <div
           v-show="currentViewMode !== 'edit'"
-          :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : 'is-8'}`">
-          <div class="my-3 has-text-centered">
+          :class="`column ${currentViewMode === 'diff' ? 'pl-6' : 'is-8'}`">
+          <!-- <div class="my-3 has-text-centered">
             🚧 work in progress - preview edited
-          </div>
+          </div> -->
           <!-- <code><pre>{{ data }}</pre></code> -->
           <JsonTree
             :file-id="fileId"
@@ -155,7 +149,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { mixinIcons, mixinDiff, mixinJson } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderMD from '@/components/loaders/LoaderMD'
+import LoaderJSON from '@/components/loaders/LoaderJSON'
 
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 
@@ -165,7 +159,7 @@ export default {
   name: 'PreviewJson',
   components: {
     LoaderEditNavbar,
-    LoaderMD,
+    LoaderJSON,
     PreviewHelpers,
     JsonTree
   },
@@ -211,7 +205,8 @@ export default {
       data: undefined,
       edited: null,
       defaultDepth: 3,
-      jsonSpaces: 2
+      jsonSpaces: 2,
+      changesNodes: []
     }
   },
   computed: {
@@ -289,8 +284,41 @@ export default {
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })
     },
+    setChanges (changeObj) {
+      console.log('C > PreviewJson > UpdateEditedJson > changeObj : ', changeObj)
+      const changeId = changeObj.nodeId
+      const changeIsLabel = changeObj.isLabel
+      const action = changeObj.action
+      const isDiff = changeObj.oldVal !== changeObj.val
+      console.log('C > PreviewJson > UpdateEditedJson > changeId : ', changeId)
+      let copyChanges = [...this.changesNodes]
+      // copyChanges = copyChanges.filter(ch => ch.field !== changeId)
+      console.log('C > PreviewJson > UpdateEditedJson > copyChanges : ', copyChanges)
+      if (action === 'diff') {
+        copyChanges = copyChanges.filter(ch => {
+          const sameNode = ch.nodeId === changeId
+          const sameIsLabel = ch.isLabel === changeIsLabel
+          const same = sameNode && sameIsLabel
+          return !same
+        })
+      }
+      if (action === 'deleted') {
+        copyChanges = copyChanges.filter(ch => {
+          const same = ch.nodeId === changeId
+          return !same
+        })
+      }
+
+      // set in copy
+      const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
+      if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
+      if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
+      console.log('C > PreviewMd > addRowEvent > copyChanges : ', copyChanges)
+      this.changesNodes = copyChanges
+    },
     UpdateEditedJson (event) {
       console.log('C > PreviewJson > UpdateEditedJson > event : ', event)
+      this.setChanges(event)
       this.edited = this.setEditInNode(this.edited, event)
     }
   }

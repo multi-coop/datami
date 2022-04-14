@@ -88,7 +88,11 @@ export default {
     deleteRows: 'Supprimer les lignes'
   },
   editJson: {
-    editLabel: 'éditer le nom du champ',
+    nodeType: 'Noeud de type',
+    openNode: 'Ouvrir le noeud',
+    closeNode: 'Refermer le noeud',
+    editLabel: 'Editer le nom du champ',
+    addNode: 'Ajouter un noeud',
     arr: 'liste',
     obj: 'objet',
     str: 'texte',

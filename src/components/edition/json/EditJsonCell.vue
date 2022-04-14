@@ -8,7 +8,6 @@
         :custom-class="`g-cell py-0 ${isLabel ? 'g-label' : ''}`"
         :value="input"
         size="is-small"
-        :icon="icon"
         @input="emitChange"/>
     </b-field>
     <span v-show="!edit">
@@ -62,6 +61,10 @@ export default {
       default: false,
       type: Boolean
     },
+    isNodeAdded: {
+      default: false,
+      type: Boolean
+    },
     showChildren: {
       default: false,
       type: Boolean
@@ -77,6 +80,7 @@ export default {
   },
   data () {
     return {
+      originalInput: undefined,
       input: undefined,
       edit: true,
       isNum: false,
@@ -94,6 +98,7 @@ export default {
     // }
   },
   beforeMount () {
+    this.originalInput = this.inputData
     this.input = this.inputData
     this.edit = !this.isLabel
   },
@@ -105,10 +110,13 @@ export default {
       // console.log('C > EditJsonCell > emitChange > event : ', event)
       this.input = event
       const payload = {
+        action: 'diff',
+        added: this.isNodeAdded,
         fileId: this.fileId,
         nodeId: this.nodeId,
         isLabel: this.isLabel,
-        val: this.input
+        val: this.input,
+        oldVal: this.originalInput
       }
       // console.log('C > EditJsonCell > emitChange > payload : ', payload)
       this.$emit('updateJson', payload)
