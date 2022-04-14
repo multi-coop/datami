@@ -1,12 +1,13 @@
 <template>
   <span class="EditJsonCell is-flex is-flex-direction-row is-align-items-center">
     <!-- <code>{{ inputData }}</code> -->
+
     <!-- EDIT LABEL -->
     <b-tooltip
       v-if="isLabel"
       :label="t(`editJson.editLabel`, locale)"
       type="is-dark"
-      position="is-right">
+      position="is-left">
       <b-icon
         class="ml-4 mr-2"
         size="is-small"
@@ -14,6 +15,7 @@
         :icon="`pencil-${edit ? 'off-' : ''}outline`"
         @click.native="edit = !edit"/>
     </b-tooltip>
+
     <!-- INPUT EDIT -->
     <b-field
       v-show="edit"
@@ -29,6 +31,7 @@
         {{ input }}
       </code>
     </span>
+
     <!-- REMOVE NODE -->
     <b-tooltip
       v-if="isLabel"
