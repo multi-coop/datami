@@ -11,10 +11,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'PreviewHelperDivider',
+  mixins: [mixinGlobal],
   props: {
     icon: {
       default: '',
@@ -28,11 +29,6 @@ export default {
       default: '',
       type: String
     }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   }
 }
 </script>

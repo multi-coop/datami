@@ -15,10 +15,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
+
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonReloadFile',
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -34,22 +37,8 @@ export default {
       loading: false
     }
   },
-  computed: {
-    ...mapGetters({
-      fileNeedsReload: 'git-data/fileNeedsReload',
-      t: 'git-translations/getTranslation',
-      getGitInfosObj: 'getGitInfosObj'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    fileIsReloading () {
-      // console.log('C > ButtonReloadFile > this.gitObj : ', this.gitObj)
-      return this.gitObj && this.fileNeedsReload(this.fileId)
-    }
-  },
   watch: {
-    fileIsReloading (next) {
+    fileIsLoading (next) {
       if (!next) { this.loading = false }
     }
   },

@@ -69,13 +69,11 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'DialogAddRow',
-  components: {
-  },
+  mixins: [mixinGlobal],
   model: {
     prop: 'hidden',
     event: 'blur'
@@ -102,11 +100,6 @@ export default {
     return {
       temp: {}
     }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   },
   watch: {
     headers (next) {

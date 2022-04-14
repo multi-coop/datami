@@ -55,13 +55,11 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'DialogDeleteRow',
-  components: {
-  },
+  mixins: [mixinGlobal],
   model: {
     prop: 'hidden',
     event: 'blur'
@@ -94,9 +92,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     getTootlipLabel () {
       let str
       const checkedRowsLength = this.checkedRows.length

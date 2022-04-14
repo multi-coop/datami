@@ -93,6 +93,7 @@ export default {
     closeNode: 'close the node',
     editLabel: 'Edit field name',
     addNode: 'Add a node',
+    removeNode: 'Remove this node',
     arr: 'list',
     obj: 'object',
     str: 'text',

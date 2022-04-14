@@ -63,10 +63,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'FilterTags',
+  mixins: [mixinGlobal],
   props: {
     headers: {
       default: null,
@@ -80,11 +81,6 @@ export default {
       default: null,
       type: String
     }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   },
   methods: {
     getFieldLabel (field) {

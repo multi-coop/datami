@@ -27,15 +27,17 @@ export const typesIcons = [
   }
 ]
 
-export const filesViewsOptions = [
+// FOR EDITION
+export const editViewsOptions = [
   { code: 'edit', icon: 'pencil', textCode: 'preview.editView' },
   { code: 'diff', icon: 'arrow-left-right', textCode: 'preview.diffView' },
   { code: 'preview', icon: 'eye', textCode: 'preview.previewView' }
 ]
+export const editModes = editViewsOptions.map(v => v.code)
 
-export const wikiViewsOptions = [
+// FOR VIEWS
+export const viewsOptions = [
   { code: 'cards', icon: 'apps', textCode: 'preview.cardsView' },
-  { code: 'preview', icon: 'table', textCode: 'preview.previewView' }
+  { code: 'table', icon: 'table', textCode: 'preview.previewView' }
 ]
-
-export const viewModes = filesViewsOptions.map(v => v.code)
+export const viewModes = viewsOptions.map(v => v.code)

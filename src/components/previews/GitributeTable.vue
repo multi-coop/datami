@@ -6,7 +6,6 @@
         <EditCsvSkeleton
           v-show="!isAnyDialogOpen"
           :file-id="fileId"
-          :view="view"
           :columns="columnsEdited"
           :checked-rows="checkedRows"
           :is-active-tags="!!filterTags.length"
@@ -47,8 +46,8 @@
         class="column is-12">
         <b-table
           :data="dataEditedPaginated"
-          :checkable="view === 'edit'"
-          :sticky-checkbox="view === 'edit'"
+          :checkable="currentEditViewMode === 'edit'"
+          :sticky-checkbox="currentEditViewMode === 'edit'"
           :checked-rows.sync="checkedRows"
           narrowed
           hoverable
@@ -65,7 +64,7 @@
             <!-- HEADERS -->
             <template #header="{ column }">
               <!-- EDITION HEADERS-->
-              <div v-if="view === 'edit'">
+              <div v-if="currentEditViewMode === 'edit'">
                 <b-field>
                   <EditCell
                     :is-header="true"
@@ -75,7 +74,7 @@
                 </b-field>
               </div>
               <!-- DIFF HEADERS -->
-              <div v-if="view === 'diff'">
+              <div v-if="currentEditViewMode === 'diff'">
                 <div
                   v-if="isInChanges (true, col.added, col.field)">
                   <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
@@ -85,7 +84,7 @@
                 </span>
               </div>
               <!-- PREVIEW HEADERS -->
-              <div v-if="view === 'preview'">
+              <div v-if="currentEditViewMode === 'preview'">
                 {{ column.label }}
               </div>
             </template>
@@ -101,7 +100,7 @@
               </div>
 
               <!-- EDITION -->
-              <div v-if="view === 'edit'">
+              <div v-if="currentEditViewMode === 'edit'">
                 <b-field>
                   <EditCell
                     :is-header="false"
@@ -114,7 +113,7 @@
               </div>
 
               <!-- DIFF -->
-              <div v-if="view === 'diff'">
+              <div v-if="currentEditViewMode === 'diff'">
                 <div v-if="isInChanges(false, props.row.added, col.field, props.row.id)">
                   <span v-html="getDiffHtmlChars(false, props.row.added, col.field, props.row[col.field], props.row.id)"/>
                 </div>
@@ -124,7 +123,7 @@
               </div>
 
               <!-- PREVIEW -->
-              <div v-if="view === 'preview'">
+              <div v-if="currentEditViewMode === 'preview'">
                 {{ props.row[col.field] }}
               </div>
             </template>
@@ -268,8 +267,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mixinDiff, mixinPagination } from '@/utils/mixins.js'
+import { mixinGlobal, mixinDiff, mixinPagination } from '@/utils/mixins.js'
 
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
@@ -289,6 +287,7 @@ export default {
     PagesNavigation
   },
   mixins: [
+    mixinGlobal,
     mixinDiff,
     mixinPagination
   ],
@@ -301,10 +300,10 @@ export default {
       default: undefined,
       type: Object
     },
-    view: {
-      default: '',
-      type: String
-    },
+    // view: {
+    //   default: '',
+    //   type: String
+    // },
     data: {
       default: undefined,
       type: Array
@@ -361,9 +360,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     paginationFromFileOptions () {
       // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
       const pagination = {
@@ -411,7 +407,7 @@ export default {
       let data
       const dataFiltered = this.dataEditedFiltered
       let originalIndices, editedIndices, concat, uniquesIndices
-      switch (this.view) {
+      switch (this.currentEditViewMode) {
         case 'edit':
           data = dataFiltered
           break
@@ -438,7 +434,7 @@ export default {
     columnsForView () {
       let columns
       let originalFields, editedFields, concat, uniquesFields
-      switch (this.view) {
+      switch (this.currentEditViewMode) {
         case 'edit':
           columns = this.columnsEdited
           break

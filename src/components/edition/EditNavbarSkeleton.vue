@@ -3,19 +3,19 @@
     <div
       v-if="gitObj"
       class="columns is-multiline mb-2">
-      <!-- VIEW CHOICES -->
+      <!-- EDIT VIEW CHOICES -->
       <div
-        v-show="!onlyPreview"
         class="column pl-5 is-2 is-offset-5">
         <EditModeBtns
+          v-show="!onlyPreview"
           :file-id="fileId"
           :locale="locale"/>
       </div>
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <div
-        v-if="!onlyPreview"
         class="column is-3 is-offset-2">
         <b-button
+          v-if="!onlyPreview"
           type="is-dark"
           expanded
           :loading="loading"
@@ -35,31 +35,32 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
+import { mixinGlobal } from '@/utils/mixins.js'
+
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import EditModeBtns from '@/components/edition/EditModeBtns'
 
 export default {
   name: 'EditNavbarSkeleton',
   components: {
+    // ViewModeBtns,
     EditModeBtns
   },
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: undefined,
       type: String
     },
-    fileTypeFamily: {
-      default: null,
-      type: String
+    onlyPreview: {
+      default: false,
+      type: Boolean
     },
     locale: {
       default: 'en',
       type: String
-    },
-    onlyPreview: {
-      default: false,
-      type: Boolean
     }
   },
   data () {
@@ -67,34 +68,21 @@ export default {
       loading: false
     }
   },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode',
-      getGitInfosObj: 'getGitInfosObj'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    currentViewMode () {
-      return this.getViewMode(this.fileId)
-    }
-  },
   methods: {
     ...mapActions({
-      changeViewMode: 'git-data/changeViewMode',
+      changeEditViewMode: 'git-data/changeEditViewMode',
       updateSaving: 'git-data/updateSaving'
     }),
     toggleButton () {
       if (this.currentViewMode === 'preview') {
-        this.changeMode('edit')
+        this.changeEditMode('edit')
       } else {
         this.commitChanges()
       }
     },
-    changeMode (code) {
-      // console.log('C > EditNavbarSkeleton > changeMode > code :', code)
-      this.changeViewMode({ fileId: this.fileId, mode: code })
+    changeEditMode (code) {
+      // console.log('C > EditNavbarSkeleton > changeEditMode > code :', code)
+      this.changeEditViewMode({ fileId: this.fileId, mode: code })
     },
     commitChanges () {
       this.updateSaving({ fileId: this.fileId, isSaving: true })

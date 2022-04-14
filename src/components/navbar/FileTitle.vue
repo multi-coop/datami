@@ -19,10 +19,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'FileTitle',
+  mixins: [mixinGlobal],
   props: {
     title: {
       default: '',
@@ -40,11 +41,6 @@ export default {
       default: false,
       type: Boolean
     }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   },
   methods: {
     toggleDialog () {

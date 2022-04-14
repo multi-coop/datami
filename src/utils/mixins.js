@@ -1,3 +1,6 @@
+import { mapGetters } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
+
 import { debounce, itemsPerPageChoices, paginate, getClosest } from '@/utils/globalUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
@@ -5,31 +8,84 @@ import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
 import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
 import { nodeTypes, objToNodes, setEditInNode, nodeToObj } from '@/utils/jsonUtils.js'
-import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
+import { editViewsOptions } from '@/utils/fileTypesUtils.js'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
 
-export const mixinGit = {
+export const mixinGlobal = {
   computed: {
+    ...mapGetters({
+      t: 'git-translations/getTranslation',
+      getEditViewMode: 'git-data/getEditViewMode',
+      getViewMode: 'git-data/getViewMode',
+      getGitInfosObj: 'getGitInfosObj',
+      fileNeedsReload: 'git-data/fileNeedsReload',
+      fileNeedsSaving: 'git-data/fileNeedsSaving',
+      fileIsCommitting: 'git-data/fileIsCommitting',
+      getReqErrors: 'git-data/getReqErrors'
+    }),
+    gitObj () {
+      return this.fileId && this.getGitInfosObj(this.fileId)
+    },
     fileTypeFamily () {
       // const FileType = this.fileTypes[this.fileType]
       // return (FileType && FileType.family) || 'other'
       return this.gitObj.filefamily
+    },
+    currentEditViewMode () {
+      return this.getEditViewMode(this.fileId)
+    },
+    currentViewMode () {
+      return this.getViewMode(this.fileId)
+    },
+    fileIsLoading () {
+      const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
+      return resp
+    },
+    fileIsSaving () {
+      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
+      return resp
+    },
+    isCommitting () {
+      return this.fileIsCommitting(this.fileId)
+    },
+    errors () {
+      return this.getReqErrors(this.fileId)
     }
   },
   methods: {
+    uuidv4
+  }
+}
+
+export const mixinGit = {
+  // computed: {
+  //   fileTypeFamily () {
+  //     // const FileType = this.fileTypes[this.fileType]
+  //     // return (FileType && FileType.family) || 'other'
+  //     return this.gitObj.filefamily
+  //   }
+  // },
+  methods: {
     extractGitInfos,
-    // $axios,
     getFileData,
     getFileDataRaw
+  }
+}
+
+export const mixinCommit = {
+  computed: {
+    ...mapGetters({
+      buildNewBranchName: 'buildNewBranchName'
+    })
   }
 }
 
 export const mixinIcons = {
   methods: {
     getIcon (view) {
-      return filesViewsOptions.find(i => i.code === view).icon
+      return editViewsOptions.find(i => i.code === view).icon
     }
   }
 }

@@ -43,10 +43,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'NotificationErrors',
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -65,11 +66,6 @@ export default {
     return {
       isActive: true
     }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   }
 }
 </script>

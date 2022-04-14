@@ -182,6 +182,8 @@
 
 import { mapGetters, mapActions } from 'vuex'
 
+import { mixinGlobal, mixinCommit } from '@/utils/mixins.js'
+
 import { sendContribution } from '@/utils/gitProvidersAPI.js'
 
 import GitObjInfos from '@/components/previews/GitObjInfos'
@@ -191,6 +193,10 @@ export default {
   components: {
     GitObjInfos
   },
+  mixins: [
+    mixinGlobal,
+    mixinCommit
+  ],
   props: {
     fileId: {
       default: null,
@@ -217,17 +223,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getGitInfosObj: 'getGitInfosObj',
-      buildNewBranchName: 'buildNewBranchName',
       getCommitData: 'git-data/getCommitData',
       getFileToken: 'git-data/getFileToken',
-      getFileReqInfosObj: 'getFileReqInfosObj',
-      fileIsCommitting: 'git-data/fileIsCommitting'
+      getFileReqInfosObj: 'getFileReqInfosObj'
     }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
     commitData () {
       return this.getCommitData(this.fileId)
     },
@@ -238,10 +237,6 @@ export default {
     commitBranch () {
       const commitData = this.commitData
       return commitData && commitData.newBranch
-    },
-    isCommitting () {
-      // console.log('C > ConfirmCommit > this.gitObj : ', this.gitObj)
-      return this.fileIsCommitting(this.fileId)
     },
     buildCommitMessage () {
       let msg = this.userMessage

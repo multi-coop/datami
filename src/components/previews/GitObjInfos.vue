@@ -30,12 +30,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 import { typesIcons } from '@/utils/fileTypesUtils.js'
 
 export default {
   name: 'GitObjInofs',
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: '',
@@ -61,13 +62,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getGitInfosObj: 'getGitInfosObj'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
     infoRowsPopulated () {
       let infos = [...this.infoRows]
       infos = infos.map(i => {

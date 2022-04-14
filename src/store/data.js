@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { viewModes } from '@/utils/fileTypesUtils.js'
+import { editModes, viewModes } from '@/utils/fileTypesUtils.js'
 
 export const data = {
   namespaced: true,
@@ -7,14 +7,23 @@ export const data = {
     loadedData: {},
     tokens: {},
 
+    // IO
     reloading: [],
     saving: [],
     committing: [],
 
+    // EDIT MODES
     preview: [],
     edit: [],
     diff: [],
 
+    // VIEW MODES
+    list: [],
+    table: [],
+    text: [],
+    json: [],
+
+    // DATA STORED
     buffer: [],
     errors: []
 
@@ -32,10 +41,16 @@ export const data = {
     getFileToken: (state) => (fileId) => {
       return state.tokens[fileId]
     },
-    getViewMode: (state) => (fileId) => {
+    getEditViewMode: (state) => (fileId) => {
       if (state.preview.includes(fileId)) return 'preview'
       if (state.diff.includes(fileId)) return 'diff'
       if (state.edit.includes(fileId)) return 'edit'
+    },
+    getViewMode: (state) => (fileId) => {
+      if (state.list.includes(fileId)) return 'list'
+      if (state.table.includes(fileId)) return 'table'
+      if (state.text.includes(fileId)) return 'text'
+      if (state.json.includes(fileId)) return 'json'
     },
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)
@@ -98,7 +113,6 @@ export const data = {
     },
     updateReloading ({ commit }, { fileId, isLoading }) {
       // console.log('\nS-data > A > updateReloading > fileId : ', fileId)
-      // console.log('S-data > A > updateReloading > isLoading : ', isLoading)
       if (isLoading) {
         commit('addToState', { key: 'reloading', fileId: fileId })
       } else {
@@ -120,12 +134,16 @@ export const data = {
       }
     },
     updateToken ({ commit }, { fileId, token }) {
-      // console.log('S-data > A > updateToken > fileId : ', fileId)
       commit('setState', { key: 'tokens', fileId: fileId, data: token })
     },
+    changeEditViewMode ({ commit }, { fileId, mode }) {
+      commit('addToState', { key: mode, fileId: fileId })
+      const switchOffModes = editModes.filter(v => v !== mode)
+      switchOffModes.forEach(v => {
+        commit('removeFromState', { key: v, fileId: fileId })
+      })
+    },
     changeViewMode ({ commit }, { fileId, mode }) {
-      // console.log('S-data > A > changeViewMode > fileId : ', fileId)
-      // console.log('S-data > A > changeViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = viewModes.filter(v => v !== mode)
       switchOffModes.forEach(v => {

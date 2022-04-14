@@ -153,9 +153,7 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
-import { mixinDiff, mixinJsonNode } from '@/utils/mixins.js'
+import { mixinGlobal, mixinDiff, mixinJsonNode } from '@/utils/mixins.js'
 
 import EditJsonCell from '@/components/edition/json/EditJsonCell'
 
@@ -164,7 +162,11 @@ export default {
   components: {
     EditJsonCell
   },
-  mixins: [mixinDiff, mixinJsonNode],
+  mixins: [
+    mixinGlobal,
+    mixinDiff,
+    mixinJsonNode
+  ],
   props: {
     fileId: {
       default: null,
@@ -227,9 +229,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     indent () {
       return {
         transform: `translate(${this.depth * this.indentSize}px)`

@@ -3,7 +3,7 @@
     <b-tooltip
       :label="t(`editCsv.importData`, locale)"
       type="is-dark"
-      position="is-right">
+      position="is-top">
       <b-button
         size="is-small"
         class="ml-1"
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonImportData',
-  mixins: [],
+  mixins: [mixinGlobal],
   props: {
     headers: {
       default: null,
@@ -32,11 +32,6 @@ export default {
   },
   data () {
     return {}
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   },
   methods: {
     SendActionToParent () {

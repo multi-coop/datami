@@ -6,7 +6,7 @@
       :key="helper"
       class="column">
       <PreviewHelperDivider
-        :icon="getIcon(currentViewMode)"
+        :icon="getIcon(currentEditViewMode)"
         :code="helper"
         :locale="locale"/>
     </div>
@@ -14,9 +14,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 
-import { mixinIcons } from '@/utils/mixins.js'
+import { mixinGlobal, mixinIcons } from '@/utils/mixins.js'
 
 import PreviewHelperDivider from '@/components/previews/PreviewHelperDivider'
 
@@ -25,7 +24,10 @@ export default {
   components: {
     PreviewHelperDivider
   },
-  mixins: [mixinIcons],
+  mixins: [
+    mixinGlobal,
+    mixinIcons
+  ],
   props: {
     fileId: {
       default: '',
@@ -62,16 +64,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode'
-    }),
-    currentViewMode () {
-      return this.getViewMode(this.fileId)
-    },
     getSettings () {
       const settingsFileFamily = this.settings[this.fileFamily]
-      const settingsView = settingsFileFamily[this.currentViewMode]
+      const settingsView = settingsFileFamily[this.currentEditViewMode]
       return settingsView
     }
   }

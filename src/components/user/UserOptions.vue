@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 import ButtonReloadFile from '@/components/user/ButtonReloadFile'
 import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
 import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
@@ -44,11 +42,6 @@ export default {
       default: 'en',
       type: String
     }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   }
 }
 </script>

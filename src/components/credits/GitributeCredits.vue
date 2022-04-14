@@ -29,10 +29,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default ({
   name: 'GitributeCredits',
+  mixins: [mixinGlobal],
   props: {
     locale: {
       default: '',
@@ -42,9 +44,6 @@ export default ({
   computed: {
     ...mapState({
       testTranslation: (state) => state['git-translations'].test
-    }),
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
     })
   },
   beforeMount () {

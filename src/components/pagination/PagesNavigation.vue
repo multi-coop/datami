@@ -85,10 +85,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'PagesNavigation',
+  mixins: [mixinGlobal],
   props: {
     totalItems: {
       default: 0,
@@ -135,9 +136,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     countElements () {
       const result = this.totalItems > this.itemsPerPage ? this.itemsPerPage : this.totalItems
       return result

@@ -6,8 +6,8 @@
       class="columns is-multiline">
       <div class="column is-12">
         <p>
-          currentViewMode:
-          <code>{{ currentViewMode }}</code>
+          currentEditViewMode:
+          <code>{{ currentEditViewMode }}</code>
         </p>
       </div>
       <div class="column is-6">
@@ -47,7 +47,6 @@
         <GitributeTable
           :file-id="fileId"
           :file-options="fileOptions"
-          :view="currentViewMode"
           :data="data"
           :columns="dataColumns"
           :data-edited="edited"
@@ -66,9 +65,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { v4 as uuidv4 } from 'uuid'
-import { mixinDiff, mixinCsv } from '@/utils/mixins.js'
+import { mapActions } from 'vuex'
+
+import { mixinGlobal, mixinCommit, mixinDiff, mixinCsv } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderCSV from '@/components/loaders/LoaderCSV'
@@ -84,7 +83,12 @@ export default {
     PreviewHelpers,
     GitributeTable
   },
-  mixins: [mixinDiff, mixinCsv],
+  mixins: [
+    mixinGlobal,
+    mixinCommit,
+    mixinDiff,
+    mixinCsv
+  ],
   props: {
     fileId: {
       default: null,
@@ -93,14 +97,6 @@ export default {
     fileOptions: {
       default: undefined,
       type: Object
-    },
-    fileIsLoading: {
-      default: true,
-      type: Boolean
-    },
-    fileIsSaving: {
-      default: true,
-      type: Boolean
     },
     fileRaw: {
       default: '',
@@ -133,19 +129,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode',
-      getGitInfosObj: 'getGitInfosObj',
-      buildNewBranchName: 'buildNewBranchName',
-      fileNeedsSaving: 'git-data/fileNeedsSaving'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    currentViewMode () {
-      return this.getViewMode(this.fileId)
-    },
     dataDiff () {
       const diff = this.data
       return diff
@@ -154,10 +137,6 @@ export default {
       const diff = this.dataColumns
       return diff
     }
-    // fileIsSaving () {
-    //   const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
-    //   return resp
-    // }
   },
   watch: {
     fileRaw (next) {
@@ -315,7 +294,7 @@ export default {
     addRowEvent (event) {
       console.log('\nC > PreviewMd > addRowEvent > event : ', event)
       // update edited
-      const newRowId = uuidv4()
+      const newRowId = this.uuidv4()
       const newRow = { ...event.row, id: newRowId, added: true }
       console.log('C > PreviewMd > addRowEvent > newRow : ', newRow)
       console.log('C > PreviewMd > addRowEvent > this.edited : ', this.edited)

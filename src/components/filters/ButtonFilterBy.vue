@@ -66,11 +66,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
+
 import { debounce } from '@/utils/globalUtils'
 
 export default {
   name: 'ButtonFilterBy',
+  mixins: [mixinGlobal],
   props: {
     headers: {
       default: null,
@@ -94,9 +96,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     getActiveHeader () {
       const activeHeaderLabel = this.activeHeader && this.activeHeader.label
       return activeHeaderLabel || this.defaultLabel

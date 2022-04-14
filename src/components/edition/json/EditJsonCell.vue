@@ -1,6 +1,20 @@
 <template>
   <span class="EditJsonCell is-flex is-flex-direction-row is-align-items-center">
     <!-- <code>{{ inputData }}</code> -->
+    <!-- EDIT LABEL -->
+    <b-tooltip
+      v-if="isLabel"
+      :label="t(`editJson.editLabel`, locale)"
+      type="is-dark"
+      position="is-right">
+      <b-icon
+        class="ml-4 mr-2"
+        size="is-small"
+        type="is-gray"
+        :icon="`pencil-${edit ? 'off-' : ''}outline`"
+        @click.native="edit = !edit"/>
+    </b-tooltip>
+    <!-- INPUT EDIT -->
     <b-field
       v-show="edit"
       class="mb-0">
@@ -15,27 +29,28 @@
         {{ input }}
       </code>
     </span>
+    <!-- REMOVE NODE -->
     <b-tooltip
       v-if="isLabel"
-      :label="t(`editJson.editLabel`, locale)"
+      :label="t(`editJson.removeNode`, locale)"
       type="is-dark"
       position="is-right">
       <b-icon
         class="ml-2 mr-4"
         size="is-small"
         type="is-gray"
-        :icon="`pencil-${edit ? 'off-' : ''}outline`"
-        @click.native="edit = !edit"/>
+        icon="trash-can-outline"
+        @click.native="removeNode"/>
     </b-tooltip>
   </span>
 </template>
 
 <script>
-
-import { mapGetters, mapActions } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'EditJsonCell',
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -87,11 +102,6 @@ export default {
       isBool: false
     }
   },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
-  },
   watch: {
     // inputData (next) {
     //   this.input = this.inputData
@@ -103,9 +113,14 @@ export default {
     this.edit = !this.isLabel
   },
   methods: {
-    ...mapActions({
-
-    }),
+    removeNode () {
+      const payload = {
+        action: 'del',
+        fileId: this.fileId,
+        nodeId: this.nodeId
+      }
+      this.$emit('updateJson', payload)
+    },
     emitChange (event) {
       // console.log('C > EditJsonCell > emitChange > event : ', event)
       this.input = event

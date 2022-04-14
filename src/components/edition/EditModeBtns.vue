@@ -3,7 +3,7 @@
     <!-- DEBUG -->
     <div v-if="debug">
       <p>
-        currentViewMode: {{ currentViewMode }}
+        currentEditViewMode: {{ currentEditViewMode }}
       </p>
     </div>
     <!-- BUTTONS -->
@@ -18,8 +18,8 @@
           position="is-top">
           <b-button
             :icon-left="btn.icon"
-            :type="currentViewMode === btn.code ? 'is-dark' : ''"
-            :active="currentViewMode === btn.code"
+            :type="currentEditViewMode === btn.code ? 'is-dark' : ''"
+            :active="currentEditViewMode === btn.code"
             size="is-small"
             @click="changeMode(btn.code)"/>
         </b-tooltip>
@@ -29,12 +29,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
-import { filesViewsOptions } from '@/utils/fileTypesUtils.js'
+import { mixinGlobal } from '@/utils/mixins.js'
+
+import { editViewsOptions } from '@/utils/fileTypesUtils.js'
 
 export default {
   name: 'EditModeBtns',
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: undefined,
@@ -49,16 +52,7 @@ export default {
     return {
       debug: false,
       // active: 'preview',
-      buttons: filesViewsOptions
-    }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode'
-    }),
-    currentViewMode () {
-      return this.getViewMode(this.fileId)
+      buttons: editViewsOptions
     }
   },
   beforeMount () {
@@ -66,12 +60,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      changeViewMode: 'git-data/changeViewMode'
+      changeEditViewMode: 'git-data/changeEditViewMode'
     }),
     changeMode (code) {
       // this.active = code
       // console.log('\nC > EditModeBtns > changeMode > code : ', code)
-      this.changeViewMode({ fileId: this.fileId, mode: code })
+      this.changeEditViewMode({ fileId: this.fileId, mode: code })
     }
   }
 }

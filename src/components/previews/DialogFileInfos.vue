@@ -35,8 +35,7 @@
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 import GitObjInfos from '@/components/previews/GitObjInfos'
 
@@ -45,6 +44,7 @@ export default {
   components: {
     GitObjInfos
   },
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -58,15 +58,6 @@ export default {
       default: false,
       type: Boolean
     }
-  },
-  data () {
-    return {
-    }
-  },
-  computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
   },
   methods: {
     closeDialog () {

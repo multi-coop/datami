@@ -93,6 +93,7 @@ export default {
     closeNode: 'Refermer le noeud',
     editLabel: 'Editer le nom du champ',
     addNode: 'Ajouter un noeud',
+    removeNode: 'Supprimer ce noeud',
     arr: 'liste',
     obj: 'objet',
     str: 'texte',

@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDeleteRows',
-  mixins: [],
+  mixins: [mixinGlobal],
   props: {
     checkedRows: {
       default: null,
@@ -34,9 +34,6 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     getTootlipLabel () {
       let str
       const checkedRowsLength = this.checkedRows.length

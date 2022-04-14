@@ -63,14 +63,14 @@
         class="columns is-centered">
         <!-- EDIT VIEW -->
         <div
-          v-show="currentViewMode === 'edit'"
+          v-show="currentEditViewMode === 'edit'"
           :class="`column is-8`">
           <div class="my-3 has-text-centered">
             🚧 work in progress - edition
           </div>
           <JsonTree
             :file-id="fileId"
-            :view="currentViewMode"
+            :view="currentEditViewMode"
             :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
@@ -81,7 +81,7 @@
             @updateJson="UpdateEditedJson"/>
         </div>
         <div
-          v-if="debug && currentViewMode === 'edit'"
+          v-if="debug && currentEditViewMode === 'edit'"
           class="column is-4">
           <p>
             edited:
@@ -93,14 +93,14 @@
 
         <!-- DIFF VIEW -->
         <div
-          v-show="currentViewMode === 'diff'"
+          v-show="currentEditViewMode === 'diff'"
           :class="`column is-half pr-6`">
           <!-- <div class="my-3 has-text-centered">
             🚧 work in progress - diff
           </div> -->
           <JsonTree
             :file-id="fileId"
-            :view="currentViewMode"
+            :view="currentEditViewMode"
             :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
@@ -113,17 +113,17 @@
 
         <!-- DIVIDER -->
         <div
-          v-show="currentViewMode === 'diff'"
+          v-show="currentEditViewMode === 'diff'"
           class="divider is-vertical mx-0">
           <b-icon
-            :icon="getIcon(currentViewMode)"
+            :icon="getIcon(currentEditViewMode)"
             size="is-small"/>
         </div>
 
         <!-- PREVIEW -->
         <div
-          v-show="currentViewMode !== 'edit'"
-          :class="`column ${currentViewMode === 'diff' ? 'pl-6' : 'is-8'}`">
+          v-show="currentEditViewMode !== 'edit'"
+          :class="`column ${currentEditViewMode === 'diff' ? 'pl-6' : 'is-8'}`">
           <!-- <div class="my-3 has-text-centered">
             🚧 work in progress - preview edited
           </div> -->
@@ -145,8 +145,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { mixinIcons, mixinDiff, mixinJson } from '@/utils/mixins.js'
+import { mapActions } from 'vuex'
+
+import { mixinGlobal, mixinCommit, mixinIcons, mixinDiff, mixinJson } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderJSON from '@/components/loaders/LoaderJSON'
@@ -163,7 +164,13 @@ export default {
     PreviewHelpers,
     JsonTree
   },
-  mixins: [mixinIcons, mixinDiff, mixinJson],
+  mixins: [
+    mixinGlobal,
+    mixinCommit,
+    mixinIcons,
+    mixinDiff,
+    mixinJson
+  ],
   props: {
     fileId: {
       default: null,
@@ -172,14 +179,6 @@ export default {
     fileOptions: {
       default: undefined,
       type: Object
-    },
-    fileIsLoading: {
-      default: true,
-      type: Boolean
-    },
-    fileIsSaving: {
-      default: true,
-      type: Boolean
     },
     fileRaw: {
       default: undefined,
@@ -210,19 +209,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode',
-      getGitInfosObj: 'getGitInfosObj',
-      buildNewBranchName: 'buildNewBranchName',
-      fileNeedsSaving: 'git-data/fileNeedsSaving'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    currentViewMode () {
-      return this.getViewMode(this.gitObj.uuid)
-    },
     getObjectFromNodes () {
       return this.nodeToObj(this.edited)
     }

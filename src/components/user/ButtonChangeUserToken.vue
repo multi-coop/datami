@@ -48,8 +48,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+import { mixinGlobal } from '@/utils/mixins.js'
+
 export default {
   name: 'ButtonChangeUserToken',
+  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -69,8 +72,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getFileToken: 'git-data/getFileToken',
-      t: 'git-translations/getTranslation'
+      getFileToken: 'git-data/getFileToken'
     })
   },
   mounted () {

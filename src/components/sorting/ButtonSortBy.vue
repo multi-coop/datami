@@ -66,11 +66,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonSortBy',
-  mixins: [],
+  mixins: [mixinGlobal],
   props: {
     headers: {
       default: null,
@@ -89,9 +89,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation'
-    }),
     getActiveHeader () {
       const activeHeaderLabel = this.activeHeader && this.activeHeader.label
       // return activeHeaderLabel || this.t('editCsv.noSelect', this.locale)

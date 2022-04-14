@@ -12,7 +12,7 @@
           </code>
         </p>
         <p>
-          currentViewMode : {{ currentViewMode }}
+          currentEditViewMode : {{ currentEditViewMode }}
         </p>
       </div>
     </div>
@@ -37,7 +37,7 @@
         class="columns is-mobile">
         <!-- EDIT VIEW -->
         <div
-          v-show="currentViewMode === 'edit'"
+          v-show="currentEditViewMode === 'edit'"
           :class="`column is-half pr-6`">
           <p class="is-italic">
             {{ t('preview.yamlPart', locale) }}
@@ -63,7 +63,7 @@
 
         <!-- DIFF VIEW -->
         <div
-          v-show="currentViewMode === 'diff'"
+          v-show="currentEditViewMode === 'diff'"
           :class="`column is-half pr-6`">
           <p class="is-italic">
             {{ t('preview.yamlPart', locale) }}
@@ -82,37 +82,37 @@
 
         <!-- DIVIDER -->
         <div
-          v-show="currentViewMode !== 'preview'"
+          v-show="currentEditViewMode !== 'preview'"
           class="divider is-vertical mx-0">
           <b-icon
-            v-if="currentViewMode === 'diff'"
-            :icon="getIcon(currentViewMode)"
+            v-if="currentEditViewMode === 'diff'"
+            :icon="getIcon(currentEditViewMode)"
             size="is-small"/>
           <b-icon
-            v-if="currentViewMode === 'edit'"
-            :icon="getIcon(currentViewMode)"
+            v-if="currentEditViewMode === 'edit'"
+            :icon="getIcon(currentEditViewMode)"
             size="is-small"/>
         </div>
 
         <!-- PREVIEW -->
         <div
-          :class="`column ${currentViewMode !== 'preview' ? 'pl-6' : ''}`">
+          :class="`column ${currentEditViewMode !== 'preview' ? 'pl-6' : ''}`">
           <p
-            v-if="currentViewMode !== 'preview'"
+            v-if="currentEditViewMode !== 'preview'"
             class="is-italic">
             {{ t('preview.yamlPart', locale) }}
           </p>
           <div
-            v-if="currentViewMode !== 'preview'"
+            v-if="currentEditViewMode !== 'preview'"
             class="diff-data"
-            v-html="currentViewMode === 'diff' ? getDataString(data) : dataEdited"/>
+            v-html="currentEditViewMode === 'diff' ? getDataString(data) : dataEdited"/>
           <p
-            v-if="currentViewMode !== 'preview'"
+            v-if="currentEditViewMode !== 'preview'"
             class="is-italic">
             {{ t('preview.textPart', locale) }}
           </p>
           <ShowDown
-            :markdown="currentViewMode === 'diff' ? content : edited"
+            :markdown="currentEditViewMode === 'diff' ? content : edited"
             flavor="github"/>
         </div>
       </div>
@@ -121,8 +121,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { mixinIcons, mixinDiff, mixinMd } from '@/utils/mixins.js'
+import { mapActions } from 'vuex'
+
+import { mixinGlobal, mixinCommit, mixinIcons, mixinDiff, mixinMd } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderMD from '@/components/loaders/LoaderMD'
@@ -145,6 +146,8 @@ export default {
     ShowDown
   },
   mixins: [
+    mixinGlobal,
+    mixinCommit,
     mixinIcons,
     mixinDiff,
     mixinMd
@@ -157,14 +160,6 @@ export default {
     fileOptions: {
       default: undefined,
       type: Object
-    },
-    fileIsLoading: {
-      default: true,
-      type: Boolean
-    },
-    fileIsSaving: {
-      default: true,
-      type: Boolean
     },
     fileRaw: {
       default: '',
@@ -194,19 +189,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getViewMode: 'git-data/getViewMode',
-      getGitInfosObj: 'getGitInfosObj',
-      buildNewBranchName: 'buildNewBranchName',
-      fileNeedsSaving: 'git-data/fileNeedsSaving'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    currentViewMode () {
-      return this.getViewMode(this.gitObj.uuid)
-    },
     dataAsMarkdown () {
       return this.objectAsMarkdown(this.data)
     },

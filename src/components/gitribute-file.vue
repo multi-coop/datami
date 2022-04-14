@@ -82,78 +82,61 @@
         :locale="locale"/>
     </div>
 
-    <!-- LOADERS -->
-    <!-- <LoaderEditNavbar v-if="fileIsReloading && !onlypreview"/> -->
-    <!-- <LoaderCSV v-if="fileIsReloading && fileTypeFamily === 'table'"/> -->
-    <!-- <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'text'"/> -->
-    <!-- <LoaderMD v-if="fileIsReloading && fileTypeFamily === 'json'"/> -->
-
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
-      v-if="!fileIsReloading && !fileIsSaving"
-      :only-preview="onlypreview"
+      v-if="!fileIsLoading && !fileIsSaving"
       :file-id="fileId"
-      :file-type-family="fileTypeFamily"
-      :view-mode="currentViewMode"
+      :only-preview="onlypreview"
       :locale="locale"/>
 
     <!-- CONFIRM COMMIT MODAL -->
     <ConfirmCommit
-      v-show="fileIsSaving && !fileIsReloading"
+      v-show="fileIsSaving && !fileIsLoading"
       :file-id="fileId"
       :locale="locale"
       :debug="debug"/>
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+    <div v-show="!fileIsSaving">
+      <!-- PREVIEWS CSV -->
+      <div
+        v-if="fileTypeFamily === 'table'"
+        class="container">
+        <PreviewCsv
+          :only-preview="onlypreview"
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :file-raw="fileRaw"
+          :locale="locale"
+          :debug="debug"/>
+      </div>
 
-    <!-- PREVIEWS CSV -->
-    <!-- <div v-show="!fileIsSaving"> -->
-    <div
-      v-if="fileTypeFamily === 'table'"
-      class="container">
-      <PreviewCsv
-        :only-preview="onlypreview"
-        :file-id="fileId"
-        :file-options="fileOptions"
-        :file-is-loading="fileIsReloading"
-        :file-is-saving="fileIsSaving"
-        :file-raw="fileRaw"
-        :locale="locale"
-        :debug="debug"/>
-    </div>
+      <!-- PREVIEWS MD -->
+      <div
+        v-if="fileTypeFamily === 'text'"
+        class="container">
+        <PreviewMd
+          :only-preview="onlypreview"
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :file-raw="fileRaw"
+          :locale="locale"
+          :debug="debug"/>
+      </div>
 
-    <!-- PREVIEWS MD -->
-    <div
-      v-if="fileTypeFamily === 'text'"
-      class="container">
-      <!-- v-show="!fileIsReloading" -->
-      <PreviewMd
-        :only-preview="onlypreview"
-        :file-id="fileId"
-        :file-options="fileOptions"
-        :file-is-loading="fileIsReloading"
-        :file-is-saving="fileIsSaving"
-        :file-raw="fileRaw"
-        :locale="locale"
-        :debug="debug"/>
+      <!-- PREVIEWS JSON -->
+      <div
+        v-if="fileTypeFamily === 'json'"
+        class="container">
+        <PreviewJson
+          :only-preview="onlypreview"
+          :file-id="fileId"
+          :file-options="fileOptions"
+          :file-raw="fileRaw"
+          :locale="locale"
+          :debug="debug"/>
+      </div>
     </div>
-
-    <!-- PREVIEWS JSON -->
-    <div
-      v-if="fileTypeFamily === 'json'"
-      class="container">
-      <!-- v-show="!fileIsReloading" -->
-      <PreviewJson
-        :only-preview="onlypreview"
-        :file-id="fileId"
-        :file-options="fileOptions"
-        :file-is-loading="fileIsReloading"
-        :file-is-saving="fileIsSaving"
-        :file-raw="fileRaw"
-        :locale="locale"
-        :debug="debug"/>
-    </div>
-    <!-- </div> -->
 
     <!-- CREDITS -->
     <GitributeCredits
@@ -162,11 +145,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { v4 as uuidv4 } from 'uuid'
+import { mapActions } from 'vuex'
 
-import { mixinGit } from '@/utils/mixins.js'
-import { extractGitInfos } from '@/utils/utilsGitUrl.js'
+import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import UserOptions from '@/components/user/UserOptions'
@@ -180,10 +161,6 @@ import ConfirmCommit from '@/components/edition/ConfirmCommit'
 import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
-
-// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-// import LoaderCSV from '@/components/loaders/LoaderCSV'
-// import LoaderMD from '@/components/loaders/LoaderMD'
 
 import GitributeCredits from '@/components/credits/GitributeCredits'
 
@@ -199,12 +176,12 @@ export default {
     PreviewCsv,
     PreviewMd,
     PreviewJson,
-    // LoaderEditNavbar,
-    // LoaderCSV,
-    // LoaderMD,
     GitributeCredits
   },
-  mixins: [mixinGit],
+  mixins: [
+    mixinGlobal,
+    mixinGit
+  ],
   props: {
     title: {
       default: 'gitribute',
@@ -246,46 +223,16 @@ export default {
       showFileInfos: false
     }
   },
-  computed: {
-    ...mapGetters({
-      getGitObj: 'getGitObj',
-      getGitInfosObj: 'getGitInfosObj',
-      fileNeedsReload: 'git-data/fileNeedsReload',
-      fileNeedsSaving: 'git-data/fileNeedsSaving',
-      getViewMode: 'git-data/getViewMode',
-      getReqErrors: 'git-data/getReqErrors'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    fileIsReloading () {
-      // console.log('C > GitributeFile > fileIsReloading > this.gitInfos : ', this.gitInfos)
-      const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
-      // console.log('C > GitributeFile > fileIsReloading > resp : ', resp)
-      return resp
-    },
-    fileIsSaving () {
-      const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
-      return resp
-    },
-    currentViewMode () {
-      // return this.getViewMode(this.gitObj.uuid)
-      return this.getViewMode(this.fileId)
-    },
-    errors () {
-      return this.getReqErrors(this.fileId)
-    }
-  },
   watch: {
-    fileIsReloading (next) {
-      // console.log('C > GitributeFile > watch > fileIsReloading > next : ', next)
+    fileIsLoading (next) {
+      // console.log('C > GitributeFile > watch > fileIsLoading > next : ', next)
       if (next) { this.reloadFile() }
     }
   },
   beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
-    const gitInfosObject = extractGitInfos(this.gitfile)
-    const fileUuid = uuidv4()
+    const gitInfosObject = this.extractGitInfos(this.gitfile)
+    const fileUuid = this.uuidv4()
     gitInfosObject.uuid = fileUuid
     // console.log("C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid

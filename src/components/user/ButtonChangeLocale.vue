@@ -41,8 +41,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
+import { mixinGlobal } from '@/utils/mixins.js'
+
 export default {
   name: 'ButtonChangeLocale',
+  mixins: [mixinGlobal],
   props: {
     locale: {
       default: 'en',
@@ -54,7 +57,6 @@ export default {
       allowedLocales: (state) => state['git-translations'].allowedLocales
     }),
     ...mapGetters({
-      t: 'git-translations/getTranslation',
       currentLocale: 'git-translations/getCurrentLocale'
     })
   },

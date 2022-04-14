@@ -84,11 +84,9 @@
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
-      v-if="!fileIsReloading"
-      :only-preview="onlypreview"
+      v-if="!fileIsLoading"
       :file-id="fileId"
-      :file-type-family="fileTypeFamily"
-      :view-mode="currentViewMode"
+      :only-preview="onlypreview"
       :locale="locale"/>
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
@@ -104,7 +102,7 @@
         :only-preview="onlypreview"
         :file-id="fileId"
         :file-options="fileOptions"
-        :file-is-loading="fileIsReloading"
+        :file-is-loading="fileIsLoading"
         :file-raw="fileRaw"
         :locale="locale"
         :debug="debug"/>
@@ -117,11 +115,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { v4 as uuidv4 } from 'uuid'
+import { mapActions } from 'vuex'
 
-import { mixinGit } from '@/utils/mixins.js'
-import { extractGitInfos } from '@/utils/utilsGitUrl.js'
+import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import UserOptions from '@/components/user/UserOptions'
@@ -146,7 +142,10 @@ export default {
     PreviewCsv,
     GitributeCredits
   },
-  mixins: [mixinGit],
+  mixins: [
+    mixinGlobal,
+    mixinGit
+  ],
   props: {
     title: {
       default: 'gitribute',
@@ -185,41 +184,16 @@ export default {
       showFileInfos: false
     }
   },
-  computed: {
-    ...mapGetters({
-      getGitObj: 'getGitObj',
-      getGitInfosObj: 'getGitInfosObj',
-      fileNeedsReload: 'git-data/fileNeedsReload',
-      getViewMode: 'git-data/getViewMode',
-      getReqErrors: 'git-data/getReqErrors'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
-    },
-    fileIsReloading () {
-      // console.log('C > GitributeExploWiki > fileIsReloading > this.gitInfos : ', this.gitInfos)
-      const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
-      // console.log('C > GitributeExploWiki > fileIsReloading > resp : ', resp)
-      return resp
-    },
-    currentViewMode () {
-      // return this.getViewMode(this.gitObj.uuid)
-      return this.getViewMode(this.fileId)
-    },
-    errors () {
-      return this.getReqErrors(this.fileId)
-    }
-  },
   watch: {
-    fileIsReloading (next) {
-      // console.log('C > GitributeExploWiki > watch > fileIsReloading > next : ', next)
+    fileIsLoading (next) {
+      // console.log('C > GitributeExploWiki > watch > fileIsLoading > next : ', next)
       if (next) { this.reloadFile() }
     }
   },
   beforeMount () {
     console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
-    const gitInfosObject = extractGitInfos(this.wikifile)
-    const fileUuid = uuidv4()
+    const gitInfosObject = this.extractGitInfos(this.wikifile)
+    const fileUuid = this.uuidv4()
     gitInfosObject.uuid = fileUuid
     console.log('C > GitributeExploWiki > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid

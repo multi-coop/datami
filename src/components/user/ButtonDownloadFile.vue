@@ -15,12 +15,14 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { mixinDownload } from '@/utils/mixins.js'
+import { mixinGlobal, mixinDownload } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDownloadFile',
-  mixins: [mixinDownload],
+  mixins: [
+    mixinGlobal,
+    mixinDownload
+  ],
   props: {
     fileId: {
       default: null,
@@ -34,17 +36,6 @@ export default {
   data () {
     return {
       loading: false
-    }
-  },
-  computed: {
-    ...mapState({
-    }),
-    ...mapGetters({
-      t: 'git-translations/getTranslation',
-      getGitInfosObj: 'getGitInfosObj'
-    }),
-    gitObj () {
-      return this.fileId && this.getGitInfosObj(this.fileId)
     }
   },
   methods: {
