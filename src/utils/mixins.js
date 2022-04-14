@@ -60,13 +60,6 @@ export const mixinGlobal = {
 }
 
 export const mixinGit = {
-  // computed: {
-  //   fileTypeFamily () {
-  //     // const FileType = this.fileTypes[this.fileType]
-  //     // return (FileType && FileType.family) || 'other'
-  //     return this.gitObj.filefamily
-  //   }
-  // },
   methods: {
     extractGitInfos,
     getFileData,
