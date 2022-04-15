@@ -122,7 +122,7 @@
 
         <!-- PREVIEW -->
         <div
-          v-show="currentEditViewMode !== 'edit'"
+          v-if="currentEditViewMode !== 'edit'"
           :class="`column ${currentEditViewMode === 'diff' ? 'pl-6' : 'is-8'}`">
           <!-- <div class="my-3 has-text-centered">
             🚧 work in progress - preview edited
@@ -131,10 +131,10 @@
           <JsonTree
             :file-id="fileId"
             :view="'preview'"
-            :node-id="edited.id"
-            :label="edited.label"
-            :node-type="edited.nodeType"
-            :nodes="edited.nodes"
+            :node-id="getPreviewJson.id"
+            :label="getPreviewJson.label"
+            :node-type="getPreviewJson.nodeType"
+            :nodes="getPreviewJson.nodes"
             :depth="0"
             :locale="locale"
             :default-depth="defaultDepth"/>
@@ -211,6 +211,18 @@ export default {
   computed: {
     getObjectFromNodes () {
       return this.nodeToObj(this.edited)
+    },
+    getPreviewJson () {
+      let dataForEditView
+      switch (this.currentEditViewMode) {
+        case 'diff':
+          dataForEditView = this.data
+          break
+        case 'preview':
+          dataForEditView = this.edited
+          break
+      }
+      return dataForEditView
     }
   },
   watch: {
