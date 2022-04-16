@@ -12,7 +12,7 @@
           <b-tooltip
             :label="`${t(`editJson.${showChildren ? 'close' : 'open'}Node`, locale)}`"
             type="is-dark"
-            position="is-top">
+            position="is-left">
             <span @click="toggleChildren">
               <b-icon
                 v-if="!hasValue"
