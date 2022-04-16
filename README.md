@@ -290,6 +290,9 @@ options:
     - defaultDepth: 
       description: default visible depth of the JSON preview
       type: number | "all"
+    - allowKeyEdit: 
+      description: allow objects' key edition (edit or remove)
+      type: boolean
 ```
 
 ### Parameters for `csv` and `tsv` files

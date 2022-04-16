@@ -160,15 +160,26 @@ export const objToNodes = (obj, label) => {
 }
 
 export const setEditInNode = (node, modif) => {
-  // console.log('\nU > jsonUtils > objToNodes > node : ', node)
-  // console.log('U > jsonUtils > objToNodes > modif : ', modif)
+  console.log('\nU > jsonUtils > setEditInNode > node : ', node)
+  console.log('U > jsonUtils > setEditInNode > modif : ', modif)
   const isTargetNode = node.id === modif.nodeId
   const isTargetLabel = modif.isLabel
+  const action = modif.action
   const hasNodes = !!node.nodes
-  // console.log('U > jsonUtils > objToNodes > isTargetNode : ', isTargetNode)
+  console.log('U > jsonUtils > setEditInNode > isTargetNode : ', isTargetNode)
+
   if (isTargetNode) {
-    if (!isTargetLabel) node.value = modif.val
-    if (isTargetLabel) node.label = modif.val
+    switch (action) {
+      case 'diff':
+        if (!isTargetLabel) node.value = modif.val
+        if (isTargetLabel) node.label = modif.val
+        break
+      case 'added':
+        node.nodes.push(modif.newNode)
+        break
+      case 'deleted':
+        break
+    }
   }
   if (!isTargetNode && hasNodes) {
     node.nodes = node.nodes.map(subnode => {

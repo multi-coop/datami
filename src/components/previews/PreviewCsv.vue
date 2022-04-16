@@ -47,6 +47,7 @@
         <GitributeTable
           :file-id="fileId"
           :file-options="fileOptions"
+          :allow-header-edit="allowHeaderEdit"
           :data="data"
           :columns="dataColumns"
           :data-edited="edited"
@@ -117,6 +118,7 @@ export default {
   },
   data () {
     return {
+      allowHeaderEdit: false,
       dataIsSet: false,
       beginEdit: false,
       dataRaw: undefined,

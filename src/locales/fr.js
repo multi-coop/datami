@@ -2,7 +2,9 @@ export default {
   global: {
     optional: 'Optionnel',
     enterValue: 'Entrer une valeur',
-    test: 'test nested global'
+    test: 'test nested global',
+    yes: 'oui',
+    no: 'non'
   },
   git: {
     provider: 'Provider',
@@ -88,12 +90,16 @@ export default {
     deleteRows: 'Supprimer les lignes'
   },
   editJson: {
+    node: 'Noeud',
+    childrenNodes: 'noeud(s) enfant(s)',
     nodeType: 'Noeud de type',
     openNode: 'Ouvrir le noeud',
     closeNode: 'Refermer le noeud',
     editLabel: 'Editer le nom du champ',
     addNode: 'Ajouter un noeud',
+    confirmAddNode: 'Êtes-vous certain·e de vouloir ajouter un noeud ?',
     removeNode: 'Supprimer ce noeud',
+    confirmRemoveNode: 'Êtes-vous certain·e de vouloir supprimer ce noeud ?',
     arr: 'liste',
     obj: 'objet',
     str: 'texte',

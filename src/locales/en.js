@@ -2,7 +2,9 @@ export default {
   global: {
     optional: 'Optional',
     enterValue: 'Entrer une valeur',
-    test: 'test nested global'
+    test: 'test nested global',
+    yes: 'yes',
+    no: 'no'
   },
   git: {
     provider: 'Provider',
@@ -88,12 +90,16 @@ export default {
     deleteRows: 'Delete selected rows'
   },
   editJson: {
+    node: 'Node',
+    childrenNodes: 'children node(s)',
     nodeType: 'Node type',
     openNode: 'Open the node',
     closeNode: 'close the node',
     editLabel: 'Edit field name',
     addNode: 'Add a node',
+    confirmAddNode: 'Are you sure you want to add a new node ?',
     removeNode: 'Remove this node',
+    confirmRemoveNode: 'Are you sure you want to remove this node ?',
     arr: 'list',
     obj: 'object',
     str: 'text',

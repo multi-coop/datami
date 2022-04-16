@@ -28,8 +28,9 @@
           </b-tooltip>
 
           <!-- NODE LABEL + EDITABLE -->
-          <span v-if="view === 'edit' && depth !== 0 && parentType !== 'arr'">
+          <span v-if="view === 'edit' && depth !== 0 && parentType !== 'arr' && allowKeyEdit">
             <EditJsonCell
+              v-model="showRemoveNodeDialog"
               :file-id="fileId"
               :node-id="nodeId"
               :input-data="label"
@@ -83,9 +84,11 @@
           style="margin-top: 0.1em;">
           <span v-if="view === 'edit'">
             <EditJsonCell
+              v-model="showRemoveNodeDialog"
               :file-id="fileId"
               :node-id="nodeId"
               :node-type="nodeType"
+              :is-array-item="parentType === 'arr'"
               :input-data="value"
               :is-label="false"
               :icon="getNodeTypeIcon"
@@ -93,9 +96,6 @@
               @updateJson="SendActionToParent"/>
           </span>
           <span v-if="view === 'diff'">
-            <!-- <span :class="`is-size-7 ${getValueClass}`">
-              {{ value }} - diff
-            </span> -->
             <span
               v-if="view === 'diff'"
               :class="`is-size-7 ${getValueClass}`"
@@ -110,16 +110,27 @@
       </div>
     </div>
 
+    <!-- REMOVE NODE DIALOG -->
+    <DialogDeleteNode
+      v-show="showRemoveNodeDialog"
+      v-model="showRemoveNodeDialog"
+      :node-infos="nodeInfos"
+      :indent="indent"
+      :locale="locale"
+      @confirmDeleteNode="removeNode"/>
+
     <!-- LOOP CHILDREN NODES -->
-    <div v-if="showChildren">
+    <div v-if="showChildren && !showRemoveNodeDialog">
       <json-tree
         v-for="node in nodes"
         :key="node.id"
         :file-id="fileId"
         :view="view"
+        :allow-key-edit="allowKeyEdit"
         :node-id="node.id"
         :label="node.label"
         :value="node.value"
+        :parent-id="nodeId"
         :parent-type="nodeType"
         :node-type="node.nodeType"
         :was-added="node.wasAdded"
@@ -133,12 +144,12 @@
 
     <!-- ADD NODE -->
     <div
-      v-if="view === 'edit' && !hasValue && showChildren"
+      v-if="view === 'edit' && !hasValue && showChildren && !showRemoveNodeDialog"
       class="is-flex is-direction-row is-align-items-center"
       :style="indentAddNode"
       @mouseenter="showAdd = true"
       @mouseleave="showAdd = false"
-      @click="addNode">
+      @click="showAddNodeDialog = !showAddNodeDialog">
       <b-icon
         :icon="`plus${showAdd ? '-thick' : ''}`"
         size="is-small"
@@ -149,6 +160,14 @@
         {{ t(`editJson.addNode`, locale) }}
       </span>
     </div>
+    <!-- ADD NODE DIALOG -->
+    <DialogAddNode
+      v-show="showAddNodeDialog"
+      v-model="showAddNodeDialog"
+      :node-infos="nodeInfos"
+      :indent="indent"
+      :locale="locale"
+      @confirmAddNode="addNode"/>
   </div>
 </template>
 
@@ -156,11 +175,15 @@
 import { mixinGlobal, mixinDiff, mixinJsonNode } from '@/utils/mixins.js'
 
 import EditJsonCell from '@/components/edition/json/EditJsonCell'
+import DialogDeleteNode from '@/components/edition/json/DialogDeleteNode'
+import DialogAddNode from '@/components/edition/json/DialogAddNode'
 
 export default {
   name: 'JsonTree',
   components: {
-    EditJsonCell
+    EditJsonCell,
+    DialogDeleteNode,
+    DialogAddNode
   },
   mixins: [
     mixinGlobal,
@@ -176,6 +199,10 @@ export default {
       default: 'preview',
       type: String
     },
+    allowKeyEdit: {
+      default: false,
+      type: Boolean
+    },
     nodeId: {
       default: null,
       type: String
@@ -187,6 +214,10 @@ export default {
     value: {
       default: null,
       type: [String, Boolean, Number]
+    },
+    parentId: {
+      default: null,
+      type: String
     },
     parentType: {
       default: null,
@@ -224,8 +255,10 @@ export default {
   data () {
     return {
       showChildren: true,
+      showRemoveNodeDialog: false,
       indentSize: 15,
-      showAdd: false
+      showAdd: false,
+      showAddNodeDialog: false
     }
   },
   computed: {
@@ -237,6 +270,17 @@ export default {
     indentAddNode () {
       return {
         transform: `translate(${(this.depth * this.indentSize) + this.indentSize}px)`
+      }
+    },
+    nodeInfos () {
+      return {
+        fileId: this.fileId,
+        nodeId: this.nodeId,
+        nodeType: this.nodeType,
+        nodeTypeIcon: this.getNodeTypeIcon,
+        value: this.value,
+        children: this.nodes && this.nodes.length,
+        label: this.label
       }
     }
   },
@@ -290,14 +334,24 @@ export default {
       return bool
     },
     // TO DO
-    addNode () {
+    addNode (event) {
       const payload = {
         action: 'added',
         fileId: this.fileId,
-        nodeId: this.nodeId
+        nodeId: this.nodeId,
+        newNode: event.newNode
       }
       console.log('\nC > JsonTree > addNode > payload : ', payload)
       // this.$emit('updateJson', payload)
+    },
+    removeNode () {
+      const payload = {
+        action: 'deleted',
+        fileId: this.fileId,
+        nodeId: this.nodeId,
+        parentId: this.parentId
+      }
+      this.$emit('updateJson', payload)
     },
     SendActionToParent (event) {
       this.$emit('updateJson', event)

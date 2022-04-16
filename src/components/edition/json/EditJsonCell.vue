@@ -34,7 +34,7 @@
 
     <!-- REMOVE NODE -->
     <b-tooltip
-      v-if="isLabel"
+      v-if="isLabel || isArrayItem"
       :label="t(`editJson.removeNode`, locale)"
       type="is-dark"
       position="is-right">
@@ -42,8 +42,8 @@
         class="ml-2 mr-4"
         size="is-small"
         type="is-gray"
-        icon="trash-can-outline"
-        @click.native="removeNode"/>
+        :icon="`trash-can${hidden ? '' : '-outline'}`"
+        @click.native="toggleRemoveDialog"/>
     </b-tooltip>
   </span>
 </template>
@@ -54,7 +54,15 @@ import { mixinGlobal } from '@/utils/mixins.js'
 export default {
   name: 'EditJsonCell',
   mixins: [mixinGlobal],
+  model: {
+    prop: 'hidden',
+    event: 'blur'
+  },
   props: {
+    hidden: {
+      default: false,
+      type: Boolean
+    },
     fileId: {
       default: null,
       type: String
@@ -76,6 +84,10 @@ export default {
       type: String
     },
     isLabel: {
+      default: false,
+      type: Boolean
+    },
+    isArrayItem: {
       default: false,
       type: Boolean
     },
@@ -105,24 +117,18 @@ export default {
       isBool: false
     }
   },
-  watch: {
-    // inputData (next) {
-    //   this.input = this.inputData
-    // }
-  },
   beforeMount () {
     this.originalInput = this.inputData
     this.input = this.inputData
     this.edit = !this.isLabel
   },
   methods: {
-    removeNode () {
-      const payload = {
-        action: 'del',
-        fileId: this.fileId,
-        nodeId: this.nodeId
-      }
-      this.$emit('updateJson', payload)
+    handleInput (value) {
+      this.$emit('blur', value)
+    },
+    toggleRemoveDialog () {
+      const val = !this.hidden
+      this.handleInput(val)
     },
     emitChange (event) {
       // console.log('C > EditJsonCell > emitChange > event : ', event)

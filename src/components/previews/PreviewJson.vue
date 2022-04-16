@@ -66,11 +66,12 @@
           v-show="currentEditViewMode === 'edit'"
           :class="`column is-8`">
           <div class="my-3 has-text-centered">
-            🚧 work in progress - edition
+            🚧 &nbsp; work in progress - edition - {{ allowKeyEdit }}
           </div>
           <JsonTree
             :file-id="fileId"
             :view="currentEditViewMode"
+            :allow-key-edit="allowKeyEdit"
             :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
@@ -223,6 +224,10 @@ export default {
           break
       }
       return dataForEditView
+    },
+    allowKeyEdit () {
+      const options = this.fileOptions
+      return options && options.allowKeyEdit
     }
   },
   watch: {
@@ -283,15 +288,15 @@ export default {
       this.updateBuffer({ ...commitData, addToBuffer: true })
     },
     setChanges (changeObj) {
-      console.log('C > PreviewJson > UpdateEditedJson > changeObj : ', changeObj)
+      console.log('\nC > PreviewJson > setChanges > changeObj : ', changeObj)
       const changeId = changeObj.nodeId
       const changeIsLabel = changeObj.isLabel
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      console.log('C > PreviewJson > UpdateEditedJson > changeId : ', changeId)
+      console.log('C > PreviewJson > setChanges > changeId : ', changeId)
       let copyChanges = [...this.changesNodes]
       // copyChanges = copyChanges.filter(ch => ch.field !== changeId)
-      console.log('C > PreviewJson > UpdateEditedJson > copyChanges : ', copyChanges)
+      console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
       if (action === 'diff') {
         copyChanges = copyChanges.filter(ch => {
           const sameNode = ch.nodeId === changeId
@@ -311,11 +316,11 @@ export default {
       const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
-      console.log('C > PreviewMd > addRowEvent > copyChanges : ', copyChanges)
+      console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
       this.changesNodes = copyChanges
     },
     UpdateEditedJson (event) {
-      console.log('C > PreviewJson > UpdateEditedJson > event : ', event)
+      console.log('\nC > PreviewJson > UpdateEditedJson > event : ', event)
       this.setChanges(event)
       this.edited = this.setEditInNode(this.edited, event)
     }

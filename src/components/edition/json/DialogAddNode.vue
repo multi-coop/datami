@@ -1,7 +1,9 @@
 <template>
-  <div class="DialogDeleteRow container">
-    <div class="columns is-vcentered is-centered">
-      <div class="column is-9">
+  <div
+    class="DialogAddNode mb-5"
+    :style="indent">
+    <div class="columns">
+      <div class="column is-8">
         <div class="card">
           <!-- CARD HEADER -->
           <header class="card-header">
@@ -9,7 +11,7 @@
               <b-icon
                 class="mr-3"
                 :icon="icon"/>
-              {{ t(`editCsv.${getTootlipLabel}`, locale) }}
+              {{ t('editJson.addNode', locale) }}
             </p>
             <button
               class="card-header-icon"
@@ -19,15 +21,35 @@
             </button>
           </header>
 
-          <!-- ROWS TO DELETE / ROW VALUES -->
+          <!-- NODE TO ADD -->
           <div class="card-content">
             <div class="content my-4">
-              <b-table
-                :data="checkedRows"
-                :columns="headers"
-                narrowed
-                sticky-headers
-                striped/>
+              <p class="has-text-weight-bold has-text-centered">
+                {{ t('editJson.confirmAddNode', locale) }}
+              </p>
+              <!-- NODE TITLE -->
+              <p v-if="false">
+                {{ nodeInfos }}
+              </p>
+              <p class="has-text-centered">
+                <span>
+                  <code
+                    :class="nodeInfos.hasValue ? 'has-text-grey' : ''">
+                    {{ nodeInfos.label }}
+                  </code>
+                </span>
+                <!-- NODE TYPE ICON -->
+                <b-tooltip
+                  :label="`${t(`editJson.nodeType`, locale)} : ${t(`editJson.${nodeInfos.nodeType}`, locale)}`"
+                  type="is-dark"
+                  position="is-right">
+                  <b-icon
+                    class="mx-3 mt-2"
+                    size="is-small"
+                    type="is-danger"
+                    :icon="nodeInfos.nodeTypeIcon"/>
+                </b-tooltip>
+              </p>
             </div>
           </div>
 
@@ -44,8 +66,8 @@
               class="card-footer-item mx-3"
               :icon-left="icon"
               type="is-dark"
-              @click="sendRowToDeleteToParent">
-              {{ t(`editCsv.${getTootlipLabel}`, locale) }}
+              @click="sendNodeToAddToParent">
+              {{ t('editJson.addNode', locale) }}
             </b-button>
           </footer>
         </div>
@@ -58,7 +80,7 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'DialogDeleteRow',
+  name: 'DialogAddNode',
   mixins: [mixinGlobal],
   model: {
     prop: 'hidden',
@@ -69,13 +91,13 @@ export default {
       default: false,
       type: Boolean
     },
-    headers: {
+    nodeInfos: {
       default: null,
-      type: Array
+      type: Object
     },
-    checkedRows: {
-      default: null,
-      type: Array
+    indent: {
+      default: undefined,
+      type: Object
     },
     locale: {
       default: '',
@@ -88,32 +110,9 @@ export default {
   },
   data () {
     return {
-      icon: 'trash-can'
+      icon: 'plus-thick',
+      newNode: {}
     }
-  },
-  computed: {
-    getTootlipLabel () {
-      let str
-      const checkedRowsLength = this.checkedRows.length
-      if (!checkedRowsLength) str = 'deleteARow'
-      if (checkedRowsLength === 1) str = 'deleteRow'
-      if (checkedRowsLength > 1) str = 'deleteRows'
-      return str
-    }
-  },
-  watch: {
-    headers (next) {
-      next.forEach(header => {
-        // if (this.temp[header.field]) {
-        //   this.temp[header.field] = null
-        // }
-      })
-    }
-  },
-  beforeMount () {
-    // this.headers.forEach(h => {
-    //   this.temp[h.field] = null
-    // })
   },
   methods: {
     handleInput (value) {
@@ -122,13 +121,9 @@ export default {
     closeDialog () {
       this.handleInput(false)
     },
-    sendRowToDeleteToParent () {
-      console.log('\nC > DialogDeleteRow > sendRowToDeleteToParent > this.temp :', this.temp)
-      const payload = {
-        action: 'deleteRows',
-        rows: this.checkedRows
-      }
-      this.$emit('action', payload)
+    sendNodeToAddToParent () {
+      // console.log('\nC > DialogAddNode > sendNodeToDeleteToParent > this.temp :', this.temp)
+      this.$emit('confirmAddNode', this.newNode)
       this.closeDialog()
     }
   }
