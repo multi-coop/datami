@@ -78,19 +78,6 @@ export const nodeTypes = [
   }
 ]
 
-// let nodes = {
-//   label: 'root',
-//   nodeType: undefined,
-//   nodes: []
-// }
-
-// const partial = (arr = [], condition) => {
-//   const result = []
-//   arr.forEach(a => {
-//     if (condition(a)) result.push(a)
-//   })
-// }
-
 const getNodeTypeCode = (nodeType) => {
   const typeInfos = nodeTypes.find(t => t.type === nodeType)
   return typeInfos.code
@@ -160,28 +147,34 @@ export const objToNodes = (obj, label) => {
 }
 
 export const setEditInNode = (node, modif) => {
-  console.log('\nU > jsonUtils > setEditInNode > node : ', node)
-  console.log('U > jsonUtils > setEditInNode > modif : ', modif)
-  const isTargetNode = node.id === modif.nodeId
-  const isTargetLabel = modif.isLabel
+  // console.log('\nU > jsonUtils > setEditInNode > node : ', node)
+  // console.log('U > jsonUtils > setEditInNode > modif : ', modif)
   const action = modif.action
   const hasNodes = !!node.nodes
-  console.log('U > jsonUtils > setEditInNode > isTargetNode : ', isTargetNode)
+  const isParentNode = node.id === modif.parentId
+  const isTargetNode = node.id === modif.nodeId
+  const continueProcess = !isParentNode && !isTargetNode
 
-  if (isTargetNode) {
-    switch (action) {
-      case 'diff':
-        if (!isTargetLabel) node.value = modif.val
-        if (isTargetLabel) node.label = modif.val
-        break
-      case 'added':
-        node.nodes.push(modif.newNode)
-        break
-      case 'deleted':
-        break
+  if (!continueProcess && action === 'diff') {
+    const isTargetLabel = modif.isLabel
+    // console.log('U > jsonUtils > setEditInNode > isTargetNode : ', isTargetNode)
+    if (isTargetNode) {
+      if (!isTargetLabel) node.value = modif.val
+      if (isTargetLabel) node.label = modif.val
     }
   }
-  if (!isTargetNode && hasNodes) {
+
+  if (!continueProcess && action === 'deleted') {
+    node.nodes = node.nodes.filter(n => n.id !== modif.nodeId)
+  }
+
+  if (!continueProcess && action === 'added') {
+    const newNode = modif.newNode
+    newNode.label = newNode.label || 'new'
+    node.nodes = [...node.nodes, newNode]
+  }
+
+  if (continueProcess && hasNodes) {
     node.nodes = node.nodes.map(subnode => {
       return setEditInNode(subnode, modif)
     })
@@ -192,12 +185,13 @@ export const setEditInNode = (node, modif) => {
 export const nodeToObj = (node, isRoot = false) => {
   // console.log('\nU > jsonUtils > objToNodes > node : ', node)
   const nodeType = node.nodeType
+  const nodeChildren = node.nodes && node.nodes.length && node.nodes
   // const label = node.label
   // console.log('U > jsonUtils > objToNodes > nodeType : ', nodeType)
   let obj
   if (nodeType === 'arr') {
     obj = []
-    node.nodes.forEach(subNode => {
+    nodeChildren && nodeChildren.forEach(subNode => {
       // console.log('U > jsonUtils > objToNodes > subNode : ', subNode)
       const newObj = nodeToObj(subNode)
       obj.push(newObj)
@@ -205,7 +199,7 @@ export const nodeToObj = (node, isRoot = false) => {
   }
   if (nodeType === 'obj') {
     obj = {}
-    node.nodes.forEach(subNode => {
+    nodeChildren && nodeChildren.forEach(subNode => {
       // console.log('U > jsonUtils > objToNodes > subNode : ', subNode)
       const newObj = nodeToObj(subNode)
       obj[subNode.label] = newObj

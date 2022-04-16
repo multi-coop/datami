@@ -150,27 +150,47 @@ export const mixinMd = {
 export const mixinJson = {
   methods: {
     objToNodes,
-    setEditInNode,
+    setEditInNode
+  }
+}
+
+export const mixinNodeToJson = {
+  methods: {
     nodeToObj
   }
 }
 
 export const mixinJsonNode = {
+  data () {
+    return {
+      nodeTypes: nodeTypes
+    }
+  },
   computed: {
     getNodeTypeInfos () {
-      return nodeTypes.find(n => n.code === this.nodeType)
+      return this.nodeTypes.find(n => n.code === this.nodeType)
     },
     getNodeTypeIcon () {
       const infos = this.getNodeTypeInfos
-      return infos.icon
+      return infos && infos.icon
     },
     hasValue () {
       const infos = this.getNodeTypeInfos
-      return infos.hasValue
+      return infos && infos.hasValue
     },
     getValueClass () {
       const infos = this.getNodeTypeInfos
-      return infos.class
+      return infos && infos.class
+    }
+  },
+  methods: {
+    getNodeTypeInfosByType (nodeType) {
+      const infos = nodeTypes.find(n => n.code === nodeType)
+      return infos
+    },
+    getNodeTypeIconByType (nodeType) {
+      const infos = this.getNodeTypeInfosByType(nodeType)
+      return infos && infos.icon
     }
   }
 }

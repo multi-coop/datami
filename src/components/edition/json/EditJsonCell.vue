@@ -4,7 +4,7 @@
 
     <!-- EDIT LABEL -->
     <b-tooltip
-      v-if="isLabel"
+      v-if="isLabel && !isArrayItem"
       :label="t(`editJson.editLabel`, locale)"
       type="is-dark"
       position="is-left">
@@ -20,21 +20,47 @@
     <b-field
       v-show="edit"
       class="mb-0">
-      <b-input
+      <!-- <b-input
         :custom-class="`g-cell py-0 ${isLabel ? 'g-label' : ''}`"
+        :value="input"
+        size="is-small"
+        @input="emitChange"/> -->
+      <b-switch
+        v-if="nodeType === 'bool'"
+        :value="input"
+        size="is-small"
+        type="is-dark"
+        @input="emitChange">
+        {{ input }}
+      </b-switch>
+      <b-numberinput
+        v-if="nodeType === 'num' || nodeType === 'float'"
+        v-model="input"
+        size="is-small"
+        type="is-light"
+        controls-position="compact"
+        @input="emitChange"/>
+      <b-input
+        v-if="nodeType === 'str' || isLabel"
+        :custom-class="`g-cell py-0 ${isLabel ? 'g-label' : ''}`"
+        clearable
         :value="input"
         size="is-small"
         @input="emitChange"/>
     </b-field>
-    <span v-show="!edit">
+
+    <!-- VALUE WHEN EDIT IS OFF -->
+    <span
+      v-show="!edit"
+      @click="toggleShowChildren">
       <code :class="!showChildren || hasValue ? 'has-text-grey' : ''">
         {{ input }}
       </code>
     </span>
 
-    <!-- REMOVE NODE -->
+    <!-- REMOVE NODE ICON -->
     <b-tooltip
-      v-if="isLabel || isArrayItem"
+      v-if="isLabel"
       :label="t(`editJson.removeNode`, locale)"
       type="is-dark"
       position="is-right">
@@ -129,6 +155,10 @@ export default {
     toggleRemoveDialog () {
       const val = !this.hidden
       this.handleInput(val)
+    },
+    toggleShowChildren () {
+      // console.log('C > EditJsonCell > toggleShowChildren ...')
+      this.$emit('toggleShowChildren')
     },
     emitChange (event) {
       // console.log('C > EditJsonCell > emitChange > event : ', event)

@@ -28,7 +28,8 @@
           </b-tooltip>
 
           <!-- NODE LABEL + EDITABLE -->
-          <span v-if="view === 'edit' && depth !== 0 && parentType !== 'arr' && allowKeyEdit">
+          <!-- {{ nodeType }} -->
+          <span v-if="view === 'edit' && depth !== 0 && allowKeyEdit">
             <EditJsonCell
               v-model="showRemoveNodeDialog"
               :file-id="fileId"
@@ -37,8 +38,10 @@
               :is-label="true"
               :icon="'code-braces'"
               :has-value="hasValue"
+              :is-array-item="parentType === 'arr'"
               :show-children="showChildren"
               :locale="locale"
+              @toggleShowChildren="showChildren = !showChildren"
               @updateJson="SendActionToParent"/>
           </span>
           <span
@@ -57,7 +60,7 @@
 
           <!-- NODE TYPE ICON -->
           <b-tooltip
-            :label="`${t(`editJson.nodeType`, locale)} : ${t(`editJson.${nodeType}`, locale)}`"
+            :label="`${t(`editJson.nodeTypeOf`, locale)} : ${t(`editJson.${nodeType}`, locale)}`"
             type="is-dark"
             position="is-right">
             <b-icon
@@ -144,20 +147,28 @@
 
     <!-- ADD NODE -->
     <div
-      v-if="view === 'edit' && !hasValue && showChildren && !showRemoveNodeDialog"
+      v-if="view === 'edit' && !hasValue && showChildren && !showRemoveNodeDialog && !showAddNodeDialog"
       class="is-flex is-direction-row is-align-items-center"
       :style="indentAddNode"
       @mouseenter="showAdd = true"
       @mouseleave="showAdd = false"
       @click="showAddNodeDialog = !showAddNodeDialog">
       <b-icon
-        :icon="`plus${showAdd ? '-thick' : ''}`"
+        :icon="`plus${showAdd || showAddNodeDialog ? '-thick' : ''}`"
         size="is-small"
         class="my-1"/>
       <span
         v-show="showAdd"
         class="is-size-7 has-text-dark ml-2">
-        {{ t(`editJson.addNode`, locale) }}
+        <span class="is-italic">
+          {{ t(`editJson.addTo`, locale) }} :
+        </span>
+        <code>{{ label }}</code>
+        <b-icon
+          class=""
+          size="is-small"
+          type="is-danger"
+          :icon="getNodeTypeIcon"/>
       </span>
     </div>
     <!-- ADD NODE DIALOG -->
@@ -342,7 +353,7 @@ export default {
         newNode: event.newNode
       }
       console.log('\nC > JsonTree > addNode > payload : ', payload)
-      // this.$emit('updateJson', payload)
+      this.$emit('updateJson', payload)
     },
     removeNode () {
       const payload = {

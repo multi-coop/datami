@@ -1,49 +1,5 @@
 <template>
   <div class="PreviewJson content">
-    <!-- DEBUG -->
-    <div
-      v-if="debug"
-      class="columns is-multiline">
-      <div class="column is-4">
-        <p>
-          data:
-          <code>
-            <pre>{{ data }}</pre>
-          </code>
-        </p>
-      </div>
-    </div>
-    <div
-      v-if="false"
-      class="columns is-multiline">
-      <div class="column is-4">
-        <p v-if="fileRaw">
-          (target) JSON.parse(fileRaw):
-          <code>
-            <pre>{{ JSON.parse(fileRaw) }}</pre>
-          </code>
-        </p>
-      </div>
-      <div class="column is-4">
-        <p>
-          edited:
-          <code>
-            <pre>{{ edited }}</pre>
-          </code>
-        </p>
-      </div>
-      <div
-        v-if="edited"
-        class="column is-4">
-        <p>
-          getObjectFromNodes:
-          <code>
-            <pre>{{ getObjectFromNodes }}</pre>
-          </code>
-        </p>
-      </div>
-    </div>
-
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
       <LoaderEditNavbar v-if="!onlyPreview"/>
@@ -142,13 +98,57 @@
         </div>
       </div>
     </div>
+
+    <!-- DEBUG -->
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-4">
+        <p>
+          data:
+          <code>
+            <pre>{{ data }}</pre>
+          </code>
+        </p>
+      </div>
+    </div>
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-3">
+        <p v-if="fileRaw">
+          (target) JSON.parse(fileRaw):
+          <code>
+            <pre>{{ JSON.parse(fileRaw) }}</pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-6">
+        <p>
+          edited:
+          <code>
+            <pre>{{ edited }}</pre>
+          </code>
+        </p>
+      </div>
+      <div
+        v-if="edited"
+        class="column is-3">
+        <p>
+          getObjectFromNodes:
+          <code>
+            <pre>{{ getObjectFromNodes }}</pre>
+          </code>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinCommit, mixinIcons, mixinDiff, mixinJson } from '@/utils/mixins.js'
+import { mixinGlobal, mixinCommit, mixinIcons, mixinDiff, mixinJson, mixinNodeToJson } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderJSON from '@/components/loaders/LoaderJSON'
@@ -170,7 +170,8 @@ export default {
     mixinCommit,
     mixinIcons,
     mixinDiff,
-    mixinJson
+    mixinJson,
+    mixinNodeToJson
   ],
   props: {
     fileId: {
@@ -327,3 +328,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.b-numberinput.field.has-addons > .control {
+  margin-bottom: none !important;
+}
+</style>

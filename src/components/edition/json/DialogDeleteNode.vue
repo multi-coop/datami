@@ -40,7 +40,7 @@
                 </span>
                 <!-- NODE TYPE ICON -->
                 <b-tooltip
-                  :label="`${t(`editJson.nodeType`, locale)} : ${t(`editJson.${nodeInfos.nodeType}`, locale)}`"
+                  :label="`${t(`editJson.nodeTypeOf`, locale)} : ${t(`editJson.${nodeInfos.nodeType}`, locale)}`"
                   type="is-dark"
                   position="is-right">
                   <b-icon
