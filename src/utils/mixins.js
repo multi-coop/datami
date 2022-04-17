@@ -96,6 +96,12 @@ export const mixinInput = {
 }
 
 export const mixinDiff = {
+  data () {
+    return {
+      insFragClass: 'git-ins',
+      delFragClass: 'git-del'
+    }
+  },
   methods: {
     createTwoFilesPatch,
     diffWords,
@@ -106,7 +112,7 @@ export const mixinDiff = {
         // green for additions, red for deletions
         // grey for common parts
         let fragment
-        const spanClass = part.added ? 'git-ins' : part.removed ? 'git-del' : null
+        const spanClass = part.added ? this.insFragClass : part.removed ? this.delFragClass : null
         if (spanClass) {
           fragment = `<span class="${spanClass}">${part.value}</span>`
         } else {
@@ -150,6 +156,7 @@ export const mixinMd = {
 export const mixinJson = {
   methods: {
     objToNodes,
+    // mergeJsons,
     setEditInNode
   }
 }

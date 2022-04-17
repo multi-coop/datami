@@ -94,6 +94,7 @@ export default {
     childrenNodes: 'noeud(s) enfant(s)',
     nodeType: 'Type de noeud',
     nodeTypeOf: 'Noeud de type',
+    selectType: 'Sélectionner un type',
     openNode: 'Ouvrir le noeud',
     closeNode: 'Refermer le noeud',
     nodeLabel: 'Nom du noeud',

@@ -94,6 +94,7 @@ export default {
     childrenNodes: 'children node(s)',
     nodeType: 'Node type',
     nodeTypeOf: 'Node of type',
+    selectType: 'Select a node type',
     openNode: 'Open the node',
     closeNode: 'close the node',
     editLabel: 'Edit node label',

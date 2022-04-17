@@ -21,12 +21,12 @@
         <div
           v-show="currentEditViewMode === 'edit'"
           :class="`column is-8`">
-          <div class="my-3 has-text-centered">
+          <!-- <div class="my-3 has-text-centered">
             🚧 &nbsp; work in progress - edition - {{ allowKeyEdit }}
-          </div>
+          </div> -->
           <JsonTree
             :file-id="fileId"
-            :view="currentEditViewMode"
+            :view="'edit'"
             :allow-key-edit="allowKeyEdit"
             :node-id="edited.id"
             :label="edited.label"
@@ -57,7 +57,7 @@
           </div> -->
           <JsonTree
             :file-id="fileId"
-            :view="currentEditViewMode"
+            :view="'diff'"
             :node-id="edited.id"
             :label="edited.label"
             :node-type="edited.nodeType"
@@ -65,6 +65,7 @@
             :depth="0"
             :locale="locale"
             :default-depth="defaultDepth"
+            :debug="false"
             :changes-nodes="changesNodes"/>
         </div>
 
@@ -112,6 +113,7 @@
         </p>
       </div>
     </div>
+    <!-- COMPARISON INPUT > EDITED > OUTPUT -->
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -142,13 +144,33 @@
         </p>
       </div>
     </div>
+    <!-- CHANGES LOG -->
+    <div
+      v-if="false"
+      class="columns is-multiline">
+      <div class="column is-3">
+        <p v-if="fileRaw">
+          changesNodes:
+          <code>
+            <pre>{{ changesNodes }}</pre>
+          </code>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinCommit, mixinIcons, mixinDiff, mixinJson, mixinNodeToJson } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinCommit,
+  mixinIcons,
+  mixinDiff,
+  mixinJson,
+  mixinNodeToJson
+} from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderJSON from '@/components/loaders/LoaderJSON'
@@ -226,6 +248,9 @@ export default {
       }
       return dataForEditView
     },
+    // getMixedJsons () {
+    //   return this.mergeJsons(this.edited, this.data)
+    // },
     allowKeyEdit () {
       const options = this.fileOptions
       return options && options.allowKeyEdit
@@ -331,6 +356,6 @@ export default {
 
 <style>
 .b-numberinput.field.has-addons > .control {
-  margin-bottom: none !important;
+  margin-bottom: 0!important;
 }
 </style>

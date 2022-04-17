@@ -28,7 +28,11 @@
           </b-tooltip>
 
           <!-- NODE LABEL + EDITABLE -->
-          <!-- {{ nodeType }} -->
+          <span v-if="false">
+            <!-- {{ nodeType }} -->
+            <code v-if="wasAddedNode">+ {{ wasAddedNode }}</code> &nbsp;
+            <code v-if="wasDeletedNode">- {{ wasDeletedNode }}</code>
+          </span>
           <span v-if="view === 'edit' && depth !== 0 && allowKeyEdit">
             <EditJsonCell
               v-model="showRemoveNodeDialog"
@@ -54,8 +58,11 @@
             </code>
             <span
               v-if="view === 'diff'"
-              :class="`gt-node-label ${!showChildren || hasValue ? 'has-text-grey' : ''}`"
-              v-html="getDiffHtmlChars (true, wasAdded, label, nodeId)"/>
+              :class="`${ wasAddedNode ? insFragClass : ''} ${ wasDeletedNode ? delFragClass : ''}`">
+              <span
+                :class="`gt-node-label ${!showChildren || hasValue ? 'has-text-grey' : ''}`"
+                v-html="getDiffHtmlChars (true, wasAddedNode, label, nodeId)"/>
+            </span>
           </span>
 
           <!-- NODE TYPE ICON -->
@@ -102,7 +109,7 @@
             <span
               v-if="view === 'diff'"
               :class="`is-size-7 ${getValueClass}`"
-              v-html="getDiffHtmlChars (false, wasAdded, value, nodeId)"/>
+              v-html="getDiffHtmlChars (false, wasAddedNode, value, nodeId)"/>
           </span>
           <span v-if="view === 'preview'">
             <span :class="`is-size-7 ${getValueClass}`">
@@ -122,10 +129,22 @@
       :locale="locale"
       @confirmDeleteNode="removeNode"/>
 
+    <!-- DEBUGGING DIFF -->
+    <div
+      v-if="false && view === 'diff' && getChanges && getChanges.hasDiff"
+      class="box">
+      Node <code>{{ this.label }} / {{ this.nodeType }}</code> has diff =><br>
+      Node id : <code>{{ this.nodeId }}</code><br>
+      <pre><code>{{ getChanges }}</code></pre>
+    </div>
+    <div v-if="false && view === 'diff'">
+      <pre>{{ getChildrenNodes }}</pre>
+    </div>
+
     <!-- LOOP CHILDREN NODES -->
-    <div v-if="showChildren && !showRemoveNodeDialog">
+    <div v-show="showChildren && !showRemoveNodeDialog">
       <json-tree
-        v-for="node in nodes"
+        v-for="node in getChildrenNodes"
         :key="node.id"
         :file-id="fileId"
         :view="view"
@@ -136,12 +155,14 @@
         :parent-id="nodeId"
         :parent-type="nodeType"
         :node-type="node.nodeType"
-        :was-added="node.wasAdded"
         :nodes="node.nodes"
         :depth="depth + 1"
         :locale="locale"
         :default-depth="defaultDepth"
         :changes-nodes="changesNodes"
+        :was-added-node="node.wasAdded"
+        :was-deleted-node="node.wasDeleted"
+        :debug="debug"
         @updateJson="SendActionToParent"/>
     </div>
 
@@ -238,10 +259,6 @@ export default {
       default: null,
       type: String
     },
-    wasAdded: {
-      default: false,
-      type: Boolean
-    },
     nodes: {
       default: null,
       type: Array
@@ -261,6 +278,18 @@ export default {
     changesNodes: {
       default: () => [],
       type: Array
+    },
+    wasAddedNode: {
+      default: false,
+      type: Boolean
+    },
+    wasDeletedNode: {
+      default: false,
+      type: Boolean
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
@@ -282,6 +311,55 @@ export default {
       return {
         transform: `translate(${(this.depth * this.indentSize) + this.indentSize}px)`
       }
+    },
+    isDiffMode () {
+      return this.view === 'diff'
+    },
+    getChildrenNodes () {
+      let addedNodes, deletedNodes
+      let nodes = this.nodes
+      if (this.isDiffMode) {
+        console.log('\nC > JsonTree > getChildrenNodes > this.nodes : ', this.nodes)
+        addedNodes = this.getChangesAdded.map(n => n.newNode) || []
+        console.log('C > JsonTree > getChildrenNodes > addedNodes : ', addedNodes)
+        deletedNodes = this.getChangesDeleted.map(n => n.deletedNode) || []
+        console.log('C > JsonTree > getChildrenNodes > deletedNodes : ', deletedNodes)
+        // nodes = [...nodes, ...addedNodes, ...deletedNodes]
+        nodes = addedNodes.length ? [...nodes, ...addedNodes] : nodes
+        nodes = deletedNodes.length ? [...nodes, ...deletedNodes] : nodes
+        console.log('C > JsonTree > getChildrenNodes > nodes : ', nodes)
+      }
+      return nodes
+    },
+    getChangesDiff () {
+      // get diff on this node
+      const diffs = this.isDiffMode && this.changesNodes.filter(ch => ch.action === 'diff' && ch.nodeId === this.nodeId)
+      return diffs
+    },
+    getChangesAdded () {
+      // get additions to this node
+      const additions = this.isDiffMode && this.changesNodes.filter(ch => ch.action === 'added' && ch.parentId === this.nodeId)
+      return additions
+    },
+    getChangesDeleted () {
+      // get deleted children
+      const deletions = this.isDiffMode && this.changesNodes.filter(ch => ch.action === 'deleted' && ch.parentId === this.nodeId)
+      return deletions
+    },
+    getChanges () {
+      let deletions, diffs, additions, allChanges
+      if (this.isDiffMode) {
+        diffs = this.getChangesDiff
+        deletions = this.getChangesDeleted
+        additions = this.getChangesAdded
+        allChanges = [deletions, diffs, additions]
+        return {
+          hasDiff: allChanges.some(ch => !!ch.length),
+          deleted: deletions,
+          diffs: diffs,
+          addded: additions
+        }
+      } else return false
     },
     nodeInfos () {
       return {
@@ -344,23 +422,35 @@ export default {
       if (wasAdded) bool = true
       return bool
     },
-    // TO DO
     addNode (event) {
+      const newNode = event.newNode
+      newNode.wasAdded = true
       const payload = {
         action: 'added',
         fileId: this.fileId,
-        nodeId: this.nodeId,
-        newNode: event.newNode
+        parentId: this.nodeId,
+        newNode: newNode
       }
       console.log('\nC > JsonTree > addNode > payload : ', payload)
       this.$emit('updateJson', payload)
     },
     removeNode () {
+      const deletedNode = {
+        nodeType: this.nodeType,
+        label: this.label,
+        value: this.value,
+        wasDeleted: true
+      }
+      let deletedSubNodes = this.nodes && [...this.nodes]
+      deletedSubNodes = deletedSubNodes && deletedSubNodes.map(n => { return { ...n, wasDeleted: true } })
+      deletedNode.nodes = deletedSubNodes
+
       const payload = {
         action: 'deleted',
         fileId: this.fileId,
         nodeId: this.nodeId,
-        parentId: this.parentId
+        parentId: this.parentId,
+        deletedNode: deletedNode
       }
       this.$emit('updateJson', payload)
     },

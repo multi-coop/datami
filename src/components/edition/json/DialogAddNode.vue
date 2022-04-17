@@ -58,6 +58,7 @@
                     :label="t('editJson.nodeType', locale)">
                     <b-select
                       v-model="nodeType"
+                      :placeholder="t('editJson.selectType', locale)"
                       :icon="getNodeTypeIcon || 'circle-small'">
                       <option :value="undefined">
                         ---
@@ -320,7 +321,7 @@ export default {
       }
       if (!this.isNodeObj) {
         const isStringNode = this.nodeType === 'str'
-        const hasVal = isStringNode ? !!tempNode.value : true
+        const hasVal = isStringNode ? !!tempNode.value : !!tempNode.nodeType
         isReady = needLabel ? hasLabel && hasVal : hasVal
       }
       return isReady
