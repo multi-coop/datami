@@ -115,7 +115,7 @@
     </div>
     <!-- COMPARISON INPUT > EDITED > OUTPUT -->
     <div
-      v-if="debug"
+      v-if="false"
       class="columns is-multiline">
       <div class="column is-3">
         <p v-if="fileRaw">

@@ -107,9 +107,14 @@
           </span>
           <span v-if="view === 'diff'">
             <span
-              v-if="view === 'diff'"
+              v-if="!wasDeletedNode"
               :class="`is-size-7 ${getValueClass}`"
-              v-html="getDiffHtmlChars (false, wasAddedNode, value, nodeId)"/>
+              v-html="getDiffHtmlChars (false, wasAddedNode, value.toString(), nodeId)"/>
+            <span
+              v-if="wasDeletedNode"
+              :class="`${delFragClass}`">
+              {{ value.toString() }}
+            </span>
           </span>
           <span v-if="view === 'preview'">
             <span :class="`is-size-7 ${getValueClass}`">
@@ -133,8 +138,8 @@
     <div
       v-if="false && view === 'diff' && getChanges && getChanges.hasDiff"
       class="box">
-      Node <code>{{ this.label }} / {{ this.nodeType }}</code> has diff =><br>
-      Node id : <code>{{ this.nodeId }}</code><br>
+      Node <code>{{ label }} / {{ nodeType }}</code> has diff =><br>
+      Node id : <code>{{ nodeId }}</code><br>
       <pre><code>{{ getChanges }}</code></pre>
     </div>
     <div v-if="false && view === 'diff'">
@@ -316,16 +321,15 @@ export default {
       return this.view === 'diff'
     },
     getChildrenNodes () {
-      let addedNodes, deletedNodes
+      let deletedNodes
       let nodes = this.nodes
       if (this.isDiffMode) {
         console.log('\nC > JsonTree > getChildrenNodes > this.nodes : ', this.nodes)
-        addedNodes = this.getChangesAdded.map(n => n.newNode) || []
-        console.log('C > JsonTree > getChildrenNodes > addedNodes : ', addedNodes)
+        // addedNodes = this.getChangesAdded.map(n => n.newNode) || []
+        // console.log('C > JsonTree > getChildrenNodes > addedNodes : ', addedNodes)
         deletedNodes = this.getChangesDeleted.map(n => n.deletedNode) || []
         console.log('C > JsonTree > getChildrenNodes > deletedNodes : ', deletedNodes)
-        // nodes = [...nodes, ...addedNodes, ...deletedNodes]
-        nodes = addedNodes.length ? [...nodes, ...addedNodes] : nodes
+        // nodes = addedNodes.length ? [...nodes, ...addedNodes] : nodes
         nodes = deletedNodes.length ? [...nodes, ...deletedNodes] : nodes
         console.log('C > JsonTree > getChildrenNodes > nodes : ', nodes)
       }
