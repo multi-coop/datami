@@ -60,7 +60,7 @@
               v-if="view === 'diff'"
               :class="`${ wasAddedNode ? insFragClass : ''} ${ wasDeletedNode ? delFragClass : ''}`">
               <span
-                :class="`gt-node-label ${!showChildren || hasValue ? 'has-text-grey' : ''}`"
+                :class="`gt-node-label ${!showChildren || hasValue ? (wasDeletedNode ? delFragClass : 'has-text-grey') : ''}`"
                 v-html="getDiffHtmlChars (true, wasAddedNode, label, nodeId)"/>
             </span>
           </span>
@@ -112,7 +112,7 @@
               v-html="getDiffHtmlChars (false, wasAddedNode, value.toString(), nodeId)"/>
             <span
               v-if="wasDeletedNode"
-              :class="`${delFragClass}`">
+              :class="`is-size-7  ${getValueClass} ${delFragClass}`">
               {{ value.toString() }}
             </span>
           </span>
@@ -324,14 +324,11 @@ export default {
       let deletedNodes
       let nodes = this.nodes
       if (this.isDiffMode) {
-        console.log('\nC > JsonTree > getChildrenNodes > this.nodes : ', this.nodes)
-        // addedNodes = this.getChangesAdded.map(n => n.newNode) || []
-        // console.log('C > JsonTree > getChildrenNodes > addedNodes : ', addedNodes)
+        // console.log('\nC > JsonTree > getChildrenNodes > this.nodes : ', this.nodes)
         deletedNodes = this.getChangesDeleted.map(n => n.deletedNode) || []
-        console.log('C > JsonTree > getChildrenNodes > deletedNodes : ', deletedNodes)
-        // nodes = addedNodes.length ? [...nodes, ...addedNodes] : nodes
+        // console.log('C > JsonTree > getChildrenNodes > deletedNodes : ', deletedNodes)
         nodes = deletedNodes.length ? [...nodes, ...deletedNodes] : nodes
-        console.log('C > JsonTree > getChildrenNodes > nodes : ', nodes)
+        // console.log('C > JsonTree > getChildrenNodes > nodes : ', nodes)
       }
       return nodes
     },
