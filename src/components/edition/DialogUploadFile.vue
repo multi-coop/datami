@@ -89,7 +89,6 @@
                     <!-- TAG REPEATING -->
                     <div
                       v-if="fileReady"
-                      :disabled="!fielReady"
                       class="tags">
                       <span
                         class="tag is-dark">
@@ -104,6 +103,7 @@
 
                   <!-- PREVIEW UPLOAD -->
                   <b-tab-item
+                    :disabled="!fileReady"
                     :label="t('preview.uploadedPreview', locale)">
                     <div class="content">
                       <pre><code>{{ uploaded }}</code></pre>
