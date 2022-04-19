@@ -35,6 +35,7 @@ export default {
     original: 'Original content',
     edited: 'Edited content',
     editedPreview: 'Edited content preview',
+    uploadedPreview: 'Uploaded file preview',
     yamlPart: 'Data part',
     textPart: 'Text part',
     changes: 'Changes'
@@ -48,6 +49,10 @@ export default {
     search: 'Search',
     reloadFile: 'Reload the file',
     downloadFile: 'Download the file',
+    uploadFile: 'Upload a file',
+    clickToUpload: 'Click to upload',
+    dropFile: 'Drop a file',
+    clickOrDropFile: 'Drop your file or click to upload',
     changeLocale: 'Choose the language',
     changeToken: 'Change your user token',
     commitChanges: 'Submit your modifications'
@@ -79,6 +84,9 @@ export default {
     nextPage: 'Next page',
     currentPage: 'Current page',
     itemsPerPage: 'items per page'
+  },
+  edit: {
+    importData: 'Import/overwrite the data'
   },
   editCsv: {
     noSelect: 'Aucun',

@@ -31,7 +31,7 @@ export const mixinGlobal = {
     fileTypeFamily () {
       // const FileType = this.fileTypes[this.fileType]
       // return (FileType && FileType.family) || 'other'
-      return this.gitObj.filefamily
+      return this.gitObj && this.gitObj.filefamily
     },
     currentEditViewMode () {
       return this.getEditViewMode(this.fileId)

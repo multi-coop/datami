@@ -9,13 +9,13 @@
     <!-- BUTTONS -->
     <b-field custom-class="is-small edit-mode-btns">
       <p
-        v-for="btn in buttons"
+        v-for="(btn, i) in buttons"
         :key="btn.code"
         class="control">
         <b-tooltip
           :label="t(btn.textCode, locale)"
           type="is-dark"
-          position="is-top">
+          :position="`is-${i === 0 ? 'left' : (i === buttons.length - 1) ? 'right' : 'top'}`">
           <b-button
             :icon-left="btn.icon"
             :type="currentEditViewMode === btn.code ? 'is-dark' : ''"

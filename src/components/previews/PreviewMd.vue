@@ -19,7 +19,7 @@
 
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
-      <LoaderEditNavbar v-if="!onlyPreview"/>
+      <LoaderEditNavbar :only-preview="onlyPreview"/>
       <LoaderMD/>
     </div>
 

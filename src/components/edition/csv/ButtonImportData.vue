@@ -1,13 +1,13 @@
 <template>
   <div class="ButtonImportData">
     <b-tooltip
-      :label="t(`editCsv.importData`, locale)"
+      :label="t(`edit.uploadData`, locale)"
       type="is-dark"
-      position="is-top">
+      position="is-right">
       <b-button
         size="is-small"
         class="ml-1"
-        disabled
+        :type="showUploadFileDialog ? 'is-dark' : ''"
         :icon-left="'upload'"
         @click="SendActionToParent"/>
     </b-tooltip>
@@ -21,9 +21,9 @@ export default {
   name: 'ButtonImportData',
   mixins: [mixinGlobal],
   props: {
-    headers: {
-      default: null,
-      type: Array
+    showUploadFileDialog: {
+      default: false,
+      type: Boolean
     },
     locale: {
       default: 'en',
@@ -37,7 +37,7 @@ export default {
     SendActionToParent () {
       // console.log('\nC > ButtonImportData > SendActions > this.headers : ', this.headers)
       const payload = {
-        action: 'importData'
+        action: 'toggleUploadFileDialog'
       }
       this.$emit('action', payload)
     }

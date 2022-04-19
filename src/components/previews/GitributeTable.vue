@@ -343,8 +343,8 @@ export default {
 
       // DIALOGS
       showAddRowDialog: false,
-      showImportDataDialog: false,
       showDeleteRowsDialog: false,
+      showUploadFileDialog: false,
 
       // SORTING
       sortingByField: undefined,
@@ -461,7 +461,7 @@ export default {
       return columns
     },
     isAnyDialogOpen () {
-      return this.showAddRowDialog || this.showImportDataDialog || this.showDeleteRowsDialog
+      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog
     }
   },
   watch: {
@@ -487,8 +487,8 @@ export default {
           this.$emit('addRow', event)
           break
         // IMPORT DATA
-        case 'openImportDataDialog':
-          this.showImportDataDialog = true
+        case 'openUploadFileDialog':
+          this.showUploadFileDialog = true
           break
         // DELETE ROWS
         case 'openDeleteRowsDialog':

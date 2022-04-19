@@ -2,15 +2,35 @@
   <div class="EditNavbarSkeleton container">
     <div
       v-if="gitObj"
-      class="columns is-multiline mb-2">
+      class="columns is-multiline is-centered mb-2">
+      <!-- UPLOAD FILE -->
+      <div
+        v-if="!onlyPreview"
+        class="column is-1">
+        <ButtonImportData
+          :locale="locale"
+          :show-upload-file-dialog="showUploadFileDialog"
+          @action="SendActionToParent"/>
+      </div>
+
+      <!-- VIEW CHOICES -->
+      <div
+        :class="`column is-1 is-offset-${ onlyPreview ? '4' : '2'}`">
+        <ViewModeBtns
+          v-show="fileTypeFamily === 'table'"
+          :file-id="fileId"
+          :locale="locale"/>
+      </div>
+
       <!-- EDIT VIEW CHOICES -->
       <div
-        class="column pl-5 is-2 is-offset-5">
+        :class="`column is-2 is-offset-${ onlyPreview ? '1' : '1'}`">
         <EditModeBtns
           v-show="!onlyPreview"
           :file-id="fileId"
           :locale="locale"/>
       </div>
+
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <div
         class="column is-3 is-offset-2">
@@ -39,13 +59,15 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
-// import ViewModeBtns from '@/components/previews/ViewModeBtns'
+import ViewModeBtns from '@/components/previews/ViewModeBtns'
+import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import EditModeBtns from '@/components/edition/EditModeBtns'
 
 export default {
   name: 'EditNavbarSkeleton',
   components: {
-    // ViewModeBtns,
+    ViewModeBtns,
+    ButtonImportData,
     EditModeBtns
   },
   mixins: [mixinGlobal],
@@ -55,6 +77,10 @@ export default {
       type: String
     },
     onlyPreview: {
+      default: false,
+      type: Boolean
+    },
+    showUploadFileDialog: {
       default: false,
       type: Boolean
     },
@@ -83,6 +109,9 @@ export default {
     changeEditMode (code) {
       // console.log('C > EditNavbarSkeleton > changeEditMode > code :', code)
       this.changeEditViewMode({ fileId: this.fileId, mode: code })
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     },
     commitChanges () {
       this.updateSaving({ fileId: this.fileId, isSaving: true })

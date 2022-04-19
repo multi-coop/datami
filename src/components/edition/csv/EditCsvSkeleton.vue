@@ -2,15 +2,15 @@
   <div class="EditCsvSkeleton container">
     <div class="columns">
       <!-- VIEW CHOICES -->
-      <div
+      <!-- <div
         :class="`column is-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-start`">
         <ViewModeBtns
           :file-id="fileId"
           :locale="locale"/>
-      </div>
+      </div> -->
       <!-- EDIT BUTTONS -->
       <div
-        :class="`column is-4 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
+        :class="`column is-4 is-offset-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonSortBy
           :headers="columns"
           :locale="locale"
@@ -30,10 +30,9 @@
         <ButtonAddRow
           :locale="locale"
           @action="SendActionToParent"/>
-        <ButtonImportData
-          :headers="columns"
+        <!-- <ButtonImportData
           :locale="locale"
-          @action="SendActionToParent"/>
+          @action="SendActionToParent"/> -->
         <ButtonDeleteRows
           :checked-rows="checkedRows"
           :locale="locale"
@@ -64,10 +63,10 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import ViewModeBtns from '@/components/previews/ViewModeBtns'
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
 
 import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
-import ButtonImportData from '@/components/edition/csv/ButtonImportData'
+// import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import ButtonSortBy from '@/components/sorting/ButtonSortBy'
 import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
@@ -75,9 +74,9 @@ import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 export default {
   name: 'EditCsvSkeleton',
   components: {
-    ViewModeBtns,
+    // ViewModeBtns,
     ButtonAddRow,
-    ButtonImportData,
+    // ButtonImportData,
     ButtonSortBy,
     ButtonFilterBy,
     ButtonDeleteRows

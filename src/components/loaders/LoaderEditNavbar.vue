@@ -1,13 +1,22 @@
 <template>
-  <div class="LoaderEditNavbar container">
+  <div
+    v-if="!onlyPreview"
+    class="LoaderEditNavbar container">
     <!-- FAKE EDIT NAVBAR -->
     <div class="columns is-mobile mb-5 pb-4">
-      <div class="column is-2 is-offset-5">
+      <div class="column is-1">
         <b-skeleton
           position="is-centered"
           size="is-large"
           animated
-          width="50%"/>
+          width="100%"/>
+      </div>
+      <div class="column is-2 is-offset-4">
+        <b-skeleton
+          position="is-centered"
+          size="is-large"
+          animated
+          width="75%"/>
       </div>
       <div class="column is-3 is-offset-2">
         <b-skeleton
@@ -23,6 +32,12 @@
 <script>
 
 export default {
-  name: 'LoaderEditNavbar'
+  name: 'LoaderEditNavbar',
+  props: {
+    onlyPreview: {
+      default: false,
+      type: Boolean
+    }
+  }
 }
 </script>

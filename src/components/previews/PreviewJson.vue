@@ -2,7 +2,7 @@
   <div class="PreviewJson content">
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
-      <LoaderEditNavbar v-if="!onlyPreview"/>
+      <LoaderEditNavbar :only-preview="onlyPreview"/>
       <LoaderJSON/>
     </div>
 

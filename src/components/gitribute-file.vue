@@ -84,10 +84,12 @@
 
     <!-- FILE NAVBAR BUTTONS -->
     <EditNavbarSkeleton
-      v-if="!fileIsLoading && !fileIsSaving"
+      v-if="!fileIsLoading && !fileIsSaving && !showUploadFileDialog"
       :file-id="fileId"
+      :show-upload-file-dialog="showUploadFileDialog"
       :only-preview="onlypreview"
-      :locale="locale"/>
+      :locale="locale"
+      @action="processAction"/>
 
     <!-- CONFIRM COMMIT MODAL -->
     <ConfirmCommit
@@ -95,6 +97,12 @@
       :file-id="fileId"
       :locale="locale"
       :debug="debug"/>
+    <DialogUploadFile
+      v-show="showUploadFileDialog"
+      v-model="showUploadFileDialog"
+      :file-id="fileId"
+      :locale="locale"
+      @action="processAction"/>
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
     <div v-show="!fileIsSaving">
@@ -156,6 +164,7 @@ import NotificationErrors from '@/components/errors/NotificationErrors'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import DialogFileInfos from '@/components/previews/DialogFileInfos'
+import DialogUploadFile from '@/components/edition/DialogUploadFile'
 import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
 import PreviewCsv from '@/components/previews/PreviewCsv'
@@ -172,6 +181,7 @@ export default {
     NotificationErrors,
     EditNavbarSkeleton,
     DialogFileInfos,
+    DialogUploadFile,
     ConfirmCommit,
     PreviewCsv,
     PreviewMd,
@@ -220,7 +230,8 @@ export default {
       fileInfos: undefined,
       fileRaw: undefined,
       fileOptions: undefined,
-      showFileInfos: false
+      showFileInfos: false,
+      showUploadFileDialog: false
     }
   },
   watch: {
@@ -292,6 +303,16 @@ export default {
 
       // Update reloading in store - false
       this.updateReloading({ fileId: this.fileId, isLoading: false })
+    },
+    processAction (event) {
+      console.log('\nC > GitributeFile > processAction > event : ', event)
+      switch (event.action) {
+        case 'toggleUploadFileDialog':
+          this.showUploadFileDialog = !this.showUploadFileDialog
+          break
+        case 'uploadFileData':
+          break
+      }
     }
   }
 }

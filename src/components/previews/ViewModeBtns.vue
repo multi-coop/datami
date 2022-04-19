@@ -5,7 +5,7 @@
       <b-tooltip
         v-for="btn in buttons"
         :key="btn.code"
-        :label="t(btn.textCode, locale)"
+        :label="`${t(btn.textCode, locale)} ... 🚧 work in progress`"
         type="is-dark"
         position="is-top">
         <b-button
@@ -13,6 +13,7 @@
           :type="currentViewMode === btn.code ? 'is-dark' : ''"
           :active="currentViewMode === btn.code"
           size="is-small"
+          disabled
           @click="changeMode(btn.code)"/>
       </b-tooltip>
     </b-field>

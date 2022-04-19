@@ -18,7 +18,7 @@ export default {
     file: 'Fichier',
     fileSource: 'Fichier source',
     fileName: 'Nom du fichier',
-    fileType: 'Type du fichier',
+    fileType: 'Type de fichier',
     fileFamily: 'Famille de fichier',
     fileUrl: 'URL du fichier',
     fileUrlRaw: 'URL de la source (brut)',
@@ -35,6 +35,7 @@ export default {
     original: 'Contenu original',
     edited: 'Contenu édité',
     editedPreview: 'Aperçu des modifications',
+    uploadedPreview: 'Aperçu du contenu de votre fichier',
     yamlPart: "Données d'en-tête",
     textPart: 'Partie texte',
     changes: 'Modifications'
@@ -48,6 +49,10 @@ export default {
     search: 'Rechercher',
     reloadFile: 'Recharger le fichier',
     downloadFile: 'Télécharger le fichier',
+    uploadFile: 'Importer un fichier',
+    clickToUpload: 'Cliquer pour importer',
+    dropFile: 'Glisser/déposer un fichier',
+    clickOrDropFile: 'Glisser/déposer votre fichier ou cliquer pour importer',
     changeLocale: 'Choisir la langue',
     changeToken: "Changer votre jeton d'accès",
     commitChanges: 'Proposer vos modifications'
@@ -79,6 +84,9 @@ export default {
     nextPage: 'Page suivante',
     currentPage: 'Page actuelle',
     itemsPerPage: 'éléments par page'
+  },
+  edit: {
+    uploadData: 'Importer/écraser les données'
   },
   editCsv: {
     noSelect: 'Aucun',
