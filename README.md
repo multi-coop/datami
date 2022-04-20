@@ -8,6 +8,27 @@
 
 ---
 
+## Summary
+
+- [RoadWhat is Gitribute for ?](#what-is-gitribute-for)
+- [Roadmap](#roamap)
+- [Websites](#websites)
+- [Project setup](#project-setup)
+- [How to integrate the Gitribute widgets](#how-to-integrate-the-gitribute-widgets)
+- [Widgets configuration](#widgets-configuration)
+  - [multi-gitribute-file](#1-multi-gitribute-file)
+    - [Options parameters](#options-parameters)
+    - [Parameters for all file types](#parameters-for-all-file-types)
+    - [Parameters for `md` files](#parameters-for-md-files)
+    - [Parameters for `json` and `geojson` files](#parameters-for-json-and-geojson-files)
+    - [Parameters for `csv` and `tsv` files](#parameters-for-csv-and-tsv-files)
+- [Stack](#stack)
+- [Schema / architecture](1schema-architecture)
+
+---
+
+## What is Gitribute for ?
+
 This project aims to create a serie of widgets to interact with files stored on Gitlab or Github :
 
 - **Edit data stored on github or gitlab** (csv or md files) ;
@@ -22,7 +43,9 @@ This project aims to create a serie of widgets to interact with files stored on 
 
 ---
 
-## Work in progress... be patient guys (or help us by contributing) :)
+## Roadmap
+
+**Work in progress... be patient guys (or help us by contributing) :)**
 
 This project is currently under early development...
 
@@ -44,10 +67,12 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [x] Component to switch between french and english ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] Other main components :
-  - [ ] On each preview (for every file type), switch between 'preview' and 'edition' views ;
+  - [x] On each preview (for every file type), switch between 'preview' and 'edition' views ;
     - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
-    - [ ] for `json` files (`.json` and `.geojson` types)
+    - [x] for `json` files (`.json` and `.geojson` types)
+  - [ ]  Add a `Upload` button + dialog + actions to overwrite whole edited data ;
+  - [ ]  Add a `lockHeaders` options in widget to only protect keys from edition ;
   - [ ]  Add a `Save` button + dialog + actions :
     - [x] `POST` create a separate branch on the file's repo ;
     - [x] `PUT` after edition on client's side, acting as a commit to the file's git repo on a separate branch ;
@@ -110,9 +135,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ---
 
-## How to integrate widgets
-
-### CURRENTLY UNDER EARLY DEVELOPMENT - not deployed yet on netlify
+## How to integrate the Gitribute widgets
 
 Widgets need two files in order to work :
 
@@ -161,6 +184,23 @@ The widget takes several parameters, following this structure :
     gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" 
     options='{
       "separator":","
+      "pagination":{
+        "itemsPerPage":5
+      },
+      "cardsview": true,
+      "cardsdetail": true,
+      "cardssettings": {
+        "mini": {
+          "name": {"position": "title"},
+          "surname": {"position": "title"},
+          "profession": {"position": "resume"}
+        },
+        "detail": {
+          "name": {"position": "title"},
+          "surname": {"position": "title"},
+          "profession": {"position": "desription"}
+        }
+      }
     }' 
     title="gitribute for gitlab file - csv (comma separator)" 
     usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
@@ -235,7 +275,7 @@ So you can read more on those topics here =>
 ##### `locale` parameter
 
 ```yaml
-locale:
+"locale":
   - description : the language you want to use by default
   - required: false
   - type: string
@@ -249,7 +289,7 @@ locale:
 ##### `onlypreview` parameter
 
 ```yaml
-onlypreview:
+"onlypreview":
   - description : displays only the preview and hide the edit mode
   - required: false
   - type: boolean
@@ -259,7 +299,7 @@ onlypreview:
 ##### `debug` parameter
 
 ```yaml
-debug:
+"debug":
   - description : just for debugging
   - required: false
   - type: boolean
@@ -271,7 +311,7 @@ debug:
 ##### `options` parameter
 
 ```yaml
-options:
+"options":
   - (no options for now)
 ```
 
@@ -280,17 +320,17 @@ options:
 ##### `options` parameter
 
 ```yaml
-options:
+"options":
   - description : JSON object containing the options allowing your json to be parsed correctly
   - required: false
   - default: {
-      defaultDepth: 3,
+      "defaultDepth": 3,
     }
   - fields: 
-    - defaultDepth: 
+    - "defaultDepth": 
       description: default visible depth of the JSON preview
       type: number | "all"
-    - allowKeyEdit: 
+    - "allowKeyEdit": 
       description: allow objects' key edition (edit or remove)
       type: boolean
 ```
@@ -300,36 +340,66 @@ options:
 ##### `options` parameter
 
 ```yaml
-options:
+"options":
   - description : JSON object containing the options allowing your csv to be parsed correctly
   - required: false
   - default: {
-      separator: ";",
-      tagseparator: "-",
-      pagination: {
-        itemsPerPage: 5
-      }
+      "separator": ";",
+      "tagseparator": "-",
+      "pagination": {
+        "itemsPerPage": 5
+      },
+      "cardsview": false,
     }
   - fields: 
-    - separator: 
+    - "separator": 
       description: character separating the columns in your csv source
       type: string
       allowed values: [ ",", ";", "|", "\t" ]
-    - tagseparator: 
+    - "tagseparator": 
       description: character separating a column's values into tags
       type: string
       allowed values: [ ",", ";", "|", "-", "_" ]
-    - pagination: 
+    - "pagination": 
       description: pagination settings
       type: object
       fields:
-      - itemsPerPage:
+      - "itemsPerPage":
         description: number of items per page
         default: 20
         type: number
         notes: 
         - must be > 1 and within allowed values, or a default value will be used (the closest value from allowed values array)
         - values : [3, 5, 10, 15, 20, 25, 50, 100]
+    - "cardsview":
+      description: allows cards view on a table data
+      type: boolean
+      default: false
+    - "cardsdetail":
+      description: allows cards detailled view on a table data
+      type: boolean
+      default: false
+    - "cardssettings":
+      description: |
+        Mandatory settings to display table data, field by field, in a card view. 
+        You can chose to display data diffently between "mini" card view (tiles) and the "detailled" card view...
+        For "mini" and "detail" entries you have to map a key from your original data (f.i. the "name" column) to a position in the cards (f.i. apply the "name" value to the "title")
+      type: object
+      default: {
+        "mini": {
+          "<KEY-COLUMN>": {"position": "<POSITION-IN-CARD>"},
+          ...
+        },
+        "detail": {
+          "<KEY-COLUMN>": {"position": "<POSITION-IN-CARD>"},
+          ...
+        }
+      }
+      notes: The possible positions in cards are for now te following :
+        - "title"
+        - "subtitle"
+        - "content"
+        - "image" (needs an url to an image)
 ```
 
 ---
