@@ -23,7 +23,7 @@
     - [Parameters for `json` and `geojson` files](#parameters-for-json-and-geojson-files)
     - [Parameters for `csv` and `tsv` files](#parameters-for-csv-and-tsv-files)
 - [Stack](#stack)
-- [Schema / architecture](1schema-architecture)
+- [Schema / architecture](#schema-architecture)
 
 ---
 
