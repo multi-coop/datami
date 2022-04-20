@@ -10,7 +10,7 @@
 
 ## Summary
 
-- [What is Gitribute for ?](#what-is-gitribute-for)
+- [What is Gitribute for ?](#what-is-gitribute-for-)
 - [Roadmap](#roadmap)
 - [Websites](#websites)
 - [Project setup](#project-setup)
