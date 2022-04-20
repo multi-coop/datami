@@ -10,13 +10,13 @@
 
 ## Summary
 
-- [RoadWhat is Gitribute for ?](#what-is-gitribute-for)
-- [Roadmap](#roamap)
+- [What is Gitribute for ?](#what-is-gitribute-for)
+- [Roadmap](#roadmap)
 - [Websites](#websites)
 - [Project setup](#project-setup)
 - [How to integrate the Gitribute widgets](#how-to-integrate-the-gitribute-widgets)
 - [Widgets configuration](#widgets-configuration)
-  - [multi-gitribute-file](#1-multi-gitribute-file)
+  - ["multi-gitribute-file" widget](#1-multi-gitribute-file)
     - [Options parameters](#options-parameters)
     - [Parameters for all file types](#parameters-for-all-file-types)
     - [Parameters for `md` files](#parameters-for-md-files)
