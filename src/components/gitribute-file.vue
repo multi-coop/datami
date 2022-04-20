@@ -83,6 +83,9 @@
     </div>
 
     <!-- FILE NAVBAR BUTTONS -->
+    <!-- {{ fileOptions }} -->
+    <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
+    <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
     <EditNavbarSkeleton
       v-if="!fileIsLoading && !fileIsSaving && !showUploadFileDialog"
       :file-id="fileId"
@@ -113,7 +116,6 @@
         <PreviewCsv
           :only-preview="onlypreview"
           :file-id="fileId"
-          :file-options="fileOptions"
           :file-raw="fileRaw"
           :locale="locale"
           :debug="debug"/>
@@ -126,7 +128,6 @@
         <PreviewMd
           :only-preview="onlypreview"
           :file-id="fileId"
-          :file-options="fileOptions"
           :file-raw="fileRaw"
           :locale="locale"
           :debug="debug"/>
@@ -139,7 +140,6 @@
         <PreviewJson
           :only-preview="onlypreview"
           :file-id="fileId"
-          :file-options="fileOptions"
           :file-raw="fileRaw"
           :locale="locale"
           :debug="debug"/>
@@ -229,7 +229,6 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
-      fileOptions: undefined,
       showFileInfos: false,
       showUploadFileDialog: false
     }
@@ -255,7 +254,8 @@ export default {
     }
     // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
     // build options object
-    this.fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    const fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
   },
   async mounted () {
     // console.log('\nC > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
@@ -268,6 +268,7 @@ export default {
   methods: {
     ...mapActions({
       addGitInfos: 'addGitInfos',
+      addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',

@@ -1,6 +1,6 @@
 <template>
   <div class="GitributeTable content">
-    <div class="columns is-multiline is-mobile">
+    <div class="columns is-multiline is-mobile is-centered">
       <!-- EDIT CSV NAVABAR -->
       <div class="column is-12 pt-0">
         <EditCsvSkeleton
@@ -42,7 +42,7 @@
 
       <!-- TABLE -->
       <div
-        v-show="!isAnyDialogOpen"
+        v-show="!isAnyDialogOpen && currentViewMode === 'table'"
         class="column is-12">
         <b-table
           :data="dataEditedPaginated"
@@ -131,9 +131,22 @@
         </b-table>
       </div>
 
+      <!-- CARDS -->
+      <div
+        v-if="hasCardsView"
+        v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
+        class="column is-10">
+        <GitributeCardsGrid
+          v-model="showCardDetails"
+          :file-id="fileId"
+          :cards-settings="cardsSettingsFromFileOptions"
+          :items="dataEditedPaginated"
+          :locale="locale"/>
+      </div>
+
       <!-- PAGINATION -->
       <div
-        v-show="!isAnyDialogOpen"
+        v-show="!isAnyDialogOpen && !isCardDetailsOpen"
         class="column is-12">
         <PagesNavigation
           :total-items="totalItemsDataEdited"
@@ -273,7 +286,10 @@ import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
+
 import EditCell from '@/components/edition/csv/EditCell'
+import GitributeCardsGrid from '@/components/previews/GitributeCardsGrid'
+
 import PagesNavigation from '@/components/pagination/PagesNavigation'
 
 export default {
@@ -284,6 +300,7 @@ export default {
     DialogAddRow,
     DialogDeleteRows,
     EditCell,
+    GitributeCardsGrid,
     PagesNavigation
   },
   mixins: [
@@ -296,14 +313,6 @@ export default {
       default: null,
       type: String
     },
-    fileOptions: {
-      default: undefined,
-      type: Object
-    },
-    // view: {
-    //   default: '',
-    //   type: String
-    // },
     data: {
       default: undefined,
       type: Array
@@ -340,6 +349,7 @@ export default {
   data () {
     return {
       checkedRows: [],
+      showCardDetails: false,
 
       // DIALOGS
       showAddRowDialog: false,
@@ -360,6 +370,33 @@ export default {
     }
   },
   computed: {
+    hasCardsView () {
+      return !!this.fileOptions.cardsview
+    },
+    cardsSettingsFromFileOptions () {
+      let cardsSettings
+      if (this.hasCardsView) {
+        const settings = this.fileOptions.cardssettings
+        const miniSettings = settings.mini
+        const detailSettins = settings.detail
+        const mapping = this.columns.map(h => {
+          const fieldMap = {
+            field: h.field,
+            // mini: miniSettings,
+            mini: miniSettings[h.label],
+            detail: detailSettins[h.label]
+          }
+          return fieldMap
+        })
+        cardsSettings = {
+          originalHeaders: this.columns,
+          editedHeaders: this.columnsForView,
+          settings: { mini: miniSettings, detail: detailSettins },
+          mapping: mapping
+        }
+      }
+      return cardsSettings
+    },
     paginationFromFileOptions () {
       // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
       const pagination = {
@@ -462,6 +499,9 @@ export default {
     },
     isAnyDialogOpen () {
       return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog
+    },
+    isCardDetailsOpen () {
+      return this.showCardDetails && this.currentViewMode === 'cards'
     }
   },
   watch: {

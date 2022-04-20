@@ -13,7 +13,6 @@
           :type="currentViewMode === btn.code ? 'is-dark' : ''"
           :active="currentViewMode === btn.code"
           size="is-small"
-          disabled
           @click="changeMode(btn.code)"/>
       </b-tooltip>
     </b-field>
@@ -21,9 +20,6 @@
     <div v-if="false">
       <p>
         currentViewMode: {{ currentViewMode }}
-      </p>
-      <p>
-        currentEditViewMode: {{ currentEditViewMode }}
       </p>
     </div>
   </div>
@@ -63,7 +59,7 @@ export default {
       changeViewMode: 'git-data/changeViewMode'
     }),
     changeMode (code) {
-      // this.changeViewMode({ fileId: this.fileId, mode: code })
+      this.changeViewMode({ fileId: this.fileId, mode: code })
     }
   }
 }

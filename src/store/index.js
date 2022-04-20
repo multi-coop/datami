@@ -12,6 +12,7 @@ Vue.use(Vuex)
 const defaultStore = {
   state: {
     gitInfos: [],
+    fileOptions: [],
     fileReqInfos: []
   },
   getters: {
@@ -21,6 +22,10 @@ const defaultStore = {
     getGitInfosObj: (state) => (uuid) => {
       const gitInfosObj = state.gitInfos.find(gitObj => gitObj.uuid === uuid)
       return gitInfosObj
+    },
+    getFileOptionsObj: (state) => (uuid) => {
+      const fileOptionsObj = state.fileOptions.find(options => options.uuid === uuid)
+      return fileOptionsObj
     },
     getFileReqInfosObj: (state) => (uuid) => {
       const fileReqInfosObj = state.fileReqInfos.find(fileReq => fileReq.uuid === uuid)
@@ -44,6 +49,14 @@ const defaultStore = {
         state.gitInfos.push(gitInfosObject)
       }
     },
+    setFileOptions (state, fileOptionsObject) {
+      const index = state.fileOptions.findIndex(item => item.uuid === fileOptionsObject.uuid)
+      if (index !== -1) {
+        Vue.set(state.fileOptions, index, fileOptionsObject)
+      } else {
+        state.fileOptions.push(fileOptionsObject)
+      }
+    },
     setFileInfos (state, fileReqInfosObject) {
       // console.log('S-index > M > setFileInfos > fileReqInfosObject : ', fileReqInfosObject)
       const index = state.fileReqInfos.findIndex(item => item.uuid === fileReqInfosObject.uuid)
@@ -63,6 +76,9 @@ const defaultStore = {
     },
     addGitInfos ({ commit }, gitInfosObject) {
       commit('setGitInfos', gitInfosObject)
+    },
+    addFileOptions ({ commit }, fileOptionsObject) {
+      commit('setFileOptions', fileOptionsObject)
     },
     addFileReqInfos ({ commit }, fileReqInfos) {
       commit('setFileInfos', fileReqInfos)

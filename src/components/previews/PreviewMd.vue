@@ -19,7 +19,9 @@
 
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
-      <LoaderEditNavbar :only-preview="onlyPreview"/>
+      <LoaderEditNavbar
+        :file-id="fileId"
+        :only-preview="onlyPreview"/>
       <LoaderMD/>
     </div>
 
@@ -156,10 +158,6 @@ export default {
     fileId: {
       default: null,
       type: String
-    },
-    fileOptions: {
-      default: undefined,
-      type: Object
     },
     fileRaw: {
       default: '',

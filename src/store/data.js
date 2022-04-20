@@ -18,10 +18,8 @@ export const data = {
     diff: [],
 
     // VIEW MODES
-    list: [],
+    cards: [],
     table: [],
-    text: [],
-    json: [],
 
     // DATA STORED
     buffer: [],
@@ -47,10 +45,8 @@ export const data = {
       if (state.edit.includes(fileId)) return 'edit'
     },
     getViewMode: (state) => (fileId) => {
-      if (state.list.includes(fileId)) return 'list'
+      if (state.cards.includes(fileId)) return 'cards'
       if (state.table.includes(fileId)) return 'table'
-      if (state.text.includes(fileId)) return 'text'
-      if (state.json.includes(fileId)) return 'json'
     },
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)
@@ -137,6 +133,7 @@ export const data = {
       commit('setState', { key: 'tokens', fileId: fileId, data: token })
     },
     changeEditViewMode ({ commit }, { fileId, mode }) {
+      // console.log('S-data > M > changeEditViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = editModes.filter(v => v !== mode)
       switchOffModes.forEach(v => {
@@ -144,6 +141,7 @@ export const data = {
       })
     },
     changeViewMode ({ commit }, { fileId, mode }) {
+      // console.log('S-data > M > changeViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = viewModes.filter(v => v !== mode)
       switchOffModes.forEach(v => {

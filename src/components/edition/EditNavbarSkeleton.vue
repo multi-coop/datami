@@ -2,7 +2,7 @@
   <div class="EditNavbarSkeleton container">
     <div
       v-if="gitObj"
-      class="columns is-multiline is-centered mb-2">
+      class="columns is-multiline is-mobile is-centered mb-2">
       <!-- UPLOAD FILE -->
       <div
         v-if="!onlyPreview"
@@ -14,26 +14,26 @@
       </div>
 
       <!-- VIEW CHOICES -->
-      <div
+      <!-- <div
         :class="`column is-1 is-offset-${ onlyPreview ? '4' : '2'}`">
         <ViewModeBtns
           v-show="fileTypeFamily === 'table'"
           :file-id="fileId"
           :locale="locale"/>
-      </div>
+      </div> -->
 
       <!-- EDIT VIEW CHOICES -->
       <div
-        :class="`column is-2 is-offset-${ onlyPreview ? '1' : '1'}`">
+        :class="`column is-4 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
         <EditModeBtns
-          v-show="!onlyPreview"
+          :only-preview="onlyPreview"
           :file-id="fileId"
           :locale="locale"/>
       </div>
 
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <div
-        class="column is-3 is-offset-2">
+        class="column is-3 is-offset-1">
         <b-button
           v-if="!onlyPreview"
           type="is-dark"
@@ -59,14 +59,14 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import ViewModeBtns from '@/components/previews/ViewModeBtns'
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import EditModeBtns from '@/components/edition/EditModeBtns'
 
 export default {
   name: 'EditNavbarSkeleton',
   components: {
-    ViewModeBtns,
+    // ViewModeBtns,
     ButtonImportData,
     EditModeBtns
   },

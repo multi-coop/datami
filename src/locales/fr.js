@@ -32,6 +32,8 @@ export default {
     diffView: 'Comparer',
     previewView: 'Aperçu',
     cardsView: 'Liste',
+    showCardDetails: 'Afficher les détails',
+    closeCardDetails: 'Fermer la vue détaillée',
     original: 'Contenu original',
     edited: 'Contenu édité',
     editedPreview: 'Aperçu des modifications',

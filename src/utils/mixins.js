@@ -20,6 +20,7 @@ export const mixinGlobal = {
       getEditViewMode: 'git-data/getEditViewMode',
       getViewMode: 'git-data/getViewMode',
       getGitInfosObj: 'getGitInfosObj',
+      getFileOptionsObj: 'getFileOptionsObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
       fileNeedsSaving: 'git-data/fileNeedsSaving',
       fileIsCommitting: 'git-data/fileIsCommitting',
@@ -39,6 +40,9 @@ export const mixinGlobal = {
     currentViewMode () {
       return this.getViewMode(this.fileId)
     },
+    fileOptions () {
+      return this.getFileOptionsObj(this.fileId)
+    },
     fileIsLoading () {
       const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
       return resp
@@ -52,6 +56,12 @@ export const mixinGlobal = {
     },
     errors () {
       return this.getReqErrors(this.fileId)
+    },
+    hasCardsView () {
+      return this.fileOptions && !!this.fileOptions.cardsview
+    },
+    hasCardsDetail () {
+      return this.fileOptions && !!this.fileOptions.cardsdetail
     }
   },
   methods: {
@@ -130,6 +140,18 @@ export const mixinPagination = {
   data () {
     return {
       itemsPerPageChoices: itemsPerPageChoices
+    }
+  },
+  computed: {
+    cardsSettingsFromFileOptions () {
+      let cardsSettings
+      if (this.hasCardsView) {
+        cardsSettings = {
+          headers: this.columnsForView,
+          settings: this.fileOptions.cardssettings
+        }
+      }
+      return cardsSettings
     }
   },
   methods: {

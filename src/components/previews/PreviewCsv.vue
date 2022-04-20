@@ -2,22 +2,34 @@
   <div class="PreviewCsv content">
     <!-- DEBUG -->
     <div
-      v-if="false"
+      v-if="debug"
       class="columns is-multiline">
       <div class="column is-12">
         <p>
           currentEditViewMode:
           <code>{{ currentEditViewMode }}</code>
         </p>
+        <p>
+          currentViewMode:
+          <code>{{ currentViewMode }}</code>
+        </p>
+        <p>
+          fileIsLoading:
+          <code>{{ fileIsLoading }}</code>
+        </p>
       </div>
-      <div class="column is-6">
+      <div
+        v-if="debug"
+        class="column is-6">
         <p>
           edited:
           <br>
           <pre><code>{{ edited }}</code></pre>
         </p>
       </div>
-      <div class="column is-6">
+      <div
+        v-if="debug"
+        class="column is-6">
         <p>
           data:
           <br>
@@ -28,7 +40,9 @@
 
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
-      <LoaderEditNavbar :only-preview="onlyPreview"/>
+      <LoaderEditNavbar
+        :file-id="fileId"
+        :only-preview="onlyPreview"/>
       <LoaderCSV/>
     </div>
 
@@ -94,10 +108,6 @@ export default {
     fileId: {
       default: null,
       type: String
-    },
-    fileOptions: {
-      default: undefined,
-      type: Object
     },
     fileRaw: {
       default: '',

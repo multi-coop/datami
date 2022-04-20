@@ -83,6 +83,9 @@
     </div>
 
     <!-- FILE NAVBAR BUTTONS -->
+    <!-- {{ fileOptions }} -->
+    <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
+    <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
     <EditNavbarSkeleton
       v-if="!fileIsLoading"
       :file-id="fileId"
@@ -101,7 +104,6 @@
       <PreviewCsv
         :only-preview="onlypreview"
         :file-id="fileId"
-        :file-options="fileOptions"
         :file-is-loading="fileIsLoading"
         :file-raw="fileRaw"
         :locale="locale"
@@ -180,7 +182,6 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
-      fileOptions: undefined,
       showFileInfos: false
     }
   },
@@ -204,7 +205,8 @@ export default {
     }
     console.log('C > GitributeExploWiki > beforeMount > this.gitObj : ', this.gitObj)
     // build options object
-    this.fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    const fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
   },
   async mounted () {
     await this.reloadFile()
@@ -212,6 +214,7 @@ export default {
   methods: {
     ...mapActions({
       addGitInfos: 'addGitInfos',
+      addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors'
