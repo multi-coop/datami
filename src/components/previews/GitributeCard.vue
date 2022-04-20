@@ -9,7 +9,8 @@
         class="card-header-title mb-0 is-4">
         <span
           v-for="(f, i) in getFieldsByPosition('title')"
-          :key="`title-${i}-${f.field}`">
+          :key="`title-${i}-${f.field}`"
+          class="mr-1">
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
@@ -84,7 +85,8 @@
             class="subtitle is-6">
             <span
               v-for="(f, i) in getFieldsByPosition('subtitle')"
-              :key="`subtitle-${i}-${f.field}`">
+              :key="`subtitle-${i}-${f.field}`"
+              class="mr-1">
               <div v-if="currentEditViewMode === 'preview'">
                 {{ item[f.field] }}
               </div>
@@ -107,7 +109,8 @@
         class="content">
         <span
           v-for="(f, i) in getFieldsByPosition('resume')"
-          :key="`resume-${i}-${f.field}`">
+          :key="`resume-${i}-${f.field}`"
+          class="mr-1">
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
@@ -122,7 +125,8 @@
         </span>
         <span
           v-for="(f, i) in getFieldsByPosition('description')"
-          :key="`description-${i}-${f.field}`">
+          :key="`description-${i}-${f.field}`"
+          class="mr-1">
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
