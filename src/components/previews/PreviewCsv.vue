@@ -43,7 +43,9 @@
       <LoaderEditNavbar
         :file-id="fileId"
         :only-preview="onlyPreview"/>
-      <LoaderCSV/>
+      <LoaderSortFilters/>
+      <LoaderCards v-show="currentViewMode === 'cards'"/>
+      <LoaderCSV v-show="currentViewMode === 'table'"/>
     </div>
 
     <div v-if="!fileIsLoading">
@@ -85,7 +87,9 @@ import { mapActions } from 'vuex'
 import { mixinGlobal, mixinCommit, mixinDiff, mixinCsv } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
 import LoaderCSV from '@/components/loaders/LoaderCSV'
+import LoaderCards from '@/components/loaders/LoaderCards'
 
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 import GitributeTable from '@/components/previews/GitributeTable'
@@ -94,7 +98,9 @@ export default {
   name: 'PreviewCsv',
   components: {
     LoaderEditNavbar,
+    LoaderSortFilters,
     LoaderCSV,
+    LoaderCards,
     PreviewHelpers,
     GitributeTable
   },

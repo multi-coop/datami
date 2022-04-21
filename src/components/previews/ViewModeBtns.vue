@@ -1,11 +1,15 @@
 <template>
   <div class="ViewModeBtns">
     <!-- BUTTONS -->
-    <b-field custom-class="is-small edit-mode-btns">
+    <!-- :class="`${ onlyPreview ? '' : 'ml-5'}`" -->
+    <b-field
+      v-if="fileTypeFamily === 'table' && hasCardsView"
+      class="mr-4"
+      custom-class="is-small edit-mode-btns">
       <b-tooltip
-        v-for="btn in buttons"
+        v-for="btn in buttonsView"
         :key="btn.code"
-        :label="`${t(btn.textCode, locale)} ... 🚧 work in progress`"
+        :label="`${t(btn.textCode, locale)}`"
         type="is-dark"
         position="is-top">
         <b-button
@@ -13,9 +17,10 @@
           :type="currentViewMode === btn.code ? 'is-dark' : ''"
           :active="currentViewMode === btn.code"
           size="is-small"
-          @click="changeMode(btn.code)"/>
+          @click="changeView(btn.code)"/>
       </b-tooltip>
     </b-field>
+
     <!-- DEBUG -->
     <div v-if="false">
       <p>
@@ -46,19 +51,17 @@ export default {
   },
   data () {
     return {
-      // debug: false,
-      // active: 'preview',
-      buttons: viewsOptions
+      buttonsView: viewsOptions
     }
   },
   beforeMount () {
-    this.changeMode('preview')
+    this.changeView('table')
   },
   methods: {
     ...mapActions({
       changeViewMode: 'git-data/changeViewMode'
     }),
-    changeMode (code) {
+    changeView (code) {
       this.changeViewMode({ fileId: this.fileId, mode: code })
     }
   }

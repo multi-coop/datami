@@ -1,23 +1,6 @@
 <template>
   <div class="LoaderCSV container">
     <div class="columns is-mobile is-multiline mb-5 pb-4">
-      <!-- FAKE EDIT NAVBAR -->
-      <!-- FAKE SORTINGS -->
-      <div class="column is-4 is-offset-2 pt-4">
-        <b-skeleton
-          position="is-centered"
-          size="is-large"
-          animated
-          width="75%"/>
-      </div>
-      <!-- FAKE FILTERS -->
-      <div class="column is-4 pt-4">
-        <b-skeleton
-          position="is-centered"
-          size="is-large"
-          animated
-          width="75%"/>
-      </div>
       <!-- FAKE TABLE -->
       <div class="column is-12 mt-2">
         <table class="table">

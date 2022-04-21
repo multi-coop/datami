@@ -13,15 +13,6 @@
           @action="SendActionToParent"/>
       </div>
 
-      <!-- VIEW CHOICES -->
-      <!-- <div
-        :class="`column is-1 is-offset-${ onlyPreview ? '4' : '2'}`">
-        <ViewModeBtns
-          v-show="fileTypeFamily === 'table'"
-          :file-id="fileId"
-          :locale="locale"/>
-      </div> -->
-
       <!-- EDIT VIEW CHOICES -->
       <div
         :class="`column is-4 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
@@ -59,14 +50,12 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
-// import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import EditModeBtns from '@/components/edition/EditModeBtns'
 
 export default {
   name: 'EditNavbarSkeleton',
   components: {
-    // ViewModeBtns,
     ButtonImportData,
     EditModeBtns
   },

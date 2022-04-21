@@ -3,7 +3,7 @@
     <b-tooltip
       :label="t('actions.reloadFile', locale)"
       type="is-dark"
-      position="is-left">
+      position="is-top">
       <b-button
         size="is-small"
         class="ml-1"

@@ -12,7 +12,10 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <div class="column is-3">
+        <div class="column is-3 is-flex is-direction-row is-align-items-center is-justify-content-end">
+          <ViewModeBtns
+            :file-id="fileId"
+            :locale="locale"/>
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -122,6 +125,7 @@ import { mapActions } from 'vuex'
 import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
 
 import FileTitle from '@/components/navbar/FileTitle'
+import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import UserOptions from '@/components/user/UserOptions'
 
 import NotificationErrors from '@/components/errors/NotificationErrors'
@@ -137,6 +141,7 @@ export default {
   name: 'GitributeExploWiki',
   components: {
     FileTitle,
+    ViewModeBtns,
     UserOptions,
     NotificationErrors,
     EditNavbarSkeleton,

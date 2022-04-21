@@ -14,7 +14,12 @@
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
-          <div v-else>
+          <div v-if="currentEditViewMode === 'diff'">
+            {{ item[f.field] }}
+          </div>
+          <div
+            v-if="currentEditViewMode === 'edit'"
+            class="mr-2">
             <EditCell
               :col-field="f.field"
               :row-id="item.id"
@@ -90,7 +95,12 @@
               <div v-if="currentEditViewMode === 'preview'">
                 {{ item[f.field] }}
               </div>
-              <div v-else>
+              <div v-if="currentEditViewMode === 'diff'">
+                {{ item[f.field] }}
+              </div>
+              <div
+                v-if="currentEditViewMode === 'edit'"
+                class="mr-2">
                 <EditCell
                   :col-field="f.field"
                   :row-id="item.id"
@@ -114,7 +124,12 @@
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
-          <div v-else>
+          <div v-if="currentEditViewMode === 'diff'">
+            {{ item[f.field] }}
+          </div>
+          <div
+            v-if="currentEditViewMode === 'edit'"
+            class="mr-2">
             <EditCell
               :col-field="f.field"
               :row-id="item.id"
@@ -130,7 +145,12 @@
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
-          <div v-else>
+          <div v-if="currentEditViewMode === 'diff'">
+            {{ item[f.field] }}
+          </div>
+          <div
+            v-if="currentEditViewMode === 'edit'"
+            class="mr-2">
             <EditCell
               :col-field="f.field"
               :row-id="item.id"

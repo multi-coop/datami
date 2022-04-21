@@ -17,7 +17,7 @@
       <div
         :class="`column is-4 is-offset-${onlyPreview ? '4' : '3'}`">
         <div class="columns is-centered">
-          <div
+          <!-- <div
             v-if="!onlyPreview"
             :class="`column is-${hasCardsView ? '7' : '8'} fake-edit`">
             <b-skeleton
@@ -26,8 +26,18 @@
               size="is-large"
               animated
               width="75%"/>
-          </div>
+          </div> -->
           <div
+            v-if="!onlyPreview"
+            :class="`column is-8 fake-edit`">
+            <b-skeleton
+              class="my-0"
+              :position="'is-centered'"
+              size="is-large"
+              animated
+              width="50%"/>
+          </div>
+          <!-- <div
             v-if="hasCardsView"
             :class="`column is-${onlyPreview ? '6' : '5'} fake-views`">
             <b-skeleton
@@ -35,7 +45,7 @@
               size="is-large"
               animated
               :width="`50%`"/>
-          </div>
+          </div> -->
         </div>
       </div>
       <div
