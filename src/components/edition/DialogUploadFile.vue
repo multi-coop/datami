@@ -38,8 +38,9 @@
                 class="column is-10">
                 fileTypeFamily : <code>{{ fileTypeFamily }}</code>
               </div>
-
-              <div class="has-text-centered">
+              <div
+                v-if="false"
+                class="has-text-centered">
                 🚧 &nbsp; work in progress - uploading file -
                 <code>.{{ gitObj.filetype }}</code>
                 /
