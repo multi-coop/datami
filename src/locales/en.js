@@ -32,6 +32,7 @@ export default {
     diffView: 'Compare',
     previewView: 'Preview',
     cardsView: 'List',
+    tableView: 'Table',
     showCardDetails: 'Show details',
     closeCardDetails: 'Close detailed card',
     original: 'Original content',
