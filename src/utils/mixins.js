@@ -68,6 +68,9 @@ export const mixinGlobal = {
     hasCardsView () {
       return this.fileOptions && !!this.fileOptions.cardsview
     },
+    cardsViewOptions () {
+      return this.hasCardsView && this.fileOptions.cardsview
+    },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
     }

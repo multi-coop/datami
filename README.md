@@ -187,7 +187,7 @@ The widget takes several parameters, following this structure :
       "pagination":{
         "itemsPerPage":5
       },
-      "cardsview": true,
+      "cardsview": { "activate": true, "default": true },
       "cardsdetail": true,
       "cardssettings": {
         "mini": {
@@ -377,8 +377,11 @@ So you can read more on those topics here =>
         - values : [3, 5, 10, 15, 20, 25, 50, 100]
     - "cardsview":
       description: allows cards view on a table data
-      type: boolean
+      type: boolean || object
       default: false
+      notes: |
+        You can pass an object instead of a boolean value if you need to display the cards view by default, with :
+        { "activate": true, "default": true }
     - "cardsdetail":
       description: allows cards detailled view on a table data
       type: boolean

@@ -1,9 +1,9 @@
 <template>
   <div class="section">
     <div class="container mb-4">
-      <div class="columns is-mobile mb-4">
+      <div class="columns mb-4">
         <!-- FILE TITLE -->
-        <div class="column is-9">
+        <div class="column is-9 is-12-mobile has-text-centered-mobile">
           <FileTitle
             :show-file-infos="showFileInfos"
             :title="title"
@@ -12,7 +12,7 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <div class="column is-3 is-flex is-direction-row is-align-items-center is-justify-content-end">
+        <div class="column is-3 is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>

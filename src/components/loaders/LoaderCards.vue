@@ -1,8 +1,8 @@
 <template>
   <div class="LoaderCards container">
-    <div class="columns is-mobile is-centered mb-5 pb-4">
+    <div class="columns is-centered mb-5 pb-4">
       <div class="column is-10">
-        <div class="columns is-mobile is-multiline">
+        <div class="columns is-multiline">
           <!-- FAKE CARDS GRID -->
           <div
             v-for="item in items"
