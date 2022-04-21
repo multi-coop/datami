@@ -1,7 +1,15 @@
 import { mapGetters } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
-import { debounce, itemsPerPageChoices, paginate, getClosest } from '@/utils/globalUtils'
+import {
+  debounce,
+  itemsPerPageChoicesTable,
+  itemsPerPageChoicesCards2perRow,
+  itemsPerPageChoicesCards3perRow,
+  itemsPerPageChoicesCards4perRow,
+  paginate,
+  getClosest
+} from '@/utils/globalUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 // import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
@@ -139,7 +147,10 @@ export const mixinDiff = {
 export const mixinPagination = {
   data () {
     return {
-      itemsPerPageChoices: itemsPerPageChoices
+      itemsPerPageChoicesTable: itemsPerPageChoicesTable,
+      itemsPerPageChoicesCards2perRow: itemsPerPageChoicesCards2perRow,
+      itemsPerPageChoicesCards3perRow: itemsPerPageChoicesCards3perRow,
+      itemsPerPageChoicesCards4perRow: itemsPerPageChoicesCards4perRow
     }
   },
   computed: {

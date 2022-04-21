@@ -140,6 +140,7 @@
           v-model="showCardDetails"
           :file-id="fileId"
           :cards-settings="cardsSettingsFromFileOptions"
+          :items-per-row="itemsPerRow"
           :items="dataEditedPaginated"
           :locale="locale"/>
       </div>
@@ -364,9 +365,16 @@ export default {
       filterTags: [],
 
       // PAGINATION
+      currentPage: 1,
       itemsPerPage: undefined,
+      // ... FOR TABLE
+      itemsPerPageTable: undefined,
       itemsPerPageDefault: 20,
-      currentPage: 1
+      // ... FOR CARDS
+      itemsPerRow: undefined,
+      itemsPerRowDefault: 3,
+      itemsPerPageCards: undefined,
+      itemsPerPageCardsDefault: 6
     }
   },
   computed: {
@@ -397,11 +405,47 @@ export default {
       }
       return cardsSettings
     },
+    itemsPerPageChoices () {
+      let result
+      // console.log('\nC > GitributeTable > itemsPerPageChoices > this.currentViewMode : ', this.currentViewMode)
+      if (this.currentViewMode === 'table') {
+        result = this.itemsPerPageChoicesTable
+      }
+      if (this.currentViewMode === 'cards') {
+        // console.log('C > GitributeTable > itemsPerPageChoices > this.itemsPerRow : ', this.itemsPerRow)
+        const itemsPerRow = this.itemsPerRow
+        switch (itemsPerRow) {
+          case 2:
+            // console.log('C > GitributeTable > itemsPerPageChoices > case 2 > this.itemsPerRow : ', this.itemsPerRow)
+            result = this.itemsPerPageChoicesCards2perRow
+            break
+          case 3:
+            // console.log('C > GitributeTable > itemsPerPageChoices > case 3 > this.itemsPerRow : ', this.itemsPerRow)
+            // console.log('C > GitributeTable > itemsPerPageChoices > case 3 > this.itemsPerPageChoicesCards3PerRow : ', this.itemsPerPageChoicesCards3PerRow)
+            result = this.itemsPerPageChoicesCards3perRow
+            break
+          case 4:
+            // console.log('C > GitributeTable > itemsPerPageChoices > case 4 > this.itemsPerRow : ', this.itemsPerRow)
+            result = this.itemsPerPageChoicesCards4perRow
+            break
+          default:
+            // console.log('C > GitributeTable > itemsPerPageChoices > default: > this.itemsPerRow : ', this.itemsPerRow)
+            result = this.itemsPerPageChoicesCards3perRow
+        }
+      }
+      // console.log('C > GitributeTable > itemsPerPageChoices > result : ', result)
+      return result
+    },
     paginationFromFileOptions () {
       // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
       const pagination = {
-        itemsPerPage: this.itemsPerPageDefault
+        itemsPerPage: this.itemsPerPageDefault,
+        itemsPerPageTable: this.itemsPerPageDefault,
+        itemsPerRow: this.itemsPerRowDefault,
+        itemsPerPageCards: this.itemsPerPageCards
       }
+
+      // retrieve options from file options
       const hasPaginationOptions = this.fileOptions && this.fileOptions.pagination
       if (hasPaginationOptions) {
         // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
@@ -409,10 +453,30 @@ export default {
           pagination[key] = hasPaginationOptions[key]
         })
       }
-      if (pagination.itemsPerPage < 1) pagination.itemsPerPage = 20
-      if (!this.itemsPerPageChoices.includes(pagination.itemsPerPage)) {
-        const goal = pagination.itemsPerPage
-        pagination.itemsPerPage = this.getClosest(this.itemsPerPageChoices, goal)
+      // set raw values
+      if (pagination.itemsPerPageTable < 1) pagination.itemsPerPageTable = 20
+      if (pagination.itemsPerRow < 1) pagination.itemsPerRow = 3
+      if (pagination.itemsPerPageCards < 1) pagination.itemsPerPageCards = 6
+
+      // refine values
+      const goal = pagination.itemsPerPage
+      // for table view
+      if (!this.itemsPerPageChoicesTable.includes(pagination.itemsPerPage)) {
+        pagination.itemsPerPage = this.getClosest(this.itemsPerPageChoicesTable, goal)
+      }
+      // for cards view
+      if (pagination.itemsPerRow) {
+        const itemsPerRow = this.getClosest([2, 3, 4], pagination.itemsPerRow)
+        if (itemsPerRow === 2) {
+          pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards2perRow, goal)
+        }
+        if (itemsPerRow === 3) {
+          pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards3perRow, goal)
+        }
+        if (itemsPerRow === 4) {
+          pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards4perRow, goal)
+        }
+        pagination.itemsPerRow = itemsPerRow
       }
       return pagination
     },
@@ -507,6 +571,10 @@ export default {
   watch: {
     edited (next) {
       console.log('\nC > GitributeTable > watch > edited > next : ', next)
+    },
+    currentViewMode (next) {
+      // console.log('\nC > GitributeTable > watch > currentViewMode > next : ', next)
+      this.itemsPerPage = next === 'cards' ? this.itemsPerPageCards : this.itemsPerPageTable
     }
   },
   beforeMount () {
@@ -514,6 +582,9 @@ export default {
     const pagination = this.paginationFromFileOptions
     // console.log('\nC > GitributeTable > beforeMount > pagination : ', pagination)
     this.itemsPerPage = pagination.itemsPerPage
+    this.itemsPerPageTable = pagination.itemsPerPageTable
+    this.itemsPerRow = pagination.itemsPerRow
+    this.itemsPerPageCards = pagination.itemsPerPageCards
   },
   methods: {
     processAction (event) {
@@ -552,6 +623,14 @@ export default {
         case 'changePage':
           this.currentPage = event.value.currentPage
           this.itemsPerPage = event.value.itemsPerPage
+          switch (this.currentViewMode) {
+            case 'table':
+              this.itemsPerPageTable = event.value.itemsPerPage
+              break
+            case 'cards':
+              this.itemsPerPageCards = event.value.itemsPerPage
+              break
+          }
           break
       }
     },

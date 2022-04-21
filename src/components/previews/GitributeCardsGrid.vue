@@ -24,8 +24,8 @@
       class="columns is-multiline">
       <div
         v-for="item in items"
-        :class="`column is-4`"
-        :key="`item-card-${item.id}`">
+        :key="`item-card-${item.id}`"
+        :class="`column is-${itemsPerRow === 3 ? 4 : 3}`">
         <GitributeCard
           :file-id="fileId"
           :field-mapping="mappingsForMini"
@@ -86,6 +86,10 @@ export default {
     items: {
       default: null,
       type: Array
+    },
+    itemsPerRow: {
+      default: 3,
+      type: Number
     },
     locale: {
       default: '',

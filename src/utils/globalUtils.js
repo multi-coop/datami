@@ -75,7 +75,10 @@ export function debounce (fn, delay = 500) {
   }
 }
 
-export const itemsPerPageChoices = [3, 5, 10, 15, 20, 25, 50, 100]
+export const itemsPerPageChoicesTable = [3, 5, 10, 15, 20, 25, 50, 100]
+export const itemsPerPageChoicesCards2perRow = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+export const itemsPerPageChoicesCards3perRow = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+export const itemsPerPageChoicesCards4perRow = [4, 8, 12, 16, 20, 24, 28, 32, 36, 40]
 
 export const getClosest = (array, goal) => {
   // https://stackoverflow.com/questions/8584902/get-the-closest-number-out-of-an-array

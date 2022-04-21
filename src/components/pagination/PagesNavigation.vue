@@ -158,6 +158,9 @@ export default {
     currentPageFromParent (next) {
       // console.log('\nC > PagesNavigation > watch > currentPageFromParent > next :', next)
       this.currentPage = next
+    },
+    itemsPerPage (next) {
+      this.itemsPerPageSelected = next
     }
   },
   beforeMount () {
