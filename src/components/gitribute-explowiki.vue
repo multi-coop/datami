@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <div class="container mb-4">
-      <div class="columns mb-4">
+      <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <div class="column is-9 is-12-mobile has-text-centered-mobile">
           <FileTitle
