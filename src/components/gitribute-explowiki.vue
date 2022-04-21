@@ -12,7 +12,7 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <div class="column is-3 is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end">
+        <div class="column is-3 is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
