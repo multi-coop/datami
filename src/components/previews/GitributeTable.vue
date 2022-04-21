@@ -603,7 +603,7 @@ export default {
     // build pagination options
     const pagination = this.paginationFromFileOptions
     // console.log('\nC > GitributeTable > beforeMount > pagination : ', pagination)
-    this.itemsPerPage = pagination.itemsPerPage
+    this.itemsPerPage = this.cardsViewIsDefault ? pagination.itemsPerPageCards : pagination.itemsPerPageTable
     this.itemsPerPageTable = pagination.itemsPerPageTable
     this.itemsPerRow = pagination.itemsPerRow
     this.itemsPerPageCards = pagination.itemsPerPageCards

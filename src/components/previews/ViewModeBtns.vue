@@ -55,7 +55,7 @@ export default {
     }
   },
   beforeMount () {
-    const defaultCardsView = this.hasCardsView && this.cardsViewOptions.default ? 'cards' : 'table'
+    const defaultCardsView = this.cardsViewIsDefault ? 'cards' : 'table'
     this.changeView(defaultCardsView)
   },
   methods: {

@@ -71,6 +71,9 @@ export const mixinGlobal = {
     cardsViewOptions () {
       return this.hasCardsView && this.fileOptions.cardsview
     },
+    cardsViewIsDefault () {
+      return this.cardsViewOptions && this.cardsViewOptions.default
+    },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
     }
