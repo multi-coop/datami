@@ -62,7 +62,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [x] For each file type create a loading skeleton while waiting raw file to finish loading ;
   - [x] Preview for a `.md` file ;
   - [x] Preview for a `.csv` file ;
-  - [ ] Preview for a `.json` or `.geojson` file ;
+  - [x] Preview for a `.json` or `.geojson` file ;
   - [x] Component to update user's token (if user has a specific one for direct commits) ;
   - [x] Component to switch between french and english ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
@@ -71,8 +71,8 @@ The **roadmap** for a first proof of concept (POC) is the following :
     - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
     - [x] for `json` files (`.json` and `.geojson` types)
-  - [ ]  Add a `Upload` button + dialog + actions to overwrite whole edited data ;
-  - [ ]  Add a `lockHeaders` options in widget to only protect keys from edition ;
+  - [x]  Add a `Upload` button + dialog + actions to overwrite whole edited data ;
+  - [x]  Add a `lockHeaders` options in widget to only protect keys from edition ;
   - [ ]  Add a `Save` button + dialog + actions :
     - [x] `POST` create a separate branch on the file's repo ;
     - [x] `PUT` after edition on client's side, acting as a commit to the file's git repo on a separate branch ;
