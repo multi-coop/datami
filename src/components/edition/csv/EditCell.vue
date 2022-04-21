@@ -1,10 +1,10 @@
 <template>
   <div class="EditCell is-flex is-align-items-center">
     <!-- <code>{{ inputData }}</code> -->
-    <b-icon
+    <!-- <b-icon
       class="mr-1 ml-0"
       size="is-small"
-      icon="pencil-outline"/>
+      icon="pencil-outline"/> -->
     <b-field>
       <b-input
         :custom-class="`g-cell py-0 ${isHeader ? 'g-header' : ''}`"

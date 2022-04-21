@@ -88,7 +88,8 @@ export default {
     itemsPerPage: 'éléments par page'
   },
   edit: {
-    uploadData: 'Importer/écraser les données'
+    uploadData: 'Importer/écraser les données',
+    headerLocked: "L'intitulé de cette colonne est protégé en écriture"
   },
   editCsv: {
     noSelect: 'Aucun',

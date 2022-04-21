@@ -356,6 +356,10 @@ So you can read more on those topics here =>
       description: character separating the columns in your csv source
       type: string
       allowed values: [ ",", ";", "|", "\t" ]
+    - "lockcolumns": 
+      description: allows to edit columns' label
+      default: false
+      type: boolean
     - "tagseparator": 
       description: character separating a column's values into tags
       type: string

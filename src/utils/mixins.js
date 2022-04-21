@@ -172,6 +172,12 @@ export const mixinPagination = {
 }
 
 export const mixinCsv = {
+  computed: {
+    lockHeaders () {
+      const options = this.fileOptions
+      return !!(options && options.lockcolumns)
+    }
+  },
   methods: {
     csvToObject,
     ObjectToCsv

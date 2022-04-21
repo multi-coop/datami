@@ -62,8 +62,6 @@
         <!-- ORIGINAL DATA -->
         <GitributeTable
           :file-id="fileId"
-          :file-options="fileOptions"
-          :allow-header-edit="allowHeaderEdit"
           :data="data"
           :columns="dataColumns"
           :data-edited="edited"
@@ -119,6 +117,10 @@ export default {
       default: '',
       type: String
     },
+    fileClientRaw: {
+      default: '',
+      type: String
+    },
     locale: {
       default: '',
       type: String
@@ -134,7 +136,6 @@ export default {
   },
   data () {
     return {
-      allowHeaderEdit: false,
       dataIsSet: false,
       beginEdit: false,
       dataRaw: undefined,
@@ -170,9 +171,16 @@ export default {
       // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
       if (next) {
         this.data = this.dataRaw.data
-        this.dataColumns = this.buildColumns()
+        this.dataColumns = this.buildColumns(this.dataRaw)
         this.edited = this.data
         this.editedColumns = this.dataColumns
+      }
+    },
+    fileClientRaw (next) {
+      if (next) {
+        const dataObj = this.csvToObject(next, this.fileOptions)
+        this.edited = dataObj.data
+        this.editedColumns = this.buildColumns(dataObj)
       }
     },
     edited (next, prev) {
@@ -191,8 +199,8 @@ export default {
     ...mapActions({
       updateBuffer: 'git-data/updateBuffer'
     }),
-    buildColumns () {
-      const headers = this.dataRaw && this.dataRaw.headers
+    buildColumns (dataRaw) {
+      const headers = dataRaw && dataRaw.headers
       // console.log('C > PreviewCsv > buildColumns > headers : ', headers)
       if (!headers) return null
       // if (this.fileOptions.abstractHeaders) {
@@ -203,23 +211,18 @@ export default {
             label: entry[1]
           }
         })
-      // }
-      // const columns = headers.map(h => {
-      //   return { field: h, label: h }
-      // })
-      // return columns
     },
     updateEdited (event) {
-      console.log('\nC > PreviewMd > updateEdited > event : ', event)
+      console.log('\nC > PreviewCsv > updateEdited > event : ', event)
       let toEdit, newObj, oldEditedObj, originalObj, oldVal
       let rowId
       const isHeader = event.isHeader
       const colField = event.colField
       const wasAdded = event.added
       const val = event.val
-      // console.log('C > PreviewMd > updateEdited > isHeader : ', isHeader)
-      // console.log('C > PreviewMd > updateEdited > colField : ', colField)
-      // console.log('C > PreviewMd > updateEdited > val : ', val)
+      // console.log('C > PreviewCsv > updateEdited > isHeader : ', isHeader)
+      // console.log('C > PreviewCsv > updateEdited > colField : ', colField)
+      // console.log('C > PreviewCsv > updateEdited > val : ', val)
       if (isHeader) {
         // update edited headers
         oldVal = this.dataColumns.find(i => i.field === colField).label
@@ -237,23 +240,23 @@ export default {
         if (!wasAdded) {
           originalObj = this.data.find((row) => row.id === rowId)
           oldVal = originalObj && originalObj[colField]
-          // console.log('C > PreviewMd > updateEdited > oldVal : ', oldVal)
+          // console.log('C > PreviewCsv > updateEdited > oldVal : ', oldVal)
         } else {
           originalObj = { ...oldEditedObj }
         }
-        // console.log('C > PreviewMd > updateEdited > oldEditedObj : ', oldEditedObj)
+        // console.log('C > PreviewCsv > updateEdited > oldEditedObj : ', oldEditedObj)
 
         newObj = { ...oldEditedObj }
         newObj[colField] = val
-        // console.log('C > PreviewMd > updateEdited > newObj : ', newObj)
-        // console.log('C > PreviewMd > updateEdited > this.edited (A) : ', this.edited)
+        // console.log('C > PreviewCsv > updateEdited > newObj : ', newObj)
+        // console.log('C > PreviewCsv > updateEdited > this.edited (A) : ', this.edited)
         // reset edited
         toEdit = this.edited.map((row) => {
           if (row.id === rowId) return newObj
           else return row
         })
         this.edited = [...toEdit]
-        // console.log('C > PreviewMd > updateEdited > this.edited (B) : ', this.edited)
+        // console.log('C > PreviewCsv > updateEdited > this.edited (B) : ', this.edited)
       }
       // set changes
       const changeObj = {
@@ -270,8 +273,8 @@ export default {
       let changeId //, isDeleted
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      console.log('\nC > PreviewMd > addRowEvent > changeObj : ', changeObj)
-      console.log('C > PreviewMd > addRowEvent > isDiff : ', isDiff)
+      // console.log('\nC > PreviewCsv > addRowEvent > changeObj : ', changeObj)
+      // console.log('C > PreviewCsv > addRowEvent > isDiff : ', isDiff)
       if (isHeader) {
         changeId = changeObj.field
         // create a filtered copy of changesColumns
@@ -300,7 +303,7 @@ export default {
       const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
-      console.log('C > PreviewMd > addRowEvent > copyChanges : ', copyChanges)
+      // console.log('C > PreviewCsv > addRowEvent > copyChanges : ', copyChanges)
 
       // set in local store
       if (isHeader) {
@@ -310,14 +313,14 @@ export default {
       }
     },
     addRowEvent (event) {
-      console.log('\nC > PreviewMd > addRowEvent > event : ', event)
+      // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
       // update edited
       const newRowId = this.uuidv4()
       const newRow = { ...event.row, id: newRowId, added: true }
-      console.log('C > PreviewMd > addRowEvent > newRow : ', newRow)
-      console.log('C > PreviewMd > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      // console.log('C > PreviewMd > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
 
       // update changesData
       const changeObj = {
@@ -327,11 +330,11 @@ export default {
       this.setChanges(changeObj)
     },
     deleteRowsEvent (event) {
-      console.log('\nC > PreviewMd > deleteRowEvent > event : ', event)
+      // console.log('\nC > PreviewCsv > deleteRowEvent > event : ', event)
       const toDeleteIndices = event.rows.map(rowToDelete => rowToDelete.id)
       const edited = [...this.edited]
       this.edited = edited.filter(r => !toDeleteIndices.includes(r.id))
-      // console.log('C > PreviewMd > deleteRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > deleteRowEvent > this.edited : ', this.edited)
 
       // update changesData
       toDeleteIndices.forEach(rowId => {
@@ -343,7 +346,7 @@ export default {
       })
     },
     sortEdited (event) {
-      // console.log('\nC > PreviewMd > sortEdited > event : ', event)
+      // console.log('\nC > PreviewCsv > sortEdited > event : ', event)
       const sorting = event.value
       const sortingField = sorting.header && sorting.header.field
       const sortIsAscending = sorting.ascending
@@ -362,7 +365,7 @@ export default {
     // BUFFER
     bufferizeEdited () {
       const editedCsv = this.ObjectToCsv(this.editedColumns, this.edited, this.fileOptions)
-      // console.log('\nC > PreviewMd > bufferizeEdited > editedCsv : ', editedCsv)
+      // console.log('\nC > PreviewCsv > bufferizeEdited > editedCsv : ', editedCsv)
 
       const commitData = {
         gitObj: this.gitObj,

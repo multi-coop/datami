@@ -88,7 +88,8 @@ export default {
     itemsPerPage: 'items per page'
   },
   edit: {
-    importData: 'Import/overwrite the data'
+    importData: 'Import/overwrite the data',
+    headerLocked: "This column's label is protected from writing"
   },
   editCsv: {
     noSelect: 'Aucun',

@@ -163,6 +163,10 @@ export default {
       default: '',
       type: String
     },
+    fileClientRaw: {
+      default: '',
+      type: String
+    },
     locale: {
       default: '',
       type: String
@@ -248,9 +252,16 @@ export default {
         // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
         // console.log('C > PreviewMd > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataRaw = this.mdToObject(next, this.fileOptions)
-        this.data = dataRaw.data
         this.content = dataRaw.content
+        this.data = dataRaw.data
         if (!this.contentIsSet) { this.contentIsSet = true }
+      }
+    },
+    fileClientRaw (next) {
+      if (next) {
+        const dataRaw = this.mdToObject(next, this.fileOptions)
+        this.edited = dataRaw.content
+        this.dataEdited = this.objectToMd('', dataRaw.data)
       }
     },
     contentIsSet (next) {

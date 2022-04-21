@@ -81,7 +81,9 @@
                                   icon="upload"
                                   size="is-large"/>
                               </p>
-                              <p>{{ file.name || t('actions.clickOrDropFile', locale) }}</p>
+                              <p>
+                                {{ (file && file.name) || t('actions.clickOrDropFile', locale) }}
+                              </p>
                             </div>
                           </section>
                         </b-upload>
@@ -113,7 +115,7 @@
                       class="mr-2"
                       size="is-small"
                       icon="file"/>
-                    {{ file.name }}
+                    {{ file && file.name }}
                   </p>
                   <div class="content">
                     <pre><code>{{ uploaded }}</code></pre>
@@ -184,7 +186,7 @@ export default {
   },
   computed: {
     fileReady () {
-      return !!this.file.name
+      return !!(this.file && this.file.name)
     }
   },
   watch: {

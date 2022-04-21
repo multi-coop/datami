@@ -1,7 +1,7 @@
 <template>
   <div class="section">
     <div class="container mb-4">
-      <div class="columns is-mobile mb-4">
+      <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <div class="column is-9">
           <FileTitle
@@ -12,7 +12,7 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <div class="column is-3 is-flex is-direction-row is-align-items-center is-justify-content-end">
+        <div class="column is-3 is-flex is-direction-row is-align-items-center is-justify-content-center">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -120,6 +120,7 @@
           :only-preview="onlypreview"
           :file-id="fileId"
           :file-raw="fileRaw"
+          :file-client-raw="fileClientRaw"
           :locale="locale"
           :debug="debug"/>
       </div>
@@ -132,6 +133,7 @@
           :only-preview="onlypreview"
           :file-id="fileId"
           :file-raw="fileRaw"
+          :file-client-raw="fileClientRaw"
           :locale="locale"
           :debug="debug"/>
       </div>
@@ -144,6 +146,7 @@
           :only-preview="onlypreview"
           :file-id="fileId"
           :file-raw="fileRaw"
+          :file-client-raw="fileClientRaw"
           :locale="locale"
           :debug="debug"/>
       </div>
@@ -234,6 +237,7 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
+      fileClientRaw: undefined,
       showFileInfos: false,
       showUploadFileDialog: false
     }
@@ -317,6 +321,7 @@ export default {
           this.showUploadFileDialog = !this.showUploadFileDialog
           break
         case 'uploadFileData':
+          this.fileClientRaw = event.data
           break
       }
     }

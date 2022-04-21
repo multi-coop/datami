@@ -206,6 +206,10 @@ export default {
       default: undefined,
       type: String
     },
+    fileClientRaw: {
+      default: '',
+      type: String
+    },
     locale: {
       default: '',
       type: String
@@ -272,9 +276,17 @@ export default {
         if (!this.contentIsSet) { this.contentIsSet = true }
       }
     },
+    fileClientRaw (next) {
+      if (next) {
+        console.log('C > PreviewJson > watch > fileClientRaw > next :', next)
+        const dataParsed = JSON.parse(next)
+        console.log('C > PreviewJson > watch > fileClientRaw > dataParsed :', dataParsed)
+        this.edited = this.objToNodes(dataParsed, 'root')
+      }
+    },
     contentIsSet (next) {
       if (next) {
-        console.log('C > PreviewMd > watch > contentIsSet > next :', next)
+        console.log('C > PreviewJson > watch > contentIsSet > next :', next)
         const dataParsed = JSON.parse(this.fileRaw)
         this.data = this.objToNodes(dataParsed, 'root')
         this.edited = this.objToNodes(dataParsed, 'root')
@@ -292,7 +304,7 @@ export default {
     },
     fileIsSaving (next) {
       if (next) {
-        // console.log('C > PreviewMd > watch > fileIsSaving > next : ', next)
+        // console.log('C > PreviewJson > watch > fileIsSaving > next : ', next)
         this.bufferizeEdited()
       }
     }

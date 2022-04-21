@@ -40,6 +40,10 @@
         :locale="locale"
         @action="processAction"/>
 
+      <!-- DEBUGGING -->
+      <div v-if="debug">
+        lockHeaders : <code>{{ lockHeaders }}</code>
+      </div>
       <!-- TABLE -->
       <div
         v-show="!isAnyDialogOpen && currentViewMode === 'table'"
@@ -65,13 +69,28 @@
             <template #header="{ column }">
               <!-- EDITION HEADERS-->
               <div v-if="currentEditViewMode === 'edit'">
-                <b-field>
+                <b-field
+                  v-if="!lockHeaders">
                   <EditCell
                     :is-header="true"
                     :col-field="column.field"
                     :input-data="column.label"
                     @updateCellValue="emitUpdate"/>
                 </b-field>
+                <span v-if="lockHeaders">
+                  {{ column.label }}
+                  <b-tooltip
+                    :label="t('edit.headerLocked', locale)"
+                    position="is-bottom"
+                    multilined
+                    type="is-dark">
+                    <b-icon
+                      class="mr-1 ml-0"
+                      size="is-small"
+                      type="is-light"
+                      icon="lock"/>
+                  </b-tooltip>
+                </span>
               </div>
               <!-- DIFF HEADERS -->
               <div v-if="currentEditViewMode === 'diff'">
@@ -142,7 +161,8 @@
           :cards-settings="cardsSettingsFromFileOptions"
           :items-per-row="itemsPerRow"
           :items="dataEditedPaginated"
-          :locale="locale"/>
+          :locale="locale"
+          @updateCellValue="emitUpdate"/>
       </div>
 
       <!-- PAGINATION -->
@@ -156,7 +176,8 @@
           :default-current="currentPage"
           :debug="false"
           :locale="locale"
-          @action="processAction"/>
+          @action="processAction"
+          @updateCellValue="emitUpdate"/>
       </div>
 
       <!-- DEBUG -->
@@ -281,7 +302,7 @@
 </template>
 
 <script>
-import { mixinGlobal, mixinDiff, mixinPagination } from '@/utils/mixins.js'
+import { mixinGlobal, mixinDiff, mixinCsv, mixinPagination } from '@/utils/mixins.js'
 
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
@@ -307,6 +328,7 @@ export default {
   mixins: [
     mixinGlobal,
     mixinDiff,
+    mixinCsv,
     mixinPagination
   ],
   props: {

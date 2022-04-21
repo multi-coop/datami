@@ -32,7 +32,8 @@
           :item="item"
           :show-detail="showDetail"
           :locale="locale"
-          @toggleDetail="toggleDetail"/>
+          @toggleDetail="toggleDetail"
+          @updateCellValue="emitUpdate"/>
       </div>
     </div>
 
@@ -48,7 +49,8 @@
           :item="getDetailItem"
           :show-detail="showDetail"
           :locale="locale"
-          @toggleDetail="toggleDetail"/>
+          @toggleDetail="toggleDetail"
+          @updateCellValue="emitUpdate"/>
       </div>
     </div>
   </div>
@@ -146,6 +148,10 @@ export default {
         this.activeCardId = event
         this.handleInput(true)
       }
+    },
+    emitUpdate (event) {
+      // console.log('\nC > GitributeCardsGrid > emitUpdate > event : ', event)
+      this.$emit('updateCellValue', event)
     }
   }
 }

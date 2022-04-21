@@ -30,10 +30,10 @@
           type="is-dark"
           expanded
           :loading="loading"
-          :icon-left="currentViewMode === 'preview' ? 'pencil' : 'check' "
+          :icon-left="currentEditViewMode === 'preview' ? 'pencil' : 'check' "
           size="is-small"
           @click="toggleButton()">
-          <span v-if="currentViewMode === 'preview'">
+          <span v-if="currentEditViewMode === 'preview'">
             {{ t('actions.edit', locale) }}
           </span>
           <span v-else>
@@ -50,7 +50,7 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import ButtonImportData from '@/components/edition/csv/ButtonImportData'
+import ButtonImportData from '@/components/edition/ButtonImportData'
 import EditModeBtns from '@/components/edition/EditModeBtns'
 
 export default {
@@ -89,7 +89,7 @@ export default {
       updateSaving: 'git-data/updateSaving'
     }),
     toggleButton () {
-      if (this.currentViewMode === 'preview') {
+      if (this.currentEditViewMode === 'preview') {
         this.changeEditMode('edit')
       } else {
         this.commitChanges()

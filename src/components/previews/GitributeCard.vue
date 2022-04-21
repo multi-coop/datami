@@ -218,7 +218,7 @@ export default {
       this.$emit('toggleDetail', this.item.id)
     },
     emitUpdate (event) {
-      this.$emit('updateEdited', event)
+      this.$emit('updateCellValue', event)
     }
   }
 }
