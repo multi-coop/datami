@@ -9,12 +9,16 @@
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 
-<body>
+<body style="background-color: grey; padding: 1em;">
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
   </noscript>
   <!-- <div id="app"></div> -->
+
+  <h2 id="title-demo" class="pt-6 title has-text-centered has-text-white">
+    Some examples of gitribute widgets' integration
+  </h2>
 
   <!-- TEST FILTERS COMPONENTS -->
   <!-- TO DO  -->
@@ -23,23 +27,44 @@
   <!-- TO DO  -->
 
   <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
-  <multi-gitribute-file
-    gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/markdown/test-file-gitribute-fr.md"
-    options="" title="gitribute for gitlab file - md" usertoken="glpat-bp8pjJYinNeLK7mBUe73" locale="fr" debug="false">
-  </multi-gitribute-file>
+  <p id="gitribute-md-gitlab" class="ml-4 mt-6 subtitle has-text-white">
+    <a href="/#gitribute-md-gitlab" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    Import and edit a markdow file from gitlab
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
+      gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/markdown/test-file-gitribute-fr.md"
+      options="" title="gitribute for gitlab file - md" usertoken="glpat-bp8pjJYinNeLK7mBUe73" locale="fr"
+      debug="false">
+    </multi-gitribute-file>
+  </div>
 
-  <hr>
+  <p id="gitribute-md-github" class="ml-4 mt-6 subtitle has-text-white">
+    <a href="/#gitribute-md-github" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    Import and edit a markdow file from github
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
+      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/jailbreak-devient-multi-fr.md"
+      options="" title="gitribute for github file - md" usertoken="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"
+      locale="en">
+    </multi-gitribute-file>
+  </div>
 
-  <multi-gitribute-file
-    gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/jailbreak-devient-multi-fr.md"
-    options="" title="gitribute for github file - md" usertoken="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" locale="en">
-  </multi-gitribute-file>
-
-  <hr>
-
-  <multi-gitribute-file
-    gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
-    options='{
+  <p id="gitribute-csv-gitlab" class="ml-4 mt-6 subtitle has-text-white">
+    <a href="/#gitribute-csv-gitlab" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    Import and edit a csv file from gitlab
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
+      gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
+      options='{
       "separator":";",
       "lockcolumns": true,
       "tagseparator":", ",
@@ -61,24 +86,36 @@
         }
       }
     }' title="gitribute for gitlab file - csv (semicolon separator)" usertoken="glpat-bp8pjJYinNeLK7mBUe73"
-    locale="fr">
-  </multi-gitribute-file>
+      locale="fr">
+    </multi-gitribute-file>
+  </div>
 
-  <hr>
-
-  <multi-gitribute-file
-    gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
+  <p id="gitribute-csv-github" class="ml-4 mt-6 subtitle has-text-white">
+    <a href="/#gitribute-csv-github" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    Import a csv file from github for only preview
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
+      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
       "separator":","
     }' title="gitribute for github file - csv (comma separator) - only preview"
-    usertoken="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" locale="tk" onlypreview="true" debug="false">
-  </multi-gitribute-file>
+      usertoken="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" locale="tk" onlypreview="true" debug="false">
+    </multi-gitribute-file>
+  </div>
 
-  <hr>
-
-  <multi-gitribute-explowiki
-    wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Compte_Mobilit%C3%A9_Standardis%C3%A9#Suivre_les_travaux"
-    wikifile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
-    options='{
+  <p id="gitribute-wiki" class="ml-4 mt-6 subtitle has-text-white">
+    <a href="/#gitribute-wiki" style="color: white; margin-right: 0.5em;">
+      #
+    </a>
+    Import wikidata content to display as csv / cards content
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-explowiki
+      wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Compte_Mobilit%C3%A9_Standardis%C3%A9#Suivre_les_travaux"
+      wikifile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
+      options='{
       "separator":";",
       "pagination":{
         "itemsPerPage":5
@@ -97,19 +134,24 @@
         }
       }
     }' title="gitribute for explowiki :)" locale="fr">
-  </multi-gitribute-explowiki>
+    </multi-gitribute-explowiki>
+  </div>
 
-  <hr>
-
-  <multi-gitribute-file
-    gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/test-json.json" options='{
+  <p id="gitribute-json-github" class="ml-4 mt-6 subtitle has-text-white">
+    <a href="/#gitribute-json" style="color: white; margin-right: 0.5em;">
+      #
+    </a>
+    Import and edit a json file from github
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
+      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/test-json.json" options='{
       "defaultDepth": "all",
       "allowKeyEdit": true
     }' title="gitribute for github file - json" usertoken="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" locale="fr"
-    onlypreview="false" debug="false">
-  </multi-gitribute-file>
-
-  <hr>
+      onlypreview="false" debug="false">
+    </multi-gitribute-file>
+  </div>
 
   <!-- built files will be auto injected -->
 </body>

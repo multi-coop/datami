@@ -97,9 +97,6 @@
 
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
 
-    <!-- PREVIEWS CARDS -->
-    <!-- TO DO  -->
-
     <!-- PREVIEWS CSV -->
     <div
       v-if="fileTypeFamily === 'table'"
@@ -122,7 +119,7 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
+import { mixinGlobal, mixinGit, mixinWiki } from '@/utils/mixins.js'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
@@ -151,7 +148,8 @@ export default {
   },
   mixins: [
     mixinGlobal,
-    mixinGit
+    mixinGit,
+    mixinWiki
   ],
   props: {
     title: {

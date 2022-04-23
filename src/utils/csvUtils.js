@@ -5,6 +5,13 @@ export const separators = [
   { separator: '\t', name: 'tab' }
 ]
 
+/**
+ * @typedef {Object} options
+ * @property {string} separator
+ * @property {string} tagseparator
+ * @property {boolean} asJson
+**/
+
 export const defaultCsvOptions = {
   separator: ';',
   tagseparator: '-',
@@ -13,8 +20,28 @@ export const defaultCsvOptions = {
 
 // cf : https://stackoverflow.com/questions/28543821/convert-csv-lines-into-javascript-objects
 
+/**
+ * parseLine takes a string parses it as a lien object
+ * @param  {string} line string equivalent to a line content encoded as JSON
+ * @return {object}      line as an object
+ **/
 export const parseLine = (line) => JSON.parse(`[${line}]`)
 
+/**
+ * @typedef {Object} csv
+ * @property {Object} headers The csv headers
+ * @property {Object} data The csv data
+**/
+
+/**
+ * csvToObject takes a string parses it as a lien object
+ * @param  {string} csvRaw
+ *          string equivalent to csv content
+ * @param  {options} options
+ *          object containing the options to parse csv content
+ * @return {csv}
+ *          csv as an object
+**/
 export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
   // console.log('\nU > csvToObject > csvRaw : \n', csvRaw)
   // console.log('U > csvToObject > options : ', options)
@@ -73,6 +100,17 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
   return csv
 }
 
+/**
+ * ObjectToCsv takes headers infos and data to build a string corresponding to a raw csv
+ * @param  {headers} headers
+ *          Array of headers
+ * @param  {data} data
+ *          Array of objects
+ * @param  {options} options
+ *          object containing the options to parse csv content
+ * @return {csv}
+ *          csv as an object
+**/
 export const ObjectToCsv = (headers, data, options = defaultCsvOptions) => {
   // console.log('\nU > ObjectToCsv > headers : \n', headers)
   // console.log('U > ObjectToCsv > data : \n', data)

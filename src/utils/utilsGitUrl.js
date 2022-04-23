@@ -21,9 +21,20 @@ export const gitProviders = {
   }
 }
 
+/**
+ * b64encode takes a string and encodes it to b64
+ * @param  {string} str string content to encode
+ * @return {string}     encoded string
+ **/
 export const b64encode = (str) => {
   return btoa(unescape(encodeURIComponent(str)))
 }
+
+/**
+ * b64decode takes an encoded string and decodes it
+ * @param  {string} str string content to decode
+ * @return {string}     decoded string
+ **/
 export const b64decode = (str) => {
   return decodeURIComponent(escape(atob(str)))
 }
