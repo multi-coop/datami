@@ -76,6 +76,7 @@
       "separator":";",
       "lockcolumns": true,
       "tagseparator":", ",
+      "height": "500px",
       "pagination":{
         "itemsPerPage":5
       },
@@ -107,7 +108,8 @@
   <div style="background-color: white; margin: 1em;">
     <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
-      "separator":","
+      "separator":",",
+      "height": "300px"
     }' title="gitribute for github file - csv (comma separator) - only preview"
       usertoken="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" locale="tk" onlypreview="true" debug="false">
     </multi-gitribute-file>
@@ -123,7 +125,8 @@
     <multi-gitribute-explowiki
       wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
       options='{
-      "wikisettings": {
+        "height": "900px",
+        "wikisettings": {
         "category": "projet",
         "fields": [
           "url",
@@ -158,13 +161,21 @@
         "mini": {
           "title": {"position": "title"},
           "imageUrl": {"position": "image"},
-          "shortDescription": {"position": "resume"}
+          "shortDescription": {"position": "resume"},
+          "Tags": {"position": "tags"},
+          "Theme": {"position": "tags"},
+          "challenge": {"position": "tags"}
         },
         "detail": {
           "title": {"position": "title"},
           "imageUrl": {"position": "image"},
           "shortDescription": {"position": "resume"},
-          "description": {"position": "description"}
+          "description": {"position": "description"},
+          "Tags": {"position": "tags"},
+          "Theme": {"position": "tags"},
+          "challenge": {"position": "tags"},
+          "communauté d&#39;intérêt": {"position": "tags"},
+          "url": {"position": "links"}
         }
       }
     }' title="gitribute for explowiki :)" locale="fr">

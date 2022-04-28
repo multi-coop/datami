@@ -8,7 +8,8 @@ import {
   itemsPerPageChoicesCards3perRow,
   itemsPerPageChoicesCards4perRow,
   paginate,
-  getClosest
+  getClosest,
+  trimText
 } from '@/utils/globalUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
@@ -80,7 +81,8 @@ export const mixinGlobal = {
     }
   },
   methods: {
-    uuidv4
+    uuidv4,
+    trimText
   }
 }
 

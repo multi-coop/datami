@@ -3,6 +3,7 @@ export default {
     optional: 'Optional',
     enterValue: 'Entrer une valeur',
     test: 'test nested global',
+    link: 'Link',
     yes: 'yes',
     no: 'no'
   },
@@ -50,6 +51,7 @@ export default {
     send: 'Send',
     cancel: 'Cancel',
     search: 'Search',
+    openLinkInNew: 'Open link in a new window',
     reloadFile: 'Reload the file',
     downloadFile: 'Download the file',
     uploadFile: 'Upload a file',

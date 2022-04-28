@@ -1,3 +1,4 @@
+// OBJECTS UTILS
 
 export const nullOnNested = (val, def = '') => {
   return Object.keys(val).reduce((acc, key) => {
@@ -60,6 +61,8 @@ export const setFromPath = (obj, path, value, separator = '.') => {
   }, obj)
 }
 
+// DEBOUNCE UTILS
+
 export function debounce (fn, delay = 500) {
   // cf : https://stackoverflow.com/questions/42199956/how-to-implement-debounce-in-vue2
   // console.log('\nU > globalUtils > debounce > fn : ', fn)
@@ -74,6 +77,8 @@ export function debounce (fn, delay = 500) {
     }, delay)
   }
 }
+
+// PAGINATION UTILS
 
 export const itemsPerPageChoicesTable = [3, 5, 10, 15, 20, 25, 50, 100]
 export const itemsPerPageChoicesCards2perRow = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
@@ -90,4 +95,11 @@ export const getClosest = (array, goal) => {
 export const paginate = (array, pageSize, pageNumber) => {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+}
+
+// TEXT UTILS
+
+export const trimText = (str, maxLength = 30) => {
+  if (str.length > maxLength) return `${str.slice(0, maxLength)}...`
+  else return str
 }

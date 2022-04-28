@@ -28,6 +28,7 @@
         :class="`column is-${itemsPerRow === 3 ? 4 : 3}`">
         <GitributeCard
           :file-id="fileId"
+          :fields="cardsSettings.originalHeaders"
           :field-mapping="mappingsForMini"
           :item="item"
           :show-detail="showDetail"
@@ -37,7 +38,7 @@
       </div>
     </div>
 
-    <!-- DISPLAY CARDS GRID -->
+    <!-- DISPLAY DETAILLED CARD -->
     <div
       v-if="showDetail && activeCardId"
       class="columns is-centered">
@@ -45,6 +46,7 @@
         :class="`column is-8`">
         <GitributeCard
           :file-id="fileId"
+          :fields="cardsSettings.originalHeaders"
           :field-mapping="mappingsForDetail"
           :item="getDetailItem"
           :show-detail="showDetail"

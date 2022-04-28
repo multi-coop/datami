@@ -53,16 +53,17 @@
           :checkable="currentEditViewMode === 'edit'"
           :sticky-checkbox="currentEditViewMode === 'edit'"
           :checked-rows.sync="checkedRows"
+          :height="fileOptions.height || '400px'"
           narrowed
           hoverable
           sticky-header
           striped>
           <!-- LOOP COLUMNS -->
-          <!-- width="40" -->
           <!-- numeric -->
           <b-table-column
             v-for="col in columnsForView"
             :key="col.field"
+            width="75px"
             :field="col.field"
             :label="col.label">
             <!-- HEADERS -->
