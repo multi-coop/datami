@@ -126,6 +126,11 @@ export default {
     float: 'nombre décimal',
     bool: 'booléen'
   },
+  editWiki: {
+    loadingPages: 'Chargement des pages du mediawiki...',
+    page: 'page',
+    pages: 'pages'
+  },
   user: {
     userToken: "Votre jeton d'accès",
     user: 'Utilisateur',

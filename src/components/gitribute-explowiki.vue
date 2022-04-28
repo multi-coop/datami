@@ -46,6 +46,15 @@
       </div>
       <div class="column is-one-third">
         <p>
+          wikiObj:
+          <br>
+          <code>
+            <pre>{{ wikiObj }}</pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-one-third">
+        <p>
           fileInfos:
           <br>
           <code>
@@ -53,7 +62,29 @@
           </code>
         </p>
       </div>
-      <div class="column is-one-third">
+      <div
+        v-if="debug"
+        class="column is-8">
+        <p>
+          wikiPages:
+          <br>
+          <code>
+            <pre>{{ wikiPages }}</pre>
+          </code>
+        </p>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-4">
+        <p>
+          wikiFields
+          <br>
+          <code>
+            <pre>{{ wikiFields }}</pre>
+          </code>
+        </p>
+      </div>
+      <!-- <div class="column is-one-third">
         <p>
           fileRaw:
           <br>
@@ -61,7 +92,7 @@
             <pre>{{ fileRaw }}</pre>
           </code>
         </p>
-      </div>
+      </div> -->
     </div>
 
     <!-- FILE INFOS -->
@@ -95,8 +126,16 @@
       :only-preview="onlypreview"
       :locale="locale"/>
 
-    <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+    <!-- PROGRESS LOADER -->
+    <!-- v-if="wikiItems && wikiItems.length" -->
+    <LoaderWiki
+      v-if="wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length)"
+      :file-id="fileId"
+      :items-loaded="wikiPages.length"
+      :items-total="wikiItems.length"
+      :locale="locale"/>
 
+    <!-- PREVIEWS - SWITCH BY FILE TYPE -->
     <!-- PREVIEWS CSV -->
     <div
       v-if="fileTypeFamily === 'table'"
@@ -106,6 +145,7 @@
         :file-id="fileId"
         :file-is-loading="fileIsLoading"
         :file-raw="fileRaw"
+        :wiki-raw="wikiRaw"
         :locale="locale"
         :debug="debug"/>
     </div>
@@ -130,6 +170,8 @@ import NotificationErrors from '@/components/errors/NotificationErrors'
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import DialogFileInfos from '@/components/previews/DialogFileInfos'
 
+import LoaderWiki from '@/components/loaders/LoaderWIKI'
+
 import PreviewCsv from '@/components/previews/PreviewCsv'
 
 import GitributeCredits from '@/components/credits/GitributeCredits'
@@ -143,6 +185,7 @@ export default {
     NotificationErrors,
     EditNavbarSkeleton,
     DialogFileInfos,
+    LoaderWiki,
     PreviewCsv,
     GitributeCredits
   },
@@ -185,34 +228,66 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
-      showFileInfos: false
+      showFileInfos: false,
+
+      // tests for mediawiki fetching
+      mediawikiDefaultFields: ['title', 'imageUrl'],
+      mediawikiOptions: undefined,
+      wikiObj: undefined,
+      wikiItems: undefined,
+      wikiFields: undefined,
+      // wikiHeaders: undefined,
+      wikiPages: undefined
+    }
+  },
+  computed: {
+    headersArray () {
+      // const headers = this.wikiHeaders ? Array.from(this.wikiHeaders) : []
+      // return headers
+      return Array.from(this.wikiHeaders)
+    },
+    wikiRaw () {
+      return {
+        headers: this.wikiFields,
+        data: this.wikiPages
+      }
     }
   },
   watch: {
     fileIsLoading (next) {
       // console.log('C > GitributeExploWiki > watch > fileIsLoading > next : ', next)
-      if (next) { this.reloadFile() }
+      if (next) { this.reloadMediawikiRessources() }
     }
   },
   beforeMount () {
-    console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
-    const gitInfosObject = this.extractGitInfos(this.wikifile)
-    const fileUuid = this.uuidv4()
-    gitInfosObject.uuid = fileUuid
-    console.log('C > GitributeExploWiki > beforeMount > gitInfosObject : ', gitInfosObject)
-    this.fileId = gitInfosObject.uuid
-    this.fileType = gitInfosObject.filetype
-    if (!this.getGitInfosObj[this.fileId]) {
-      // this.gitObj = gitInfosObject
-      this.addGitInfos(gitInfosObject)
-    }
-    console.log('C > GitributeExploWiki > beforeMount > this.gitObj : ', this.gitObj)
+    // console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
+    console.log('\nC > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
+    // console.log('C > GitributeExploWiki > beforeMount > this.options : ', this.options)
+
+    const wikiUuid = this.uuidv4()
+
     // build options object
-    const fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
-    this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
+    const mediawikiOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    this.mediawikiOptions = mediawikiOptions
+    console.log('C > GitributeExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)
+    // add default fields for pages structuration
+    const fields = [...this.mediawikiDefaultFields, ...mediawikiOptions.wikisettings.fields]
+    this.wikiFields = { ...fields }
+
+    // get wiki object for further reload infos
+    const wikiInfosObject = this.extractWikiInfos(this.wikilist, this.mediawikiOptions.wikisettings)
+    wikiInfosObject.uuid = wikiUuid
+    this.wikiObj = wikiInfosObject
+    this.fileId = wikiInfosObject.uuid
+    this.fileType = wikiInfosObject.filetype
+    if (!this.getGitInfosObj[wikiUuid]) {
+      this.addGitInfos(wikiInfosObject)
+    }
+    this.addFileOptions({ ...mediawikiOptions, uuid: wikiUuid })
+    console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
   },
   async mounted () {
-    await this.reloadFile()
+    await this.reloadMediawikiRessources()
   },
   methods: {
     ...mapActions({
@@ -222,36 +297,70 @@ export default {
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors'
     }),
-    async reloadFile () {
+    async reloadMediawikiRessources () {
+      // Update reloading in store - true
+      // this.updateReloading({ fileId: this.wikiObj.uuid, isLoading: true })
+      // this.updateReqErrors({ fileId: this.wikiObj.uuid, addToErrors: false })
+
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
       this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
-      // Request API for file infos
-      const respData = await this.getFileData(this.gitObj)
-      // console.log('\nC > GitributeExploWiki > reloadFile > respData : ', respData)
-      const fileInfos = respData.data
-      const fileInfosErrors = respData.errors
-      fileInfos.uuid = this.fileId
-      this.addFileReqInfos(fileInfos)
-      this.fileInfos = fileInfos
-      // console.log('C > GitributeExploWiki > reloadFile > this.fileInfos : ', this.fileInfos)
+      // reset local data
+      this.wikiItems = undefined
+      this.wikiPages = []
 
-      // Request API for file content
-      const respDataRaw = await this.getFileDataRaw(this.gitObj)
-      // console.log('C > GitributeExploWiki > reloadFile > respDataRaw : ', respDataRaw)
-      const fileRaw = respDataRaw.data
-      const fileRawErrors = respDataRaw.errors
-      this.fileRaw = fileRaw
-
-      // update errors if any
-      if (fileInfosErrors.length || fileRawErrors.length) {
-        const errors = [...fileInfosErrors, ...fileRawErrors]
-        this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
-      }
+      // Request API for wiki pages data
+      const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
+      console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
+      let wikiItems = respWikidataRaw.data
+      wikiItems = wikiItems.map(item => { return { ...item, id: this.uuidv4() } })
+      console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikiItems : ', wikiItems)
+      this.wikiItems = wikiItems
 
       // Update reloading in store - false
       this.updateReloading({ fileId: this.fileId, isLoading: false })
+
+      // this.wikiHeaders = new Set()
+      // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pages : ', pages)
+      for (const item of this.wikiItems) {
+        const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
+        // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+        // pageData.headers.forEach(h => { this.wikiHeaders.add(h) })
+        // this.wikiHeaders.push(...pageData.headers)
+        pageData.temp = this.restructurePageData(pageData, this.wikiFields)
+        this.wikiPages.push(pageData.temp)
+      }
+      // this.wikiHeaders = Array.from(new Set(this.wikiHeaders))
+      console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > this.wikiHeaders : ', this.wikiHeaders)
+      console.log('C > GitributeExploWiki > reloadMediawikiRessources > this.wikiPages : ', this.wikiPages)
+
+      // CSV FUNCTIONS ---> TO REMOVE - - -
+      // Request API for file infos
+      // const respData = await this.getFileData(this.gitObj)
+      // // console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respData : ', respData)
+      // const fileInfos = respData.data
+      // const fileInfosErrors = respData.errors
+      // fileInfos.uuid = this.fileId
+      // this.addFileReqInfos(fileInfos)
+      // this.fileInfos = fileInfos
+      // // console.log('C > GitributeExploWiki > reloadMediawikiRessources > this.fileInfos : ', this.fileInfos)
+
+      // // Request API for file content
+      // const respDataRaw = await this.getFileDataRaw(this.gitObj)
+      // // console.log('C > GitributeExploWiki > reloadMediawikiRessources > respDataRaw : ', respDataRaw)
+      // const fileRaw = respDataRaw.data
+      // const fileRawErrors = respDataRaw.errors
+      // this.fileRaw = fileRaw
+
+      // // update errors if any
+      // if (fileInfosErrors.length || fileRawErrors.length) {
+      //   const errors = [...fileInfosErrors, ...fileRawErrors]
+      //   this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
+      // }
+
+      // // Update reloading in store - false
+      // this.updateReloading({ fileId: this.fileId, isLoading: false })
     }
   }
 }

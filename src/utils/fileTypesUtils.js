@@ -8,6 +8,25 @@ export const authorizedFileTypes = {
   wiki: { family: 'table' }
 }
 
+// ICONS
+export const providerIcons = [
+  {
+    icon: 'gitlab',
+    providers: ['gitlab']
+  },
+  {
+    icon: 'github',
+    providers: ['github']
+  },
+  {
+    icon: 'wikipedia',
+    providers: ['mediawiki']
+  },
+  {
+    icon: 'source',
+    providers: ['other']
+  }
+]
 export const typesIcons = [
   {
     icon: 'note-text-outline',
@@ -15,11 +34,15 @@ export const typesIcons = [
   },
   {
     icon: 'table',
-    allowedTypes: ['csv', 'tsv', 'wiki']
+    allowedTypes: ['csv', 'tsv']
   },
   {
     icon: 'code-json',
     allowedTypes: ['json', 'geojson']
+  },
+  {
+    icon: 'wikipedia',
+    allowedTypes: ['wiki']
   },
   {
     icon: 'file',

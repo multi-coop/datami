@@ -5,7 +5,9 @@
         v-for="info in infoRowsPopulated"
         :key="info.key"
         class="tile is-12">
-        <div class="tile is-parent py-1">
+        <div
+          v-if="gitObj[info.key]"
+          class="tile is-parent py-1">
           <div class="tile is-child is-4">
             <b-icon
               :icon="info.icon"
@@ -32,7 +34,7 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import { typesIcons } from '@/utils/fileTypesUtils.js'
+import { providerIcons, typesIcons } from '@/utils/fileTypesUtils.js'
 
 export default {
   name: 'GitObjInofs',
@@ -49,6 +51,7 @@ export default {
   },
   data () {
     return {
+      providerIcons: providerIcons,
       icons: typesIcons,
       infoRows: [
         { txt: 'file.fileName', key: 'filefullname', icon: 'file' },
@@ -74,12 +77,17 @@ export default {
             raw.icon = this.fileIcon
             break
           case 'provider' :
-            raw.icon = this.gitObj.provider
+            // raw.icon = this.gitObj.provider
+            raw.icon = this.providerIcon
             break
         }
         return raw
       })
       return infos
+    },
+    providerIcon () {
+      const providerIconObj = this.providerIcons.find(t => t.providers.includes(this.gitObj.provider))
+      return providerIconObj.icon || this.icons[0].icon
     },
     fileIcon () {
       const iconObj = this.icons.find(t => t.allowedTypes.includes(this.gitObj.filetype))

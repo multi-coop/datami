@@ -1,27 +1,30 @@
 <template>
-  <div class="columns is-centered is-multiline mt-6">
+  <div class="GitributeCredits columns is-centered is-multiline mt-6">
     <!-- CREDITS -->
     <div
       class="column is-full is-italic has-text-centered">
       <span
-        class="has-text-grey is-size-6"
+        class="has-text-grey is-size-7"
         v-html="t('credits.reclaim', locale, true)"/>
-      <a
-        href="https://multi.coop"
-        target="_blank">
-        multi
-        <!-- <img
-          :src="require('@/assets/multi-logo-01.png')"
-          class="mini-logo"
-          alt="The multi Logo"> -->
-      </a>
+      <span
+        class="has-text-grey is-size-7">
+        <a
+          href="https://multi.coop"
+          target="_blank">
+          multi
+          <!-- <img
+            :src="require('@/assets/multi-logo-01.png')"
+            class="mini-logo"
+            alt="The multi Logo"> -->
+        </a>
+      </span>
       <b-button
         icon-left="gitlab"
         tag="a"
         href="https://gitlab.com/multi-coop/gitribute"
         outlined
         size="is-small"
-        class="ml-3">
+        class="ml-3 is-size-7">
         {{ t('credits.code', locale) }}
       </b-button>
     </div>

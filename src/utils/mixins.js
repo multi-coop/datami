@@ -17,7 +17,7 @@ import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
 import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
 import { nodeTypes, objToNodes, setEditInNode, nodeToObj } from '@/utils/jsonUtils.js'
 import { editViewsOptions } from '@/utils/fileTypesUtils.js'
-import { fetchMediaWikiData } from '@/utils/utilsWikiUrl.js'
+import { extractWikiInfos, getMediawikiData, getMediawikitItem, restructurePageData } from '@/utils/utilsWikiUrl.js'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -193,7 +193,10 @@ export const mixinCsv = {
 
 export const mixinWiki = {
   methods: {
-    fetchMediaWikiData
+    extractWikiInfos,
+    getMediawikiData,
+    getMediawikitItem,
+    restructurePageData
   }
 }
 

@@ -1,6 +1,10 @@
 import { authorizedFileTypes as fileTypes } from '@/utils/fileTypesUtils.js'
 
 /**
+ * GOAL : fetch every ressource from such page :
+ * https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Commun=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=
+ * https://wiki.lafabriquedesmobilites.fr/wiki/Compte_Mobilit%C3%A9_Standardis%C3%A9#Suivre_les_travaux
+/**
  * @typedef {WikiData}
  * @property {string} title Title of the page
  * @property {string} image_url URL of the main image of the page
@@ -74,6 +78,35 @@ export async function fetchMediaWikiData (urls) {
   return results
 }
 
+export const objectFromWikitext = (wikitext) => {
+  const headers = []
+  const obj = {}
+  let splitted = wikitext.split('\n|')
+  splitted = splitted.slice(1, splitted.length)
+  splitted.forEach(i => {
+    const iSplit = i.split('=')
+    headers.push(iSplit[0])
+    obj[iSplit[0]] = iSplit[1]
+  })
+  return {
+    parted: extractWikitextPartGen(wikitext),
+    headers: headers,
+    data: obj
+  }
+}
+
+export const extractWikitextPartGen = (content) => {
+  const regex = /[\n]|(.*)=(.*)/
+  const part = content.split(regex)
+  return part
+}
+
+export const extractWikitextPart = (key, content) => {
+  const regex = new RegExp(`\\|${key}=(.*)`)
+  const part = content.match(regex)
+  return part && part[1]
+}
+
 export const extractDescription = (content) => {
   // const regex = /^\|shortDescription=(.*)$/
   const regex = /\|shortDescription=(.*)/
@@ -138,38 +171,207 @@ export const forgeImageUrl = (hostname, imageName) => {
   return imgUrl.href
 }
 
-export const extractWikiInfos = (str) => {
-  // console.log('\nU > utilsGitUrl > extractGitInfos > str : ', str)
-  let orga, repo, rawRoot, publicRoot, remaining, api
-  // let gitRef, trimmed, split, rawUrl
-  let filefullname, filename, filetype
+export const extractWikiInfos = (urlStr, options) => {
+  // cf https://www.mediawiki.org/wiki/API:Categorymembers#Example_1:_List_twenty_pages_in_a_category
+  console.log('\nU > utilsWikiUrl > extractWikiInfos > urlStr : ', urlStr)
+  console.log('\nU > utilsWikiUrl > extractWikiInfos > options : ', options)
 
-  const provider = 'wikidata'
+  const filetype = 'wiki'
+  const provider = 'mediawiki'
+
+  // let orga, repo, rawRoot, publicRoot, remaining, api
+  // let gitRef, trimmed, split, rawUrl
+  // let filefullname, filename
+
+  const apiRoot = extractApiEndpoint(urlStr)
+  console.log('U > utilsWikiUrl > extractWikiInfos > apiRoot : ', apiRoot)
+
+  let apiUrl = `${apiRoot}`
+
+  const params = {
+    action: 'query',
+    list: 'categorymembers',
+    utf8: '',
+    cmtitle: `Category:${options.category}`,
+    cmlimit: 'max',
+    formatversion: '2',
+    format: 'json'
+  }
+
+  apiUrl += '?origin=*'
+  Object.keys(params)
+    .forEach(key => { apiUrl += `&${key}=${params[key]}` })
+  console.log('U > utilsWikiUrl > extractWikiInfos > apiUrl : ', apiUrl)
 
   const wikiInfos = {
-    id: str,
+    id: urlStr,
     uuid: undefined,
     provider: provider,
-    api: api,
-    orga: orga,
-    repo: repo,
+
+    hostname: hostname(urlStr),
+    basename: basename(urlStr),
+    pageTitle: extractPageTitle(urlStr),
+    apiRoot: apiRoot,
+    apiUrl: apiUrl,
+
+    filename: hostname(urlStr),
+    filefullname: `${hostname(urlStr)} => ${params.cmtitle}`,
+    filetype: filetype,
+    filefamily: (fileTypes[filetype] && fileTypes[filetype].family) || 'other'
+
+    // api: api,
+    // orga: orga,
+    // repo: repo,
     // branch: branch || 'master',
     // repoUrl: publicRootUrl,
-    rawRoot: rawRoot,
+    // rawRoot: rawRoot,
     // fileraw: fileraw,
-    publicRoot: publicRoot,
-    filepath: remaining,
-    filename: filename,
-    filetype: filetype,
-    filefamily: (fileTypes[filetype] && fileTypes[filetype].family) || 'other',
-    filefullname: filefullname
+    // publicRoot: publicRoot,
+    // filepath: remaining,
+    // filename: filename,
+    // filefullname: filefullname
   }
   // const apiRoots = buildApiRoots(wikiInfos)
   // wikiInfos.apiRepo = apiRoots.repo
   // wikiInfos.apiFile = apiRoots.file
   // wikiInfos.apiFileRaw = apiRoots.fileRaw
 
-  console.log('\nU > utilsGitUrl > extractGitInfos > wikiInfos : ', wikiInfos)
+  console.log('\nU > utilsWikiUrl > extractGitInfos > wikiInfos : ', wikiInfos)
 
   return wikiInfos
+}
+
+export async function getMediawikiData (apiUrl, options = undefined) {
+  let response, responseData, errors
+
+  try {
+    response = await fetch(apiUrl)
+    responseData = await response.json()
+  } catch (error) {
+    console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
+    errors = [error]
+  }
+
+  return {
+    data: responseData && responseData.query.categorymembers,
+    dataRaw: responseData,
+    errors: errors
+  }
+}
+
+export async function populateMediawikiItem (wikiInfosObject, items, options = undefined) {
+  console.log('\nU > utilsWikiUrl > populateMediawikiItem > wikiInfosObject : ', wikiInfosObject)
+  console.log('U > utilsWikiUrl > populateMediawikiItem > items : ', items)
+  console.log('U > utilsWikiUrl > populateMediawikiItem > options : ', options)
+
+  const results = []
+  for (const item of items) {
+    const data = await getMediawikitItem(wikiInfosObject, item, options)
+    results.push(data)
+  }
+  return results
+}
+
+export async function getMediawikitItem (wikiInfosObject, item, options = undefined) {
+  // console.log('\nU > utilsWikiUrl > extractWikiInfos > item : ', item)
+  // console.log('U > utilsWikiUrl > extractWikiInfos > options : ', options)
+  const apiRoot = wikiInfosObject.apiRoot
+  let response, responseData, errors, imageUrl
+  let urlItemDetail = `${apiRoot}?origin=*`
+
+  const params = {
+    action: 'query',
+    prop: 'revisions',
+    // titles: item.title,
+    pageids: item.pageid,
+    rvslots: 'main',
+    rvprop: 'content',
+    utf8: '',
+    formatversion: '2',
+    format: 'json'
+  }
+
+  Object.keys(params)
+    .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
+  // console.log('U > utilsWikiUrl > extractWikiInfos > urlItemDetail : ', urlItemDetail)
+
+  try {
+    response = await fetch(urlItemDetail)
+    responseData = await response.json()
+  } catch (error) {
+    console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
+    errors = [error]
+  }
+  let content = responseData && responseData.query.pages[0].revisions[0].slots.main.content
+  content = content && content.replace('{{', '').replace('}}', '')
+
+  // WIKITEXT TO OBJECT - HARD CODEED
+  const fields = options.fields
+  const structured = {}
+  fields.forEach(field => {
+    structured[field] = extractWikitextPart(field, content)
+  })
+
+  // WIKITEXT TO OBJECT - GENERIC
+  const wikiContent = objectFromWikitext(content)
+
+  // build image url
+  if (wikiContent.data.Main_Picture) {
+    const hostName = wikiInfosObject.hostname
+    imageUrl = forgeImageUrl(hostName, wikiContent.data.Main_Picture)
+  }
+  /*
+  "{{Project
+    |shortDescription=solutions digitales clé en main pour maîtriser et optimiser votre réseau de transport public
+    |description=Solutions digitales agiles et puissantes organisées à partir de Smartphone ou de Tablette et du Cloud, en lieu et place de systèmes lourds, physiques et complexes, pour aider à maîtriser, sécuriser et optimiser les réseaux de transport scolaires (2School), interurbains, péri-urbains, petit et moyen urbain (2Place).  Véritables outils d’aides à la décision, collaboratifs, simples à déployer, ergonomiques, les outils sont réfléchis techniquement et économiquement pour répondre au besoin des territoires peu denses. Elles intéressent de plus en plus les territoires moyennement denses et sont porteuses de nombreuses efficiences économiques, environnementales et sociétales.  Ces solutions permettent de géolocaliser en temps réel des flottes de véhicules (SAE , Système d’aide à l’exploitation), suivre la fréquentation, gérer les titres de transport (Billettique) , aider le conducteur dans son service au quotidien, offrir des services aux usagers. Les données sont remontées dans le Cloud, traitées et réorganisées sous forme de statistiques dynamiques pour les acteurs du transport. Par exemple, suivre en temps réel l’avance/retard d’un véhicule, évaluer son taux de remplissage, connaître les montées par point d’arrêt, faciliter la gestion des recettes, connaître le nombre de km parcourus, informer les voyageurs des prochains horaires ou acheter un titre de transport sur une boutique en ligne.
+    |location=France
+    |url=https://www.ubitransport.com/une-suite-logicielle/ubitransport-solution-2-school/
+    |Tags=autobus, smartphone, données
+    |Theme=Voiture Connectée, Accessibilité dans les transports, Traces de mobilité et des données associées, Ecomobilité scolaire, Collectivité
+    |from=UBI Transport
+    |challenge=Accompagner une collectivité à ouvrir un maximum de ressources et construire un kit d'aide à l'innovation, Augmenter les connaissances partagées en cartographie et usages des véhicules et réseaux de transports
+    |communauté d'intérêt=Communauté des Territoires et Collectivités, Communauté autour des traces de mobilité et des données associées
+    |chat=https://chat.fabmob.io/channel/traces_mobilite
+    |complement=Utilisation d’un outil connu et grand public, le Smartphone, transformé en outil de travail pour les collectivités et opérateurs de transport. Il est utilisé pour la première fois en association avec le Cloud dans l’univers de l'Aide à l’Exploitation et de la billettique pour un réseau de transport public.  Pour les territoires peu denses, ces solutions leur permettent enfin d’avoir accès à des services qui leur étaient jusqu’alors complètement fermés.  Pour les territoires à densité moyenne, les solutions sont plus complètes, abouties, fiables et donnent accés à des informations qu’ils n’avaient pas nécessairement ou pas en temps réel.  Pour les territoires à très forte densité, les solutions ne sont pas (encore) adaptées à leurs besoins. En revanche, elles permettent de connecter, de mailler ces « gros «  territoires  à leurs territoires voisins moyennement ou peu denses et ainsi de mieux organiser la chaîne de mobilité.
+    |pageCo=https://www.communecter.org/#@2schoolEt2place }}"
+  */
+
+  return {
+    id: item.id,
+    pageId: item.pageid,
+    title: item.title,
+    imageUrl: imageUrl,
+    // responseData: responseData,
+    content: content,
+    structured: structured,
+    // headers: wikiContent.headers,
+    data: wikiContent.data,
+    // parted: wikiContent.parted,
+    errors: errors
+  }
+}
+
+export const restructurePageData = (pageObj, wikiFields) => {
+  const pageData = {
+    id: pageObj.id,
+    pageId: pageObj.pageId,
+    // structured: pageObj.structured,
+    content: pageObj.content
+  }
+  Object.keys(wikiFields).forEach(k => {
+    let pageObjValue
+    const field = wikiFields[k]
+    switch (field) {
+      case 'title':
+        pageObjValue = pageObj.title
+        break
+      case 'imageUrl':
+        pageObjValue = pageObj.imageUrl
+        break
+      default:
+        pageObjValue = pageObj.structured[field]
+    }
+    pageData[k] = pageObjValue
+  })
+  return pageData
 }

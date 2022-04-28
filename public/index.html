@@ -121,31 +121,58 @@
   </p>
   <div style="background-color: white; margin: 1em;">
     <multi-gitribute-explowiki
-      wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Compte_Mobilit%C3%A9_Standardis%C3%A9#Suivre_les_travaux"
+      wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
       wikifile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
       options='{
-      "separator":";",
-      "pagination":{
-        "itemsPerPage":5
+      "wikisettings": {
+        "category": "projet",
+        "fields": [
+          "url",
+          "description",
+          "shortDescription",
+          "Main_Picture",
+          "Coordonnées géo",
+          "needs",
+          "referent",
+          "communauté d&#39;intérêt",
+          "Titre",
+          "Tags",
+          "etape",
+          "Theme",
+          "location",
+          "from",
+          "challenge"
+        ],
+        "tagfields": [
+          "Tags",
+          "Theme",
+          "location",
+          "from",
+          "challenge"
+        ]
+      },
+      "pagination": {
+        "itemsPerPage":12
       },
       "cardsview": { "activate": true, "default": true },
       "cardssettings": {
         "mini": {
-          "name": {"position": "title"},
-          "surname": {"position": "subtitle"},
-          "profession": {"position": "resume"}
+          "title": {"position": "title"},
+          "imageUrl": {"position": "image"},
+          "shortDescription": {"position": "resume"}
         },
         "detail": {
-          "name": {"position": "title"},
-          "surname": {"position": "subtitle"},
-          "profession": {"position": "desription"}
+          "title": {"position": "title"},
+          "imageUrl": {"position": "image"},
+          "shortDescription": {"position": "resume"},
+          "description": {"position": "description"}
         }
       }
     }' title="gitribute for explowiki :)" locale="fr">
     </multi-gitribute-explowiki>
   </div>
 
-  <p id="gitribute-json-github" class="ml-4 pt-6 subtitle has-text-white">
+  <!-- <p id="gitribute-json-github" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-json-github" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -159,7 +186,7 @@
     }' title="gitribute for github file - json" usertoken="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" locale="fr"
       onlypreview="false" debug="false">
     </multi-gitribute-file>
-  </div>
+  </div> -->
 
   <!-- built files will be auto injected -->
 </body>

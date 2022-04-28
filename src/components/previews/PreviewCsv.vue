@@ -18,6 +18,26 @@
           <code>{{ fileIsLoading }}</code>
         </p>
       </div>
+      <!-- DEBUG RAW CONTENT OBJECTS -->
+      <div
+        v-if="true"
+        class="column is-6">
+        <p>
+          dataRaw:
+          <br>
+          <pre><code>{{ dataRaw }}</code></pre>
+        </p>
+      </div>
+      <div
+        v-if="true"
+        class="column is-6">
+        <p>
+          wikiRaw:
+          <br>
+          <pre><code>{{ wikiRaw }}</code></pre>
+        </p>
+      </div>
+      <!-- DEBUG EDITED -->
       <div
         v-if="debug"
         class="column is-6">
@@ -117,6 +137,10 @@ export default {
       default: '',
       type: String
     },
+    wikiRaw: {
+      default: null,
+      type: Object
+    },
     fileClientRaw: {
       default: '',
       type: String
@@ -136,8 +160,10 @@ export default {
   },
   data () {
     return {
+      // flags
       dataIsSet: false,
       beginEdit: false,
+      // table data
       dataRaw: undefined,
       data: null,
       dataColumns: undefined,
@@ -165,6 +191,16 @@ export default {
         const dataObj = this.csvToObject(next, this.fileOptions)
         this.dataRaw = dataObj
         if (!this.dataIsSet) { this.dataIsSet = true }
+      }
+    },
+    wikiRaw (next) {
+      if (next && next !== '') {
+        // console.log('C > PreviewCsv > watch > wikiRaw > this.fileOptions : ', this.fileOptions)
+        this.dataRaw = next
+        this.data = this.dataRaw.data
+        this.dataColumns = this.buildColumns(this.dataRaw)
+        this.edited = this.data
+        this.editedColumns = this.dataColumns
       }
     },
     dataIsSet (next) {

@@ -126,6 +126,11 @@ export default {
     float: 'float',
     bool: 'boolean'
   },
+  editWiki: {
+    loadingPages: 'Loading mediawiki pages...',
+    page: 'page',
+    pages: 'pages'
+  },
   user: {
     userToken: 'Your access token',
     user: 'User',

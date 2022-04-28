@@ -38,7 +38,7 @@
           position="is-right">
           <b-icon
             size="is-small"
-            :icon="showDetail ? 'close' : 'arrow-top-right-bottom-left'"/>
+            :icon="showDetail ? 'close' : 'eye'"/>
         </b-tooltip>
       </button>
     </header>
@@ -50,10 +50,12 @@
       <figure
         v-for="(f, i) in getFieldsByPosition('image')"
         :key="`image-${i}-${f.field}`"
-        class="image mx-0">
+        class="image mx-0"
+        @click="toggleDetail">
         <img
+          v-if="item[f.field]"
           :src="item[f.field]"
-          :alt="key">
+          :alt="`image-${item.id}`">
       </figure>
     </div>
 
@@ -63,26 +65,27 @@
       <!-- <pre><code>{{ fieldMapping }}</code></pre> -->
       <div class="media">
         <div class="media-content">
-          <!-- TITLE BLOCK
-          <p
-            v-if="hasContentByPosition('title')"
-            class="title is-4">
-            <span
-              v-for="(f, i) in getFieldsByPosition('title')"
-              :key="`title-${i}-${f.field}`">
-              <div v-if="currentEditViewMode === 'preview'">
-                {{ item[f.field] }}
-              </div>
-              <div v-else>
-                <EditCell
-                  :col-field="f.field"
-                  :row-id="item.id"
-                  :is-added="item.added"
-                  :input-data="item[f.field]"
-                  @updateCellValue="emitUpdate"/>
-              </div>
-            </span>
-          </p> -->
+          <!-- DEBUG -->
+          <div v-if="debug">
+            <p>
+              fieldMapping: <br>
+              <code>
+                <pre>{{ fieldMapping }}</pre>
+              </code>
+            </p>
+            <p>
+              getFieldsByPosition('description'): <br>
+              <code>
+                <pre>{{ getFieldsByPosition('description') }}</pre>
+              </code>
+            </p>
+            <p>
+              item: <br>
+              <code>
+                <pre>{{ item }}</pre>
+              </code>
+            </p>
+          </div>
 
           <!-- SUBTITLE BLOCK -->
           <p
@@ -138,6 +141,12 @@
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
+      </div>
+
+      <!-- DESCRIPTION BLOCK -->
+      <div
+        v-if="hasContentByPosition('description')"
+        class="content">
         <span
           v-for="(f, i) in getFieldsByPosition('description')"
           :key="`description-${i}-${f.field}`"

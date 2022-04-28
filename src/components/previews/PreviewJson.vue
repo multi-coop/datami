@@ -278,9 +278,9 @@ export default {
     },
     fileClientRaw (next) {
       if (next) {
-        console.log('C > PreviewJson > watch > fileClientRaw > next :', next)
+        // console.log('C > PreviewJson > watch > fileClientRaw > next :', next)
         const dataParsed = JSON.parse(next)
-        console.log('C > PreviewJson > watch > fileClientRaw > dataParsed :', dataParsed)
+        // console.log('C > PreviewJson > watch > fileClientRaw > dataParsed :', dataParsed)
         this.edited = this.objToNodes(dataParsed, 'root')
       }
     },
