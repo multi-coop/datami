@@ -220,7 +220,12 @@
                 multilined
                 type="is-dark"
                 position="is-top">
-                {{ trimText(val) }}
+                <span v-if="isMini">
+                  {{ trimText(val) }}
+                </span>
+                <span v-else>
+                  {{ trimText(val, 75) }}
+                </span>
               </b-tooltip>
             </b-tag>
           </div>
