@@ -4,7 +4,7 @@
 
 ---
 <!-- # Gitribute -->
-**Contribute easily with git** (but without having to use Github or Gitlab)
+**Contribute easily with git** (but without having to use Github or Gitlab interfaces)
 
 ---
 
@@ -29,12 +29,12 @@
 
 ## What is Gitribute for ?
 
-This project aims to create a serie of widgets to interact with files stored on Gitlab or Github :
+This project aims to create a serie of widgets to interact with ressources stored on Gitlab, Github, or mediawiki :
 
-- **Edit data stored on github or gitlab** (csv or md files) ;
+- **Edit data stored on github or gitlab** (`csv`, `md`, or `json` files) ;
 - **Allow unidentified users to push on a separate branch** and automatically create a pull request ;
 - **Create a set of components for modular uses** :
-  - preview for `.csv`, `.md`, `.json` files, with several choices for preview (table, cards list, ...) ;
+  - preview for `.csv`, `.md`, `.json` files or `mediawiki` ressources, with several choices for preview (table, cards list, ...) ;
   - files edition interfaces ;
   - dataviz for `.csv` files (barcharts, pies, ...) ;
   - user preferences: language, user token, ...
@@ -55,23 +55,25 @@ The **roadmap** for a first proof of concept (POC) is the following :
 - [x] First utils functions and mixins to process a file's gitlab/github url ;
   - [x] Get all git infos from file's url ;
   - [x] Get file's raw data from provider ;
-  - [x] Format file's raw data to expected structures (from `md` or `csv` to objects) ;
-- [x] Install a CSS framework for Vuejs ( Bulma / Buefy / Vuetify... ? ) ;
-- [x] Prepare a simple multi-language / translation solution ;
+  - [x] Format file's raw data to expected structures (from `md`, `csv`, `json`, `mediawiki` to objects) ;
+- [x] Install a CSS framework for Vuejs ( Bulma + Buefy ) ;
+- [x] Prepare a simple multi-language / translation solution (i18n not adapted for our purposes);
 - [x] Create the first main components :
   - [x] For each file type create a loading skeleton while waiting raw file to finish loading ;
   - [x] Preview for a `.md` file ;
   - [x] Preview for a `.csv` file ;
   - [x] Preview for a `.json` or `.geojson` file ;
+  - [x] Preview for a list of `mediawiki` ressources, converted as pseudo-table ;
   - [x] Component to update user's token (if user has a specific one for direct commits) ;
-  - [x] Component to switch between french and english ;
+  - [x] Component to switch between `french` and `english` for now ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
 - [ ] Other main components :
   - [x] On each preview (for every file type), switch between 'preview' and 'edition' views ;
     - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
     - [x] for `json` files (`.json` and `.geojson` types)
-  - [x]  Add a `Upload` button + dialog + actions to overwrite whole edited data ;
+    - [ ] for `mediwiki` ressources (only preview for now)
+  - [x]  Add an `Upload` button + dialog + actions to overwrite whole edited data ;
   - [x]  Add a `lockHeaders` options in widget to only protect keys from edition ;
   - [ ]  Add a `Save` button + dialog + actions :
     - [x] `POST` create a separate branch on the file's repo ;
@@ -405,6 +407,275 @@ So you can read more on those topics here =>
       notes: The possible positions in cards are for now te following :
         - "title"
         - "subtitle"
+        - "content"
+        - "resume"
+        - "description"
+        - "image" (needs an url to an image)
+```
+
+## 2. `<multi-gitribute-explowiki>`
+
+The first widget's tag is : `<multi-gitribute-explowiki/>`
+
+This widget allows to preview a set of ressources from a mediawiki.
+
+The widget takes several parameters, following this structure :
+
+```html
+  <!-- Example for loading and contribute to a distant .md file from Gitlab -->
+  <multi-gitribute-explowiki 
+    wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
+    options='{<YOUR-OPTIONS>}'
+    title="gitribute for explowiki :)"
+    usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
+    locale="fr"
+  ></multi-gitribute-explowiki>
+```
+
+```html
+  <!-- Example for loading and contribute to a distant .csv file from Github -->
+  <multi-gitribute-explowiki
+      wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
+      options='{
+        "wikisettings": {
+          "category": "projet",
+          "fields": [
+            "url",
+            "description",
+            "shortDescription",
+            "Main_Picture",
+            "Coordonnées géo",
+            "needs",
+            "referent",
+            "communauté d&#39;intérêt",
+            "Titre",
+            "Tags",
+            "etape",
+            "Theme",
+            "location",
+            "from",
+            "challenge"
+          ],
+          "tagfields": [
+            "Tags",
+            "Theme",
+            "location",
+            "from",
+            "challenge"
+          ]
+        },
+        "pagination": {
+          "itemsPerPage":12
+        },
+        "cardsview": { "activate": true, "default": true },
+        "cardssettings": {
+          "mini": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"}
+          },
+          "detail": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "description": {"position": "description"}
+          }
+        }
+    }'
+    title="gitribute for gitlab file - csv (comma separator)" 
+    usertoken="MY-USER-TOKEN or GHOST-USER-TOKEN"
+    locale="en"
+    debug="false"
+  ></multi-gitribute-explowiki>
+```
+
+### Options parameters
+
+This widget can take several parameters for a mediawiki ressources
+
+#### Parameters for all file types
+
+##### `wikilist` parameter
+
+```yaml
+wikilist:
+  - description : the URL of a page of mediawiki website or mediawiki list of ressources
+  - type: string
+  - required: true
+  - note: |
+    if you know the adress of a mediawiki ressources, 
+    just copy-paste the url from your browser
+```
+
+##### `title` parameter
+
+```yaml
+title:
+  - description : the file title you want to display on top of the widget
+  - type: string
+  - required: false
+  - default: null
+```
+
+##### `usertoken` parameter (not implemented yet)
+
+```yaml
+usertoken:
+  - description : the user token allowing to commit / update a file on the wiki
+  - type: string
+  - required: false
+  - default: null
+  - note: |
+    If null, you can only read the ressources and not update them. 
+    To be allowed to push revisions on the mediawiki website
+    you'll have at least to create a "ghost user"
+    acting as an anonymous contributor 
+```
+
+**Notes**
+
+The `usertoken` parameter is one of the most important features of this project. You will need a private token to post revisions to a mediawiki website and make all the operations we want to automatize for an open contribution :
+
+So you can read more on those topics here =>
+
+- More about **mediawiki API** :
+  - API documentation : [docs](https://www.mediawiki.org/wiki/API:Main_page)
+  - Create a private token : [docs](https://www.mediawiki.org/wiki/API:Tokens)
+
+##### `locale` parameter
+
+```yaml
+"locale":
+  - description : the language you want to use by default
+  - required: false
+  - type: string
+  - default: 'en'
+  - allowed values: [ 'en', 'fr' ]
+  - notes: |
+    This parameter allows you to inject a locale component by componenet.
+    But we'll have a selector to allow the user to apply a locale globally, overiding default injected locales.
+```
+
+##### `onlypreview` parameter
+
+```yaml
+"onlypreview":
+  - description : displays only the preview and hide the edit mode
+  - required: false
+  - type: boolean
+  - default: false
+```
+
+##### `debug` parameter
+
+```yaml
+"debug":
+  - description : just for debugging
+  - required: false
+  - type: boolean
+  - default: false
+```
+
+##### `options` parameter
+
+```yaml
+"options":
+  - description : JSON object containing the options allowing your mediawiki ressources to be parsed correctly
+  - required: true
+  - default: {
+      "wikisettings": {
+        "category": "projet",
+        "fields": [
+          "url",
+          "description",
+          "shortDescription",
+          "Main_Picture",
+          "Tags"
+        ],
+        "tagfields": [
+          "Tags"
+        ]
+      },
+      "pagination": {
+        "itemsPerPage":12
+      },
+      "pagination": {
+        "itemsPerPage": 5
+      },
+      "cardsview": { "activate": true, "default": true },
+      "cardssettings": {
+        "mini": {
+          "title": {"position": "title"},
+          "imageUrl": {"position": "image"},
+          "shortDescription": {"position": "resume"}
+        },
+        "detail": {
+          "title": {"position": "title"},
+          "imageUrl": {"position": "image"},
+          "shortDescription": {"position": "resume"},
+          "description": {"position": "description"}
+        }
+      }
+    }
+  - fields:
+    - "wikisettings"
+      description: settings to retrieve and parse mediawiki ressources
+      type: object
+      fields:
+        - "category"
+          description: the name of the ressources' category to retrieve
+          required: true
+          type: string
+        - "fields"
+          description: list of fields you want to parse from the wikitext format
+          required: true
+          type: [ string ]
+      - "tagfields"
+          description: list of fields you want to parse as tags
+          type: [ string ]
+    - "pagination": 
+      description: pagination settings
+      type: object
+      fields:
+      - "itemsPerPage":
+        description: number of items per page
+        default: 20
+        type: number
+        notes: 
+        - must be > 1 and within allowed values, or a default value will be used (the closest value from allowed values array)
+        - values : [3, 5, 10, 15, 20, 25, 50, 100]
+    - "cardsview":
+      description: allows cards view on a table data
+      type: boolean || object
+      default: false
+      notes: |
+        You can pass an object instead of a boolean value if you need to display the cards view by default, with :
+        { "activate": true, "default": true }
+    - "cardsdetail":
+      description: allows cards detailled view on a table data
+      type: boolean
+      default: false
+    - "cardssettings":
+      description: |
+        Mandatory settings to display table data, field by field, in a card view. 
+        You can chose to display data diffently between "mini" card view (tiles) and the "detailled" card view...
+        For "mini" and "detail" entries you have to map a key from your original data (f.i. the "name" column) to a position in the cards (f.i. apply the "name" value to the "title")
+      type: object
+      default: {
+        "mini": {
+          "<KEY-COLUMN>": {"position": "<POSITION-IN-CARD>"},
+          ...
+        },
+        "detail": {
+          "<KEY-COLUMN>": {"position": "<POSITION-IN-CARD>"},
+          ...
+        }
+      }
+      notes: The possible positions in cards are for now te following :
+        - "title"
+        - "subtitle"
+        - "resume"
+        - "description"
         - "content"
         - "image" (needs an url to an image)
 ```
