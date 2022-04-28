@@ -36,6 +36,7 @@ export default {
     tableView: 'Table',
     showCardDetails: 'Show details',
     closeCardDetails: 'Close detailed card',
+    noIllustration: 'no illustration',
     original: 'Original content',
     edited: 'Edited content',
     editedPreview: 'Edited content preview',

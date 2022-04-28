@@ -69,6 +69,10 @@
             <b-icon
               icon="image-off-outline"
               size="is-small"/>
+            <br>
+            <span class="is-size-7">
+              {{ t('preview.noIllustration', locale) }}
+            </span>
           </p>
         </article>
       </div>
@@ -76,10 +80,10 @@
 
     <!-- CONTENT -->
     <div class="card-content pt-4">
-      <!-- <pre><code>{{ item }}</code></pre> -->
-      <!-- <pre><code>{{ fieldMapping }}</code></pre> -->
       <!-- DEBUG -->
       <div v-if="debug">
+        <!-- <pre><code>{{ item }}</code></pre> -->
+        <!-- <pre><code>{{ fieldMapping }}</code></pre> -->
         <p>
           fieldMapping: <br>
           <code>
@@ -129,13 +133,19 @@
 
       <!-- RESUME BLOCK -->
       <div
-        v-if="hasContentByPosition('resume')">
+        v-if="hasContentByPosition('resume')"
+        class="content">
         <span
           v-for="(f, i) in getFieldsByPosition('resume')"
           :key="`resume-${i}-${f.field}`"
           class="mt-4 has-text-weight-medium">
           <div v-if="currentEditViewMode === 'preview'">
-            {{ item[f.field] }}
+            <span v-if="isMini">
+              {{ trimText(item[f.field], 150) }}
+            </span>
+            <span v-else>
+              {{ item[f.field] }}
+            </span>
           </div>
           <div v-if="currentEditViewMode === 'diff'">
             {{ item[f.field] }}
@@ -160,6 +170,7 @@
         <span
           v-for="(f, i) in getFieldsByPosition('description')"
           :key="`description-${i}-${f.field}`"
+          :id="`description-${i}-${f.field}`"
           class="mr-1">
           <p
             v-if="item[f.field]"
@@ -192,6 +203,7 @@
         <span
           v-for="(f, i) in getFieldsByPosition('tags')"
           :key="`tags-${i}-${f.field}`"
+          :id="`tags-${i}-${f.field}`"
           class="mr-1">
           <p
             v-if="item[f.field]"
