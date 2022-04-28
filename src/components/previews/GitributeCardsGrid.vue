@@ -33,8 +33,10 @@
           :item="item"
           :show-detail="showDetail"
           :locale="locale"
+          :is-mini="true"
           @toggleDetail="toggleDetail"
-          @updateCellValue="emitUpdate"/>
+          @updateCellValue="emitUpdate">
+        </GitributeCard>
       </div>
     </div>
 

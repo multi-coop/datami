@@ -2,16 +2,18 @@
   <div
     class="GitributeCard card">
     <!-- HEADER -->
-    <header class="card-header">
+    <header class="card-header no-shadow">
       <!-- TITLE BLOCK -->
       <p
         v-if="hasContentByPosition('title')"
-        class="card-header-title mb-0 is-4 no-shadow">
+        class="card-header-title mb-0 is-4">
         <span
           v-for="(f, i) in getFieldsByPosition('title')"
           :key="`title-${i}-${f.field}`"
           class="mr-1 is-size-5">
-          <div v-if="currentEditViewMode === 'preview'">
+          <div
+            v-if="currentEditViewMode === 'preview'"
+            @click="toggleDetail">
             {{ item[f.field] }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
@@ -281,6 +283,21 @@
           </div>
         </span>
       </div>
+
+      <!-- SHOW DETAILS BUTTON -->
+      <div
+        v-if="isMini"
+        class="content">
+        <b-button
+          type="is-dark"
+          size="is-small"
+          icon-left="eye"
+          expanded
+          outlined
+          @click="toggleDetail">
+          {{ t('preview.showCardDetails', locale) }}
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -315,6 +332,10 @@ export default {
       type: Array
     },
     showDetail: {
+      default: false,
+      type: Boolean
+    },
+    isMini: {
       default: false,
       type: Boolean
     },
