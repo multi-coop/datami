@@ -6,7 +6,7 @@
       <!-- TITLE BLOCK -->
       <p
         v-if="hasContentByPosition('title')"
-        class="card-header-title mb-0 is-4">
+        class="card-header-title mb-0 is-4 no-shadow">
         <span
           v-for="(f, i) in getFieldsByPosition('title')"
           :key="`title-${i}-${f.field}`"
@@ -56,6 +56,7 @@
           class="image mx-0">
           <img
             :src="item[f.field]"
+            class="image-constrained"
             :alt="`image-${item.id}`">
         </figure>
         <!-- NO IMAGE FOUND -->
@@ -165,7 +166,7 @@
           class="mr-1">
           <p
             v-if="item[f.field]"
-            class="is-size-7 has-text-weight-bold mb-2">
+            class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
             {{ getFieldLabel(f.field) }}
           </p>
           <div v-if="currentEditViewMode === 'preview'">
@@ -197,7 +198,7 @@
           class="mr-1">
           <p
             v-if="item[f.field]"
-            class="is-size-7 has-text-weight-bold mb-2">
+            class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
             {{ getFieldLabel(f.field) }}
           </p>
           <div v-if="currentEditViewMode === 'preview' && item[f.field]">
@@ -245,7 +246,7 @@
           class="mr-1">
           <p
             v-if="item[f.field]"
-            class="is-size-7 has-text-weight-bold mb-2">
+            class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
             {{ getFieldLabel(f.field) }}
           </p>
           <div v-if="currentEditViewMode === 'preview' && item[f.field]">
@@ -352,3 +353,14 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.no-shadow {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.image-constrained {
+  max-height: 200px;
+  width: auto !important;
+}
+</style>

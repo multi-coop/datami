@@ -43,7 +43,7 @@
       v-if="showDetail && activeCardId"
       class="columns is-centered">
       <div
-        :class="`column is-8`">
+        :class="`column is-10`">
         <GitributeCard
           :file-id="fileId"
           :fields="cardsSettings.originalHeaders"
