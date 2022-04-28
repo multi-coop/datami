@@ -55,7 +55,7 @@
         :key="`image-${i}-${f.field}`">
         <figure
           v-if="item[f.field]"
-          class="image mx-0">
+          class="image mx-0 image-wrapper is-flex is-align-items-center is-justify-content-center">
           <img
             :src="item[f.field]"
             class="image-constrained"
@@ -64,7 +64,7 @@
         <!-- NO IMAGE FOUND -->
         <article
           v-else
-          class="notification is-light">
+          class="notification is-light image-wrapper is-flex is-align-items-center is-justify-content-center">
           <p class="subtitle py-4 has-text-centered">
             <b-icon
               icon="image-off-outline"
@@ -75,70 +75,65 @@
     </div>
 
     <!-- CONTENT -->
-    <div class="card-content pt-2">
+    <div class="card-content pt-4">
       <!-- <pre><code>{{ item }}</code></pre> -->
       <!-- <pre><code>{{ fieldMapping }}</code></pre> -->
-      <div class="media">
-        <div class="media-content">
-          <!-- DEBUG -->
-          <div v-if="debug">
-            <p>
-              fieldMapping: <br>
-              <code>
-                <pre>{{ fieldMapping }}</pre>
-              </code>
-            </p>
-            <p>
-              getFieldsByPosition('description'): <br>
-              <code>
-                <pre>{{ getFieldsByPosition('description') }}</pre>
-              </code>
-            </p>
-            <p>
-              item: <br>
-              <code>
-                <pre>{{ item }}</pre>
-              </code>
-            </p>
-          </div>
-
-          <!-- SUBTITLE BLOCK -->
-          <p
-            v-if="hasContentByPosition('subtitle')"
-            class="subtitle is-6">
-            <span
-              v-for="(f, i) in getFieldsByPosition('subtitle')"
-              :key="`subtitle-${i}-${f.field}`"
-              class="mr-1">
-              <div v-if="currentEditViewMode === 'preview'">
-                {{ item[f.field] }}
-              </div>
-              <div v-if="currentEditViewMode === 'diff'">
-                {{ item[f.field] }}
-              </div>
-              <div
-                v-if="currentEditViewMode === 'edit'"
-                class="mr-2">
-                <EditCell
-                  :col-field="f.field"
-                  :row-id="item.id"
-                  :is-added="item.added"
-                  :input-data="item[f.field]"
-                  @updateCellValue="emitUpdate"/>
-              </div>
-            </span>
-          </p>
-        </div>
+      <!-- DEBUG -->
+      <div v-if="debug">
+        <p>
+          fieldMapping: <br>
+          <code>
+            <pre>{{ fieldMapping }}</pre>
+          </code>
+        </p>
+        <p>
+          getFieldsByPosition('description'): <br>
+          <code>
+            <pre>{{ getFieldsByPosition('description') }}</pre>
+          </code>
+        </p>
+        <p>
+          item: <br>
+          <code>
+            <pre>{{ item }}</pre>
+          </code>
+        </p>
       </div>
+
+      <!-- SUBTITLE BLOCK -->
+      <p
+        v-if="hasContentByPosition('subtitle')"
+        class="subtitle is-6">
+        <span
+          v-for="(f, i) in getFieldsByPosition('subtitle')"
+          :key="`subtitle-${i}-${f.field}`"
+          class="mr-1">
+          <div v-if="currentEditViewMode === 'preview'">
+            {{ item[f.field] }}
+          </div>
+          <div v-if="currentEditViewMode === 'diff'">
+            {{ item[f.field] }}
+          </div>
+          <div
+            v-if="currentEditViewMode === 'edit'"
+            class="mr-2">
+            <EditCell
+              :col-field="f.field"
+              :row-id="item.id"
+              :is-added="item.added"
+              :input-data="item[f.field]"
+              @updateCellValue="emitUpdate"/>
+          </div>
+        </span>
+      </p>
 
       <!-- RESUME BLOCK -->
       <div
-        v-if="hasContentByPosition('resume')"
-        class="content">
+        v-if="hasContentByPosition('resume')">
         <span
           v-for="(f, i) in getFieldsByPosition('resume')"
           :key="`resume-${i}-${f.field}`"
-          class="mr-1 has-text-weight-medium">
+          class="mt-4 has-text-weight-medium">
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] }}
           </div>
@@ -207,7 +202,7 @@
             <b-tag
               v-for="(val, tagIdx) in item[f.field].split(fileOptions.tagseparator)"
               :key="`tags-${i}-${f.field}-${tagIdx}`"
-              class="mr-1">
+              class="mr-2 mb-1">
               <b-tooltip
                 :label="val"
                 multilined
@@ -283,22 +278,23 @@
           </div>
         </span>
       </div>
-
-      <!-- SHOW DETAILS BUTTON -->
-      <div
-        v-if="isMini"
-        class="content">
-        <b-button
-          type="is-dark"
-          size="is-small"
-          icon-left="eye"
-          expanded
-          outlined
-          @click="toggleDetail">
-          {{ t('preview.showCardDetails', locale) }}
-        </b-button>
-      </div>
     </div>
+
+    <!-- CARD FOOTER -->
+    <footer
+      v-if="isMini"
+      class="card-footer px-3 py-3">
+      <!-- SHOW DETAILS BUTTON -->
+      <b-button
+        type="is-dark"
+        size="is-small"
+        icon-left="eye"
+        expanded
+        outlined
+        @click="toggleDetail">
+        {{ t('preview.showCardDetails', locale) }}
+      </b-button>
+    </footer>
   </div>
 </template>
 
@@ -380,8 +376,19 @@ export default {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+.image-wrapper {
+  min-height: 200px;
+}
 .image-constrained {
   max-height: 200px;
   width: auto !important;
+}
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.card-content {
+  height: 100%;
 }
 </style>
