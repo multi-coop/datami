@@ -21,6 +21,8 @@
           show-value>
           {{ itemsLoaded }} / {{ itemsTotal }}
           {{ t('editWiki.pages', locale) }}
+          &nbsp;
+          ({{ itemsProgress }}%)
         </b-progress>
       </div>
     </div>
