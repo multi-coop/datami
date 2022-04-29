@@ -11,23 +11,26 @@
 ## Summary
 
 - [What is Gitribute for ?](#what-is-gitribute-for-)
-- [Roadmap](#roadmap)
-- [Websites](#websites)
-- [Project setup](#project-setup)
-- [How to integrate the Gitribute widgets](#how-to-integrate-the-gitribute-widgets)
-- [Widgets configuration](#widgets-configuration)
-  - ["multi-gitribute-file" widget](#1-multi-gitribute-file)
-    - [Options parameters](#options-parameters)
-    - [Parameters for all file types](#parameters-for-all-file-types)
-    - [Parameters for `md` files](#parameters-for-md-files)
-    - [Parameters for `json` and `geojson` files](#parameters-for-json-and-geojson-files)
-    - [Parameters for `csv` and `tsv` files](#parameters-for-csv-and-tsv-files)
-- [Stack](#stack)
-- [Schema / architecture](#schema-architecture)
+- [Roadmap](#roadmap-)
+- [Websites](#websites-)
+- [Project setup](#project-setup-)
+- [How to integrate the Gitribute widgets](#how-to-integrate-the-gitribute-widgets-)
+- [Widgets configuration](#widgets-configuration-)
+  - ["multi-gitribute-file" widget](#1-multi-gitribute-file-)
+    - [Options parameters for gitribute-file](#options-parameters-for-gitribute-file-)
+    - [Parameters for all file types](#parameters-for-all-file-types-)
+    - [Parameters for `md` files](#parameters-for-md-files-)
+    - [Parameters for `json` and `geojson` files](#parameters-for-json-and-geojson-files-)
+    - [Parameters for `csv` and `tsv` files](#parameters-for-csv-and-tsv-files-)
+  - ["multi-gitribute-explowiki" widget](#2-multi-gitribute-explowiki-)
+    - [Options parameters for explowiki](#options-parameters-for-explowiki-)
+    - [Parameters for `mediawiki` type](#parameters-for-mediawiki-type-)
+- [Stack](#stack-)
+- [Schema / architecture](#schema-architecture-)
 
 ---
 
-## What is Gitribute for ?
+## What is Gitribute for ? [⇡](#summary)
 
 This project aims to create a serie of widgets to interact with ressources stored on Gitlab, Github, or mediawiki :
 
@@ -43,7 +46,7 @@ This project aims to create a serie of widgets to interact with ressources store
 
 ---
 
-## Roadmap
+## Roadmap [⇡](#summary)
 
 **Work in progress... be patient guys (or help us by contributing) :)**
 
@@ -86,7 +89,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
 
 ---
 
-## Websites
+## Websites [⇡](#summary)
 
 ### Test deploy
 
@@ -100,7 +103,7 @@ An open source project by **[multi](https://multi.coop)**
 
 ---
 
-## Project setup
+## Project setup [⇡](#summary)
 
 ```bash
 nvm use
@@ -137,7 +140,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ---
 
-## How to integrate the Gitribute widgets
+## How to integrate the Gitribute widgets [⇡](#summary)
 
 Widgets need two files in order to work :
 
@@ -156,13 +159,13 @@ Widgets can then be called directly into the page as custom html elements.
 
 ---
 
-# Widgets configuration
+# Widgets configuration [⇡](#summary)
 
 We plan to develop several widgets, all able to interact but also being able to be used independently.
 
 ---
 
-## 1. `<multi-gitribute-file>`
+## 1. `<multi-gitribute-file>` [⇡](#summary)
 
 The first widget's tag is : `<multi-gitribute-file/>`
 
@@ -211,11 +214,11 @@ The widget takes several parameters, following this structure :
   ></multi-gitribute-file>
 ```
 
-### Options parameters
+### Options parameters for gitribute-file [⇡](#summary)
 
 This widget can take several parameters, some of them depends on your input file's type (`csv`, `json`, `md`, ...)
 
-#### Parameters for all file types
+#### Parameters for all file types [⇡](#summary)
 
 ##### `gitfile` parameter
 
@@ -308,7 +311,7 @@ So you can read more on those topics here =>
   - default: false
 ```
 
-### Parameters for `md` files
+### Parameters for `md` files [⇡](#summary)
 
 ##### `options` parameter
 
@@ -317,7 +320,7 @@ So you can read more on those topics here =>
   - (no options for now)
 ```
 
-### Parameters for `json` and `geojson` files
+### Parameters for `json` and `geojson` files [⇡](#summary)
 
 ##### `options` parameter
 
@@ -337,7 +340,7 @@ So you can read more on those topics here =>
       type: boolean
 ```
 
-### Parameters for `csv` and `tsv` files
+### Parameters for `csv` and `tsv` files [⇡](#summary)
 
 ##### `options` parameter
 
@@ -413,16 +416,16 @@ So you can read more on those topics here =>
         - "image" (needs an url to an image)
 ```
 
-## 2. `<multi-gitribute-explowiki>`
+## 2. `<multi-gitribute-explowiki>` [⇡](#summary)
 
-The first widget's tag is : `<multi-gitribute-explowiki/>`
+The second widget's tag is : `<multi-gitribute-explowiki/>`
 
 This widget allows to preview a set of ressources from a mediawiki.
 
 The widget takes several parameters, following this structure :
 
 ```html
-  <!-- Example for loading and contribute to a distant .md file from Gitlab -->
+  <!-- Example for loading and contribute to a distant mediawiki ressource -->
   <multi-gitribute-explowiki 
     wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
     options='{<YOUR-OPTIONS>}'
@@ -433,7 +436,7 @@ The widget takes several parameters, following this structure :
 ```
 
 ```html
-  <!-- Example for loading and contribute to a distant .csv file from Github -->
+  <!-- Example for loading and contribute to a distant mediawiki ressource -->
   <multi-gitribute-explowiki
       wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
       options='{
@@ -489,11 +492,11 @@ The widget takes several parameters, following this structure :
   ></multi-gitribute-explowiki>
 ```
 
-### Options parameters
+### Options parameters for explowiki [⇡](#summary)
 
 This widget can take several parameters for a mediawiki ressources
 
-#### Parameters for all file types
+#### Parameters for mediawiki type [⇡](#summary)
 
 ##### `wikilist` parameter
 
@@ -682,7 +685,7 @@ So you can read more on those topics here =>
 
 ---
 
-# Stack
+# Stack [⇡](#summary)
 
 We only used open source packages and technologies, coz' that's what we do... :
 
@@ -700,7 +703,7 @@ We only used open source packages and technologies, coz' that's what we do... :
 
 ---
 
-# Schema / architecture
+# Schema / architecture [⇡](#summary)
 
 We are proud (and a bit ashamed too) to apply the `#passionSchema` to our brainstorming process...
 
