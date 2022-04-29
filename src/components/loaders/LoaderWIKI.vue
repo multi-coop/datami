@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderWIKI container mb-6">
+  <div class="LoaderWIKI container mt-4 mb-6">
     <div class="columns is-centered is-mobile">
       <div class="column is-10">
         <p class="has-text-centered has-text-grey mb-4">

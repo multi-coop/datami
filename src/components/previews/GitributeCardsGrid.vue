@@ -35,8 +35,7 @@
           :locale="locale"
           :is-mini="true"
           @toggleDetail="toggleDetail"
-          @updateCellValue="emitUpdate">
-        </GitributeCard>
+          @updateCellValue="emitUpdate"/>
       </div>
     </div>
 
@@ -142,7 +141,7 @@ export default {
       this.$emit('blur', value)
     },
     toggleDetail (event) {
-      console.log('\nC > GitributeCardsGrid > toggleDetail > event : ', event)
+      // console.log('\nC > GitributeCardsGrid > toggleDetail > event : ', event)
       if (this.showDetail) {
         this.showDetail = false
         this.activeCardId = undefined

@@ -132,7 +132,8 @@ export default {
   editWiki: {
     loadingPages: 'Chargement des pages du mediawiki...',
     page: 'page',
-    pages: 'pages'
+    pages: 'pages',
+    goToWikiPage: 'Ouvrir la page du wiki'
   },
   user: {
     userToken: "Votre jeton d'accès",

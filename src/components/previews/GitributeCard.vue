@@ -169,8 +169,8 @@
         class="content">
         <span
           v-for="(f, i) in getFieldsByPosition('description')"
-          :key="`description-${i}-${f.field}`"
           :id="`description-${i}-${f.field}`"
+          :key="`description-${i}-${f.field}`"
           class="mr-1">
           <p
             v-if="item[f.field]"
@@ -202,8 +202,8 @@
         class="content">
         <span
           v-for="(f, i) in getFieldsByPosition('tags')"
-          :key="`tags-${i}-${f.field}`"
           :id="`tags-${i}-${f.field}`"
+          :key="`tags-${i}-${f.field}`"
           class="mr-1">
           <p
             v-if="item[f.field]"
@@ -310,6 +310,22 @@
         outlined
         @click="toggleDetail">
         {{ t('preview.showCardDetails', locale) }}
+      </b-button>
+    </footer>
+    <footer
+      v-if="!isMini && item.pageUrl"
+      class="card-footer px-3 py-3">
+      <!-- SHOW DETAILS BUTTON -->
+      <b-button
+        tag="a"
+        type="is-dark"
+        size="is-small"
+        icon-left="open-in-new"
+        :href="item.pageUrl"
+        target="_blank"
+        expanded
+        outlined>
+        {{ t('editWiki.goToWikiPage', locale) }}
       </b-button>
     </footer>
   </div>

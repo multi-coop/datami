@@ -213,6 +213,7 @@ export const extractWikiInfos = (urlStr, options) => {
     pageTitle: extractPageTitle(urlStr),
     apiRoot: apiRoot,
     apiUrl: apiUrl,
+    pageUrlRoot: `https://${hostname(urlStr)}/wiki/`,
 
     filename: hostname(urlStr),
     filefullname: `${hostname(urlStr)} => ${params.cmtitle}`,
@@ -298,6 +299,7 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
   try {
     response = await fetch(urlItemDetail)
     responseData = await response.json()
+    // console.log('U > utilsWikiUrl > extractWikiInfos > responseData : ', responseData)
   } catch (error) {
     console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
     errors = [error]
@@ -339,6 +341,7 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
   return {
     id: item.id,
     pageId: item.pageid,
+    pageUrl: `${wikiInfosObject.pageUrlRoot}${item.title.replace(' ', '_')}`,
     title: item.title,
     imageUrl: imageUrl,
     // responseData: responseData,
@@ -355,6 +358,7 @@ export const restructurePageData = (pageObj, wikiFields) => {
   const pageData = {
     id: pageObj.id,
     pageId: pageObj.pageId,
+    pageUrl: pageObj.pageUrl,
     // structured: pageObj.structured,
     content: pageObj.content
   }

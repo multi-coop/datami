@@ -126,15 +126,6 @@
       :only-preview="onlypreview"
       :locale="locale"/>
 
-    <!-- PROGRESS LOADER -->
-    <!-- v-if="wikiItems && wikiItems.length" -->
-    <LoaderWiki
-      v-if="wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length)"
-      :file-id="fileId"
-      :items-loaded="wikiPages.length"
-      :items-total="wikiItems.length"
-      :locale="locale"/>
-
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
     <!-- PREVIEWS CSV -->
     <div
@@ -149,6 +140,15 @@
         :locale="locale"
         :debug="debug"/>
     </div>
+
+    <!-- PROGRESS LOADER -->
+    <!-- v-if="wikiItems && wikiItems.length" -->
+    <LoaderWiki
+      v-if="wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length)"
+      :file-id="fileId"
+      :items-loaded="wikiPages.length"
+      :items-total="wikiItems.length"
+      :locale="locale"/>
 
     <!-- CREDITS -->
     <GitributeCredits
@@ -231,7 +231,7 @@ export default {
       showFileInfos: false,
 
       // tests for mediawiki fetching
-      mediawikiDefaultFields: ['title', 'imageUrl'],
+      mediawikiDefaultFields: ['title', 'imageUrl', 'pageUrl'],
       mediawikiOptions: undefined,
       wikiObj: undefined,
       wikiItems: undefined,
