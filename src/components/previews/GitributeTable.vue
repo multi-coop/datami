@@ -2,13 +2,14 @@
   <div class="GitributeTable content">
     <div class="columns is-multiline is-mobile is-centered">
       <!-- EDIT CSV NAVABAR -->
-      <div class="column is-12 pt-0">
+      <div
+        v-show="!isAnyDialogOpen"
+        class="column is-12 pt-0">
         <EditCsvSkeleton
-          v-show="!isAnyDialogOpen"
           :file-id="fileId"
           :columns="columnsEdited"
           :checked-rows="checkedRows"
-          :is-active-tags="!!filterTags.length"
+          :active-tags="filterTags"
           :locale="locale"
           @action="processAction"/>
       </div>
@@ -44,126 +45,147 @@
       <div v-if="debug">
         lockHeaders : <code>{{ lockHeaders }}</code>
       </div>
-      <!-- TABLE -->
+
       <div
-        v-show="!isAnyDialogOpen && currentViewMode === 'table'"
-        class="column is-12">
-        <b-table
-          :data="dataEditedPaginated"
-          :checkable="currentEditViewMode === 'edit'"
-          :sticky-checkbox="currentEditViewMode === 'edit'"
-          :checked-rows.sync="checkedRows"
-          :height="fileOptions.height || '400px'"
-          narrowed
-          hoverable
-          sticky-header
-          striped>
-          <!-- LOOP COLUMNS -->
-          <!-- numeric -->
-          <b-table-column
-            v-for="col in columnsForView"
-            :key="col.field"
-            width="75px"
-            :field="col.field"
-            :label="col.label">
-            <!-- HEADERS -->
-            <template #header="{ column }">
-              <!-- EDITION HEADERS-->
-              <div v-if="currentEditViewMode === 'edit'">
-                <b-field
-                  v-if="!lockHeaders">
-                  <EditCell
-                    :is-header="true"
-                    :col-field="column.field"
-                    :input-data="column.label"
-                    @updateCellValue="emitUpdate"/>
-                </b-field>
-                <span v-if="lockHeaders">
+        v-show="dataEditedPaginated && dataEditedPaginated.length"
+        :class="`column is-${ currentViewMode === 'cards' ? 10 : 12}`">
+        <!-- TABLE -->
+        <div
+          v-show="!isAnyDialogOpen && currentViewMode === 'table'">
+          <b-table
+            :data="dataEditedPaginated"
+            :checkable="currentEditViewMode === 'edit'"
+            :sticky-checkbox="currentEditViewMode === 'edit'"
+            :checked-rows.sync="checkedRows"
+            :height="fileOptions.height || '400px'"
+            narrowed
+            hoverable
+            sticky-header
+            striped>
+            <!-- LOOP COLUMNS -->
+            <!-- numeric -->
+            <b-table-column
+              v-for="col in columnsForView"
+              :key="col.field"
+              width="75px"
+              :field="col.field"
+              :label="col.label">
+              <!-- HEADERS -->
+              <template #header="{ column }">
+                <!-- EDITION HEADERS-->
+                <div v-if="currentEditViewMode === 'edit'">
+                  <b-field
+                    v-if="!lockHeaders">
+                    <EditCell
+                      :is-header="true"
+                      :col-field="column.field"
+                      :input-data="column.label"
+                      @updateCellValue="emitUpdate"/>
+                  </b-field>
+                  <span v-if="lockHeaders">
+                    {{ column.label }}
+                    <b-tooltip
+                      :label="t('edit.headerLocked', locale)"
+                      position="is-bottom"
+                      multilined
+                      type="is-dark">
+                      <b-icon
+                        class="mr-1 ml-0"
+                        size="is-small"
+                        type="is-light"
+                        icon="lock"/>
+                    </b-tooltip>
+                  </span>
+                </div>
+                <!-- DIFF HEADERS -->
+                <div v-if="currentEditViewMode === 'diff'">
+                  <div
+                    v-if="isInChanges (true, col.added, col.field)">
+                    <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                  </div>
+                  <span v-else>
+                    {{ column.label }}
+                  </span>
+                </div>
+                <!-- PREVIEW HEADERS -->
+                <div v-if="currentEditViewMode === 'preview'">
                   {{ column.label }}
-                  <b-tooltip
-                    :label="t('edit.headerLocked', locale)"
-                    position="is-bottom"
-                    multilined
-                    type="is-dark">
-                    <b-icon
-                      class="mr-1 ml-0"
-                      size="is-small"
-                      type="is-light"
-                      icon="lock"/>
-                  </b-tooltip>
-                </span>
-              </div>
-              <!-- DIFF HEADERS -->
-              <div v-if="currentEditViewMode === 'diff'">
+                </div>
+              </template>
+
+              <!-- ROWS -->
+              <template #default="props">
+                <!-- DEBUG -->
                 <div
-                  v-if="isInChanges (true, col.added, col.field)">
-                  <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                  v-if="false"
+                  class="mb-3">
+                  <!-- row: <code>{{ props.row }}</code><br> -->
+                  <code>row id</code>: <code>{{ props.row.id }}</code><br>
                 </div>
-                <span v-else>
-                  {{ column.label }}
-                </span>
-              </div>
-              <!-- PREVIEW HEADERS -->
-              <div v-if="currentEditViewMode === 'preview'">
-                {{ column.label }}
-              </div>
-            </template>
 
-            <!-- ROWS -->
-            <template #default="props">
-              <!-- DEBUG -->
-              <div
-                v-if="false"
-                class="mb-3">
-                <!-- row: <code>{{ props.row }}</code><br> -->
-                <code>row id</code>: <code>{{ props.row.id }}</code><br>
-              </div>
-
-              <!-- EDITION -->
-              <div v-if="currentEditViewMode === 'edit'">
-                <b-field>
-                  <EditCell
-                    :is-header="false"
-                    :col-field="col.field"
-                    :row-id="props.row.id"
-                    :is-added="props.row.added"
-                    :input-data="props.row[col.field]"
-                    @updateCellValue="emitUpdate"/>
-                </b-field>
-              </div>
-
-              <!-- DIFF -->
-              <div v-if="currentEditViewMode === 'diff'">
-                <div v-if="isInChanges(false, props.row.added, col.field, props.row.id)">
-                  <span v-html="getDiffHtmlChars(false, props.row.added, col.field, props.row[col.field], props.row.id)"/>
+                <!-- EDITION -->
+                <div v-if="currentEditViewMode === 'edit'">
+                  <b-field>
+                    <EditCell
+                      :is-header="false"
+                      :col-field="col.field"
+                      :row-id="props.row.id"
+                      :is-added="props.row.added"
+                      :input-data="props.row[col.field]"
+                      @updateCellValue="emitUpdate"/>
+                  </b-field>
                 </div>
-                <span v-else>
+
+                <!-- DIFF -->
+                <div v-if="currentEditViewMode === 'diff'">
+                  <div v-if="isInChanges(false, props.row.added, col.field, props.row.id)">
+                    <span v-html="getDiffHtmlChars(false, props.row.added, col.field, props.row[col.field], props.row.id)"/>
+                  </div>
+                  <span v-else>
+                    {{ props.row[col.field] }}
+                  </span>
+                </div>
+
+                <!-- PREVIEW -->
+                <div v-if="currentEditViewMode === 'preview'">
                   {{ props.row[col.field] }}
-                </span>
-              </div>
+                </div>
+              </template>
+            </b-table-column>
+          </b-table>
+        </div>
 
-              <!-- PREVIEW -->
-              <div v-if="currentEditViewMode === 'preview'">
-                {{ props.row[col.field] }}
-              </div>
-            </template>
-          </b-table-column>
-        </b-table>
+        <!-- CARDS -->
+        <div
+          v-if="hasCardsView"
+          v-show="!isAnyDialogOpen && currentViewMode === 'cards'">
+          <GitributeCardsGrid
+            v-model="showCardDetails"
+            :file-id="fileId"
+            :cards-settings="cardsSettingsFromFileOptions"
+            :items-per-row="itemsPerRow"
+            :items="dataEditedPaginated"
+            :locale="locale"
+            @updateCellValue="emitUpdate"/>
+        </div>
       </div>
 
-      <!-- CARDS -->
+      <!-- NO RESULTS -->
       <div
-        v-if="hasCardsView"
-        v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
-        class="column is-10">
-        <GitributeCardsGrid
-          v-model="showCardDetails"
-          :file-id="fileId"
-          :cards-settings="cardsSettingsFromFileOptions"
-          :items-per-row="itemsPerRow"
-          :items="dataEditedPaginated"
-          :locale="locale"
-          @updateCellValue="emitUpdate"/>
+        v-show="dataEditedPaginated && !dataEditedPaginated.length"
+        class="column is-12">
+        <article
+          class="notification my-6 is-light is-flex is-align-items-center is-justify-content-center">
+          <p class="subtitle py-4 has-text-centered">
+            <b-icon
+              icon="alert-outline"
+              size="is-small"/>
+            <br>
+            <span class="is-size-7">
+              {{ t('global.noResult', locale) }}
+            </span>
+          </p>
+        </article>
       </div>
 
       <!-- PAGINATION -->
@@ -385,6 +407,7 @@ export default {
       sortingAscending: true,
 
       // FILTERS
+      filterTagsChoices: [],
       filterTags: [],
 
       // PAGINATION
@@ -401,6 +424,14 @@ export default {
     }
   },
   computed: {
+    sortingFields () {
+      const settingsSorting = this.customSortingConfig.sortfields
+      return this.columns.filter(col => settingsSorting.includes(col.label))
+    },
+    filterFields () {
+      const settingsFields = this.customFiltersConfig.filterfields
+      return this.columns.filter(col => settingsFields.includes(col.label))
+    },
     hasCardsView () {
       return !!this.fileOptions.cardsview
     },
@@ -509,9 +540,9 @@ export default {
       // console.log('\nC > GitributeTable > dataEditedFiltered > filters : ', filters)
       filters.forEach(filter => {
         data = data.filter(row => {
-          const rowVal = row[filter.field].toLowerCase()
+          const rowVal = row[filter.field] && row[filter.field].toLowerCase()
           const filterVal = filter.value.toLowerCase()
-          return rowVal.includes(filterVal)
+          return rowVal && rowVal.includes(filterVal)
         })
       })
       return data
@@ -592,8 +623,11 @@ export default {
     }
   },
   watch: {
-    edited (next) {
-      console.log('\nC > GitributeTable > watch > edited > next : ', next)
+    // edited (next) {
+    //   console.log('\nC > GitributeTable > watch > edited > next : ', next)
+    // },
+    dataEdited (next) {
+      if (this.hasCustomFilters) { this.updateCustomFilters() }
     },
     currentViewMode (next) {
       // console.log('\nC > GitributeTable > watch > currentViewMode > next : ', next)
@@ -601,6 +635,27 @@ export default {
     }
   },
   beforeMount () {
+    // prepare sorting
+    if (this.hasCustomSorting) {
+      const sorting = {
+        fileId: this.fileId,
+        fields: this.sortingFields
+      }
+      this.setSorting(sorting)
+    }
+
+    // prepare filters
+    if (this.hasCustomFilters) {
+      // console.log('C > GitributeTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
+      // console.log('C > GitributeTable > beforeMount > this.filterFields : ', this.filterFields)
+      const filters = [...this.filterFields]
+      filters.forEach(filter => {
+        filter.fileId = this.fileId
+        filter.choices = new Set()
+        this.setFilters(filter)
+      })
+    }
+
     // build pagination options
     const pagination = this.paginationFromFileOptions
     // console.log('\nC > GitributeTable > beforeMount > pagination : ', pagination)
@@ -620,10 +675,12 @@ export default {
         case 'addNewRow':
           this.$emit('addRow', event)
           break
+
         // IMPORT DATA
         case 'openUploadFileDialog':
           this.showUploadFileDialog = true
           break
+
         // DELETE ROWS
         case 'openDeleteRowsDialog':
           this.showDeleteRowsDialog = true
@@ -632,12 +689,14 @@ export default {
           this.$emit('deleteRows', event)
           this.checkedRows = []
           break
+
         // SORTING
         case 'sortBy':
           this.sortingByField = event.value.header
           this.sortingAscending = event.value.ascending
           this.$emit('sortRows', event)
           break
+
         // FILTERING
         case 'filterBy':
           this.processFilter(event.value)
@@ -711,8 +770,35 @@ export default {
       // isFirstRow && console.log('C > GitributeTable > isInChanges > bool : ', bool)
       return bool
     },
+    updateCustomFilters () {
+      // console.log('\nC > GitributeTable > updateCustomFilters > this.customFiltersConfig : ', this.customFiltersConfig)
+      // console.log('C > GitributeTable > updateCustomFilters > this.dataEdited : ', this.dataEdited)
+      // console.log('C > GitributeTable > updateCustomFilters > this.filterFields : ', this.filterFields)
+      // build filters from options config
+      // console.log('C > GitributeTable > updateCustomFilters > this.fileFilters : ', this.fileFilters)
+      this.fileFilters.forEach(filter => {
+        // console.log('\n... C > GitributeTable > updateCustomFilters > filter : ', filter)
+        const field = filter.field
+
+        // get only last value from new dataEdited array
+        const lastData = this.dataEdited[this.dataEdited.length - 1]
+        const hasData = !!lastData[field]
+        if (hasData) {
+          const dataTagsRaw = lastData[field]
+          // console.log('... C > GitributeTable > updateCustomFilters > dataTagsRaw : ', dataTagsRaw)
+          let dataTags = dataTagsRaw.split(this.customFiltersConfig.tagsSeparator)
+          dataTags = dataTags.map(tag => tag.trim())
+          this.updateFiltersSettings({
+            fileId: this.fileId,
+            field: field,
+            choices: dataTags
+          })
+        }
+      })
+      // console.log('C > GitributeTable > updateCustomFilters > this.fileFilters : ', this.fileFilters)
+    },
     processFilter (filter) {
-      console.log('C > GitributeTable > processFilter > filter : ', filter)
+      // console.log('C > GitributeTable > processFilter > filter : ', filter)
       const active = !!filter.field
       const reset = filter.reset
       if (!reset && active) {
@@ -723,8 +809,8 @@ export default {
       }
     },
     processFilterValue (tag, remove = false) {
-      console.log('C > GitributeTable > processFilterValue > tag : ', tag)
-      console.log('C > GitributeTable > processFilterValue > remove : ', remove)
+      // console.log('C > GitributeTable > processFilterValue > tag : ', tag)
+      // console.log('C > GitributeTable > processFilterValue > remove : ', remove)
       if (!remove) {
         this.filterTags.push(tag)
       } else {
@@ -736,7 +822,7 @@ export default {
       }
     },
     removeTag (tag) {
-      console.log('\nC > GitributeTable > removeTag > tag : ', tag)
+      // console.log('\nC > GitributeTable > removeTag > tag : ', tag)
       this.processFilterValue(tag, true)
     }
   }

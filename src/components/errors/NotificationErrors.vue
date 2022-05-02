@@ -1,5 +1,5 @@
 <template>
-  <div class="NotificationErrors container px-6">
+  <div class="NotificationErrors gitribute-component container px-6">
     <b-notification
       v-model="isActive"
       aria-close-label="Close notification">

@@ -1,5 +1,5 @@
 <template>
-  <div class="GitributeCardsGrid">
+  <div class="GitributeCardsGrid gitribute-component">
     <!-- DEBUG -->
     <div
       v-if="debug"

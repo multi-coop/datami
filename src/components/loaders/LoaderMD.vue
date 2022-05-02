@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderMD container">
+  <div class="LoaderMD gitribute-component container">
     <!-- FAKE TITLE -->
     <h1 class="mb-4">
       <b-skeleton

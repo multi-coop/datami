@@ -1,5 +1,5 @@
 <template>
-  <div class="FilterTags container is-flex is-flex-direction-row is-align-content-center is-justify-content-center">
+  <div class="FilterTags gitribute-component container is-flex is-flex-direction-row is-align-content-center is-justify-content-center">
     <!-- <div
       v-for="(tag, idx) in tags"
       :key="`${tag.field}-${tag.value}`"

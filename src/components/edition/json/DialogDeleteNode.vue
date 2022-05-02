@@ -1,6 +1,6 @@
 <template>
   <div
-    class="DialogDeleteNode mb-5"
+    class="DialogDeleteNode gitribute-component mb-5"
     :style="indent">
     <div class="columns">
       <div class="column is-8">

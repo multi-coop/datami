@@ -76,7 +76,6 @@
         :file-family="'table'"
         :locale="locale"/>
 
-      <!-- WORK IN PROGRESS -->
       <!-- PREVIEWS -->
       <div v-if="data">
         <!-- ORIGINAL DATA -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonFilterBy px-2">
+  <div class="ButtonFilterBy gitribute-component px-2">
     <b-field
       grouped
       custom-class="gt-label-filter mr-2 is-align-content-center">

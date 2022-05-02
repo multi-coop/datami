@@ -1,5 +1,5 @@
 <template>
-  <div class="json-tree">
+  <div class="JsonTree json-tree gitribute-component">
     <!-- NODE -->
     <div
       class="my-1"

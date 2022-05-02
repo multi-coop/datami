@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import { user } from '@/store/user.js'
 import { data } from '@/store/data.js'
 import { filters } from '@/store/filters.js'
+import { sortings } from '@/store/sortings.js'
 import { translations } from '@/store/translations.js'
 
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
@@ -78,6 +79,7 @@ const defaultStore = {
       commit('setGitInfos', gitInfosObject)
     },
     addFileOptions ({ commit }, fileOptionsObject) {
+      console.log('S-index > A > addFileOptions > fileOptionsObject : ', fileOptionsObject)
       commit('setFileOptions', fileOptionsObject)
     },
     addFileReqInfos ({ commit }, fileReqInfos) {
@@ -92,6 +94,7 @@ export const store = new Vuex.Store({
     'git-translations': translations,
     'git-user': user,
     'git-filters': filters,
+    'git-sortings': sortings,
     'git-data': data
   }
 })

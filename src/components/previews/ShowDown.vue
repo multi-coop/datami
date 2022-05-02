@@ -1,5 +1,5 @@
 <template>
-  <div class="ShowDown">
+  <div class="ShowDown gitribute-component">
     <div v-html="outputHtml"/>
   </div>
 </template>

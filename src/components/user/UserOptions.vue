@@ -1,5 +1,5 @@
 <template>
-  <div class="UserOptions is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
+  <div class="UserOptions gitribute-component is-flex is-flex-direction-row is-align-items-center is-justify-content-right">
     <ButtonReloadFile
       :file-id="fileId"
       :locale="locale"/>

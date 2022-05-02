@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderCSV container">
+  <div class="LoaderCSV gitribute-component container">
     <div class="columns is-mobile is-multiline mb-5 pb-4">
       <!-- FAKE TABLE -->
       <div class="column is-12 mt-2">

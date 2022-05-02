@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -67,6 +67,33 @@ export const mixinGlobal = {
     errors () {
       return this.getReqErrors(this.fileId)
     },
+
+    // SORTING SETTINGS
+    hasCustomSorting () {
+      return this.fileOptions && !!this.fileOptions.customsorting && this.fileOptions.customsorting.activate
+    },
+    customSortingConfig () {
+      let config = []
+      if (this.hasCustomSorting) {
+        config = this.fileOptions.customsorting
+      }
+      return config
+    },
+
+    // FILTERS SETTINGS
+    hasCustomFilters () {
+      return this.fileOptions && !!this.fileOptions.customfilters && this.fileOptions.customfilters.activate
+    },
+    customFiltersConfig () {
+      let config = []
+      if (this.hasCustomFilters) {
+        config = this.fileOptions.customfilters
+        config.tagsSeparator = this.fileOptions.tagseparator
+      }
+      return config
+    },
+
+    // CARDS SETTINGS
     hasCardsView () {
       return this.fileOptions && !!this.fileOptions.cardsview
     },
@@ -182,12 +209,27 @@ export const mixinPagination = {
 
 export const mixinCsv = {
   computed: {
+    ...mapGetters({
+      getSortingById: 'git-sortings/getSortingById',
+      getFiltersById: 'git-filters/getFiltersById'
+    }),
+    fileSorting () {
+      return this.getSortingById(this.fileId)
+    },
+    fileFilters () {
+      return this.getFiltersById(this.fileId)
+    },
     lockHeaders () {
       const options = this.fileOptions
       return !!(options && options.lockcolumns)
     }
   },
   methods: {
+    ...mapActions({
+      setSorting: 'git-sortings/setSortingSettings',
+      setFilters: 'git-filters/setFiltersSettings',
+      updateFiltersSettings: 'git-filters/updateFiltersSettings'
+    }),
     csvToObject,
     ObjectToCsv
   }

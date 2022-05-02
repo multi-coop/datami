@@ -1,5 +1,5 @@
 <template>
-  <div class="EditCell is-flex is-align-items-center">
+  <div class="EditCell gitribute-component is-flex is-align-items-center">
     <!-- <code>{{ inputData }}</code> -->
     <!-- <b-icon
       class="mr-1 ml-0"

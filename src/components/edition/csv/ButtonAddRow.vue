@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonAddRow">
+  <div class="ButtonAddRow gitribute-component">
     <b-tooltip
       :label="t(`editCsv.addRow`, locale)"
       type="is-dark"

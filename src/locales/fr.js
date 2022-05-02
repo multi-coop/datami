@@ -75,6 +75,7 @@ export default {
   filters: {
     label: 'Filtrer',
     filterBy: 'Filtrer par un champ et une valeur',
+    filterByField: 'Filtrer par le champ',
     removeFilter: 'Supprimer ce filtre',
     removeFilters: 'Supprimer tous les filtres'
   },

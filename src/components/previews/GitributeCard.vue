@@ -1,6 +1,6 @@
 <template>
   <div
-    class="GitributeCard card">
+    class="GitributeCard gitribute-component gitribute-component card">
     <!-- HEADER -->
     <header class="card-header no-shadow">
       <!-- TITLE BLOCK -->

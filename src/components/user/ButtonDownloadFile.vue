@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonDownloadFile">
+  <div class="ButtonDownloadFile gitribute-component">
     <b-tooltip
       :label="t('actions.downloadFile', locale)"
       type="is-dark"
@@ -42,17 +42,19 @@ export default {
     async DownloadFile () {
       this.loading = true
       console.log('C > ButtonDownloadFile > DownloadFile > this.gitObj : ', this.gitObj)
-      const respFileRaw = await this.getFileDataRaw(this.gitObj)
-      const fileRaw = respFileRaw.data
-      const fileName = this.gitObj.filefullname
-      const fileUrl = window.URL.createObjectURL(new Blob([fileRaw]))
-      console.log('C > ButtonDownloadFile > DownloadFile > fileUrl : ', fileUrl)
-      const fileLink = document.createElement('a')
-      fileLink.href = fileUrl
-      fileLink.setAttribute('download', fileName)
-      document.body.appendChild(fileLink)
-      this.loading = false
-      fileLink.click()
+      if (this.gitObj.filetype !== 'wiki') {
+        const respFileRaw = await this.getFileDataRaw(this.gitObj)
+        const fileRaw = respFileRaw.data
+        const fileName = this.gitObj.filefullname
+        const fileUrl = window.URL.createObjectURL(new Blob([fileRaw]))
+        console.log('C > ButtonDownloadFile > DownloadFile > fileUrl : ', fileUrl)
+        const fileLink = document.createElement('a')
+        fileLink.href = fileUrl
+        fileLink.setAttribute('download', fileName)
+        document.body.appendChild(fileLink)
+        this.loading = false
+        fileLink.click()
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="DialogFileInfos container mb-4">
+  <div class="DialogFileInfos gitribute-component container mb-4">
     <div class="columns is-vcentered is-centered">
       <div class="column is-9">
         <div class="card">

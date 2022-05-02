@@ -1,5 +1,5 @@
 <template>
-  <div class="GitributeCredits columns is-centered is-multiline mt-6">
+  <div class="GitributeCredits gitribute-component columns is-centered is-multiline mt-6">
     <!-- CREDITS -->
     <div
       class="column is-full is-italic has-text-centered">

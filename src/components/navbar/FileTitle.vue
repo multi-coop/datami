@@ -1,5 +1,5 @@
 <template>
-  <div class="FileTitle">
+  <div class="FileTitle gitribute-component">
     <b-tooltip
       :label="t('file.fileInfos', locale)"
       type="is-dark"

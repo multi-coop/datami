@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderSortFilters container">
+  <div class="LoaderSortFilters gitribute-component container">
     <div class="columns is-mobile is-multiline mb-3 mt-0">
       <!-- FAKE SORTINGS -->
       <div class="column is-4 is-offset-2 pt-2">

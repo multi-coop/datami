@@ -1,5 +1,5 @@
 <template>
-  <span class="EditJsonCell is-flex is-flex-direction-row is-align-items-center">
+  <span class="EditJsonCell gitribute-component is-flex is-flex-direction-row is-align-items-center">
     <!-- <code>{{ inputData }}</code> -->
 
     <!-- EDIT LABEL -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="EditNavbarSkeleton container">
+  <div class="EditNavbarSkeleton gitribute-component container">
     <div
       v-if="gitObj"
       class="columns is-multiline is-mobile is-centered mb-2">

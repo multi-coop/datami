@@ -1,5 +1,5 @@
 <template>
-  <div class="section">
+  <div class="GitributeFile gitribute-widget section">
     <div class="container mb-4">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->

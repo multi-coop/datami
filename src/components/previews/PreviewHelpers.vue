@@ -1,6 +1,6 @@
 <template>
   <!-- HELPERS -->
-  <div class="PreviewHelpers columns is-multiline is-mobile">
+  <div class="PreviewHelpers gitribute-component columns is-multiline is-mobile">
     <div
       v-for="helper in getSettings"
       :key="helper"

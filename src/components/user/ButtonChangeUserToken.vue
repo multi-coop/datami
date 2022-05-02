@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonChangeUserToken">
+  <div class="ButtonChangeUserToken gitribute-component">
     <div :class="`dropdown is-right ${showContent ? 'is-active' : '' }`">
       <!-- TRIGGER BUTTON -->
       <div class="dropdown-trigger">

@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonChangeLocale">
+  <div class="ButtonChangeLocale gitribute-component">
     <!-- {{ currentLocale(locale) }} -
     {{ allowedLocales }} -->
     <div class="dropdown is-hoverable is-right">

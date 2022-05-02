@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewModeBtns">
+  <div class="ViewModeBtns gitribute-component">
     <!-- BUTTONS -->
     <!-- :class="`${ onlyPreview ? '' : 'ml-5'}`" -->
     <b-field

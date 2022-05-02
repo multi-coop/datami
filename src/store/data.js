@@ -11,6 +11,7 @@ export const data = {
     reloading: [],
     saving: [],
     committing: [],
+    downloading: [],
 
     // EDIT MODES
     preview: [],
@@ -35,6 +36,9 @@ export const data = {
     },
     fileNeedsSaving: (state) => (fileId) => {
       return state.saving.includes(fileId)
+    },
+    fileNeedsDownloading: (state) => (fileId) => {
+      return state.downloading.includes(fileId)
     },
     getFileToken: (state) => (fileId) => {
       return state.tokens[fileId]
@@ -120,6 +124,13 @@ export const data = {
         commit('addToState', { key: 'saving', fileId: fileId })
       } else {
         commit('removeFromState', { key: 'saving', fileId: fileId })
+      }
+    },
+    updateDownloading ({ commit }, { fileId, isDownloading }) {
+      if (isDownloading) {
+        commit('addToState', { key: 'downloading', fileId: fileId })
+      } else {
+        commit('removeFromState', { key: 'downloading', fileId: fileId })
       }
     },
     updateCommitting ({ commit }, { fileId, isCommitting }) {

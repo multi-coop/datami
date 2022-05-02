@@ -1,5 +1,5 @@
 <template>
-  <div class="GiObjInfos tile is-ancestor my-2">
+  <div class="GiObjInfos gitribute-component tile is-ancestor my-2">
     <div class="tile is-vertical is-12">
       <div
         v-for="info in infoRowsPopulated"

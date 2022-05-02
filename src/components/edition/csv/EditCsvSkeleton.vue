@@ -1,29 +1,36 @@
 <template>
-  <div class="EditCsvSkeleton container">
-    <div class="columns">
-      <!-- VIEW CHOICES -->
-      <!-- <div
-        :class="`column is-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-start`">
-        <ViewModeBtns
-          :file-id="fileId"
-          :locale="locale"/>
-      </div> -->
-      <!-- EDIT BUTTONS -->
+  <div class="EditCsvSkeleton gitribute-component container">
+    <div class="columns is-multiline is-centered">
+      <!-- SORTING -->
       <div
-        :class="`column is-4 is-offset-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
+        :class="`column is-4 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonSortBy
-          :headers="columns"
+          :headers="sortingHeaders"
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
+
+      <!-- FILTERS -->
       <div
-        :class="`column is-4 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
+        v-if="!hasCustomFilters"
+        :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
         <ButtonFilterBy
           :headers="columns"
           :is-active-tags="isActiveTags"
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
+      <div
+        v-if="hasCustomFilters"
+        :class="`column is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
+        <CustomFilters
+          :file-id="fileId"
+          :active-tags="activeTags"
+          :locale="locale"
+          @action="SendActionToParent"/>
+      </div>
+
+      <!-- EDIT BUTTONS -->
       <div
         v-if="currentEditViewMode === 'edit'"
         :class="`column is-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
@@ -61,7 +68,7 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
 // import ViewModeBtns from '@/components/previews/ViewModeBtns'
 
@@ -69,6 +76,7 @@ import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
 // import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import ButtonSortBy from '@/components/sorting/ButtonSortBy'
 import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
+import CustomFilters from '@/components/filters/CustomFilters'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
@@ -79,9 +87,13 @@ export default {
     // ButtonImportData,
     ButtonSortBy,
     ButtonFilterBy,
+    CustomFilters,
     ButtonDeleteRows
   },
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinGlobal,
+    mixinCsv
+  ],
   props: {
     fileId: {
       default: undefined,
@@ -95,9 +107,9 @@ export default {
       default: null,
       type: Array
     },
-    isActiveTags: {
+    activeTags: {
       default: null,
-      type: Boolean
+      type: Array
     },
     locale: {
       default: 'en',
@@ -106,6 +118,18 @@ export default {
     debug: {
       default: false,
       type: Boolean
+    }
+  },
+  computed: {
+    sortingHeaders () {
+      let sortingHeaders = this.columns
+      if (this.hasCustomSorting) {
+        sortingHeaders = this.fileSorting.fields
+      }
+      return sortingHeaders
+    },
+    isActiveTags () {
+      return this.activeTags && !!this.activeTags.length
     }
   },
   methods: {

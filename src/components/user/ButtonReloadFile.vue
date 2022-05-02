@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonReloadFile">
+  <div class="ButtonReloadFile gitribute-component">
     <b-tooltip
       :label="t('actions.reloadFile', locale)"
       type="is-dark"

@@ -1,5 +1,5 @@
 <template>
-  <div class="ConfirmCommit container">
+  <div class="ConfirmCommit gitribute-component container">
     <div class="columns is-vcentered is-centered">
       <div class="column is-9">
         <div class="card">
