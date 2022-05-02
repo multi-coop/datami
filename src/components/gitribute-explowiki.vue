@@ -267,8 +267,10 @@ export default {
 
     // build options object
     const mediawikiOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
-    mediawikiOptions.tagseparator = ','
+    mediawikiOptions.tagseparator = ',' // to parse tags fields
+    mediawikiOptions.separator = '\t' // for csv export
     this.mediawikiOptions = mediawikiOptions
+
     // add default fields for pages structuration
     // console.log('C > GitributeExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)
     const fields = [...this.mediawikiDefaultFields, ...mediawikiOptions.wikisettings.fields]

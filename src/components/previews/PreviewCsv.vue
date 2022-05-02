@@ -101,7 +101,7 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinCommit, mixinDiff, mixinCsv } from '@/utils/mixins.js'
+import { mixinGlobal, mixinCommit, mixinDiff, mixinCsv, mixinDownload } from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
@@ -125,7 +125,8 @@ export default {
     mixinGlobal,
     mixinCommit,
     mixinDiff,
-    mixinCsv
+    mixinCsv,
+    mixinDownload
   ],
   props: {
     fileId: {
@@ -221,6 +222,18 @@ export default {
     edited (next, prev) {
       if (next && !prev) {
         this.bufferizeEdited()
+      }
+    },
+    fileIsDownloading (next) {
+      console.log('\nC > GitributeTable > watch > fileIsDownloading > next : ', next)
+      if (next && this.gitObj.filetype === 'wiki') {
+        console.log('C > GitributeTable > watch > fileIsDownloading > this.gitObj : ', this.gitObj)
+        const editedCsv = this.ObjectToCsv(this.dataColumns, this.data, this.fileOptions)
+        console.log('C > GitributeTable > watch > fileIsDownloading > editedCsv : ', editedCsv)
+        const dl = this.buildFileLink(editedCsv, window)
+        console.log('C > GitributeTable > watch > fileIsDownloading > dl : ', dl)
+        // this.removeLink(dl)
+        this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
     },
     fileIsSaving (next) {

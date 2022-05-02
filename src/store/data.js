@@ -127,6 +127,7 @@ export const data = {
       }
     },
     updateDownloading ({ commit }, { fileId, isDownloading }) {
+      console.log('\nS-data > A > updateDownloading > fileId : ', fileId)
       if (isDownloading) {
         commit('addToState', { key: 'downloading', fileId: fileId })
       } else {

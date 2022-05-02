@@ -1,11 +1,11 @@
 export const authorizedFileTypes = {
-  txt: { family: 'text' },
-  md: { family: 'text' },
-  csv: { family: 'table' },
-  tsv: { family: 'table' },
-  json: { family: 'json' },
-  geojson: { family: 'json' },
-  wiki: { family: 'table' }
+  txt: { family: 'text', type: 'text/plain' },
+  md: { family: 'text', type: 'text/plain' },
+  csv: { family: 'table', type: 'data:text/csv' },
+  tsv: { family: 'table', type: 'data:text/tsv' },
+  json: { family: 'json', type: 'application/json' },
+  geojson: { family: 'json', type: 'application/json' },
+  wiki: { family: 'table', type: 'data:text/csv' }
 }
 
 // ICONS

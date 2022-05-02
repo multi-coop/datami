@@ -13,11 +13,13 @@ import {
 } from '@/utils/globalUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
-// import { authorizedFileTypes } from '@/utils/fileTypesUtils.js'
+import {
+  authorizedFileTypes,
+  editViewsOptions
+} from '@/utils/fileTypesUtils.js'
 import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
 import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
 import { nodeTypes, objToNodes, setEditInNode, nodeToObj } from '@/utils/jsonUtils.js'
-import { editViewsOptions } from '@/utils/fileTypesUtils.js'
 import { extractWikiInfos, getMediawikiData, getMediawikitItem, restructurePageData } from '@/utils/utilsWikiUrl.js'
 
 // see : https://github.com/kpdecker/jsdiff
@@ -33,6 +35,7 @@ export const mixinGlobal = {
       getFileOptionsObj: 'getFileOptionsObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
       fileNeedsSaving: 'git-data/fileNeedsSaving',
+      fileNeedsDownloading: 'git-data/fileNeedsDownloading',
       fileIsCommitting: 'git-data/fileIsCommitting',
       getReqErrors: 'git-data/getReqErrors'
     }),
@@ -60,6 +63,9 @@ export const mixinGlobal = {
     fileIsSaving () {
       const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
       return resp
+    },
+    fileIsDownloading () {
+      return this.fileNeedsDownloading(this.fileId)
     },
     isCommitting () {
       return this.fileIsCommitting(this.fileId)
@@ -139,7 +145,49 @@ export const mixinIcons = {
 
 export const mixinDownload = {
   methods: {
-    getFileDataRaw
+    getFileDataRaw,
+    ...mapActions({
+      updateDownloading: 'git-data/updateDownloading'
+    }),
+    buildFileLink (data, window) {
+      const filetype = authorizedFileTypes[this.gitObj.filetype].type
+      const type = `${filetype};charset=utf-8`
+      const fileName = this.gitObj.filetype === 'wiki' ? `${this.gitObj.filefullname.replaceAll('.', '-').replaceAll(' => ', '---')}.tsv` : this.gitObj.filefullname
+      console.log('\nC > mixinDownload > buildFileLink > fileName : ', fileName)
+      // const fileBlob = new Blob([data])
+      const fileBlob = new Blob([data], {
+        type: type
+      })
+      console.log('C > mixinDownload > buildFileLink > fileBlob : ', fileBlob)
+      const dl = document.createElement('a')
+      const fileUrl = window.URL.createObjectURL(fileBlob)
+      console.log('C > mixinDownload > buildFileLink > fileUrl : ', fileUrl)
+      dl.href = fileUrl
+      dl.download = fileName
+      dl.display = 'none'
+      dl.visibility = 'hidden'
+      dl.title = `Download file - ${fileName}`
+      dl.target = '_self'
+      // dl.rel = 'noopener'
+      // dl.setAttribute('title', `Download file - ${fileName}`)
+      // dl.setAttribute('download', fileName)
+      // dl.setAttribute('target', '_self')
+      // dl.setAttribute('rel', 'noopener')
+      // dl.setAttribute('download', fileName)
+      // dl.setAttribute('visibility', 'hidden')
+      // dl.setAttribute('display', 'none')
+      // console.log('C > mixinDownload > buildFileLink > dl : ', dl)
+      document.body.appendChild(dl)
+      dl.click()
+      return dl
+    },
+    removeLink (link) {
+      setTimeout(() => {
+        URL.revokeObjectURL(link.href)
+        // document.body.removeChild(link)
+        link.parentNode.removeChild(link)
+      }, 100)
+    }
   }
 }
 
