@@ -14,11 +14,18 @@
           @action="processAction"/>
       </div>
 
+      <!-- RESULTS -->
+      <div class="column is-2 has-text-left">
+        <p class="has-text-weight-bold is-6">
+          {{ dataEditedFiltered.length || 0 }}
+          {{ t(`edit${this.gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
+        </p>
+      </div>
+
       <!-- FILTER TAGS -->
-      <div
-        v-if="filterTags && filterTags.length"
-        class="column is-12">
+      <div :class="`column is-${ currentViewMode === 'cards' ? 8 : 10}`">
         <FilterTags
+          v-if="filterTags && filterTags.length"
           v-show="!isAnyDialogOpen"
           :headers="columnsEdited"
           :tags="filterTags"
@@ -182,7 +189,7 @@
               size="is-small"/>
             <br>
             <span class="is-size-7">
-              {{ t('global.noResult', locale) }}
+              {{ t('editCsv.noResult', locale) }}
             </span>
           </p>
         </article>
@@ -626,9 +633,6 @@ export default {
     // edited (next) {
     //   console.log('\nC > GitributeTable > watch > edited > next : ', next)
     // },
-    dataEdited (next) {
-      if (this.hasCustomFilters) { this.updateCustomFilters() }
-    },
     currentViewMode (next) {
       // console.log('\nC > GitributeTable > watch > currentViewMode > next : ', next)
       this.itemsPerPage = next === 'cards' ? this.itemsPerPageCards : this.itemsPerPageTable
@@ -769,33 +773,6 @@ export default {
       if (wasAdded) bool = true
       // isFirstRow && console.log('C > GitributeTable > isInChanges > bool : ', bool)
       return bool
-    },
-    updateCustomFilters () {
-      // console.log('\nC > GitributeTable > updateCustomFilters > this.customFiltersConfig : ', this.customFiltersConfig)
-      // console.log('C > GitributeTable > updateCustomFilters > this.dataEdited : ', this.dataEdited)
-      // console.log('C > GitributeTable > updateCustomFilters > this.filterFields : ', this.filterFields)
-      // build filters from options config
-      // console.log('C > GitributeTable > updateCustomFilters > this.fileFilters : ', this.fileFilters)
-      this.fileFilters.forEach(filter => {
-        // console.log('\n... C > GitributeTable > updateCustomFilters > filter : ', filter)
-        const field = filter.field
-
-        // get only last value from new dataEdited array
-        const lastData = this.dataEdited[this.dataEdited.length - 1]
-        const hasData = !!lastData[field]
-        if (hasData) {
-          const dataTagsRaw = lastData[field]
-          // console.log('... C > GitributeTable > updateCustomFilters > dataTagsRaw : ', dataTagsRaw)
-          let dataTags = dataTagsRaw.split(this.customFiltersConfig.tagsSeparator)
-          dataTags = dataTags.map(tag => tag.trim())
-          this.updateFiltersSettings({
-            fileId: this.fileId,
-            field: field,
-            choices: dataTags
-          })
-        }
-      })
-      // console.log('C > GitributeTable > updateCustomFilters > this.fileFilters : ', this.fileFilters)
     },
     processFilter (filter) {
       // console.log('C > GitributeTable > processFilter > filter : ', filter)

@@ -98,6 +98,8 @@ export default {
   },
   editCsv: {
     noSelect: 'Aucun',
+    noResult: 'Pas de résultat',
+    results: 'lignes',
     addRow: 'Ajouter une nouvelle ligne',
     addTheNewRow: 'Ajouter la nouvelle ligne',
     importData: 'Importer/écraser les données',
@@ -132,6 +134,7 @@ export default {
   },
   editWiki: {
     loadingPages: 'Chargement des pages du mediawiki...',
+    results: 'fiches',
     page: 'page',
     pages: 'pages',
     goToWikiPage: 'Ouvrir la page du wiki'

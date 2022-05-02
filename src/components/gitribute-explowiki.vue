@@ -158,7 +158,7 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit, mixinWiki } from '@/utils/mixins.js'
+import { mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
@@ -191,6 +191,7 @@ export default {
   mixins: [
     mixinGlobal,
     mixinGit,
+    mixinCsv,
     mixinWiki
   ],
   props: {
@@ -325,14 +326,32 @@ export default {
       for (const item of this.wikiItems) {
         const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
         // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
-        // pageData.headers.forEach(h => { this.wikiHeaders.add(h) })
-        // this.wikiHeaders.push(...pageData.headers)
         pageData.temp = this.restructurePageData(pageData, this.wikiFields)
         this.wikiPages.push(pageData.temp)
+        if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
       }
-      // this.wikiHeaders = Array.from(new Set(this.wikiHeaders))
-      // console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > this.wikiHeaders : ', this.wikiHeaders)
-      // console.log('C > GitributeExploWiki > reloadMediawikiRessources > this.wikiPages : ', this.wikiPages)
+    },
+    updateCustomFilters (data) {
+      // build filters from options config
+      this.fileFilters.forEach(filter => {
+        // console.log('\n... C > GitributeExploWiki > updateCustomFilters > filter : ', filter)
+        const field = filter.field
+
+        // get only last value from new data object
+        const hasData = !!data[field]
+        if (hasData) {
+          const dataTagsRaw = data[field]
+          // console.log('... C > GitributeExploWiki > updateCustomFilters > dataTagsRaw : ', dataTagsRaw)
+          let dataTags = dataTagsRaw.split(this.customFiltersConfig.tagsSeparator)
+          dataTags = dataTags.map(tag => tag.trim())
+          this.updateFiltersSettings({
+            fileId: this.fileId,
+            field: field,
+            choices: dataTags
+          })
+        }
+      })
+      // console.log('C > GitributeExploWiki > updateCustomFilters > this.fileFilters : ', this.fileFilters)
     }
   }
 }

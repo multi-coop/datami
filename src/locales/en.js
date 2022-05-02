@@ -97,7 +97,9 @@ export default {
     headerLocked: "This column's label is protected from writing"
   },
   editCsv: {
-    noSelect: 'Aucun',
+    noSelect: 'None',
+    noResult: 'No result',
+    results: 'lines',
     addRow: 'Add a new row',
     addTheNewRow: 'Add the new row',
     importData: 'Import/overwrite the data',
@@ -132,6 +134,7 @@ export default {
   },
   editWiki: {
     loadingPages: 'Loading mediawiki pages...',
+    results: 'entries',
     page: 'page',
     pages: 'pages',
     goToWikiPage: 'Open the page from the wiki'

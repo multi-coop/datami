@@ -14,10 +14,10 @@
           <div
             v-if="currentEditViewMode === 'preview'"
             @click="toggleDetail">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -26,7 +26,7 @@
               :col-field="f.field"
               :row-id="item.id"
               :is-added="item.added"
-              :input-data="item[f.field]"
+              :input-data="item[f.field] || ''"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -113,10 +113,10 @@
           :key="`subtitle-${i}-${f.field}`"
           class="mr-1">
           <div v-if="currentEditViewMode === 'preview'">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -141,14 +141,14 @@
           class="mt-4 has-text-weight-medium">
           <div v-if="currentEditViewMode === 'preview'">
             <span v-if="isMini">
-              {{ trimText(item[f.field], 150) }}
+              {{ trimText(item[f.field] || '', 150) }}
             </span>
             <span v-else>
-              {{ item[f.field] }}
+              {{ item[f.field] || '' }}
             </span>
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -157,7 +157,7 @@
               :col-field="f.field"
               :row-id="item.id"
               :is-added="item.added"
-              :input-data="item[f.field]"
+              :input-data="item[f.field] || ''"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -178,10 +178,10 @@
             {{ getFieldLabel(f.field) }}
           </p>
           <div v-if="currentEditViewMode === 'preview'">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] }}
+            {{ item[f.field] || '' }}
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -190,7 +190,7 @@
               :col-field="f.field"
               :row-id="item.id"
               :is-added="item.added"
-              :input-data="item[f.field]"
+              :input-data="item[f.field] || ''"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -244,7 +244,7 @@
               :col-field="f.field"
               :row-id="item.id"
               :is-added="item.added"
-              :input-data="item[f.field]"
+              :input-data="item[f.field] || ''"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -290,7 +290,7 @@
               :col-field="f.field"
               :row-id="item.id"
               :is-added="item.added"
-              :input-data="item[f.field]"
+              :input-data="item[f.field] || ''"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>

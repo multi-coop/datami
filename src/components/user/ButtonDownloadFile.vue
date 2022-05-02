@@ -49,7 +49,7 @@ export default {
       // console.log('C > ButtonDownloadFile > DownloadFile > this.gitObj : ', this.gitObj)
       if (this.gitObj.filetype !== 'wiki') {
         const respFileRaw = await this.getFileDataRaw(this.gitObj)
-        console.log('C > ButtonDownloadFile > DownloadFile > respFileRaw.data : ', respFileRaw.data)
+        // console.log('C > ButtonDownloadFile > DownloadFile > respFileRaw.data : ', respFileRaw.data)
         const dl = this.buildFileLink(respFileRaw.data, window)
         console.log('C > ButtonDownloadFile > DownloadFile > dl : ', dl)
         // this.removeLink(dl)
