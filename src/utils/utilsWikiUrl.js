@@ -273,13 +273,14 @@ export async function getMediawikiData (apiUrl, options = undefined) {
 //   return results
 // }
 
-export async function getMediaWikiPage (wikiInfosObject, pageUrl, options = undefined) {
+export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options = undefined) {
   console.log('\nU > utilsWikiUrl > getMediaWikiPage > pageUrl : ', pageUrl)
 
   const apiRoot = wikiInfosObject.apiRoot
   const title = extractPageTitle(pageUrl)
   console.log('U > utilsWikiUrl > getMediaWikiPage > title : ', title)
   const item = {
+    id: uuid,
     pageId: undefined,
     title: title,
     ns: 0
@@ -303,7 +304,7 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, options = unde
   try {
     response = await fetch(urlItemDetail)
     responseData = await response.json()
-    console.log('U > utilsWikiUrl > getMediaWikiPage > responseData : ', responseData)
+    // console.log('U > utilsWikiUrl > getMediaWikiPage > responseData : ', responseData)
     const pageData = responseData.query.pages[0]
     item.pageId = pageData.pageId
     item.title = pageData.title
@@ -353,12 +354,12 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
 }
 
 export async function extractWikiContent (wikiInfosObject, responseData, item, errors, options) {
-  console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
+  // console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
   // let responseData
   let imageUrl
 
   const content = responseData && (responseData.query.pages[0].revisions[0].content || responseData.query.pages[0].revisions[0].slots.main.content)
-  console.log('U > utilsWikiUrl > extractWikiContent > content : ', content)
+  // console.log('U > utilsWikiUrl > extractWikiContent > content : ', content)
 
   // WIKITEXT TO OBJECT - HARD CODEED
   const fields = options.fields

@@ -75,7 +75,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
     - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
     - [x] for `json` files (`.json` and `.geojson` types)
-    - [ ] for `mediwiki` ressources (only preview for now)
+    - [x] for `mediwiki` ressources (only preview for now)
   - [x]  Add an `Upload` button + dialog + actions to overwrite whole edited data ;
   - [x]  Add a `lockHeaders` options in widget to only protect keys from edition ;
   - [ ]  Add a `Save` button + dialog + actions :
@@ -439,6 +439,11 @@ The widget takes several parameters, following this structure :
   <!-- Example for loading and contribute to a distant mediawiki ressource -->
   <multi-gitribute-explowiki
       wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
+      wikipages='[
+        "https://wiki.lafabriquedesmobilites.fr/wiki/Accra_Mobile",
+        "https://wiki.lafabriquedesmobilites.fr/wiki/Agremob_Self_Data_Territorial_La_Rochelle",
+        "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
+      ]'
       options='{
         "wikisettings": {
           "category": "projet",
@@ -505,6 +510,18 @@ wikilist:
   - description : the URL of a page of mediawiki website or mediawiki list of ressources
   - type: string
   - required: true
+  - note: |
+    if you know the adress of a mediawiki ressources, 
+    just copy-paste the url from your browser
+```
+
+##### `wikipages` parameter
+
+```yaml
+wikipages:
+  - description : list of  mediawiki pages' URL
+  - type: array of urls
+  - required: false
   - note: |
     if you know the adress of a mediawiki ressources, 
     just copy-paste the url from your browser

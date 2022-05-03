@@ -313,7 +313,7 @@ export default {
       // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikipages : ', wikipages)
       if (wikipages && wikipages.length) {
         for (const pageUrl of wikipages) {
-          const pageData = await this.getMediaWikiPage(this.wikiObj, pageUrl, this.mediawikiOptions.wikisettings)
+          const pageData = await this.getMediaWikiPage(this.wikiObj, pageUrl, this.uuidv4(), this.mediawikiOptions.wikisettings)
           // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
           this.wikiPages.push(pageData.temp)
