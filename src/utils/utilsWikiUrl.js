@@ -260,24 +260,68 @@ export async function getMediawikiData (apiUrl, options = undefined) {
   }
 }
 
-export async function populateMediawikiItem (wikiInfosObject, items, options = undefined) {
-  console.log('\nU > utilsWikiUrl > populateMediawikiItem > wikiInfosObject : ', wikiInfosObject)
-  console.log('U > utilsWikiUrl > populateMediawikiItem > items : ', items)
-  console.log('U > utilsWikiUrl > populateMediawikiItem > options : ', options)
+// export async function populateMediawikiItem (wikiInfosObject, items, options = undefined) {
+//   console.log('\nU > utilsWikiUrl > populateMediawikiItem > wikiInfosObject : ', wikiInfosObject)
+//   console.log('U > utilsWikiUrl > populateMediawikiItem > items : ', items)
+//   console.log('U > utilsWikiUrl > populateMediawikiItem > options : ', options)
 
-  const results = []
-  for (const item of items) {
-    const data = await getMediawikitItem(wikiInfosObject, item, options)
-    results.push(data)
+//   const results = []
+//   for (const item of items) {
+//     const data = await getMediawikitItem(wikiInfosObject, item, options)
+//     results.push(data)
+//   }
+//   return results
+// }
+
+export async function getMediaWikiPage (wikiInfosObject, pageUrl, options = undefined) {
+  console.log('\nU > utilsWikiUrl > getMediaWikiPage > pageUrl : ', pageUrl)
+
+  const apiRoot = wikiInfosObject.apiRoot
+  const title = extractPageTitle(pageUrl)
+  console.log('U > utilsWikiUrl > getMediaWikiPage > title : ', title)
+  const item = {
+    pageId: undefined,
+    title: title,
+    ns: 0
   }
-  return results
+  let response, responseData, errors // , imageUrl
+  let urlItemDetail = `${apiRoot}?origin=*`
+
+  const params = {
+    action: 'query',
+    prop: 'revisions',
+    titles: title,
+    rvprop: 'content',
+    rvslots: 'main',
+    formatversion: '2',
+    format: 'json'
+  }
+  Object.keys(params)
+    .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
+  console.log('U > utilsWikiUrl > getMediaWikiPage > urlItemDetail : ', urlItemDetail)
+
+  try {
+    response = await fetch(urlItemDetail)
+    responseData = await response.json()
+    console.log('U > utilsWikiUrl > getMediaWikiPage > responseData : ', responseData)
+    const pageData = responseData.query.pages[0]
+    item.pageId = pageData.pageId
+    item.title = pageData.title
+  } catch (error) {
+    console.log('\nU > utilsWikiUrl > getMediaWikiPage > error : ', error)
+    errors = [error]
+    console.log('\nU > utilsWikiUrl > getMediaWikiPage > errors : ', errors)
+  }
+
+  console.log('U > utilsWikiUrl > getMediaWikiPage > item : ', item)
+  return extractWikiContent(wikiInfosObject, responseData, item, errors, options)
 }
 
-export async function getMediawikitItem (wikiInfosObject, item, options = undefined) {
-  // console.log('\nU > utilsWikiUrl > extractWikiInfos > item : ', item)
-  // console.log('U > utilsWikiUrl > extractWikiInfos > options : ', options)
+export async function getMediawikitItem (wikiInfosObject, item, options = undefined, extractPage = false) {
+  // console.log('\nU > utilsWikiUrl > getMediawikitItem > item : ', item)
+  // console.log('U > utilsWikiUrl > getMediawikitItem > options : ', options)
   const apiRoot = wikiInfosObject.apiRoot
-  let response, responseData, errors, imageUrl
+  let response, responseData, errors
   let urlItemDetail = `${apiRoot}?origin=*`
 
   const params = {
@@ -294,16 +338,24 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
 
   Object.keys(params)
     .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
-  // console.log('U > utilsWikiUrl > extractWikiInfos > urlItemDetail : ', urlItemDetail)
+  // console.log('U > utilsWikiUrl > getMediawikitItem > urlItemDetail : ', urlItemDetail)
 
   try {
     response = await fetch(urlItemDetail)
     responseData = await response.json()
-    // console.log('U > utilsWikiUrl > extractWikiInfos > responseData : ', responseData)
+    // console.log('U > utilsWikiUrl > getMediawikitItem > responseData : ', responseData)
   } catch (error) {
     console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
     errors = [error]
   }
+
+  return extractWikiContent(wikiInfosObject, responseData, item, errors, options)
+}
+
+export const extractWikiContent = (wikiInfosObject, responseData, item, errors, options) => {
+  // console.log('U > utilsWikiUrl > getMediawikitItem > urlItemDetail : ', urlItemDetail)
+  let imageUrl
+
   let content = responseData && responseData.query.pages[0].revisions[0].slots.main.content
   content = content && content.replace('{{', '').replace('}}', '')
 
@@ -322,7 +374,7 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
     const hostName = wikiInfosObject.hostname
     imageUrl = forgeImageUrl(hostName, wikiContent.data.Main_Picture)
   }
-  /*
+  /* example wikitext response :
   "{{Project
     |shortDescription=solutions digitales clé en main pour maîtriser et optimiser votre réseau de transport public
     |description=Solutions digitales agiles et puissantes organisées à partir de Smartphone ou de Tablette et du Cloud, en lieu et place de systèmes lourds, physiques et complexes, pour aider à maîtriser, sécuriser et optimiser les réseaux de transport scolaires (2School), interurbains, péri-urbains, petit et moyen urbain (2Place).  Véritables outils d’aides à la décision, collaboratifs, simples à déployer, ergonomiques, les outils sont réfléchis techniquement et économiquement pour répondre au besoin des territoires peu denses. Elles intéressent de plus en plus les territoires moyennement denses et sont porteuses de nombreuses efficiences économiques, environnementales et sociétales.  Ces solutions permettent de géolocaliser en temps réel des flottes de véhicules (SAE , Système d’aide à l’exploitation), suivre la fréquentation, gérer les titres de transport (Billettique) , aider le conducteur dans son service au quotidien, offrir des services aux usagers. Les données sont remontées dans le Cloud, traitées et réorganisées sous forme de statistiques dynamiques pour les acteurs du transport. Par exemple, suivre en temps réel l’avance/retard d’un véhicule, évaluer son taux de remplissage, connaître les montées par point d’arrêt, faciliter la gestion des recettes, connaître le nombre de km parcourus, informer les voyageurs des prochains horaires ou acheter un titre de transport sur une boutique en ligne.

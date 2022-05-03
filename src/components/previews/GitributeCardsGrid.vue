@@ -23,8 +23,8 @@
       v-show="!showDetail"
       class="columns is-multiline">
       <div
-        v-for="item in items"
-        :key="`item-card-${item.id}`"
+        v-for="(item, idx) in items"
+        :key="`item-card-${idx}-${item.id}`"
         :class="`column is-${itemsPerRow === 3 ? 4 : 3}`">
         <GitributeCard
           :file-id="fileId"
