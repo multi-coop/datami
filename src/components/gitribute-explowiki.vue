@@ -310,11 +310,11 @@ export default {
 
       // get wikipages list if any
       const wikipages = this.wikipages && this.wikipages.length ? JSON.parse(this.wikipages) : []
-      console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikipages : ', wikipages)
+      // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikipages : ', wikipages)
       if (wikipages && wikipages.length) {
         for (const pageUrl of wikipages) {
           const pageData = await this.getMediaWikiPage(this.wikiObj, pageUrl, this.mediawikiOptions.wikisettings)
-          console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
           this.wikiPages.push(pageData.temp)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }

@@ -349,15 +349,16 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
     errors = [error]
   }
 
-  return extractWikiContent(wikiInfosObject, responseData, item, errors, options)
+  return await extractWikiContent(wikiInfosObject, responseData, item, errors, options)
 }
 
-export const extractWikiContent = (wikiInfosObject, responseData, item, errors, options) => {
-  // console.log('U > utilsWikiUrl > getMediawikitItem > urlItemDetail : ', urlItemDetail)
+export async function extractWikiContent (wikiInfosObject, responseData, item, errors, options) {
+  console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
+  // let responseData
   let imageUrl
 
-  let content = responseData && responseData.query.pages[0].revisions[0].slots.main.content
-  content = content && content.replace('{{', '').replace('}}', '')
+  const content = responseData && (responseData.query.pages[0].revisions[0].content || responseData.query.pages[0].revisions[0].slots.main.content)
+  console.log('U > utilsWikiUrl > extractWikiContent > content : ', content)
 
   // WIKITEXT TO OBJECT - HARD CODEED
   const fields = options.fields
