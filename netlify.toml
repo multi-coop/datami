@@ -1,0 +1,4 @@
+[[headers]]
+  for = "/dist/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
