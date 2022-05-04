@@ -36,7 +36,7 @@
           v-for="(h, i) in filter.choices"
           :key="`${filter.field}-${i}`"
           :value="h">
-          {{ h }}
+          {{ trimText(h, 40) }}
         </option>
       </b-select>
 

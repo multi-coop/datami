@@ -137,7 +137,8 @@ export default {
     results: 'fiches',
     page: 'page',
     pages: 'pages',
-    goToWikiPage: 'Ouvrir la page du wiki'
+    goToWikiPage: 'Ouvrir la page du wiki',
+    showRawContent: 'Voir le contenu original (format wikitext)'
   },
   user: {
     userToken: "Votre jeton d'accès",

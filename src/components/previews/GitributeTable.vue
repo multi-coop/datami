@@ -15,15 +15,23 @@
       </div>
 
       <!-- RESULTS -->
-      <div class="column is-2 has-text-left">
-        <p class="has-text-weight-bold is-6">
-          {{ dataEditedFiltered.length || 0 }}
-          {{ t(`edit${this.gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
+      <div class="column is-3 has-text-left">
+        <p class="has-text-weight-bold is-size-6">
+          <span>
+            {{ dataEditedFiltered.length || 0 }}
+          </span>
+          <span class="is-size-7">
+            /
+            {{ itemsTotal || 0 }}
+          </span>
+          <span class="ml-2">
+            {{ t(`edit${this.gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
+          </span>
         </p>
       </div>
 
       <!-- FILTER TAGS -->
-      <div :class="`column is-${ currentViewMode === 'cards' ? 8 : 10}`">
+      <div :class="`column is-${ currentViewMode === 'cards' ? 7 : 9}`">
         <FilterTags
           v-if="filterTags && filterTags.length"
           v-show="!isAnyDialogOpen"
@@ -389,6 +397,10 @@ export default {
     changesColumns: {
       default: undefined,
       type: Array
+    },
+    itemsTotal: {
+      default: 0,
+      type: Number
     },
     locale: {
       default: '',

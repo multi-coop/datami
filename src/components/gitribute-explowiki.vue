@@ -131,12 +131,13 @@
       v-if="fileTypeFamily === 'table'"
       class="container">
       <PreviewCsv
-        :only-preview="onlypreview"
         :file-id="fileId"
         :file-is-loading="fileIsLoading"
         :file-raw="fileRaw"
         :wiki-raw="wikiRaw"
+        :items-total="wikiItems && wikiItems.length"
         :locale="locale"
+        :only-preview="onlypreview"
         :debug="debug"/>
     </div>
 
@@ -305,7 +306,8 @@ export default {
       this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // reset local data
-      this.wikiItems = undefined
+      let wikiItems = []
+      this.wikiItems = []
       this.wikiPages = []
 
       // get wikipages list if any
@@ -317,30 +319,33 @@ export default {
           // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
           this.wikiPages.push(pageData.temp)
+          this.wikiItems.push(pageData.item)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
         }
       }
 
       // Request API for wiki pages data
       const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
-      // console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
-      // let wikiItems = respWikidataRaw.data.slice(0, 10)
-      let wikiItems = respWikidataRaw.data
-      wikiItems = wikiItems.map(item => { return { ...item, id: this.uuidv4() } })
-      // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikiItems : ', wikiItems)
-      this.wikiItems = wikiItems
+      console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
+      if (respWikidataRaw.data) {
+        // let wikiItems = respWikidataRaw.data.slice(0, 10)
+        wikiItems = respWikidataRaw.data
+        wikiItems = wikiItems.map(item => { return { ...item, id: this.uuidv4() } })
+        // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikiItems : ', wikiItems)
+        this.wikiItems.push(...wikiItems)
 
-      // Update reloading in store - false
-      this.updateReloading({ fileId: this.fileId, isLoading: false })
+        // Update reloading in store - false
+        this.updateReloading({ fileId: this.fileId, isLoading: false })
 
-      // this.wikiHeaders = new Set()
-      // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pages : ', pages)
-      for (const item of this.wikiItems) {
-        const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
-        // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
-        pageData.temp = this.restructurePageData(pageData, this.wikiFields)
-        this.wikiPages.push(pageData.temp)
-        if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
+        // this.wikiHeaders = new Set()
+        // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pages : ', pages)
+        for (const item of this.wikiItems.filter(item => !item.isLoaded)) {
+          const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
+          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+          pageData.temp = this.restructurePageData(pageData, this.wikiFields)
+          this.wikiPages.push(pageData.temp)
+          if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
+        }
       }
     },
     updateCustomFilters (data) {

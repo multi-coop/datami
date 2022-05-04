@@ -87,6 +87,7 @@
           :columns-edited="editedColumns"
           :changes-data="changesData"
           :changes-columns="changesColumns"
+          :items-total="itemsTotal || edited.length"
           :locale="locale"
           :debug="debug"
           @updateEdited="updateEdited"
@@ -144,6 +145,10 @@ export default {
     fileClientRaw: {
       default: '',
       type: String
+    },
+    itemsTotal: {
+      default: 0,
+      type: Number
     },
     locale: {
       default: '',

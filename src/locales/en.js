@@ -137,7 +137,8 @@ export default {
     results: 'entries',
     page: 'page',
     pages: 'pages',
-    goToWikiPage: 'Open the page from the wiki'
+    goToWikiPage: 'Open the page from the wiki',
+    showRawContent: 'Show raw content (wikitext format)'
   },
   user: {
     userToken: 'Your access token',

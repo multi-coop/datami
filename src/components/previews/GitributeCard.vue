@@ -295,6 +295,22 @@
           </div>
         </span>
       </div>
+
+      <!-- RAW CONTENT (WIKITEXT) -->
+      <div
+        v-if="!isMini && gitObj.filetype === 'wiki'"
+        class="content">
+        <b-switch
+          v-model="showRawContent"
+          type="is-dark">
+          {{ t('editWiki.showRawContent', locale) }}
+        </b-switch>
+        <p
+          v-if="showRawContent"
+          class="">
+          <pre><code>{{ item.content }}</code></pre>
+        </p>
+      </div>
     </div>
 
     <!-- CARD FOOTER -->
@@ -379,6 +395,11 @@ export default {
     debug: {
       default: false,
       type: Boolean
+    }
+  },
+  data () {
+    return {
+      showRawContent: false
     }
   },
   methods: {

@@ -173,8 +173,8 @@ export const forgeImageUrl = (hostname, imageName) => {
 
 export const extractWikiInfos = (urlStr, options) => {
   // cf https://www.mediawiki.org/wiki/API:Categorymembers#Example_1:_List_twenty_pages_in_a_category
-  console.log('\nU > utilsWikiUrl > extractWikiInfos > urlStr : ', urlStr)
-  console.log('\nU > utilsWikiUrl > extractWikiInfos > options : ', options)
+  // console.log('\nU > utilsWikiUrl > extractWikiInfos > urlStr : ', urlStr)
+  // console.log('U > utilsWikiUrl > extractWikiInfos > options : ', options)
 
   const filetype = 'wiki'
   const provider = 'mediawiki'
@@ -184,7 +184,7 @@ export const extractWikiInfos = (urlStr, options) => {
   // let filefullname, filename
 
   const apiRoot = extractApiEndpoint(urlStr)
-  console.log('U > utilsWikiUrl > extractWikiInfos > apiRoot : ', apiRoot)
+  // console.log('U > utilsWikiUrl > extractWikiInfos > apiRoot : ', apiRoot)
 
   let apiUrl = `${apiRoot}`
 
@@ -237,7 +237,7 @@ export const extractWikiInfos = (urlStr, options) => {
   // wikiInfos.apiFile = apiRoots.file
   // wikiInfos.apiFileRaw = apiRoots.fileRaw
 
-  console.log('\nU > utilsWikiUrl > extractGitInfos > wikiInfos : ', wikiInfos)
+  // console.log('\nU > utilsWikiUrl > extractGitInfos > wikiInfos : ', wikiInfos)
 
   return wikiInfos
 }
@@ -274,11 +274,11 @@ export async function getMediawikiData (apiUrl, options = undefined) {
 // }
 
 export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options = undefined) {
-  console.log('\nU > utilsWikiUrl > getMediaWikiPage > pageUrl : ', pageUrl)
+  // console.log('\nU > utilsWikiUrl > getMediaWikiPage > pageUrl : ', pageUrl)
 
   const apiRoot = wikiInfosObject.apiRoot
   const title = extractPageTitle(pageUrl)
-  console.log('U > utilsWikiUrl > getMediaWikiPage > title : ', title)
+  // console.log('U > utilsWikiUrl > getMediaWikiPage > title : ', title)
   const item = {
     id: uuid,
     pageId: undefined,
@@ -299,7 +299,7 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
   }
   Object.keys(params)
     .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
-  console.log('U > utilsWikiUrl > getMediaWikiPage > urlItemDetail : ', urlItemDetail)
+  // console.log('U > utilsWikiUrl > getMediaWikiPage > urlItemDetail : ', urlItemDetail)
 
   try {
     response = await fetch(urlItemDetail)
@@ -308,13 +308,14 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
     const pageData = responseData.query.pages[0]
     item.pageId = pageData.pageId
     item.title = pageData.title
+    item.isLoaded = true
   } catch (error) {
     console.log('\nU > utilsWikiUrl > getMediaWikiPage > error : ', error)
     errors = [error]
     console.log('\nU > utilsWikiUrl > getMediaWikiPage > errors : ', errors)
   }
 
-  console.log('U > utilsWikiUrl > getMediaWikiPage > item : ', item)
+  // console.log('U > utilsWikiUrl > getMediaWikiPage > item : ', item)
   return extractWikiContent(wikiInfosObject, responseData, item, errors, options)
 }
 
@@ -399,6 +400,7 @@ export async function extractWikiContent (wikiInfosObject, responseData, item, e
     title: item.title,
     imageUrl: imageUrl,
     // responseData: responseData,
+    item: item,
     content: content,
     structured: structured,
     // headers: wikiContent.headers,

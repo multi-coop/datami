@@ -20,12 +20,25 @@
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
-      <div
+      <!-- <div
         v-if="hasCustomFilters"
         :class="`column is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
         <CustomFilters
           :file-id="fileId"
           :active-tags="activeTags"
+          :locale="locale"
+          @action="SendActionToParent"/>
+      </div> -->
+      <!-- FILTERS -->
+      <div
+        v-for="filter in filtersDisplay"
+        :key="`filter-${fileId}-${filter.field}`"
+        :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
+        <CustomFilter
+          v-if="hasCustomFilters && filtersDisplay"
+          :file-id="fileId"
+          :filter="filter"
+          :field-active-tags="fieldActiveTags(filter.field)"
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
@@ -76,7 +89,7 @@ import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
 // import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import ButtonSortBy from '@/components/sorting/ButtonSortBy'
 import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
-import CustomFilters from '@/components/filters/CustomFilters'
+import CustomFilter from '@/components/filters/CustomFilter'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
@@ -87,7 +100,7 @@ export default {
     // ButtonImportData,
     ButtonSortBy,
     ButtonFilterBy,
-    CustomFilters,
+    CustomFilter,
     ButtonDeleteRows
   },
   mixins: [
@@ -128,11 +141,28 @@ export default {
       }
       return sortingHeaders
     },
+    filtersDisplay () {
+      let filters
+      if (this.fileFilters && this.fileFilters.length) {
+        filters = this.fileFilters.map(filter => {
+          return {
+            field: filter.field,
+            label: filter.label,
+            choices: Array.from(filter.choices).sort((a, b) => a.localeCompare(b))
+          }
+        })
+      }
+      return filters
+    },
     isActiveTags () {
       return this.activeTags && !!this.activeTags.length
     }
   },
   methods: {
+    fieldActiveTags (field) {
+      // console.log('\nC > CustomFilters > fieldActiveTags > field : ', field)
+      return this.activeTags.filter(t => t.field === field)
+    },
     SendActionToParent (event) {
       // console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
       this.$emit('action', event)
