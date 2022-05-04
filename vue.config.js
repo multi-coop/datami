@@ -6,6 +6,7 @@
 const webpack = require('webpack')
 module.exports = {
   configureWebpack: {
+    // transpileDependencies: true,
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
