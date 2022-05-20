@@ -286,7 +286,7 @@ export default {
     },
     contentIsSet (next) {
       if (next) {
-        console.log('C > PreviewJson > watch > contentIsSet > next :', next)
+        // console.log('C > PreviewJson > watch > contentIsSet > next :', next)
         const dataParsed = JSON.parse(this.fileRaw)
         this.data = this.objToNodes(dataParsed, 'root')
         this.edited = this.objToNodes(dataParsed, 'root')

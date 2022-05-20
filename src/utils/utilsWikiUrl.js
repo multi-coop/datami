@@ -201,7 +201,7 @@ export const extractWikiInfos = (urlStr, options) => {
   apiUrl += '?origin=*'
   Object.keys(params)
     .forEach(key => { apiUrl += `&${key}=${params[key]}` })
-  console.log('U > utilsWikiUrl > extractWikiInfos > apiUrl : ', apiUrl)
+  // console.log('U > utilsWikiUrl > extractWikiInfos > apiUrl : ', apiUrl)
 
   const wikiInfos = {
     id: urlStr,

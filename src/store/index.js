@@ -79,7 +79,7 @@ const defaultStore = {
       commit('setGitInfos', gitInfosObject)
     },
     addFileOptions ({ commit }, fileOptionsObject) {
-      console.log('S-index > A > addFileOptions > fileOptionsObject : ', fileOptionsObject)
+      // console.log('S-index > A > addFileOptions > fileOptionsObject : ', fileOptionsObject)
       commit('setFileOptions', fileOptionsObject)
     },
     addFileReqInfos ({ commit }, fileReqInfos) {

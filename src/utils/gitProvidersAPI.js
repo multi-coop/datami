@@ -1,4 +1,9 @@
-import { buildGitRequestOptions, buildPostBranchUrl, buildPutCommitReqData } from '@/utils/utilsGitUrl'
+import {
+  buildGitRequestOptions,
+  buildPostBranchUrl,
+  buildPutCommitReqData,
+  buildPostMergeRequestUrl
+} from '@/utils/utilsGitUrl'
 
 // no use for axios (less dependencies, native function)
 // see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
@@ -99,7 +104,7 @@ export async function postNewBranch (commitData) {
   console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
 
   // build request options
-  const requestOptions = buildGitRequestOptions(method, provider, token, urlData.body)
+  const requestOptions = buildGitRequestOptions(method, provider, token, urlData.body, 'new-branch')
   console.log('U > gitProvidersAPI > postNewBranch > requestOptions : ', requestOptions)
 
   // test with pure fetch
@@ -124,7 +129,6 @@ export async function postNewBranch (commitData) {
   }
 }
 
-// TO DO
 // PUT - CREATE A COMMIT
 export async function putCommitToBranch (commitData) {
   console.log('\nU > gitProvidersAPI > putCommitToBranch > commitData : ', commitData)
@@ -196,15 +200,41 @@ export async function postMergeRequest (commitData) {
   */
 
   // build request options
-  const errors = []
+  let errors = []
   const method = 'POST'
+  const targetBranch = commitData.gitObj.branch
+  const newBranch = commitData.newBranch
   const token = commitData.token
   const provider = commitData.gitObj.provider
   console.log('U > gitProvidersAPI > postMergeRequest > method : ', method)
+  console.log('U > gitProvidersAPI > postMergeRequest > newBranch : ', newBranch)
   console.log('U > gitProvidersAPI > postMergeRequest > token : ', token)
   console.log('U > gitProvidersAPI > postMergeRequest > provider : ', provider)
 
-  const resp = 'postMergeRequest resp ... work in progress'
+  // build correct API url
+  const urlData = await buildPostMergeRequestUrl(commitData.gitObj, targetBranch, newBranch, token)
+  console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
+  // const resp = 'postMergeRequest resp ... work in progress'
+
+  // build request options
+  const requestOptions = buildGitRequestOptions(method, provider, token, urlData.body, 'merge-request')
+  console.log('U > gitProvidersAPI > postMergeRequest > requestOptions : ', requestOptions)
+
+  // test with pure fetch
+  const req = await fetch(urlData.url, requestOptions)
+  console.log('U > gitProvidersAPI > postMergeRequest > req : ', req)
+  if (!req.ok) { errors = [] }
+
+  const resp = await req.json()
+  console.log('U > gitProvidersAPI > postMergeRequest > resp : ', resp)
+  if (!req.ok) {
+    const err = {
+      function: 'postMergeRequest',
+      code: req.status,
+      message: resp.message
+    }
+    errors.push(err)
+  }
 
   return {
     data: resp,

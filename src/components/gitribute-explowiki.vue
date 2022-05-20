@@ -326,7 +326,7 @@ export default {
 
       // Request API for wiki pages data
       const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
-      console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
+      // console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
       if (respWikidataRaw.data) {
         // let wikiItems = respWikidataRaw.data.slice(0, 10)
         wikiItems = respWikidataRaw.data
