@@ -320,14 +320,18 @@ export default {
       const respContribution = await sendContribution(commitData)
       console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
       const respContributionErrors = respContribution.errors
+      // const respContributionData = respContribution.data
+      const respContributionResume = respContribution.resume
 
       // clean store
-      this.updateCommitting({ fileId: this.fileId, isCommitting: false })
+      this.updateCommitting({ fileId: this.fileId, isCommitting: false, data: respContributionResume })
 
       // update errors if any
       if (respContributionErrors && respContributionErrors.length) {
         const errors = [...respContributionErrors]
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
+      } else {
+        this.updateSaving({ fileId: this.fileId, isSaving: false })
       }
     }
   }

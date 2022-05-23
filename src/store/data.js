@@ -24,6 +24,7 @@ export const data = {
 
     // DATA STORED
     buffer: [],
+    notifications: [],
     errors: []
 
   },
@@ -59,6 +60,11 @@ export const data = {
       // console.log('\nS-data > G > getCommitData > state.buffer : ', state.buffer)
       return state.buffer.find(commitData => commitData.uuid === fileId)
     },
+    getReqNotifications: (state) => (fileId) => {
+      // console.log('\nS-data > G > getReqNotifications > state.notifications : ', state.notifications)
+      const fielNotifs = state.notifications.find(notif => notif.uuid === fileId)
+      return fielNotifs && fielNotifs.data
+    },
     getReqErrors: (state) => (fileId) => {
       // console.log('\nS-data > G > getErrors > state.errors : ', state.errors)
       const fileErrors = state.errors.find(err => err.uuid === fileId)
@@ -91,6 +97,20 @@ export const data = {
     removeFromBuffer (state, commitData) {
       state.buffer = state.buffer.filter(data => data.uuid !== commitData.uuid)
       // console.log('S-data > M > removeFromBuffer > state.buffer : ', state.buffer)
+    },
+    addToNotifications (state, reqNotifs) {
+      const index = state.notifications.findIndex(notifs => notifs.uuid === reqNotifs.uuid)
+      if (index !== -1) {
+        Vue.set(state.notifications, index, reqNotifs)
+      } else {
+        state.notifications.push(reqNotifs)
+      }
+      // console.log('S-data > M > addToNotifications > state.notifications : ', state.notifications)
+    },
+    removeFromNotifications (state, reqNotifs) {
+      // console.log('S-data > M > removeFromNotifications > state.notifications : ', state.notifications)
+      state.errors = state.notifications.filter(notifs => notifs.uuid !== reqNotifs.uuid)
+      // console.log('S-data > M > removeFromNotifications > state.notifications : ', state.notifications)
     },
     addToErrors (state, reqErrors) {
       const index = state.errors.findIndex(err => err.uuid === reqErrors.uuid)
@@ -134,11 +154,39 @@ export const data = {
         commit('removeFromState', { key: 'downloading', fileId: fileId })
       }
     },
-    updateCommitting ({ commit }, { fileId, isCommitting }) {
+    updateCommitting ({ commit }, { fileId, isCommitting, data }) {
+      console.log('\nS-data > A > updateCommitting > fileId : ', fileId)
+      console.log('S-data > A > updateCommitting > isCommitting : ', isCommitting)
+      console.log('S-data > A > updateCommitting > data : ', data)
+      const reqNotifsData = { uuid: fileId }
+
       if (isCommitting) {
         commit('addToState', { key: 'committing', fileId: fileId })
+        commit('removeFromNotifications', reqNotifsData)
       } else {
+        // spread data into notifs
+        // const notifBranch = {
+        //   action: 'addBranch',
+        //   data: data.respPostBranch
+        // }
+        // const notifCommit = {
+        //   action: 'addCommit',
+        //   data: data.respPutCommit
+        // }
+        // const notifMergeRequest = {
+        //   action: 'addMergeRequest',
+        //   data: data.respPostMergeRequest
+        // }
+        // const notifs = [
+        //   notifBranch,
+        //   notifCommit,
+        //   notifMergeRequest
+        // ]
+        reqNotifsData.data = [data]
+
+        console.log('S-data > A > updateCommitting > reqNotifsData : ', reqNotifsData)
         commit('removeFromState', { key: 'committing', fileId: fileId })
+        commit('addToNotifications', reqNotifsData)
       }
     },
     updateToken ({ commit }, { fileId, token }) {

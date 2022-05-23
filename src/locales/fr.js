@@ -149,6 +149,12 @@ export default {
     userEmail: 'Email',
     userMessage: 'Message'
   },
+  notifications: {
+    notif: 'Notification',
+    notifFunction: 'Notification de la fonction',
+    notifCode: 'Code de réponse',
+    notifMessage: 'Message'
+  },
   errors: {
     error: 'Erreur',
     errorFunction: 'Erreur de la fonction',

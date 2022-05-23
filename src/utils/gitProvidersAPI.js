@@ -242,6 +242,34 @@ export async function postMergeRequest (commitData) {
   }
 }
 
+export const buildContributionResume = (commitData, responsesData) => {
+  const gitObj = commitData.gitObj
+  const provider = gitObj.provider
+  const repoUrl = gitObj.repoUrl
+  const filePath = gitObj.filepath
+  const newBranch = commitData.newBranch
+  const resumeData = {
+    code: 200,
+    newBranch: newBranch
+  }
+  switch (provider) {
+    case 'gitlab':
+      resumeData.provider = provider
+      // resumeData.branchUrl = responsesData.respPostBranch.data.web_url
+      resumeData.branchUrl = `${repoUrl}/~/blob/${newBranch}/${filePath}`
+      // resumeData.commitUrl = responsesData.respPutCommit.data
+      resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.web_url
+      break
+    case 'github':
+      resumeData.provider = provider
+      resumeData.branchUrl = `${repoUrl}/blob/${newBranch}/${filePath}`
+      // resumeData.commitUrl = responsesData.respPutCommit.data.commit.html_url
+      resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.html_url
+      break
+  }
+  return resumeData
+}
+
 // WRAP UP : post new branch > put commit to new branch > make a new merge request
 export async function sendContribution (commitData) {
   console.log('\nU > gitProvidersAPI > sendContribution > commitData : ', commitData)
@@ -267,13 +295,18 @@ export async function sendContribution (commitData) {
     ...respMergeRequest.errors
   ]
 
+  const responsesData = {
+    respPostBranch: respBranch,
+    respPutCommit: respCommit,
+    respPostMergeRequest: respMergeRequest
+  }
+
+  const resumeData = buildContributionResume(commitData, responsesData)
+
   return {
     ok: ok,
-    data: {
-      respPostBranch: respBranch,
-      respPutCommit: respCommit,
-      respPostMergeRequest: respMergeRequest
-    },
+    responseData: responsesData,
+    resume: resumeData,
     errors: errors
   }
 }

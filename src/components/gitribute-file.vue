@@ -73,6 +73,19 @@
       :debug="debug"
       @closeDialogFileInfos="showFileInfos = false"/>
 
+    <!-- NOTIFICATIONS -->
+    <!-- <pre><code>{{ notifications }}</code></pre> -->
+    <div
+      v-if="notifications && notifications.length"
+      class="mb-6">
+      <NotificationInfos
+        v-for="(notif, index) in notifications"
+        :key="`notif-${fileId}-${index}-${notif.code}`"
+        :file-id="fileId"
+        :notif="notif"
+        :locale="locale"/>
+    </div>
+
     <!-- ERRORS -->
     <div
       v-if="errors && errors.length"
@@ -167,7 +180,8 @@ import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import UserOptions from '@/components/user/UserOptions'
 
-import NotificationErrors from '@/components/errors/NotificationErrors'
+import NotificationInfos from '@/components/notifications/NotificationInfos'
+import NotificationErrors from '@/components/notifications/NotificationErrors'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import DialogFileInfos from '@/components/previews/DialogFileInfos'
@@ -186,6 +200,7 @@ export default {
     FileTitle,
     ViewModeBtns,
     UserOptions,
+    NotificationInfos,
     NotificationErrors,
     EditNavbarSkeleton,
     DialogFileInfos,

@@ -43,6 +43,7 @@ export const mixinGlobal = {
       fileNeedsSaving: 'git-data/fileNeedsSaving',
       fileNeedsDownloading: 'git-data/fileNeedsDownloading',
       fileIsCommitting: 'git-data/fileIsCommitting',
+      getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors'
     }),
     gitObj () {
@@ -75,6 +76,9 @@ export const mixinGlobal = {
     },
     isCommitting () {
       return this.fileIsCommitting(this.fileId)
+    },
+    notifications () {
+      return this.getReqNotifications(this.fileId)
     },
     errors () {
       return this.getReqErrors(this.fileId)
@@ -126,10 +130,21 @@ export const mixinGlobal = {
 }
 
 export const mixinGit = {
+  computed: {
+    ...mapGetters({
+      getUserBranches: 'git-user/getUserBranches'
+    }),
+    userBranches () {
+      return this.getUserBranches(this.fileId)
+    }
+  },
   methods: {
     extractGitInfos,
     getFileData,
-    getFileDataRaw
+    getFileDataRaw,
+    ...mapActions({
+      updateUserBranches: 'git-user/updateUserBranches'
+    })
   }
 }
 
