@@ -15,12 +15,18 @@
             {{ t(info.txt, locale) }} :
           </div>
           <div class="tile is-child is-8">
-            <a
-              v-if="info.link"
-              target="_blank"
-              :href="gitObj[info.key]">
-              {{ t(info.linkTxt, locale) }}
-            </a>
+            <span
+              v-if="info.link">
+              <b-icon
+                class="mr-2"
+                size="is-small"
+                icon="open-in-new"/>
+              <a
+                target="_blank"
+                :href="gitObj[info.key]">
+                {{ t(info.linkTxt, locale) }}
+              </a>
+            </span>
             <code v-else>
               {{ gitObj[info.key] }}
             </code>
@@ -96,3 +102,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+a {
+  color: grey;
+  text-decoration: underline;
+}
+
+</style>

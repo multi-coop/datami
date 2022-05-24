@@ -331,6 +331,10 @@ export default {
         const errors = [...respContributionErrors]
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
       } else {
+        // update user's branches for curent file
+        this.updateUserBranches({ fileId: this.fileId, branches: respContributionResume, addToBranches: true })
+
+        // set isSaving as false now all is finished
         this.updateSaving({ fileId: this.fileId, isSaving: false })
       }
     }

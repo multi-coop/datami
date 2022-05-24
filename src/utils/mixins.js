@@ -151,7 +151,16 @@ export const mixinGit = {
 export const mixinCommit = {
   computed: {
     ...mapGetters({
-      buildNewBranchName: 'buildNewBranchName'
+      buildNewBranchName: 'buildNewBranchName',
+      getUserBranches: 'git-user/getUserBranches'
+    }),
+    userBranches () {
+      return this.getUserBranches(this.fileId)
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateUserBranches: 'git-user/updateUserBranches'
     })
   }
 }

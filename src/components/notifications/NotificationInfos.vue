@@ -21,46 +21,73 @@
           </p>
         </div> -->
         <!-- REMINDER TO BRANCH -->
-        <div class="column is-3 has-text-centered">
-          <h4 class="has-text-weight-bold mb-2">
-            {{ t('git.newBranch', locale) }}
-          </h4>
-          <p>
-            newBranch
-            {{ notif.newBranch }}
-          </p>
-        </div>
-        <!-- LINK TO MERGE REQUEST -->
-        <div
-          v-if="notif.mergeRequestUrl"
-          class="column is-3 has-text-centered">
-          <h4 class="has-text-weight-bold mb-2">
-            {{ t('notifications.mergeRequestUrl', locale) }}
-          </h4>
-          <p>
-            link to mergeRequestUrl
-            <a
-              target="_blank"
-              :href="notif.mergeRequestUrl">
-              {{ t('git.mergeRequestUrl', locale) }}
-            </a>
-          </p>
-        </div>
-        <!-- LINK TO BRANCH -->
-        <div
-          v-if="notif.branchUrl"
-          class="column is-3 has-text-centered">
-          <h4 class="has-text-weight-bold mb-2">
-            {{ t('notifications.branchUrl', locale) }}
-          </h4>
-          <p>
-            link to commit on branch
-            <a
-              target="_blank"
-              :href="notif.branchUrl">
-              {{ t('git.branchUrl', locale) }}
-            </a>
-          </p>
+        <div class="column is-10 has-text-left">
+          <!-- REMINDER TO BRANCH -->
+          <div class="columns is-vcentered is-multiline">
+            <div class="column is-12 has-text-centered">
+              <b-icon
+                class="mr-1"
+                size="is-small"
+                icon="check-bold"/>
+              <span class="has-text-weight-bold">
+                {{ t('git.commitSuccess', locale) }}
+              </span>
+            </div>
+            <div class="column is-4">
+              <b-icon
+                class="mr-1"
+                size="is-small"
+                icon="source-branch"/>
+              <span class="has-text-weight-bold">
+                {{ t('git.newBranch', locale) }} :
+              </span>
+            </div>
+            <div class="column is-8">
+              <code>{{ notif.newBranch }}</code>
+            </div>
+            <!-- LINK TO NEW BRANCH -->
+            <div class="column is-4">
+              <b-icon
+                class="mr-1"
+                size="is-small"
+                icon="source-branch"/>
+              <span class="has-text-weight-bold">
+                {{ t('git.branchUrl', locale) }} :
+              </span>
+            </div>
+            <div class="column is-8">
+              <b-icon
+                class="mr-2"
+                size="is-small"
+                icon="open-in-new"/>
+              <a
+                target="_blank"
+                :href="notif.branchUrl">
+                {{ t('git.branchUrlLink', locale) }}
+              </a>
+            </div>
+            <!-- LINK TO MERGE REQUEST -->
+            <div class="column is-4">
+              <b-icon
+                class="mr-1"
+                size="is-small"
+                icon="source-pull"/>
+              <span class="has-text-weight-bold">
+                {{ t('git.mergeRequestUrl', locale) }} :
+              </span>
+            </div>
+            <div class="column is-8">
+              <b-icon
+                class="mr-2"
+                size="is-small"
+                icon="open-in-new"/>
+              <a
+                target="_blank"
+                :href="notif.mergeRequestUrl">
+                {{ t('git.mergeRequestUrlLink', locale) }}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </b-notification>
@@ -94,3 +121,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+a {
+  color: grey !important;
+}
+</style>

@@ -10,7 +10,13 @@ export default {
   git: {
     provider: 'Provider',
     branch: 'Branch',
-    commitBranch: 'Commit branch'
+    newBranch: 'New branch',
+    commitBranch: 'Commit branch',
+    commitSuccess: 'Your contribution proposal has correctly been sent',
+    mergeRequestUrl: 'Link to the merge request',
+    mergeRequestUrlLink: 'Go to the merge request',
+    branchUrl: 'Link to the branch',
+    branchUrlLink: 'Check the file on the branch'
   },
   file: {
     text: 'text',
