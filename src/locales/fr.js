@@ -10,11 +10,14 @@ export default {
   git: {
     provider: 'Provider',
     branch: 'Branche',
+    sourceBranch: 'Branche source',
     newBranch: 'Nouvelle branche',
     commitBranch: 'Branche de commit',
     commitSuccess: 'Votre proposition de contribution a bien été envoyée',
     mergeRequestUrl: 'Lien vers la "merge request"',
     mergeRequestUrlLink: 'Voir la merge request',
+    branchRef: 'Branche de référence',
+    branchesUser: 'Vos branches',
     branchUrl: 'Lien vers la branche',
     branchUrlLink: 'Voir le fichier sur la branche'
   },
@@ -67,6 +70,7 @@ export default {
     clickOrDropFile: 'Glisser/déposer votre fichier ou cliquer pour importer',
     changeLocale: 'Choisir la langue',
     changeToken: "Changer votre jeton d'accès",
+    changeActiveBranch: 'Changer de branche',
     commitChanges: 'Proposer vos modifications'
     // nest: {
     //   test: 'test nested actions'

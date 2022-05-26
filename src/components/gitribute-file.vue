@@ -264,16 +264,28 @@ export default {
     }
   },
   beforeMount () {
-    // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
+    console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     const fileUuid = this.uuidv4()
     gitInfosObject.uuid = fileUuid
-    // console.log("C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
+    console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid
     this.fileType = gitInfosObject.filetype
     if (!this.getGitInfosObj[this.fileId]) {
-      // this.gitObj = gitInfosObject
-      this.updateToken({ fileId: this.fileId, token: this.usertoken })
+      // load token
+      let token = this.usertoken && this.usertoken !== '' && this.usertoken
+      console.log('C > GitributeFile > beforeMount > process.env : ', process.env)
+      if (!token) {
+        switch (gitInfosObject.provider) {
+          case 'gitlab':
+            token = process.env.VUE_APP_DEFAULT_GITLAB_TOKEN
+            break
+          case 'github':
+            token = process.env.VUE_APP_DEFAULT_GITHUB_TOKEN
+            break
+        }
+      }
+      this.updateToken({ fileId: this.fileId, token: token })
       this.addGitInfos(gitInfosObject)
     }
     // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
@@ -282,11 +294,15 @@ export default {
     this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
   },
   async mounted () {
-    // console.log('\nC > GitributeFile > mount > this.gitInfos : ', this.gitInfos)
-    // console.log('C > GitributeFile > mount > this.gitObj : ', this.gitObj)
-    // console.log('C > GitributeFile > mount > this.usertoken : ', this.usertoken)
+    // console.log('\nC > GitributeFile > mounted > this.gitInfos : ', this.gitInfos)
+    // console.log('C > GitributeFile > mounted > this.gitObj : ', this.gitObj)
+    // console.log('C > GitributeFile > mounted > this.usertoken : ', this.usertoken)
     // this.fileInfos = await this.getFileData(this.gitObj)
-    // console.log('C > GitributeFile > mount > this.fileInfos : ', this.fileInfos)
+    // console.log('C > GitributeFile > mounted > this.fileInfos : ', this.fileInfos)
+
+    const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
+    this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
+    // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
     await this.reloadFile()
   },
   methods: {

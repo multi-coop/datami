@@ -1,5 +1,6 @@
 import {
   buildGitRequestOptions,
+  buildGitUserInfosUrl,
   buildPostBranchUrl,
   buildPutCommitReqData,
   buildPostMergeRequestUrl
@@ -80,9 +81,37 @@ export async function getFileDataRaw (gitObj) {
 
 // WORK IN PROGRESS
 
+// GET - GET USER INFO FROM TOKEN
+export async function getUserInfosFromToken (gitObj, token) {
+  // console.log('\nU > gitProvidersAPI > getUserInfosFromToken > gitObj : ', gitObj)
+  // console.log('U > gitProvidersAPI > getUserInfosFromToken > token : ', token)
+
+  const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
+  // console.log('U > gitProvidersAPI > getUserInfosFromToken > userInfosUrl : ', userInfosUrl)
+
+  const userInfosReq = await fetch(userInfosUrl.url, userInfosUrl.requestOptions)
+  const userInfosData = await userInfosReq.json()
+  let username
+
+  switch (gitObj.provider) {
+    case 'gitlab':
+      username = userInfosData.username
+      // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > username : ', username)
+      break
+    case 'github':
+      username = userInfosData.login
+      break
+  }
+  return {
+    token: token,
+    username: username,
+    gitInfos: userInfosData
+  }
+}
+
 // POST - CREATE A NEW BRANCH
 export async function postNewBranch (commitData) {
-  console.log('\nU > gitProvidersAPI > postNewBranch > commitData : ', commitData)
+  // console.log('\nU > gitProvidersAPI > postNewBranch > commitData : ', commitData)
   /*
   GITLAB : https://docs.gitlab.com/ee/api/branches.html#create-repository-branch
   POST /projects/:id/repository/branches
@@ -101,19 +130,19 @@ export async function postNewBranch (commitData) {
   const newBranch = commitData.newBranch
   const sourceBranch = commitData.gitObj.branch
   const urlData = await buildPostBranchUrl(commitData.gitObj, sourceBranch, newBranch)
-  console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
+  // console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
 
   // build request options
   const requestOptions = buildGitRequestOptions(method, provider, token, urlData.body, 'new-branch')
-  console.log('U > gitProvidersAPI > postNewBranch > requestOptions : ', requestOptions)
+  // console.log('U > gitProvidersAPI > postNewBranch > requestOptions : ', requestOptions)
 
   // test with pure fetch
   const req = await fetch(urlData.url, requestOptions)
-  console.log('U > gitProvidersAPI > postNewBranch > req : ', req)
+  // console.log('U > gitProvidersAPI > postNewBranch > req : ', req)
   if (!req.ok) { errors = [] }
 
   const resp = await req.json()
-  console.log('U > gitProvidersAPI > postNewBranch > resp : ', resp)
+  // console.log('U > gitProvidersAPI > postNewBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
       function: 'postNewBranch',
@@ -131,7 +160,7 @@ export async function postNewBranch (commitData) {
 
 // PUT - CREATE A COMMIT
 export async function putCommitToBranch (commitData) {
-  console.log('\nU > gitProvidersAPI > putCommitToBranch > commitData : ', commitData)
+  // console.log('\nU > gitProvidersAPI > putCommitToBranch > commitData : ', commitData)
   /*
   GITLAB :
   curl --request PUT --header 'PRIVATE-TOKEN: <your_access_token>' \
@@ -155,19 +184,19 @@ export async function putCommitToBranch (commitData) {
 
   // build body and data
   const reqData = await buildPutCommitReqData(commitData.gitObj, branch, edited, message, author)
-  console.log('U > gitProvidersAPI > putCommitToBranch > reqData : ', reqData)
+  // console.log('U > gitProvidersAPI > putCommitToBranch > reqData : ', reqData)
   const body = reqData.body
 
   // build request options
   const requestOptions = buildGitRequestOptions(method, provider, token, body)
-  console.log('U > gitProvidersAPI > putCommitToBranch > requestOptions : ', requestOptions)
+  // console.log('U > gitProvidersAPI > putCommitToBranch > requestOptions : ', requestOptions)
 
   // test with pure fetch
   const req = await fetch(reqData.url, requestOptions)
-  console.log('U > gitProvidersAPI > putCommitToBranch > req : ', req)
+  // console.log('U > gitProvidersAPI > putCommitToBranch > req : ', req)
 
   const resp = await req.json()
-  console.log('U > gitProvidersAPI > putCommitToBranch > resp : ', resp)
+  // console.log('U > gitProvidersAPI > putCommitToBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
       function: 'putCommitToBranch',
@@ -183,10 +212,9 @@ export async function putCommitToBranch (commitData) {
   }
 }
 
-// TO DO
 // PUT - POST - CREATE A MERGE REQUEST
 export async function postMergeRequest (commitData) {
-  console.log('\nU > gitProvidersAPI > postMergeRequest > commitData : ', commitData)
+  // console.log('\nU > gitProvidersAPI > postMergeRequest > commitData : ', commitData)
   /*
   GITLAB : https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
   POST /projects/:id/merge_requests
@@ -206,27 +234,28 @@ export async function postMergeRequest (commitData) {
   const newBranch = commitData.newBranch
   const token = commitData.token
   const provider = commitData.gitObj.provider
-  console.log('U > gitProvidersAPI > postMergeRequest > method : ', method)
-  console.log('U > gitProvidersAPI > postMergeRequest > newBranch : ', newBranch)
-  console.log('U > gitProvidersAPI > postMergeRequest > token : ', token)
-  console.log('U > gitProvidersAPI > postMergeRequest > provider : ', provider)
+  const userGit = commitData.userGit
+  // console.log('U > gitProvidersAPI > postMergeRequest > method : ', method)
+  // console.log('U > gitProvidersAPI > postMergeRequest > newBranch : ', newBranch)
+  // console.log('U > gitProvidersAPI > postMergeRequest > token : ', token)
+  // console.log('U > gitProvidersAPI > postMergeRequest > provider : ', provider)
 
   // build correct API url
-  const urlData = await buildPostMergeRequestUrl(commitData.gitObj, targetBranch, newBranch, token)
-  console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
+  const urlData = await buildPostMergeRequestUrl(commitData.gitObj, targetBranch, newBranch, token, userGit)
+  // console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
   // const resp = 'postMergeRequest resp ... work in progress'
 
   // build request options
   const requestOptions = buildGitRequestOptions(method, provider, token, urlData.body, 'merge-request')
-  console.log('U > gitProvidersAPI > postMergeRequest > requestOptions : ', requestOptions)
+  // console.log('U > gitProvidersAPI > postMergeRequest > requestOptions : ', requestOptions)
 
   // test with pure fetch
   const req = await fetch(urlData.url, requestOptions)
-  console.log('U > gitProvidersAPI > postMergeRequest > req : ', req)
+  // console.log('U > gitProvidersAPI > postMergeRequest > req : ', req)
   if (!req.ok) { errors = [] }
 
   const resp = await req.json()
-  console.log('U > gitProvidersAPI > postMergeRequest > resp : ', resp)
+  // console.log('U > gitProvidersAPI > postMergeRequest > resp : ', resp)
   if (!req.ok) {
     const err = {
       function: 'postMergeRequest',
@@ -242,30 +271,35 @@ export async function postMergeRequest (commitData) {
   }
 }
 
-export const buildContributionResume = (commitData, responsesData) => {
+export const buildContributionResume = (commitData, responsesData, onlyCommit = false) => {
   const gitObj = commitData.gitObj
   const provider = gitObj.provider
   const repoUrl = gitObj.repoUrl
   const filePath = gitObj.filepath
-  const newBranch = commitData.newBranch
+  const branch = commitData.newBranch
   const resumeData = {
     code: 200,
-    newBranch: newBranch
+    provider: provider,
+    branch: branch
   }
-  switch (provider) {
-    case 'gitlab':
-      resumeData.provider = provider
-      // resumeData.branchUrl = responsesData.respPostBranch.data.web_url
-      resumeData.branchUrl = `${repoUrl}/~/blob/${newBranch}/${filePath}`
-      // resumeData.commitUrl = responsesData.respPutCommit.data
-      resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.web_url
-      break
-    case 'github':
-      resumeData.provider = provider
-      resumeData.branchUrl = `${repoUrl}/blob/${newBranch}/${filePath}`
-      // resumeData.commitUrl = responsesData.respPutCommit.data.commit.html_url
-      resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.html_url
-      break
+  if (onlyCommit) {
+    resumeData.branchUrl = responsesData.branchUrl
+    resumeData.mergeRequestUrl = responsesData.mergeRequestUrl
+    resumeData.branchExists = true
+  } else {
+    switch (provider) {
+      case 'gitlab':
+        // resumeData.branchUrl = responsesData.respPostBranch.data.web_url
+        resumeData.branchUrl = `${repoUrl}/-/blob/${branch}/${filePath}`
+        // resumeData.commitUrl = responsesData.respPutCommit.data
+        resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.web_url
+        break
+      case 'github':
+        resumeData.branchUrl = `${repoUrl}/blob/${branch}/${filePath}`
+        // resumeData.commitUrl = responsesData.respPutCommit.data.commit.html_url
+        resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.html_url
+        break
+    }
   }
   return resumeData
 }
@@ -274,34 +308,44 @@ export const buildContributionResume = (commitData, responsesData) => {
 export async function sendContribution (commitData) {
   console.log('\nU > gitProvidersAPI > sendContribution > commitData : ', commitData)
 
-  let errors = []
   const ok = true
+  const responsesData = {}
+  const errors = []
 
-  // post new branch
-  const respBranch = await postNewBranch(commitData)
-  console.log('\nU > gitProvidersAPI > sendContribution > respBranch :', respBranch)
+  const branch = commitData.userBranches.find(branch => branch.branch === commitData.newBranch)
+  const branchExists = branch && !!branch.branch
+  const mergeRequestExists = branchExists && branch.hasMergeRequest
+  console.log('U > gitProvidersAPI > sendContribution > branch : ', branch)
+  console.log('U > gitProvidersAPI > sendContribution > branchExists : ', branchExists)
+  console.log('U > gitProvidersAPI > sendContribution > mergeRequestExists : ', mergeRequestExists)
+
+  // post new branch (if necessary)
+  if (!branchExists) {
+    const respBranch = await postNewBranch(commitData)
+    console.log('\nU > gitProvidersAPI > sendContribution > respBranch :', respBranch)
+    responsesData.respPostBranch = respBranch
+    errors.push(...respBranch.errors)
+  } else {
+    responsesData.branchUrl = branch.branchUrl
+  }
 
   // put commit to branch
   const respCommit = await putCommitToBranch(commitData)
   console.log('\nU > gitProvidersAPI > sendContribution > respCommit :', respCommit)
+  responsesData.respPutCommit = respCommit
+  errors.push(...respCommit.errors)
 
-  // post a new merge request
-  const respMergeRequest = await postMergeRequest(commitData)
-  console.log('\nU > gitProvidersAPI > sendContribution > respMergeRequest :', respMergeRequest)
-
-  errors = [
-    ...respBranch.errors,
-    ...respCommit.errors,
-    ...respMergeRequest.errors
-  ]
-
-  const responsesData = {
-    respPostBranch: respBranch,
-    respPutCommit: respCommit,
-    respPostMergeRequest: respMergeRequest
+  // post a new merge request (if necessary)
+  if (!mergeRequestExists) {
+    const respMergeRequest = await postMergeRequest(commitData)
+    console.log('\nU > gitProvidersAPI > sendContribution > respMergeRequest :', respMergeRequest)
+    responsesData.respPostMergeRequest = respMergeRequest
+    errors.push(...respMergeRequest.errors)
+  } else {
+    responsesData.mergeRequestUrl = branch.mergeRequestUrl
   }
 
-  const resumeData = buildContributionResume(commitData, responsesData)
+  const resumeData = buildContributionResume(commitData, responsesData, mergeRequestExists)
 
   return {
     ok: ok,

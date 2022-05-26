@@ -302,6 +302,8 @@ export default {
       // get token
       const token = this.getFileToken(this.fileId)
       commitData.token = token
+      commitData.userGit = this.userGit
+      commitData.userBranches = this.userBranches
       console.log('C > ConfirmCommit > confirmCommit > token :', token)
 
       // append commit message and infos
@@ -330,9 +332,17 @@ export default {
       if (respContributionErrors && respContributionErrors.length) {
         const errors = [...respContributionErrors]
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
-      } else {
+      } else if (!respContributionResume.branchExists) {
         // update user's branches for curent file
-        this.updateUserBranches({ fileId: this.fileId, branches: respContributionResume, addToBranches: true })
+        const commitBranch = {
+          branch: respContributionResume.branch,
+          userBranch: true,
+          activeBranch: true,
+          hasMergeRequest: !!respContributionResume.mergeRequestUrl,
+          branchUrl: respContributionResume.branchUrl,
+          mergeRequestUrl: respContributionResume.mergeRequestUrl
+        }
+        this.updateUserBranches({ fileId: this.fileId, branches: commitBranch })
 
         // set isSaving as false now all is finished
         this.updateSaving({ fileId: this.fileId, isSaving: false })

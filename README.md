@@ -264,7 +264,13 @@ The `usertoken` parameter is one of the most important features of this project.
 - **Push a commit** to the new branch ;
 - **Create a merge request** from the new branch onto the reference branch.
 
-Our strategy to simplify those operations for 'normal' people (who does not give a s*** to git) was to create one or several "ghost users", so we could set the repositories' permissions and tokens in advance.
+Our strategy to simplify those operations for 'normal' people (who does not give a s*** about git) was to create one or several "ghost users", so we could set the repositories' permissions and tokens in advance.
+
+In order to deploy a Gitribute demo on a domain we chose to store those tokens on an `.env` file, based on the `example.env` file at the project's root. So you can have several strategies to inject a default token :
+
+- create an `.env` file, but you will have to deploy your own instance of Gitribute ;
+- copy-paste the html block, filling the widget's `usertoken` parameter ;
+- leave all blank and ask your users to create their own tokens on Gitub or Gitlab...
 
 So you can read more on those topics here =>
 

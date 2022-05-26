@@ -11,15 +11,32 @@ import {
   getClosest,
   trimText
 } from '@/utils/globalUtils'
-import { extractGitInfos } from '@/utils/utilsGitUrl.js'
-import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
+import {
+  extractGitInfos
+} from '@/utils/utilsGitUrl.js'
+import {
+  getFileData,
+  getFileDataRaw,
+  getUserInfosFromToken
+} from '@/utils/gitProvidersAPI.js'
 import {
   authorizedFileTypes,
   editViewsOptions
 } from '@/utils/fileTypesUtils.js'
-import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
-import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
-import { nodeTypes, objToNodes, setEditInNode, nodeToObj } from '@/utils/jsonUtils.js'
+import {
+  csvToObject,
+  ObjectToCsv
+} from '@/utils/csvUtils.js'
+import {
+  mdToObject,
+  objectToMd
+} from '@/utils/mdUtils.js'
+import {
+  nodeTypes,
+  objToNodes,
+  setEditInNode,
+  nodeToObj
+} from '@/utils/jsonUtils.js'
 import {
   extractWikiInfos,
   getMediawikiData,
@@ -132,18 +149,37 @@ export const mixinGlobal = {
 export const mixinGit = {
   computed: {
     ...mapGetters({
-      getUserBranches: 'git-user/getUserBranches'
+      getUserGit: 'git-user/getUserGit',
+      getUserBranches: 'git-user/getUserBranches',
+      getRefBranch: 'git-user/getRefBranch',
+      getUserBranchesNotRef: 'git-user/getUserBranchesNotRef',
+      getUserActiveBranch: 'git-user/getUserActiveBranch',
+      userBranch: 'git-user/getUserBranch'
     }),
+    userGit () {
+      return this.getUserGit(this.fileId)
+    },
     userBranches () {
       return this.getUserBranches(this.fileId)
+    },
+    refBranch () {
+      return this.getRefBranch(this.fileId)
+    },
+    notRefBranches () {
+      return this.getUserBranchesNotRef(this.fileId)
+    },
+    userActiveBranch () {
+      return this.getUserActiveBranch(this.fileId)
     }
   },
   methods: {
     extractGitInfos,
     getFileData,
     getFileDataRaw,
+    getUserInfosFromToken,
     ...mapActions({
-      updateUserBranches: 'git-user/updateUserBranches'
+      updateUserBranches: 'git-user/updateUserBranches',
+      changeActiveUserBranch: 'git-user/changeActiveUserBranch'
     })
   }
 }
@@ -151,9 +187,13 @@ export const mixinGit = {
 export const mixinCommit = {
   computed: {
     ...mapGetters({
+      getUserGit: 'git-user/getUserGit',
       buildNewBranchName: 'buildNewBranchName',
       getUserBranches: 'git-user/getUserBranches'
     }),
+    userGit () {
+      return this.getUserGit(this.fileId)
+    },
     userBranches () {
       return this.getUserBranches(this.fileId)
     }

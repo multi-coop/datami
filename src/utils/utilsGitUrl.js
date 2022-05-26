@@ -290,85 +290,6 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
   }
 }
 
-export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch, token = undefined) {
-  console.log('\nU > utilsGitUrl > buildPostMergeRequestUrl > ...')
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitObj : ', gitObj)
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > targetBranch : ', targetBranch)
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > newBranch : ', newBranch)
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > token : ', token)
-
-  const errors = []
-  // let mergeRequestAlreadyExists = false
-  let urlPostMergeRequest
-
-  // specific to gitlab
-  // let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
-  // let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
-
-  // specific to github
-  let username, userInfosUrl, userInfosReq, userInfosData
-  // let prePostRequestUrl // prePostResponse, prePostResponseData, revisionHash
-
-  let postBody
-
-  switch (gitObj.provider) {
-    case 'gitlab':
-      // TO DO - CATCH IF BRANCH ALREADY EXISTS
-      // if (prePostCheckTargetBranchResp.ok) { newBranchAlreadyExists = true }
-
-      // build url for urlPostMergeRequest
-      urlPostMergeRequest = `${gitObj.apiRepo}/merge_requests`
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > urlPostMergeRequest : ', urlPostMergeRequest)
-
-      // get username
-      userInfosUrl = buildGitUserInfosUrl(gitObj, token)
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > userInfosUrl : ', userInfosUrl)
-      userInfosReq = await fetch(userInfosUrl.url, userInfosUrl.requestOptions)
-      userInfosData = await userInfosReq.json()
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > userInfosData : ', userInfosData)
-      username = userInfosData.username
-
-      postBody = {
-        title: `Gitribute ... Contribution from : ${username}`,
-        description: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
-        source_branch: `${newBranch}`,
-        target_branch: targetBranch
-      }
-      break
-
-    case 'github':
-      // GET from : https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
-
-      // build url for urlPostMergeRequest
-      urlPostMergeRequest = `${gitObj.apiRepo}/pulls`
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > urlPostMergeRequest : ', urlPostMergeRequest)
-
-      // get username
-      userInfosUrl = buildGitUserInfosUrl(gitObj, token)
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > userInfosUrl : ', userInfosUrl)
-      userInfosReq = await fetch(userInfosUrl.url, userInfosUrl.requestOptions)
-      userInfosData = await userInfosReq.json()
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > userInfosData : ', userInfosData)
-      username = userInfosData.login
-
-      // TO DO - CATCH IF MERGE REQUEST ALREADY EXISTS
-      // if () { mergeRequestAlreadyExists = true }
-
-      postBody = {
-        title: `Gitribute ... Contribution from : ${username}`,
-        body: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
-        head: `${newBranch}`,
-        base: targetBranch
-      }
-      break
-  }
-  return {
-    url: urlPostMergeRequest,
-    body: postBody,
-    errors: errors
-  }
-}
-
 export async function buildPutCommitReqData (gitObj, branch, edited, message, author) {
   let url
   let bodyObj = {}
@@ -431,5 +352,75 @@ export async function buildPutCommitReqData (gitObj, branch, edited, message, au
   return {
     url: url,
     body: bodyObj
+  }
+}
+
+export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch, token = undefined, userGit = undefined) {
+  console.log('\nU > utilsGitUrl > buildPostMergeRequestUrl > ...')
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitObj : ', gitObj)
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > targetBranch : ', targetBranch)
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > newBranch : ', newBranch)
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > token : ', token)
+
+  const errors = []
+  let urlPostMergeRequest
+  let username
+
+  // specific to gitlab
+  // let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
+  // let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
+
+  // specific to github
+  // let prePostRequestUrl // prePostResponse, prePostResponseData, revisionHash
+
+  let postBody, userInfosData
+
+  if (!userGit) {
+    const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
+    const userInfosReq = await fetch(userInfosUrl.url, userInfosUrl.requestOptions)
+    userInfosData = await userInfosReq.json()
+    console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosUrl : ', userInfosUrl)
+    console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosData : ', userInfosData)
+  } else {
+    userInfosData = userGit
+  }
+
+  switch (gitObj.provider) {
+    case 'gitlab':
+      // build url for urlPostMergeRequest
+      urlPostMergeRequest = `${gitObj.apiRepo}/merge_requests`
+      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > urlPostMergeRequest : ', urlPostMergeRequest)
+
+      username = userInfosData.username
+
+      postBody = {
+        title: `Gitribute ... Contribution from : ${username}`,
+        description: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
+        source_branch: `${newBranch}`,
+        target_branch: targetBranch
+      }
+      break
+
+    case 'github':
+      // GET from : https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
+
+      // build url for urlPostMergeRequest
+      urlPostMergeRequest = `${gitObj.apiRepo}/pulls`
+      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > urlPostMergeRequest : ', urlPostMergeRequest)
+
+      username = userInfosData.login
+
+      postBody = {
+        title: `Gitribute ... Contribution from : ${username}`,
+        body: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
+        head: `${newBranch}`,
+        base: targetBranch
+      }
+      break
+  }
+  return {
+    url: urlPostMergeRequest,
+    body: postBody,
+    errors: errors
   }
 }

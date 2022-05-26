@@ -43,8 +43,9 @@
               </span>
             </div>
             <div class="column is-8">
-              <code>{{ notif.newBranch }}</code>
+              <code>{{ notif.branch }}</code>
             </div>
+
             <!-- LINK TO NEW BRANCH -->
             <div class="column is-4">
               <b-icon
@@ -66,6 +67,7 @@
                 {{ t('git.branchUrlLink', locale) }}
               </a>
             </div>
+
             <!-- LINK TO MERGE REQUEST -->
             <div class="column is-4">
               <b-icon

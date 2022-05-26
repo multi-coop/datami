@@ -14,7 +14,7 @@
               size="is-small"/>&nbsp;
             {{ t(info.txt, locale) }} :
           </div>
-          <div class="tile is-child is-8">
+          <div class="tile is-child is-8 pl-2">
             <span
               v-if="info.link">
               <b-icon
@@ -62,7 +62,7 @@ export default {
       infoRows: [
         { txt: 'file.fileName', key: 'filefullname', icon: 'file' },
         { txt: 'git.provider', key: 'provider', icon: '' },
-        { txt: 'git.branch', key: 'branch', icon: 'source-branch' },
+        { txt: 'git.sourceBranch', key: 'branch', icon: 'source-branch' },
         { txt: 'file.fileType', key: 'filetype', icon: '' },
         { txt: 'file.fileFamily', key: 'filefamily', icon: '' },
         { txt: 'file.fileUrl', key: 'id', icon: 'open-in-new', link: true, linkTxt: 'file.linkToFile' },

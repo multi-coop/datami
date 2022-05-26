@@ -10,6 +10,10 @@
       v-if="!onlyPreview"
       :file-id="fileId"
       :locale="locale"/>
+    <ButtonChangeUserBranch
+      v-if="!onlyPreview"
+      :file-id="fileId"
+      :locale="locale"/>
     <ButtonChangeLocale
       :locale="locale"/>
   </div>
@@ -18,16 +22,18 @@
 <script>
 import ButtonReloadFile from '@/components/user/ButtonReloadFile'
 import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
-import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
 import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
+import ButtonChangeUserBranch from '@/components/user/ButtonChangeUserBranch'
+import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
 
 export default {
   name: 'UserOptions',
   components: {
     ButtonReloadFile,
     ButtonDownloadFile,
-    ButtonChangeLocale,
-    ButtonChangeUserToken
+    ButtonChangeUserToken,
+    ButtonChangeUserBranch,
+    ButtonChangeLocale
   },
   props: {
     fileId: {
