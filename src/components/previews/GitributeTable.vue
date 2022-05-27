@@ -1,21 +1,20 @@
 <template>
   <div class="GitributeTable content">
     <div class="columns is-multiline is-mobile is-centered">
-      <!-- EDIT CSV NAVABAR -->
+      <!-- SORT & FILTERS CSV NAVABAR -->
       <div
         v-show="!isAnyDialogOpen"
         class="column is-12 pt-0">
-        <EditCsvSkeleton
+        <SortAndFiltersSkeleton
           :file-id="fileId"
           :columns="columnsEdited"
-          :checked-rows="checkedRows"
           :active-tags="filterTags"
           :locale="locale"
           @action="processAction"/>
       </div>
 
       <!-- RESULTS -->
-      <div class="column is-3 has-text-left">
+      <!-- <div class="column is-3 has-text-left">
         <p class="has-text-weight-bold is-size-6">
           <span>
             {{ dataEditedFiltered.length || 0 }}
@@ -28,10 +27,10 @@
             {{ t(`edit${gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
           </span>
         </p>
-      </div>
+      </div> -->
 
       <!-- FILTER TAGS -->
-      <div :class="`column is-${ currentViewMode === 'cards' ? 7 : 9}`">
+      <div :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
         <FilterTags
           v-if="filterTags && filterTags.length"
           v-show="!isAnyDialogOpen"
@@ -39,6 +38,20 @@
           :tags="filterTags"
           :locale="locale"
           @removeTag="removeTag"/>
+      </div>
+
+      <!-- EDIT CSV NAVABAR -->
+      <div
+        v-show="!isAnyDialogOpen"
+        class="column is-12 pt-0">
+        <EditCsvSkeleton
+          :file-id="fileId"
+          :columns="columnsEdited"
+          :data-edited-filtered="dataEditedFiltered"
+          :items-total="itemsTotal"
+          :checked-rows="checkedRows"
+          :locale="locale"
+          @action="processAction"/>
       </div>
 
       <!-- DIALOGS -->
@@ -73,6 +86,7 @@
             :sticky-checkbox="currentEditViewMode === 'edit'"
             :checked-rows.sync="checkedRows"
             :height="fileOptions.height || '400px'"
+            class=""
             narrowed
             hoverable
             sticky-header
@@ -365,8 +379,9 @@
 <script>
 import { mixinGlobal, mixinIcons, mixinDiff, mixinCsv, mixinPagination } from '@/utils/mixins.js'
 
-import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
+import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
+import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 
@@ -379,8 +394,9 @@ import PagesNavigation from '@/components/pagination/PagesNavigation'
 export default {
   name: 'GitributeTable',
   components: {
-    EditCsvSkeleton,
+    SortAndFiltersSkeleton,
     FilterTags,
+    EditCsvSkeleton,
     DialogAddRow,
     DialogDeleteRows,
     PreviewCell,

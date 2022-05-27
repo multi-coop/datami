@@ -139,7 +139,7 @@
     <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
       options='{
-      "height": "800px",
+      "height": "835px",
       "separator":";",
       "lockcolumns": true,
       "tagseparator":"-",
@@ -271,6 +271,18 @@
           }
         ]
       },
+      "consolidation": [
+        {
+          "field": "siren",
+          "api": "api-entreprise",
+          "results_fields": [""]
+        },
+        {
+          "field": "adress",
+          "api": "api-ban",
+          "results_fields": [""]
+        }
+      ],
       "pagination":{
         "itemsPerPage":30
       },
@@ -371,7 +383,7 @@
     </multi-gitribute-explowiki>
   </div> -->
 
-  <!-- <p id="gitribute-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
+  <p id="gitribute-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-wiki-fabmob" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -385,7 +397,7 @@
         "https://wiki.lafabriquedesmobilites.fr/wiki/Agremob_Self_Data_Territorial_La_Rochelle",
         "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
       ]' options='{
-        "height": "900px",
+        "height": "700px",
         "wikisettings": {
           "category": "projet",
           "fields": [
@@ -453,7 +465,7 @@
       }
     }' title="gitribute for explowiki - fabmob :)" locale="fr">
     </multi-gitribute-explowiki>
-  </div> -->
+  </div>
 
   <!-- <p id="gitribute-json-github" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-json-github" style="color: white; margin-right: 0.5em;">
