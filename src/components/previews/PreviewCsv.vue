@@ -192,7 +192,7 @@ export default {
     fileRaw (next) {
       if (next && next !== '') {
         // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
-        // console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
+        console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataObj = this.csvToObject(next, this.fileOptions)
         this.dataRaw = dataObj
         if (!this.dataIsSet) { this.dataIsSet = true }
@@ -209,16 +209,18 @@ export default {
       }
     },
     dataIsSet (next) {
-      // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
       if (next) {
+        console.log('C > PreviewCsv > watch > dataIsSet > next : \n', next)
         this.data = this.dataRaw.data
         this.dataColumns = this.buildColumns(this.dataRaw)
+        console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
         this.edited = this.data
         this.editedColumns = this.dataColumns
       }
     },
     fileClientRaw (next) {
       if (next) {
+        console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
         const dataObj = this.csvToObject(next, this.fileOptions)
         this.edited = dataObj.data
         this.editedColumns = this.buildColumns(dataObj)
@@ -255,13 +257,26 @@ export default {
     buildColumns (dataRaw) {
       const headers = dataRaw && dataRaw.headers
       // console.log('C > PreviewCsv > buildColumns > headers : ', headers)
+      // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
+      const tableSchema = this.fileOptions.tableschema
       if (!headers) return null
-      // if (this.fileOptions.abstractHeaders) {
       return Object.entries(headers)
         .map(entry => {
+          const fieldId = entry[0]
+          const fieldLabel = entry[1].trim()
+          const fieldProps = tableSchema && tableSchema.fields.find(schema => schema.name === fieldLabel)
+          const fieldCustomProps = fieldProps && fieldProps['custom-properties']
           return {
-            field: entry[0],
-            label: entry[1]
+            field: fieldId,
+            label: fieldLabel.trim(),
+            name: (fieldProps && fieldProps.name) || fieldLabel,
+            title: (fieldProps && fieldProps.title) || fieldLabel,
+            description: fieldProps && fieldProps.description,
+            type: (fieldProps && fieldProps.type) || 'string',
+            subtype: (fieldCustomProps && fieldCustomProps.subtype) || 'string',
+            tagSeparator: fieldCustomProps && fieldCustomProps.tagSeparator,
+            isCategory: fieldCustomProps && fieldCustomProps.category,
+            customProperties: fieldCustomProps
           }
         })
     },

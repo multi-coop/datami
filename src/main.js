@@ -24,6 +24,8 @@ Vue.use(Buefy, {
 GitributeFile.store = store
 GitributeExploWiki.store = store
 
+console.log('>>> Gitribute > main.js > process.env : ', process.env)
+
 Vue.use(vueCustomElement, {
   shadow: true
 })

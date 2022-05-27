@@ -83,48 +83,61 @@
               v-for="col in columnsForView"
               :key="col.field"
               width="75px"
+              :th-attrs="columnThAttrs"
+              :td-attrs="columnTdAttrs"
               :field="col.field"
               :label="col.label">
               <!-- HEADERS -->
               <template #header="{ column }">
-                <!-- EDITION HEADERS-->
-                <div v-if="currentEditViewMode === 'edit'">
-                  <b-field
-                    v-if="!lockHeaders">
-                    <EditCell
-                      :is-header="true"
-                      :col-field="column.field"
-                      :input-data="column.label"
-                      @updateCellValue="emitUpdate"/>
-                  </b-field>
-                  <span v-if="lockHeaders">
-                    {{ column.label }}
-                    <b-tooltip
-                      :label="t('edit.headerLocked', locale)"
-                      position="is-bottom"
-                      multilined
-                      type="is-dark">
-                      <b-icon
-                        class="mr-1 ml-0"
-                        size="is-small"
-                        type="is-light"
-                        icon="lock"/>
-                    </b-tooltip>
-                  </span>
-                </div>
-                <!-- DIFF HEADERS -->
-                <div v-if="currentEditViewMode === 'diff'">
-                  <div
-                    v-if="isInChanges (true, col.added, col.field)">
-                    <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                <div class="is-flex is-flex-direction-row is-align-items-center">
+                  <!-- COLUMN TYPE ICON -->
+                  <b-icon
+                    :icon="getIconFieldType( col )"
+                    class="ml-0 mr-2"
+                    type="is-grey-light"
+                    size="is-small"/>
+
+                  <!-- EDITION HEADERS-->
+                  <div v-if="currentEditViewMode === 'edit'">
+                    <b-field
+                      v-if="!lockHeaders">
+                      <EditCell
+                        :is-header="true"
+                        :col-field="column.field"
+                        :input-data="column.label"
+                        @updateCellValue="emitUpdate"/>
+                    </b-field>
+                    <span v-if="lockHeaders">
+                      {{ column.label }}
+                      <b-tooltip
+                        :label="t('edit.headerLocked', locale)"
+                        position="is-bottom"
+                        multilined
+                        type="is-dark">
+                        <b-icon
+                          class="mr-1 ml-0"
+                          size="is-small"
+                          type="is-light"
+                          icon="lock"/>
+                      </b-tooltip>
+                    </span>
                   </div>
-                  <span v-else>
+
+                  <!-- DIFF HEADERS -->
+                  <div v-if="currentEditViewMode === 'diff'">
+                    <div
+                      v-if="isInChanges (true, col.added, col.field)">
+                      <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                    </div>
+                    <span v-else>
+                      {{ column.label }}
+                    </span>
+                  </div>
+
+                  <!-- PREVIEW HEADERS -->
+                  <div v-if="currentEditViewMode === 'preview'">
                     {{ column.label }}
-                  </span>
-                </div>
-                <!-- PREVIEW HEADERS -->
-                <div v-if="currentEditViewMode === 'preview'">
-                  {{ column.label }}
+                  </div>
                 </div>
               </template>
 
@@ -156,14 +169,20 @@
                   <div v-if="isInChanges(false, props.row.added, col.field, props.row.id)">
                     <span v-html="getDiffHtmlChars(false, props.row.added, col.field, props.row[col.field], props.row.id)"/>
                   </div>
-                  <span v-else>
-                    {{ props.row[col.field] }}
-                  </span>
+                  <PreviewCell
+                    v-else
+                    :value="props.row[col.field]"
+                    :col="col"
+                    :locale="locale"/>
                 </div>
 
                 <!-- PREVIEW -->
                 <div v-if="currentEditViewMode === 'preview'">
-                  {{ props.row[col.field] }}
+                  <!-- {{ props.row[col.field] }} -->
+                  <PreviewCell
+                    :value="props.row[col.field]"
+                    :col="col"
+                    :locale="locale"/>
                 </div>
               </template>
             </b-table-column>
@@ -340,13 +359,14 @@
 </template>
 
 <script>
-import { mixinGlobal, mixinDiff, mixinCsv, mixinPagination } from '@/utils/mixins.js'
+import { mixinGlobal, mixinIcons, mixinDiff, mixinCsv, mixinPagination } from '@/utils/mixins.js'
 
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 
+import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
 import GitributeCardsGrid from '@/components/previews/GitributeCardsGrid'
 
@@ -359,12 +379,14 @@ export default {
     FilterTags,
     DialogAddRow,
     DialogDeleteRows,
+    PreviewCell,
     EditCell,
     GitributeCardsGrid,
     PagesNavigation
   },
   mixins: [
     mixinGlobal,
+    mixinIcons,
     mixinDiff,
     mixinCsv,
     mixinPagination
@@ -681,6 +703,19 @@ export default {
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
   methods: {
+    columnThAttrs (column) {
+      // console.log('\nC > GitributeTable > columnThAttrs > column : ', column)
+      return {
+        class: 'gitribute-table gitribute-table-th'
+      }
+    },
+    columnTdAttrs (row, column) {
+      // console.log('\nC > GitributeTable > columnTdAttrs > column : ', column)
+      // console.log('C > GitributeTable > columnTdAttrs > row : ', row)
+      return {
+        class: 'gitribute-table gitribute-table-td'
+      }
+    },
     processAction (event) {
       // console.log('\nC > GitributeTable > processAction > event : ', event)
       switch (event.action) {
@@ -817,3 +852,18 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.gitribute-table {
+  white-space: nowrap;
+  min-width: 100px;
+  max-width: 300px;
+  overflow: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.gitribute-table::-webkit-scrollbar {
+  display: none;
+}
+</style>

@@ -21,6 +21,7 @@ import {
 } from '@/utils/gitProvidersAPI.js'
 import {
   authorizedFileTypes,
+  fieldTypeIcons,
   editViewsOptions
 } from '@/utils/fileTypesUtils.js'
 import {
@@ -209,6 +210,12 @@ export const mixinIcons = {
   methods: {
     getIcon (view) {
       return editViewsOptions.find(i => i.code === view).icon
+    },
+    getIconFieldType (field) {
+      const icon = fieldTypeIcons.find(f => f.type === field.type && f.subtype === field.subtype)
+      const iconDefault = fieldTypeIcons.find(f => f.default)
+      const result = icon || iconDefault
+      return result.icon
     }
   }
 }

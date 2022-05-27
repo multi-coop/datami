@@ -49,6 +49,15 @@ export const typesIcons = [
     allowedTypes: ['other']
   }
 ]
+export const fieldTypeIcons = [
+  { type: 'string', subtype: 'string', icon: 'text', default: true },
+  { type: 'string', subtype: 'link', icon: 'link-variant' },
+  { type: 'string', subtype: 'tag', icon: 'tag-outline' },
+  { type: 'number', subtype: undefined, icon: 'numeric' },
+  { type: 'integer', subtype: undefined, icon: 'numeric' },
+  { type: 'date', subtype: undefined, icon: 'calendar-range' },
+  { type: 'any', subtype: undefined, icon: '' }
+]
 
 // FOR EDITION
 export const editViewsOptions = [

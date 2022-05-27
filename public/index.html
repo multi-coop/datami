@@ -35,7 +35,7 @@
   <!-- TO DO  -->
 
   <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
-  <p id="gitribute-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
+  <!-- <p id="gitribute-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-md-gitlab" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -46,7 +46,7 @@
       gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/markdown/test-file-gitribute-fr.md"
       options="" title="gitribute for gitlab file - md" usertoken="" locale="fr" debug="false">
     </multi-gitribute-file>
-  </div>
+  </div> -->
 
   <!-- <p id="gitribute-md-github" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-md-github" style="color: white; margin-right:  0.5em;">
@@ -139,10 +139,138 @@
     <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
       options='{
-      "separator":";",
-      "lockcolumns": false,
-      "tagseparator":"-",
       "height": "800px",
+      "separator":";",
+      "lockcolumns": true,
+      "tagseparator":"-",
+      "tableschema": {
+        "fields": [
+          {
+            "name": "type",
+            "title": "Type d organisation",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "tags",
+            "title": "Tags thématiques",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "tagSeparator": "-"
+            }
+          },
+          {
+            "name": "merge",
+            "title": "Merge",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "tagSeparator": "+"
+            }
+          },
+          {
+            "name": "orga",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "platform_clean",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "depcode",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "reg_code_geo",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "reg_code_short",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "tranche_ptf",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "tranche_pop",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "tag",
+              "category": true
+            }
+          },
+          {
+            "name": "url_ptf",
+            "title": "URL de la plateforme",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "link"
+            }
+          },
+          {
+            "name": "url_datagouv",
+            "title": "URL sur datagouv",
+            "type": "string",
+            "custom-properties": {
+              "subtype": "link"
+            }
+          },
+          {
+            "name": "nb_ptf",
+            "title": "Nombre de plateformes",
+            "type": "number"
+          },
+          {
+            "name": "nb_datagouv",
+            "title": "Nombre de plateformes",
+            "type": "number"
+          },
+          {
+            "name": "pop_insee",
+            "title": "Population",
+            "type": "integer"
+          },
+          {
+            "name": "lat",
+            "title": "Latitude",
+            "type": "number"
+          },
+          {
+            "name": "lon",
+            "title": "Longitude",
+            "type": "number"
+          }
+        ]
+      },
       "pagination":{
         "itemsPerPage":30
       },
