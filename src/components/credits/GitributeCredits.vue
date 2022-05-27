@@ -23,6 +23,7 @@
         tag="a"
         href="https://gitlab.com/multi-coop/gitribute"
         outlined
+        target="_blank"
         size="is-small"
         class="ml-3 is-size-7">
         {{ t('credits.code', locale) }}

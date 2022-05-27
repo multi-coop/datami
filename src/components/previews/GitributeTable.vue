@@ -25,7 +25,7 @@
             {{ itemsTotal || 0 }}
           </span>
           <span class="ml-2">
-            {{ t(`edit${this.gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
+            {{ t(`edit${gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
           </span>
         </p>
       </div>
@@ -61,10 +61,10 @@
         lockHeaders : <code>{{ lockHeaders }}</code>
       </div>
 
+      <!-- TABLE -->
       <div
         v-show="dataEditedPaginated && dataEditedPaginated.length"
         :class="`column is-${ currentViewMode === 'cards' ? 10 : 12}`">
-        <!-- TABLE -->
         <div
           v-show="!isAnyDialogOpen && currentViewMode === 'table'">
           <b-table
