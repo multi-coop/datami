@@ -4,7 +4,7 @@
 
     <!-- STRING -->
     <div
-      v-if="col.type === 'string' && col.subtype === 'string'"
+      v-if="col.type === 'string' && !col.subtype"
       :class="`${col.isCategory ? 'has-text-centered' : ''}`">
       {{ value }}
     </div>

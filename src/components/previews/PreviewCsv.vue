@@ -273,7 +273,7 @@ export default {
             title: (fieldProps && fieldProps.title) || fieldLabel,
             description: fieldProps && fieldProps.description,
             type: (fieldProps && fieldProps.type) || 'string',
-            subtype: (fieldCustomProps && fieldCustomProps.subtype) || 'string',
+            subtype: (fieldCustomProps && fieldCustomProps.subtype),
             tagSeparator: fieldCustomProps && fieldCustomProps.tagSeparator,
             isCategory: fieldCustomProps && fieldCustomProps.category,
             customProperties: fieldCustomProps

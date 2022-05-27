@@ -78,7 +78,6 @@
             sticky-header
             striped>
             <!-- LOOP COLUMNS -->
-            <!-- numeric -->
             <b-table-column
               v-for="col in columnsForView"
               :key="col.field"
@@ -91,12 +90,17 @@
               <template #header="{ column }">
                 <div class="is-flex is-flex-direction-row is-align-items-center">
                   <!-- COLUMN TYPE ICON -->
-                  <b-icon
-                    :icon="getIconFieldType( col )"
-                    class="ml-0 mr-2"
-                    type="is-grey-light"
-                    size="is-small"/>
-
+                  <b-tooltip
+                    :label="`${ t('editCsv.colType', locale) } : '${col.type}${ col.subtype ? ' - ('+col.subtype+')' : ''}'`"
+                    type="is-dark"
+                    append-to-body
+                    position="is-top">
+                    <b-icon
+                      :icon="getIconFieldType( col )"
+                      class="ml-0 mr-2"
+                      type="is-grey-light"
+                      size="is-small"/>
+                  </b-tooltip>
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
                     <b-field

@@ -212,7 +212,12 @@ export const mixinIcons = {
       return editViewsOptions.find(i => i.code === view).icon
     },
     getIconFieldType (field) {
-      const icon = fieldTypeIcons.find(f => f.type === field.type && f.subtype === field.subtype)
+      // console.log('\nC > mixinDownload > getIconFieldType > field.label : ', field.label)
+      // console.log('C > mixinDownload > getIconFieldType > field : ', field)
+      const icons = fieldTypeIcons.filter(f => f.type === field.type)
+      // console.log('C > mixinDownload > getIconFieldType > icons (1) : ', icons)
+      const icon = icons.find(f => f.subtype === field.subtype) || icons[0]
+      // console.log('C > mixinDownload > getIconFieldType > icon (2) : ', icon)
       const iconDefault = fieldTypeIcons.find(f => f.default)
       const result = icon || iconDefault
       return result.icon

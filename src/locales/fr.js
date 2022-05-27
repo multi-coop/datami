@@ -110,6 +110,7 @@ export default {
     noSelect: 'Aucun',
     noResult: 'Pas de résultat',
     results: 'lignes',
+    colType: 'Colonne de type',
     addRow: 'Ajouter une nouvelle ligne',
     addTheNewRow: 'Ajouter la nouvelle ligne',
     importData: 'Importer/écraser les données',

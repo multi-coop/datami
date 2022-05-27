@@ -110,6 +110,7 @@ export default {
     noSelect: 'None',
     noResult: 'No result',
     results: 'lines',
+    colType: 'Column type',
     addRow: 'Add a new row',
     addTheNewRow: 'Add the new row',
     importData: 'Import/overwrite the data',
