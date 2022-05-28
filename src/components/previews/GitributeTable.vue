@@ -13,22 +13,6 @@
           @action="processAction"/>
       </div>
 
-      <!-- RESULTS -->
-      <!-- <div class="column is-3 has-text-left">
-        <p class="has-text-weight-bold is-size-6">
-          <span>
-            {{ dataEditedFiltered.length || 0 }}
-          </span>
-          <span class="is-size-7">
-            /
-            {{ itemsTotal || 0 }}
-          </span>
-          <span class="ml-2">
-            {{ t(`edit${gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
-          </span>
-        </p>
-      </div> -->
-
       <!-- FILTER TAGS -->
       <div :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
         <FilterTags
@@ -40,7 +24,7 @@
           @removeTag="removeTag"/>
       </div>
 
-      <!-- EDIT CSV NAVABAR -->
+      <!-- COUNTS & EDIT CSV NAVABAR -->
       <div
         v-show="!isAnyDialogOpen"
         class="column is-12 pt-0">

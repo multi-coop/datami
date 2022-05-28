@@ -9,6 +9,15 @@
       {{ value }}
     </div>
 
+    <!-- BOOLEAN -->
+    <div
+      v-if="col.type === 'boolean'"
+      :class="`has-text-centered`">
+      <b-icon
+        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank'}-circle-outline`"
+        size="is-small"/>
+    </div>
+
     <!-- TAG / TAGS -->
     <div
       v-if="col.type === 'string' && col.subtype === 'tag'"

@@ -9,6 +9,7 @@ import {
   itemsPerPageChoicesCards4perRow,
   paginate,
   getClosest,
+  booleanFromValue,
   trimText
 } from '@/utils/globalUtils'
 import {
@@ -143,6 +144,7 @@ export const mixinGlobal = {
   },
   methods: {
     uuidv4,
+    booleanFromValue,
     trimText
   }
 }
