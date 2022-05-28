@@ -9,6 +9,7 @@ import {
   itemsPerPageChoicesCards4perRow,
   paginate,
   getClosest,
+  defaultTagsSeparator,
   booleanFromValue,
   trimText
 } from '@/utils/globalUtils'
@@ -143,9 +144,7 @@ export const mixinGlobal = {
     }
   },
   methods: {
-    uuidv4,
-    booleanFromValue,
-    trimText
+    uuidv4
   }
 }
 
@@ -272,6 +271,48 @@ export const mixinDownload = {
         link.parentNode.removeChild(link)
       }, 100)
     }
+  }
+}
+
+export const mixinValue = {
+  data () {
+    return {
+      numberTypes: ['number', 'integer', 'float'],
+      defaultTagsSeparator: defaultTagsSeparator
+    }
+  },
+  computed: {
+    fieldType () {
+      return (this.field && this.field.type) || 'string'
+    },
+    isString () {
+      return this.fieldType === 'string'
+    },
+    isBoolean () {
+      return this.fieldType === 'boolean'
+    },
+    isNumber () {
+      return this.numberTypes.includes(this.fieldType)
+    },
+    isInteger () {
+      return this.fieldType === 'integer'
+    },
+    isTag () {
+      return this.field && this.field.subtype === 'tag'
+    },
+    isCategory () {
+      return this.isTag && this.field.isCategory
+    },
+    tagsEnum () {
+      return (this.field && this.field.enumArr) || []
+    },
+    tagSeparator () {
+      return this.field.tagSeparator || this.defaultTagsSeparator
+    }
+  },
+  methods: {
+    booleanFromValue,
+    trimText
   }
 }
 

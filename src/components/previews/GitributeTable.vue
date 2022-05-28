@@ -13,6 +13,10 @@
           @action="processAction"/>
       </div>
 
+      <!-- <div v-if="true">
+        fileFilters: <br><pre><code>{{ fileFilters }}</code></pre>
+      </div> -->
+
       <!-- FILTER TAGS -->
       <div :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
         <FilterTags
@@ -100,7 +104,7 @@
                       v-if="!lockHeaders ">
                       <EditCell
                         :is-header="true"
-                        :col-field="column.field"
+                        :col="col"
                         :input-data="column.label"
                         @updateCellValue="emitUpdate"/>
                     </b-field>
@@ -204,13 +208,13 @@
                   <PreviewCell
                     v-if="col.locked"
                     :value="props.row[col.field]"
-                    :col="col"
+                    :field="col"
                     :is-edit-view="true"
                     :locale="locale"/>
                   <EditCell
                     v-else
                     :is-header="false"
-                    :col-field="col.field"
+                    :field="col"
                     :row-id="props.row.id"
                     :is-added="props.row.added"
                     :input-data="props.row[col.field]"
@@ -227,7 +231,7 @@
                   <PreviewCell
                     v-else
                     :value="props.row[col.field]"
-                    :col="col"
+                    :field="col"
                     :locale="locale"/>
                 </div>
 
@@ -238,7 +242,7 @@
                   <!-- {{ props.row[col.field] }} -->
                   <PreviewCell
                     :value="props.row[col.field]"
-                    :col="col"
+                    :field="col"
                     :locale="locale"/>
                 </div>
               </template>
@@ -743,12 +747,13 @@ export default {
 
     // prepare filters
     if (this.hasCustomFilters) {
-      // console.log('C > GitributeTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
+      // console.log('\nC > GitributeTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
       // console.log('C > GitributeTable > beforeMount > this.filterFields : ', this.filterFields)
       const filters = [...this.filterFields]
       filters.forEach(filter => {
         filter.fileId = this.fileId
-        filter.choices = new Set()
+        // filter.enumArr = new Set()
+        // filter.enum = filter.enumArr
         this.setFilters(filter)
       })
     }

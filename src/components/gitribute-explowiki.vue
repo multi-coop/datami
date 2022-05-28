@@ -275,7 +275,7 @@ export default {
   },
   beforeMount () {
     // console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
-    // console.log('\nC > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
+    // console.log('C > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > GitributeExploWiki > beforeMount > this.options : ', this.options)
 
     const wikiUuid = this.uuidv4()
@@ -357,6 +357,7 @@ export default {
           const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
           // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
+          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)
           this.wikiPages.push(pageData.temp)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
         }
@@ -378,7 +379,7 @@ export default {
           this.updateFiltersSettings({
             fileId: this.fileId,
             field: field,
-            choices: dataTags
+            enumArr: dataTags
           })
         }
       })

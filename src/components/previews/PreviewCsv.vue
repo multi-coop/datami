@@ -112,6 +112,8 @@ import LoaderCards from '@/components/loaders/LoaderCards'
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 import GitributeTable from '@/components/previews/GitributeTable'
 
+import { defaultTagsSeparator } from '@/utils/globalUtils'
+
 export default {
   name: 'PreviewCsv',
   components: {
@@ -192,7 +194,7 @@ export default {
     fileRaw (next) {
       if (next && next !== '') {
         // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
-        console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
+        // console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataObj = this.csvToObject(next, this.fileOptions)
         this.dataRaw = dataObj
         if (!this.dataIsSet) { this.dataIsSet = true }
@@ -200,6 +202,7 @@ export default {
     },
     wikiRaw (next) {
       if (next && next !== '') {
+        // console.log('\nC > PreviewCsv > watch > wikiRaw > next : ', next)
         // console.log('C > PreviewCsv > watch > wikiRaw > this.fileOptions : ', this.fileOptions)
         this.dataRaw = next
         this.data = this.dataRaw.data
@@ -210,17 +213,17 @@ export default {
     },
     dataIsSet (next) {
       if (next) {
-        console.log('C > PreviewCsv > watch > dataIsSet > next : \n', next)
+        // console.log('C > PreviewCsv > watch > dataIsSet > next : \n', next)
         this.data = this.dataRaw.data
         this.dataColumns = this.buildColumns(this.dataRaw)
-        console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
+        // console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
         this.edited = this.data
         this.editedColumns = this.dataColumns
       }
     },
     fileClientRaw (next) {
       if (next) {
-        console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
+        // console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
         const dataObj = this.csvToObject(next, this.fileOptions)
         this.edited = dataObj.data
         this.editedColumns = this.buildColumns(dataObj)
@@ -254,32 +257,79 @@ export default {
     ...mapActions({
       updateBuffer: 'git-data/updateBuffer'
     }),
+    buildEnumArr (data, separator) {
+      const dataCopy = data.filter(d => !!d)
+      // console.log('C > PreviewCsv > buildEnumArr > dataCopy : ', dataCopy)
+      // console.log('C > PreviewCsv > buildEnumArr > separator : ', separator)
+      const dataParsed = []
+      dataCopy && dataCopy.forEach(tag => {
+        if (tag.includes(separator)) {
+          const subArr = tag.split(separator).map(t => t.trim())
+          dataParsed.push(...subArr)
+        } else {
+          dataParsed.push(tag)
+        }
+      })
+      const enumArr = [...new Set(dataParsed)].sort((a, b) => a.localeCompare(b))
+      // console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
+      return enumArr
+    },
     buildColumns (dataRaw) {
       const headers = dataRaw && dataRaw.headers
-      // console.log('C > PreviewCsv > buildColumns > headers : ', headers)
+      // console.log('\nC > PreviewCsv > buildColumns > headers : ', headers)
+      // console.log('C > PreviewCsv > buildColumns > dataRaw : ', dataRaw)
+      // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
       const tableSchema = this.fileOptions.tableschema
+      // console.log('C > PreviewCsv > buildColumns > tableSchema : ', tableSchema)
       if (!headers) return null
-      return Object.entries(headers)
+      const fields = Object.entries(headers)
         .map(entry => {
           const fieldId = entry[0]
           const fieldLabel = entry[1].trim()
           const fieldProps = tableSchema && tableSchema.fields.find(schema => schema.name === fieldLabel)
+          const fieldConstraints = fieldProps && fieldProps.constraints
+          // console.log('C > PreviewCsv > buildColumns > fieldConstraints : ', fieldConstraints)
           const fieldCustomProps = fieldProps && fieldProps['custom-properties']
-          return {
+          let fieldData = {
             field: fieldId,
             label: fieldLabel.trim(),
-            name: (fieldProps && fieldProps.name) || fieldLabel,
-            title: fieldProps && fieldProps.title,
-            description: fieldProps && fieldProps.description,
             type: (fieldProps && fieldProps.type) || 'string',
-            subtype: (fieldCustomProps && fieldCustomProps.subtype),
-            locked: fieldCustomProps && fieldCustomProps.locked,
-            tagSeparator: fieldCustomProps && fieldCustomProps.tagSeparator,
-            isCategory: fieldCustomProps && fieldCustomProps.category,
-            customProperties: fieldCustomProps
+            name: (fieldProps && fieldProps.name) || fieldLabel
+            // title: fieldProps && fieldProps.title,
+            // description: fieldProps && fieldProps.description,
+
+            // subtype: fieldSubtype,
+            // locked: fieldCustomProps && fieldCustomProps.locked,
+            // tagSeparator: fieldCustomProps && fieldCustomProps.tagSeparator,
+            // isCategory: fieldCustomProps && fieldCustomProps.category,
+            // customProperties: fieldCustomProps
           }
+          // parse data for unique values on tag columns
+          const fieldSubtype = fieldCustomProps && fieldCustomProps.subtype
+          const needEnumArr = fieldSubtype === 'tag'
+          const defaultEnumArr = fieldConstraints && fieldConstraints.enum
+          fieldData = {
+            ...fieldData,
+            ...fieldProps && fieldProps.title && { title: fieldProps.title },
+            ...fieldProps && fieldProps.description && { description: fieldProps.description },
+            ...fieldSubtype && { subtype: fieldSubtype },
+            ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
+            ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
+            ...fieldCustomProps && fieldCustomProps.category && { isCategory: fieldCustomProps.category },
+            ...defaultEnumArr && { enumArr: defaultEnumArr }
+          }
+          if (!defaultEnumArr && needEnumArr) {
+            const enumArr = this.buildEnumArr(
+              dataRaw.data.map(item => item[fieldId]),
+              fieldCustomProps.tagSeparator || defaultTagsSeparator
+            )
+            fieldData.enumArr = enumArr
+          }
+          return fieldData
         })
+      // console.log('C > PreviewCsv > buildColumns > fields : ', fields)
+      return fields
     },
     updateEdited (event) {
       console.log('\nC > PreviewCsv > updateEdited > event : ', event)

@@ -21,12 +21,12 @@
       <div
         v-if="currentEditViewMode === 'edit'"
         :class="`column is-9 is-justify-content-end is-flex is-flex-direction-row is-align-content-end`">
-        <ButtonAddRow
-          :locale="locale"
-          @action="SendActionToParent"/>
         <!-- <ButtonImportData
           :locale="locale"
           @action="SendActionToParent"/> -->
+        <ButtonAddRow
+          :locale="locale"
+          @action="SendActionToParent"/>
         <ButtonDeleteRows
           :checked-rows="checkedRows"
           :locale="locale"

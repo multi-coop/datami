@@ -274,7 +274,7 @@ export default {
     if (!this.getGitInfosObj[this.fileId]) {
       // load token
       let token = this.usertoken && this.usertoken !== '' && this.usertoken
-      console.log('C > GitributeFile > beforeMount > process.env : ', process.env)
+      // console.log('C > GitributeFile > beforeMount > process.env : ', process.env)
       if (!token) {
         switch (gitInfosObject.provider) {
           case 'gitlab':

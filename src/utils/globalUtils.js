@@ -98,6 +98,8 @@ export const paginate = (array, pageSize, pageNumber) => {
 }
 
 // TEXT UTILS
+export const defaultTagsSeparator = '-'
+
 export const FalseBooleanStrings = [
   'no',
   'false',

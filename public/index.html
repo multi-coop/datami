@@ -138,11 +138,18 @@
   <div style="background-color: white; margin: 1em;">
     <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
+      gitschema="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-schema.json"
       options='{
       "height": "835px",
       "separator":";",
       "lockcolumns": true,
       "tagseparator":"-",
+      "customfilters" : {
+        "activate": true,
+        "filterfields": [
+          "type"
+        ]
+      },
       "tableschema": {
         "fields": [
           {
@@ -162,8 +169,24 @@
           },
           {
             "name": "type",
-            "title": "Type d organisation",
+            "title": "Type d&#39;organisation",
             "type": "string",
+            "constraints": {
+              "enum" : [
+                "AGCT",
+                "CA",
+                "CC",
+                "COM",
+                "CU",
+                "DEP",
+                "DSPT",
+                "EPT",
+                "MET",
+                "OACT",
+                "REG",
+                "SDE"
+              ]
+            },
             "custom-properties": {
               "subtype": "tag",
               "category": true
@@ -182,6 +205,12 @@
             "name": "merge",
             "title": "Merge",
             "type": "string",
+            "constraints": {
+              "enum" : [
+                "datagouv",
+                "ptf"
+              ]
+            },
             "custom-properties": {
               "subtype": "tag",
               "tagSeparator": "+"
@@ -192,7 +221,8 @@
             "type": "string",
             "custom-properties": {
               "subtype": "tag",
-              "category": true
+              "category": true,
+              "allowNew": true
             }
           },
           {
@@ -418,6 +448,91 @@
         "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
       ]' options='{
         "height": "700px",
+        "tableschema": {
+          "fields": [
+            { 
+              "name": "pageUrl",
+              "custom-properties": {
+                "subtype": "link",
+                "locked": true
+              }
+            },
+            { 
+              "name": "imageUrl",
+              "custom-properties": {
+                "subtype": "link"
+              }
+            },
+            { 
+              "name": "url",
+              "custom-properties": {
+                "subtype": "link"
+              }
+            },
+            { 
+              "name": "description"
+            },
+            { 
+              "name": "shortDescription"
+            },
+            { 
+              "name": "Main_Picture"
+            },
+            { 
+              "name": "Coordonnées géo"
+            },
+            { 
+              "name": "needs"
+            },
+            { 
+              "name": "referent"
+            },
+            { 
+              "name": "communauté d&#39;intérêt"
+            },
+            { 
+              "name": "Titre"
+            },
+            { 
+              "name": "etape"
+            },
+            {
+              "name": "Tags",
+              "custom-properties": {
+                "subtype": "tag",
+                "tagSeparator": ","
+              }
+            },
+            {
+              "name": "Theme",
+              "custom-properties": {
+                "subtype": "tag",
+                "tagSeparator": ","
+              }
+            },
+            {
+              "name": "location",
+              "custom-properties": {
+                "subtype": "tag",
+                "tagSeparator": ","
+              }
+            },
+            {
+              "name": "from",
+              "custom-properties": {
+                "subtype": "tag",
+                "tagSeparator": ","
+              }
+            },
+            {
+              "name": "challenge",
+              "custom-properties": {
+                "subtype": "tag",
+                "tagSeparator": ","
+              }
+            }
+          ]
+        },
         "wikisettings": {
           "category": "projet",
           "fields": [

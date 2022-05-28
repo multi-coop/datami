@@ -180,8 +180,8 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
 }
 
 export const buildGitUserInfosUrl = (gitObj, token = undefined, method = 'GET') => {
-  console.log('\nU > utilsGitUrl > buildGitUserInfosUrl > ...')
-  console.log('U > utilsGitUrl > buildGitUserInfosUrl > gitObj : ', gitObj)
+  // console.log('\nU > utilsGitUrl > buildGitUserInfosUrl > ...')
+  // console.log('U > utilsGitUrl > buildGitUserInfosUrl > gitObj : ', gitObj)
 
   let userInfosUrl
   const requestOptions = {

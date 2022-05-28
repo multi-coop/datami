@@ -79,7 +79,7 @@ export default {
           return {
             field: filter.field,
             label: filter.label,
-            choices: Array.from(filter.choices).sort((a, b) => a.localeCompare(b))
+            enumArr: Array.from(filter.enumArr).sort((a, b) => a.localeCompare(b))
           }
         })
       }

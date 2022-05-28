@@ -46,8 +46,8 @@ export const user = {
       }
     },
     addToBranches (state, userBranches) {
-      console.log('\nS-user > G > addToBranches > state.userBranches : ', state.userBranches)
-      console.log('S-user > G > addToBranches > userBranches : ', userBranches)
+      // console.log('\nS-user > G > addToBranches > state.userBranches : ', state.userBranches)
+      // console.log('S-user > G > addToBranches > userBranches : ', userBranches)
       const index = state.userBranches.findIndex(branches => branches.uuid === userBranches.uuid)
       if (index !== -1) {
         const userBranchesUpdated = { ...state.userBranches[index] }
@@ -64,7 +64,7 @@ export const user = {
       commit('setUserLocale', locale)
     },
     updateUserGit ({ commit }, { fileId, userGitInfos }) {
-      console.log('\nS-user > G > updateUserGit > userGitInfos : ', userGitInfos)
+      // console.log('\nS-user > G > updateUserGit > userGitInfos : ', userGitInfos)
       const userGit = {
         uuid: fileId,
         username: userGitInfos.username,
@@ -73,7 +73,7 @@ export const user = {
       commit('setUserGit', userGit)
     },
     updateUserBranches ({ commit }, { fileId, branches }) {
-      console.log('\nS-user > G > getUserBranches > branches : ', branches)
+      // console.log('\nS-user > G > getUserBranches > branches : ', branches)
       const userBranches = {
         uuid: fileId,
         branches: branches

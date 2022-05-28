@@ -142,10 +142,12 @@ export default {
       let filters
       if (this.fileFilters && this.fileFilters.length) {
         filters = this.fileFilters.map(filter => {
+          // console.log('\nC > SortAndFiltersSkeleton > filtersDisplay > filter : ', filter)
+          const enumArr = filter.enumArr || []
           return {
             field: filter.field,
             label: filter.label,
-            choices: Array.from(filter.choices).sort((a, b) => a.localeCompare(b))
+            enumArr: Array.from(enumArr).sort((a, b) => a.localeCompare(b))
           }
         })
       }
@@ -157,11 +159,11 @@ export default {
   },
   methods: {
     fieldActiveTags (field) {
-      // console.log('\nC > CustomFilters > fieldActiveTags > field : ', field)
+      // console.log('\nC > SortAndFiltersSkeleton > fieldActiveTags > field : ', field)
       return this.activeTags.filter(t => t.field === field)
     },
     SendActionToParent (event) {
-      // console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
+      // console.log('\nC > SortAndFiltersSkeleton > SendActionToParent > event.action : ', event.action)
       this.$emit('action', event)
     }
   }

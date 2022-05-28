@@ -349,7 +349,7 @@
 
 <script>
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
 import EditCell from '@/components/edition/csv/EditCell'
 
@@ -358,7 +358,10 @@ export default {
   components: {
     EditCell
   },
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinGlobal,
+    mixinValue
+  ],
   props: {
     fileId: {
       default: null,
