@@ -99,10 +99,11 @@
                       type="is-grey-light"
                       size="is-small"/>
                   </b-tooltip>
+
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
                     <b-field
-                      v-if="!lockHeaders">
+                      v-if="!lockHeaders ">
                       <EditCell
                         :is-header="true"
                         :col-field="column.field"
@@ -113,11 +114,12 @@
                       {{ column.label }}
                       <b-tooltip
                         :label="t('edit.headerLocked', locale)"
-                        position="is-bottom"
+                        position="is-top"
                         multilined
+                        append-to-body
                         type="is-dark">
                         <b-icon
-                          class="mr-1 ml-0"
+                          class="mr-1 ml-2"
                           size="is-small"
                           type="is-light"
                           icon="lock"/>
@@ -154,20 +156,29 @@
                 </div>
 
                 <!-- EDITION -->
-                <div v-if="currentEditViewMode === 'edit'">
-                  <b-field>
-                    <EditCell
-                      :is-header="false"
-                      :col-field="col.field"
-                      :row-id="props.row.id"
-                      :is-added="props.row.added"
-                      :input-data="props.row[col.field]"
-                      @updateCellValue="emitUpdate"/>
-                  </b-field>
+                <div
+                  v-if="currentEditViewMode === 'edit'"
+                  class="gitribute-cell">
+                  <PreviewCell
+                    v-if="col.locked"
+                    :value="props.row[col.field]"
+                    :col="col"
+                    :is-edit-view="true"
+                    :locale="locale"/>
+                  <EditCell
+                    v-else
+                    :is-header="false"
+                    :col-field="col.field"
+                    :row-id="props.row.id"
+                    :is-added="props.row.added"
+                    :input-data="props.row[col.field]"
+                    @updateCellValue="emitUpdate"/>
                 </div>
 
                 <!-- DIFF -->
-                <div v-if="currentEditViewMode === 'diff'">
+                <div
+                  v-if="currentEditViewMode === 'diff'"
+                  class="gitribute-cell">
                   <div v-if="isInChanges(false, props.row.added, col.field, props.row.id)">
                     <span v-html="getDiffHtmlChars(false, props.row.added, col.field, props.row[col.field], props.row.id)"/>
                   </div>
@@ -179,7 +190,9 @@
                 </div>
 
                 <!-- PREVIEW -->
-                <div v-if="currentEditViewMode === 'preview'">
+                <div
+                  v-if="currentEditViewMode === 'preview'"
+                  class="gitribute-cell">
                   <!-- {{ props.row[col.field] }} -->
                   <PreviewCell
                     :value="props.row[col.field]"
@@ -864,6 +877,7 @@ export default {
   min-width: 100px;
   max-width: 300px;
   overflow: auto;
+  vertical-align: middle !important;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }

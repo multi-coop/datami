@@ -1,11 +1,12 @@
 <template>
-  <div class="PreviewCell">
+  <div
+    :class="`PreviewCell`">
     <!-- {{ value }} <br> {{ col }} -->
 
     <!-- STRING -->
     <div
       v-if="col.type === 'string' && !col.subtype"
-      :class="`${col.isCategory ? 'has-text-centered' : ''}`">
+      :class="`${col.isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
       {{ value }}
     </div>
 
@@ -25,7 +26,7 @@
       <b-tag
         v-for="(val, tagIdx) in value.split(col.tagSeparator)"
         :key="`tags-${col.field}-${tagIdx}`"
-        :class="`mr-2 mb-1 has-text-weight-bold`">
+        :class="`mr-2 has-text-weight-bold`">
         {{ val }}
       </b-tag>
     </div>
@@ -69,6 +70,10 @@ export default {
     col: {
       default: null,
       type: Object
+    },
+    isEditView: {
+      default: false,
+      type: Boolean
     },
     locale: {
       default: null,

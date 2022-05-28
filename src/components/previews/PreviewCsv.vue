@@ -274,6 +274,7 @@ export default {
             description: fieldProps && fieldProps.description,
             type: (fieldProps && fieldProps.type) || 'string',
             subtype: (fieldCustomProps && fieldCustomProps.subtype),
+            locked: fieldCustomProps && fieldCustomProps.locked,
             tagSeparator: fieldCustomProps && fieldCustomProps.tagSeparator,
             isCategory: fieldCustomProps && fieldCustomProps.category,
             customProperties: fieldCustomProps
