@@ -88,17 +88,11 @@
               <template #header="{ column }">
                 <div class="is-flex is-flex-direction-row is-align-items-center">
                   <!-- COLUMN TYPE ICON -->
-                  <b-tooltip
-                    :label="`${ t('editCsv.colType', locale) } : '${col.type}${ col.subtype ? ' - ('+col.subtype+')' : ''}'`"
-                    type="is-dark"
-                    append-to-body
-                    position="is-top">
-                    <b-icon
-                      :icon="getIconFieldType( col )"
-                      class="ml-0 mr-2"
-                      type="is-grey-light"
-                      size="is-small"/>
-                  </b-tooltip>
+                  <b-icon
+                    :icon="getIconFieldType( col )"
+                    class="ml-0 mr-2"
+                    type="is-grey-light"
+                    size="is-small"/>
 
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
@@ -140,7 +134,55 @@
 
                   <!-- PREVIEW HEADERS -->
                   <div v-if="currentEditViewMode === 'preview'">
-                    {{ column.label }}
+                    <b-tooltip
+                      position="is-top"
+                      multilined
+                      append-to-body
+                      type="is-dark">
+                      {{ column.label }}
+                      <template #content>
+                        <div class="columns is-multiline px-2 py-2">
+                          <div class="column is-4 py-1 px-1 is-italic">
+                            {{ t('field.label', locale) }}
+                          </div>
+                          <div class="column is-8 py-1 px-1 has-text-weight-bold">
+                            {{ col.label }}
+                          </div>
+                          <div class="column is-4 py-1 px-1 is-italic">
+                            {{ t('field.type', locale) }}
+                          </div>
+                          <div class="column is-8 py-1 px-1 is-italic">
+                            <b-icon
+                              :icon="getIconFieldType( col )"
+                              class="ml-0 mr-1"
+                              type="is-grey-light"
+                              size="is-small"/>
+                            {{ col.type }}
+                            {{ col.subtype ? '(' + col.subtype + ')' : '' }}
+                          </div>
+                          <div
+                            v-if="col.title"
+                            class="column is-4 py-1 px-1 is-italic">
+                            {{ t('field.title', locale) }}
+                          </div>
+                          <div
+                            v-if="col.title"
+                            class="column is-8 py-1 px-1">
+                            {{ col.title }}
+                          </div>
+                          <div
+                            v-if="col.description"
+                            class="column is-4 pt-1 pb-2 px-1 is-italic">
+                            {{ t('field.description', locale) }}
+                          </div>
+                          <div
+                            v-if="col.description"
+                            class="column is-8 pt-1 pb-2 pl-3 pr-1 has-text-left">
+                            {{ col.description }}
+                          </div>
+                        </div>
+                      </template>
+                    </b-tooltip>
                   </div>
                 </div>
               </template>

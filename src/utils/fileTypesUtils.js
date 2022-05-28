@@ -50,7 +50,7 @@ export const typesIcons = [
   }
 ]
 export const fieldTypeIcons = [
-  { type: 'string', subtype: undefined, icon: 'text', default: true },
+  { type: 'string', subtype: undefined, icon: 'alphabetical', default: true },
   { type: 'string', subtype: 'link', icon: 'link-variant' },
   { type: 'string', subtype: 'tag', icon: 'tag-outline' },
   { type: 'boolean', subtype: undefined, icon: 'check-bold' },

@@ -270,7 +270,7 @@ export default {
             field: fieldId,
             label: fieldLabel.trim(),
             name: (fieldProps && fieldProps.name) || fieldLabel,
-            title: (fieldProps && fieldProps.title) || fieldLabel,
+            title: fieldProps && fieldProps.title,
             description: fieldProps && fieldProps.description,
             type: (fieldProps && fieldProps.type) || 'string',
             subtype: (fieldCustomProps && fieldCustomProps.subtype),

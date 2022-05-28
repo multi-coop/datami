@@ -102,6 +102,13 @@ export default {
     currentPage: 'Current page',
     itemsPerPage: 'items per page'
   },
+  field: {
+    field: 'Field',
+    label: 'Label',
+    title: 'Title',
+    description: 'Description',
+    type: 'Type'
+  },
   edit: {
     importData: 'Import/overwrite the data',
     headerLocked: "This column's label is protected from writing"

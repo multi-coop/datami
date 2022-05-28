@@ -102,6 +102,13 @@ export default {
     currentPage: 'Page actuelle',
     itemsPerPage: 'éléments par page'
   },
+  field: {
+    field: 'Champ',
+    label: 'Libellé',
+    title: 'Titre',
+    description: 'Description',
+    type: 'Type'
+  },
   edit: {
     uploadData: 'Importer/écraser les données',
     headerLocked: "L'intitulé de cette colonne est protégé en écriture"
