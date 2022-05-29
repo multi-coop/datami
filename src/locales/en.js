@@ -120,7 +120,7 @@ export default {
     boolean: 'Boolean'
   },
   edit: {
-    importData: 'Import/overwrite the data',
+    uploadData: 'Import/overwrite the data',
     headerLocked: "This column's label is protected from writing"
   },
   editCsv: {
