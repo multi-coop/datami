@@ -189,7 +189,7 @@ export default {
         value = event.length ? value.join(this.tagSeparator) : ''
       } else {
         this.input = event
-        value = this.isNumber ? event.toString() : event
+        value = (this.isNumber || this.isBoolean) ? event.toString() : event
       }
       const payload = {
         val: value,
