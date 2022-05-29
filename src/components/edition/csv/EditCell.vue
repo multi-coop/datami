@@ -224,7 +224,7 @@ export default {
   min-width: 150px;
 }
 .g-cell-tags {
-  min-width: 300px;
+  min-width: 275px;
 }
 .g-header {
   font-size: .85em!important;

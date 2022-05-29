@@ -877,4 +877,7 @@ export default {
 .gitribute-table::-webkit-scrollbar {
   display: none;
 }
+.gitribute-table-td {
+  /* padding: .2em .25em !important; */
+}
 </style>
