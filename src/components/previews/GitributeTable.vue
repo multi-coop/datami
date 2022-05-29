@@ -867,7 +867,6 @@ export default {
 <style>
 
 .gitribute-table {
-  /* white-space: nowrap; */
   min-width: 100px;
   max-width: 300px;
   overflow: auto;

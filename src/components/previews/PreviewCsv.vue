@@ -296,14 +296,6 @@ export default {
             label: fieldLabel.trim(),
             type: (fieldProps && fieldProps.type) || 'string',
             name: (fieldProps && fieldProps.name) || fieldLabel
-            // title: fieldProps && fieldProps.title,
-            // description: fieldProps && fieldProps.description,
-
-            // subtype: fieldSubtype,
-            // locked: fieldCustomProps && fieldCustomProps.locked,
-            // tagSeparator: fieldCustomProps && fieldCustomProps.tagSeparator,
-            // isCategory: fieldCustomProps && fieldCustomProps.category,
-            // customProperties: fieldCustomProps
           }
           // parse data for unique values on tag columns
           const fieldSubtype = fieldCustomProps && fieldCustomProps.subtype

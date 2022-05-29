@@ -10,7 +10,7 @@
           @action="SendActionToParent"/>
       </div>
 
-      <!-- FILTERS -->
+      <!-- DEFAULT FILTERS -->
       <div
         v-if="!hasCustomFilters"
         :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
@@ -20,16 +20,8 @@
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
-      <!-- <div
-        v-if="hasCustomFilters"
-        :class="`column is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
-        <CustomFilters
-          :file-id="fileId"
-          :active-tags="activeTags"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </div> -->
-      <!-- FILTERS -->
+
+      <!-- CUSTOM FILTERS -->
       <div
         v-for="filter in filtersDisplay"
         :key="`filter-${fileId}-${filter.field}`"
@@ -42,19 +34,6 @@
           :locale="locale"
           @action="SendActionToParent"/>
       </div>
-
-      <!-- EDIT BUTTONS -->
-      <!-- <div
-        v-if="currentEditViewMode === 'edit'"
-        :class="`column is-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
-        <ButtonAddRow
-          :locale="locale"
-          @action="SendActionToParent"/>
-        <ButtonDeleteRows
-          :checked-rows="checkedRows"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </div> -->
     </div>
 
     <!-- DEBUG -->
@@ -80,25 +59,16 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-// import ViewModeBtns from '@/components/previews/ViewModeBtns'
-
-// import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
-// import ButtonImportData from '@/components/edition/csv/ButtonImportData'
 import ButtonSortBy from '@/components/sorting/ButtonSortBy'
 import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
 import CustomFilter from '@/components/filters/CustomFilter'
-// import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
   name: 'SortAndFiltersSkeleton',
   components: {
-    // ViewModeBtns,
-    // ButtonAddRow,
-    // ButtonImportData,
     ButtonSortBy,
     ButtonFilterBy,
     CustomFilter
-    // ButtonDeleteRows
   },
   mixins: [
     mixinGlobal,
@@ -113,10 +83,6 @@ export default {
       default: null,
       type: Array
     },
-    // checkedRows: {
-    //   default: null,
-    //   type: Array
-    // },
     activeTags: {
       default: null,
       type: Array
