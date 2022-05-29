@@ -190,7 +190,9 @@ export default {
     errorMessage: "Message d'erreur"
   },
   credits: {
-    reclaim: 'Un widget open source codé avec 🤍  &nbsp; par',
+    reclaim: 'Un widget open source',
+    byLove: 'codé avec 🤍 ',
+    byCooperative: 'par la coopérative',
     code: 'Code source'
   }
 }

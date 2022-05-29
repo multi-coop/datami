@@ -190,7 +190,9 @@ export default {
     errorMessage: 'Error message'
   },
   credits: {
-    reclaim: 'An open source widget coded with 🤍  &nbsp; by',
+    reclaim: 'An open source widget',
+    byLove: 'coded with 🤍 ',
+    byCooperative: 'by the tech cooperative',
     code: 'Source code'
   }
 }
