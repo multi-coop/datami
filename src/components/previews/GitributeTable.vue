@@ -724,7 +724,7 @@ export default {
       // console.log('\nC > GitributeTable > columnTdAttrs > column : ', column)
       // console.log('C > GitributeTable > columnTdAttrs > row : ', row)
       return {
-        class: 'gitribute-table gitribute-table-td'
+        class: `gitribute-table gitribute-table-td ${this.currentEditViewMode === 'edit' ? 'gitribute-table-td-edit' : ''}`
       }
     },
     processAction (event) {
@@ -879,5 +879,8 @@ export default {
 }
 .gitribute-table-td {
   /* padding: .2em .25em !important; */
+}
+.gitribute-table-td-edit {
+  border: none !important;
 }
 </style>

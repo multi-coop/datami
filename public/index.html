@@ -317,13 +317,23 @@
       "consolidation": [
         {
           "field": "siren",
+          "activate": true,
           "api": "api-entreprise",
-          "results_fields": [""]
+          "results_fields": [
+            { 
+              "source_field" : "resp_code_reg"
+            }
+          ]
         },
         {
           "field": "adress",
+          "activate": false,
           "api": "api-ban",
-          "results_fields": [""]
+          "results_fields": [
+            { 
+              "source_field" : "resp_code_reg"
+            }
+          ]
         }
       ],
       "pagination":{

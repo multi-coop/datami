@@ -84,7 +84,7 @@
         expanded
         append-to-body
         attached
-        type="is-dark"
+        type="is-grey"
         @input="emitChange"/>
 
       <!-- ANY STRING -->

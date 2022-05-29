@@ -306,7 +306,6 @@ export const mixinValue = {
     },
     isCategory () {
       return this.fieldSubtype === 'tag'
-      // return this.isTag && this.field.isCategory
     },
     tagsEnum () {
       return (this.field && this.field.enumArr) || []
