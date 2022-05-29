@@ -15,7 +15,7 @@
         append-to-body
         type="is-dark">
         <b-icon
-          icon="arrow-expand"
+          :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
           class="mr-1"
           :type="nowrap ? 'is-grey-light' : 'is-dark'"
           size="is-small"
