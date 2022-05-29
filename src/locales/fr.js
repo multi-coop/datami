@@ -62,6 +62,7 @@ export default {
     cancel: 'Annuler',
     search: 'Rechercher',
     expandCell: 'Agrandir la cellule',
+    reduceCell: 'Réduire la cellule',
     openLinkInNew: 'Ouvrir le lien dans une nouvelle fenêtre',
     reloadFile: 'Recharger le fichier',
     downloadFile: 'Télécharger le fichier',

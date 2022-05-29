@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`PreviewCell ${nowrap ? 'gitribute-nowrap' : ''}`"
+    :class="`PreviewCell gitribute-${nowrap ? 'nowrap' : 'wrap'}`"
     @mouseover="showExpand = true"
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
@@ -9,28 +9,21 @@
     <div
       v-if="isString && !field.subtype"
       :class="`${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
-      <div class="columns">
-        <div
-          v-if="showExpand"
-          class="column is-1">
-          <b-tooltip
-            :label="t('actions.expandCell', locale)"
-            append-to-body
-            type="is-dark">
-            <b-icon
-              icon="arrow-expand"
-              class="mr-3"
-              :type="nowrap ? 'is-grey-light' : 'is-dark'"
-              size="is-small"
-              @click.native="nowrap = !nowrap"/>
-          </b-tooltip>
-        </div>
-        <div class="column">
-          <span>
-            {{ value }}
-          </span>
-        </div>
-      </div>
+      <b-tooltip
+        v-if="showExpand"
+        :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
+        append-to-body
+        type="is-dark">
+        <b-icon
+          icon="arrow-expand"
+          class="mr-1"
+          :type="nowrap ? 'is-grey-light' : 'is-dark'"
+          size="is-small"
+          @click.native="nowrap = !nowrap"/>
+      </b-tooltip>
+      <span>
+        {{ value }}
+      </span>
     </div>
 
     <!-- BOOLEAN -->
@@ -126,5 +119,8 @@ export default {
 <style scoped>
   .gitribute-nowrap {
     white-space: nowrap;
+  }
+  .gitribute-wrap {
+    min-height: 3em;
   }
 </style>
