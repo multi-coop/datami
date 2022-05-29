@@ -308,7 +308,6 @@ export default {
             ...fieldSubtype && { subtype: fieldSubtype },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
-            ...fieldCustomProps && fieldCustomProps.category && { isCategory: fieldCustomProps.category },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
           if (!defaultEnumArr && needEnumArr) {

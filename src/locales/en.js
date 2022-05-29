@@ -114,6 +114,7 @@ export default {
     string: 'String',
     link: 'Link',
     tag: 'Tag',
+    tags: 'Tags',
     number: 'Number',
     integer: 'Integer',
     boolean: 'Boolean'

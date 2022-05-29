@@ -278,12 +278,16 @@ export const mixinValue = {
   data () {
     return {
       numberTypes: ['number', 'integer', 'float'],
+      tagTypes: ['tag', 'tags'],
       defaultTagsSeparator: defaultTagsSeparator
     }
   },
   computed: {
     fieldType () {
       return (this.field && this.field.type) || 'string'
+    },
+    fieldSubtype () {
+      return this.field && this.field.subtype
     },
     isString () {
       return this.fieldType === 'string'
@@ -298,10 +302,11 @@ export const mixinValue = {
       return this.fieldType === 'integer'
     },
     isTag () {
-      return this.field && this.field.subtype === 'tag'
+      return this.field && this.tagTypes.includes(this.field.subtype)
     },
     isCategory () {
-      return this.isTag && this.field.isCategory
+      return this.fieldSubtype === 'tag'
+      // return this.isTag && this.field.isCategory
     },
     tagsEnum () {
       return (this.field && this.field.enumArr) || []

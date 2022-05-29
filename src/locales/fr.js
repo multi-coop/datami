@@ -114,6 +114,7 @@ export default {
     string: 'Texte',
     link: 'Lien',
     tag: 'Etiquette',
+    tags: 'Etiquettes',
     number: 'Nombre',
     integer: 'Nombre entier',
     boolean: 'Bouléen'

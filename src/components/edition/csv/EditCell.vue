@@ -16,8 +16,9 @@
         size="is-small"/>
       <template #content>
         fieldType: <code>{{ fieldType }}</code><br>
+        <!-- fieldType: <code>{{ fieldType }}</code><br> -->
         inputData: <code>{{ inputData }}</code><br>
-        <!-- isCategory: <code>{{ isCategory }}</code> -->
+        isCategory: <code>{{ isCategory }}</code>
         <span v-if="!isTag && isCategory">
           input : <code>{{ input }}</code><br>
         </span>
@@ -40,17 +41,6 @@
         size="is-small"
         type="is-dark"
         @input="emitChange"/>
-
-      <!-- CATEGORY SELECT -->
-      <!-- <b-numberinput
-        v-else-if="!isHeader && field.type === 'integer'"
-        :custom-class="`g-cell g-cell-integer py-0`"
-        :value="input"
-        controls-position="compact"
-        controls-rounded
-        size="is-small"
-        type="is-light"
-        @input="emitChange"/> -->
 
       <!-- NUMBERS -->
       <b-numberinput

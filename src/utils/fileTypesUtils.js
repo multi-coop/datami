@@ -53,6 +53,7 @@ export const fieldTypeIcons = [
   { type: 'string', subtype: undefined, icon: 'alphabetical', default: true },
   { type: 'string', subtype: 'link', icon: 'link-variant' },
   { type: 'string', subtype: 'tag', icon: 'tag-outline' },
+  { type: 'string', subtype: 'tags', icon: 'tag-multiple-outline' },
   { type: 'boolean', subtype: undefined, icon: 'check-bold' },
   { type: 'number', subtype: undefined, icon: 'numeric' },
   { type: 'integer', subtype: undefined, icon: 'numeric' },
