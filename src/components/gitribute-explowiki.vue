@@ -11,6 +11,7 @@
             :locale="locale"
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
+
         <!-- USER NAVBAR -->
         <div class="column is-3 is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
           <ViewModeBtns

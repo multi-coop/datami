@@ -91,38 +91,22 @@
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div class="is-flex is-flex-direction-row is-align-items-center">
-                  <!-- COLUMN TYPE ICON -->
-                  <b-icon
-                    :icon="getIconFieldType( col )"
-                    class="ml-0 mr-2"
-                    type="is-grey-light"
-                    size="is-small"/>
-
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
                     <b-field
                       v-if="!lockHeaders ">
                       <EditCell
                         :is-header="true"
-                        :col="col"
+                        :field="col"
                         :input-data="column.label"
                         @updateCellValue="emitUpdate"/>
                     </b-field>
-                    <span v-if="lockHeaders">
-                      {{ column.label }}
-                      <b-tooltip
-                        :label="t('edit.headerLocked', locale)"
-                        position="is-top"
-                        multilined
-                        append-to-body
-                        type="is-dark">
-                        <b-icon
-                          class="mr-1 ml-2"
-                          size="is-small"
-                          type="is-light"
-                          icon="lock"/>
-                      </b-tooltip>
-                    </span>
+                    <PreviewField
+                      v-if="lockHeaders"
+                      :file-id="fileId"
+                      :field="col"
+                      :lock-headers="lockHeaders"
+                      :locale="locale"/>
                   </div>
 
                   <!-- DIFF HEADERS -->
@@ -132,61 +116,22 @@
                       <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
                     </div>
                     <span v-else>
-                      {{ column.label }}
+                      <!-- {{ column.label }} -->
+                      <PreviewField
+                        :file-id="fileId"
+                        :field="col"
+                        :lock-headers="lockHeaders"
+                        :locale="locale"/>
                     </span>
                   </div>
 
                   <!-- PREVIEW HEADERS -->
                   <div v-if="currentEditViewMode === 'preview'">
-                    <b-tooltip
-                      position="is-top"
-                      multilined
-                      append-to-body
-                      type="is-dark">
-                      {{ column.label }}
-                      <template #content>
-                        <div class="columns is-multiline px-2 py-2">
-                          <div class="column is-4 py-1 px-1 is-italic">
-                            {{ t('field.label', locale) }}
-                          </div>
-                          <div class="column is-8 py-1 px-1 has-text-weight-bold">
-                            {{ col.label }}
-                          </div>
-                          <div class="column is-4 py-1 px-1 is-italic">
-                            {{ t('field.type', locale) }}
-                          </div>
-                          <div class="column is-8 py-1 px-1 is-italic">
-                            <b-icon
-                              :icon="getIconFieldType( col )"
-                              class="ml-0 mr-1"
-                              type="is-grey-light"
-                              size="is-small"/>
-                            {{ col.type }}
-                            {{ col.subtype ? '(' + col.subtype + ')' : '' }}
-                          </div>
-                          <div
-                            v-if="col.title"
-                            class="column is-4 py-1 px-1 is-italic">
-                            {{ t('field.title', locale) }}
-                          </div>
-                          <div
-                            v-if="col.title"
-                            class="column is-8 py-1 px-1">
-                            {{ col.title }}
-                          </div>
-                          <div
-                            v-if="col.description"
-                            class="column is-4 pt-1 pb-2 px-1 is-italic">
-                            {{ t('field.description', locale) }}
-                          </div>
-                          <div
-                            v-if="col.description"
-                            class="column is-8 pt-1 pb-2 pl-3 pr-1 has-text-left">
-                            {{ col.description }}
-                          </div>
-                        </div>
-                      </template>
-                    </b-tooltip>
+                    <PreviewField
+                      :file-id="fileId"
+                      :field="col"
+                      :lock-headers="lockHeaders"
+                      :locale="locale"/>
                   </div>
                 </div>
               </template>
@@ -428,6 +373,7 @@ import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 
+import PreviewField from '@/components/previews/PreviewField'
 import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
 import GitributeCardsGrid from '@/components/previews/GitributeCardsGrid'
@@ -442,6 +388,7 @@ export default {
     EditCsvSkeleton,
     DialogAddRow,
     DialogDeleteRows,
+    PreviewField,
     PreviewCell,
     EditCell,
     GitributeCardsGrid,
@@ -920,7 +867,7 @@ export default {
 <style>
 
 .gitribute-table {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   min-width: 100px;
   max-width: 300px;
   overflow: auto;

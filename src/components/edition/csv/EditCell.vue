@@ -182,14 +182,14 @@ export default {
       return newInput
     },
     emitChange (event) {
-      console.log('C > EditCell > emitChange > event : ', event)
+      // console.log('C > EditCell > emitChange > event : ', event)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
         value = event.length ? value.join(this.tagSeparator) : ''
       } else {
         this.input = event
-        value = event
+        value = this.isNumber ? event.toString() : event
       }
       const payload = {
         val: value,

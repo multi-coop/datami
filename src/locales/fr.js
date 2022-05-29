@@ -61,6 +61,7 @@ export default {
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
+    expandCell: 'Agrandir la cellule',
     openLinkInNew: 'Ouvrir le lien dans une nouvelle fenêtre',
     reloadFile: 'Recharger le fichier',
     downloadFile: 'Télécharger le fichier',
@@ -105,9 +106,16 @@ export default {
   field: {
     field: 'Champ',
     label: 'Libellé',
+    type: 'Type',
     title: 'Titre',
     description: 'Description',
-    type: 'Type'
+    category: 'Catégorie',
+    string: 'Texte',
+    link: 'Lien',
+    tag: 'Etiquette',
+    number: 'Nombre',
+    integer: 'Nombre entier',
+    boolean: 'Bouléen'
   },
   edit: {
     uploadData: 'Importer/écraser les données',

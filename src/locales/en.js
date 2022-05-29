@@ -61,6 +61,7 @@ export default {
     send: 'Send',
     cancel: 'Cancel',
     search: 'Search',
+    expandCell: 'Expand cell content',
     openLinkInNew: 'Open link in a new window',
     reloadFile: 'Reload the file',
     downloadFile: 'Download the file',
@@ -105,9 +106,16 @@ export default {
   field: {
     field: 'Field',
     label: 'Label',
+    type: 'Type',
     title: 'Title',
     description: 'Description',
-    type: 'Type'
+    category: 'Category',
+    string: 'String',
+    link: 'Link',
+    tag: 'Tag',
+    number: 'Number',
+    integer: 'Integer',
+    boolean: 'Boolean'
   },
   edit: {
     importData: 'Import/overwrite the data',

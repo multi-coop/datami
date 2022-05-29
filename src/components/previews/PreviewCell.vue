@@ -1,13 +1,36 @@
 <template>
   <div
-    :class="`PreviewCell`">
+    :class="`PreviewCell ${nowrap ? 'gitribute-nowrap' : ''}`"
+    @mouseover="showExpand = true"
+    @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
 
     <!-- STRING -->
     <div
       v-if="isString && !field.subtype"
       :class="`${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
-      {{ value }}
+      <div class="columns">
+        <div
+          v-if="showExpand"
+          class="column is-1">
+          <b-tooltip
+            :label="t('actions.expandCell', locale)"
+            append-to-body
+            type="is-dark">
+            <b-icon
+              icon="arrow-expand"
+              class="mr-3"
+              :type="nowrap ? 'is-grey-light' : 'is-dark'"
+              size="is-small"
+              @click.native="nowrap = !nowrap"/>
+          </b-tooltip>
+        </div>
+        <div class="column">
+          <span>
+            {{ value }}
+          </span>
+        </div>
+      </div>
     </div>
 
     <!-- BOOLEAN -->
@@ -38,6 +61,7 @@
       :class="``">
       <b-button
         tag="a"
+        class="mx-3"
         size="is-small"
         icon-left="open-in-new"
         :href="value"
@@ -83,6 +107,12 @@ export default {
       default: null,
       type: String
     }
+  },
+  data () {
+    return {
+      showExpand: false,
+      nowrap: true
+    }
   }
   // beforeMount () {
   //   console.log('\nC > PreviewCell > beforeMount > this.value : ', this.value)
@@ -92,3 +122,9 @@ export default {
   // }
 }
 </script>
+
+<style scoped>
+  .gitribute-nowrap {
+    white-space: nowrap;
+  }
+</style>
