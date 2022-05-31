@@ -117,7 +117,9 @@ export default {
     tags: 'Etiquettes',
     number: 'Nombre',
     integer: 'Nombre entier',
-    boolean: 'Bouléen'
+    boolean: 'Bouléen',
+    gitribute: 'Champ spécial',
+    consolidation: 'Consolidation'
   },
   edit: {
     uploadData: 'Importer/écraser les données',

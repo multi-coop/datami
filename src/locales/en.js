@@ -117,7 +117,9 @@ export default {
     tags: 'Tags',
     number: 'Number',
     integer: 'Integer',
-    boolean: 'Boolean'
+    boolean: 'Boolean',
+    gitribute: 'Special field',
+    consolidation: 'Consolidation'
   },
   edit: {
     uploadData: 'Import/overwrite the data',

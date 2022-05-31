@@ -1,7 +1,7 @@
 <template>
   <div
     :class="`EditCell gitribute-component gitribute-cell is-flex is-align-items-center
-      ${field && field.type === 'boolean' ? 'is-justify-content-center' : ''}
+      ${field && ['boolean', 'gitribute'].includes(field.type) ? 'is-justify-content-center' : ''}
       ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}
     `">
     <!-- DEBUGGING -->
@@ -16,7 +16,8 @@
         size="is-small"/>
       <template #content>
         fieldType: <code>{{ fieldType }}</code><br>
-        <!-- fieldType: <code>{{ fieldType }}</code><br> -->
+        fieldSubtype: <code>{{ fieldSubtype }}</code><br>
+        hasConsolidation: <code>{{ hasConsolidation }}</code><br>
         inputData: <code>{{ inputData }}</code><br>
         isCategory: <code>{{ isCategory }}</code>
         <span v-if="!isTag && isCategory">
@@ -28,11 +29,49 @@
         <span v-if="isTag">
           field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre>
         </span>
+        <!-- fileOptions: <br><pre><code>{{ fileOptions }}</code></pre> -->
       </template>
     </b-tooltip>
 
+    <!-- USEREE BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
+    <div
+      v-if="field && isGitributeField"
+      class="">
+      <b-tooltip
+        v-if="field.subtype === 'consolidation'"
+        :label="t('consolidation.help', locale)"
+        append-to-body
+        type="is-dark">
+        <!-- :triggers="['hover']" -->
+        <b-dropdown
+          aria-role="list"
+          append-to-body>
+          <template #trigger>
+            <b-button
+              v-if="isConsolidation"
+              icon-left="api"
+              size="is-small"
+              type="is-dark"
+              outlined/>
+          </template>
+          <b-dropdown-item
+            v-for="api in field.apis"
+            :key="api.api_name"
+            aria-role="listitem"
+            @click="consolidateRow(api)">
+            <b-icon
+              :icon="field.icon"
+              class="ml-0 mr-2"
+              type="is-grey-light"
+              size="is-small"/>
+            {{ api.api_name }}
+          </b-dropdown-item>
+        </b-dropdown>
+      </b-tooltip>
+    </div>
+
     <!-- VALUE INPUT -->
-    <b-field v-if="field">
+    <b-field v-if="field && !isGitributeField">
       <!--BOOLEAN -->
       <b-switch
         v-if="!isHeader && field.type === 'boolean'"
@@ -130,6 +169,10 @@ export default {
       default: null,
       type: String
     },
+    locale: {
+      default: null,
+      type: String
+    },
     debug: {
       default: false,
       type: Boolean
@@ -170,6 +213,11 @@ export default {
         this.tagsValue = value.split(this.tagSeparator).filter(v => v !== '')
       }
       return newInput
+    },
+    consolidateRow (api) {
+      console.log('\nC > EditCell > consolidateRow > ...')
+      console.log('C > EditCell > consolidateRow > api :', api)
+      console.log('C > EditCell > consolidateRow > this.field :', this.field)
     },
     emitChange (event) {
       // console.log('C > EditCell > emitChange > event : ', event)

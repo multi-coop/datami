@@ -12,9 +12,18 @@
         class="ml-0 mr-2"
         type="is-grey-light"
         size="is-small"/>
-      <span class="mr-3">
+      <!-- FIELD LABEL -->
+      <span
+        v-if="field.type === 'gitribute'"
+        class="mr-3">
+        {{ t(field.label, locale) }}
+      </span>
+      <span
+        v-else
+        class="mr-3">
         {{ field.label }}
       </span>
+      <!-- TOOLTIP -->
       <template #content>
         <div class="columns is-multiline px-2 py-2">
           <!-- LABEL -->

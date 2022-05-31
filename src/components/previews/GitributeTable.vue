@@ -81,12 +81,13 @@
             striped>
             <!-- LOOP COLUMNS -->
             <b-table-column
-              v-for="col in columnsForView"
+              v-for="(col, idx) in columnsForView"
               :key="col.field"
               width="75px"
               :th-attrs="columnThAttrs"
               :td-attrs="columnTdAttrs"
               :field="col.field"
+              :sticky="!idx"
               :label="col.label">
               <!-- HEADERS -->
               <template #header="{ column }">
@@ -163,6 +164,7 @@
                     :row-id="props.row.id"
                     :is-added="props.row.added"
                     :input-data="props.row[col.field]"
+                    :locale="locale"
                     @updateCellValue="emitUpdate"/>
                 </div>
 
@@ -471,7 +473,12 @@ export default {
       itemsPerRow: undefined,
       itemsPerRowDefault: 3,
       itemsPerPageCards: undefined,
-      itemsPerPageCardsDefault: 6
+      itemsPerPageCardsDefault: 6,
+
+      // CONSOLIDATION
+      consolidationField: {
+        type: 'gitribute'
+      }
     }
   },
   computed: {
@@ -642,7 +649,19 @@ export default {
       let originalFields, editedFields, concat, uniquesFields
       switch (this.currentEditViewMode) {
         case 'edit':
-          columns = this.columnsEdited
+          if (this.hasConsolidation) {
+            const consolidationColumn = {
+              ...this.consolidationField,
+              field: 'consolidation',
+              subtype: 'consolidation',
+              label: 'field.consolidation',
+              apis: this.hasConsolidation
+            }
+            consolidationColumn.icon = this.getIconFieldType(consolidationColumn)
+            columns = [consolidationColumn, ...this.columnsEdited]
+          } else {
+            columns = this.columnsEdited
+          }
           break
         case 'diff':
           // TO DO : CHANGE TO CONTATENATE DELETED COLUMNS

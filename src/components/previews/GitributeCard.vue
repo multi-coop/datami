@@ -27,6 +27,7 @@
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -126,6 +127,7 @@
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field]"
+              :locale="locale"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -158,6 +160,7 @@
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -191,6 +194,7 @@
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -245,6 +249,7 @@
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -291,6 +296,7 @@
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>

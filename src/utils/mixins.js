@@ -141,6 +141,11 @@ export const mixinGlobal = {
     },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
+    },
+
+    // DATA CONNSOLIDATION
+    hasConsolidation () {
+      return this.fileOptions && this.fileOptions.consolidation
     }
   },
   methods: {
@@ -312,6 +317,12 @@ export const mixinValue = {
     },
     tagSeparator () {
       return this.field.tagSeparator || this.defaultTagsSeparator
+    },
+    isGitributeField () {
+      return this.fieldType === 'gitribute'
+    },
+    isConsolidation () {
+      return this.isGitributeField && this.fieldSubtype === 'consolidation'
     }
   },
   methods: {

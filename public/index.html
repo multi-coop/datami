@@ -166,7 +166,10 @@
             "name": "siren",
             "title": "N° SIREN",
             "description": "Numéro de SIREN de la structure",
-            "type": "string"
+            "type": "string",
+            "custom-properties": {
+              "sticky": true
+            }
           },
           {
             "name": "type",
@@ -316,22 +319,54 @@
       },
       "consolidation": [
         {
-          "field": "siren",
+          "api_name": "api-entreprise",
+          "field_name": "siren",
           "activate": true,
-          "api": "api-entreprise",
+          "api": "https://entreprise.data.gouv.fr/api/sirene/v3/unites_legales/{{VALUE}}",
           "results_fields": [
             { 
-              "source_field" : "resp_code_reg"
+              "resp_field": "resp_code_reg",
+              "map_to_field": ""
+            },
+            {
+              "resp_field": "resp_field",
+              "map_to_field": ""
+            },
+            {
+              "resp_field": "latitude",
+              "map_to_field": "lat"
+            },
+            {
+              "resp_field": "longitude",
+              "map_to_field": "lon"
+            },
+            {
+              "resp_field": "geo_adresse",
+              "map_to_field": "adress"
+            },
+            {
+              "resp_field": "code_postal",
+              "map_to_field": "depcode"
+            },
+            {
+              "resp_field": "libelle_commune",
+              "map_to_field": ""
             }
           ]
         },
         {
-          "field": "adress",
+          "api_name": "adresse.gouv.fr",
+          "field_name": "adress",
           "activate": false,
           "api": "api-ban",
           "results_fields": [
             { 
-              "source_field" : "resp_code_reg"
+              "resp_field" : "latitude",
+              "map_to_field": "lat"
+            },
+            { 
+              "resp_field" : "longitude",
+              "map_to_field": "lon"
             }
           ]
         }
