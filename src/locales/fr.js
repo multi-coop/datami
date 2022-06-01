@@ -5,7 +5,9 @@ export default {
     test: 'test nested global',
     link: 'Lien',
     yes: 'oui',
-    no: 'non'
+    no: 'non',
+    oldValue: 'Ancienne valeur',
+    newValue: 'Nouvelle valeur'
   },
   git: {
     provider: 'Provider',
@@ -74,7 +76,9 @@ export default {
     changeToken: "Changer votre jeton d'accès",
     changeActiveBranch: 'Changer de branche',
     commitChanges: 'Proposer vos modifications',
-    consolidate: 'Consolider vos données'
+    consolidate: 'Consolider vos données',
+    selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
+    validateConsolidation: 'Valider les changements'
     // nest: {
     //   test: 'test nested actions'
     // }

@@ -71,7 +71,7 @@
     <multi-gitribute-file
       gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
       options='{
-      "separator":";",
+      "separator": ";",
       "lockcolumns": true,
       "tagseparator":", ",
       "height": "500px",
@@ -92,8 +92,7 @@
           "profession": {"position": "desription"}
         }
       }
-    }' title="gitribute for gitlab file - csv (semicolon separator)" usertoken=""
-      locale="fr">
+    }' title="gitribute for gitlab file - csv (semicolon separator)" usertoken="" locale="fr">
     </multi-gitribute-file>
   </div> -->
 
@@ -108,8 +107,8 @@
       gitfile="https://github.com/qloridant/meteofrance_bra_hist/blob/master/src/data/ARAVIS/hist.csv" options='{
       "separator":",",
       "height": "1000px"
-    }' title="gitribute for github file - csv BERA (comma separator) - only preview"
-      usertoken="" locale="fr" onlypreview="true" debug="false">
+    }' title="gitribute for github file - csv BERA (comma separator) - only preview" usertoken="" locale="fr"
+      onlypreview="true" debug="false">
     </multi-gitribute-file>
   </div> -->
 
@@ -124,8 +123,8 @@
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
       "separator":",",
       "height": "300px"
-    }' title="gitribute for github file - csv (comma separator) - only preview"
-      usertoken="" locale="tk" onlypreview="true" debug="false">
+    }' title="gitribute for github file - csv (comma separator) - only preview" usertoken="" locale="tk"
+      onlypreview="true" debug="false">
     </multi-gitribute-file>
   </div> -->
 
@@ -160,7 +159,8 @@
         },
         {
           "name": "siren",
-          "sticky": true
+          "sticky": true,
+          "primaryKey": true
         },
         {
           "name": "type",
@@ -260,8 +260,16 @@
           ]
         }
       ],
+      "validation": [
+        {
+          "api_name": "api-json-validation",
+          "api": "https://json.validator.validata.fr/validate",
+          "api_doc": "https://json.validator.validata.fr/apidocs",
+          "notes": "not implemented (yet)"
+        }
+      ],
       "pagination":{
-        "itemsPerPage":30
+        "itemsPerPage": 10
       },
       "cardsview": { "activate": true, "default": false },
       "cardsdetail": true,

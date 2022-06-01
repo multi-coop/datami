@@ -225,7 +225,7 @@ export default {
       type: String
     },
     options: {
-      default: 'en',
+      default: '',
       type: String
     },
     usertoken: {
@@ -264,11 +264,11 @@ export default {
     }
   },
   async beforeMount () {
-    console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
+    // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     const fileUuid = this.uuidv4()
     gitInfosObject.uuid = fileUuid
-    console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
+    // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid
     this.fileType = gitInfosObject.filetype
     if (!this.getGitInfosObj[this.fileId]) {
@@ -289,20 +289,34 @@ export default {
       this.addGitInfos(gitInfosObject)
     }
     // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
+
     // build options object
-    const fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
-    // get schema if any
-    const fileSchema = fileOptions.schema
-    console.log('C > GitributeFile > beforeMount > fileSchema : ', fileSchema)
+    let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    let fileSchema = fileOptions.schema
+    // console.log('C > GitributeFile > beforeMount > fileSchema : ', fileSchema)
     if (fileSchema && fileSchema.file) {
       const schemaGitObj = this.extractGitInfos(fileSchema.file)
-      console.log('C > GitributeFile > beforeMount > schemaGitObj : ', schemaGitObj)
+      // console.log('C > GitributeFile > beforeMount > schemaGitObj : ', schemaGitObj)
       const schemaRaw = await this.getFileDataRaw(schemaGitObj)
       const schemaData = schemaRaw && schemaRaw.data
       const schema = JSON.parse(schemaData)
-      fileOptions.schema = schema
-      console.log('C > GitributeFile > beforeMount > schema : ', schema)
+      // console.log('C > GitributeFile > beforeMount > schema : ', schema)
+      fileSchema = schema
+      // fileOptions.schema = schema
     }
+
+    // get consolidation settings if any
+    let fileConsolidation = fileOptions.consolidation
+    fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
+    console.log('C > GitributeFile > beforeMount > fileConsolidation : ', fileConsolidation)
+
+    // update fileOptions with schema and consolidation settings
+    fileOptions = {
+      ...fileOptions,
+      ...fileSchema && { schema: fileSchema },
+      ...fileConsolidation && { consolidation: fileConsolidation }
+    }
+
     // add fileOptions in store
     this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
   },

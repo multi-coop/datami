@@ -1,10 +1,11 @@
 import { findFromPath } from '@/utils/globalUtils.js'
 
-export async function getConsolidationApiUrl (consolidationData, sourceFields) {
+export async function getConsolidationApiUrl (consolidationData, fields, sourceFields) {
   let consolidation
   const errors = []
 
   console.log('\nU > consolidationUtils > getConsolidationApiUrl > consolidationData : ', consolidationData)
+  console.log('U > consolidationUtils > getConsolidationApiUrl > fields : ', fields)
   console.log('U > consolidationUtils > getConsolidationApiUrl > sourceFields : ', sourceFields)
   let apiUrl = consolidationData.api.api
   sourceFields.forEach(sf => {
@@ -27,14 +28,18 @@ export async function getConsolidationApiUrl (consolidationData, sourceFields) {
   } else {
     const resultsMapping = consolidationData.api.results_fields
     consolidation = resultsMapping.map(m => {
-      console.log('U > consolidationUtils > getConsolidationApiUrl > m : ', m)
+      // console.log('U > consolidationUtils > getConsolidationApiUrl > m : ', m)
+      let targetField = fields.find(f => f.name === m.map_to_field)
+      targetField = targetField && {
+        field: targetField.field,
+        name: targetField.name,
+        type: targetField.type,
+        subtype: targetField.subtype
+      }
       return {
         fromField: m.resp_field,
-        toField: m.map_to_field,
-        m: m,
-        sourceFields: sourceFields,
-        // toFieldId: sourceFields.find(f => f.name === m.map_to_field).id,
-        value: findFromPath(m.resp_field, resp)
+        toField: targetField,
+        newValue: findFromPath(m.resp_field, resp)
       }
     })
   }

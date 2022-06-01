@@ -85,7 +85,7 @@
             :height="fileOptions.height || '400px'"
             :detailed="currentEditViewMode === 'edit'"
             detail-key="id"
-            :opened-detailed="defaultOpenedDetails"
+            :opened-detailed="openedDetails"
             :detail-transition="transitionName"
             :show-detail-icon="showDetailIcon"
             class=""
@@ -213,25 +213,12 @@
 
             <!-- ROWS DETAIL FOR CONSOLIDATION -->
             <template #detail="props">
-              <article
+              <PreviewConsolidation
                 v-if="currentEditViewMode === 'edit' && getRowConsolidation(props.row.id)"
-                class="media">
-                <div class="media-content">
-                  <div class="content">
-                    <p>
-                      <!-- <strong>{{ props.row.user.first_name }} {{ props.row.user.last_name }}</strong>
-                      <small>@{{ props.row.user.first_name }}</small>
-                      <small>31m</small>
-                      <br> -->
-                      <!-- <pre><code>{{ props.row }}</code></pre><br> -->
-                      <pre><code>{{ getRowConsolidation(props.row.id) }}</code></pre>
-                      <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
-                      Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis. -->
-                    </p>
-                  </div>
-                </div>
-              </article>
+                :row-data="props.row"
+                :consolidation-data="getRowConsolidation(props.row.id)"
+                :locale="locale"
+                @action="processAction"/>
             </template>
           </b-table>
         </div>
@@ -417,6 +404,7 @@ import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 import PreviewField from '@/components/previews/PreviewField'
 import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
+import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
 import GitributeCardsGrid from '@/components/previews/GitributeCardsGrid'
 
 import PagesNavigation from '@/components/pagination/PagesNavigation'
@@ -432,6 +420,7 @@ export default {
     PreviewField,
     PreviewCell,
     EditCell,
+    PreviewConsolidation,
     GitributeCardsGrid,
     PagesNavigation
   },
@@ -521,8 +510,8 @@ export default {
       },
       consolidating: [],
       consolidationData: [],
-      defaultOpenedDetails: [],
-      showDetailIcon: true,
+      openedDetails: [],
+      showDetailIcon: false,
       transitionName: 'fade'
     }
   },
@@ -849,10 +838,19 @@ export default {
           // console.log('\nC > GitributeTable > processAction > consolidation > event : ', event)
           await this.consolidateRow(event)
           break
+        case 'cancelConsolidation':
+          console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
+          // this.openedDetails = this.openedDetails.filter(id => id !== event.rowId)
+          this.closeConsolidationDetail(event.rowId)
+          break
+        case 'mergeConsolidation':
+          // console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
+          this.updateConsolidatedValues(event)
+          break
       }
     },
     emitUpdate (event) {
-      // console.log('C > GitributeTable > emitUpdate > event : ', event)
+      console.log('C > GitributeTable > emitUpdate > event : ', event)
       this.$emit('updateEdited', event)
     },
     getCharDiff (content, edited) {
@@ -937,14 +935,17 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      console.log('\nC > GitributeTable > consolidationSettings : ', consolidationSettings)
+      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
-      this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
-      console.log('\nC > GitributeTable > this.consolidationData : ', this.consolidationData)
-      // console.log('C > GitributeTable > this.columns : ', this.columns)
+      this.closeConsolidationDetail(rowId)
+      // this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
+      // this.openedDetails = this.openedDetails.filter(id => id !== rowId)
+
+      console.log('\nC > GitributeTable > consolidateRow > this.consolidationData : ', this.consolidationData)
+      // console.log('C > GitributeTable > consolidateRow > this.columns : ', this.columns)
       const rowData = this.dataEdited.find(row => row.id === rowId)
-      console.log('C > GitributeTable > rowData : ', rowData)
+      // console.log('C > GitributeTable > consolidateRow > rowData : ', rowData)
       let sourceFields = consolidationSettings.api.source_fields
       sourceFields = sourceFields.map(f => {
         const colField = this.columns.find(cf => cf.name === f.name)
@@ -958,17 +959,31 @@ export default {
       })
       console.log('C > GitributeTable > sourceFields : ', sourceFields)
 
-      const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, sourceFields)
+      const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
       respConsolidation.fromApi = consolidationSettings.api.api_name
-      respConsolidation.rowData = rowData
-      console.log('C > GitributeTable > respConsolidation : ', respConsolidation)
+      // respConsolidation.rowData = rowData
+      console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
+      // update loaders
       this.consolidating = this.consolidating.filter(id => id !== rowId)
       this.consolidationData.push(respConsolidation)
+      this.openedDetails.push(rowId)
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)
+    },
+    closeConsolidationDetail (rowId) {
+      this.openedDetails = this.openedDetails.filter(id => id !== rowId)
+      this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
+    },
+    updateConsolidatedValues (event) {
+      console.log('\nC > GitributeTable > updateConsolidatedValues > event : ', event)
+      event.newValues.forEach(e => {
+        console.log('C > GitributeTable > updateConsolidatedValues > e : ', e)
+        this.$emit('updateEdited', e)
+      })
+      this.closeConsolidationDetail(event.rowId)
     }
   }
 }

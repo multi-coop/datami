@@ -5,7 +5,9 @@ export default {
     test: 'test nested global',
     link: 'Link',
     yes: 'yes',
-    no: 'no'
+    no: 'no',
+    oldValue: 'Old value',
+    newValue: 'New value'
   },
   git: {
     provider: 'Provider',
@@ -74,7 +76,9 @@ export default {
     changeToken: 'Change your user token',
     changeActiveBranch: 'Change your branch',
     commitChanges: 'Submit your modifications',
-    consolidate: 'Consolider vos données'
+    consolidate: 'Consolidate your data',
+    selectConsolidationFields: 'Select the fields to update',
+    validateConsolidation: 'Validate the changes'
     // nest: {
     //   test: 'test nested actions'
     // }
