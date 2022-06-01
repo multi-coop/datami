@@ -31,7 +31,7 @@
       v-if="isBoolean"
       :class="`has-text-centered`">
       <b-icon
-        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank'}-circle-outline`"
+        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank-outline'}`"
         size="is-small"/>
     </div>
 
