@@ -936,15 +936,16 @@ export default {
     isConsolidating (rowId) {
       return this.consolidating.includes(rowId)
     },
-    async consolidateRow (consolidationData) {
-      const rowId = consolidationData.rowId
+    async consolidateRow (consolidationSettings) {
+      console.log('\nC > GitributeTable > consolidationSettings : ', consolidationSettings)
+      const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
-      console.log('\nC > GitributeTable > consolidateRow : ', consolidationData)
+      console.log('\nC > GitributeTable > this.consolidationData : ', this.consolidationData)
       // console.log('C > GitributeTable > this.columns : ', this.columns)
       const rowData = this.dataEdited.find(row => row.id === rowId)
       console.log('C > GitributeTable > rowData : ', rowData)
-      let sourceFields = consolidationData.api.source_fields
+      let sourceFields = consolidationSettings.api.source_fields
       sourceFields = sourceFields.map(f => {
         const colField = this.columns.find(cf => cf.name === f.name)
         const colFieldId = colField.field
@@ -957,9 +958,9 @@ export default {
       })
       console.log('C > GitributeTable > sourceFields : ', sourceFields)
 
-      const respConsolidation = await this.getConsolidationApiUrl(consolidationData, sourceFields)
+      const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, sourceFields)
       respConsolidation.rowId = rowId
-      respConsolidation.fromApi = consolidationData.api.api_name
+      respConsolidation.fromApi = consolidationSettings.api.api_name
       respConsolidation.rowData = rowData
       console.log('C > GitributeTable > respConsolidation : ', respConsolidation)
 
