@@ -221,7 +221,7 @@ export default {
         this.editedColumns = this.dataColumns
       }
     },
-    fileClientRaw (next) {
+    async fileClientRaw (next) {
       if (next) {
         // console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
         const dataObj = this.csvToObject(next, this.fileOptions)
@@ -280,26 +280,28 @@ export default {
       // console.log('C > PreviewCsv > buildColumns > dataRaw : ', dataRaw)
       // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
-      const tableSchema = this.fileOptions.tableschema
-      // console.log('C > PreviewCsv > buildColumns > tableSchema : ', tableSchema)
-      const fileConsolidation = this.fileOptions.consolidation
-      console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
+      const schema = this.fileOptions.schema
+      // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
+      const fieldsCustomProperties = this.fileOptions['fields-custom-properties']
+      // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
+      // const fileConsolidation = this.fileOptions.consolidation
+      // console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
       if (!headers) return null
       const fields = Object.entries(headers)
         .map((entry, idx) => {
           const fieldId = entry[0]
           const fieldLabel = entry[1].trim()
-          const fieldProps = tableSchema && tableSchema.fields.find(schema => schema.name === fieldLabel)
-          const fieldConstraints = fieldProps && fieldProps.constraints
+          const fieldSchema = schema && schema.fields.find(schema => schema.name === fieldLabel)
+          const fieldConstraints = fieldSchema && fieldSchema.constraints
           // console.log('C > PreviewCsv > buildColumns > fieldConstraints : ', fieldConstraints)
-          const fieldCustomProps = fieldProps && fieldProps['custom-properties']
+          const fieldCustomProps = fieldsCustomProperties && fieldsCustomProperties.find(schema => schema.name === fieldLabel)
           // const fielSticky = fieldCustomProps && fieldCustomProps.sticky
-          const fieldConsolidation = fileConsolidation && fileConsolidation.find(item => item.field_name === fieldLabel)
+          // const fieldConsolidation = fileConsolidation && fileConsolidation.find(item => item.field_name === fieldLabel)
           let fieldData = {
             field: fieldId,
             label: fieldLabel.trim(),
-            type: (fieldProps && fieldProps.type) || 'string',
-            name: (fieldProps && fieldProps.name) || fieldLabel
+            type: (fieldSchema && fieldSchema.type) || 'string',
+            name: (fieldSchema && fieldSchema.name) || fieldLabel
           }
           // parse data for unique values on tag columns
           const fieldSubtype = fieldCustomProps && fieldCustomProps.subtype
@@ -308,14 +310,14 @@ export default {
           fieldData = {
             ...fieldData,
             // ...(!idx) && { sticky: true },
-            ...fieldProps && fieldProps.title && { title: fieldProps.title },
-            ...fieldProps && fieldProps.description && { description: fieldProps.description },
+            ...fieldSchema && fieldSchema.title && { title: fieldSchema.title },
+            ...fieldSchema && fieldSchema.description && { description: fieldSchema.description },
             ...fieldSubtype && { subtype: fieldSubtype },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
-            ...defaultEnumArr && { enumArr: defaultEnumArr },
+            ...defaultEnumArr && { enumArr: defaultEnumArr }
             // consolidation data
-            ...fieldConsolidation && { consolidation: fieldConsolidation }
+            // ...fieldConsolidation && { consolidation: fieldConsolidation }
           }
           if (!defaultEnumArr && needEnumArr) {
             const enumArr = this.buildEnumArr(

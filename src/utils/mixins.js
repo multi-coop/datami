@@ -47,6 +47,9 @@ import {
   getMediawikitItem,
   restructurePageData
 } from '@/utils/utilsWikiUrl.js'
+import {
+  getConsolidationApiUrl
+} from '@/utils/consolidationUtils'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -487,5 +490,11 @@ export const mixinJsonNode = {
       const infos = this.getNodeTypeInfosByType(nodeType)
       return infos && infos.icon
     }
+  }
+}
+
+export const mixinConsolidation = {
+  methods: {
+    getConsolidationApiUrl
   }
 }

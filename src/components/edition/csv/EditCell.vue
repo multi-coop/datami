@@ -6,7 +6,7 @@
     `">
     <!-- DEBUGGING -->
     <b-tooltip
-      v-if="false"
+      v-if="debug"
       multilined
       append-to-body
       type="is-warning">
@@ -15,11 +15,12 @@
         type="is-warning"
         size="is-small"/>
       <template #content>
+        isCardView: <code>{{ isCardView }}</code><br>
         fieldType: <code>{{ fieldType }}</code><br>
         fieldSubtype: <code>{{ fieldSubtype }}</code><br>
         hasConsolidation: <code>{{ hasConsolidation }}</code><br>
         inputData: <code>{{ inputData }}</code><br>
-        isCategory: <code>{{ isCategory }}</code>
+        isCategory: <code>{{ isCategory }}</code><br>
         <span v-if="!isTag && isCategory">
           input : <code>{{ input }}</code><br>
         </span>
@@ -27,47 +28,22 @@
           tagsValue : <code>{{ tagsValue }}</code><br>
         </span>
         <span v-if="isTag">
-          field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre>
+          field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
         </span>
+        field: <br><pre><code>{{ field }}</code></pre>
         <!-- fileOptions: <br><pre><code>{{ fileOptions }}</code></pre> -->
       </template>
     </b-tooltip>
 
-    <!-- USEREE BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
-    <div
-      v-if="field && isGitributeField"
-      class="">
-      <b-tooltip
-        v-if="field.subtype === 'consolidation'"
-        :label="t('consolidation.help', locale)"
-        append-to-body
-        type="is-dark">
-        <!-- :triggers="['hover']" -->
-        <b-dropdown
-          aria-role="list"
-          append-to-body>
-          <template #trigger>
-            <b-button
-              v-if="isConsolidation"
-              icon-left="api"
-              size="is-small"
-              type="is-dark"
-              outlined/>
-          </template>
-          <b-dropdown-item
-            v-for="api in field.apis"
-            :key="api.api_name"
-            aria-role="listitem"
-            @click="consolidateRow(api)">
-            <b-icon
-              :icon="field.icon"
-              class="ml-0 mr-2"
-              type="is-grey-light"
-              size="is-small"/>
-            {{ api.api_name }}
-          </b-dropdown-item>
-        </b-dropdown>
-      </b-tooltip>
+    <!-- USER BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
+    <div v-if="field && isGitributeField">
+      <ButtonConsolidation
+        v-if="isConsolidation"
+        :field="field"
+        :row-id="rowId"
+        :is-consolidating="isConsolidating"
+        :locale="locale"
+        @action="SendActionToParent"/>
     </div>
 
     <!-- VALUE INPUT -->
@@ -75,8 +51,9 @@
       <!--BOOLEAN -->
       <b-switch
         v-if="!isHeader && field.type === 'boolean'"
-        :custom-class="`g-cell g-cell-boolean py-0`"
+        :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
         :value="input"
+        :disabled="isConsolidating"
         size="is-small"
         type="is-dark"
         @input="emitChange"/>
@@ -84,9 +61,10 @@
       <!-- NUMBERS -->
       <b-numberinput
         v-else-if="!isHeader && isNumber"
-        :custom-class="`g-cell g-cell-${isInteger ? 'integer' : 'number'} py-0`"
+        :custom-class="`g-cell g-cell-${isInteger ? 'integer' : 'number'}${ isCardView ? '-card' :'' } py-0`"
         :value="input"
         :step="isInteger ? 1 : 0.01"
+        :disabled="isConsolidating"
         controls-position="compact"
         controls-rounded
         size="is-small"
@@ -97,7 +75,8 @@
       <b-select
         v-else-if="!isHeader && isCategory"
         v-model="input"
-        :class="`g-cell g-cell-tag py-0`"
+        :class="`g-cell g-cell-tag${ isCardView ? '-card' :'' } py-0`"
+        :disabled="isConsolidating"
         size="is-small"
         expanded
         @input="emitChange">
@@ -113,8 +92,9 @@
       <b-taginput
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
-        :class="`g-cell g-cell-tags py-0`"
+        :class="`g-cell g-cell-tags${ isCardView ? '-card' :'' } py-0`"
         :data="tagsEnum"
+        :disabled="isConsolidating"
         size="is-small"
         open-on-focus
         ellipsis
@@ -129,8 +109,9 @@
       <!-- ANY STRING -->
       <b-input
         v-else
-        :custom-class="`g-cell g-cell-string py-0 ${isHeader ? 'g-header' : ''}`"
+        :custom-class="`g-cell g-cell-string${ isCardView ? '-card' :'' } py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
+        :disabled="isConsolidating"
         size="is-small"
         expanded
         @input="emitChange"/>
@@ -142,8 +123,13 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
+import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
+
 export default {
   name: 'EditCell',
+  components: {
+    ButtonConsolidation
+  },
   mixins: [
     mixinGlobal,
     mixinValue
@@ -169,9 +155,17 @@ export default {
       default: null,
       type: String
     },
+    isConsolidating: {
+      default: false,
+      type: Boolean
+    },
     locale: {
       default: null,
       type: String
+    },
+    isCardView: {
+      default: false,
+      type: Boolean
     },
     debug: {
       default: false,
@@ -214,11 +208,6 @@ export default {
       }
       return newInput
     },
-    consolidateRow (api) {
-      console.log('\nC > EditCell > consolidateRow > ...')
-      console.log('C > EditCell > consolidateRow > api :', api)
-      console.log('C > EditCell > consolidateRow > this.field :', this.field)
-    },
     emitChange (event) {
       // console.log('C > EditCell > emitChange > event : ', event)
       let value
@@ -241,6 +230,9 @@ export default {
       }
       // console.log('C > EditCell > emitChange > payload : ', payload)
       this.$emit('updateCellValue', payload)
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     }
   }
 }

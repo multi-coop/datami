@@ -13,9 +13,18 @@
           @action="processAction"/>
       </div>
 
-      <!-- <div v-if="true">
-        fileFilters: <br><pre><code>{{ fileFilters }}</code></pre>
-      </div> -->
+      <!-- DEBUGGING -->
+      <div
+        v-if="false"
+        class="column is-3">
+        <!-- fileFilters: <br><pre><code>{{ fileFilters }}</code></pre> -->
+        consolidating: <br><pre><code>{{ consolidating }}</code></pre><br>
+      </div>
+      <div
+        v-if="false"
+        class="column is-9">
+        consolidationData: <br><pre><code>{{ consolidationData }}</code></pre><br>
+      </div>
 
       <!-- FILTER TAGS -->
       <div :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
@@ -74,6 +83,11 @@
             :sticky-checkbox="currentEditViewMode === 'edit'"
             :checked-rows.sync="checkedRows"
             :height="fileOptions.height || '400px'"
+            :detailed="currentEditViewMode === 'edit'"
+            detail-key="id"
+            :opened-detailed="defaultOpenedDetails"
+            :detail-transition="transitionName"
+            :show-detail-icon="showDetailIcon"
             class=""
             narrowed
             hoverable
@@ -164,8 +178,10 @@
                     :row-id="props.row.id"
                     :is-added="props.row.added"
                     :input-data="props.row[col.field]"
+                    :is-consolidating="isConsolidating(props.row.id)"
                     :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    @updateCellValue="emitUpdate"
+                    @action="processAction"/>
                 </div>
 
                 <!-- DIFF -->
@@ -194,6 +210,29 @@
                 </div>
               </template>
             </b-table-column>
+
+            <!-- ROWS DETAIL FOR CONSOLIDATION -->
+            <template #detail="props">
+              <article
+                v-if="currentEditViewMode === 'edit' && getRowConsolidation(props.row.id)"
+                class="media">
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      <!-- <strong>{{ props.row.user.first_name }} {{ props.row.user.last_name }}</strong>
+                      <small>@{{ props.row.user.first_name }}</small>
+                      <small>31m</small>
+                      <br> -->
+                      <!-- <pre><code>{{ props.row }}</code></pre><br> -->
+                      <pre><code>{{ getRowConsolidation(props.row.id) }}</code></pre>
+                      <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
+                      Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis. -->
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </template>
           </b-table>
         </div>
 
@@ -367,7 +406,7 @@
 </template>
 
 <script>
-import { mixinGlobal, mixinIcons, mixinDiff, mixinCsv, mixinPagination } from '@/utils/mixins.js'
+import { mixinGlobal, mixinIcons, mixinDiff, mixinCsv, mixinPagination, mixinConsolidation } from '@/utils/mixins.js'
 
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import FilterTags from '@/components/filters/FilterTags'
@@ -401,7 +440,8 @@ export default {
     mixinIcons,
     mixinDiff,
     mixinCsv,
-    mixinPagination
+    mixinPagination,
+    mixinConsolidation
   ],
   props: {
     fileId: {
@@ -478,7 +518,12 @@ export default {
       // CONSOLIDATION
       consolidationField: {
         type: 'gitribute'
-      }
+      },
+      consolidating: [],
+      consolidationData: [],
+      defaultOpenedDetails: [],
+      showDetailIcon: true,
+      transitionName: 'fade'
     }
   },
   computed: {
@@ -501,7 +546,10 @@ export default {
         const detailSettins = settings.detail
         const mapping = this.columns.map(h => {
           const fieldMap = {
-            field: h.field,
+            ...h,
+            // field: h.field,
+            // type: h.type,
+            // subtype: h.subtype,
             // mini: miniSettings,
             mini: miniSettings[h.label],
             detail: detailSettins[h.label]
@@ -736,7 +784,7 @@ export default {
     columnThAttrs (column) {
       // console.log('\nC > GitributeTable > columnThAttrs > column : ', column)
       return {
-        class: 'gitribute-table gitribute-table-th'
+        class: 'gitribute-table gitribute-table-th has-text-centered'
       }
     },
     columnTdAttrs (row, column) {
@@ -746,7 +794,7 @@ export default {
         class: `gitribute-table gitribute-table-td ${this.currentEditViewMode === 'edit' ? 'gitribute-table-td-edit' : ''}`
       }
     },
-    processAction (event) {
+    async processAction (event) {
       // console.log('\nC > GitributeTable > processAction > event : ', event)
       switch (event.action) {
         // ADD ROW
@@ -794,6 +842,12 @@ export default {
               this.itemsPerPageCards = event.value.itemsPerPage
               break
           }
+          break
+
+        // CONSOLIDATION
+        case 'consolidate':
+          // console.log('\nC > GitributeTable > processAction > consolidation > event : ', event)
+          await this.consolidateRow(event)
           break
       }
     },
@@ -878,6 +932,42 @@ export default {
     removeTag (tag) {
       // console.log('\nC > GitributeTable > removeTag > tag : ', tag)
       this.processFilterValue(tag, true)
+    },
+    isConsolidating (rowId) {
+      return this.consolidating.includes(rowId)
+    },
+    async consolidateRow (consolidationData) {
+      const rowId = consolidationData.rowId
+      this.consolidating.push(rowId)
+      this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
+      console.log('\nC > GitributeTable > consolidateRow : ', consolidationData)
+      // console.log('C > GitributeTable > this.columns : ', this.columns)
+      const rowData = this.dataEdited.find(row => row.id === rowId)
+      console.log('C > GitributeTable > rowData : ', rowData)
+      let sourceFields = consolidationData.api.source_fields
+      sourceFields = sourceFields.map(f => {
+        const colField = this.columns.find(cf => cf.name === f.name)
+        const colFieldId = colField.field
+        const rowDataValue = rowData[colFieldId]
+        return {
+          name: f.name,
+          id: colFieldId,
+          value: rowDataValue
+        }
+      })
+      console.log('C > GitributeTable > sourceFields : ', sourceFields)
+
+      const respConsolidation = await this.getConsolidationApiUrl(consolidationData, sourceFields)
+      respConsolidation.rowId = rowId
+      respConsolidation.fromApi = consolidationData.api.api_name
+      respConsolidation.rowData = rowData
+      console.log('C > GitributeTable > respConsolidation : ', respConsolidation)
+
+      this.consolidating = this.consolidating.filter(id => id !== rowId)
+      this.consolidationData.push(respConsolidation)
+    },
+    getRowConsolidation (rowId) {
+      return this.consolidationData.find(data => data.rowId === rowId)
     }
   }
 }
@@ -898,6 +988,9 @@ export default {
 }
 .gitribute-table-td {
   /* padding: .2em .25em !important; */
+}
+.th-wrap {
+  justify-content: center !important;
 }
 .gitribute-table-td-edit {
   border: none !important;

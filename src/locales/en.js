@@ -73,7 +73,8 @@ export default {
     changeLocale: 'Choose the language',
     changeToken: 'Change your user token',
     changeActiveBranch: 'Change your branch',
-    commitChanges: 'Submit your modifications'
+    commitChanges: 'Submit your modifications',
+    consolidate: 'Consolider vos données'
     // nest: {
     //   test: 'test nested actions'
     // }

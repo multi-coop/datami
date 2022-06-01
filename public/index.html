@@ -138,7 +138,6 @@
   <div style="background-color: white; margin: 1em;">
     <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
-      gitschema="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-schema.json"
       options='{
       "height": "850px",
       "separator":";",
@@ -147,216 +146,106 @@
       "customfilters" : {
         "activate": true,
         "filterfields": [
-          "type",
+        "type",
           "platform_clean"
-        ]
+          ]
       },
-      "tableschema": {
-        "fields": [
-          {
-            "name": "id_odf",
-            "title": "Identifiant ODF",
-            "description": "Identifiant unique proposé par Open Data France",
-            "type": "string",
-            "custom-properties": {
-              "locked": true
-            }
-          },
-          {
-            "name": "siren",
-            "title": "N° SIREN",
-            "description": "Numéro de SIREN de la structure",
-            "type": "string",
-            "custom-properties": {
-              "sticky": true
-            }
-          },
-          {
-            "name": "type",
-            "title": "Type d&#39;organisation",
-            "type": "string",
-            "constraints": {
-              "enum" : [
-                "AGCT",
-                "CA",
-                "CC",
-                "COM",
-                "CU",
-                "DEP",
-                "DSPT",
-                "EPT",
-                "MET",
-                "OACT",
-                "REG",
-                "SDE"
-              ]
-            },
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "tags",
-            "title": "Tags thématiques",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tags",
-              "tagSeparator": "-"
-            }
-          },
-          {
-            "name": "merge",
-            "title": "Merge",
-            "type": "string",
-            "constraints": {
-              "enum" : [
-                "datagouv",
-                "ptf"
-              ]
-            },
-            "custom-properties": {
-              "subtype": "tags",
-              "tagSeparator": "+"
-            }
-          },
-          {
-            "name": "orga",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag",
-              "allowNew": true
-            }
-          },
-          {
-            "name": "platform_clean",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "depcode",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "reg_code_geo",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "reg_code_short",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "tranche_ptf",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "tranche_pop",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "tag"
-            }
-          },
-          {
-            "name": "url_ptf",
-            "title": "URL de la plateforme",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "link"
-            }
-          },
-          {
-            "name": "url_datagouv",
-            "title": "URL sur datagouv",
-            "type": "string",
-            "custom-properties": {
-              "subtype": "link"
-            }
-          },
-          {
-            "name": "nb_ptf",
-            "title": "Nombre de plateformes",
-            "type": "integer"
-          },
-          {
-            "name": "nb_datagouv",
-            "title": "Nombre de plateformes",
-            "type": "integer"
-          },
-          {
-            "name": "pop_insee",
-            "title": "Population",
-            "type": "integer"
-          },
-          {
-            "name": "lat",
-            "title": "Latitude",
-            "type": "number"
-          },
-          {
-            "name": "lon",
-            "title": "Longitude",
-            "type": "number"
-          },
-          {
-            "name": "boolean",
-            "title": "Bouléen",
-            "type": "boolean"
-          }
-        ]
+      "schema": {
+        "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/ODF-Observatoire-apiviz_data-schema.json"
       },
+      "fields-custom-properties": [
+        {
+          "name": "id_odf",
+          "locked": true
+        },
+        {
+          "name": "siren",
+          "sticky": true
+        },
+        {
+          "name": "type",
+          "subtype": "tag"
+        },
+        {
+          "name": "tags",
+          "subtype": "tags",
+          "tagSeparator": "-"
+        },
+        {
+          "name": "merge",
+          "subtype": "tags",
+          "tagSeparator": "+"
+        },
+        {
+          "name": "orga",
+          "subtype": "tag",
+          "allowNew": true
+        },
+        {
+          "name": "platform_clean",
+          "subtype": "tag"
+        },
+        {
+          "name": "depcode",
+          "subtype": "tag"
+        },
+        {
+          "name": "reg_code_geo",
+          "subtype": "tag"
+        },
+        {
+          "name": "reg_code_short",
+          "subtype": "tag"
+        },
+        {
+          "name": "tranche_ptf",
+          "subtype": "tag"
+        },
+        {
+          "name": "tranche_pop",
+          "subtype": "tag"
+        },
+        {
+          "name": "url_ptf",
+          "subtype": "link"
+        },
+        {
+          "name": "url_datagouv",
+          "subtype": "link"
+        }
+      ],
       "consolidation": [
         {
           "api_name": "api-entreprise",
-          "field_name": "siren",
+          "source_fields": [
+            { "name": "siren" }
+          ],
           "activate": true,
-          "api": "https://entreprise.data.gouv.fr/api/sirene/v3/unites_legales/{{VALUE}}",
+          "api": "https://entreprise.data.gouv.fr/api/sirene/v3/unites_legales/{{siren}}",
           "results_fields": [
-            { 
-              "resp_field": "resp_code_reg",
-              "map_to_field": ""
-            },
             {
-              "resp_field": "resp_field",
-              "map_to_field": ""
-            },
-            {
-              "resp_field": "latitude",
+              "resp_field": "unite_legale.etablissement_siege.latitude",
               "map_to_field": "lat"
             },
             {
-              "resp_field": "longitude",
+              "resp_field": "unite_legale.etablissement_siege.longitude",
               "map_to_field": "lon"
             },
             {
-              "resp_field": "geo_adresse",
+              "resp_field": "unite_legale.etablissement_siege.geo_adresse",
               "map_to_field": "adress"
             },
             {
-              "resp_field": "code_postal",
+              "resp_field": "unite_legale.etablissement_siege.code_postal",
               "map_to_field": "depcode"
-            },
-            {
-              "resp_field": "libelle_commune",
-              "map_to_field": ""
             }
           ]
         },
         {
           "api_name": "adresse.gouv.fr",
-          "field_name": "adress",
+          "source_fields": [
+            { "name": "adress" }
+          ],
           "activate": false,
           "api": "api-ban",
           "results_fields": [
@@ -502,91 +391,49 @@
         "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
       ]' options='{
         "height": "700px",
-        "tableschema": {
-          "fields": [
-            { 
-              "name": "pageUrl",
-              "custom-properties": {
-                "subtype": "link",
-                "locked": true
-              }
-            },
-            { 
-              "name": "imageUrl",
-              "custom-properties": {
-                "subtype": "link"
-              }
-            },
-            { 
-              "name": "url",
-              "custom-properties": {
-                "subtype": "link"
-              }
-            },
-            { 
-              "name": "description"
-            },
-            { 
-              "name": "shortDescription"
-            },
-            { 
-              "name": "Main_Picture"
-            },
-            { 
-              "name": "Coordonnées géo"
-            },
-            { 
-              "name": "needs"
-            },
-            { 
-              "name": "referent"
-            },
-            { 
-              "name": "communauté d&#39;intérêt"
-            },
-            { 
-              "name": "Titre"
-            },
-            { 
-              "name": "etape"
-            },
-            {
-              "name": "Tags",
-              "custom-properties": {
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            },
-            {
-              "name": "Theme",
-              "custom-properties": {
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            },
-            {
-              "name": "location",
-              "custom-properties": {
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            },
-            {
-              "name": "from",
-              "custom-properties": {
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            },
-            {
-              "name": "challenge",
-              "custom-properties": {
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            }
-          ]
+        "schema": {
+          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob-projets-schema.json"
         },
+        "fields-custom-properties": [
+          { 
+            "name": "pageUrl",
+            "subtype": "link",
+            "locked": true
+          },
+          { 
+            "name": "imageUrl",
+            "subtype": "link"
+          },
+          { 
+            "name": "url",
+            "subtype": "link"
+          },
+          {
+            "name": "Tags",
+            "subtype": "tags",
+            "tagSeparator": ","
+          },
+          {
+            "name": "Theme",
+            "subtype": "tags",
+            "tagSeparator": ","
+          },
+          {
+            "name": "location",
+            "subtype": "tags",
+            "tagSeparator": ","
+          },
+          {
+            "name": "from",
+            "subtype": "tags",
+            "tagSeparator": ","
+          },
+          {
+            "name": "challenge",
+            "subtype": "tags",
+            "tagSeparator": ","
+          }
+        ],
         "wikisettings": {
           "category": "projet",
           "fields": [
@@ -630,7 +477,10 @@
       "pagination": {
         "itemsPerPage":12
       },
-      "cardsview": { "activate": true, "default": true },
+      "cardsview": {
+        "activate": true,
+        "default": true
+      },
       "cardssettings": {
         "mini": {
           "title": {"position": "title"},

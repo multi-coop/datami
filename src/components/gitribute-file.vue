@@ -263,7 +263,7 @@ export default {
       if (next) { this.reloadFile() }
     }
   },
-  beforeMount () {
+  async beforeMount () {
     console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     const fileUuid = this.uuidv4()
@@ -291,6 +291,19 @@ export default {
     // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
     // build options object
     const fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    // get schema if any
+    const fileSchema = fileOptions.schema
+    console.log('C > GitributeFile > beforeMount > fileSchema : ', fileSchema)
+    if (fileSchema && fileSchema.file) {
+      const schemaGitObj = this.extractGitInfos(fileSchema.file)
+      console.log('C > GitributeFile > beforeMount > schemaGitObj : ', schemaGitObj)
+      const schemaRaw = await this.getFileDataRaw(schemaGitObj)
+      const schemaData = schemaRaw && schemaRaw.data
+      const schema = JSON.parse(schemaData)
+      fileOptions.schema = schema
+      console.log('C > GitributeFile > beforeMount > schema : ', schema)
+    }
+    // add fileOptions in store
     this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
   },
   async mounted () {

@@ -73,7 +73,8 @@ export default {
     changeLocale: 'Choisir la langue',
     changeToken: "Changer votre jeton d'accès",
     changeActiveBranch: 'Changer de branche',
-    commitChanges: 'Proposer vos modifications'
+    commitChanges: 'Proposer vos modifications',
+    consolidate: 'Consolider vos données'
     // nest: {
     //   test: 'test nested actions'
     // }

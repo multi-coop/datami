@@ -61,7 +61,7 @@ export const fieldTypeIcons = [
   { type: 'any', subtype: undefined, icon: 'text' },
 
   // GITRIBUTE ICONS
-  { type: 'gitribute', subtype: 'consolidation', icon: 'api' }
+  { type: 'gitribute', subtype: 'consolidation', icon: 'wrench' }
 ]
 
 // FOR EDITION

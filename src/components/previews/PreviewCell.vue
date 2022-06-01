@@ -54,7 +54,7 @@
       :class="``">
       <b-button
         tag="a"
-        class="mx-3"
+        class=""
         size="is-small"
         icon-left="open-in-new"
         :href="value"
