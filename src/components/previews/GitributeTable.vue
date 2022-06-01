@@ -75,23 +75,23 @@
       <div
         v-show="dataEditedPaginated && dataEditedPaginated.length"
         :class="`column is-${ currentViewMode === 'cards' ? 10 : 12}`">
+        <!-- :sticky-checkbox="currentEditViewMode === 'edit'" -->
         <div
           v-show="!isAnyDialogOpen && currentViewMode === 'table'">
           <b-table
             :data="dataEditedPaginated"
-            :checkable="currentEditViewMode === 'edit'"
-            :sticky-checkbox="currentEditViewMode === 'edit'"
-            :checked-rows.sync="checkedRows"
             :height="fileOptions.height || '400px'"
+            :checkable="currentEditViewMode === 'edit'"
+            :checked-rows.sync="checkedRows"
             :detailed="currentEditViewMode === 'edit'"
-            detail-key="id"
             :opened-detailed="openedDetails"
             :detail-transition="transitionName"
             :show-detail-icon="showDetailIcon"
-            class=""
+            detail-key="id"
             narrowed
             hoverable
             sticky-header
+            checkbox-type="is-dark"
             striped>
             <!-- LOOP COLUMNS -->
             <b-table-column

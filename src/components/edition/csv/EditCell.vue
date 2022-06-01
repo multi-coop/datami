@@ -49,7 +49,15 @@
     <!-- VALUE INPUT -->
     <b-field v-if="field && !isGitributeField">
       <!--BOOLEAN -->
-      <b-switch
+      <!-- <b-switch
+        v-if="!isHeader && field.type === 'boolean'"
+        :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
+        :value="input"
+        :disabled="isConsolidating"
+        size="is-small"
+        type="is-dark"
+        @input="emitChange"/> -->
+      <b-checkbox
         v-if="!isHeader && field.type === 'boolean'"
         :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
         :value="input"
@@ -204,7 +212,7 @@ export default {
       }
       if (this.isTag && !this.isCategory) {
         newInput = [value]
-        this.tagsValue = value.split(this.tagSeparator).filter(v => v !== '')
+        this.tagsValue = value.split(this.tagSeparator).filter(v => v !== '') || []
       }
       return newInput
     },
