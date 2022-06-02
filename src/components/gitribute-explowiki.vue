@@ -11,9 +11,11 @@
             :locale="locale"
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
+
         <!-- USER NAVBAR -->
         <div class="column is-3 is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
           <ViewModeBtns
+            v-if="fileOptions"
             :file-id="fileId"
             :locale="locale"/>
           <UserOptions
@@ -140,7 +142,7 @@
 
     <!-- PREVIEWS CSV / CARDS WIKI -->
     <div
-      v-if="fileTypeFamily === 'table'"
+      v-if="wikiItems && fileTypeFamily === 'table'"
       class="container">
       <PreviewCsv
         :file-id="fileId"
@@ -172,6 +174,9 @@
 import { mapActions } from 'vuex'
 
 import { mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
+
+import { extractGitInfos } from '@/utils/utilsGitUrl.js'
+import { getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
@@ -273,9 +278,9 @@ export default {
       if (next) { this.reloadMediawikiRessources() }
     }
   },
-  beforeMount () {
+  async beforeMount () {
     // console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
-    // console.log('\nC > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
+    // console.log('C > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > GitributeExploWiki > beforeMount > this.options : ', this.options)
 
     const wikiUuid = this.uuidv4()
@@ -299,6 +304,20 @@ export default {
     this.fileType = wikiInfosObject.filetype
     if (!this.getGitInfosObj[wikiUuid]) {
       this.addGitInfos(wikiInfosObject)
+    }
+    // get schema if any
+    const fileSchema = mediawikiOptions.schema
+    console.log('C > GitributeExploWiki > beforeMount > fileSchema : ', fileSchema)
+    if (fileSchema && fileSchema.file) {
+      const schemaGitObj = extractGitInfos(fileSchema.file)
+      console.log('C > GitributeExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
+      const schemaRaw = await getFileDataRaw(schemaGitObj)
+      // console.log('C > GitributeExploWiki > beforeMount > schemaRaw : ', schemaRaw)
+      const schemaData = schemaRaw && schemaRaw.data
+      // console.log('C > GitributeExploWiki > beforeMount > schemaData : ', schemaData)
+      const schema = JSON.parse(schemaData)
+      mediawikiOptions.schema = schema
+      console.log('C > GitributeExploWiki > beforeMount > schema : ', schema)
     }
     this.addFileOptions({ ...mediawikiOptions, uuid: wikiUuid })
     // console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
@@ -357,6 +376,7 @@ export default {
           const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
           // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
+          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)
           this.wikiPages.push(pageData.temp)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
         }
@@ -378,7 +398,7 @@ export default {
           this.updateFiltersSettings({
             fileId: this.fileId,
             field: field,
-            choices: dataTags
+            enumArr: dataTags
           })
         }
       })

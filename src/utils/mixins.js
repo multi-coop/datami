@@ -9,6 +9,8 @@ import {
   itemsPerPageChoicesCards4perRow,
   paginate,
   getClosest,
+  defaultTagsSeparator,
+  booleanFromValue,
   trimText
 } from '@/utils/globalUtils'
 import {
@@ -21,6 +23,7 @@ import {
 } from '@/utils/gitProvidersAPI.js'
 import {
   authorizedFileTypes,
+  fieldTypeIcons,
   editViewsOptions
 } from '@/utils/fileTypesUtils.js'
 import {
@@ -44,6 +47,9 @@ import {
   getMediawikitItem,
   restructurePageData
 } from '@/utils/utilsWikiUrl.js'
+import {
+  getConsolidationApiUrl
+} from '@/utils/consolidationUtils'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -138,11 +144,15 @@ export const mixinGlobal = {
     },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
+    },
+
+    // DATA CONNSOLIDATION
+    hasConsolidation () {
+      return this.fileOptions && this.fileOptions.consolidation
     }
   },
   methods: {
-    uuidv4,
-    trimText
+    uuidv4
   }
 }
 
@@ -209,6 +219,17 @@ export const mixinIcons = {
   methods: {
     getIcon (view) {
       return editViewsOptions.find(i => i.code === view).icon
+    },
+    getIconFieldType (field) {
+      // console.log('\nC > mixinDownload > getIconFieldType > field.label : ', field.label)
+      // console.log('C > mixinDownload > getIconFieldType > field : ', field)
+      const icons = fieldTypeIcons.filter(f => f.type === field.type)
+      // console.log('C > mixinDownload > getIconFieldType > icons (1) : ', icons)
+      const icon = icons.find(f => f.subtype === field.subtype) || icons[0]
+      // console.log('C > mixinDownload > getIconFieldType > icon (2) : ', icon)
+      const iconDefault = fieldTypeIcons.find(f => f.default)
+      const result = icon || iconDefault
+      return result.icon
     }
   }
 }
@@ -258,6 +279,58 @@ export const mixinDownload = {
         link.parentNode.removeChild(link)
       }, 100)
     }
+  }
+}
+
+export const mixinValue = {
+  data () {
+    return {
+      numberTypes: ['number', 'integer', 'float'],
+      tagTypes: ['tag', 'tags'],
+      defaultTagsSeparator: defaultTagsSeparator
+    }
+  },
+  computed: {
+    fieldType () {
+      return (this.field && this.field.type) || 'string'
+    },
+    fieldSubtype () {
+      return this.field && this.field.subtype
+    },
+    isString () {
+      return this.fieldType === 'string'
+    },
+    isBoolean () {
+      return this.fieldType === 'boolean'
+    },
+    isNumber () {
+      return this.numberTypes.includes(this.fieldType)
+    },
+    isInteger () {
+      return this.fieldType === 'integer'
+    },
+    isTag () {
+      return this.field && this.tagTypes.includes(this.field.subtype)
+    },
+    isCategory () {
+      return this.fieldSubtype === 'tag'
+    },
+    tagsEnum () {
+      return (this.field && this.field.enumArr) || []
+    },
+    tagSeparator () {
+      return this.field.tagSeparator || this.defaultTagsSeparator
+    },
+    isGitributeField () {
+      return this.fieldType === 'gitribute'
+    },
+    isConsolidation () {
+      return this.isGitributeField && this.fieldSubtype === 'consolidation'
+    }
+  },
+  methods: {
+    booleanFromValue,
+    trimText
   }
 }
 
@@ -417,5 +490,11 @@ export const mixinJsonNode = {
       const infos = this.getNodeTypeInfosByType(nodeType)
       return infos && infos.icon
     }
+  }
+}
+
+export const mixinConsolidation = {
+  methods: {
+    getConsolidationApiUrl
   }
 }

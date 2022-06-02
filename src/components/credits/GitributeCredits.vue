@@ -3,31 +3,42 @@
     <!-- CREDITS -->
     <div
       class="column is-full is-italic has-text-centered">
-      <span
-        class="has-text-grey is-size-7"
-        v-html="t('credits.reclaim', locale, true)"/>
-      <span
-        class="has-text-grey is-size-7">
-        <a
-          href="https://multi.coop"
-          target="_blank">
-          multi
-          <!-- <img
-            :src="require('@/assets/multi-logo-01.png')"
-            class="mini-logo"
-            alt="The multi Logo"> -->
-        </a>
-      </span>
-      <b-button
-        icon-left="gitlab"
-        tag="a"
-        href="https://gitlab.com/multi-coop/gitribute"
-        outlined
-        target="_blank"
-        size="is-small"
-        class="ml-3 is-size-7">
-        {{ t('credits.code', locale) }}
-      </b-button>
+      <p class="has-text-grey is-size-7 mb-2">
+        <span>
+          {{ t('credits.reclaim', locale) }}
+        </span>
+        <span>
+          {{ t('credits.byLove', locale) }}
+        </span>
+        <span class="ml-1">
+          {{ t('credits.byCooperative', locale) }}
+        </span>
+        <span
+          class="has-text-weight-bold">
+          <a
+            class="link-multi"
+            href="https://multi.coop"
+            target="_blank">
+            multi
+            <!-- <img
+              :src="require('@/assets/multi-logo-01.png')"
+              class="mini-logo"
+              alt="The multi Logo"> -->
+          </a>
+        </span>
+      </p>
+      <p>
+        <b-button
+          icon-left="gitlab"
+          tag="a"
+          href="https://gitlab.com/multi-coop/gitribute"
+          outlined
+          target="_blank"
+          size="is-small"
+          class="ml-3 is-size-7">
+          {{ t('credits.code', locale) }}
+        </b-button>
+      </p>
     </div>
   </div>
 </template>
@@ -56,7 +67,11 @@ export default ({
 })
 </script>
 
-<style>
+<style scoped>
+.link-multi {
+  color: grey;
+  text-decoration: underline;
+}
 .mini-logo {
   width: 70px !important;
 }

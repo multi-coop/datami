@@ -5,7 +5,9 @@ export default {
     test: 'test nested global',
     link: 'Link',
     yes: 'yes',
-    no: 'no'
+    no: 'no',
+    oldValue: 'Old value',
+    newValue: 'New value'
   },
   git: {
     provider: 'Provider',
@@ -61,6 +63,8 @@ export default {
     send: 'Send',
     cancel: 'Cancel',
     search: 'Search',
+    expandCell: 'Expand cell content',
+    reduceCell: 'Minimize cell content',
     openLinkInNew: 'Open link in a new window',
     reloadFile: 'Reload the file',
     downloadFile: 'Download the file',
@@ -71,7 +75,10 @@ export default {
     changeLocale: 'Choose the language',
     changeToken: 'Change your user token',
     changeActiveBranch: 'Change your branch',
-    commitChanges: 'Submit your modifications'
+    commitChanges: 'Submit your modifications',
+    consolidate: 'Consolidate your data',
+    selectConsolidationFields: 'Select the fields to update',
+    validateConsolidation: 'Validate the changes'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -102,14 +109,32 @@ export default {
     currentPage: 'Current page',
     itemsPerPage: 'items per page'
   },
+  field: {
+    field: 'Field',
+    label: 'Label',
+    type: 'Type',
+    title: 'Title',
+    description: 'Description',
+    category: 'Category',
+    string: 'String',
+    link: 'Link',
+    tag: 'Tag',
+    tags: 'Tags',
+    number: 'Number',
+    integer: 'Integer',
+    boolean: 'Boolean',
+    gitribute: 'Special field',
+    consolidation: 'Consolidation'
+  },
   edit: {
-    importData: 'Import/overwrite the data',
+    uploadData: 'Import/overwrite the data',
     headerLocked: "This column's label is protected from writing"
   },
   editCsv: {
     noSelect: 'None',
     noResult: 'No result',
     results: 'lines',
+    colType: 'Column type',
     addRow: 'Add a new row',
     addTheNewRow: 'Add the new row',
     importData: 'Import/overwrite the data',
@@ -172,7 +197,9 @@ export default {
     errorMessage: 'Error message'
   },
   credits: {
-    reclaim: 'An open source widget coded with 🤍  &nbsp; by',
+    reclaim: 'An open source widget',
+    byLove: 'coded with 🤍 ',
+    byCooperative: 'by the tech cooperative',
     code: 'Source code'
   }
 }

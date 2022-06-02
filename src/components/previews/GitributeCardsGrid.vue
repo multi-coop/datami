@@ -120,6 +120,9 @@ export default {
       return this.cardsSettings.mapping.map(h => {
         return {
           field: h.field,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
           ...h.mini
         }
       })
@@ -128,6 +131,9 @@ export default {
       return this.cardsSettings.mapping.map(h => {
         return {
           field: h.field,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
           ...h.detail
         }
       })

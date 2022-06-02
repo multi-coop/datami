@@ -49,6 +49,20 @@ export const typesIcons = [
     allowedTypes: ['other']
   }
 ]
+export const fieldTypeIcons = [
+  { type: 'string', subtype: undefined, icon: 'alphabetical', default: true },
+  { type: 'string', subtype: 'link', icon: 'link-variant' },
+  { type: 'string', subtype: 'tag', icon: 'tag-outline' },
+  { type: 'string', subtype: 'tags', icon: 'tag-multiple-outline' },
+  { type: 'boolean', subtype: undefined, icon: 'check-bold' },
+  { type: 'number', subtype: undefined, icon: 'numeric' },
+  { type: 'integer', subtype: undefined, icon: 'numeric' },
+  { type: 'date', subtype: undefined, icon: 'calendar-range' },
+  { type: 'any', subtype: undefined, icon: 'text' },
+
+  // GITRIBUTE ICONS
+  { type: 'gitribute', subtype: 'consolidation', icon: 'wrench' }
+]
 
 // FOR EDITION
 export const editViewsOptions = [

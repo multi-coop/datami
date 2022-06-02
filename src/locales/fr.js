@@ -5,7 +5,9 @@ export default {
     test: 'test nested global',
     link: 'Lien',
     yes: 'oui',
-    no: 'non'
+    no: 'non',
+    oldValue: 'Ancienne valeur',
+    newValue: 'Nouvelle valeur'
   },
   git: {
     provider: 'Provider',
@@ -61,6 +63,8 @@ export default {
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
+    expandCell: 'Agrandir la cellule',
+    reduceCell: 'Réduire la cellule',
     openLinkInNew: 'Ouvrir le lien dans une nouvelle fenêtre',
     reloadFile: 'Recharger le fichier',
     downloadFile: 'Télécharger le fichier',
@@ -71,7 +75,10 @@ export default {
     changeLocale: 'Choisir la langue',
     changeToken: "Changer votre jeton d'accès",
     changeActiveBranch: 'Changer de branche',
-    commitChanges: 'Proposer vos modifications'
+    commitChanges: 'Proposer vos modifications',
+    consolidate: 'Consolider vos données',
+    selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
+    validateConsolidation: 'Valider les changements'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -102,6 +109,23 @@ export default {
     currentPage: 'Page actuelle',
     itemsPerPage: 'éléments par page'
   },
+  field: {
+    field: 'Champ',
+    label: 'Libellé',
+    type: 'Type',
+    title: 'Titre',
+    description: 'Description',
+    category: 'Catégorie',
+    string: 'Texte',
+    link: 'Lien',
+    tag: 'Etiquette',
+    tags: 'Etiquettes',
+    number: 'Nombre',
+    integer: 'Nombre entier',
+    boolean: 'Bouléen',
+    gitribute: 'Champ spécial',
+    consolidation: 'Consolidation'
+  },
   edit: {
     uploadData: 'Importer/écraser les données',
     headerLocked: "L'intitulé de cette colonne est protégé en écriture"
@@ -110,6 +134,7 @@ export default {
     noSelect: 'Aucun',
     noResult: 'Pas de résultat',
     results: 'lignes',
+    colType: 'Colonne de type',
     addRow: 'Ajouter une nouvelle ligne',
     addTheNewRow: 'Ajouter la nouvelle ligne',
     importData: 'Importer/écraser les données',
@@ -172,7 +197,9 @@ export default {
     errorMessage: "Message d'erreur"
   },
   credits: {
-    reclaim: 'Un widget open source codé avec 🤍  &nbsp; par',
+    reclaim: 'Un widget open source',
+    byLove: 'codé avec 🤍 ',
+    byCooperative: 'par la coopérative',
     code: 'Code source'
   }
 }

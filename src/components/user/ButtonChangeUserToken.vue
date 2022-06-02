@@ -138,9 +138,9 @@ export default {
       }
     },
     async getUserInfos () {
-      console.log('\nC > ButtonChangeUserToken > getUserInfos > this.usertoken : ', this.usertoken)
+      // console.log('\nC > ButtonChangeUserToken > getUserInfos > this.usertoken : ', this.usertoken)
       const gitUserInfos = await getUserInfosFromToken(this.gitObj, this.usertoken)
-      console.log('C > ButtonChangeUserToken > getUserInfos > gitUserInfos : ', gitUserInfos)
+      // console.log('C > ButtonChangeUserToken > getUserInfos > gitUserInfos : ', gitUserInfos)
       this.updateUserGit({ fileId: this.fileId, userGitInfos: gitUserInfos })
     }
   }

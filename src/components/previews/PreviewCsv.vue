@@ -112,6 +112,8 @@ import LoaderCards from '@/components/loaders/LoaderCards'
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
 import GitributeTable from '@/components/previews/GitributeTable'
 
+import { defaultTagsSeparator } from '@/utils/globalUtils'
+
 export default {
   name: 'PreviewCsv',
   components: {
@@ -200,6 +202,7 @@ export default {
     },
     wikiRaw (next) {
       if (next && next !== '') {
+        // console.log('\nC > PreviewCsv > watch > wikiRaw > next : ', next)
         // console.log('C > PreviewCsv > watch > wikiRaw > this.fileOptions : ', this.fileOptions)
         this.dataRaw = next
         this.data = this.dataRaw.data
@@ -209,16 +212,18 @@ export default {
       }
     },
     dataIsSet (next) {
-      // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
       if (next) {
+        // console.log('C > PreviewCsv > watch > dataIsSet > next : \n', next)
         this.data = this.dataRaw.data
         this.dataColumns = this.buildColumns(this.dataRaw)
+        // console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
         this.edited = this.data
         this.editedColumns = this.dataColumns
       }
     },
-    fileClientRaw (next) {
+    async fileClientRaw (next) {
       if (next) {
+        // console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
         const dataObj = this.csvToObject(next, this.fileOptions)
         this.edited = dataObj.data
         this.editedColumns = this.buildColumns(dataObj)
@@ -252,21 +257,82 @@ export default {
     ...mapActions({
       updateBuffer: 'git-data/updateBuffer'
     }),
+    buildEnumArr (data, separator) {
+      const dataCopy = data.filter(d => !!d)
+      // console.log('C > PreviewCsv > buildEnumArr > dataCopy : ', dataCopy)
+      // console.log('C > PreviewCsv > buildEnumArr > separator : ', separator)
+      const dataParsed = []
+      dataCopy && dataCopy.forEach(tag => {
+        if (tag.includes(separator)) {
+          const subArr = tag.split(separator).map(t => t.trim())
+          dataParsed.push(...subArr)
+        } else {
+          dataParsed.push(tag)
+        }
+      })
+      const enumArr = [...new Set(dataParsed)].sort((a, b) => a.localeCompare(b))
+      // console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
+      return enumArr
+    },
     buildColumns (dataRaw) {
       const headers = dataRaw && dataRaw.headers
-      // console.log('C > PreviewCsv > buildColumns > headers : ', headers)
+      // console.log('\nC > PreviewCsv > buildColumns > headers : ', headers)
+      // console.log('C > PreviewCsv > buildColumns > dataRaw : ', dataRaw)
+      // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
+      // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
+      const schema = this.fileOptions.schema
+      // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
+      const fieldsCustomProperties = this.fileOptions['fields-custom-properties']
+      // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
+      // const fileConsolidation = this.fileOptions.consolidation
+      // console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
       if (!headers) return null
-      // if (this.fileOptions.abstractHeaders) {
-      return Object.entries(headers)
-        .map(entry => {
-          return {
-            field: entry[0],
-            label: entry[1]
+      const fields = Object.entries(headers)
+        .map((entry, idx) => {
+          const fieldId = entry[0]
+          const fieldLabel = entry[1].trim()
+          const fieldSchema = schema && schema.fields.find(schema => schema.name === fieldLabel)
+          const fieldConstraints = fieldSchema && fieldSchema.constraints
+          // console.log('C > PreviewCsv > buildColumns > fieldConstraints : ', fieldConstraints)
+          const fieldCustomProps = fieldsCustomProperties && fieldsCustomProperties.find(schema => schema.name === fieldLabel)
+          // const fielSticky = fieldCustomProps && fieldCustomProps.sticky
+          // const fieldConsolidation = fileConsolidation && fileConsolidation.find(item => item.field_name === fieldLabel)
+          let fieldData = {
+            field: fieldId,
+            label: fieldLabel.trim(),
+            type: (fieldSchema && fieldSchema.type) || 'string',
+            name: (fieldSchema && fieldSchema.name) || fieldLabel
           }
+          // parse data for unique values on tag columns
+          const fieldSubtype = fieldCustomProps && fieldCustomProps.subtype
+          const needEnumArr = fieldSubtype === 'tag'
+          const defaultEnumArr = fieldConstraints && fieldConstraints.enum
+          fieldData = {
+            ...fieldData,
+            // ...(!idx) && { sticky: true },
+            ...fieldSchema && fieldSchema.title && { title: fieldSchema.title },
+            ...fieldSchema && fieldSchema.description && { description: fieldSchema.description },
+            ...fieldSubtype && { subtype: fieldSubtype },
+            ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
+            ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
+            ...defaultEnumArr && { enumArr: defaultEnumArr }
+            // consolidation data
+            // ...fieldConsolidation && { consolidation: fieldConsolidation }
+          }
+          if (!defaultEnumArr && needEnumArr) {
+            const enumArr = this.buildEnumArr(
+              dataRaw.data.map(item => item[fieldId]),
+              fieldCustomProps.tagSeparator || defaultTagsSeparator
+            )
+            fieldData.enumArr = enumArr
+          }
+          return fieldData
         })
+      // console.log('C > PreviewCsv > buildColumns > fields : ', fields)
+      return fields
     },
     updateEdited (event) {
-      console.log('\nC > PreviewCsv > updateEdited > event : ', event)
+      // console.log('\nC > PreviewCsv > updateEdited > event : ', event)
       let toEdit, newObj, oldEditedObj, originalObj, oldVal
       let rowId
       const isHeader = event.isHeader

@@ -98,6 +98,22 @@ export const paginate = (array, pageSize, pageNumber) => {
 }
 
 // TEXT UTILS
+export const defaultTagsSeparator = '-'
+
+export const FalseBooleanStrings = [
+  'no',
+  'false',
+  '0'
+]
+
+export const booleanFromValue = (val) => {
+  const valTrimmed = val.toString().trim().toLowerCase()
+  let bool = Boolean(valTrimmed)
+  if (FalseBooleanStrings.includes(valTrimmed)) {
+    bool = false
+  }
+  return bool
+}
 
 export const trimText = (str, maxLength = 25) => {
   if (str && str.length > maxLength) return `${str.slice(0, maxLength)}...`

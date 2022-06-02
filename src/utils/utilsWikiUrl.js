@@ -428,6 +428,9 @@ export const restructurePageData = (pageObj, wikiFields) => {
       case 'imageUrl':
         pageObjValue = pageObj.imageUrl
         break
+      case 'pageUrl':
+        pageObjValue = pageObj.pageUrl
+        break
       default:
         pageObjValue = pageObj.structured[field]
     }
