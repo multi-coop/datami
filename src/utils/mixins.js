@@ -47,6 +47,9 @@ import {
   getMediawikitItem,
   restructurePageData
 } from '@/utils/utilsWikiUrl.js'
+import {
+  getConsolidationApiUrl
+} from '@/utils/consolidationUtils'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -141,6 +144,11 @@ export const mixinGlobal = {
     },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
+    },
+
+    // DATA CONNSOLIDATION
+    hasConsolidation () {
+      return this.fileOptions && this.fileOptions.consolidation
     }
   },
   methods: {
@@ -312,6 +320,12 @@ export const mixinValue = {
     },
     tagSeparator () {
       return this.field.tagSeparator || this.defaultTagsSeparator
+    },
+    isGitributeField () {
+      return this.fieldType === 'gitribute'
+    },
+    isConsolidation () {
+      return this.isGitributeField && this.fieldSubtype === 'consolidation'
     }
   },
   methods: {
@@ -476,5 +490,11 @@ export const mixinJsonNode = {
       const infos = this.getNodeTypeInfosByType(nodeType)
       return infos && infos.icon
     }
+  }
+}
+
+export const mixinConsolidation = {
+  methods: {
+    getConsolidationApiUrl
   }
 }

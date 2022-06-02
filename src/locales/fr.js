@@ -5,7 +5,9 @@ export default {
     test: 'test nested global',
     link: 'Lien',
     yes: 'oui',
-    no: 'non'
+    no: 'non',
+    oldValue: 'Ancienne valeur',
+    newValue: 'Nouvelle valeur'
   },
   git: {
     provider: 'Provider',
@@ -73,7 +75,10 @@ export default {
     changeLocale: 'Choisir la langue',
     changeToken: "Changer votre jeton d'accès",
     changeActiveBranch: 'Changer de branche',
-    commitChanges: 'Proposer vos modifications'
+    commitChanges: 'Proposer vos modifications',
+    consolidate: 'Consolider vos données',
+    selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
+    validateConsolidation: 'Valider les changements'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -117,7 +122,9 @@ export default {
     tags: 'Etiquettes',
     number: 'Nombre',
     integer: 'Nombre entier',
-    boolean: 'Bouléen'
+    boolean: 'Bouléen',
+    gitribute: 'Champ spécial',
+    consolidation: 'Consolidation'
   },
   edit: {
     uploadData: 'Importer/écraser les données',

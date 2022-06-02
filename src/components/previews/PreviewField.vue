@@ -9,12 +9,23 @@
       <!-- FIELD TYPE ICON -->
       <b-icon
         :icon="getIconFieldType( field )"
-        class="ml-0 mr-2"
+        :class="`${isGitributeField ? '' : 'ml-2 mr-2'}`"
         type="is-grey-light"
         size="is-small"/>
-      <span class="mr-3">
+
+      <!-- FIELD LABEL -->
+      <span
+        v-if="isGitributeField"
+        class="mr-3">
+        <!-- {{ t(field.label, locale) }} -->
+      </span>
+      <span
+        v-else
+        class="mr-3">
         {{ field.label }}
       </span>
+
+      <!-- TOOLTIP -->
       <template #content>
         <div class="columns is-multiline px-2 py-2">
           <!-- LABEL -->
@@ -22,7 +33,12 @@
             {{ t('field.label', locale) }}
           </div>
           <div class="column is-8 py-1 px-1 has-text-weight-bold">
-            {{ field.label }}
+            <span v-if="!isGitributeField">
+              {{ field.label }}
+            </span>
+            <span v-else>
+              {{ t(field.label, locale) }}
+            </span>
           </div>
 
           <!-- TYPE -->
@@ -80,7 +96,7 @@
 
     <!-- LOCKED OR NOT -->
     <b-tooltip
-      v-if="lockHeaders && currentEditViewMode !== 'preview'"
+      v-if="lockHeaders && currentEditViewMode !== 'preview' && !isGitributeField"
       :label="t('edit.headerLocked', locale)"
       position="is-top"
       multilined

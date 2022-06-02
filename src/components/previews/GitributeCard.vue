@@ -23,10 +23,12 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
-              :col-field="f.field"
+              :field="f"
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
+              :is-card-view="true"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -121,11 +123,15 @@
           <div
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
+            {{ f }}
             <EditCell
+              :field="f"
               :col-field="f.field"
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field]"
+              :locale="locale"
+              :is-card-view="true"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -154,10 +160,12 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
-              :col-field="f.field"
+              :field="f"
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
+              :is-card-view="true"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -187,10 +195,12 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
-              :col-field="f.field"
+              :field="f"
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
+              :is-card-view="true"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -241,10 +251,12 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
-              :col-field="f.field"
+              :field="f"
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
+              :is-card-view="true"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -287,10 +299,12 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
-              :col-field="f.field"
+              :field="f"
               :row-id="item.id"
               :is-added="item.added"
               :input-data="item[f.field] || ''"
+              :locale="locale"
+              :is-card-view="true"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>

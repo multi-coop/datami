@@ -58,7 +58,10 @@ export const fieldTypeIcons = [
   { type: 'number', subtype: undefined, icon: 'numeric' },
   { type: 'integer', subtype: undefined, icon: 'numeric' },
   { type: 'date', subtype: undefined, icon: 'calendar-range' },
-  { type: 'any', subtype: undefined, icon: 'text' }
+  { type: 'any', subtype: undefined, icon: 'text' },
+
+  // GITRIBUTE ICONS
+  { type: 'gitribute', subtype: 'consolidation', icon: 'wrench' }
 ]
 
 // FOR EDITION

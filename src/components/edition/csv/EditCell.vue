@@ -1,12 +1,12 @@
 <template>
   <div
     :class="`EditCell gitribute-component gitribute-cell is-flex is-align-items-center
-      ${field && field.type === 'boolean' ? 'is-justify-content-center' : ''}
+      ${field && ['boolean', 'gitribute'].includes(field.type) ? 'is-justify-content-center' : ''}
       ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}
     `">
     <!-- DEBUGGING -->
     <b-tooltip
-      v-if="false"
+      v-if="debug"
       multilined
       append-to-body
       type="is-warning">
@@ -15,10 +15,12 @@
         type="is-warning"
         size="is-small"/>
       <template #content>
+        isCardView: <code>{{ isCardView }}</code><br>
         fieldType: <code>{{ fieldType }}</code><br>
-        <!-- fieldType: <code>{{ fieldType }}</code><br> -->
+        fieldSubtype: <code>{{ fieldSubtype }}</code><br>
+        hasConsolidation: <code>{{ hasConsolidation }}</code><br>
         inputData: <code>{{ inputData }}</code><br>
-        isCategory: <code>{{ isCategory }}</code>
+        isCategory: <code>{{ isCategory }}</code><br>
         <span v-if="!isTag && isCategory">
           input : <code>{{ input }}</code><br>
         </span>
@@ -26,18 +28,40 @@
           tagsValue : <code>{{ tagsValue }}</code><br>
         </span>
         <span v-if="isTag">
-          field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre>
+          field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
         </span>
+        field: <br><pre><code>{{ field }}</code></pre>
+        <!-- fileOptions: <br><pre><code>{{ fileOptions }}</code></pre> -->
       </template>
     </b-tooltip>
 
+    <!-- USER BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
+    <div v-if="field && isGitributeField">
+      <ButtonConsolidation
+        v-if="isConsolidation"
+        :field="field"
+        :row-id="rowId"
+        :is-consolidating="isConsolidating"
+        :locale="locale"
+        @action="SendActionToParent"/>
+    </div>
+
     <!-- VALUE INPUT -->
-    <b-field v-if="field">
+    <b-field v-if="field && !isGitributeField">
       <!--BOOLEAN -->
-      <b-switch
+      <!-- <b-switch
         v-if="!isHeader && field.type === 'boolean'"
-        :custom-class="`g-cell g-cell-boolean py-0`"
+        :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
         :value="input"
+        :disabled="isConsolidating"
+        size="is-small"
+        type="is-dark"
+        @input="emitChange"/> -->
+      <b-checkbox
+        v-if="!isHeader && field.type === 'boolean'"
+        :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
+        :value="input"
+        :disabled="isConsolidating"
         size="is-small"
         type="is-dark"
         @input="emitChange"/>
@@ -45,9 +69,10 @@
       <!-- NUMBERS -->
       <b-numberinput
         v-else-if="!isHeader && isNumber"
-        :custom-class="`g-cell g-cell-${isInteger ? 'integer' : 'number'} py-0`"
+        :custom-class="`g-cell g-cell-${isInteger ? 'integer' : 'number'}${ isCardView ? '-card' :'' } py-0`"
         :value="input"
         :step="isInteger ? 1 : 0.01"
+        :disabled="isConsolidating"
         controls-position="compact"
         controls-rounded
         size="is-small"
@@ -58,7 +83,8 @@
       <b-select
         v-else-if="!isHeader && isCategory"
         v-model="input"
-        :class="`g-cell g-cell-tag py-0`"
+        :class="`g-cell g-cell-tag${ isCardView ? '-card' :'' } py-0`"
+        :disabled="isConsolidating"
         size="is-small"
         expanded
         @input="emitChange">
@@ -74,8 +100,9 @@
       <b-taginput
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
-        :class="`g-cell g-cell-tags py-0`"
+        :class="`g-cell g-cell-tags${ isCardView ? '-card' :'' } py-0`"
         :data="tagsEnum"
+        :disabled="isConsolidating"
         size="is-small"
         open-on-focus
         ellipsis
@@ -90,8 +117,9 @@
       <!-- ANY STRING -->
       <b-input
         v-else
-        :custom-class="`g-cell g-cell-string py-0 ${isHeader ? 'g-header' : ''}`"
+        :custom-class="`g-cell g-cell-string${ isCardView ? '-card' :'' } py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
+        :disabled="isConsolidating"
         size="is-small"
         expanded
         @input="emitChange"/>
@@ -103,8 +131,13 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
+import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
+
 export default {
   name: 'EditCell',
+  components: {
+    ButtonConsolidation
+  },
   mixins: [
     mixinGlobal,
     mixinValue
@@ -129,6 +162,18 @@ export default {
     rowId: {
       default: null,
       type: String
+    },
+    isConsolidating: {
+      default: false,
+      type: Boolean
+    },
+    locale: {
+      default: null,
+      type: String
+    },
+    isCardView: {
+      default: false,
+      type: Boolean
     },
     debug: {
       default: false,
@@ -167,7 +212,7 @@ export default {
       }
       if (this.isTag && !this.isCategory) {
         newInput = [value]
-        this.tagsValue = value.split(this.tagSeparator).filter(v => v !== '')
+        this.tagsValue = value.split(this.tagSeparator).filter(v => v !== '') || []
       }
       return newInput
     },
@@ -193,6 +238,9 @@ export default {
       }
       // console.log('C > EditCell > emitChange > payload : ', payload)
       this.$emit('updateCellValue', payload)
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     }
   }
 }

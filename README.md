@@ -70,7 +70,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [x] Component to update user's token (if user has a specific one for direct commits) ;
   - [x] Component to switch between `french` and `english` for now ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
-- [ ] Other main components :
+- [x] Other main components :
   - [x] On each preview (for every file type), switch between 'preview' and 'edition' views ;
     - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
@@ -78,10 +78,10 @@ The **roadmap** for a first proof of concept (POC) is the following :
     - [x] for `mediwiki` ressources (only preview for now)
   - [x]  Add an `Upload` button + dialog + actions to overwrite whole edited data ;
   - [x]  Add a `lockHeaders` options in widget to only protect keys from edition ;
-  - [ ]  Add a `Save` button + dialog + actions :
+  - [x]  Add a `Save` button + dialog + actions :
     - [x] `POST` create a separate branch on the file's repo ;
     - [x] `PUT` after edition on client's side, acting as a commit to the file's git repo on a separate branch ;
-    - [ ] create a merge request (commit and request by default done the "ghost user") ;
+    - [x] create a merge request (commit and request by default done the "ghost user") ;
 - [x] Deploy on Netlify for test purposes => [test deploy here](https://multi-gitribute-test.netlify.app/)
 - [ ] A good documentation for each web component (at least in this readme for now)
 
