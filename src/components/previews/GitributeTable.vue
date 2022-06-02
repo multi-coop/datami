@@ -102,6 +102,7 @@
               :td-attrs="columnTdAttrs"
               :field="col.field"
               :sticky="!idx"
+              :visible="!col.hide"
               :label="col.label">
               <!-- HEADERS -->
               <template #header="{ column }">
