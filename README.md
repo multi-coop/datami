@@ -97,6 +97,16 @@ Website : [multi-gitribute-test](https://multi-gitribute-test.netlify.app/)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/693b562e-5ff8-4101-9cdb-157f7be2d3d2/deploy-status)](https://app.netlify.com/sites/multi-gitribute-test/deploys)
 
+### Prod deploy
+
+Website : [multi-gitribute](https://multi-gitribute.netlify.app/)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1cd66edf-3b08-43db-bd21-6490377bb24a/deploy-status)](https://app.netlify.com/sites/multi-gitribute/deploys)
+
+### Preprod deploy
+
+Website : [multi-gitribute-preprod](https://multi-gitribute-preprod.netlify.app/)
+
 ---
 
 An open source project by **[multi](https://multi.coop)**
