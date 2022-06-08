@@ -58,7 +58,7 @@
         type="is-dark"
         @input="emitChange"/> -->
       <b-checkbox
-        v-if="!isHeader && field.type === 'boolean'"
+        v-if="!isHeader && isBoolean"
         :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
         :value="input"
         :disabled="isConsolidating"
@@ -117,9 +117,11 @@
       <!-- ANY STRING -->
       <b-input
         v-else
-        :custom-class="`g-cell g-cell-string${ isCardView ? '-card' :'' } py-0 ${isHeader ? 'g-header' : ''}`"
+        :custom-class="`g-cell g-cell-string${ isLongText ? '-longtext' : '' }${ isCardView ? '-card' : '' } py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         :disabled="isConsolidating"
+        :type="isLongText ? 'textarea' : 'text'"
+        :rows="isLongText ? 3 : false"
         size="is-small"
         expanded
         @input="emitChange"/>
@@ -258,6 +260,9 @@ export default {
 }
 .g-cell-string {
   min-width: 150px;
+}
+.g-cell-string-longtext {
+  min-width: 250px;
 }
 .g-cell-number {
   min-width: 85px;

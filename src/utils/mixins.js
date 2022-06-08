@@ -309,6 +309,9 @@ export const mixinValue = {
     isInteger () {
       return this.fieldType === 'integer'
     },
+    isLongText () {
+      return this.fieldSubtype === 'longtext'
+    },
     isTag () {
       return this.field && this.tagTypes.includes(this.field.subtype)
     },

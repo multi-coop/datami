@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`PreviewCell gitribute-${nowrap ? 'nowrap' : 'wrap'}`"
+    :class="`PreviewCell gitribute-${nowrap && !isLongText ? 'nowrap' : 'wrap'}`"
     @mouseover="showExpand = true"
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
@@ -23,6 +23,27 @@
       </b-tooltip>
       <span>
         {{ value }}
+      </span>
+    </div>
+
+    <!-- STRING -->
+    <div
+      v-if="isString && isLongText"
+      :class="`${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      <b-tooltip
+        v-if="showExpand"
+        :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
+        append-to-body
+        type="is-dark">
+        <b-icon
+          :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
+          class="mr-1"
+          :type="nowrap ? 'is-grey-light' : 'is-dark'"
+          size="is-small"
+          @click.native="nowrap = !nowrap"/>
+      </b-tooltip>
+      <span>
+        {{ trimmedText }}
       </span>
     </div>
 
@@ -104,15 +125,27 @@ export default {
   data () {
     return {
       showExpand: false,
-      nowrap: true
+      nowrap: true,
+      defaultMaxTextLength: 30
     }
-  }
+  },
   // beforeMount () {
   //   console.log('\nC > PreviewCell > beforeMount > this.value : ', this.value)
   //   console.log('C > PreviewCell > beforeMount > this.field.label : ', this.field.label)
   //   console.log('C > PreviewCell > beforeMount > this.field : ', this.field)
   //   console.log('C > PreviewCell > beforeMount > this.tagSeparator : ', this.tagSeparator)
   // }
+  computed: {
+    trimmedText () {
+      // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
+      const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
+      // console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
+      const exceed = this.nowrap && (this.value.length > maxTextLength)
+      // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
+      const trimmed = exceed ? `${this.value.slice(0, maxTextLength)} (...)` : this.value
+      return trimmed
+    }
+  }
 }
 </script>
 

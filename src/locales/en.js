@@ -117,6 +117,7 @@ export default {
     description: 'Description',
     category: 'Category',
     string: 'String',
+    longtext: 'Long text',
     link: 'Link',
     tag: 'Tag',
     tags: 'Tags',
