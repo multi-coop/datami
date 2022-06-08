@@ -281,7 +281,7 @@ export default {
       // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
       const schema = this.fileOptions.schema
-      console.log('C > PreviewCsv > buildColumns > schema : ', schema)
+      // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
       const fieldsCustomProperties = this.fileOptions['fields-custom-properties']
       // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
       // const fileConsolidation = this.fileOptions.consolidation
