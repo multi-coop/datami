@@ -276,14 +276,14 @@ export default {
     },
     buildColumns (dataRaw) {
       const headers = dataRaw && dataRaw.headers
-      // console.log('\nC > PreviewCsv > buildColumns > headers : ', headers)
+      console.log('\nC > PreviewCsv > buildColumns > headers : ', headers)
       // console.log('C > PreviewCsv > buildColumns > dataRaw : ', dataRaw)
       // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
       const schema = this.fileOptions.schema
-      // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
+      console.log('C > PreviewCsv > buildColumns > schema : ', schema)
       const fieldsCustomProperties = this.fileOptions['fields-custom-properties']
-      // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
+      console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
       // const fileConsolidation = this.fileOptions.consolidation
       // console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
       if (!headers) return null
@@ -315,6 +315,7 @@ export default {
             ...fieldSubtype && { subtype: fieldSubtype },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
+            ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide }, // Ly
             ...defaultEnumArr && { enumArr: defaultEnumArr }
             // consolidation data
             // ...fieldConsolidation && { consolidation: fieldConsolidation }
