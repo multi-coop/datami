@@ -283,7 +283,7 @@ export default {
       const schema = this.fileOptions.schema
       console.log('C > PreviewCsv > buildColumns > schema : ', schema)
       const fieldsCustomProperties = this.fileOptions['fields-custom-properties']
-      console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
+      // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
       // const fileConsolidation = this.fileOptions.consolidation
       // console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
       if (!headers) return null
