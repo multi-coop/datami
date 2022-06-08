@@ -315,6 +315,7 @@ export default {
             ...fieldSubtype && { subtype: fieldSubtype },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
+            ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
             // consolidation data
             // ...fieldConsolidation && { consolidation: fieldConsolidation }
