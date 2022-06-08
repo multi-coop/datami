@@ -126,7 +126,7 @@ export default {
     return {
       showExpand: false,
       nowrap: true,
-      defaultMaxTextLength: 20
+      defaultMaxTextLength: 30
     }
   },
   // beforeMount () {
@@ -137,11 +137,11 @@ export default {
   // }
   computed: {
     trimmedText () {
-      console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
-      const maxTextLength = this.defaultMaxTextLength
-      console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
+      // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
+      const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
+      // console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
       const exceed = this.nowrap && (this.value.length > maxTextLength)
-      console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
+      // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
       const trimmed = exceed ? `${this.value.slice(0, maxTextLength)} (...)` : this.value
       return trimmed
     }
