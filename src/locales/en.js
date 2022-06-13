@@ -89,7 +89,9 @@ export default {
     label: 'Sort',
     sortBy: 'Sort by a field',
     sortAscending: 'Ascending sorting',
-    sortDescending: 'Descending sorting'
+    sortDescending: 'Descending sorting',
+    sortedAsc: 'Sorted, ascendent',
+    sortedDesc: 'Sorted, descendent'
   },
   filters: {
     label: 'Filter',
@@ -121,6 +123,8 @@ export default {
     string: 'String',
     longtext: 'Long text',
     link: 'Link',
+    email: 'Email',
+    geopoint: 'Geographic coordinate',
     tag: 'Tag',
     tags: 'Tags',
     number: 'Number',

@@ -303,20 +303,30 @@ export default {
       const schemaData = schemaRaw && schemaRaw.data
       const schema = JSON.parse(schemaData)
       // console.log('C > GitributeFile > beforeMount > schema : ', schema)
-      fileSchema = schema
+      fileSchema = { ...schema, file: fileSchema.file }
       // fileOptions.schema = schema
+    }
+    // get custom props if any
+    let fileCustomProps = fileOptions['fields-custom-properties']
+    if (fileCustomProps && fileCustomProps.file) {
+      const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
+      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      const customPropsData = customPropsRaw && customPropsRaw.data
+      const customProps = JSON.parse(customPropsData)
+      fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
 
     // get consolidation settings if any
-    let fileConsolidation = fileOptions.consolidation
-    fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
+    // let fileConsolidation = fileOptions.consolidation
+    // fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
     // console.log('C > GitributeFile > beforeMount > fileConsolidation : ', fileConsolidation)
 
     // update fileOptions with schema and consolidation settings
     fileOptions = {
       ...fileOptions,
       ...fileSchema && { schema: fileSchema },
-      ...fileConsolidation && { consolidation: fileConsolidation }
+      ...fileCustomProps && { customProps: fileCustomProps }
+      // ...fileConsolidation && { consolidation: fileConsolidation }
     }
 
     // add fileOptions in store

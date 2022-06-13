@@ -14,9 +14,9 @@
       </div>
     </article>
 
-    <!-- VALUES -->
+    <!-- RESPONSE VALUES -->
     <article
-      v-for="cData in consolidationData.consolidation"
+      v-for="cData in activeConsolidationItems"
       :key="cData.toField.field"
       class="media">
       <div class="media-left gitribute-selection">
@@ -118,6 +118,9 @@ export default {
     }
   },
   computed: {
+    activeConsolidationItems () {
+      return this.consolidationData.consolidation.filter(cd => !!cd.toField)
+    },
     hasSelection () {
       return this.checkboxGroup.length
     }

@@ -15,7 +15,7 @@
             {{ getFieldLabel(tag.field) }}
           </b-tag>
           <b-tag
-            type="is-dark">
+            :style="`color: ${tagColour(tag.value)}; background-color:  ${tagBackgroundColour(tag.value)}`">
             <span class="px-2">
               {{ tag.value }}
             </span>
@@ -36,11 +36,14 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
 export default {
   name: 'FilterTags',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinGlobal,
+    mixinValue
+  ],
   props: {
     headers: {
       default: null,

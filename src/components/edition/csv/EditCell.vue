@@ -1,9 +1,6 @@
 <template>
   <div
-    :class="`EditCell gitribute-component gitribute-cell is-flex is-align-items-center
-      ${field && ['boolean', 'gitribute'].includes(field.type) ? 'is-justify-content-center' : ''}
-      ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}
-    `">
+    :class="`EditCell gitribute-component gitribute-cell is-flex is-align-items-center ${field && ['boolean', 'gitribute'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
     <!-- DEBUGGING -->
     <b-tooltip
       v-if="debug"
@@ -47,19 +44,13 @@
     </div>
 
     <!-- VALUE INPUT -->
-    <b-field v-if="field && !isGitributeField">
+    <b-field
+      v-if="field && !isGitributeField"
+      class="has-text-centered">
       <!--BOOLEAN -->
-      <!-- <b-switch
-        v-if="!isHeader && field.type === 'boolean'"
-        :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
-        :value="input"
-        :disabled="isConsolidating"
-        size="is-small"
-        type="is-dark"
-        @input="emitChange"/> -->
       <b-checkbox
         v-if="!isHeader && isBoolean"
-        :custom-class="`g-cell g-cell-boolean${ isCardView ? '-card' :'' } py-0`"
+        :custom-class="`g-cell py-0`"
         :value="input"
         :disabled="isConsolidating"
         size="is-small"
@@ -69,7 +60,7 @@
       <!-- NUMBERS -->
       <b-numberinput
         v-else-if="!isHeader && isNumber"
-        :custom-class="`g-cell g-cell-${isInteger ? 'integer' : 'number'}${ isCardView ? '-card' :'' } py-0`"
+        :custom-class="`g-cell py-0`"
         :value="input"
         :step="isInteger ? 1 : 0.01"
         :disabled="isConsolidating"
@@ -79,11 +70,11 @@
         type="is-light"
         @input="emitChange"/>
 
-      <!-- CATEGORY SELECT -->
+      <!-- CATEGORY (SELECT) -->
       <b-select
         v-else-if="!isHeader && isCategory"
         v-model="input"
-        :class="`g-cell g-cell-tag${ isCardView ? '-card' :'' } py-0`"
+        :class="`g-cell py-0`"
         :disabled="isConsolidating"
         size="is-small"
         expanded
@@ -100,7 +91,7 @@
       <b-taginput
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
-        :class="`g-cell g-cell-tags${ isCardView ? '-card' :'' } py-0`"
+        :class="`g-cell py-0`"
         :data="tagsEnum"
         :disabled="isConsolidating"
         size="is-small"
@@ -111,13 +102,19 @@
         expanded
         append-to-body
         attached
-        type="is-grey"
-        @input="emitChange"/>
+        type="is-dark"
+        @input="emitChange">
+        <template #tag="tag">
+          <div class="test">
+            {{ tag.tag }}
+          </div>
+        </template>
+      </b-taginput>
 
       <!-- ANY STRING -->
       <b-input
         v-else
-        :custom-class="`g-cell g-cell-string${ isLongText ? '-longtext' : '' }${ isCardView ? '-card' : '' } py-0 ${isHeader ? 'g-header' : ''}`"
+        :custom-class="`g-cell py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         :disabled="isConsolidating"
         :type="isLongText ? 'textarea' : 'text'"
@@ -154,8 +151,8 @@ export default {
       type: Object
     },
     inputData: {
-      default: null,
-      type: [String, Number]
+      default: '',
+      type: [String, Number, Boolean]
     },
     isAdded: {
       default: false,
@@ -199,8 +196,10 @@ export default {
   methods: {
     adaptInput (value) {
       let newInput
+      // console.log('C > EditCell > adaptInput > value : ', value)
       switch (this.fieldType) {
         case 'boolean':
+          // console.log('C > EditCell > adaptInput > value : ', value)
           newInput = this.booleanFromValue(value)
           break
         case 'number':
@@ -213,8 +212,10 @@ export default {
           newInput = value
       }
       if (this.isTag && !this.isCategory) {
-        newInput = [value]
-        this.tagsValue = value.split(this.tagSeparator).filter(v => v !== '') || []
+        // console.log('\nC > EditCell > adaptInput > value : ', value)
+        const valStr = value && value.toString()
+        newInput = valStr && [valStr]
+        this.tagsValue = (valStr && valStr.split(this.tagSeparator).filter(v => v !== '')) || []
       }
       return newInput
     },
@@ -251,33 +252,14 @@ export default {
 
 <style>
 
-.gitribute-cell {
+.gitribute-cell > .field {
   /* border: none; */
+  width: 100%;
 }
 .g-cell {
   background-color: transparent;
   /* border: none; */
-}
-.g-cell-string {
-  min-width: 150px;
-}
-.g-cell-string-longtext {
-  min-width: 250px;
-}
-.g-cell-number {
-  min-width: 85px;
-}
-.g-cell-integer {
-  min-width: 40px;
-}
-.g-cell-boolean {
-  min-width: 30px;
-}
-.g-cell-tag {
-  min-width: 150px;
-}
-.g-cell-tags {
-  min-width: 275px;
+  /* border-color: none; */
 }
 .g-header {
   font-size: .85em!important;
