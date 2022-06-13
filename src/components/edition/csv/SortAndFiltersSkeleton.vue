@@ -2,13 +2,13 @@
   <div class="SortAndFiltersSkeleton gitribute-component container">
     <div class="columns is-multiline is-centered">
       <!-- SORTING -->
-      <div
+      <!-- <div
         :class="`column is-4 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
         <ButtonSortBy
           :headers="sortingHeaders"
           :locale="locale"
           @action="SendActionToParent"/>
-      </div>
+      </div> -->
 
       <!-- DEFAULT FILTERS -->
       <div
@@ -59,14 +59,14 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-import ButtonSortBy from '@/components/sorting/ButtonSortBy'
+// import ButtonSortBy from '@/components/sorting/ButtonSortBy'
 import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
 import CustomFilter from '@/components/filters/CustomFilter'
 
 export default {
   name: 'SortAndFiltersSkeleton',
   components: {
-    ButtonSortBy,
+    // ButtonSortBy,
     ButtonFilterBy,
     CustomFilter
   },
@@ -97,13 +97,13 @@ export default {
     }
   },
   computed: {
-    sortingHeaders () {
-      let sortingHeaders = this.columns
-      if (this.hasCustomSorting) {
-        sortingHeaders = this.fileSorting.fields
-      }
-      return sortingHeaders
-    },
+    // sortingHeaders () {
+    //   let sortingHeaders = this.columns
+    //   if (this.hasCustomSorting) {
+    //     sortingHeaders = this.fileSorting.fields
+    //   }
+    //   return sortingHeaders
+    // },
     filtersDisplay () {
       let filters
       if (this.fileFilters && this.fileFilters.length) {

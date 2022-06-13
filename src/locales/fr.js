@@ -89,7 +89,9 @@ export default {
     label: 'Trier',
     sortBy: 'Trier par un champ',
     sortAscending: 'Trier par ordre croissant',
-    sortDescending: 'Trier par ordre décroissant'
+    sortDescending: 'Trier par ordre décroissant',
+    sortedAsc: 'Tri par ordre croissant',
+    sortedDesc: 'Tri par ordre décroissant'
   },
   filters: {
     label: 'Filtrer',
@@ -121,6 +123,8 @@ export default {
     string: 'Texte',
     longtext: 'Texte long',
     link: 'Lien',
+    email: 'Email',
+    geopoint: 'Coordonnée géographique',
     tag: 'Etiquette',
     tags: 'Etiquettes',
     number: 'Nombre',

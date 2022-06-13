@@ -11,6 +11,7 @@
         <template #trigger>
           <b-button
             icon-left="wrench"
+            class="mt-1"
             size="is-small"
             type="is-dark"
             :loading="isConsolidating"
@@ -18,7 +19,7 @@
             outlined/>
         </template>
         <b-dropdown-item
-          v-for="api in field.apis"
+          v-for="api in activeApis"
           :key="api.api_name"
           aria-role="listitem"
           @click="consolidateRow(api)">
@@ -68,6 +69,11 @@ export default {
     debug: {
       default: false,
       type: Boolean
+    }
+  },
+  computed: {
+    activeApis () {
+      return this.field.apis.filter(api => api.activate)
     }
   },
   methods: {

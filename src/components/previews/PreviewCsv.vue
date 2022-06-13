@@ -188,6 +188,10 @@ export default {
     dataColumnsDiff () {
       const diff = this.dataColumns
       return diff
+    },
+    dataEditedSorted () {
+      const editedSorted = this.edited
+      return editedSorted
     }
   },
   watch: {
@@ -235,13 +239,13 @@ export default {
       }
     },
     fileIsDownloading (next) {
-      console.log('\nC > GitributeTable > watch > fileIsDownloading > next : ', next)
+      // console.log('\nC > PreviewCsv > watch > fileIsDownloading > next : ', next)
       if (next && this.gitObj.filetype === 'wiki') {
-        // console.log('C > GitributeTable > watch > fileIsDownloading > this.gitObj : ', this.gitObj)
+        // console.log('C > PreviewCsv > watch > fileIsDownloading > this.gitObj : ', this.gitObj)
         const editedCsv = this.ObjectToCsv(this.dataColumns, this.data, this.fileOptions)
-        // console.log('C > GitributeTable > watch > fileIsDownloading > editedCsv : ', editedCsv)
+        // console.log('C > PreviewCsv > watch > fileIsDownloading > editedCsv : ', editedCsv)
         const dl = this.buildFileLink(editedCsv, window)
-        console.log('C > GitributeTable > watch > fileIsDownloading > dl : ', dl)
+        // console.log('C > PreviewCsv > watch > fileIsDownloading > dl : ', dl)
         // this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
@@ -261,16 +265,20 @@ export default {
       const dataCopy = data.filter(d => !!d)
       // console.log('C > PreviewCsv > buildEnumArr > dataCopy : ', dataCopy)
       // console.log('C > PreviewCsv > buildEnumArr > separator : ', separator)
-      const dataParsed = []
+      // make a set from dataParsed instead of simple array
+      const dataParsedSet = new Set()
       dataCopy && dataCopy.forEach(tag => {
-        if (tag.includes(separator)) {
+        // console.log('...C > PreviewCsv > buildEnumArr > tag : ', tag)
+        const tagStr = tag && tag.toString()
+        // console.log('...C > PreviewCsv > buildEnumArr > tagStr : ', tagStr)
+        if (tagStr && tagStr.includes(separator)) {
           const subArr = tag.split(separator).map(t => t.trim())
-          dataParsed.push(...subArr)
-        } else {
-          dataParsed.push(tag)
+          subArr.forEach(item => dataParsedSet.add(item))
+        } else if (tagStr) {
+          dataParsedSet.add(tagStr)
         }
       })
-      const enumArr = [...new Set(dataParsed)].sort((a, b) => a.localeCompare(b))
+      const enumArr = [...dataParsedSet].sort((a, b) => a.localeCompare(b))
       // console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
       return enumArr
     },
@@ -282,9 +290,8 @@ export default {
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
       const schema = this.fileOptions.schema
       // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
-      const fieldsCustomProperties = this.fileOptions['fields-custom-properties']
+      const fieldsCustomProperties = this.fileOptions.customProps && this.fileOptions.customProps.fields
       // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
-      // const fileConsolidation = this.fileOptions.consolidation
       // console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
       if (!headers) return null
       const fields = Object.entries(headers)
@@ -295,8 +302,6 @@ export default {
           const fieldConstraints = fieldSchema && fieldSchema.constraints
           // console.log('C > PreviewCsv > buildColumns > fieldConstraints : ', fieldConstraints)
           const fieldCustomProps = fieldsCustomProperties && fieldsCustomProperties.find(schema => schema.name === fieldLabel)
-          // const fielSticky = fieldCustomProps && fieldCustomProps.sticky
-          // const fieldConsolidation = fileConsolidation && fileConsolidation.find(item => item.field_name === fieldLabel)
           let fieldData = {
             field: fieldId,
             label: fieldLabel.trim(),
@@ -305,7 +310,7 @@ export default {
           }
           // parse data for unique values on tag columns
           const fieldSubtype = fieldCustomProps && fieldCustomProps.subtype
-          const needEnumArr = fieldSubtype === 'tag'
+          const needEnumArr = fieldSubtype === 'tag' || fieldSubtype === 'tags'
           const defaultEnumArr = fieldConstraints && fieldConstraints.enum
           fieldData = {
             ...fieldData,
@@ -318,8 +323,6 @@ export default {
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
-            // consolidation data
-            // ...fieldConsolidation && { consolidation: fieldConsolidation }
           }
           if (!defaultEnumArr && needEnumArr) {
             const enumArr = this.buildEnumArr(
@@ -394,8 +397,8 @@ export default {
       let changeId //, isDeleted
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      // console.log('\nC > PreviewCsv > addRowEvent > changeObj : ', changeObj)
-      // console.log('C > PreviewCsv > addRowEvent > isDiff : ', isDiff)
+      console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
+      // console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
       if (isHeader) {
         changeId = changeObj.field
         // create a filtered copy of changesColumns
@@ -424,7 +427,7 @@ export default {
       const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
-      // console.log('C > PreviewCsv > addRowEvent > copyChanges : ', copyChanges)
+      // console.log('C > PreviewCsv > setChanges > copyChanges : ', copyChanges)
 
       // set in local store
       if (isHeader) {
@@ -469,19 +472,16 @@ export default {
     sortEdited (event) {
       // console.log('\nC > PreviewCsv > sortEdited > event : ', event)
       const sorting = event.value
-      const sortingField = sorting.header && sorting.header.field
-      const sortIsAscending = sorting.ascending
-      if (sortingField) {
-        // sort by a field
-        if (sortIsAscending) {
-          this.edited = this.edited.sort((a, b) => a[sortingField] > b[sortingField] ? 1 : -1)
-        } else {
-          this.edited = this.edited.sort((a, b) => a[sortingField] < b[sortingField] ? 1 : -1)
-        }
-      } else {
-        // default : sort by id
-        this.edited = this.edited.sort((a, b) => a.id > b.id ? 1 : -1)
+
+      // update sorting store
+      const payloadSorting = {
+        fileId: this.fileId,
+        field: sorting.header.field,
+        fieldName: sorting.header.name,
+        ascending: sorting.ascending,
+        resetSort: sorting.reset
       }
+      this.setSorting(payloadSorting)
     },
     // BUFFER
     bufferizeEdited () {

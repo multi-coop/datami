@@ -22,6 +22,9 @@ export const data = {
     cards: [],
     table: [],
 
+    // SORTING
+    sorting: [],
+
     // DATA STORED
     buffer: [],
     notifications: [],
