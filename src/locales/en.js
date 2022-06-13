@@ -78,7 +78,9 @@ export default {
     commitChanges: 'Submit your modifications',
     consolidate: 'Consolidate your data',
     selectConsolidationFields: 'Select the fields to update',
-    validateConsolidation: 'Validate the changes'
+    validateConsolidation: 'Validate the changes',
+    copyWidget: "To insert the widget in your website, copy the widget's html block",
+    widgetCopied: 'The widget code was copied to the clipboard'
     // nest: {
     //   test: 'test nested actions'
     // }

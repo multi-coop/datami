@@ -268,6 +268,8 @@ export default {
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     const fileUuid = this.uuidv4()
     gitInfosObject.uuid = fileUuid
+    gitInfosObject.title = this.title
+    gitInfosObject.onlyPreview = this.onlypreview
     // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid
     this.fileType = gitInfosObject.filetype
@@ -308,7 +310,7 @@ export default {
     // get consolidation settings if any
     let fileConsolidation = fileOptions.consolidation
     fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
-    console.log('C > GitributeFile > beforeMount > fileConsolidation : ', fileConsolidation)
+    // console.log('C > GitributeFile > beforeMount > fileConsolidation : ', fileConsolidation)
 
     // update fileOptions with schema and consolidation settings
     fileOptions = {
@@ -373,7 +375,7 @@ export default {
       this.updateReloading({ fileId: this.fileId, isLoading: false })
     },
     processAction (event) {
-      console.log('\nC > GitributeFile > processAction > event : ', event)
+      // console.log('\nC > GitributeFile > processAction > event : ', event)
       switch (event.action) {
         case 'toggleUploadFileDialog':
           this.showUploadFileDialog = !this.showUploadFileDialog

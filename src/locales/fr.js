@@ -78,7 +78,9 @@ export default {
     commitChanges: 'Proposer vos modifications',
     consolidate: 'Consolider vos données',
     selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
-    validateConsolidation: 'Valider les changements'
+    validateConsolidation: 'Valider les changements',
+    copyWidget: 'Pour intégrer le widget dans votre site, copie du bloc html du widget',
+    widgetCopied: 'Le widget est copié dans le presse-papier'
     // nest: {
     //   test: 'test nested actions'
     // }
