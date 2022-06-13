@@ -245,7 +245,7 @@ export default {
         const editedCsv = this.ObjectToCsv(this.dataColumns, this.data, this.fileOptions)
         // console.log('C > PreviewCsv > watch > fileIsDownloading > editedCsv : ', editedCsv)
         const dl = this.buildFileLink(editedCsv, window)
-        // console.log('C > PreviewCsv > watch > fileIsDownloading > dl : ', dl)
+        console.log('C > PreviewCsv > watch > fileIsDownloading > dl : ', dl)
         // this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }

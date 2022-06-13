@@ -1,137 +1,137 @@
 <!DOCTYPE html>
 <html lang="">
 
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon_multi.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon_multi.ico">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
 
-  <body style="background-color: grey; padding: 1em;">
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+<body style="background-color: grey; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
-    </noscript>
-    <!-- <div id="app"></div> -->
+  </noscript>
+  <!-- <div id="app"></div> -->
 
-    <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
-      <a href="https://gitlab.com/multi-coop/gitribute" target="_blank">
-        <img src="/logo_GITRIBUTE.png" alt="logo gitribute" style="height: 75px !important; width: auto !important">
-      </a>
-      <span class="ml-3 pb-3">
+  <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
+    <a href="https://gitlab.com/multi-coop/gitribute" target="_blank">
+      <img src="/logo_GITRIBUTE.png" alt="logo gitribute" style="height: 75px !important; width: auto !important">
+    </a>
+    <span class="ml-3 pb-3">
       Some examples of gitribute widgets' integration
     </span>
-    </h2>
-    <p class="has-text-centered"></p>
+  </h2>
+  <p class="has-text-centered"></p>
 
-    <!-- TEST FILTERS COMPONENTS -->
-    <!-- TO DO  -->
+  <!-- TEST FILTERS COMPONENTS -->
+  <!-- TO DO  -->
 
-    <!-- TEST LOAD / EDIT REPO COMPONENTS -->
-    <!-- TO DO  -->
+  <!-- TEST LOAD / EDIT REPO COMPONENTS -->
+  <!-- TO DO  -->
 
-    <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
-    <p id="gitribute-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
+  <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
+  <!-- <p id="gitribute-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#gitribute-md-gitlab" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import and edit a markdow file from gitlab
-  </p>
+        #
+      </a>
+      Import and edit a markdow file from gitlab
+    </p>
     <div style="background-color: white; margin: 1em;">
       <multi-gitribute-file
       gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/markdown/test-file-gitribute-fr.md"
       options="" title="gitribute for gitlab file - md" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
-    </div>
+    </div> -->
 
-    <!-- <p id="gitribute-md-github" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#gitribute-md-github" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import and edit a markdow file from github
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <multi-gitribute-file
-      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/jailbreak-devient-multi-fr.md"
-      options="" title="gitribute for github file - md" usertoken="" locale="en">
-    </multi-gitribute-file>
-  </div> -->
+  <!-- <p id="gitribute-md-github" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#gitribute-md-github" style="color: white; margin-right:  0.5em;">
+        #
+      </a>
+      Import and edit a markdow file from github
+    </p>
+    <div style="background-color: white; margin: 1em;">
+      <multi-gitribute-file
+        gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/jailbreak-devient-multi-fr.md"
+        options="" title="gitribute for github file - md" usertoken="" locale="en">
+      </multi-gitribute-file>
+    </div> -->
 
-    <p id="gitribute-csv-gitlab" class="ml-4 pt-6 subtitle has-text-white">
+  <!-- <p id="gitribute-csv-gitlab" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#gitribute-csv-gitlab" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import and edit a csv file from gitlab
-  </p>
+        #
+      </a>
+      Import and edit a csv file from gitlab
+    </p>
     <div style="background-color: white; margin: 1em;">
       <multi-gitribute-file
       gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
       options='{
-      "separator": ";",
-      "lockcolumns": true,
-      "tagseparator":", ",
-      "height": "500px",
-      "pagination":{
-        "itemsPerPage":5
-      },
-      "cardsview": { "activate": true, "default": false },
-      "cardsdetail": true,
-      "cardssettings": {
-        "mini": {
-          "name": {"position": "title"},
-          "surname": {"position": "title"},
-          "profession": {"position": "resume"}
+        "separator": ";",
+        "lockcolumns": true,
+        "tagseparator":", ",
+        "height": "500px",
+        "pagination":{
+          "itemsPerPage":5
         },
-        "detail": {
-          "name": {"position": "title"},
-          "surname": {"position": "title"},
-          "profession": {"position": "desription"}
+        "cardsview": { "activate": true, "default": false },
+        "cardsdetail": true,
+        "cardssettings": {
+          "mini": {
+            "name": {"position": "title"},
+            "surname": {"position": "title"},
+            "profession": {"position": "resume"}
+          },
+          "detail": {
+            "name": {"position": "title"},
+            "surname": {"position": "title"},
+            "profession": {"position": "desription"}
+          }
         }
-      }
-    }' title="gitribute for gitlab file - csv (semicolon separator)" usertoken="" locale="fr"></multi-gitribute-file>
-    </div>
+      }' title="gitribute for gitlab file - csv (semicolon separator)" usertoken="" locale="fr"></multi-gitribute-file>
+    </div> -->
 
-    <!-- <p id="gitribute-csv-github-bera" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#gitribute-csv-github-bera" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import a csv file from github for only preview
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <multi-gitribute-file
-      gitfile="https://github.com/qloridant/meteofrance_bra_hist/blob/master/src/data/ARAVIS/hist.csv" options='{
-      "separator":",",
-      "height": "1000px"
-    }' title="gitribute for github file - csv BERA (comma separator) - only preview" usertoken="" locale="fr"
-      onlypreview="true" debug="false">
-    </multi-gitribute-file>
-  </div> -->
+  <!-- <p id="gitribute-csv-github-bera" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#gitribute-csv-github-bera" style="color: white; margin-right:  0.5em;">
+        #
+      </a>
+      Import a csv file from github for only preview
+    </p>
+    <div style="background-color: white; margin: 1em;">
+      <multi-gitribute-file
+        gitfile="https://github.com/qloridant/meteofrance_bra_hist/blob/master/src/data/ARAVIS/hist.csv" options='{
+        "separator":",",
+        "height": "1000px"
+      }' title="gitribute for github file - csv BERA (comma separator) - only preview" usertoken="" locale="fr"
+        onlypreview="true" debug="false">
+      </multi-gitribute-file>
+    </div> -->
 
-    <!-- <p id="gitribute-csv-github" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#gitribute-csv-github" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import a csv file from github for only preview
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <multi-gitribute-file
-      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
-      "separator":",",
-      "height": "300px"
-    }' title="gitribute for github file - csv (comma separator) - only preview" usertoken="" locale="tk"
-      onlypreview="true" debug="false">
-    </multi-gitribute-file>
-  </div> -->
+  <!-- <p id="gitribute-csv-github" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#gitribute-csv-github" style="color: white; margin-right:  0.5em;">
+        #
+      </a>
+      Import a csv file from github for only preview
+    </p>
+    <div style="background-color: white; margin: 1em;">
+      <multi-gitribute-file
+        gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
+        "separator":",",
+        "height": "300px"
+      }' title="gitribute for github file - csv (comma separator) - only preview" usertoken="" locale="tk"
+        onlypreview="true" debug="false">
+      </multi-gitribute-file>
+    </div> -->
 
-    <p id="gitribute-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-csv-github-odf-ressources" style="color: white; margin-right:  0.5em;">
+  <p id="gitribute-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#gitribute-csv-github-odf-ressources" style="color: white; margin-right:  0.5em;">
       #
     </a>
     Import ODF data - ressources
   </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-file
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-liste des ressources.csv"
       options='{
       "height": "500px",
@@ -180,214 +180,216 @@
         }
       }
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
-    </div>
+  </div>
 
-    <p id="gitribute-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
+  <p id="gitribute-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#gitribute-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
       #
     </a>
     Import ODF data - observatoire
   </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-file
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
       options='{
-      "height": "500px",
-      "separator":";",
-      "lockcolumns": true,
-      "tagseparator":"-",
-      "customfilters" : {
-        "activate": true,
-        "filterfields": [
-        "type",
-          "platform_clean"
-          ]
-      },
-      "schema": {
-        "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
-      },
-      "fields-custom-properties": {
-        "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json"
-      },
-      "customsorting" : {
-        "activate": true,
-        "sortfields": [
-          { "name": "nom" }
-        ]
-      },
-      "pagination":{
-        "itemsPerPage": 20
-      },
-      "cardsview": { "activate": true, "default": false },
-      "cardsdetail": true,
-      "cardssettings": {
-        "mini": {
-          "nom": {"position": "title"},
-          "siren": {"position": "resume"},
-          "tags": {"position": "tags"}
+        "height": "500px",
+        "separator":";",
+        "lockcolumns": true,
+        "tagseparator":"-",
+        "customfilters" : {
+          "activate": true,
+          "filterfields": [
+          "type",
+            "platform_clean"
+            ]
         },
-        "detail": {
-          "nom": {"position": "title"},
-          "orga": {"position": "resume"},
-          "siren": {"position": "description"},
-          "adress": {"position": "description"},
-          "dep_label": {"position": "tags"},
-          "tags": {"position": "tags"}
+        "schema": {
+          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
+        },
+        "fields-custom-properties": {
+          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json"
+        },
+        "customsorting" : {
+          "activate": true,
+          "sortfields": [
+            { "name": "nom" }
+          ]
+        },
+        "pagination":{
+          "itemsPerPage": 20
+        },
+        "cardsview": { "activate": true, "default": false },
+        "cardsdetail": true,
+        "cardssettings": {
+          "mini": {
+            "nom": {"position": "title"},
+            "siren": {"position": "resume"},
+            "tags": {"position": "tags"}
+          },
+          "detail": {
+            "nom": {"position": "title"},
+            "orga": {"position": "resume"},
+            "siren": {"position": "description"},
+            "adress": {"position": "description"},
+            "dep_label": {"position": "tags"},
+            "tags": {"position": "tags"}
+          }
         }
-      }
-    }' title="Données de l'observatoire Open Data France" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
-    </div>
+      }' title="Données de l'observatoire Open Data France" usertoken="" locale="fr" debug="false">
+    </multi-gitribute-file>
+  </div>
 
-    <p id="gitribute-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-csv-github-cooptech" style="color: white; margin-right:  0.5em;">
+  <p id="gitribute-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#gitribute-csv-github-cooptech" style="color: white; margin-right:  0.5em;">
       #
     </a>
     Liste des coopératives de la tech en France
   </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-file
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/cooptech/Annuaire-SCOP-SCIC-tech-France.csv"
       options='{
-      "height": "500px",
-      "separator":",",
-      "lockcolumns": true,
-      "tagseparator":",",
-      "customfilters" : {
-        "activate": true,
-        "filterfields": [
-        "type",
-          "Statut juridique"
-          ]
-      },
-      "schema": {
-        "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/cooptech/Annuaire-SCOP-SCIC-tech-France-schema.json"
-      },
-      "fields-custom-properties": {
-        "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/cooptech/Annuaire-SCOP-SCIC-tech-France-fields-custom-props.json"
-      },
-      "customsorting" : {
-        "activate": true,
-        "sortfields": [
-          { "name": "Nom" }
-        ]
-      },
-      "pagination":{
-        "itemsPerPage": 20
-      },
-      "cardsview": { "activate": true, "default": false },
-      "cardsdetail": true,
-      "cardssettings": {
-        "mini": {
-          "Nom": {"position": "title"},
-          "Présentation": {"position": "description"},
-          "Site internet": {"position": "description"},
-          "Statut juridique": {"position": "tags"},
-          "Domaine(s)": {"position": "tags"}
+        "height": "500px",
+        "separator":",",
+        "lockcolumns": true,
+        "tagseparator":",",
+        "customfilters" : {
+          "activate": true,
+          "filterfields": [
+          "type",
+            "Statut juridique"
+            ]
         },
-        "detail": {
-          "Nom": {"position": "title"},
-          "Site internet": {"position": "description"},
-          "Présentation": {"position": "description"},
-          "Numéro SIREN": {"position": "description"},
-          "Adresse": {"position": "description"},
-          "Statut juridique": {"position": "tags"},
-          "Domaine(s)": {"position": "tags"},
-          "Fiche URSCOP": {"position": "links"}
+        "schema": {
+          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/cooptech/Annuaire-SCOP-SCIC-tech-France-schema.json"
+        },
+        "fields-custom-properties": {
+          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/cooptech/Annuaire-SCOP-SCIC-tech-France-fields-custom-props.json"
+        },
+        "customsorting" : {
+          "activate": true,
+          "sortfields": [
+            { "name": "Nom" }
+          ]
+        },
+        "pagination":{
+          "itemsPerPage": 20
+        },
+        "cardsview": { "activate": true, "default": false },
+        "cardsdetail": true,
+        "cardssettings": {
+          "mini": {
+            "Nom": {"position": "title"},
+            "Présentation": {"position": "description"},
+            "Site internet": {"position": "description"},
+            "Statut juridique": {"position": "tags"},
+            "Domaine(s)": {"position": "tags"}
+          },
+          "detail": {
+            "Nom": {"position": "title"},
+            "Site internet": {"position": "description"},
+            "Présentation": {"position": "description"},
+            "Numéro SIREN": {"position": "description"},
+            "Adresse": {"position": "description"},
+            "Statut juridique": {"position": "tags"},
+            "Domaine(s)": {"position": "tags"},
+            "Fiche URSCOP": {"position": "links"}
+          }
         }
-      }
-    }' title="Liste des coopératives de la tech en France - csv ( semicolon separator)" usertoken="" locale="fr"
+      }' title="Liste des coopératives de la tech en France - csv ( semicolon separator)" usertoken="" locale="fr"
       debug="false"></multi-gitribute-file>
-    </div> -->
+  </div> -->
 
-  <!-- <p id="gitribute-json-github-odf-schema" class="ml-4 pt-6 subtitle has-text-white">
+  <p id="gitribute-json-github-odf-schema" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-json-github-odf-schema" style="color: white; margin-right: 0.5em;">
   </p>
   <div style="background-color: white; margin: 1em;">
     <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
       options='{
-      "defaultDepth": 2,
-      "allowKeyEdit": true
-    }' title="gitribute for github file - json schema ODF" usertoken="" locale="fr" onlypreview="false" debug="false">
+        "defaultDepth": 2,
+        "allowKeyEdit": true
+      }' title="gitribute for github file - json schema ODF" usertoken="" locale="fr" onlypreview="false"
+      debug="false">
     </multi-gitribute-file>
-  </div> -->
+  </div>
 
-    <p id="gitribute-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-wiki-communs" style="color: white; margin-right: 0.5em;">
+  <p id="gitribute-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#gitribute-wiki-communs" style="color: white; margin-right: 0.5em;">
       #
     </a>
     Import wikidata content (wiki resilience) to display as csv / cards content
   </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-explowiki
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-explowiki
       wikilist="https://wiki.resilience-territoire.ademe.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Commun=on&wf-expl-Tags="
       options='{
-        "height": "900px",
-        "wikisettings": {
-          "category": "commun",
-          "fields": [
-            "url",
-            "description",
-            "shortDescription",
-            "Main_Picture",
-            "Titre",
-            "Tags",
-            "Theme",
-            "location",
-            "complement",
-            "challenge",
-            "from"
-          ],
-          "tagfields": [
+          "height": "900px",
+          "wikisettings": {
+            "category": "commun",
+            "fields": [
+              "url",
+              "description",
+              "shortDescription",
+              "Main_Picture",
+              "Titre",
+              "Tags",
+              "Theme",
+              "location",
+              "complement",
+              "challenge",
+              "from"
+            ],
+            "tagfields": [
+              "challenge",
+              "Tags",
+              "Theme"
+            ]
+        },
+        "customsorting" : {
+          "activate": true,
+          "sortfields": [
+            "title"
+          ]
+        },
+        "customfilters" : {
+          "activate": true,
+          "filterfields": [
             "challenge",
             "Tags",
             "Theme"
           ]
-      },
-      "customsorting" : {
-        "activate": true,
-        "sortfields": [
-          "title"
-        ]
-      },
-      "customfilters" : {
-        "activate": true,
-        "filterfields": [
-          "challenge",
-          "Tags",
-          "Theme"
-        ]
-      },
-      "pagination": {
-        "itemsPerPage": 9
-      },
-      "cardsview": { "activate": true, "default": true },
-      "cardssettings": {
-        "mini": {
-          "title": {"position": "title"},
-          "imageUrl": {"position": "image"},
-          "shortDescription": {"position": "resume"},
-          "Tags": {"position": "tags"},
-          "Theme": {"position": "tags"},
-          "challenge": {"position": "tags"}
         },
-        "detail": {
-          "title": {"position": "title"},
-          "imageUrl": {"position": "image"},
-          "shortDescription": {"position": "resume"},
-          "description": {"position": "description"},
-          "complement": {"position": "description"},
-          "from": {"position": "description"},
-          "Tags": {"position": "tags"},
-          "Theme": {"position": "tags"},
-          "challenge": {"position": "tags"},
-          "url": {"position": "links"}
+        "pagination": {
+          "itemsPerPage": 9
+        },
+        "cardsview": { "activate": true, "default": true },
+        "cardssettings": {
+          "mini": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "Tags": {"position": "tags"},
+            "Theme": {"position": "tags"},
+            "challenge": {"position": "tags"}
+          },
+          "detail": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "description": {"position": "description"},
+            "complement": {"position": "description"},
+            "from": {"position": "description"},
+            "Tags": {"position": "tags"},
+            "Theme": {"position": "tags"},
+            "challenge": {"position": "tags"},
+            "url": {"position": "links"}
+          }
         }
-      }
-    }' title="gitribute for explowiki - communs :)" locale="fr"></multi-gitribute-explowiki>
-    </div>
+      }' title="gitribute for explowiki - communs :)" locale="fr"></multi-gitribute-explowiki>
+  </div>
 
-    <!-- <p id="gitribute-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
+  <p id="gitribute-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-wiki-fabmob" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -397,148 +399,149 @@
     <multi-gitribute-explowiki
       wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
       wikipages='[
-        "https://wiki.lafabriquedesmobilites.fr/wiki/Accra_Mobile",
-        "https://wiki.lafabriquedesmobilites.fr/wiki/Agremob_Self_Data_Territorial_La_Rochelle",
-        "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
-      ]' options='{
-        "height": "700px",
-        "schema": {
-          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+          "https://wiki.lafabriquedesmobilites.fr/wiki/Accra_Mobile",
+          "https://wiki.lafabriquedesmobilites.fr/wiki/Agremob_Self_Data_Territorial_La_Rochelle",
+          "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
+        ]' options='{
+          "height": "700px",
+          "schema": {
+            "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+          },
+          "fields-custom-properties": {
+            "fields": [
+              { 
+                "name": "pageUrl",
+                "subtype": "link",
+                "locked": true
+              },
+              { 
+                "name": "imageUrl",
+                "subtype": "link"
+              },
+              { 
+                "name": "url",
+                "subtype": "link"
+              },
+              {
+                "name": "Tags",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "Theme",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "location",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "from",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "challenge",
+                "subtype": "tags",
+                "tagSeparator": ","
+              }
+            ]
+          },
+          "wikisettings": {
+            "category": "projet",
+            "fields": [
+              "url",
+              "description",
+              "shortDescription",
+              "Main_Picture",
+              "Coordonnées géo",
+              "needs",
+              "referent",
+              "communauté d&#39;intérêt",
+              "Titre",
+              "Tags",
+              "etape",
+              "Theme",
+              "location",
+              "from",
+              "challenge"
+            ],
+            "tagfields": [
+              "Tags",
+              "Theme",
+              "location",
+              "from",
+              "challenge"
+            ]
         },
-        "fields-custom-properties": {
-          "fields": [
-            { 
-              "name": "pageUrl",
-              "subtype": "link",
-              "locked": true
-            },
-            { 
-              "name": "imageUrl",
-              "subtype": "link"
-            },
-            { 
-              "name": "url",
-              "subtype": "link"
-            },
-            {
-              "name": "Tags",
-              "subtype": "tags",
-              "tagSeparator": ","
-            },
-            {
-              "name": "Theme",
-              "subtype": "tags",
-              "tagSeparator": ","
-            },
-            {
-              "name": "location",
-              "subtype": "tags",
-              "tagSeparator": ","
-            },
-            {
-              "name": "from",
-              "subtype": "tags",
-              "tagSeparator": ","
-            },
-            {
-              "name": "challenge",
-              "subtype": "tags",
-              "tagSeparator": ","
-            }
+        "customsorting" : {
+          "activate": true,
+          "sortfields": [
+            "title"
           ]
         },
-        "wikisettings": {
-          "category": "projet",
-          "fields": [
-            "url",
-            "description",
-            "shortDescription",
-            "Main_Picture",
-            "Coordonnées géo",
-            "needs",
-            "referent",
-            "communauté d&#39;intérêt",
-            "Titre",
+        "customfilters" : {
+          "activate": true,
+          "filterfields": [
             "Tags",
-            "etape",
-            "Theme",
-            "location",
-            "from",
-            "challenge"
-          ],
-          "tagfields": [
-            "Tags",
-            "Theme",
-            "location",
-            "from",
-            "challenge"
+            "Theme"
           ]
-      },
-      "customsorting" : {
-        "activate": true,
-        "sortfields": [
-          "title"
-        ]
-      },
-      "customfilters" : {
-        "activate": true,
-        "filterfields": [
-          "Tags",
-          "Theme"
-        ]
-      },
-      "pagination": {
-        "itemsPerPage":12
-      },
-      "cardsview": {
-        "activate": true,
-        "default": true
-      },
-      "cardssettings": {
-        "mini": {
-          "title": {"position": "title"},
-          "imageUrl": {"position": "image"},
-          "shortDescription": {"position": "resume"},
-          "Tags": {"position": "tags"},
-          "Theme": {"position": "tags"},
-          "challenge": {"position": "tags"}
         },
-        "detail": {
-          "title": {"position": "title"},
-          "imageUrl": {"position": "image"},
-          "shortDescription": {"position": "resume"},
-          "description": {"position": "description"},
-          "Tags": {"position": "tags"},
-          "Theme": {"position": "tags"},
-          "challenge": {"position": "tags"},
-          "communauté d&#39;intérêt": {"position": "tags"},
-          "url": {"position": "links"}
+        "pagination": {
+          "itemsPerPage":12
+        },
+        "cardsview": {
+          "activate": true,
+          "default": true
+        },
+        "cardssettings": {
+          "mini": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "Tags": {"position": "tags"},
+            "Theme": {"position": "tags"},
+            "challenge": {"position": "tags"}
+          },
+          "detail": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "description": {"position": "description"},
+            "Tags": {"position": "tags"},
+            "Theme": {"position": "tags"},
+            "challenge": {"position": "tags"},
+            "communauté d&#39;intérêt": {"position": "tags"},
+            "url": {"position": "links"}
+          }
         }
-      }
-    }' title="gitribute for explowiki - fabmob :)" locale="fr"></multi-gitribute-explowiki>
-  </div> -->
+      }' title="gitribute for explowiki - fabmob :)" locale="fr"></multi-gitribute-explowiki>
+  </div>
 
-    <p id="gitribute-json-github" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-json-github" style="color: white; margin-right: 0.5em;">
+  <p id="gitribute-json-github" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#gitribute-json-github" style="color: white; margin-right: 0.5em;">
       #
     </a>
     Import and edit a json file from github
   </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-file
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/test-json.json" options='{
-      "defaultDepth": "all",
-      "allowKeyEdit": true
-    }' title="gitribute for github file - json" usertoken="" locale="fr" onlypreview="false" debug="false"></multi-gitribute-file>
-    </div>
+        "defaultDepth": "all",
+        "allowKeyEdit": true
+      }' title="gitribute for github file - json" usertoken="" locale="fr" onlypreview="false" debug="false">
+    </multi-gitribute-file>
+  </div>
 
-    <!-- built files will be auto injected -->
-    <style>
-      .gitribute-component {
-        /* for debugging purposes... */
-        /* border: thin green dashed; */
-      }
-    </style>
-  </body>
+  <!-- built files will be auto injected -->
+  <style>
+    .gitribute-component {
+      /* for debugging purposes... */
+      /* border: thin green dashed; */
+    }
+  </style>
+</body>
 
 </html>
