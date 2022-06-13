@@ -115,6 +115,7 @@ An open source project by **[multi](https://multi.coop)**
 ```bash
 nvm use
 npm install
+cp example.env .env
 ```
 
 ### Compiles and hot-reloads for development

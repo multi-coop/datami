@@ -235,6 +235,10 @@ export default {
       default: '',
       type: String
     },
+    onlypreview: {
+      default: false,
+      type: Boolean
+    },
     debug: {
       default: false,
       type: Boolean
@@ -242,7 +246,6 @@ export default {
   },
   data () {
     return {
-      onlypreview: true,
       // file infos
       fileId: undefined,
       fileType: undefined,
@@ -299,6 +302,9 @@ export default {
     // get wiki object for further reload infos
     const wikiInfosObject = this.extractWikiInfos(this.wikilist, this.mediawikiOptions.wikisettings)
     wikiInfosObject.uuid = wikiUuid
+    wikiInfosObject.title = this.title
+    wikiInfosObject.wikipages = this.wikipages && JSON.parse(this.wikipages)
+    wikiInfosObject.onlyPreview = this.onlypreview
     this.wikiObj = wikiInfosObject
     this.fileId = wikiInfosObject.uuid
     this.fileType = wikiInfosObject.filetype
@@ -307,17 +313,17 @@ export default {
     }
     // get schema if any
     const fileSchema = mediawikiOptions.schema
-    console.log('C > GitributeExploWiki > beforeMount > fileSchema : ', fileSchema)
+    // console.log('C > GitributeExploWiki > beforeMount > fileSchema : ', fileSchema)
     if (fileSchema && fileSchema.file) {
       const schemaGitObj = extractGitInfos(fileSchema.file)
-      console.log('C > GitributeExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
+      // console.log('C > GitributeExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
       const schemaRaw = await getFileDataRaw(schemaGitObj)
       // console.log('C > GitributeExploWiki > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
       // console.log('C > GitributeExploWiki > beforeMount > schemaData : ', schemaData)
       const schema = JSON.parse(schemaData)
       mediawikiOptions.schema = schema
-      console.log('C > GitributeExploWiki > beforeMount > schema : ', schema)
+      // console.log('C > GitributeExploWiki > beforeMount > schema : ', schema)
     }
     this.addFileOptions({ ...mediawikiOptions, uuid: wikiUuid })
     // console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
@@ -344,7 +350,7 @@ export default {
       this.wikiPages = []
 
       // get wikipages list if any
-      const wikipages = this.wikipages && this.wikipages.length ? JSON.parse(this.wikipages) : []
+      const wikipages = this.wikiObj.wikipages
       // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikipages : ', wikipages)
       if (wikipages && wikipages.length) {
         for (const pageUrl of wikipages) {

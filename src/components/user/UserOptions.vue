@@ -14,6 +14,9 @@
       v-if="!onlyPreview"
       :file-id="fileId"
       :locale="locale"/>
+    <ButtonCopyWidgetHtml
+      :file-id="fileId"
+      :locale="locale"/>
     <ButtonChangeLocale
       :locale="locale"/>
   </div>
@@ -25,6 +28,7 @@ import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
 import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
 import ButtonChangeUserBranch from '@/components/user/ButtonChangeUserBranch'
 import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
+import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
 
 export default {
   name: 'UserOptions',
@@ -33,7 +37,8 @@ export default {
     ButtonDownloadFile,
     ButtonChangeUserToken,
     ButtonChangeUserBranch,
-    ButtonChangeLocale
+    ButtonChangeLocale,
+    ButtonCopyWidgetHtml
   },
   props: {
     fileId: {
