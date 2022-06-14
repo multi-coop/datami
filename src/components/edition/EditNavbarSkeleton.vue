@@ -15,7 +15,7 @@
 
       <!-- EDIT VIEW CHOICES -->
       <div
-        :class="`column is-4 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
+        :class="`column is-3  mr-5 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
         <EditModeBtns
           :only-preview="onlyPreview"
           :file-id="fileId"
@@ -23,8 +23,9 @@
       </div>
 
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
+      <!-- class="column is-3 is-offset-1"> -->
       <div
-        class="column is-3 is-offset-1">
+        class="column is-3  mr-3 mr-0-desktop">
         <b-button
           v-if="!onlyPreview"
           type="is-dark"

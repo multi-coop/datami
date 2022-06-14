@@ -3,7 +3,7 @@
     <div class="container mb-4">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="column is-half is-12-mobile has-text-centered-mobile">
+        <div class="column is-half-desktop is-12-mobile has-text-centered-mobile">
           <FileTitle
             :show-file-infos="showFileInfos"
             :title="title"
@@ -13,7 +13,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="column is-half is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
+        <div class="column is-half-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
           <ViewModeBtns
             v-if="fileOptions"
             :file-id="fileId"
