@@ -1,5 +1,5 @@
 <template>
-  <div class="EditNavbarSkeleton gitribute-component container">
+  <div class="EditNavbarSkeleton gitribute-component container ">
     <div
       v-if="gitObj"
       class="columns is-multiline is-mobile is-centered mb-2">
@@ -15,7 +15,7 @@
 
       <!-- EDIT VIEW CHOICES -->
       <div
-        :class="`column is-3  mr-5 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
+        :class="`column is-3 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
         <EditModeBtns
           :only-preview="onlyPreview"
           :file-id="fileId"
@@ -25,7 +25,7 @@
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <!-- class="column is-3 is-offset-1"> -->
       <div
-        class="column is-3  mr-3 mr-0-desktop">
+        class="column is-6-mobile is-3-tablet mr-3-tablet mr-0-desktop  is-offset-1">
         <b-button
           v-if="!onlyPreview"
           type="is-dark"
