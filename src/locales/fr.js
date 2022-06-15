@@ -97,6 +97,7 @@ export default {
     label: 'Filtrer',
     filterBy: 'Filtrer par un champ et une valeur',
     filterByField: 'Filtrer par le champ',
+    resetFilter: 'Réinitialiser ce filtre',
     removeFilter: 'Supprimer ce filtre',
     removeFilters: 'Supprimer tous les filtres'
   },

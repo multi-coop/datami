@@ -97,8 +97,9 @@ export default {
     label: 'Filter',
     filterBy: 'Filter by a field and a value',
     filterByField: 'Filter by the field',
+    resetFilter: 'Reset this filter',
     removeFilter: 'Remove this filter',
-    removeFilters: 'Reset all the filters'
+    removeFilters: 'Reset all filters'
   },
   pagination: {
     items: 'items',
