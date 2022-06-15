@@ -31,16 +31,29 @@
         columnsForView: <br>
         <pre><code>{{ columnsForView }}</code></pre><br>
       </div>
+      <div
+        v-if="debug"
+        class="column is-9">
+        filterTags: <br>
+        <pre><code>{{ filterTags }}</code></pre><br>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-9">
+        searchText: <br>
+        <pre><code>{{ searchText }}</code></pre><br>
+      </div>
 
       <!-- FILTER TAGS -->
-      <div :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
+      <div
+        v-if="filterTags && filterTags.length"
+        :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
         <FilterTags
-          v-if="filterTags && filterTags.length"
           v-show="!isAnyDialogOpen"
           :headers="columnsEdited"
           :tags="filterTags"
           :locale="locale"
-          @removeTag="removeTag"/>
+          @action="processAction"/>
       </div>
 
       <!-- COUNTS & EDIT CSV NAVABAR -->
@@ -75,6 +88,9 @@
       <!-- DEBUGGING -->
       <div v-if="debug">
         lockHeaders : <code>{{ lockHeaders }}</code>
+      </div>
+      <div v-if="debug">
+        filterTags : <code>{{ filterTags }}</code>
       </div>
 
       <!-- TABLE -->
@@ -511,6 +527,7 @@ export default {
       sortingAscending: true,
 
       // FILTERS
+      searchText: undefined,
       filterTagsChoices: [],
       filterTags: [],
 
@@ -538,10 +555,6 @@ export default {
     }
   },
   computed: {
-    // sortingFields () {
-    //   const settingsSorting = this.customSortingConfig.sortfields
-    //   return this.columns.filter(col => settingsSorting.includes(col.name))
-    // },
     filterFields () {
       const settingsFields = this.customFiltersConfig.filterfields
       return this.columns.filter(col => settingsFields.includes(col.label))
@@ -653,14 +666,48 @@ export default {
     },
     dataEditedFiltered () {
       let data = [...this.dataEdited]
-      const filters = this.filterTags
-      // console.log('\nC > GitributeTable > dataEditedFiltered > filters : ', filters)
-      filters.forEach(filter => {
-        data = data.filter(row => {
-          const rowVal = row[filter.field] && row[filter.field].toLowerCase()
-          const filterVal = filter.value.toLowerCase()
-          return rowVal && rowVal.includes(filterVal)
+
+      // console.log('\nC > GitributeTable > dataEditedFiltered > this.columnsForView : ', this.columnsForView)
+      const colFields = this.columnsForView.map(col => col.field)
+      // console.log('C > GitributeTable > dataEditedFiltered > colFields : ', colFields)
+
+      const searchStr = this.searchText
+      // console.log('C > GitributeTable > dataEditedFiltered > searchStr : ', searchStr)
+      const filterTags = this.filterTags
+      // console.log('C > GitributeTable > dataEditedFiltered > filterTags : ', filterTags)
+      // const filterTagsFields = filterTags.map(f => f.field) || []
+      // console.log('C > GitributeTable > dataEditedFiltered > filterTagsFields : ', filterTagsFields)
+
+      // filter out data
+      data = data.filter(row => {
+        const hasSearchVal = searchStr ? [] : [true]
+        const hasFilterValues = [true]
+        // console.log('\nC > GitributeTable > dataEditedFiltered > row : ', row)
+
+        for (const field in colFields) {
+          // console.log('C > GitributeTable > dataEditedFiltered > field : ', field)
+          const rowVal = row[field].toString().toLowerCase()
+          // console.log('C > GitributeTable > dataEditedFiltered > rowVal : ', rowVal)
+          // search text
+          if (searchStr) {
+            const cellHasSearch = rowVal.includes(searchStr.toLowerCase())
+            hasSearchVal.push(cellHasSearch)
+          }
+        }
+        // filter tags
+        filterTags.forEach(filterTag => {
+          // if (filterTagsFields.includes(field)) {
+          // const filterTag = filterTags.find(f => f.field === field)
+          const rowVal = row[filterTag.field].toString().toLowerCase()
+          const filterVal = filterTag.value.toLowerCase()
+          const hasFilterVal = rowVal && rowVal.includes(filterVal)
+          hasFilterValues.push(hasFilterVal)
         })
+
+        const boolSearch = hasSearchVal.some(b => b)
+        const boolFilters = hasFilterValues.every(b => b)
+
+        return boolSearch && boolFilters
       })
       return data
     },
@@ -882,9 +929,17 @@ export default {
           break
 
         // FILTERING
+        case 'searchText':
+          // console.log('\nC > GitributeTable > processAction > event : ', event)
+          this.processSearch(event.value)
+          break
         case 'filterBy':
           this.processFilter(event.value)
           break
+        case 'removeTag':
+          this.removeTag(event.value)
+          break
+
         // PAGINATION
         case 'changePage':
           this.currentPage = event.value.currentPage
@@ -969,6 +1024,11 @@ export default {
       // isFirstRow && console.log('C > GitributeTable > isInChanges > bool : ', bool)
       return bool
     },
+    processSearch (search) {
+      // console.log('C > GitributeTable > processSearch > search : ', search)
+      const reset = search.reset
+      this.searchText = !reset ? search.value : undefined
+    },
     processFilter (filter) {
       // console.log('C > GitributeTable > processFilter > filter : ', filter)
       const active = !!filter.field
@@ -977,21 +1037,21 @@ export default {
         this.processFilterValue(filter)
       }
       if (reset) {
-        this.filterTags = []
+        this.filterTags = this.filterTags.filter(f => f.field !== filter.field) || []
       }
     },
     processFilterValue (tag, remove = false) {
       // console.log('C > GitributeTable > processFilterValue > tag : ', tag)
       // console.log('C > GitributeTable > processFilterValue > remove : ', remove)
+      const filterTags = this.filterTags.filter(t => {
+        const sameField = t.field === tag.field
+        const sameValue = t.value === tag.value
+        return !(sameField && sameValue)
+      })
       if (!remove) {
-        this.filterTags.push(tag)
-      } else {
-        this.filterTags = this.filterTags.filter(t => {
-          const sameField = t.field === tag.field
-          const sameValue = t.value === tag.value
-          return !(sameField && sameValue)
-        })
+        filterTags.push(tag)
       }
+      this.filterTags = filterTags
     },
     removeTag (tag) {
       // console.log('\nC > GitributeTable > removeTag > tag : ', tag)

@@ -1,5 +1,5 @@
 <template>
-  <div class="FilterTags gitribute-component container is-flex is-flex-direction-row is-align-content-center is-justify-content-center">
+  <div class="FilterTags mt-2 gitribute-component container is-flex is-flex-direction-row is-align-content-center is-justify-content-center">
     <b-field
       grouped
       group-multiline>
@@ -16,7 +16,7 @@
           </b-tag>
           <b-tag
             :style="`color: ${tagColour(tag.value)}; background-color:  ${tagBackgroundColour(tag.value)}`">
-            <span class="px-2">
+            <span class="px-2 has-text-weight-bold">
               {{ tag.value }}
             </span>
             <b-tooltip
@@ -65,7 +65,11 @@ export default {
     },
     removeTag (tag) {
       // console.log('C > FilterTags > removeTag > tag : ', tag)
-      this.$emit('removeTag', tag)
+      const payload = {
+        action: 'removeTag',
+        value: tag
+      }
+      this.$emit('action', payload)
     }
   }
 }

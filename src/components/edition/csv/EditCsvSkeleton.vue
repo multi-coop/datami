@@ -3,7 +3,7 @@
     <div class="columns is-mobile is-vcentered">
       <!-- RESULTS -->
       <div class="column is-3 has-text-left">
-        <p class="has-text-weight-bold is-size-6">
+        <p class="has-text-weight-bold is-size-6 ml-1">
           <span>
             {{ (dataEditedFiltered && dataEditedFiltered.length)|| 0 }}
           </span>

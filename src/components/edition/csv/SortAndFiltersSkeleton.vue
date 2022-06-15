@@ -1,39 +1,41 @@
 <template>
   <div class="SortAndFiltersSkeleton gitribute-component container">
-    <div class="columns is-multiline is-centered">
-      <!-- SORTING -->
-      <!-- <div
-        :class="`column is-4 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
-        <ButtonSortBy
-          :headers="sortingHeaders"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </div> -->
+    <b-navbar
+      type="is-white">
+      <!-- FULL TEXT SEARCH -->
+      <template #start>
+        <b-navbar-item
+          tag="div">
+          <SearchFullText
+            :file-id="fileId"
+            :locale="locale"
+            @action="SendActionToParent"/>
+        </b-navbar-item>
+      </template>
 
-      <!-- DEFAULT FILTERS -->
-      <div
-        v-if="!hasCustomFilters"
-        :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
-        <ButtonFilterBy
-          :headers="columns"
-          :is-active-tags="isActiveTags"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </div>
-
-      <!-- CUSTOM FILTERS -->
-      <div
-        v-for="filter in filtersDisplay"
-        :key="`filter-${fileId}-${filter.field}`"
-        :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
-        <CustomFilter
-          v-if="hasCustomFilters && filtersDisplay"
-          :file-id="fileId"
+      <!-- LOOP FILTERS -->
+      <template #end>
+        <CustomFilterDropdown
+          v-for="filter in filtersDisplay"
+          :key="`nav-filter-${fileId}-${filter.field}`"
           :filter="filter"
+          :file-id="fileId"
           :field-active-tags="fieldActiveTags(filter.field)"
           :locale="locale"
           @action="SendActionToParent"/>
+      </template>
+    </b-navbar>
+
+    <!-- DEBUGGING -->
+    <div
+      v-if="debug"
+      class="columns is-multiline is-centered">
+      <div class="column is-4">
+        activeTags : <pre><code>{{ activeTags }}</code></pre>
       </div>
+      <!-- <div class="column is-8">
+        filtersDisplay : <pre><code>{{ filtersDisplay }}</code></pre>
+      </div> -->
     </div>
 
     <!-- DEBUG -->
@@ -59,16 +61,14 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-// import ButtonSortBy from '@/components/sorting/ButtonSortBy'
-import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
-import CustomFilter from '@/components/filters/CustomFilter'
+import SearchFullText from '@/components/filters/SearchFullText'
+import CustomFilterDropdown from '@/components/filters/CustomFilterDropdown'
 
 export default {
   name: 'SortAndFiltersSkeleton',
   components: {
-    // ButtonSortBy,
-    ButtonFilterBy,
-    CustomFilter
+    SearchFullText,
+    CustomFilterDropdown
   },
   mixins: [
     mixinGlobal,
@@ -96,14 +96,12 @@ export default {
       type: Boolean
     }
   },
+  data () {
+    return {
+      search: undefined
+    }
+  },
   computed: {
-    // sortingHeaders () {
-    //   let sortingHeaders = this.columns
-    //   if (this.hasCustomSorting) {
-    //     sortingHeaders = this.fileSorting.fields
-    //   }
-    //   return sortingHeaders
-    // },
     filtersDisplay () {
       let filters
       if (this.fileFilters && this.fileFilters.length) {
