@@ -3,7 +3,10 @@
     <div class="container mb-4">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="column is-9 is-12-mobile has-text-centered-mobile">
+        <div class="column is-9 is-12-touch is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-mobile">
+          <ViewModeBtns
+            :file-id="fileId"
+            :locale="locale"/>
           <FileTitle
             :show-file-infos="showFileInfos"
             :title="title"
@@ -12,10 +15,7 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <div class="column is-3 is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
-          <ViewModeBtns
-            :file-id="fileId"
-            :locale="locale"/>
+        <div class="column is-3 is-12-touch is-flex is-direction-row is-align-items-center is-justify-content-center">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
