@@ -139,14 +139,12 @@ export const stringToColour = (str) => {
   let colour
   if (str === 'SCIC') {
     colour = 'green'
+  } else if (str === 'SCOP') {
+    colour = 'blue'
   } else {
-    colour = 'red'
+    colour = 'grey'
   }
   console.log(str)
-  // const stringUniqueHash = [...str].reduce((acc, char) => {
-  //   return char.charCodeAt(0) + ((acc << 5) - acc);
-  // }, 0)
-  // const colour = `hsl(${stringUniqueHash % 360}, 95%, 35%)`
   return colour
 }
 
