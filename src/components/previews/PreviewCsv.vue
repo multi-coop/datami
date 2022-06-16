@@ -322,6 +322,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.maxLength && { maxLength: fieldCustomProps.maxLength },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
+            ...fieldCustomProps && fieldCustomProps.bgcolor && { bgcolor: fieldCustomProps.bgcolor },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
           if (!defaultEnumArr && needEnumArr) {

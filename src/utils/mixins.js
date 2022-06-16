@@ -343,7 +343,9 @@ export const mixinValue = {
     booleanFromValue,
     trimText,
     tagBackgroundColour (value) {
-      return stringToColour(value)
+      const orange = 'yellow'
+      return stringToColour(orange)
+      // return orange
     },
     tagColour (value) {
       const hex = this.tagBackgroundColour(value)
