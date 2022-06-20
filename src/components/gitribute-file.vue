@@ -3,8 +3,7 @@
     <div class="container mb-4">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <!-- <div class="column is-4 is-12-touch is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-mobile"> -->
-        <div class="column is-6-desktop is-12-mobile has-text-centered-mobile">
+        <div class="column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-tablet">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -16,8 +15,6 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <!-- <div class="column is-8 is-12-touch is-flex is-direction-row is-align-items-center is-justify-content-center"> -->
-        <!-- <div class="column is-6-desktop is-flex is-direction-row is-align-items-center is-justify-content-right"> -->
         <div class="column is-12-mobile is-4-tablet is-3-desktop is-flex is-direction-row is-align-items-center is-justify-content-center">
           <UserOptions
             v-if="gitObj"
