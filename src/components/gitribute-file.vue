@@ -17,7 +17,8 @@
         </div>
         <!-- USER NAVBAR -->
         <!-- <div class="column is-8 is-12-touch is-flex is-direction-row is-align-items-center is-justify-content-center"> -->
-        <div class="column is-6-desktop is-flex is-direction-row is-align-items-center is-justify-content-right">
+        <!-- <div class="column is-6-desktop is-flex is-direction-row is-align-items-center is-justify-content-right"> -->
+        <div class="column is-12-mobile is-4-tablet is-3-desktop is-flex is-direction-row is-align-items-center is-justify-content-center">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
