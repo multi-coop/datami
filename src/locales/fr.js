@@ -6,6 +6,7 @@ export default {
     link: 'Lien',
     yes: 'oui',
     no: 'non',
+    noValue: '(pas de valeur)',
     oldValue: 'Ancienne valeur',
     newValue: 'Nouvelle valeur'
   },
@@ -43,7 +44,7 @@ export default {
     editView: 'Editer',
     diffView: 'Comparer',
     previewView: 'Aperçu',
-    cardsView: 'Liste',
+    cardsView: 'Liste de  fiches',
     tableView: 'Tableau',
     showCardDetails: 'Afficher les détails',
     closeCardDetails: 'Fermer la vue détaillée',
@@ -80,7 +81,10 @@ export default {
     selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
     validateConsolidation: 'Valider les changements',
     copyWidget: 'Pour intégrer le widget dans votre site, copie du bloc html du widget',
-    widgetCopied: 'Le widget est copié dans le presse-papier'
+    widgetCopied: 'Le widget est copié dans le presse-papier',
+    addTag: 'Ajouter un tag',
+    addTagHelp: 'Cliquer sur + pour ajouter votre tag',
+    clearTag: 'Supprimer le tag'
     // nest: {
     //   test: 'test nested actions'
     // }

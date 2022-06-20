@@ -34,16 +34,16 @@
 
   <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
   <!-- <p id="gitribute-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-md-gitlab" style="color: white; margin-right:  0.5em;">
-        #
-      </a>
-      Import and edit a markdow file from gitlab
-    </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-file
+    <a href="/#gitribute-md-gitlab" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    Import and edit a markdow file from gitlab
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
       gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/texts/markdown/test-file-gitribute-fr.md"
       options="" title="gitribute for gitlab file - md" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
-    </div> -->
+  </div> -->
 
   <!-- <p id="gitribute-md-github" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#gitribute-md-github" style="color: white; margin-right:  0.5em;">
@@ -59,13 +59,13 @@
     </div> -->
 
   <!-- <p id="gitribute-csv-gitlab" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#gitribute-csv-gitlab" style="color: white; margin-right:  0.5em;">
-        #
-      </a>
-      Import and edit a csv file from gitlab
-    </p>
-    <div style="background-color: white; margin: 1em;">
-      <multi-gitribute-file
+    <a href="/#gitribute-csv-gitlab" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    Import and edit a csv file from gitlab
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <multi-gitribute-file
       gitfile="https://gitlab.com/multi-coop/gitribute-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
       options='{
         "separator": ";",
@@ -90,7 +90,7 @@
           }
         }
       }' title="gitribute for gitlab file - csv (semicolon separator)" usertoken="" locale="fr"></multi-gitribute-file>
-    </div> -->
+  </div> -->
 
   <!-- <p id="gitribute-csv-github-bera" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#gitribute-csv-github-bera" style="color: white; margin-right:  0.5em;">
@@ -124,7 +124,7 @@
       </multi-gitribute-file>
     </div> -->
 
-  <p id="gitribute-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
+  <!-- <p id="gitribute-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-csv-github-odf-ressources" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -181,7 +181,7 @@
         }
       }
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
-  </div>
+  </div> -->
 
   <!-- <p id="gitribute-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
@@ -315,7 +315,7 @@
     </multi-gitribute-file>
   </div> -->
 
-  <!-- <p id="gitribute-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
+  <p id="gitribute-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-wiki-communs" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -326,6 +326,9 @@
       wikilist="https://wiki.resilience-territoire.ademe.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Commun=on&wf-expl-Tags="
       options='{
           "height": "900px",
+          "fields-custom-properties": {
+            "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/ademe/ademe-communs-fields-custom-props.json"
+          },
           "wikisettings": {
             "category": "commun",
             "fields": [
@@ -333,12 +336,13 @@
               "description",
               "shortDescription",
               "Main_Picture",
-              "Titre",
               "Tags",
               "Theme",
               "location",
               "complement",
               "challenge",
+              "commonscategorie",
+              "url",
               "from"
             ],
             "tagfields": [
@@ -358,6 +362,7 @@
           "filterfields": [
             "challenge",
             "Tags",
+            "commonscategorie",
             "Theme"
           ]
         },
@@ -372,6 +377,7 @@
             "shortDescription": {"position": "resume"},
             "Tags": {"position": "tags"},
             "Theme": {"position": "tags"},
+            "commonscategorie": {"position": "tags"},
             "challenge": {"position": "tags"}
           },
           "detail": {
@@ -383,12 +389,13 @@
             "from": {"position": "description"},
             "Tags": {"position": "tags"},
             "Theme": {"position": "tags"},
+            "commonscategorie": {"position": "tags"},
             "challenge": {"position": "tags"},
             "url": {"position": "links"}
           }
         }
       }' title="gitribute for explowiki - communs :)" locale="fr"></multi-gitribute-explowiki>
-  </div> -->
+  </div>
 
   <!-- <p id="gitribute-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-wiki-fabmob" style="color: white; margin-right: 0.5em;">

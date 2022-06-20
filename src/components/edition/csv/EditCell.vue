@@ -70,8 +70,8 @@
         type="is-light"
         @input="emitChange"/>
 
-      <!-- CATEGORY (SELECT) -->
-      <b-select
+      <!-- TAG / CATEGORY (SELECT) -->
+      <!-- <b-select
         v-else-if="!isHeader && isCategory"
         v-model="input"
         :class="`g-cell py-0`"
@@ -85,7 +85,17 @@
           :value="val">
           {{ val }}
         </option>
-      </b-select>
+      </b-select> -->
+      <!-- :value="input" -->
+      <EditTagValue
+        v-else-if="!isHeader && isCategory"
+        :input="input"
+        :field="field"
+        :tags-enum="tagsEnum"
+        :disabled="isConsolidating"
+        :locale="locale"
+        @addTagToEnum="emitAddToEnum"
+        @updateInput="emitChange"/>
 
       <!-- TAGS -->
       <b-taginput
@@ -131,11 +141,13 @@
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
 import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
+import EditTagValue from '@/components/edition/EditTagValue.vue'
 
 export default {
   name: 'EditCell',
   components: {
-    ButtonConsolidation
+    ButtonConsolidation,
+    EditTagValue
   },
   mixins: [
     mixinGlobal,
@@ -218,6 +230,19 @@ export default {
         this.tagsValue = (valStr && valStr.split(this.tagSeparator).filter(v => v !== '')) || []
       }
       return newInput
+    },
+    emitAddToEnum (event) {
+      const updatedField = { ...this.field }
+      updatedField.enumArr.push(event)
+      updatedField.enumArr = updatedField.enumArr.sort((a, b) => a.localeCompare(b))
+      // console.log('C > EditCell > emitChange > updatedField : ', updatedField)
+      const payload = {
+        action: 'addTagToEnum',
+        value: {
+          field: updatedField
+        }
+      }
+      this.$emit('action', payload)
     },
     emitChange (event) {
       // console.log('C > EditCell > emitChange > event : ', event)

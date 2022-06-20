@@ -139,17 +139,18 @@ export default {
       this.SendActionToParent(payload)
     },
     updateValues () {
-      console.log('\nC > PreviewConsolidation > updateValues > this.checkboxGroup :', this.checkboxGroup)
-      console.log('C > PreviewConsolidation > updateValues > this.consolidationData :', this.consolidationData)
+      // console.log('\nC > PreviewConsolidation > updateValues > this.checkboxGroup :', this.checkboxGroup)
+      // console.log('C > PreviewConsolidation > updateValues > this.consolidationData :', this.consolidationData)
       if (this.hasSelection) {
         const newValues = this.checkboxGroup.map(id => {
-          const consolidationData = this.consolidationData.consolidation.find(c => c.toField.field === id)
+          const consolidationData = this.consolidationData.consolidation.find(c => c.toField && c.toField.field === id)
           return {
             id: this.consolidationData.rowId,
             colField: consolidationData.toField.field,
             val: consolidationData.newValue
           }
         })
+        // console.log('C > PreviewConsolidation > updateValues > newValues :', newValues)
         const payload = {
           action: 'mergeConsolidation',
           rowId: this.consolidationData.rowId,

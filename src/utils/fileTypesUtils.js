@@ -130,7 +130,7 @@ export const editModes = editViewsOptions.map(v => v.code)
 
 // FOR VIEWS
 export const viewsOptions = [
-  { code: 'cards', icon: 'apps', textCode: 'preview.cardsView' },
+  { code: 'cards', icon: 'card-outline', textCode: 'preview.cardsView' },
   { code: 'table', icon: 'table', textCode: 'preview.tableView' }
 ]
 export const viewModes = viewsOptions.map(v => v.code)

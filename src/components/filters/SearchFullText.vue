@@ -1,13 +1,15 @@
 <template>
   <div class="SearchFullText">
     <b-field
+      expanded
       type="is-dark">
       <b-input
         v-model="searchValue"
         :placeholder="`${t('actions.search', locale)}...`"
-        type="search"
         icon="magnify"
-        expanded
+        :icon-right="`${searchValue ? 'close-thick' : ''}`"
+        icon-right-clickable
+        @icon-right-click="clearInput"
         @input="SendActionToParent"/>
     </b-field>
   </div>
@@ -37,6 +39,10 @@ export default {
     }
   },
   methods: {
+    clearInput () {
+      this.searchValue = undefined
+      this.SendActionToParent()
+    },
     SendActionToParent () {
       // console.log('\nC > SearchFullText > SendActionToParent > ... : ')
       const filterPayload = {

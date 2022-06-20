@@ -1,7 +1,7 @@
 <template>
   <div class="FileTitle gitribute-component">
     <div class="is-flex is-align-items-center">
-      <span class="mx-2 is-size-4">
+      <span class="mx-2 is-size-4 has-text-dark">
         {{ title }}
       </span>
       <b-tooltip
