@@ -102,12 +102,27 @@ export const defaultTagsSeparator = '-'
 
 export const FalseBooleanStrings = [
   'no',
+  'non',
+  'niet',
+  'nope',
+  'nein',
+  'n',
+  'nan',
+  'no way',
+  'mé non',
+  'pas question',
+  'jamais de la vie',
+  'no f***ing way',
+  'naaa',
+  'no no no',
+  'no means no',
   'false',
   '0'
 ]
 
 export const booleanFromValue = (val) => {
-  const valTrimmed = val.toString().trim().toLowerCase()
+  // console.log('U > booleanFromValue > val : ', val)
+  const valTrimmed = val && val.toString().trim().toLowerCase()
   let bool = Boolean(valTrimmed)
   if (FalseBooleanStrings.includes(valTrimmed)) {
     bool = false
@@ -118,4 +133,30 @@ export const booleanFromValue = (val) => {
 export const trimText = (str, maxLength = 25) => {
   if (str && str.length > maxLength) return `${str.slice(0, maxLength)}...`
   else return str
+}
+
+export const stringToColour = (str) => {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  let colour = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xFF
+    colour += ('00' + value.toString(16)).substr(-2)
+  }
+  // const stringUniqueHash = [...str].reduce((acc, char) => {
+  //   return char.charCodeAt(0) + ((acc << 5) - acc);
+  // }, 0)
+  // const colour = `hsl(${stringUniqueHash % 360}, 95%, 35%)`
+  return colour
+}
+
+export const getContrastYIQ = (hexcolor) => {
+  hexcolor = hexcolor.replace('#', '')
+  const r = parseInt(hexcolor.substr(0, 2), 16)
+  const g = parseInt(hexcolor.substr(2, 2), 16)
+  const b = parseInt(hexcolor.substr(4, 2), 16)
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000
+  return (yiq >= 128) ? 'black' : 'white'
 }

@@ -15,26 +15,45 @@
 
       <!-- DEBUGGING -->
       <div
-        v-if="false"
+        v-if="debug"
         class="column is-3">
         <!-- fileFilters: <br><pre><code>{{ fileFilters }}</code></pre> -->
         consolidating: <br><pre><code>{{ consolidating }}</code></pre><br>
       </div>
       <div
-        v-if="false"
+        v-if="debug"
         class="column is-9">
         consolidationData: <br><pre><code>{{ consolidationData }}</code></pre><br>
       </div>
+      <div
+        v-if="debug"
+        class="column is-9">
+        columnsForView: <br>
+        <pre><code>{{ columnsForView }}</code></pre><br>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-9">
+        filterTags: <br>
+        <pre><code>{{ filterTags }}</code></pre><br>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-9">
+        searchText: <br>
+        <pre><code>{{ searchText }}</code></pre><br>
+      </div>
 
       <!-- FILTER TAGS -->
-      <div :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
+      <div
+        v-if="filterTags && filterTags.length"
+        :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
         <FilterTags
-          v-if="filterTags && filterTags.length"
           v-show="!isAnyDialogOpen"
           :headers="columnsEdited"
           :tags="filterTags"
           :locale="locale"
-          @removeTag="removeTag"/>
+          @action="processAction"/>
       </div>
 
       <!-- COUNTS & EDIT CSV NAVABAR -->
@@ -70,6 +89,9 @@
       <div v-if="debug">
         lockHeaders : <code>{{ lockHeaders }}</code>
       </div>
+      <div v-if="debug">
+        filterTags : <code>{{ filterTags }}</code>
+      </div>
 
       <!-- TABLE -->
       <div
@@ -87,17 +109,17 @@
             :opened-detailed="openedDetails"
             :detail-transition="transitionName"
             :show-detail-icon="showDetailIcon"
+            :striped="currentEditViewMode !== 'edit'"
             detail-key="id"
             narrowed
             hoverable
             sticky-header
-            checkbox-type="is-dark"
-            striped>
+            checkbox-type="is-dark">
             <!-- LOOP COLUMNS -->
+            <!-- :width="colWidth(col)" -->
             <b-table-column
               v-for="(col, idx) in columnsForView"
               :key="col.field"
-              width="75px"
               :th-attrs="columnThAttrs"
               :td-attrs="columnTdAttrs"
               :field="col.field"
@@ -106,7 +128,9 @@
               :label="col.label">
               <!-- HEADERS -->
               <template #header="{ column }">
-                <div class="is-flex is-flex-direction-row is-align-items-center">
+                <div
+                  class="is-flex is-flex-direction-row is-align-items-center gitribute-nowrap"
+                  style="white-space: nowrap;">
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
                     <b-field
@@ -149,6 +173,14 @@
                       :lock-headers="lockHeaders"
                       :locale="locale"/>
                   </div>
+
+                  <!-- SORTING -->
+                  <ButtonSortByField
+                    v-if="!noSortingFields.includes(col.subtype)"
+                    :file-id="fileId"
+                    :field="col"
+                    :locale="locale"
+                    @action="processAction"/>
                 </div>
               </template>
 
@@ -396,7 +428,10 @@
 <script>
 import { mixinGlobal, mixinIcons, mixinDiff, mixinCsv, mixinPagination, mixinConsolidation } from '@/utils/mixins.js'
 
+// import { fieldTypeIcons } from '@/utils/fileTypesUtils'
+
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
+import ButtonSortByField from '@/components/sorting/ButtonSortByField'
 import FilterTags from '@/components/filters/FilterTags'
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
@@ -414,6 +449,7 @@ export default {
   name: 'GitributeTable',
   components: {
     SortAndFiltersSkeleton,
+    ButtonSortByField,
     FilterTags,
     EditCsvSkeleton,
     DialogAddRow,
@@ -486,10 +522,12 @@ export default {
       showUploadFileDialog: false,
 
       // SORTING
+      noSortingFields: ['tags'],
       sortingByField: undefined,
       sortingAscending: true,
 
       // FILTERS
+      searchText: undefined,
       filterTagsChoices: [],
       filterTags: [],
 
@@ -517,10 +555,6 @@ export default {
     }
   },
   computed: {
-    sortingFields () {
-      const settingsSorting = this.customSortingConfig.sortfields
-      return this.columns.filter(col => settingsSorting.includes(col.label))
-    },
     filterFields () {
       const settingsFields = this.customFiltersConfig.filterfields
       return this.columns.filter(col => settingsFields.includes(col.label))
@@ -632,19 +666,71 @@ export default {
     },
     dataEditedFiltered () {
       let data = [...this.dataEdited]
-      const filters = this.filterTags
-      // console.log('\nC > GitributeTable > dataEditedFiltered > filters : ', filters)
-      filters.forEach(filter => {
-        data = data.filter(row => {
-          const rowVal = row[filter.field] && row[filter.field].toLowerCase()
-          const filterVal = filter.value.toLowerCase()
-          return rowVal && rowVal.includes(filterVal)
+
+      // console.log('\nC > GitributeTable > dataEditedFiltered > this.columnsForView : ', this.columnsForView)
+      const colFields = this.columnsForView.map(col => col.field)
+      // console.log('C > GitributeTable > dataEditedFiltered > colFields : ', colFields)
+
+      const searchStr = this.searchText
+      // console.log('C > GitributeTable > dataEditedFiltered > searchStr : ', searchStr)
+      const filterTags = this.filterTags
+      // console.log('C > GitributeTable > dataEditedFiltered > filterTags : ', filterTags)
+      // const filterTagsFields = filterTags.map(f => f.field) || []
+      // console.log('C > GitributeTable > dataEditedFiltered > filterTagsFields : ', filterTagsFields)
+
+      // filter out data
+      data = data.filter(row => {
+        const hasSearchVal = searchStr ? [] : [true]
+        const hasFilterValues = [true]
+        // console.log('\nC > GitributeTable > dataEditedFiltered > row : ', row)
+
+        for (const field in colFields) {
+          // console.log('C > GitributeTable > dataEditedFiltered > field : ', field)
+          const rowVal = row[field].toString().toLowerCase()
+          // console.log('C > GitributeTable > dataEditedFiltered > rowVal : ', rowVal)
+          // search text
+          if (searchStr) {
+            const cellHasSearch = rowVal.includes(searchStr.toLowerCase())
+            hasSearchVal.push(cellHasSearch)
+          }
+        }
+        // filter tags
+        filterTags.forEach(filterTag => {
+          // if (filterTagsFields.includes(field)) {
+          // const filterTag = filterTags.find(f => f.field === field)
+          const rowVal = row[filterTag.field].toString().toLowerCase()
+          const filterVal = filterTag.value.toLowerCase()
+          const hasFilterVal = rowVal && rowVal.includes(filterVal)
+          hasFilterValues.push(hasFilterVal)
         })
+
+        const boolSearch = hasSearchVal.some(b => b)
+        const boolFilters = hasFilterValues.every(b => b)
+
+        return boolSearch && boolFilters
       })
       return data
     },
     totalItemsDataEdited () {
       return this.dataEditedFiltered.length
+    },
+    dataEditedSorted () {
+      let data = [...this.dataEditedFiltered]
+      if (this.fileSorting && this.fileSorting.length) {
+        // console.log('\nC > GitributeTable > dataEditedSorted > this.fileSorting : ', this.fileSorting)
+        this.fileSorting.forEach(sorting => {
+          const sortingField = sorting.field
+          const sortIsAscending = sorting.ascending
+          if (sortIsAscending) {
+            data = data.sort((a, b) => a[sortingField] < b[sortingField] ? 1 : -1)
+          } else {
+            data = data.sort((a, b) => a[sortingField] > b[sortingField] ? 1 : -1)
+          }
+        })
+      } else {
+        data = data.sort((a, b) => a.id > b.id ? 1 : -1)
+      }
+      return data
     },
     dataEditedPaginated () {
       const data = [...this.dataForView]
@@ -656,20 +742,20 @@ export default {
     },
     dataForView () {
       let data
-      const dataFiltered = this.dataEditedFiltered
+      const dataEditedSorted = this.dataEditedSorted
       let originalIndices, editedIndices, concat, uniquesIndices
       switch (this.currentEditViewMode) {
         case 'edit':
-          data = dataFiltered
+          data = dataEditedSorted
           break
         case 'diff':
+          editedIndices = dataEditedSorted.map(r => r.id)
           originalIndices = this.data.map(r => r.id)
-          editedIndices = dataFiltered.map(r => r.id)
-          concat = [...originalIndices, ...editedIndices]
+          concat = [...editedIndices, ...originalIndices]
           uniquesIndices = [...new Set(concat)]
           // console.log('\nC > GitributeTable > dataForView > diff > uniquesIndices : ', uniquesIndices)
           data = uniquesIndices.map(i => {
-            let row = dataFiltered.find(r => r.id === i)
+            let row = dataEditedSorted.find(r => r.id === i)
             if (!row) {
               row = this.data.find(r => r.id === i)
             }
@@ -677,7 +763,7 @@ export default {
           })
           break
         case 'preview':
-          data = dataFiltered
+          data = dataEditedSorted
           break
       }
       return data
@@ -685,6 +771,7 @@ export default {
     columnsForView () {
       let columns
       let originalFields, editedFields, concat, uniquesFields
+      // console.log('\nC > GitributeTable > dataForView > this.currentEditViewMode : ', this.currentEditViewMode)
       switch (this.currentEditViewMode) {
         case 'edit':
           if (this.hasConsolidation) {
@@ -715,12 +802,13 @@ export default {
             }
             return col
           })
-          // columns = this.columnsEdited
           break
         case 'preview':
-          columns = this.columnsEdited
+          // console.log('C > GitributeTable > dataForView > preview > this.columnsEdited : ', this.columnsEdited)
+          columns = this.columnsEdited.filter(c => c.type !== 'gitribute')
           break
       }
+      // console.log('C > GitributeTable > dataForView > preview > columns : ', columns)
       return columns
     },
     isAnyDialogOpen () {
@@ -740,16 +828,27 @@ export default {
     }
   },
   beforeMount () {
-    // prepare sorting
+    // prepare sorting from custom settings if any
     if (this.hasCustomSorting) {
-      const sorting = {
+      // console.log('\nC > GitributeTable > beforeMount > this.columns : ', this.columns)
+      const settingsSortings = this.customSortingConfig.sortfields.map(f => {
+        const fieldName = f.name || f
+        const header = this.columns.find(c => c.name === fieldName)
+        return {
+          field: header && header.field,
+          fieldName: fieldName,
+          ascending: !!f.ascending
+        }
+      })
+      // console.log('C > GitributeTable > beforeMount > settingsSortings : ', settingsSortings)
+      const sortings = {
         fileId: this.fileId,
-        fields: this.sortingFields
+        fields: settingsSortings.filter(f => f.field)
       }
-      this.setSorting(sorting)
+      this.setSortings(sortings)
     }
 
-    // prepare filters
+    // prepare filters from custom settings if any
     if (this.hasCustomFilters) {
       // console.log('\nC > GitributeTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
       // console.log('C > GitributeTable > beforeMount > this.filterFields : ', this.filterFields)
@@ -780,8 +879,20 @@ export default {
     columnTdAttrs (row, column) {
       // console.log('\nC > GitributeTable > columnTdAttrs > column : ', column)
       // console.log('C > GitributeTable > columnTdAttrs > row : ', row)
+      const fieldId = column.field
+      // console.log('C > GitributeTable > columnTdAttrs > fieldId : ', fieldId)
+      const field = this.columnsForView.find(f => f.field === fieldId)
+      // console.log('C > GitributeTable > columnTdAttrs > field : ', field)
+      const fieldType = field && field.type
+      const fieldSubype = field && field.subtype
+      // console.log('C > GitributeTable > columnTdAttrs > fieldType : ', fieldType)
+      // console.log('C > GitributeTable > columnTdAttrs > fieldSubype : ', fieldSubype)
+      // const props = fieldTypeIcons.find(ft => ft.type === fieldType && ft.subtype === fieldSubype)
+      let classTd = 'gitribute-table gitribute-table-td'
+      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''}`
+      classTd += `${this.currentEditViewMode === 'edit' ? ' gitribute-table-td-edit' : ''}`
       return {
-        class: `gitribute-table gitribute-table-td ${this.currentEditViewMode === 'edit' ? 'gitribute-table-td-edit' : ''}`
+        class: classTd
       }
     },
     async processAction (event) {
@@ -811,15 +922,24 @@ export default {
 
         // SORTING
         case 'sortBy':
+          // console.log('\nC > GitributeTable > processAction > event : ', event)
           this.sortingByField = event.value.header
           this.sortingAscending = event.value.ascending
           this.$emit('sortRows', event)
           break
 
         // FILTERING
+        case 'searchText':
+          // console.log('\nC > GitributeTable > processAction > event : ', event)
+          this.processSearch(event.value)
+          break
         case 'filterBy':
           this.processFilter(event.value)
           break
+        case 'removeTag':
+          this.removeTag(event.value)
+          break
+
         // PAGINATION
         case 'changePage':
           this.currentPage = event.value.currentPage
@@ -904,6 +1024,11 @@ export default {
       // isFirstRow && console.log('C > GitributeTable > isInChanges > bool : ', bool)
       return bool
     },
+    processSearch (search) {
+      // console.log('C > GitributeTable > processSearch > search : ', search)
+      const reset = search.reset
+      this.searchText = !reset ? search.value : undefined
+    },
     processFilter (filter) {
       // console.log('C > GitributeTable > processFilter > filter : ', filter)
       const active = !!filter.field
@@ -912,21 +1037,21 @@ export default {
         this.processFilterValue(filter)
       }
       if (reset) {
-        this.filterTags = []
+        this.filterTags = this.filterTags.filter(f => f.field !== filter.field) || []
       }
     },
     processFilterValue (tag, remove = false) {
       // console.log('C > GitributeTable > processFilterValue > tag : ', tag)
       // console.log('C > GitributeTable > processFilterValue > remove : ', remove)
+      const filterTags = this.filterTags.filter(t => {
+        const sameField = t.field === tag.field
+        const sameValue = t.value === tag.value
+        return !(sameField && sameValue)
+      })
       if (!remove) {
-        this.filterTags.push(tag)
-      } else {
-        this.filterTags = this.filterTags.filter(t => {
-          const sameField = t.field === tag.field
-          const sameValue = t.value === tag.value
-          return !(sameField && sameValue)
-        })
+        filterTags.push(tag)
       }
+      this.filterTags = filterTags
     },
     removeTag (tag) {
       // console.log('\nC > GitributeTable > removeTag > tag : ', tag)
@@ -991,12 +1116,14 @@ export default {
 </script>
 
 <style>
-
+.gitribute-nowrap {
+  white-space: nowrap;
+}
 .gitribute-table {
-  min-width: 100px;
-  max-width: 300px;
+  /* min-width: 100px; */
+  max-width: 350px;
   overflow: auto;
-  vertical-align: middle !important;
+  vertical-align: top !important;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -1005,11 +1132,33 @@ export default {
 }
 .gitribute-table-td {
   /* padding: .2em .25em !important; */
+  min-width: 100px;
 }
 .th-wrap {
   justify-content: center !important;
 }
 .gitribute-table-td-edit {
   border: none !important;
+}
+.g-td-string {
+  min-width: 100px;
+}
+.g-td-string-longtext {
+  min-width: 350px;
+}
+.g-td-number {
+  min-width: 85px;
+}
+.g-td-integer {
+  min-width: 40px;
+}
+.g-td-boolean {
+  min-width: 30px;
+}
+.g-td-string-tag {
+  min-width: 100px;
+}
+.g-td-string-tags {
+  min-width: 275px;
 }
 </style>

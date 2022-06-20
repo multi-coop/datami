@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewField gitribute-nowrap">
+  <div class="PreviewField">
     <!-- FIELD LABEL + INFOS -->
     <b-tooltip
       position="is-top"
@@ -145,9 +145,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .gitribute-nowrap {
-    white-space: nowrap;
-  }
-</style>

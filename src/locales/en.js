@@ -89,14 +89,17 @@ export default {
     label: 'Sort',
     sortBy: 'Sort by a field',
     sortAscending: 'Ascending sorting',
-    sortDescending: 'Descending sorting'
+    sortDescending: 'Descending sorting',
+    sortedAsc: 'Sorted, ascendent',
+    sortedDesc: 'Sorted, descendent'
   },
   filters: {
     label: 'Filter',
     filterBy: 'Filter by a field and a value',
     filterByField: 'Filter by the field',
+    resetFilter: 'Reset this filter',
     removeFilter: 'Remove this filter',
-    removeFilters: 'Reset all the filters'
+    removeFilters: 'Reset all filters'
   },
   pagination: {
     items: 'items',
@@ -121,6 +124,8 @@ export default {
     string: 'String',
     longtext: 'Long text',
     link: 'Link',
+    email: 'Email',
+    geopoint: 'Geographic coordinate',
     tag: 'Tag',
     tags: 'Tags',
     number: 'Number',

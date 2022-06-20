@@ -289,7 +289,7 @@ export default {
     const wikiUuid = this.uuidv4()
 
     // build options object
-    const mediawikiOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    let mediawikiOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
     mediawikiOptions.tagseparator = ',' // to parse tags fields
     mediawikiOptions.separator = '\t' // for csv export
     this.mediawikiOptions = mediawikiOptions
@@ -308,23 +308,43 @@ export default {
     this.wikiObj = wikiInfosObject
     this.fileId = wikiInfosObject.uuid
     this.fileType = wikiInfosObject.filetype
+    // console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
     if (!this.getGitInfosObj[wikiUuid]) {
       this.addGitInfos(wikiInfosObject)
     }
     // get schema if any
-    const fileSchema = mediawikiOptions.schema
-    // console.log('C > GitributeExploWiki > beforeMount > fileSchema : ', fileSchema)
-    if (fileSchema && fileSchema.file) {
-      const schemaGitObj = extractGitInfos(fileSchema.file)
+    let mediawikiSchema = mediawikiOptions.schema
+    // console.log('C > GitributeExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
+    if (mediawikiSchema && mediawikiSchema.file) {
+      const schemaGitObj = extractGitInfos(mediawikiSchema.file)
       // console.log('C > GitributeExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
       const schemaRaw = await getFileDataRaw(schemaGitObj)
       // console.log('C > GitributeExploWiki > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
       // console.log('C > GitributeExploWiki > beforeMount > schemaData : ', schemaData)
       const schema = JSON.parse(schemaData)
-      mediawikiOptions.schema = schema
+      mediawikiSchema = { ...schema, file: mediawikiSchema.file }
+      // mediawikiOptions.schema = schema
       // console.log('C > GitributeExploWiki > beforeMount > schema : ', schema)
     }
+
+    // get custom props if any
+    let mediawikiCustomProps = mediawikiOptions['fields-custom-properties']
+    if (mediawikiCustomProps && mediawikiCustomProps.file) {
+      const customPropsGitObj = this.extractGitInfos(mediawikiCustomProps.file)
+      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      const customPropsData = customPropsRaw && customPropsRaw.data
+      const customProps = JSON.parse(customPropsData)
+      mediawikiCustomProps = { ...customProps, file: mediawikiCustomProps.file }
+    }
+
+    // update fileOptions with schema and consolidation settings
+    mediawikiOptions = {
+      ...mediawikiOptions,
+      ...mediawikiSchema && { schema: mediawikiSchema },
+      ...mediawikiCustomProps && { customProps: mediawikiCustomProps }
+    }
+
     this.addFileOptions({ ...mediawikiOptions, uuid: wikiUuid })
     // console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
   },

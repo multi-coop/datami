@@ -50,19 +50,74 @@ export const typesIcons = [
   }
 ]
 export const fieldTypeIcons = [
-  { type: 'string', subtype: undefined, icon: 'alphabetical', default: true },
-  { type: 'string', subtype: 'longtext', icon: 'text-long' },
-  { type: 'string', subtype: 'link', icon: 'link-variant' },
-  { type: 'string', subtype: 'tag', icon: 'tag-outline' },
-  { type: 'string', subtype: 'tags', icon: 'tag-multiple-outline' },
-  { type: 'boolean', subtype: undefined, icon: 'check-bold' },
-  { type: 'number', subtype: undefined, icon: 'numeric' },
-  { type: 'integer', subtype: undefined, icon: 'numeric' },
-  { type: 'date', subtype: undefined, icon: 'calendar-range' },
-  { type: 'any', subtype: undefined, icon: 'text' },
+  {
+    type: 'string',
+    subtype: undefined,
+    icon: 'alphabetical',
+    default: true
+  },
+  {
+    type: 'string',
+    subtype: 'longtext',
+    icon: 'text-long'
+  },
+  {
+    type: 'string',
+    subtype: 'link',
+    icon: 'link-variant'
+  },
+  {
+    type: 'string',
+    subtype: 'email',
+    icon: 'email'
+  },
+  {
+    type: 'string',
+    subtype: 'tag',
+    icon: 'tag-outline'
+  },
+  {
+    type: 'string',
+    subtype: 'tags',
+    icon: 'tag-multiple-outline'
+  },
+  {
+    type: 'boolean',
+    subtype: undefined,
+    icon: 'check-bold'
+  },
+  {
+    type: 'integer',
+    subtype: undefined,
+    icon: 'numeric'
+  },
+  {
+    type: 'number',
+    subtype: undefined,
+    icon: 'numeric'
+  },
+  {
+    type: 'number',
+    subtype: 'geopoint',
+    icon: 'map-marker-outline'
+  },
+  {
+    type: 'date',
+    subtype: undefined,
+    icon: 'calendar-range'
+  },
+  {
+    type: 'any',
+    subtype: undefined,
+    icon: 'text'
+  },
 
   // GITRIBUTE ICONS
-  { type: 'gitribute', subtype: 'consolidation', icon: 'wrench' }
+  {
+    type: 'gitribute',
+    subtype: 'consolidation',
+    icon: 'wrench'
+  }
 ]
 
 // FOR EDITION

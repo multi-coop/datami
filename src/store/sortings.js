@@ -3,28 +3,53 @@ import Vue from 'vue'
 export const sortings = {
   namespaced: true,
   state: {
-    fileSortings: []
+    filesSortings: []
   },
   getters: {
     getSortingById: (state) => (fileId) => {
-      const filters = state.fileSortings.find(filter => filter.fileId === fileId)
-      return filters
+      const filters = state.filesSortings.find(fileSort => fileSort.fileId === fileId)
+      return filters && filters.sortings
     }
   },
   mutations: {
     setSorting (state, sortingInfos) {
-      const index = state.fileSortings.findIndex(filter => filter.fileId === sortingInfos.fileId)
+      const index = state.filesSortings.findIndex(fileSort => fileSort.fileId === sortingInfos.fileId)
+      const sortingField = sortingInfos.field
+      const sortingReset = sortingInfos.resetSort
+      // console.log('S-filters > A > setSortingSettings > sortingField : ', sortingField)
+      const fileSorting = {
+        fileId: sortingInfos.fileId
+      }
+      delete sortingInfos.fileId
       if (index !== -1) {
-        Vue.set(state.fileSortings, index, sortingInfos)
+        let sortings = [...state.filesSortings[index].sortings]
+        // console.log('S-filters > A > setSortingSettings > sortings (A) : ', sortings)
+        sortings = sortings.filter(s => s.field !== sortingField)
+        if (!sortingReset) {
+          delete sortingInfos.resetSort
+          sortings.push(sortingInfos)
+        }
+        // console.log('S-filters > A > setSortingSettings > sortings (B) : ', sortings)
+        // console.log('S-filters > A > setSortingSettings > sortings (C) : ', sortings)
+        fileSorting.sortings = sortings
+        Vue.set(state.filesSortings, index, fileSorting)
       } else {
-        state.fileSortings.push(sortingInfos)
+        delete sortingInfos.resetSort
+        fileSorting.sortings = [sortingInfos]
+        state.filesSortings.push(fileSorting)
       }
     }
   },
   actions: {
     setSortingSettings ({ commit }, sortingInfos) {
-      // console.log('S-filters > A > setSortingSettings > sortingInfos : ', sortingInfos)
+      // console.log('\nS-filters > A > setSortingSettings > sortingInfos : ', sortingInfos)
       commit('setSorting', sortingInfos)
+    },
+    setSortingsSettings ({ commit }, sortingsInfos) {
+      // console.log('\nS-filters > A > setSortingSettings > sortingsInfos : ', sortingsInfos)
+      sortingsInfos.fields.forEach(sorting => {
+        commit('setSorting', { fileId: sortingsInfos.fileId, ...sorting })
+      })
     }
   }
 }

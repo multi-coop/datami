@@ -3,7 +3,10 @@
     <div class="container mb-4">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="abc column is-half-desktop is-12-mobile has-text-centered-mobile">
+        <div class="column is-9 is-12-touch is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-mobile">
+          <ViewModeBtns
+            :file-id="fileId"
+            :locale="locale"/>
           <FileTitle
             :show-file-infos="showFileInfos"
             :title="title"
@@ -12,11 +15,7 @@
             @toggleInfos="showFileInfos = !showFileInfos"/>
         </div>
         <!-- USER NAVBAR -->
-        <div class="column is-half-desktop is-flex is-direction-row is-align-items-center is-justify-content-center">
-          <ViewModeBtns
-            :file-id="fileId"
-            :locale="locale"/>
-
+        <div class="column is-3 is-12-touch is-flex is-direction-row is-align-items-center is-justify-content-center">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -304,20 +303,30 @@ export default {
       const schemaData = schemaRaw && schemaRaw.data
       const schema = JSON.parse(schemaData)
       // console.log('C > GitributeFile > beforeMount > schema : ', schema)
-      fileSchema = schema
+      fileSchema = { ...schema, file: fileSchema.file }
       // fileOptions.schema = schema
+    }
+    // get custom props if any
+    let fileCustomProps = fileOptions['fields-custom-properties']
+    if (fileCustomProps && fileCustomProps.file) {
+      const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
+      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      const customPropsData = customPropsRaw && customPropsRaw.data
+      const customProps = JSON.parse(customPropsData)
+      fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
 
     // get consolidation settings if any
-    let fileConsolidation = fileOptions.consolidation
-    fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
+    // let fileConsolidation = fileOptions.consolidation
+    // fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
     // console.log('C > GitributeFile > beforeMount > fileConsolidation : ', fileConsolidation)
 
     // update fileOptions with schema and consolidation settings
     fileOptions = {
       ...fileOptions,
       ...fileSchema && { schema: fileSchema },
-      ...fileConsolidation && { consolidation: fileConsolidation }
+      ...fileCustomProps && { customProps: fileCustomProps }
+      // ...fileConsolidation && { consolidation: fileConsolidation }
     }
 
     // add fileOptions in store

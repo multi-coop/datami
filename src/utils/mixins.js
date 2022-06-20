@@ -11,7 +11,9 @@ import {
   getClosest,
   defaultTagsSeparator,
   booleanFromValue,
-  trimText
+  trimText,
+  stringToColour,
+  getContrastYIQ
 } from '@/utils/globalUtils'
 import {
   extractGitInfos
@@ -148,7 +150,7 @@ export const mixinGlobal = {
 
     // DATA CONNSOLIDATION
     hasConsolidation () {
-      return this.fileOptions && this.fileOptions.consolidation
+      return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
     }
   },
   methods: {
@@ -303,6 +305,12 @@ export const mixinValue = {
     isBoolean () {
       return this.fieldType === 'boolean'
     },
+    isLink () {
+      return this.fieldSubtype === 'link'
+    },
+    isEmail () {
+      return this.fieldSubtype === 'email'
+    },
     isNumber () {
       return this.numberTypes.includes(this.fieldType)
     },
@@ -333,7 +341,14 @@ export const mixinValue = {
   },
   methods: {
     booleanFromValue,
-    trimText
+    trimText,
+    tagBackgroundColour (value) {
+      return stringToColour(value)
+    },
+    tagColour (value) {
+      const hex = this.tagBackgroundColour(value)
+      return getContrastYIQ(hex)
+    }
   }
 }
 
@@ -421,6 +436,7 @@ export const mixinCsv = {
   methods: {
     ...mapActions({
       setSorting: 'git-sortings/setSortingSettings',
+      setSortings: 'git-sortings/setSortingsSettings',
       setFilters: 'git-filters/setFiltersSettings',
       updateFiltersSettings: 'git-filters/updateFiltersSettings'
     }),

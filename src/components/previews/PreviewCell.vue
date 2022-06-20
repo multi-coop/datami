@@ -9,18 +9,10 @@
     <div
       v-if="isString && !field.subtype"
       :class="`${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
-      <b-tooltip
-        v-if="showExpand"
-        :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
-        append-to-body
-        type="is-dark">
-        <b-icon
-          :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
-          class="mr-1"
-          :type="nowrap ? 'is-grey-light' : 'is-dark'"
-          size="is-small"
-          @click.native="nowrap = !nowrap"/>
-      </b-tooltip>
+      <ButtonWrapCell
+        v-model="nowrap"
+        :show-expand="showExpand"
+        :locale="locale"/>
       <span>
         {{ value }}
       </span>
@@ -51,6 +43,7 @@
     <div
       v-if="isBoolean"
       :class="`has-text-centered`">
+      <!-- {{ value }} -->
       <b-icon
         :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank-outline'}`"
         size="is-small"/>
@@ -61,17 +54,22 @@
       v-if="value && isTag"
       :class="`${isCategory ? 'has-text-centered' : ''}`">
       <!-- value : <code>{{ value }}</code><br> -->
+      <ButtonWrapCell
+        v-model="nowrap"
+        :show-expand="showExpand"
+        :locale="locale"/>
       <b-tag
-        v-for="(val, tagIdx) in value.split(tagSeparator).filter(v => v !== '')"
+        v-for="(val, tagIdx) in tagsArray"
         :key="`tags-${field.field}-${tagIdx}`"
-        :class="`mr-2 has-text-weight-bold`">
+        :class="`mr-2 has-text-weight-bold`"
+        :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val)}`">
         {{ val }}
       </b-tag>
     </div>
 
     <!-- LINK -->
     <div
-      v-if="value && isString && field.subtype === 'link'"
+      v-if="value && isLink"
       :class="``">
       <b-button
         tag="a"
@@ -81,7 +79,23 @@
         :href="value"
         expanded
         target="_blank">
-        {{ t('global.link', locale) }}
+        <!-- {{ t('global.link', locale) }} -->
+        {{ linkDomain(value) }}
+      </b-button>
+    </div>
+
+    <!-- EMAIL -->
+    <div
+      v-if="value && isEmail"
+      :class="``">
+      <b-button
+        tag="a"
+        class=""
+        size="is-small"
+        icon-left="email-outline"
+        :href="`mailto:${value}`"
+        expanded>
+        {{ value }}
       </b-button>
     </div>
 
@@ -98,15 +112,20 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
+import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
+
 export default {
   name: 'PreviewCell',
+  components: {
+    ButtonWrapCell
+  },
   mixins: [
     mixinGlobal,
     mixinValue
   ],
   props: {
     value: {
-      default: null,
+      default: false,
       type: [String, Boolean, Number]
     },
     field: {
@@ -129,12 +148,6 @@ export default {
       defaultMaxTextLength: 30
     }
   },
-  // beforeMount () {
-  //   console.log('\nC > PreviewCell > beforeMount > this.value : ', this.value)
-  //   console.log('C > PreviewCell > beforeMount > this.field.label : ', this.field.label)
-  //   console.log('C > PreviewCell > beforeMount > this.field : ', this.field)
-  //   console.log('C > PreviewCell > beforeMount > this.tagSeparator : ', this.tagSeparator)
-  // }
   computed: {
     trimmedText () {
       // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
@@ -143,9 +156,38 @@ export default {
       const exceed = this.nowrap && (this.value.length > maxTextLength)
       // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
       const trimmed = exceed ? `${this.value.slice(0, maxTextLength)} (...)` : this.value
-      return trimmed
+      return trimmed || ''
+    },
+    tagsArray () {
+      // console.log('\nC > PreviewCell > tagsArray > this.value : ', this.value)
+      // const valType = typeof this.value
+      // console.log('C > PreviewCell > tagsArray > valType : ', valType)
+      const tagsStr = (!!this.value && this.value.toString()) || ''
+      let tags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
+      tags = tags.filter(v => v !== '')
+      return tags
+    }
+  },
+  methods: {
+    linkDomain (value) {
+      // console.log('\nC > PreviewCell > linkDomain > value : ', value)
+      let urlObj
+      try {
+        urlObj = new URL(value)
+      } catch {
+        urlObj = {}
+      }
+      // console.log('C > PreviewCell > linkDomain > urlObj : ', urlObj)
+      return urlObj.hostname || this.t('global.link', this.locale)
     }
   }
+  // beforeMount () {
+  //   console.log('\nC > PreviewCell > beforeMount > this.value : ', this.value)
+  //   console.log('C > PreviewCell > beforeMount > this.field.label : ', this.field.label)
+  //   console.log('C > PreviewCell > beforeMount > this.field : ', this.field)
+  //   console.log('C > PreviewCell > beforeMount > this.tagSeparator : ', this.tagSeparator)
+  // }
+
 }
 </script>
 
