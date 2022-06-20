@@ -144,7 +144,7 @@ export const stringToColour = (str) => {
   } else {
     colour = 'grey'
   }
-  console.log(str)
+  // console.log(str)
   return colour
 }
 

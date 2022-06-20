@@ -332,6 +332,7 @@ export default {
             )
             fieldData.enumArr = enumArr
           }
+          // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData.fieldCustomProps.bgcolor)
           return fieldData
         })
       // console.log('C > PreviewCsv > buildColumns > fields : ', fields)

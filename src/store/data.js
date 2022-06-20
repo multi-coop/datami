@@ -158,9 +158,9 @@ export const data = {
       }
     },
     updateCommitting ({ commit }, { fileId, isCommitting, data }) {
-      console.log('\nS-data > A > updateCommitting > fileId : ', fileId)
-      console.log('S-data > A > updateCommitting > isCommitting : ', isCommitting)
-      console.log('S-data > A > updateCommitting > data : ', data)
+      // console.log('\nS-data > A > updateCommitting > fileId : ', fileId)
+      // console.log('S-data > A > updateCommitting > isCommitting : ', isCommitting)
+      // console.log('S-data > A > updateCommitting > data : ', data)
       const reqNotifsData = { uuid: fileId }
 
       if (isCommitting) {
@@ -187,7 +187,7 @@ export const data = {
         // ]
         reqNotifsData.data = [data]
 
-        console.log('S-data > A > updateCommitting > reqNotifsData : ', reqNotifsData)
+        // console.log('S-data > A > updateCommitting > reqNotifsData : ', reqNotifsData)
         commit('removeFromState', { key: 'committing', fileId: fileId })
         commit('addToNotifications', reqNotifsData)
       }
