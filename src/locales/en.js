@@ -6,6 +6,7 @@ export default {
     link: 'Link',
     yes: 'yes',
     no: 'no',
+    noValue: '(no value)',
     oldValue: 'Old value',
     newValue: 'New value'
   },
@@ -43,7 +44,7 @@ export default {
     editView: 'Edit',
     diffView: 'Compare',
     previewView: 'Preview',
-    cardsView: 'List',
+    cardsView: 'Cards list',
     tableView: 'Table',
     showCardDetails: 'Show details',
     closeCardDetails: 'Close detailed card',
@@ -80,7 +81,10 @@ export default {
     selectConsolidationFields: 'Select the fields to update',
     validateConsolidation: 'Validate the changes',
     copyWidget: "To insert the widget in your website, copy the widget's html block",
-    widgetCopied: 'The widget code was copied to the clipboard'
+    widgetCopied: 'The widget code was copied to the clipboard',
+    addTag: 'Add a tag',
+    addTagHelp: 'Click on + to add your tag',
+    clearTag: 'Remove the tag'
     // nest: {
     //   test: 'test nested actions'
     // }

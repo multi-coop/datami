@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="item"
     class="GitributeCard gitribute-component gitribute-component card">
     <!-- HEADER -->
     <header class="card-header no-shadow">
@@ -11,13 +12,23 @@
           v-for="(f, i) in getFieldsByPosition('title')"
           :key="`title-${i}-${f.field}`"
           class="mr-1 is-size-5">
+          <p
+            v-if="currentEditViewMode === 'edit'"
+            class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
+            {{ getFieldLabel(f.field) }}
+          </p>
           <div
             v-if="currentEditViewMode === 'preview'"
             @click="toggleDetail">
             {{ item[f.field] || '' }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] || '' }}
+            <div v-if="isInChanges(false, item.added, f.field, item.id)">
+              <span v-html="getDiffHtmlChars(false, item.added, f.field, item[f.field], item.id)"/>
+            </div>
+            <span v-else>
+              {{ item[f.field] || '' }}
+            </span>
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -55,6 +66,11 @@
       <div
         v-for="(f, i) in getFieldsByPosition('image')"
         :key="`image-${i}-${f.field}`">
+        <p
+          v-if="currentEditViewMode === 'edit'"
+          class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
+          {{ getFieldLabel(f.field) }}
+        </p>
         <figure
           v-if="item[f.field]"
           class="image mx-0 image-wrapper is-flex is-align-items-center is-justify-content-center">
@@ -114,16 +130,25 @@
           v-for="(f, i) in getFieldsByPosition('subtitle')"
           :key="`subtitle-${i}-${f.field}`"
           class="mr-1">
+          <p
+            v-if="currentEditViewMode === 'edit'"
+            class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
+            {{ getFieldLabel(f.field) }}
+          </p>
           <div v-if="currentEditViewMode === 'preview'">
             {{ item[f.field] || '' }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] || '' }}
+            <div v-if="isInChanges(false, item.added, f.field, item.id)">
+              <span v-html="getDiffHtmlChars(false, item.added, f.field, item[f.field], item.id)"/>
+            </div>
+            <span v-else>
+              {{ item[f.field] || '' }}
+            </span>
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
-            {{ f }}
             <EditCell
               :field="f"
               :col-field="f.field"
@@ -145,6 +170,11 @@
           v-for="(f, i) in getFieldsByPosition('resume')"
           :key="`resume-${i}-${f.field}`"
           class="mt-4 has-text-weight-medium">
+          <p
+            v-if="currentEditViewMode === 'edit'"
+            class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
+            {{ getFieldLabel(f.field) }}
+          </p>
           <div v-if="currentEditViewMode === 'preview'">
             <span v-if="isMini">
               {{ trimText(item[f.field] || '', 150) }}
@@ -154,7 +184,12 @@
             </span>
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] || '' }}
+            <div v-if="isInChanges(false, item.added, f.field, item.id)">
+              <span v-html="getDiffHtmlChars(false, item.added, f.field, item[f.field], item.id)"/>
+            </div>
+            <span v-else>
+              {{ item[f.field] || '' }}
+            </span>
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -181,7 +216,7 @@
           :key="`description-${i}-${f.field}`"
           class="mr-1">
           <p
-            v-if="item[f.field]"
+            v-if="item[f.field] || currentEditViewMode === 'edit'"
             class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
             {{ getFieldLabel(f.field) }}
           </p>
@@ -189,7 +224,12 @@
             {{ item[f.field] || '' }}
           </div>
           <div v-if="currentEditViewMode === 'diff'">
-            {{ item[f.field] || '' }}
+            <div v-if="isInChanges(false, item.added, f.field, item.id)">
+              <span v-html="getDiffHtmlChars(false, item.added, f.field, item[f.field], item.id)"/>
+            </div>
+            <span v-else>
+              {{ item[f.field] || '' }}
+            </span>
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
@@ -216,41 +256,35 @@
           :key="`tags-${i}-${f.field}`"
           class="mr-1">
           <p
-            v-if="item[f.field]"
+            v-if="item[f.field] || currentEditViewMode !== 'preview'"
             class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
             {{ getFieldLabel(f.field) }}
           </p>
           <div v-if="currentEditViewMode === 'preview' && item[f.field]">
-            <b-tag
-              v-for="(val, tagIdx) in item[f.field].split(fileOptions.tagseparator)"
-              :key="`tags-${i}-${f.field}-${tagIdx}`"
-              class="mr-2 mb-1"
-              :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val)}`">
-              <b-tooltip
-                :label="val"
-                multilined
-                type="is-dark"
-                position="is-top">
-                <span v-if="isMini">
-                  {{ trimText(val) }}
-                </span>
-                <span v-else>
-                  {{ trimText(val, 75) }}
-                </span>
-              </b-tooltip>
-            </b-tag>
+            <PreviewCell
+              :value="item[f.field]"
+              :field="f"
+              :is-card-view="true"
+              :is-mini="isMini"
+              :locale="locale"/>
           </div>
-          <div v-if="currentEditViewMode === 'diff' && item[f.field]">
-            <b-tag
-              v-for="(val, tagIdx) in item[f.field].split(fileOptions.tagseparator)"
-              :key="`tags-${i}-${f.field}-${tagIdx}`"
-              class="mr-1">
-              {{ val }}
-            </b-tag>
+          <div v-if="currentEditViewMode === 'diff'">
+            <div v-if="isInChanges(false, item.added, f.field, item.id)">
+              <span v-html="getDiffHtmlChars(false, item.added, f.field, item[f.field], item.id)"/>
+            </div>
+            <PreviewCell
+              v-else
+              :value="item[f.field]"
+              :is-diff-view="true"
+              :is-card-view="true"
+              :is-mini="isMini"
+              :field="f"
+              :locale="locale"/>
           </div>
           <div
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
+            <!-- {{ f }} -->
             <EditCell
               :field="f"
               :row-id="item.id"
@@ -258,6 +292,7 @@
               :input-data="item[f.field] || ''"
               :locale="locale"
               :is-card-view="true"
+              @action="SendActionToParent"
               @updateCellValue="emitUpdate"/>
           </div>
         </span>
@@ -272,7 +307,7 @@
           :key="`links-${i}-${f.field}`"
           class="mr-1">
           <p
-            v-if="item[f.field]"
+            v-if="item[f.field] || currentEditViewMode !== 'preview'"
             class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
             {{ getFieldLabel(f.field) }}
           </p>
@@ -286,8 +321,12 @@
               {{ t('global.link', locale) }}
             </b-button>
           </div>
-          <div v-if="currentEditViewMode === 'diff' && item[f.field]">
+          <div v-if="currentEditViewMode === 'diff'">
+            <div v-if="isInChanges(false, item.added, f.field, item.id)">
+              <span v-html="getDiffHtmlChars(false, item.added, f.field, item[f.field], item.id)"/>
+            </div>
             <b-button
+              v-else
               tag="a"
               size="is-small"
               icon-left="open-in-new"
@@ -364,18 +403,21 @@
 
 <script>
 
-import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
+import { mixinGlobal, mixinValue, mixinDiff } from '@/utils/mixins.js'
 
+import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'GitributeCard',
   components: {
+    PreviewCell,
     EditCell
   },
   mixins: [
     mixinGlobal,
-    mixinValue
+    mixinValue,
+    mixinDiff
   ],
   props: {
     fileId: {
@@ -437,6 +479,9 @@ export default {
     },
     emitUpdate (event) {
       this.$emit('updateCellValue', event)
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     }
   }
 }

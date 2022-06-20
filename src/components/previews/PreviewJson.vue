@@ -353,7 +353,16 @@ export default {
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
       console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
+      // set in local store
       this.changesNodes = copyChanges
+
+      // set in global store
+      // const changesPayload = {
+      //   fileId: this.fileId,
+      //   isFields: isHeader,
+      //   changes: copyChanges
+      // }
+      // this.updateFileChanges(changesPayload)
     },
     UpdateEditedJson (event) {
       console.log('\nC > PreviewJson > UpdateEditedJson > event : ', event)
