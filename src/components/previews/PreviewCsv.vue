@@ -325,7 +325,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.bgcolor && { bgcolor: fieldCustomProps.bgcolor },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
-          console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)
+          // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)
           // console.log('C > PreviewCsv > buildColumns > fieldCustomProps : ', fieldCustomProps)
           if (!defaultEnumArr && needEnumArr) {
             const enumArr = this.buildEnumArr(

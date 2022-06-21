@@ -62,7 +62,7 @@
         v-for="(val, tagIdx) in tagsArray"
         :key="`tags-${field.field}-${tagIdx}`"
         :class="`mr-2 has-text-weight-bold`"
-        :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val)}`">
+        :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val, field)}`">
         {{ val }}
       </b-tag>
     </div>

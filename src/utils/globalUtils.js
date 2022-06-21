@@ -136,16 +136,17 @@ export const trimText = (str, maxLength = 25) => {
 }
 
 export const stringToColour = (str) => {
-  let colour
-  if (str === 'SCIC') {
-    colour = 'green'
-  } else if (str === 'SCOP') {
-    colour = 'blue'
-  } else {
-    colour = 'grey'
-  }
-  // console.log(str)
+  const colour = 'white'
+  // if (str === 'SCIC') {
+  //   colour = 'green'
+  // } else if (str === 'SCOP') {
+  //   colour = 'blue'
+  // } else {
+  //   colour = 'grey'
+  // }
+  // // console.log(str)
   return colour
+  // return str
 }
 
 export const getContrastYIQ = (hexcolor) => {
