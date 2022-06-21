@@ -12,7 +12,6 @@ import {
   defaultTagsSeparator,
   booleanFromValue,
   trimText,
-  // stringToColour,
   getContrastYIQ
 } from '@/utils/globalUtils'
 import {
@@ -343,12 +342,10 @@ export const mixinValue = {
     booleanFromValue,
     trimText,
     tagBackgroundColour (value, field = undefined) {
-      // value && console.log(' Mixins> Methods > tagBackgroundColour > value ', value)
-      const color = field && field.bgcolor ? field.bgcolor : 'black'
       // console.log('Mixins> Methods>tagBackgroundColour>field', field)
-      console.log(' Mixins> Methods > tagBackgroundColour > color ', color)
-      // return stringToColour(value)
-      return color
+      const bgcolor = field && field.bgcolor ? field.bgcolor : 'black'
+      // console.log(' Mixins> Methods > tagBackgroundColour > color ', color)
+      return bgcolor
     },
     tagColour (value) {
       const hex = this.tagBackgroundColour(value)
