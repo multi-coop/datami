@@ -225,7 +225,7 @@
               v-for="(val, tagIdx) in item[f.field].split(fileOptions.tagseparator)"
               :key="`tags-${i}-${f.field}-${tagIdx}`"
               class="mr-2 mb-1"
-              :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val)}`">
+              :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val, fields[2] )}`">
               <b-tooltip
                 :label="val"
                 multilined
