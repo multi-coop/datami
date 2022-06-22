@@ -148,8 +148,9 @@ export const stringToColour = (str) => {
     //   return char.charCodeAt(0) + ((acc << 5) - acc);
     // }, 0)
     // const colour = `hsl(${stringUniqueHash % 360}, 95%, 35%)`
-    return colour
   }
+  return colour
+}
 
 export const getContrastYIQ = (hexcolor) => {
   hexcolor = hexcolor.replace('#', '')
