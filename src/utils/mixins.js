@@ -10,9 +10,9 @@ import {
   paginate,
   getClosest,
   defaultTagsSeparator,
+  stringToColor,
   booleanFromValue,
   trimText,
-  stringToColour,
   getContrastYIQ
 } from '@/utils/globalUtils'
 import {
@@ -342,12 +342,25 @@ export const mixinValue = {
   methods: {
     booleanFromValue,
     trimText,
-    tagBackgroundColour (value, isDiff = false) {
-      return isDiff ? '#363636' : stringToColour(value)
+    tagBackgroundColor (value, bgColor = undefined, isDiff = false) {
+      let color
+      if (!isDiff) {
+        color = bgColor ?? stringToColor(value)
+      } else {
+        color = '#363636'
+      }
+      return color
     },
-    tagColour (value, isDiff = false) {
-      const hex = this.tagBackgroundColour(value)
-      return isDiff ? 'white' : getContrastYIQ(hex)
+
+    tagColor (value, bgColor = undefined, isDiff = false) {
+      let textColor
+      if (isDiff) {
+        textColor = 'white'
+      } else {
+        const hex = this.tagBackgroundColor(value, bgColor)
+        textColor = getContrastYIQ(hex)
+      }
+      return textColor
     }
   }
 }

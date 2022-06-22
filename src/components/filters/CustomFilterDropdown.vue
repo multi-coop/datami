@@ -114,6 +114,7 @@ export default {
       // console.log('C > CustomFilterDropdown > SendActionToParent > remove : ', remove)
       const filterPayload = {
         field: this.filter.field,
+        bgColor: this.filter.bgColor,
         value: filterVal,
         reset: reset
       }

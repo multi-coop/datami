@@ -319,8 +319,11 @@ export default {
             ...fieldCustomProps && fieldCustomProps.maxLength && { maxLength: fieldCustomProps.maxLength },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
+            ...fieldCustomProps && fieldCustomProps.bgColor && { bgColor: fieldCustomProps.bgColor },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
+          // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)
+          // console.log('C > PreviewCsv > buildColumns > fieldCustomProps : ', fieldCustomProps)
           if (!defaultEnumArr && needEnumArr) {
             const enumArr = this.buildEnumArr(
               dataRaw.data.map(item => item[fieldId]),
@@ -328,6 +331,7 @@ export default {
             )
             fieldData.enumArr = enumArr
           }
+          // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData.fieldCustomProps.bgColor)
           return fieldData
         })
       // console.log('C > PreviewCsv > buildColumns > fields : ', fields)

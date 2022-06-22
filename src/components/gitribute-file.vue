@@ -267,6 +267,7 @@ export default {
   async beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     const gitInfosObject = this.extractGitInfos(this.gitfile)
+    // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
     const fileUuid = this.uuidv4()
     gitInfosObject.uuid = fileUuid
     gitInfosObject.title = this.title
