@@ -14,7 +14,7 @@
         :show-expand="showExpand"
         :locale="locale"/>
       <span>
-        {{ value }}
+        {{ trimmedText }}
       </span>
     </div>
 
@@ -189,9 +189,16 @@ export default {
       // console.log('C > PreviewCell > tagsArray > this.tagSeparator : ', this.tagSeparator)
       // const valType = typeof this.value
       // console.log('C > PreviewCell > tagsArray > valType : ', valType)
+      let tags
       const tagsStr = (!!this.value && this.value.toString()) || ''
-      let tags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
-      tags = tags.filter(v => v !== '')
+      let allTags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
+      allTags = allTags.filter(v => v !== '')
+      if (this.nowrap) {
+        tags = allTags.slice(0, 2)
+        tags = allTags.length > 2 ? [...tags, '...'] : tags
+      } else {
+        tags = allTags
+      }
       return tags
     }
   },

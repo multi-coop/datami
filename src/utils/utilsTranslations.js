@@ -15,41 +15,21 @@ export const buildDict = (languages) => {
 
   const locales = languages.map(l => l.locale)
   const dicts = languages.map(l => l.dict)
-  // console.log('U > utilsTranslations > locales : ', locales)
-  // console.log('U > utilsTranslations > dicts : ', dicts)
-
-  // get all dicts keys
-  // const allKeys = Object.keys(Object.assign({}, ...dicts))
-  // console.log('U > utilsTranslations > allKeys : ', allKeys)
 
   // nullify nested langagues dicts
   const dictsNulls = dicts.map(d => nullOnNested(d))
-  // console.log('U > utilsTranslations > dictsNulls : ', dictsNulls)
   const nestedKeys = deepAssign({}, ...dictsNulls)
-  // console.log('U > utilsTranslations > nestedKeys : ', nestedKeys)
   const allKeysNested = objectPaths(nestedKeys, true)
-  // console.log('U > utilsTranslations > allKeysNested : ', allKeysNested)
 
   // build concatenate dicts
-  // const allLanguages = Object.fromEntries(allKeys.map(k => {
-  //   const keyDict = Object.fromEntries(locales.map(l => {
-  //     const dictObj = languages.find(lang => lang.locale === l)
-  //     // console.log('U > utilsTranslations > dictObj : ', dictObj)
-  //     const def = dictObj.dict[k]
-  //     return [l, def]
-  //   }))
-  //   return [k, keyDict]
-  // }))
   const allLanguages = Object.fromEntries(allKeysNested.map(k => {
     const keyDict = Object.fromEntries(locales.map(l => {
       const dictObj = languages.find(lang => lang.locale === l)
-      // console.log('U > utilsTranslations > dictObj : ', dictObj)
       const def = findFromPath(k, dictObj.dict)
       return [l, def]
     }))
     return [k, keyDict]
   }))
-  // console.log('U > utilsTranslations > allLanguages : ', allLanguages)
 
   return allLanguages
 }
@@ -72,13 +52,19 @@ export const allowedLanguages = availableLanguaguages
 
 export const dicts = buildDict(availableLanguaguages)
 
-export const translate = (key, locale, debug = false) => {
+export const translate = (key, locale, params = undefined, debug = false) => {
   // debug && console.log('\nU > utilsTranslations > G > getTranslation > key : ', key)
   // debug && console.log('U > utilsTranslations > G > getTranslation > locale : ', locale)
+  // debug && console.log('U > utilsTranslations > G > getTranslation > params : ', params)
   if (!dicts[key]) return key
-  if (dicts[key]) return dicts[key][locale] || key
-  // const translation = findFromPath(key, dicts, debug)
-  // debug && console.log('U > utilsTranslations > G > getTranslation > translation : ', translation)
-  // if (!translation) return key
-  // if (translation) return translation[locale] || key
+  if (dicts[key]) {
+    let translated = dicts[key][locale] || key
+    if (params) {
+      for (const key in params) {
+        const reg = new RegExp(`{{${key}}}`, 'g')
+        translated = translated.replace(reg, params[key])
+      }
+    }
+    return translated
+  }
 }
