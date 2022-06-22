@@ -64,7 +64,7 @@
         v-for="(val, tagIdx) in tagsArray"
         :key="`tags-${field.field}-${tagIdx}`"
         :class="`mr-2 mb-2 has-text-weight-bold`"
-        :style="`color: ${tagColour(val, isDiffView)}; background-color:  ${tagBackgroundColour(val, isDiffView)}`">
+        :style="`color: ${tagColor(val, field.bgColor, isDiffView)}; background-color:  ${tagBackgroundColor(val, field.bgColor, isDiffView)}`">
         <span v-if="isMini">
           <b-tooltip
             :label="val"
