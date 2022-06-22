@@ -8,7 +8,12 @@ export default {
     no: 'no',
     noValue: '(no value)',
     oldValue: 'Old value',
-    newValue: 'New value'
+    newValue: 'New value',
+    thanks: 'Thanks for using {{gitributeRepo}} !',
+    understood: 'Understood'
+  },
+  tabs: {
+    switchPosition: 'Change tabs position'
   },
   git: {
     provider: 'Provider',
@@ -207,6 +212,11 @@ export default {
     errorFunction: 'Error from function',
     errorCode: 'Error code',
     errorMessage: 'Error message'
+  },
+  widget: {
+    widgetCopiedMsg: 'The widget code for {{widgetName}}<br>with the title {{widgetTitle}}<br>was copied to your clipboard.',
+    widgetUse: 'You can now insert it to any html page of your choice.',
+    widgetCopied: 'Widget copied'
   },
   credits: {
     reclaim: 'An open source widget',

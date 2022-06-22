@@ -171,5 +171,6 @@ export default {
 <style scoped>
   .branch-input {
     width: 30em;
+    z-index: 55;
   }
 </style>
