@@ -136,9 +136,20 @@ export const trimText = (str, maxLength = 25) => {
 }
 
 export const stringToColour = (str) => {
-  const colour = 'white'
-  return colour
-}
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  let colour = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xFF
+    colour += ('00' + value.toString(16)).substr(-2)
+    // const stringUniqueHash = [...str].reduce((acc, char) => {
+    //   return char.charCodeAt(0) + ((acc << 5) - acc);
+    // }, 0)
+    // const colour = `hsl(${stringUniqueHash % 360}, 95%, 35%)`
+    return colour
+  }
 
 export const getContrastYIQ = (hexcolor) => {
   hexcolor = hexcolor.replace('#', '')
