@@ -28,8 +28,11 @@ export const data = {
     // DATA STORED
     buffer: [],
     notifications: [],
-    errors: []
+    errors: [],
 
+    // DIFF DATA
+    changesFields: [],
+    changesData: []
   },
   getters: {
     getLoadedData: (state) => (fileId) => {
@@ -72,6 +75,14 @@ export const data = {
       // console.log('\nS-data > G > getErrors > state.errors : ', state.errors)
       const fileErrors = state.errors.find(err => err.uuid === fileId)
       return fileErrors && fileErrors.errors
+    },
+    getChangesFields: (state) => (fileId) => {
+      const fileChanges = state.changesFields.find(changes => changes.fileId === fileId)
+      return (fileChanges && fileChanges.changes) || []
+    },
+    getChangesData: (state) => (fileId) => {
+      const fileChanges = state.changesData.find(changes => changes.fileId === fileId)
+      return (fileChanges && fileChanges.changes) || []
     }
   },
   mutations: {
@@ -128,6 +139,16 @@ export const data = {
       // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
       state.errors = state.errors.filter(err => err.uuid !== reqErrors.uuid)
       // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
+    },
+    addToChanges (state, fileChanges) {
+      const storeChanges = fileChanges.isFields ? state.changesFields : state.changesData
+      const index = storeChanges.findIndex(item => item.uuid === fileChanges.uuid)
+      if (index !== -1) {
+        Vue.set(storeChanges, index, fileChanges)
+      } else {
+        storeChanges.push(fileChanges)
+      }
+      // console.log('S-data > M > addToChanges > storeChanges : ', storeChanges)
     }
   },
   actions: {
@@ -240,6 +261,10 @@ export const data = {
       } else {
         commit('removeFromErrors', reqErrorData)
       }
+    },
+    updateFileChanges ({ commit }, fileChanges) {
+      // console.log('\nS-data > A > updateReqErrors > fileChanges : ', fileChanges)
+      commit('addToChanges', fileChanges)
     }
   }
 }

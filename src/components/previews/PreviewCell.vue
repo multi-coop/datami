@@ -1,13 +1,13 @@
 <template>
   <div
-    :class="`PreviewCell gitribute-${nowrap && !isLongText ? 'nowrap' : 'wrap'}`"
+    :class="`PreviewCell gitribute-${nowrap && !isLongText && !isDiffView && !isCardView ? 'nowrap' : 'wrap'}`"
     @mouseover="showExpand = true"
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
 
-    <!-- STRING -->
+    <!-- WRAP CELL SWITCH -->
     <div
-      v-if="isString && !field.subtype"
+      v-if="isString && !field.subtype && !isDiffView"
       :class="`${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
       <ButtonWrapCell
         v-model="nowrap"
@@ -52,18 +52,31 @@
     <!-- TAG / TAGS -->
     <div
       v-if="value && isTag"
-      :class="`${isCategory ? 'has-text-centered' : ''}`">
+      :class="`${isCategory && !isCardView ? 'has-text-centered' : ''}`">
       <!-- value : <code>{{ value }}</code><br> -->
       <ButtonWrapCell
+        v-if="!isCardView"
         v-model="nowrap"
         :show-expand="showExpand"
         :locale="locale"/>
+      {{ currentEditViewMode }}
       <b-tag
         v-for="(val, tagIdx) in tagsArray"
         :key="`tags-${field.field}-${tagIdx}`"
-        :class="`mr-2 has-text-weight-bold`"
-        :style="`color: ${tagColour(val)}; background-color:  ${tagBackgroundColour(val, field)}`">
-        {{ val }}
+        :class="`mr-2 mb-2 has-text-weight-bold`"
+        :style="`color: ${tagColour(val, isDiffView)}; background-color:  ${tagBackgroundColour(val, field, isDiffView)}`">
+        <span v-if="isMini">
+          <b-tooltip
+            :label="val"
+            multilined
+            type="is-dark"
+            position="is-top">
+            {{ trimText(val) }}
+          </b-tooltip>
+        </span>
+        <span v-else>
+          {{ val }}
+        </span>
       </b-tag>
     </div>
 
@@ -136,6 +149,18 @@ export default {
       default: false,
       type: Boolean
     },
+    isDiffView: {
+      default: false,
+      type: Boolean
+    },
+    isCardView: {
+      default: false,
+      type: Boolean
+    },
+    isMini: {
+      default: false,
+      type: Boolean
+    },
     locale: {
       default: null,
       type: String
@@ -160,6 +185,8 @@ export default {
     },
     tagsArray () {
       // console.log('\nC > PreviewCell > tagsArray > this.value : ', this.value)
+      // console.log('C > PreviewCell > tagsArray > this.field : ', this.field)
+      // console.log('C > PreviewCell > tagsArray > this.tagSeparator : ', this.tagSeparator)
       // const valType = typeof this.value
       // console.log('C > PreviewCell > tagsArray > valType : ', valType)
       const tagsStr = (!!this.value && this.value.toString()) || ''
