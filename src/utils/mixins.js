@@ -10,6 +10,7 @@ import {
   paginate,
   getClosest,
   defaultTagsSeparator,
+  stringToColour,
   booleanFromValue,
   trimText,
   getContrastYIQ
