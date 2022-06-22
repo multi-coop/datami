@@ -343,7 +343,7 @@ export const mixinValue = {
     trimText,
     tagBackgroundColour (value, field = undefined) {
       // console.log('Mixins> Methods>tagBackgroundColour>field', field)
-      const bgcolor = field && field.bgcolor ? field.bgcolor : 'black'
+      const bgcolor = field && field.bgcolor ? field.bgcolor : stringToColour(value)
       // console.log(' Mixins> Methods > tagBackgroundColour > color ', color)
       return bgcolor
     },
