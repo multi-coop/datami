@@ -4,24 +4,27 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
   let consolidation
   const errors = []
 
-  console.log('\nU > consolidationUtils > getConsolidationApiUrl > consolidationData : ', consolidationData)
-  console.log('U > consolidationUtils > getConsolidationApiUrl > fields : ', fields)
-  console.log('U > consolidationUtils > getConsolidationApiUrl > sourceFields : ', sourceFields)
+  // console.log('\nU > consolidationUtils > getConsolidationApiUrl > consolidationData : ', consolidationData)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > fields : ', fields)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > sourceFields : ', sourceFields)
   let apiUrl = consolidationData.api.api
   sourceFields.forEach(sf => {
-    apiUrl = apiUrl.replace(`{{${sf.name}}}`, sf.value)
+    const valueStr = encodeURI(sf.value)
+    // console.log('U > consolidationUtils > getConsolidationApiUrl > sf : ', sf)
+    // console.log('U > consolidationUtils > getConsolidationApiUrl > valueStr : ', valueStr)
+    apiUrl = apiUrl.replace(`{{${sf.name}}}`, valueStr)
   })
-  console.log('U > consolidationUtils > getConsolidationApiUrl > apiUrl : ', apiUrl)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > apiUrl : ', apiUrl)
 
-  const req = await fetch(apiUrl)
-  console.log('U > consolidationUtils > getConsolidationApiUrl > req : ', req)
-  const resp = await req.json()
-  console.log('U > consolidationUtils > getConsolidationApiUrl > resp : ', resp)
+  const resp = await fetch(apiUrl)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > resp : ', resp)
+  const respData = await resp.json()
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > respData : ', respData)
 
-  if (!req.ok) {
+  if (!resp.ok) {
     const err = {
       function: 'getConsolidationApiUrl',
-      code: req.status,
+      code: resp.status,
       message: resp.message
     }
     errors.push(err)
@@ -39,15 +42,15 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
       return {
         fromField: m.resp_field,
         toField: targetField,
-        newValue: findFromPath(m.resp_field, resp)
+        newValue: findFromPath(m.resp_field, respData)
       }
     })
   }
 
   // return consolidation data
   return {
-    // data: resp,
-    consolidation: req.ok && consolidation,
+    // data: respData,
+    consolidation: resp.ok && consolidation,
     errors: errors
   }
 }

@@ -961,7 +961,7 @@ export default {
           await this.consolidateRow(event)
           break
         case 'cancelConsolidation':
-          console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
+          // console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
           // this.openedDetails = this.openedDetails.filter(id => id !== event.rowId)
           this.closeConsolidationDetail(event.rowId)
           break
@@ -1012,14 +1012,14 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
       // this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
       // this.openedDetails = this.openedDetails.filter(id => id !== rowId)
 
-      console.log('\nC > GitributeTable > consolidateRow > this.consolidationData : ', this.consolidationData)
+      // console.log('\nC > GitributeTable > consolidateRow > this.consolidationData : ', this.consolidationData)
       // console.log('C > GitributeTable > consolidateRow > this.columns : ', this.columns)
       const rowData = this.dataEdited.find(row => row.id === rowId)
       // console.log('C > GitributeTable > consolidateRow > rowData : ', rowData)
@@ -1034,13 +1034,13 @@ export default {
           value: rowDataValue
         }
       })
-      console.log('C > GitributeTable > sourceFields : ', sourceFields)
+      // console.log('C > GitributeTable > sourceFields : ', sourceFields)
 
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
       respConsolidation.fromApi = consolidationSettings.api.api_name
       // respConsolidation.rowData = rowData
-      console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
+      // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
       // update loaders
       this.consolidating = this.consolidating.filter(id => id !== rowId)
