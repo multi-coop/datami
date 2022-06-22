@@ -111,7 +111,8 @@ export default {
           return {
             field: filter.field,
             label: filter.label,
-            enumArr: Array.from(enumArr).sort((a, b) => a.localeCompare(b))
+            enumArr: Array.from(enumArr).sort((a, b) => a.localeCompare(b)),
+            bgColor: filter.bgColor
           }
         })
       }
