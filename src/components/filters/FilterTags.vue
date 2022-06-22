@@ -15,7 +15,7 @@
             {{ getFieldLabel(tag.field) }}
           </b-tag>
           <b-tag
-            :style="`color: ${tagColour(tag.value)}; background-color: ${tagBackgroundColour(tag.value, tag.field)}`">
+            :style="`color: ${tagColor(tag.value)}; background-color: ${tagBackgroundColor(tag.value, tag.field)}`">
             <span class="px-2 has-text-weight-bold">
               {{ tag.value }}
             </span>
