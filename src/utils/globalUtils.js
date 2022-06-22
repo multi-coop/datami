@@ -144,10 +144,6 @@ export const stringToColor = (str) => {
   for (let i = 0; i < 3; i++) {
     const value = (hash >> (i * 8)) & 0xFF
     color += ('00' + value.toString(16)).substr(-2)
-    // const stringUniqueHash = [...str].reduce((acc, char) => {
-    //   return char.charCodeAt(0) + ((acc << 5) - acc);
-    // }, 0)
-    // const color = `hsl(${stringUniqueHash % 360}, 95%, 35%)`
   }
   return color
 }
