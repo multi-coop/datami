@@ -342,22 +342,22 @@ export const mixinValue = {
   methods: {
     booleanFromValue,
     trimText,
-    tagBackgroundColor (value, field = undefined, isDiff = false) {
-      let bgColor
+    tagBackgroundColor (value, bgColor = undefined, isDiff = false) {
+      let color
       if (!isDiff) {
-        bgColor = field && field.bgColor ? field.bgColor : stringToColor(value)
+        color = bgColor ?? stringToColor(value)
       } else {
-        bgColor = '#363636'
+        color = '#363636'
       }
-      return bgColor
+      return color
     },
 
-    tagColor (value, field = undefined, isDiff = false) {
+    tagColor (value, bgColor = undefined, isDiff = false) {
       let textColor
       if (isDiff) {
         textColor = 'white'
       } else {
-        const hex = this.tagBackgroundColor(value, field)
+        const hex = this.tagBackgroundColor(value, bgColor)
         textColor = getContrastYIQ(hex)
       }
       return textColor
