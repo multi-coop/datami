@@ -183,26 +183,113 @@
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
   </div> -->
 
-    <!-- <p id="gitribute-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#gitribute-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
+    <p id="gitribute-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#gitribute-multifiles-odf-observatoire" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    multifiles ODF data - observatoire
+  </p>
+    <div style="background-color: white; margin: 1em;">
+      <multi-gitribute-multi-files title="test multi-files observatoire" debug="false" locale="fr" options='{
+        "display": "horizontal"
+      }' gitfiles='[
+        {
+          "title": "Données de l&#39;observatoire",
+          "activate": true,
+          "gitfile": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv",
+          "default-tab": true,
+          "options": {
+            "height": "500px",
+            "separator": ";",
+            "lockcolumns": true,
+            "customfilters": {
+              "activate": true, 
+              "filterfields" : [ 
+                "type",
+                "platform_clean"
+              ]
+            },
+            "schema": {
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
+            },
+            "fields-custom-properties": {
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json"
+            },
+            "cardsview": { 
+              "activate": true,
+              "default" : false
+            },
+            "cardsdetail": true,
+            "cardssettings": {
+              "mini": {
+                "nom": { "position": "title" },
+                "siren" : { "position": "resume" },
+                "tags" : { "position": "tags" } 
+              },
+              "detail": {
+                "nom": { "position": "title" },
+                "orga": { "position": "resume" },
+                "siren": { "position": "description" },
+                "adress": { "position": "description" },
+                "dep_label": { "position": "tags" },
+                "tags" : { "position": "tags" }
+              }
+            }
+          },
+          "usertoken": ""
+        },
+        {
+          "title": "Thématiques",
+          "activate": true,
+          "gitfile": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-thematiques.csv",
+          "options": {
+            "height": "500px",
+            "separator": ",",
+            "lockcolumns": true,
+            "customfilters": {
+              "activate": true, 
+              "filterfields" : [ 
+                "Tags"
+              ]
+            },
+            "schema": {
+              "fields": [
+                {
+                  "name": "Organisations copy",
+                  "type": "boolean"
+                }
+              ]
+            },
+            "fields-custom-properties": {
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-thematiques-fields-custom-props.json"
+            }
+          },
+          "onlypreview": true,
+          "usertoken": ""
+        }
+      ]'></multi-gitribute-multi-files>
+    </div>
+
+    <p id="gitribute-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#gitribute-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
       #
     </a>
     Import ODF data - observatoire
   </p>
-  <div style="background-color: white; margin: 1em;">
-    <multi-gitribute-file
+    <div style="background-color: white; margin: 1em;">
+      <multi-gitribute-file
       gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
       options='{
         "height": "500px",
-        "separator":";",
+        "separator": ";",
         "lockcolumns": true,
-        "tagseparator":"-",
-        "customfilters" : {
-          "activate": true,
-          "filterfields": [
-          "type",
+        "tagseparator": "-",
+        "customfilters": {
+          "activate": true, 
+          "filterfields" : [ 
+            "type",
             "platform_clean"
-            ]
+          ]
         },
         "schema": {
           "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
@@ -210,35 +297,37 @@
         "fields-custom-properties": {
           "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json"
         },
-        "customsorting" : {
+        "customsorting": {
           "activate": true,
           "sortfields": [
-            { "name": "nom" }
+            { "name" : "nom" }
           ]
         },
-        "pagination":{
+        "pagination": {
           "itemsPerPage": 20
         },
-        "cardsview": { "activate": true, "default": false },
+        "cardsview": { 
+          "activate": true,
+          "default" : false
+        },
         "cardsdetail": true,
         "cardssettings": {
           "mini": {
-            "nom": {"position": "title"},
-            "siren": {"position": "resume"},
-            "tags": {"position": "tags"}
+            "nom": { "position": "title" },
+            "siren" : { "position": "resume" },
+            "tags" : { "position": "tags" } 
           },
           "detail": {
-            "nom": {"position": "title"},
-            "orga": {"position": "resume"},
-            "siren": {"position": "description"},
-            "adress": {"position": "description"},
-            "dep_label": {"position": "tags"},
-            "tags": {"position": "tags"}
+            "nom": { "position": "title" },
+            "orga": { "position": "resume" },
+            "siren": { "position": "description" },
+            "adress": { "position": "description" },
+            "dep_label": { "position": "tags" },
+            "tags" : { "position": "tags" }
           }
         }
-      }' title="Données de l'observatoire Open Data France" usertoken="" locale="fr" debug="false">
-    </multi-gitribute-file>
-  </div> -->
+      }' title="Données de l'observatoire Open Data France" usertoken="" locale="fr" debug="false"></multi-gitribute-file>
+    </div>
 
     <p id="gitribute-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#gitribute-csv-github-cooptech" style="color: white; margin-right:  0.5em;">
@@ -315,14 +404,14 @@
     </multi-gitribute-file>
   </div> -->
 
-    <!-- <p id="gitribute-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#gitribute-wiki-communs" style="color: white; margin-right: 0.5em;">
+    <p id="gitribute-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#gitribute-wiki-communs" style="color: white; margin-right: 0.5em;">
       #
     </a>
     Import wikidata content (wiki resilience) to display as csv / cards content
   </p>
-  <div style="background-color: white; margin: 1em;">
-    <multi-gitribute-explowiki
+    <div style="background-color: white; margin: 1em;">
+      <multi-gitribute-explowiki
       wikilist="https://wiki.resilience-territoire.ademe.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Commun=on&wf-expl-Tags="
       options='{
           "height": "900px",
@@ -395,7 +484,7 @@
           }
         }
       }' title="gitribute for explowiki - communs :)" locale="fr"></multi-gitribute-explowiki>
-  </div> -->
+    </div>
 
     <!-- <p id="gitribute-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#gitribute-wiki-fabmob" style="color: white; margin-right: 0.5em;">

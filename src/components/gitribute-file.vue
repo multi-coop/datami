@@ -1,6 +1,8 @@
 <template>
-  <div class="GitributeFile gitribute-widget section">
-    <div class="container mb-4">
+  <div
+    :class="`GitributeFile gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
+    <div
+      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <div class="column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-tablet">
@@ -23,45 +25,6 @@
             :only-preview="onlypreview"
             :locale="locale"/>
         </div>
-      </div>
-    </div>
-
-    <!-- DEBUG -->
-    <div
-      v-if="debug"
-      class=" container columns is-multiline">
-      <div class="column is-full">
-        <p>
-          fileType:
-          <code>{{ fileType }}</code>
-        </p>
-      </div>
-      <div class="column is-one-third">
-        <p>
-          gitObj:
-          <br>
-          <code>
-            <pre>{{ gitObj }}</pre>
-          </code>
-        </p>
-      </div>
-      <div class="column is-one-third">
-        <p>
-          fileInfos:
-          <br>
-          <code>
-            <pre>{{ fileInfos }}</pre>
-          </code>
-        </p>
-      </div>
-      <div class="column is-one-third">
-        <p>
-          fileRaw:
-          <br>
-          <code>
-            <pre>{{ fileRaw }}</pre>
-          </code>
-        </p>
       </div>
     </div>
 
@@ -242,6 +205,14 @@ export default {
       type: Boolean
     },
     debug: {
+      default: false,
+      type: Boolean
+    },
+    fromMultiFiles: {
+      default: false,
+      type: Boolean
+    },
+    fromMultiFilesVertical: {
       default: false,
       type: Boolean
     }

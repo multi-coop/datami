@@ -150,5 +150,6 @@ export default {
 <style scoped>
   .token-input {
     min-width: 30em;
+    z-index: 50;
   }
 </style>

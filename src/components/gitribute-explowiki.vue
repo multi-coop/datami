@@ -1,7 +1,9 @@
 <template>
-  <div class="GitributeExplowiki gitribute-widget section">
-    <div class="container mb-4">
-      <div class="columns is-centered mb-4 multiline">
+  <div
+    :class="`GitributeExplowiki gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
+    <div
+      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
+      <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <div class="column is-half-desktop is-12-mobile has-text-centered-mobile">
           <ViewModeBtns
@@ -240,6 +242,14 @@ export default {
       type: Boolean
     },
     debug: {
+      default: false,
+      type: Boolean
+    },
+    fromMultiFiles: {
+      default: false,
+      type: Boolean
+    },
+    fromMultiFilesVertical: {
       default: false,
       type: Boolean
     }

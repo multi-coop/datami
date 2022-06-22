@@ -8,7 +8,12 @@ export default {
     no: 'non',
     noValue: '(pas de valeur)',
     oldValue: 'Ancienne valeur',
-    newValue: 'Nouvelle valeur'
+    newValue: 'Nouvelle valeur',
+    thanks: 'Merci d\'utiliser {{gitributeRepo}} !',
+    understood: 'Compris'
+  },
+  tabs: {
+    switchPosition: 'Changer la position des onglets'
   },
   git: {
     provider: 'Provider',
@@ -207,6 +212,11 @@ export default {
     errorFunction: 'Erreur de la fonction',
     errorCode: "Code d'erreur",
     errorMessage: "Message d'erreur"
+  },
+  widget: {
+    widgetCopiedMsg: 'Le widget {{widgetName}}<br>intitulé {{widgetTitle}}<br>est copié dans votre presse-papier.',
+    widgetUse: 'Vous pouvez désormais l\'insérer dans la page html de votre choix.',
+    widgetCopied: 'Widget copié'
   },
   credits: {
     reclaim: 'Un widget open source',
