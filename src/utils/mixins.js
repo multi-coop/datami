@@ -352,9 +352,15 @@ export const mixinValue = {
       return bgColor
     },
 
-    tagColor (value, isDiff = false) {
-      const hex = this.tagBackgroundColor(value)
-      return isDiff ? 'white' : getContrastYIQ(hex)
+    tagColor (value, field = undefined, isDiff = false) {
+      let textColor
+      if (isDiff) {
+        textColor = 'white'
+      } else {
+        const hex = this.tagBackgroundColor(value, field)
+        textColor = getContrastYIQ(hex)
+      }
+      return textColor
     }
   }
 }
