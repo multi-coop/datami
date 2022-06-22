@@ -345,7 +345,7 @@ export const mixinValue = {
     tagBackgroundColor (value, field = undefined, isDiff = false) {
       let bgColor
       if (!isDiff) {
-        bgColor = field && field.bgcolor ? field.bgColor : stringToColor(value)
+        bgColor = field && field.bgColor ? field.bgColor : stringToColor(value)
       } else {
         bgColor = '#363636'
       }
