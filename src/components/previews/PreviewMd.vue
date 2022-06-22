@@ -72,13 +72,13 @@
           </p>
           <div
             class="diff-data"
-            v-html="getDiffHtmlCharsData"/>
+            v-html="getMdDiffHtmlCharsData"/>
           <p class="is-italic">
             {{ t('preview.textPart', locale) }}
           </p>
           <ShowDown
             v-if="content"
-            :markdown="getDiffHtmlChars"
+            :markdown="getMdDiffHtmlChars"
             flavor="github"/>
         </div>
 
@@ -136,8 +136,8 @@ import ShowDown from '@/components/previews/ShowDown'
 // // see : https://github.com/kpdecker/jsdiff
 // import { createTwoFilesPatch, diffWords } from 'diff'
 
-import * as Diff2Html from 'diff2html'
-import 'diff2html/bundles/css/diff2html.min.css'
+// import * as Diff2Html from 'diff2html'
+// import 'diff2html/bundles/css/diff2html.min.css'
 
 export default {
   name: 'PreviewMd',
@@ -212,32 +212,33 @@ export default {
       const diffStr = this.createTwoFilesPatch(fileName, fileName, this.content, this.edited)
       return diffStr
     },
-    getCharDiff () {
-      // console.log('C > PreviewMd > getCharDiff  > diffChars : \n', diffChars)
-      // const diffStr = diffChars(this.content, this.edited)
-      const diffStr = this.diffWords(this.content, this.edited)
-      return diffStr
-    },
+    // getCharDiff () {
+    //   // console.log('C > PreviewMd > getCharDiff  > diffChars : \n', diffChars)
+    //   // const diffStr = diffChars(this.content, this.edited)
+    //   const diffStr = this.diffWords(this.content, this.edited)
+    //   return diffStr
+    // },
     getCharDiffData () {
       const dataAsMarkdown = this.getDataString(this.data)
       const diffStr = this.diffWords(dataAsMarkdown, this.dataEdited)
       return diffStr
     },
-    getDiffHtmlUnified () {
-      const diff = this.getUnifiedDiff
-      const options = {
-        drawFileList: false,
-        matching: 'lines',
-        outputFormat: 'side-by-side'
-        // outputFormat: 'line-by-line'
-      }
-      return Diff2Html.html(diff, options)
-    },
-    getDiffHtmlChars () {
-      const diffText = this.diffHtmlChars(this.getCharDiff)
+    // getDiffHtmlUnified () {
+    //   const diff = this.getUnifiedDiff
+    //   const options = {
+    //     drawFileList: false,
+    //     matching: 'lines',
+    //     outputFormat: 'side-by-side'
+    //     // outputFormat: 'line-by-line'
+    //   }
+    //   return Diff2Html.html(diff, options)
+    // },
+    getMdDiffHtmlChars () {
+      const charDiff = this.getCharDiff(this.content, this.edited)
+      const diffText = this.diffHtmlChars(charDiff)
       return diffText
     },
-    getDiffHtmlCharsData () {
+    getMdDiffHtmlCharsData () {
       const diffText = this.diffHtmlChars(this.getCharDiffData)
       return diffText
     }

@@ -342,12 +342,12 @@ export const mixinValue = {
   methods: {
     booleanFromValue,
     trimText,
-    tagBackgroundColour (value) {
-      return stringToColour(value)
+    tagBackgroundColour (value, isDiff = false) {
+      return isDiff ? '#363636' : stringToColour(value)
     },
-    tagColour (value) {
+    tagColour (value, isDiff = false) {
       const hex = this.tagBackgroundColour(value)
-      return getContrastYIQ(hex)
+      return isDiff ? 'white' : getContrastYIQ(hex)
     }
   }
 }
@@ -365,7 +365,23 @@ export const mixinDiff = {
       delFragClass: 'git-del'
     }
   },
+  computed: {
+    ...mapGetters({
+      getChangesFields: 'git-data/getChangesFields',
+      getChangesData: 'git-data/getChangesData'
+    }),
+
+    fieldsChanges () {
+      return this.getChangesFields(this.fileId)
+    },
+    dataChanges () {
+      return this.getChangesData(this.fileId)
+    }
+  },
   methods: {
+    ...mapActions({
+      updateFileChanges: 'git-data/updateFileChanges'
+    }),
     createTwoFilesPatch,
     diffWords,
     diffHtmlChars (diff) {
@@ -385,6 +401,56 @@ export const mixinDiff = {
       })
       // console.log('C > mixins > diffHtmlChars  > diffText : \n', diffText)
       return diffText
+    },
+    getCharDiff (content, edited) {
+      const diffStr = this.diffWords(content, edited || '')
+      return diffStr
+    },
+    getDiffHtmlChars (isHeader, wasAdded, field, val, rowId) {
+      // console.log('\nM > mixinDiff > getDiffHtmlChars > isHeader : ', isHeader)
+      // console.log('M > mixinDiff > getDiffHtmlChars > wasAdded : ', wasAdded)
+      // console.log('M > mixinDiff > getDiffHtmlChars > field : ', field)
+      // console.log('M > mixinDiff > getDiffHtmlChars > rowId : ', rowId)
+      // console.log('M > mixinDiff > getDiffHtmlChars > val : ', val)
+      let oldVal, newVal
+      const changes = this.isInChanges(isHeader, wasAdded, field, rowId)
+      // console.log('M > mixinDiff > getDiffHtmlChars > changes : ', changes)
+      const wasDeleted = changes.action === 'deleted'
+      // console.log('M > mixinDiff > getDiffHtmlChars > wasDeleted : ', wasDeleted)
+      if (wasAdded && !wasDeleted) {
+        oldVal = ''
+        newVal = val || ''
+      } else if (!wasAdded && wasDeleted) {
+        oldVal = val || ''
+        newVal = ''
+      } else {
+        oldVal = changes.oldVal
+        newVal = changes.val
+      }
+      // console.log('C > mixinValue > getDiffHtmlChars > valDef : ', valDef)
+
+      const charDiff = this.getCharDiff(oldVal, newVal)
+      const diffText = this.diffHtmlChars(charDiff)
+      return diffText
+    },
+    isInChanges (isHeader, wasAdded, field, rowId) {
+      // const isFirstRow = rowId === '0'
+      // isFirstRow && console.log('\nM > mixinDiff > isInChanges > isHeader : ', isHeader)
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > wasAdded : ', wasAdded)
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > field : ', field)
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > rowId : ', rowId)
+      let bool, boolDeleted
+      if (isHeader) {
+        bool = this.fieldsChanges.find(h => h.field === field)
+      } else {
+        // isFirstRow && console.log('M > mixinDiff > isInChanges > this.dataChanges : ', this.dataChanges)
+        bool = this.dataChanges.find(r => r.field === field && r.id === rowId)
+        boolDeleted = this.dataChanges.find(r => r.id === rowId && r.action === 'deleted')
+        if (boolDeleted) bool = boolDeleted
+      }
+      if (wasAdded) bool = true
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > bool : ', bool)
+      return bool
     }
   }
 }

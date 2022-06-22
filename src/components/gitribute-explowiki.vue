@@ -1,9 +1,13 @@
 <template>
   <div class="GitributeExplowiki gitribute-widget section">
     <div class="container mb-4">
-      <div class="columns is-centered mb-4">
+      <div class="columns is-centered mb-4 multiline">
         <!-- FILE TITLE -->
         <div class="column is-half-desktop is-12-mobile has-text-centered-mobile">
+          <ViewModeBtns
+            v-if="fileOptions"
+            :file-id="fileId"
+            :locale="locale"/>
           <FileTitle
             :show-file-infos="showFileInfos"
             :title="title"
@@ -14,10 +18,6 @@
 
         <!-- USER NAVBAR -->
         <div class="column is-half-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
-          <ViewModeBtns
-            v-if="fileOptions"
-            :file-id="fileId"
-            :locale="locale"/>
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -137,7 +137,7 @@
     <EditNavbarSkeleton
       v-if="!fileIsLoading"
       :file-id="fileId"
-      :only-preview="onlypreview"
+      :only-preview="true"
       :locale="locale"/>
 
     <!-- PREVIEWS CSV / CARDS WIKI -->
@@ -151,7 +151,7 @@
         :wiki-raw="wikiRaw"
         :items-total="wikiItems && wikiItems.length"
         :locale="locale"
-        :only-preview="onlypreview"
+        :only-preview="true"
         :debug="debug"/>
     </div>
 

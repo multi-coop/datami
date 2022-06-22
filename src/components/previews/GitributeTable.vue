@@ -92,6 +92,9 @@
       <div v-if="debug">
         filterTags : <code>{{ filterTags }}</code>
       </div>
+      <div v-if="debug">
+        dataChanges: <code>{{ dataChanges }}</code>
+      </div>
 
       <!-- TABLE -->
       <div
@@ -227,6 +230,7 @@
                   <PreviewCell
                     v-else
                     :value="props.row[col.field]"
+                    :is-diff-view="true"
                     :field="col"
                     :locale="locale"/>
                 </div>
@@ -267,6 +271,7 @@
             :items-per-row="itemsPerRow"
             :items="dataEditedPaginated"
             :locale="locale"
+            @action="processAction"
             @updateCellValue="emitUpdate"/>
         </div>
       </div>
@@ -382,24 +387,6 @@
               <pre><code>{{ dataEdited }}</code></pre>
             </p>
           </div>
-          <div
-            v-if="true"
-            class="column is-3">
-            <p>
-              changesData:
-              <br>
-              <pre><code>{{ changesData }}</code></pre>
-            </p>
-          </div>
-          <div
-            v-if="true"
-            class="column is-3">
-            <p>
-              changesColumns:
-              <br>
-              <pre><code>{{ changesColumns }}</code></pre>
-            </p>
-          </div>
           <!-- ORIGINAL -->
           <div
             v-if="false"
@@ -426,7 +413,14 @@
 </template>
 
 <script>
-import { mixinGlobal, mixinIcons, mixinDiff, mixinCsv, mixinPagination, mixinConsolidation } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinIcons,
+  mixinDiff,
+  mixinCsv,
+  mixinPagination,
+  mixinConsolidation
+} from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
 
@@ -487,14 +481,6 @@ export default {
       type: Array
     },
     columnsEdited: {
-      default: undefined,
-      type: Array
-    },
-    changesData: {
-      default: undefined,
-      type: Array
-    },
-    changesColumns: {
       default: undefined,
       type: Array
     },
@@ -664,55 +650,13 @@ export default {
       }
       return pagination
     },
-    dataEditedFiltered () {
-      let data = [...this.dataEdited]
-
-      // console.log('\nC > GitributeTable > dataEditedFiltered > this.columnsForView : ', this.columnsForView)
-      const colFields = this.columnsForView.map(col => col.field)
-      // console.log('C > GitributeTable > dataEditedFiltered > colFields : ', colFields)
-
-      const searchStr = this.searchText
-      // console.log('C > GitributeTable > dataEditedFiltered > searchStr : ', searchStr)
-      const filterTags = this.filterTags
-      // console.log('C > GitributeTable > dataEditedFiltered > filterTags : ', filterTags)
-      // const filterTagsFields = filterTags.map(f => f.field) || []
-      // console.log('C > GitributeTable > dataEditedFiltered > filterTagsFields : ', filterTagsFields)
-
-      // filter out data
-      data = data.filter(row => {
-        const hasSearchVal = searchStr ? [] : [true]
-        const hasFilterValues = [true]
-        // console.log('\nC > GitributeTable > dataEditedFiltered > row : ', row)
-
-        for (const field in colFields) {
-          // console.log('C > GitributeTable > dataEditedFiltered > field : ', field)
-          const rowVal = row[field].toString().toLowerCase()
-          // console.log('C > GitributeTable > dataEditedFiltered > rowVal : ', rowVal)
-          // search text
-          if (searchStr) {
-            const cellHasSearch = rowVal.includes(searchStr.toLowerCase())
-            hasSearchVal.push(cellHasSearch)
-          }
-        }
-        // filter tags
-        filterTags.forEach(filterTag => {
-          // if (filterTagsFields.includes(field)) {
-          // const filterTag = filterTags.find(f => f.field === field)
-          const rowVal = row[filterTag.field].toString().toLowerCase()
-          const filterVal = filterTag.value.toLowerCase()
-          const hasFilterVal = rowVal && rowVal.includes(filterVal)
-          hasFilterValues.push(hasFilterVal)
-        })
-
-        const boolSearch = hasSearchVal.some(b => b)
-        const boolFilters = hasFilterValues.every(b => b)
-
-        return boolSearch && boolFilters
-      })
+    dataFiltered () {
+      const data = this.filterData(this.data)
       return data
     },
-    totalItemsDataEdited () {
-      return this.dataEditedFiltered.length
+    dataEditedFiltered () {
+      const data = this.filterData(this.dataEdited)
+      return data
     },
     dataEditedSorted () {
       let data = [...this.dataEditedFiltered]
@@ -732,14 +676,6 @@ export default {
       }
       return data
     },
-    dataEditedPaginated () {
-      const data = [...this.dataForView]
-      const page = this.currentPage
-      const perPage = this.itemsPerPage
-      // console.log('\nC > GitributeTable > dataEditedPaginated > page : ', page)
-      // console.log('C > GitributeTable > dataEditedPaginated > perPage : ', perPage)
-      return this.paginate(data, perPage, page)
-    },
     dataForView () {
       let data
       const dataEditedSorted = this.dataEditedSorted
@@ -750,7 +686,8 @@ export default {
           break
         case 'diff':
           editedIndices = dataEditedSorted.map(r => r.id)
-          originalIndices = this.data.map(r => r.id)
+          originalIndices = this.dataFiltered.map(r => r.id)
+
           concat = [...editedIndices, ...originalIndices]
           uniquesIndices = [...new Set(concat)]
           // console.log('\nC > GitributeTable > dataForView > diff > uniquesIndices : ', uniquesIndices)
@@ -767,6 +704,17 @@ export default {
           break
       }
       return data
+    },
+    dataEditedPaginated () {
+      const data = [...this.dataForView]
+      const page = this.currentPage
+      const perPage = this.itemsPerPage
+      // console.log('\nC > GitributeTable > dataEditedPaginated > page : ', page)
+      // console.log('C > GitributeTable > dataEditedPaginated > perPage : ', perPage)
+      return this.paginate(data, perPage, page)
+    },
+    totalItemsDataEdited () {
+      return this.dataEditedFiltered.length
     },
     columnsForView () {
       let columns
@@ -895,9 +843,62 @@ export default {
         class: classTd
       }
     },
+    filterData (dataset) {
+      let data = [...dataset]
+      // console.log('\nC > GitributeTable > dataEditedFiltered > this.columnsForView : ', this.columnsForView)
+      const colFields = this.columnsForView.map(col => col.field)
+      // console.log('C > GitributeTable > dataEditedFiltered > colFields : ', colFields)
+
+      const searchStr = this.searchText
+      // console.log('C > GitributeTable > dataEditedFiltered > searchStr : ', searchStr)
+      const filterTags = this.filterTags
+      // console.log('C > GitributeTable > dataEditedFiltered > filterTags : ', filterTags)
+      // const filterTagsFields = filterTags.map(f => f.field) || []
+      // console.log('C > GitributeTable > dataEditedFiltered > filterTagsFields : ', filterTagsFields)
+
+      // filter out data
+      data = data.filter(row => {
+        const hasSearchVal = searchStr ? [] : [true]
+        const hasFilterValues = [true]
+        // console.log('\nC > GitributeTable > dataEditedFiltered > row : ', row)
+
+        for (const field in colFields) {
+          // console.log('C > GitributeTable > dataEditedFiltered > field : ', field)
+          const rowVal = row[field] && row[field].toString().toLowerCase()
+          // console.log('C > GitributeTable > dataEditedFiltered > rowVal : ', rowVal)
+          // search text
+          if (searchStr) {
+            const cellHasSearch = rowVal && rowVal.includes(searchStr.toLowerCase())
+            hasSearchVal.push(cellHasSearch)
+          }
+        }
+        // filter tags
+        filterTags.forEach(filterTag => {
+          // if (filterTagsFields.includes(field)) {
+          // const filterTag = filterTags.find(f => f.field === field)
+          const rowVal = row[filterTag.field]
+          const rowValLow = rowVal && rowVal.toString().toLowerCase()
+          const filterVal = filterTag.value.toLowerCase()
+          const hasFilterVal = rowValLow && rowValLow.includes(filterVal)
+          hasFilterValues.push(hasFilterVal)
+        })
+
+        const boolSearch = hasSearchVal.some(b => b)
+        const boolFilters = hasFilterValues.every(b => b)
+
+        return boolSearch && boolFilters
+      })
+      return data
+    },
     async processAction (event) {
       // console.log('\nC > GitributeTable > processAction > event : ', event)
       switch (event.action) {
+        // ADD TAG TO ENUM
+        case 'addTagToEnum':
+          // console.log('\nC > GitributeTable > processAction > event : ', event)
+          this.$emit('addTagToEnum', event.value)
+          break
+
         // ADD ROW
         case 'openAddRowDialog':
           this.showAddRowDialog = true
@@ -960,7 +961,7 @@ export default {
           await this.consolidateRow(event)
           break
         case 'cancelConsolidation':
-          console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
+          // console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
           // this.openedDetails = this.openedDetails.filter(id => id !== event.rowId)
           this.closeConsolidationDetail(event.rowId)
           break
@@ -971,58 +972,8 @@ export default {
       }
     },
     emitUpdate (event) {
-      console.log('C > GitributeTable > emitUpdate > event : ', event)
+      // console.log('C > GitributeTable > emitUpdate > event : ', event)
       this.$emit('updateEdited', event)
-    },
-    getCharDiff (content, edited) {
-      const diffStr = this.diffWords(content, edited)
-      return diffStr
-    },
-    getDiffHtmlChars (isHeader, wasAdded, field, val, rowId) {
-      // console.log('\nC > GitributeTable > getDiffHtmlChars > isHeader : ', isHeader)
-      // console.log('C > GitributeTable > getDiffHtmlChars > wasAdded : ', wasAdded)
-      // console.log('C > GitributeTable > getDiffHtmlChars > field : ', field)
-      // console.log('C > GitributeTable > getDiffHtmlChars > rowId : ', rowId)
-      // console.log('C > GitributeTable > getDiffHtmlChars > val : ', val)
-      let oldVal, newVal
-      const changes = this.isInChanges(isHeader, wasAdded, field, rowId)
-      // console.log('C > GitributeTable > getDiffHtmlChars > changes : ', changes)
-      const wasDeleted = changes.action === 'deleted'
-      // console.log('C > GitributeTable > getDiffHtmlChars > wasDeleted : ', wasDeleted)
-      if (wasAdded && !wasDeleted) {
-        oldVal = ''
-        newVal = val || ''
-      } else if (!wasAdded && wasDeleted) {
-        oldVal = val || ''
-        newVal = ''
-      } else {
-        oldVal = changes.oldVal
-        newVal = changes.val
-      }
-      // console.log('C > GitributeTable > getDiffHtmlChars > valDef : ', valDef)
-
-      const charDiff = this.getCharDiff(oldVal, newVal)
-      const diffText = this.diffHtmlChars(charDiff)
-      return diffText
-    },
-    isInChanges (isHeader, wasAdded, field, rowId) {
-      // const isFirstRow = rowId === '0'
-      // isFirstRow && console.log('\nC > GitributeTable > isInChanges > isHeader : ', isHeader)
-      // isFirstRow && console.log('C > GitributeTable > isInChanges > wasAdded : ', wasAdded)
-      // isFirstRow && console.log('C > GitributeTable > isInChanges > field : ', field)
-      // isFirstRow && console.log('C > GitributeTable > isInChanges > rowId : ', rowId)
-      let bool, boolDeleted
-      if (isHeader) {
-        bool = this.changesColumns.find(h => h.field === field)
-      } else {
-        // isFirstRow && console.log('C > GitributeTable > isInChanges > this.changesData : ', this.changesData)
-        bool = this.changesData.find(r => r.field === field && r.id === rowId)
-        boolDeleted = this.changesData.find(r => r.id === rowId && r.action === 'deleted')
-        if (boolDeleted) bool = boolDeleted
-      }
-      if (wasAdded) bool = true
-      // isFirstRow && console.log('C > GitributeTable > isInChanges > bool : ', bool)
-      return bool
     },
     processSearch (search) {
       // console.log('C > GitributeTable > processSearch > search : ', search)
@@ -1061,14 +1012,14 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
       // this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
       // this.openedDetails = this.openedDetails.filter(id => id !== rowId)
 
-      console.log('\nC > GitributeTable > consolidateRow > this.consolidationData : ', this.consolidationData)
+      // console.log('\nC > GitributeTable > consolidateRow > this.consolidationData : ', this.consolidationData)
       // console.log('C > GitributeTable > consolidateRow > this.columns : ', this.columns)
       const rowData = this.dataEdited.find(row => row.id === rowId)
       // console.log('C > GitributeTable > consolidateRow > rowData : ', rowData)
@@ -1083,13 +1034,13 @@ export default {
           value: rowDataValue
         }
       })
-      console.log('C > GitributeTable > sourceFields : ', sourceFields)
+      // console.log('C > GitributeTable > sourceFields : ', sourceFields)
 
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
       respConsolidation.fromApi = consolidationSettings.api.api_name
       // respConsolidation.rowData = rowData
-      console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
+      // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
       // update loaders
       this.consolidating = this.consolidating.filter(id => id !== rowId)
@@ -1154,9 +1105,11 @@ export default {
 }
 .g-td-boolean {
   min-width: 30px;
+  text-align: center !important;
 }
 .g-td-string-tag {
   min-width: 100px;
+  text-align: center !important;
 }
 .g-td-string-tags {
   min-width: 275px;

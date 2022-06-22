@@ -3,7 +3,8 @@
     hoverable
     arrowless
     right
-    tag="div">
+    tag="div"
+    class="CustomFilterDropdown">
     <!-- LABEL SLOT -->
     <template #label>
       <b-tooltip
@@ -22,10 +23,28 @@
       </b-tooltip>
     </template>
 
+    <!-- RESET FIELD FILTERS -->
+    <b-navbar-item
+      v-if="isActiveField"
+      class="pr-2"
+      @click.native="removeAllFilters">
+      <b-icon
+        icon="close-thick"
+        class="mr-2"
+        size="is-small"/>
+      <span class="has-text-weight-bold">
+        {{ t('filters.resetFilter', locale) }}
+      </span>
+    </b-navbar-item>
+    <hr
+      v-if="isActiveField"
+      class="mx-0 mt-2 mb-3">
+
     <!-- TAG VALUES LOOP -->
     <b-navbar-item
       v-for="filterVal, idx in filter.enumArr"
       :key="`nav-filter-${fileId}-${filter.field}-${idx}-${filterVal}`"
+      class="pr-2"
       @click.native="updateActiveTag(filterVal)">
       <b-icon
         v-if="isActive(filterVal)"
@@ -34,20 +53,7 @@
         icon="close-thick"/>
       <span
         :class="`${isActive(filterVal) ? 'has-text-weight-bold' : '' }`">
-        {{ filterVal }}
-      </span>
-    </b-navbar-item>
-
-    <hr class="mx-0">
-
-    <b-navbar-item
-      @click.native="removeAllFilters">
-      <b-icon
-        icon="close-thick"
-        class="mr-2"
-        size="is-small"/>
-      <span class="has-text-weight-bold">
-        {{ t('filters.resetFilter', locale) }}
+        {{ trimText(filterVal, 50) }}
       </span>
     </b-navbar-item>
   </b-navbar-dropdown>
@@ -120,3 +126,35 @@ export default {
   }
 }
 </script>
+
+<style>
+.CustomFilterDropdown > .navbar-dropdown {
+  max-height: 275px;
+  overflow: auto;
+  padding-bottom: 1.5em;
+
+  /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
+  background:
+    /* Shadow covers */
+    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+
+  background:
+    /* Shadow covers */
+    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
+
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+
+</style>

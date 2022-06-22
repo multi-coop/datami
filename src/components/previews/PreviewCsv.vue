@@ -85,12 +85,11 @@
           :columns="dataColumns"
           :data-edited="edited"
           :columns-edited="editedColumns"
-          :changes-data="changesData"
-          :changes-columns="changesColumns"
           :items-total="itemsTotal || edited.length"
           :locale="locale"
           :debug="debug"
           @updateEdited="updateEdited"
+          @addTagToEnum="addTagToEnum"
           @deleteRows="deleteRowsEvent"
           @addRow="addRowEvent"
           @sortRows="sortEdited"/>
@@ -175,9 +174,7 @@ export default {
       data: null,
       dataColumns: undefined,
       edited: undefined,
-      editedColumns: undefined,
-      changesData: [],
-      changesColumns: []
+      editedColumns: undefined
     }
   },
   computed: {
@@ -288,7 +285,7 @@ export default {
       // console.log('C > PreviewCsv > buildColumns > dataRaw : ', dataRaw)
       // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
-      const schema = this.fileOptions.schema
+      const schema = this.fileOptions && this.fileOptions.schema
       // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
       const fieldsCustomProperties = this.fileOptions.customProps && this.fileOptions.customProps.fields
       // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
@@ -392,22 +389,30 @@ export default {
       }
       this.setChanges(changeObj, isHeader)
     },
+    addTagToEnum (event) {
+      // console.log('\nC > PreviewCsv > addTagToEnum > event : ', event)
+      const editedColumns = this.editedColumns.map(col => {
+        return col.field === event.field.field ? event.field : col
+      })
+      // console.log('C > PreviewCsv > addTagToEnum > editedColumns : ', editedColumns)
+      this.editedColumns = editedColumns
+    },
     setChanges (changeObj, isHeader) {
       let copyChanges
       let changeId //, isDeleted
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
+      // console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
       // console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
       if (isHeader) {
         changeId = changeObj.field
         // create a filtered copy of changesColumns
-        copyChanges = [...this.changesColumns]
+        copyChanges = [...this.fieldsChanges]
         copyChanges = copyChanges.filter(ch => ch.field !== changeId)
       } else {
         changeId = changeObj.id
         // create a filtered copy of changesData
-        copyChanges = [...this.changesData]
+        copyChanges = [...this.dataChanges]
         if (action === 'diff') {
           copyChanges = copyChanges.filter(ch => {
             const sameId = ch.id === changeId
@@ -430,11 +435,18 @@ export default {
       // console.log('C > PreviewCsv > setChanges > copyChanges : ', copyChanges)
 
       // set in local store
-      if (isHeader) {
-        this.changesColumns = copyChanges
-      } else {
-        this.changesData = copyChanges
+      // if (isHeader) {
+      //   this.changesColumns = copyChanges
+      // } else {
+      //   this.changesData = copyChanges
+      // }
+      // set in global store
+      const changesPayload = {
+        fileId: this.fileId,
+        isFields: isHeader,
+        changes: copyChanges
       }
+      this.updateFileChanges(changesPayload)
     },
     addRowEvent (event) {
       // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
