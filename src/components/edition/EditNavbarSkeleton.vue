@@ -2,7 +2,7 @@
   <div class="EditNavbarSkeleton gitribute-component container">
     <div
       v-if="gitObj"
-      class="columns is-multiline is-mobile is-centered mb-2">
+      class="columns is-multiline is-mobile is-justify-content-end mb-2">
       <!-- UPLOAD FILE -->
       <div
         v-if="!onlyPreview"
@@ -15,7 +15,7 @@
 
       <!-- EDIT VIEW CHOICES -->
       <div
-        :class="`column is-3 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
+        :class="`column is-4 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
         <EditModeBtns
           :only-preview="onlyPreview"
           :file-id="fileId"
