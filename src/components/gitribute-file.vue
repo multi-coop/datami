@@ -277,7 +277,6 @@ export default {
       const schema = JSON.parse(schemaData)
       // console.log('C > GitributeFile > beforeMount > schema : ', schema)
       fileSchema = { ...schema, file: fileSchema.file }
-      // fileOptions.schema = schema
     }
     // get custom props if any
     let fileCustomProps = fileOptions['fields-custom-properties']
@@ -289,17 +288,11 @@ export default {
       fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
 
-    // get consolidation settings if any
-    // let fileConsolidation = fileOptions.consolidation
-    // fileConsolidation = fileConsolidation && fileConsolidation.filter(fs => !!fs.activate)
-    // console.log('C > GitributeFile > beforeMount > fileConsolidation : ', fileConsolidation)
-
     // update fileOptions with schema and consolidation settings
     fileOptions = {
       ...fileOptions,
       ...fileSchema && { schema: fileSchema },
       ...fileCustomProps && { customProps: fileCustomProps }
-      // ...fileConsolidation && { consolidation: fileConsolidation }
     }
 
     // add fileOptions in store
@@ -309,7 +302,6 @@ export default {
     // console.log('\nC > GitributeFile > mounted > this.gitInfos : ', this.gitInfos)
     // console.log('C > GitributeFile > mounted > this.gitObj : ', this.gitObj)
     // console.log('C > GitributeFile > mounted > this.usertoken : ', this.usertoken)
-    // this.fileInfos = await this.getFileData(this.gitObj)
     // console.log('C > GitributeFile > mounted > this.fileInfos : ', this.fileInfos)
 
     const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
