@@ -5,12 +5,12 @@
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <!-- <div class="column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-tablet"> -->
-        <div class=" filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered has-text-left-desktop mb-2">
+        <div class=" filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
           <FileTitle
+            class="mb-3"
             :show-file-infos="showFileInfos"
             :title="title"
             :file-id="fileId"
