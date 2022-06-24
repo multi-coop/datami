@@ -5,7 +5,7 @@
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="title-viewmodes-explowiki column is-9-desktop is-12-mobile is-flex is-direction-row-desktop is-direction-column-tablet">
+        <div class="filetitle-and-viewmodes column is-9-desktop is-12-mobile is-flex is-direction-row-desktop is-direction-column-tablet">
           <ViewModeBtns
             v-if="fileOptions"
             :file-id="fileId"
@@ -451,10 +451,10 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .title-and-viewmodes{
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
+  .filetitle-and-viewmodes{
+    justify-content: center;
+    flex-direction: column-reverse;
+    align-items: center;
   }
   .usernavbar {
     justify-content: center !important;
