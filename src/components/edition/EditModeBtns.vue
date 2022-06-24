@@ -100,4 +100,10 @@ export default {
   justify-content: center !important;
 }
 
+@media(max-width: 768px){
+  .EditModeBtns{
+    justify-content: end !important;
+  }
+}
+
 </style>

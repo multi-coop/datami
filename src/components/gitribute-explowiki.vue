@@ -5,7 +5,7 @@
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-tablet">
+        <div class="filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
           <ViewModeBtns
             v-if="fileOptions"
             :file-id="fileId"
@@ -19,7 +19,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="column is-12-mobile is-4-tablet is-3-desktop is-flex is-direction-row is-align-items-center is-justify-content-center">
+        <div class="usernavbar column is-12-mobile is-4-tablet is-3-desktop is-flex is-direction-row is-align-items-center is-justify-content-end">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -448,6 +448,17 @@ export default {
 
 .no-text-transform {
   text-transform: none!important;
+}
+
+@media (max-width: 768px) {
+  .filetitle-and-viewmodes{
+    justify-content: center;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  .usernavbar {
+    justify-content: center !important;
+  }
 }
 
 </style>
