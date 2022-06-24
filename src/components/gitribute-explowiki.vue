@@ -5,7 +5,7 @@
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="title-viewmodes-explowiki column is-half-desktop is-12-mobile is-flex is-direction-row-desktop is-direction-column-tablet">
+        <div class="title-viewmodes-explowiki column is-9-desktop is-12-mobile is-flex is-direction-row-desktop is-direction-column-tablet">
           <ViewModeBtns
             v-if="fileOptions"
             :file-id="fileId"
@@ -19,7 +19,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="column is-half-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end is-justify-content-center-mobile">
+        <div class="column is-3-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end is-justify-content-center-mobile">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
