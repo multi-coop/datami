@@ -19,7 +19,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="column is-3-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end is-justify-content-center-mobile">
+        <div class="usernavbar column is-3-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end is-justify-content-center-mobile">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
