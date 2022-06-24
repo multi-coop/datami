@@ -40,7 +40,7 @@
 
     <!-- NOTIFICATIONS -->
     <!-- <pre><code>{{ notifications }}</code></pre> -->
-    <div
+    <!-- <div
       v-if="notifications && notifications.length"
       class="mb-6">
       <NotificationInfos
@@ -49,10 +49,10 @@
         :file-id="fileId"
         :notif="notif"
         :locale="locale"/>
-    </div>
+    </div> -->
 
     <!-- ERRORS -->
-    <div
+    <!-- <div
       v-if="errors && errors.length"
       class="mb-6">
       <NotificationErrors
@@ -61,7 +61,7 @@
         :file-id="fileId"
         :error="error"
         :locale="locale"/>
-    </div>
+    </div> -->
 
     <!-- FILE NAVBAR BUTTONS -->
     <!-- {{ fileOptions }} -->
@@ -145,8 +145,8 @@ import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import UserOptions from '@/components/user/UserOptions'
 
-import NotificationInfos from '@/components/notifications/NotificationInfos'
-import NotificationErrors from '@/components/notifications/NotificationErrors'
+// import NotificationInfos from '@/components/notifications/NotificationInfos'
+// import NotificationErrors from '@/components/notifications/NotificationErrors'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import DialogFileInfos from '@/components/previews/DialogFileInfos'
@@ -165,8 +165,8 @@ export default {
     FileTitle,
     ViewModeBtns,
     UserOptions,
-    NotificationInfos,
-    NotificationErrors,
+    // NotificationInfos,
+    // NotificationErrors,
     EditNavbarSkeleton,
     DialogFileInfos,
     DialogUploadFile,
@@ -386,7 +386,7 @@ export default {
     align-items: center;
   }
   .usernavbar{
-    justify-content: center;
+    justify-content: center !important;
   }
 }
 
