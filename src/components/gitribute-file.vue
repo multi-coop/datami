@@ -145,8 +145,8 @@ import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
 import UserOptions from '@/components/user/UserOptions'
 
-// import NotificationInfos from '@/components/notifications/NotificationInfos'
-// import NotificationErrors from '@/components/notifications/NotificationErrors'
+import NotificationInfos from '@/components/notifications/NotificationInfos'
+import NotificationErrors from '@/components/notifications/NotificationErrors'
 
 import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
 import DialogFileInfos from '@/components/previews/DialogFileInfos'
@@ -165,8 +165,8 @@ export default {
     FileTitle,
     ViewModeBtns,
     UserOptions,
-    // NotificationInfos,
-    // NotificationErrors,
+    NotificationInfos,
+    NotificationErrors,
     EditNavbarSkeleton,
     DialogFileInfos,
     DialogUploadFile,
