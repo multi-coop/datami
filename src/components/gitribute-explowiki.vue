@@ -5,7 +5,7 @@
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
-        <div class="column is-half-desktop is-12-mobile has-text-centered-mobile">
+        <div class="title-viewmodes-explowiki column is-half-desktop is-12-mobile is-flex is-direction-row-desktop is-direction-column-tablet">
           <ViewModeBtns
             v-if="fileOptions"
             :file-id="fileId"
@@ -19,7 +19,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="column is-half-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-center">
+        <div class="column is-half-desktop is-12-mobile is-flex is-direction-row is-align-items-center is-justify-content-end is-justify-content-center-mobile">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -448,6 +448,17 @@ export default {
 
 .no-text-transform {
   text-transform: none!important;
+}
+
+@media (max-width: 768px) {
+  .title-viewmodes-explowiki{
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .is-justify-content-center-mobile{
+    justify-content: center !important;
+  }
 }
 
 </style>
