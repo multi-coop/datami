@@ -39,7 +39,7 @@
       @closeDialogFileInfos="showFileInfos = false"/>
 
     <!-- NOTIFICATIONS -->
-    <!-- <pre><code>{{ notifications }}</code></pre>
+    <pre><code>{{ notifications }}</code></pre>
     <div
       v-if="notifications && notifications.length"
       class="mb-6">
@@ -49,10 +49,10 @@
         :file-id="fileId"
         :notif="notif"
         :locale="locale"/>
-    </div> -->
+    </div>
 
     <!-- ERRORS -->
-    <!-- <div
+    <div
       v-if="errors && errors.length"
       class="mb-6">
       <NotificationErrors
@@ -61,7 +61,7 @@
         :file-id="fileId"
         :error="error"
         :locale="locale"/>
-    </div> -->
+    </div>
 
     <!-- FILE NAVBAR BUTTONS -->
     <!-- {{ fileOptions }} -->
