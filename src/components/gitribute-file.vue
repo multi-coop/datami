@@ -6,7 +6,7 @@
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <!-- <div class="column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left has-text-centered-tablet"> -->
-        <div class=" filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop is-justify-content-center-mobile has-text-centered-tablet">
+        <div class=" filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered has-text-left-desktop mb-2">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -39,8 +39,8 @@
       @closeDialogFileInfos="showFileInfos = false"/>
 
     <!-- NOTIFICATIONS -->
-    <!-- <pre><code>{{ notifications }}</code></pre> -->
-    <!-- <div
+    <!-- <pre><code>{{ notifications }}</code></pre>
+    <div
       v-if="notifications && notifications.length"
       class="mb-6">
       <NotificationInfos
@@ -367,7 +367,7 @@ export default {
 
 <style>
 
-.no-text-transform {
+.no-text-transform{
   text-transform: none!important;
 }
 
