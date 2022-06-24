@@ -451,7 +451,7 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .title-viewmodes-explowiki{
+  .tiletitle-and-viewmodes {
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
