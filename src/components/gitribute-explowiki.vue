@@ -456,7 +456,7 @@ export default {
     justify-content: center !important;
     align-items: center !important;
   }
-  .is-justify-content-center-mobile{
+  .usernavbar {
     justify-content: center !important;
   }
 }
