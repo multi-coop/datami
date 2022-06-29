@@ -249,6 +249,7 @@
             </b-table-column>
 
             <!-- ROWS DETAIL FOR CONSOLIDATION -->
+            <!-- ROWS DETAIL FOR CONSOLIDATION -->
             <template #detail="props">
               <PreviewConsolidation
                 v-if="currentEditViewMode === 'edit' && getRowConsolidation(props.row.id)"
