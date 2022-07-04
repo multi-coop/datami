@@ -1013,7 +1013,7 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
@@ -1040,11 +1040,15 @@ export default {
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
       respConsolidation.fromApi = consolidationSettings.api.api_name
+
       // respConsolidation.rowData = rowData
       // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
       // update loaders
       this.consolidating = this.consolidating.filter(id => id !== rowId)
+      if (respConsolidation === undefined) {
+        return 'GitributeTABLE > ERROR RESPCONSOLIDATION !'
+      }
       this.consolidationData.push(respConsolidation)
       this.openedDetails.push(rowId)
     },
