@@ -119,9 +119,6 @@ export default {
   },
   computed: {
     activeConsolidationItems () {
-      if (!this.consolidationData.errors.length === 0) {
-        return console.log('PreviewConsolidation > Computed > activeConsolidationItems > this.consolidationData : ERROR ', this.consolidationData)
-      }
       return this.consolidationData.consolidation.filter(cd => !!cd.toField)
     },
     hasSelection () {

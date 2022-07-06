@@ -3,11 +3,6 @@
     :class="`GitributeFile gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
     <div
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
-      <!-- NOTIFICATION  -->
-      <div :class="`notification is-danger ${isVisible ? '' : 'hidden' }`">
-        <button class="delete"/>
-        ERROR : SIREN NOT FOUND OR INCORRECT. <strong> VERYFY THE INPUT.</strong>
-      </div>
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <div class="filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
@@ -232,8 +227,7 @@ export default {
       fileRaw: undefined,
       fileClientRaw: undefined,
       showFileInfos: false,
-      showUploadFileDialog: false,
-      isVisible: false
+      showUploadFileDialog: false
     }
   },
   watch: {
@@ -375,10 +369,6 @@ export default {
 
 .no-text-transform{
   text-transform: none!important;
-}
-
-.hidden{
-  display: none;
 }
 
 @media(max-width:768px){

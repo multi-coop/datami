@@ -3,7 +3,7 @@
     :class="`EditCell gitribute-component gitribute-cell is-flex is-align-items-center ${field && ['boolean', 'gitribute'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
     <!-- DEBUGGING -->
     <b-tooltip
-      v-if="true"
+      v-if="debug"
       multilined
       append-to-body
       type="is-warning">
