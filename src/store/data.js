@@ -250,7 +250,7 @@ export const data = {
     },
     updateReqErrors ({ commit }, { fileId, errors, addToErrors }) {
       // console.log('\nS-data > A > updateReqErrors > fileId : ', fileId)
-      console.log('S-data > A > updateReqErrors > errors : ', errors)
+      // console.log('S-data > A > updateReqErrors > errors : ', errors)
       // console.log('S-data > A > updateReqErrors > addToErrors : ', addToErrors)
       const reqErrorData = {
         uuid: fileId,

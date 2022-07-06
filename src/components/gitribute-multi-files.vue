@@ -200,7 +200,7 @@ export default {
     this.tabsVertical = this.defaultDisplay === 'vertical'
 
     // set in store
-    console.log('\nC > GitributeMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
+    // console.log('\nC > GitributeMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
     this.addFileOptions(multiFilesOptions)
   },
   methods: {

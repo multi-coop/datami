@@ -29,8 +29,6 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
     }
 
     errors.push(err)
-    // this.getReqErrors(this.fileId)
-    return console.log('consolidationUtils > f (getConsolidationApiUrl) > ERROR !', resp)
   } else {
     const resultsMapping = consolidationData.api.results_fields
     consolidation = resultsMapping.map(m => {

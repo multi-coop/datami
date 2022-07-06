@@ -424,7 +424,7 @@ import {
 } from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
-
+import { mapActions } from 'vuex'
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import ButtonSortByField from '@/components/sorting/ButtonSortByField'
 import FilterTags from '@/components/filters/FilterTags'
@@ -818,7 +818,11 @@ export default {
     this.itemsPerRow = pagination.itemsPerRow
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
+
   methods: {
+    ...mapActions({
+      updateReqErrors: 'git-data/updateReqErrors'
+    }),
     columnThAttrs (column) {
       // console.log('\nC > GitributeTable > columnThAttrs > column : ', column)
       return {
@@ -1046,11 +1050,12 @@ export default {
 
       // update loaders
       this.consolidating = this.consolidating.filter(id => id !== rowId)
-      if (respConsolidation === undefined) {
-        return 'GitributeTABLE > ERROR RESPCONSOLIDATION !'
+      if (!respConsolidation.consolidation) {
+        this.updateReqErrors({ fileId: this.fileId, errors: respConsolidation.errors, addToErrors: true })
+      } else {
+        this.consolidationData.push(respConsolidation)
+        this.openedDetails.push(rowId)
       }
-      this.consolidationData.push(respConsolidation)
-      this.openedDetails.push(rowId)
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)
