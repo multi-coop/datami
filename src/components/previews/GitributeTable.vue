@@ -1016,7 +1016,7 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
