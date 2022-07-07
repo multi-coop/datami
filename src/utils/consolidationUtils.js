@@ -25,7 +25,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
     const err = {
       function: 'getConsolidationApiUrl',
       code: resp.status,
-      message: resp.message || resp.statusText
+      message: resp
     }
 
     errors.push(err)

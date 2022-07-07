@@ -34,7 +34,7 @@
             {{ t('errors.errorMessage', locale) }}
           </h4>
           <p>
-            {{ error.message }}
+            {{ error.message.message || error.message.statusText }}
           </p>
         </div>
       </div>
