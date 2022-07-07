@@ -34,7 +34,7 @@
             {{ t('errors.errorMessage', locale) }}
           </h4>
           <p>
-            {{ error.message.message || error.message.statusText }}
+            <pre><code> {{ getErrorMessage(error.message) }} </code></pre>
           </p>
         </div>
       </div>
@@ -65,6 +65,11 @@ export default {
   data () {
     return {
       isActive: true
+    }
+  },
+  methods: {
+    getErrorMessage (error) {
+      return error.message || error.statusText || error
     }
   }
 }
