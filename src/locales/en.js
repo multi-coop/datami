@@ -5,12 +5,30 @@ export default {
     test: 'test nested global',
     link: 'Link',
     yes: 'yes',
-    no: 'no'
+    no: 'no',
+    value: 'Value',
+    noValue: '(no value)',
+    oldValue: 'Old value',
+    newValue: 'New value',
+    thanks: 'Thanks for using {{gitributeRepo}} !',
+    understood: 'Understood'
+  },
+  tabs: {
+    switchPosition: 'Change tabs position'
   },
   git: {
     provider: 'Provider',
     branch: 'Branch',
-    commitBranch: 'Commit branch'
+    sourceBranch: 'Source branch',
+    newBranch: 'New branch',
+    commitBranch: 'Commit branch',
+    commitSuccess: 'Your contribution proposal has correctly been sent',
+    mergeRequestUrl: 'Link to the merge request',
+    mergeRequestUrlLink: 'Go to the merge request',
+    branchRef: 'Reference branch',
+    branchesUser: 'Your branches',
+    branchUrl: 'Link to the branch',
+    branchUrlLink: 'Check the file on the branch'
   },
   file: {
     text: 'text',
@@ -25,14 +43,16 @@ export default {
     fileUrlRaw: 'Source file URL (raw)',
     linkToFile: 'Link to the source file',
     linkToFileRaw: 'Link to the source file (raw)',
-    fileInfos: "File's informations"
+    fileInfos: "File's informations",
+    fileSchema: "File's schema",
+    fileCustomProps: "File's custom options"
   },
   preview: {
     edition: 'Edition',
     editView: 'Edit',
     diffView: 'Compare',
     previewView: 'Preview',
-    cardsView: 'List',
+    cardsView: 'Cards list',
     tableView: 'Table',
     showCardDetails: 'Show details',
     closeCardDetails: 'Close detailed card',
@@ -52,6 +72,8 @@ export default {
     send: 'Send',
     cancel: 'Cancel',
     search: 'Search',
+    expandCell: 'Expand cell content',
+    reduceCell: 'Minimize cell content',
     openLinkInNew: 'Open link in a new window',
     reloadFile: 'Reload the file',
     downloadFile: 'Download the file',
@@ -61,7 +83,17 @@ export default {
     clickOrDropFile: 'Drop your file or click to upload',
     changeLocale: 'Choose the language',
     changeToken: 'Change your user token',
-    commitChanges: 'Submit your modifications'
+    changeActiveBranch: 'Change your branch',
+    commitChanges: 'Submit your modifications',
+    consolidate: 'Consolidate this line',
+    selectConsolidationFields: 'Select the fields to update',
+    validateConsolidation: 'Validate the changes',
+    copyWidget: "To insert the widget in your website, copy the widget's html block",
+    widgetCopied: 'The widget code was copied to the clipboard',
+    addTag: 'Add a tag',
+    addTagHelp: 'Click on + to add your tag',
+    clearTag: 'Remove the tag',
+    clickForMoreTags: 'Click to see more tags'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -70,14 +102,17 @@ export default {
     label: 'Sort',
     sortBy: 'Sort by a field',
     sortAscending: 'Ascending sorting',
-    sortDescending: 'Descending sorting'
+    sortDescending: 'Descending sorting',
+    sortedAsc: 'Sorted, ascendent',
+    sortedDesc: 'Sorted, descendent'
   },
   filters: {
     label: 'Filter',
     filterBy: 'Filter by a field and a value',
     filterByField: 'Filter by the field',
+    resetFilter: 'Reset this filter',
     removeFilter: 'Remove this filter',
-    removeFilters: 'Reset all the filters'
+    removeFilters: 'Reset all filters'
   },
   pagination: {
     items: 'items',
@@ -92,14 +127,45 @@ export default {
     currentPage: 'Current page',
     itemsPerPage: 'items per page'
   },
+  field: {
+    field: 'Field',
+    label: 'Label',
+    type: 'Type',
+    title: 'Title',
+    description: 'Description',
+    category: 'Category',
+    string: 'String',
+    longtext: 'Long text',
+    link: 'Link',
+    email: 'Email',
+    geopoint: 'Geographic coordinate',
+    tag: 'Tag',
+    tags: 'Tags',
+    number: 'Number',
+    integer: 'Integer',
+    boolean: 'Boolean',
+    primaryKey: 'Primary key',
+    foreignKey: 'Foreign key',
+    ressource: 'Ressource',
+    ressourceValues: 'Ressource values',
+    definition: 'Definition',
+    gitribute: 'Special field',
+    consolidation: 'Consolidation'
+  },
   edit: {
-    importData: 'Import/overwrite the data',
+    uploadData: 'Import/overwrite the data',
     headerLocked: "This column's label is protected from writing"
+  },
+  consolidation: {
+    consolidationApi: 'Consolidation from the API',
+    apiFormat: 'API format',
+    sourceFields: 'Source data'
   },
   editCsv: {
     noSelect: 'None',
     noResult: 'No result',
     results: 'lines',
+    colType: 'Column type',
     addRow: 'Add a new row',
     addTheNewRow: 'Add the new row',
     importData: 'Import/overwrite the data',
@@ -149,14 +215,27 @@ export default {
     userEmail: 'Email',
     userMessage: 'Message'
   },
+  notifications: {
+    notif: 'Notification',
+    notifFunction: 'Notification from fonction',
+    notifCode: 'Response code',
+    notifMessage: 'Message'
+  },
   errors: {
     error: 'Error',
     errorFunction: 'Error from function',
     errorCode: 'Error code',
     errorMessage: 'Error message'
   },
+  widget: {
+    widgetCopiedMsg: 'The widget code for {{widgetName}}<br>with the title {{widgetTitle}}<br>was copied to your clipboard.',
+    widgetUse: 'You can now insert it to any html page of your choice.',
+    widgetCopied: 'Widget copied'
+  },
   credits: {
-    reclaim: 'An open source widget coded with 🤍  &nbsp; by',
+    reclaim: 'An open source widget',
+    byLove: 'coded with 🤍 ',
+    byCooperative: 'by the tech cooperative',
     code: 'Source code'
   }
 }

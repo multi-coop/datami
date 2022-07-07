@@ -37,18 +37,18 @@ export const deepAssign = (target, ...sources) => {
 }
 
 export const findFromPath = (path, obj, debug = false, separator = '.') => {
-  debug && console.log('U > globalUtils > findFromPath > path : ', path)
-  debug && console.log('U > globalUtils > findFromPath > obj : ', obj)
+  // debug && console.log('U > globalUtils > findFromPath > path : ', path)
+  // debug && console.log('U > globalUtils > findFromPath > obj : ', obj)
   const props = Array.isArray(path) ? path : path.split(separator)
-  debug && console.log('U > globalUtils > findFromPath > props : ', props)
+  // debug && console.log('U > globalUtils > findFromPath > props : ', props)
   const result = props.reduce((prev, curr) => {
-    debug && console.log('\nU > ... > globalUtils > findFromPath > prev : ', prev)
-    debug && console.log('U > ... > globalUtils > findFromPath > curr : ', curr)
+    // debug && console.log('\nU > ... > globalUtils > findFromPath > prev : ', prev)
+    // debug && console.log('U > ... > globalUtils > findFromPath > curr : ', curr)
     const temp = prev && prev[curr]
-    debug && console.log('U > ... > globalUtils > findFromPath > temp : ', temp)
+    // debug && console.log('U > ... > globalUtils > findFromPath > temp : ', temp)
     return temp
   }, obj)
-  debug && console.log('\nU > globalUtils > findFromPath > result : ', result)
+  // debug && console.log('\nU > globalUtils > findFromPath > result : ', result)
   return result
 }
 
@@ -98,8 +98,61 @@ export const paginate = (array, pageSize, pageNumber) => {
 }
 
 // TEXT UTILS
+export const defaultTagsSeparator = '-'
+
+export const FalseBooleanStrings = [
+  'no',
+  'non',
+  'niet',
+  'nope',
+  'nein',
+  'n',
+  'nan',
+  'no way',
+  'mé non',
+  'pas question',
+  'jamais de la vie',
+  'no f***ing way',
+  'naaa',
+  'no no no',
+  'no means no',
+  'false',
+  '0'
+]
+
+export const booleanFromValue = (val) => {
+  // console.log('U > booleanFromValue > val : ', val)
+  const valTrimmed = val && val.toString().trim().toLowerCase()
+  let bool = Boolean(valTrimmed)
+  if (FalseBooleanStrings.includes(valTrimmed)) {
+    bool = false
+  }
+  return bool
+}
 
 export const trimText = (str, maxLength = 25) => {
   if (str && str.length > maxLength) return `${str.slice(0, maxLength)}...`
   else return str
+}
+
+export const stringToColor = (str) => {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  let color = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xFF
+    color += ('00' + value.toString(16)).substr(-2)
+  }
+  return color
+}
+
+export const getContrastYIQ = (hexcolor) => {
+  hexcolor = hexcolor.replace('#', '')
+  const r = parseInt(hexcolor.substr(0, 2), 16)
+  const g = parseInt(hexcolor.substr(2, 2), 16)
+  const b = parseInt(hexcolor.substr(4, 2), 16)
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000
+  return (yiq >= 128) ? 'black' : 'white'
 }

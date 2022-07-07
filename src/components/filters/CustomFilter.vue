@@ -33,7 +33,7 @@
           {{ defaultLabel }}
         </option>
         <option
-          v-for="(h, i) in filter.choices"
+          v-for="(h, i) in filter.enumArr"
           :key="`${filter.field}-${i}`"
           :value="h">
           {{ trimText(h, 40) }}
@@ -59,11 +59,14 @@
 
 <script>
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
 export default {
   name: 'CustomFilter',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinGlobal,
+    mixinValue
+  ],
   props: {
     fileId: {
       default: null,

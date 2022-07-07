@@ -1,20 +1,20 @@
 <template>
   <div class="FileTitle gitribute-component">
-    <b-tooltip
-      :label="t('file.fileInfos', locale)"
-      type="is-dark"
-      position="is-right">
-      <div class="is-flex is-align-items-center">
-        <span class="mx-2 is-size-4">
-          {{ title }}
-        </span>
+    <div class="is-flex is-align-items-center">
+      <span class="mx-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop has-text-dark">
+        {{ title }}
+      </span>
+      <b-tooltip
+        :label="t('file.fileInfos', locale)"
+        type="is-dark"
+        position="is-top">
         <b-icon
           icon="information-outline"
           size="is-small"
           :class="`ml-1 mr-2 has-text-${showFileInfos ? 'black' : 'grey-light'}`"
           @click.native="toggleDialog"/>
-      </div>
-    </b-tooltip>
+      </b-tooltip>
+    </div>
   </div>
 </template>
 

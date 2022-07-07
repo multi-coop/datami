@@ -14,6 +14,7 @@ import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 
 import GitributeFile from './components/gitribute-file.vue'
 import GitributeExploWiki from './components/gitribute-explowiki.vue'
+import GitributeMultiFiles from './components/gitribute-multi-files.vue'
 
 Vue.config.productionTip = false
 
@@ -23,9 +24,11 @@ Vue.use(Buefy, {
 
 GitributeFile.store = store
 GitributeExploWiki.store = store
+GitributeMultiFiles.store = store
 
 Vue.use(vueCustomElement, {
   shadow: true
 })
 Vue.customElement('multi-gitribute-file', GitributeFile)
 Vue.customElement('multi-gitribute-explowiki', GitributeExploWiki)
+Vue.customElement('multi-gitribute-multi-files', GitributeMultiFiles)

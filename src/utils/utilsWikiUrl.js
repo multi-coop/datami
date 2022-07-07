@@ -81,9 +81,9 @@ export async function fetchMediaWikiData (urls) {
 export const objectFromWikitext = (wikitext) => {
   const headers = []
   const obj = {}
-  let splitted = wikitext.split('\n|')
-  splitted = splitted.slice(1, splitted.length)
-  splitted.forEach(i => {
+  let splitted = wikitext && wikitext.split('\n|')
+  splitted = splitted && splitted.slice(1, splitted.length)
+  splitted && splitted.forEach(i => {
     const iSplit = i.split('=')
     headers.push(iSplit[0])
     obj[iSplit[0]] = iSplit[1]
@@ -97,27 +97,27 @@ export const objectFromWikitext = (wikitext) => {
 
 export const extractWikitextPartGen = (content) => {
   const regex = /[\n]|(.*)=(.*)/
-  const part = content.split(regex)
+  const part = content && content.split(regex)
   return part
 }
 
 export const extractWikitextPart = (key, content) => {
   const regex = new RegExp(`\\|${key}=(.*)`)
-  const part = content.match(regex)
+  const part = content && content.match(regex)
   return part && part[1]
 }
 
 export const extractDescription = (content) => {
   // const regex = /^\|shortDescription=(.*)$/
   const regex = /\|shortDescription=(.*)/
-  const description = content.match(regex)
-  return description[1]
+  const description = content && content.match(regex)
+  return description[1] ?? ''
 }
 
 export const extractImageName = (content) => {
   const regex = /\|Main_Picture=(.*)/
-  const imageName = content.match(regex)
-  return imageName[1]
+  const imageName = content && content.match(regex)
+  return imageName[1] ?? ''
 }
 
 /**
@@ -201,7 +201,7 @@ export const extractWikiInfos = (urlStr, options) => {
   apiUrl += '?origin=*'
   Object.keys(params)
     .forEach(key => { apiUrl += `&${key}=${params[key]}` })
-  console.log('U > utilsWikiUrl > extractWikiInfos > apiUrl : ', apiUrl)
+  // console.log('U > utilsWikiUrl > extractWikiInfos > apiUrl : ', apiUrl)
 
   const wikiInfos = {
     id: urlStr,
@@ -427,6 +427,9 @@ export const restructurePageData = (pageObj, wikiFields) => {
         break
       case 'imageUrl':
         pageObjValue = pageObj.imageUrl
+        break
+      case 'pageUrl':
+        pageObjValue = pageObj.pageUrl
         break
       default:
         pageObjValue = pageObj.structured[field]

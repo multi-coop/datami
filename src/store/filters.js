@@ -12,17 +12,23 @@ export const filters = {
     }
   },
   mutations: {
-    updateFilter (state, { fileId, field, choices }) {
+    updateFilter (state, { fileId, field, enumArr }) {
       // console.log('S-filters > M > updateFilter > fileId : ', fileId)
       // console.log('S-filters > M > updateFilter > field : ', field)
-      // console.log('S-filters > M > updateFilter > choices : ', choices)
+      // console.log('S-filters > M > updateFilter > enumArr : ', enumArr)
       // console.log('S-filters > M > updateFilter > state.fileFilters : ', state.fileFilters)
       const index = state.fileFilters.findIndex(filter => filter.fileId === fileId && filter.field === field)
       // console.log('S-filters > M > updateFilter > index : ', index)
       // console.log('S-filters > M > updateFilter > state.fileFilters[index] : ', state.fileFilters[index])
       const fileFilter = { ...state.fileFilters[index] }
       // console.log('S-filters > M > updateFilter > fileFilters : ', fileFilter)
-      choices.forEach(item => fileFilter.choices.add(item))
+
+      // enumArr.forEach(item => fileFilter.enumArr.add(item))
+      const filterEnumSet = new Set(fileFilter.enumArr)
+      // console.log('S-filters > M > updateFilter > filterEnumSet : ', filterEnumSet)
+      enumArr.forEach(item => filterEnumSet.add(item))
+      fileFilter.enumArr = Array.from(filterEnumSet)
+
       Vue.set(state.fileFilters, index, fileFilter)
     },
     setFilter (state, filterInfos) {

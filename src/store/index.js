@@ -41,30 +41,13 @@ const defaultStore = {
     }
   },
   mutations: {
-    setGitInfos (state, gitInfosObject) {
+    setState (state, { key, data }) {
       // console.log('S-index > M > setGitInfos > gitInfosObject : ', gitInfosObject)
-      const index = state.gitInfos.findIndex(item => item.uuid === gitInfosObject.uuid)
+      const index = state[key].findIndex(item => item.uuid === data.uuid)
       if (index !== -1) {
-        Vue.set(state.gitInfos, index, gitInfosObject)
+        Vue.set(state[key], index, data)
       } else {
-        state.gitInfos.push(gitInfosObject)
-      }
-    },
-    setFileOptions (state, fileOptionsObject) {
-      const index = state.fileOptions.findIndex(item => item.uuid === fileOptionsObject.uuid)
-      if (index !== -1) {
-        Vue.set(state.fileOptions, index, fileOptionsObject)
-      } else {
-        state.fileOptions.push(fileOptionsObject)
-      }
-    },
-    setFileInfos (state, fileReqInfosObject) {
-      // console.log('S-index > M > setFileInfos > fileReqInfosObject : ', fileReqInfosObject)
-      const index = state.fileReqInfos.findIndex(item => item.uuid === fileReqInfosObject.uuid)
-      if (index !== -1) {
-        Vue.set(state.fileReqInfos, index, fileReqInfosObject)
-      } else {
-        state.fileReqInfos.push(fileReqInfosObject)
+        state[key].push(data)
       }
     }
   },
@@ -73,17 +56,17 @@ const defaultStore = {
       // console.log('S-index > A > buildGitInfos > gitUrl : ', gitUrl)
       const gitInfosObject = extractGitInfos(gitUrl)
       // console.log('S-index > A > buildGitInfos > gitInfosObject : ', gitInfosObject)
-      commit('setGitInfos', gitInfosObject)
+      commit('setState', { key: 'gitInfos', data: gitInfosObject })
     },
     addGitInfos ({ commit }, gitInfosObject) {
-      commit('setGitInfos', gitInfosObject)
+      commit('setState', { key: 'gitInfos', data: gitInfosObject })
     },
     addFileOptions ({ commit }, fileOptionsObject) {
-      console.log('S-index > A > addFileOptions > fileOptionsObject : ', fileOptionsObject)
-      commit('setFileOptions', fileOptionsObject)
+      // console.log('S-index > A > addFileOptions > fileOptionsObject : ', fileOptionsObject)
+      commit('setState', { key: 'fileOptions', data: fileOptionsObject })
     },
     addFileReqInfos ({ commit }, fileReqInfos) {
-      commit('setFileInfos', fileReqInfos)
+      commit('setState', { key: 'fileReqInfos', data: fileReqInfos })
     }
   }
 }
