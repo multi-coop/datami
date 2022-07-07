@@ -34,6 +34,7 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
+              :file-id="fileId"
               :field="f"
               :row-id="item.id"
               :is-added="item.added"
@@ -150,6 +151,7 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
+              :file-id="fileId"
               :field="f"
               :col-field="f.field"
               :row-id="item.id"
@@ -195,6 +197,7 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
+              :file-id="fileId"
               :field="f"
               :row-id="item.id"
               :is-added="item.added"
@@ -235,6 +238,7 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
+              :file-id="fileId"
               :field="f"
               :row-id="item.id"
               :is-added="item.added"
@@ -262,6 +266,7 @@
           </p>
           <div v-if="currentEditViewMode === 'preview' && item[f.field]">
             <PreviewCell
+              :file-id="fileId"
               :value="item[f.field]"
               :field="f"
               :is-card-view="true"
@@ -274,6 +279,7 @@
             </div>
             <PreviewCell
               v-else
+              :file-id="fileId"
               :value="item[f.field]"
               :is-diff-view="true"
               :is-card-view="true"
@@ -286,6 +292,7 @@
             class="mr-2">
             <!-- {{ f }} -->
             <EditCell
+              :file-id="fileId"
               :field="f"
               :row-id="item.id"
               :is-added="item.added"
@@ -339,6 +346,7 @@
             v-if="currentEditViewMode === 'edit'"
             class="mr-2">
             <EditCell
+              :file-id="fileId"
               :field="f"
               :row-id="item.id"
               :is-added="item.added"

@@ -76,6 +76,44 @@
         :file-family="'table'"
         :locale="locale"/>
 
+      <!-- DEBUGGING -->
+      <!-- <div
+        v-if="debug"
+        class="columns is-multiline">
+        <div
+          v-if="true && fileData"
+          class="column is-6">
+          <p>
+            fileData.uuid:<br>
+            <code>{{ fileData.uuid }}</code>
+          </p>
+          <p>
+            fileData.fileUrl:<br>
+            <code>{{ fileData.fileUrl }}</code>
+          </p>
+          <p>
+            fileDataFields.fileUrl:<br>
+            <code>{{ fileDataFields.fileUrl }}</code>
+          </p>
+        </div>
+        <div
+          v-if="true && fileEdited"
+          class="column is-6">
+          <p>
+            fileEdited.uuid:<br>
+            <code>{{ fileEdited.uuid }}</code>
+          </p>
+          <p>
+            fileEdited.fileUrl:<br>
+            <code>{{ fileEdited.fileUrl }}</code>
+          </p>
+          <p>
+            fileEditedFields.fileUrl:<br>
+            <code>{{ fileEditedFields.fileUrl }}</code>
+          </p>
+        </div>
+      </div> -->
+
       <!-- PREVIEWS -->
       <div v-if="data">
         <!-- ORIGINAL DATA -->
@@ -101,7 +139,15 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinCommit, mixinDiff, mixinCsv, mixinDownload } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinForeignKeys,
+  mixinData,
+  mixinCommit,
+  mixinDiff,
+  mixinCsv,
+  mixinDownload
+} from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
@@ -125,6 +171,8 @@ export default {
   },
   mixins: [
     mixinGlobal,
+    mixinForeignKeys,
+    mixinData,
     mixinCommit,
     mixinDiff,
     mixinCsv,
@@ -206,28 +254,58 @@ export default {
         // console.log('\nC > PreviewCsv > watch > wikiRaw > next : ', next)
         // console.log('C > PreviewCsv > watch > wikiRaw > this.fileOptions : ', this.fileOptions)
         this.dataRaw = next
-        this.data = this.dataRaw.data
-        this.dataColumns = this.buildColumns(this.dataRaw)
-        this.edited = this.data
-        this.editedColumns = this.dataColumns
+        const data = this.dataRaw.data
+        const dataColumns = this.buildColumns(this.dataRaw)
+        this.data = data
+        this.dataColumns = dataColumns
+        this.edited = data
+        this.editedColumns = dataColumns
       }
     },
     dataIsSet (next) {
       if (next) {
         // console.log('C > PreviewCsv > watch > dataIsSet > next : \n', next)
-        this.data = this.dataRaw.data
-        this.dataColumns = this.buildColumns(this.dataRaw)
+        const currentFile = this.gitObj.id
+        // console.log('\nC > PreviewCsv > watch > dataIsSet > currentFile : ', currentFile)
+
+        const data = this.dataRaw.data
+        const dataColumns = this.buildColumns(this.dataRaw)
+        this.data = data
+        this.dataColumns = dataColumns
         // console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
-        this.edited = this.data
-        this.editedColumns = this.dataColumns
+        this.edited = data
+        this.editedColumns = dataColumns
+
+        // console.log('C > PreviewCsv > watch > dataIsSet > this.shareableFiles : ', this.shareableFiles)
+        // console.log('C > PreviewCsv > watch > dataIsSet > this.sharedData : ', this.sharedData)
+
+        // Data is set
+        this.updateShareableFiles({ gitfile: currentFile, fileId: this.fileId, isSet: true })
+
+        // Check if currentFile if from shareableFiles and update store
+        // console.log('C > PreviewCsv > watch > dataIsSet > this.shareableFiles.map(i => i.isSet) :', this.shareableFiles.map(i => i.isSet))
+        const fileIsShareable = this.isInShareableAndSet(currentFile)
+        // console.log('C > PreviewCsv > watch > dataIsSet > fileIsShareable : ', fileIsShareable)
+        if (fileIsShareable) {
+          const sharedDatasetUpdated = this.getSharedDatasetByRessource(currentFile)
+          sharedDatasetUpdated.forEach(d => {
+            const shareDataUpdated = {
+              ...d,
+              ressourceId: this.fileId
+            }
+            this.updateSharedData(shareDataUpdated)
+          })
+        }
       }
     },
     async fileClientRaw (next) {
       if (next) {
         // console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
         const dataObj = this.csvToObject(next, this.fileOptions)
-        this.edited = dataObj.data
-        this.editedColumns = this.buildColumns(dataObj)
+        const edited = dataObj.data
+        const editedColumns = this.buildColumns(dataObj)
+        this.edited = edited
+        this.editedColumns = editedColumns
       }
     },
     edited (next, prev) {
@@ -252,6 +330,49 @@ export default {
         // console.log('C > PreviewCsv > watch > fileIsSaving > next : ', next)
         this.bufferizeEdited()
       }
+    },
+    loadingShared (next) {
+      if (next.loadState === 'loading') {
+        // console.log('\nC >>> PreviewCsv > watch > loadingShared > next : ', next)
+        const shareableFile = this.shareableFiles.find(r => r.fileId === this.fileId)
+        if (shareableFile) {
+          // console.log('\nC >>> PreviewCsv > watch > loadingShared > shareableFile : ', shareableFile)
+          const currentFile = this.gitObj.id
+          // console.log('C >>> PreviewCsv > watch > loadingShared > currentFile : ', currentFile)
+          const sharedDatasets = this.getSharedDatasetByRessource(currentFile)
+          // console.log('\nC >>> PreviewCsv > watch > loadingShared > sharedDatasets : ', sharedDatasets)
+          for (const resrc of sharedDatasets) {
+            // console.log('C >>> PreviewCsv > watch > loadingShared >  resrc : ', resrc)
+
+            // // save data in loadedSharedData
+            const payloadData = {
+              ressource: resrc.ressource,
+              ressourceId: resrc.ressourceId,
+              data: {
+                headers: this.editedColumns,
+                data: this.edited
+              }
+            }
+            // console.log('C >>> GitributeFile > loadingShared > payloadData : ', payloadData)
+            this.updateLoadedSharedData(payloadData)
+
+            // update sharedData
+            const payload = {
+              ...resrc,
+              isLoaded: true
+            }
+            this.updateSharedData(payload)
+          }
+
+          // update shareableFiles
+          const updatedShareableFile = {
+            ...shareableFile,
+            isLoaded: true
+          }
+          // console.log('C >>> GitributeFile > loadingShared > updatedShareableFile : ', updatedShareableFile)
+          this.updateShareableFiles(updatedShareableFile)
+        }
+      }
     }
   },
   methods: {
@@ -275,7 +396,9 @@ export default {
           dataParsedSet.add(tagStr)
         }
       })
-      const enumArr = [...dataParsedSet].sort((a, b) => a.localeCompare(b))
+      const enumArr = [...dataParsedSet].sort((a, b) => {
+        return a.localeCompare(b, this.locale, { numeric: true })
+      })
       // console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
       return enumArr
     },
@@ -285,8 +408,16 @@ export default {
       // console.log('C > PreviewCsv > buildColumns > dataRaw : ', dataRaw)
       // console.log('C > PreviewCsv > buildColumns > dataRaw.data[0] : ', dataRaw.data[0])
       // console.log('C > PreviewCsv > buildColumns > this.fileOptions : ', this.fileOptions)
-      const schema = this.fileOptions && this.fileOptions.schema
+
+      // Parse Schema
+      const schema = this.fileSchema
       // console.log('C > PreviewCsv > buildColumns > schema : ', schema)
+      let primaryKeys = (this.fileSchema && this.fileSchema.primaryKey) || []
+      if (primaryKeys && typeof primaryKeys === 'string') {
+        primaryKeys = [primaryKeys]
+      }
+
+      // Parse custom props
       const fieldsCustomProperties = this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.fields
       // console.log('C > PreviewCsv > buildColumns > fieldsCustomProperties : ', fieldsCustomProperties)
       // console.log('C > PreviewCsv > buildColumns > fileConsolidation : ', fileConsolidation)
@@ -306,6 +437,7 @@ export default {
             name: (fieldSchema && fieldSchema.name) || fieldLabel
           }
           // parse data for unique values on tag columns
+          const isPrimaryKey = primaryKeys.includes(fieldData.name)
           const fieldSubtype = fieldCustomProps && fieldCustomProps.subtype
           const needEnumArr = fieldSubtype === 'tag' || fieldSubtype === 'tags'
           const defaultEnumArr = fieldConstraints && fieldConstraints.enum
@@ -314,12 +446,16 @@ export default {
             // ...(!idx) && { sticky: true },
             ...fieldSchema && fieldSchema.title && { title: fieldSchema.title },
             ...fieldSchema && fieldSchema.description && { description: fieldSchema.description },
+            ...isPrimaryKey && { primaryKey: isPrimaryKey },
             ...fieldSubtype && { subtype: fieldSubtype },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.maxLength && { maxLength: fieldCustomProps.maxLength },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
             ...fieldCustomProps && fieldCustomProps.bgColor && { bgColor: fieldCustomProps.bgColor },
+            ...fieldCustomProps && fieldCustomProps.primaryKey && { primaryKey: fieldCustomProps.primaryKey },
+            ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
+            ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
           // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)
@@ -331,6 +467,7 @@ export default {
             )
             fieldData.enumArr = enumArr
           }
+
           // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData.fieldCustomProps.bgColor)
           return fieldData
         })
@@ -338,7 +475,7 @@ export default {
       return fields
     },
     updateEdited (event) {
-      // console.log('\nC > PreviewCsv > updateEdited > event : ', event)
+      console.log('\nC > PreviewCsv > updateEdited > event : ', event)
       let toEdit, newObj, oldEditedObj, originalObj, oldVal
       let rowId
       const isHeader = event.isHeader
@@ -380,7 +517,8 @@ export default {
           if (row.id === rowId) return newObj
           else return row
         })
-        this.edited = [...toEdit]
+        const edited = [...toEdit]
+        this.edited = edited
         // console.log('C > PreviewCsv > updateEdited > this.edited (B) : ', this.edited)
       }
       // set changes
@@ -401,6 +539,7 @@ export default {
       // console.log('C > PreviewCsv > addTagToEnum > editedColumns : ', editedColumns)
       this.editedColumns = editedColumns
     },
+
     setChanges (changeObj, isHeader) {
       let copyChanges
       let changeId //, isDeleted
@@ -472,8 +611,9 @@ export default {
     deleteRowsEvent (event) {
       // console.log('\nC > PreviewCsv > deleteRowEvent > event : ', event)
       const toDeleteIndices = event.rows.map(rowToDelete => rowToDelete.id)
-      const edited = [...this.edited]
-      this.edited = edited.filter(r => !toDeleteIndices.includes(r.id))
+      let edited = [...this.edited]
+      edited = edited.filter(r => !toDeleteIndices.includes(r.id))
+      this.edited = edited
       // console.log('C > PreviewCsv > deleteRowEvent > this.edited : ', this.edited)
 
       // update changesData

@@ -6,6 +6,7 @@ export default {
     link: 'Lien',
     yes: 'oui',
     no: 'non',
+    value: 'Valeur',
     noValue: '(pas de valeur)',
     oldValue: 'Ancienne valeur',
     newValue: 'Nouvelle valeur',
@@ -42,7 +43,9 @@ export default {
     fileUrlRaw: 'URL de la source (brut)',
     linkToFile: 'Lien vers le fichier',
     linkToFileRaw: 'Lien vers le fichier source (brut)',
-    fileInfos: 'Informations sur le fichier'
+    fileInfos: 'Informations sur le fichier',
+    fileSchema: 'Schéma des données',
+    fileCustomProps: 'Fichier des propriétés'
   },
   preview: {
     edition: 'Edition',
@@ -82,14 +85,15 @@ export default {
     changeToken: "Changer votre jeton d'accès",
     changeActiveBranch: 'Changer de branche',
     commitChanges: 'Proposer vos modifications',
-    consolidate: 'Consolider vos données',
+    consolidate: 'Consolider cette ligne',
     selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
     validateConsolidation: 'Valider les changements',
     copyWidget: 'Pour intégrer le widget dans votre site, copie du bloc html du widget',
     widgetCopied: 'Le widget est copié dans le presse-papier',
     addTag: 'Ajouter un tag',
     addTagHelp: 'Cliquer sur + pour ajouter votre tag',
-    clearTag: 'Supprimer le tag'
+    clearTag: 'Supprimer le tag',
+    clickForMoreTags: 'Cliquer pour voir plus de tags'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -140,12 +144,22 @@ export default {
     number: 'Nombre',
     integer: 'Nombre entier',
     boolean: 'Bouléen',
+    primaryKey: 'Clé principale',
+    foreignKey: 'Clé étrangère',
+    ressource: 'Ressource',
+    ressourceValues: 'Valeurs liées',
+    definition: 'Définition',
     gitribute: 'Champ spécial',
     consolidation: 'Consolidation'
   },
   edit: {
     uploadData: 'Importer/écraser les données',
     headerLocked: "L'intitulé de cette colonne est protégé en écriture"
+  },
+  consolidation: {
+    consolidationApi: "Consolidation par l'API",
+    apiFormat: "Format de l'API",
+    sourceFields: 'Données utilisées'
   },
   editCsv: {
     noSelect: 'Aucun',

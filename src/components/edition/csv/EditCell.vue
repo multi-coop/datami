@@ -71,22 +71,6 @@
         @input="emitChange"/>
 
       <!-- TAG / CATEGORY (SELECT) -->
-      <!-- <b-select
-        v-else-if="!isHeader && isCategory"
-        v-model="input"
-        :class="`g-cell py-0`"
-        :disabled="isConsolidating"
-        size="is-small"
-        expanded
-        @input="emitChange">
-        <option
-          v-for="(val, i) in tagsEnum"
-          :key="`${field.field}-${i}-${val}`"
-          :value="val">
-          {{ val }}
-        </option>
-      </b-select> -->
-      <!-- :value="input" -->
       <EditTagValue
         v-else-if="!isHeader && isCategory"
         :input="input"
@@ -127,12 +111,15 @@
         :custom-class="`g-cell py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         :disabled="isConsolidating"
-        :type="isLongText ? 'textarea' : 'text'"
-        :rows="isLongText ? 3 : false"
+        :type="!isHeader && isLongText ? 'textarea' : 'text'"
+        :rows="!isHeader && isLongText ? 3 : false"
         size="is-small"
         expanded
         @input="emitChange"/>
     </b-field>
+
+    <!-- DEBUGGING -->
+    <!-- <code>{{ input }}</code> -->
   </div>
 </template>
 
@@ -154,6 +141,10 @@ export default {
     mixinValue
   ],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     isHeader: {
       default: false,
       type: Boolean
@@ -208,26 +199,29 @@ export default {
   methods: {
     adaptInput (value) {
       let newInput
-      // console.log('C > EditCell > adaptInput > value : ', value)
-      switch (this.fieldType) {
-        case 'boolean':
-          // console.log('C > EditCell > adaptInput > value : ', value)
-          newInput = this.booleanFromValue(value)
-          break
-        case 'number':
-          newInput = parseFloat(value)
-          break
-        case 'integer':
-          newInput = parseInt(value)
-          break
-        default:
-          newInput = value
-      }
-      if (this.isTag && !this.isCategory) {
-        // console.log('\nC > EditCell > adaptInput > value : ', value)
-        const valStr = value && value.toString()
-        newInput = valStr && [valStr]
-        this.tagsValue = (valStr && valStr.split(this.tagSeparator).filter(v => v !== '')) || []
+      if (this.isHeader) {
+        newInput = value
+      } else {
+        switch (this.fieldType) {
+          case 'boolean':
+            // console.log('C > EditCell > adaptInput > value : ', value)
+            newInput = this.booleanFromValue(value)
+            break
+          case 'number':
+            newInput = parseFloat(value)
+            break
+          case 'integer':
+            newInput = parseInt(value)
+            break
+          default:
+            newInput = value
+        }
+        if (this.isTag && !this.isCategory) {
+          // console.log('\nC > EditCell > adaptInput > value : ', value)
+          const valStr = value && value.toString()
+          newInput = valStr && [valStr]
+          this.tagsValue = (valStr && valStr.split(this.tagSeparator).filter(v => v !== '')) || []
+        }
       }
       return newInput
     },

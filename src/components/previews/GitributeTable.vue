@@ -50,6 +50,7 @@
         :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
         <FilterTags
           v-show="!isAnyDialogOpen"
+          :file-id="fileId"
           :headers="columnsEdited"
           :tags="filterTags"
           :locale="locale"
@@ -95,6 +96,9 @@
       <div v-if="debug">
         dataChanges: <code>{{ dataChanges }}</code>
       </div>
+      <div v-if="debug">
+        lockHeaders: <code>{{ lockHeaders }}</code>
+      </div>
 
       <!-- TABLE -->
       <div
@@ -137,15 +141,16 @@
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
                     <b-field
-                      v-if="!lockHeaders ">
+                      v-if="!lockHeaders">
                       <EditCell
+                        :file-id="fileId"
                         :is-header="true"
                         :field="col"
                         :input-data="column.label"
                         @updateCellValue="emitUpdate"/>
                     </b-field>
                     <PreviewField
-                      v-if="lockHeaders"
+                      v-else
                       :file-id="fileId"
                       :field="col"
                       :lock-headers="lockHeaders"
@@ -179,7 +184,7 @@
 
                   <!-- SORTING -->
                   <ButtonSortByField
-                    v-if="!noSortingFields.includes(col.subtype)"
+                    v-if="col.type !== 'gitribute' && !noSortingFields.includes(col.subtype)"
                     :file-id="fileId"
                     :field="col"
                     :locale="locale"
@@ -203,12 +208,14 @@
                   class="gitribute-cell">
                   <PreviewCell
                     v-if="col.locked"
+                    :file-id="fileId"
                     :value="props.row[col.field]"
                     :field="col"
                     :is-edit-view="true"
                     :locale="locale"/>
                   <EditCell
                     v-else
+                    :file-id="fileId"
                     :is-header="false"
                     :field="col"
                     :row-id="props.row.id"
@@ -229,6 +236,7 @@
                   </div>
                   <PreviewCell
                     v-else
+                    :file-id="fileId"
                     :value="props.row[col.field]"
                     :is-diff-view="true"
                     :field="col"
@@ -241,6 +249,7 @@
                   class="gitribute-cell">
                   <!-- {{ props.row[col.field] }} -->
                   <PreviewCell
+                    :file-id="fileId"
                     :value="props.row[col.field]"
                     :field="col"
                     :locale="locale"/>
@@ -1012,7 +1021,7 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
@@ -1038,7 +1047,9 @@ export default {
 
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
-      respConsolidation.fromApi = consolidationSettings.api.api_name
+      respConsolidation.apiName = consolidationSettings.api.api_name
+      respConsolidation.sourceFields = sourceFields
+      respConsolidation.api = consolidationSettings.api.api
       // respConsolidation.rowData = rowData
       // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
@@ -1085,6 +1096,9 @@ export default {
   /* padding: .2em .25em !important; */
   min-width: 100px;
 }
+.gitribute-table-td.is-sticky {
+  z-index: 2 !important;
+}
 .th-wrap {
   justify-content: center !important;
 }
@@ -1113,5 +1127,10 @@ export default {
 }
 .g-td-string-tags {
   min-width: 275px;
+}
+.detail-container {
+  position: sticky;
+  left: 10px !important;
+  width: max-content;
 }
 </style>

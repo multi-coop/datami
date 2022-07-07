@@ -13,7 +13,8 @@
         <div
           id="dropdown-locales"
           class="dropdown-menu"
-          role="menu">
+          role="menu"
+          style="z-index: 90;">
           <div class="dropdown-content">
             <div class="dropdown-item">
               <span class="is-italic">

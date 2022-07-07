@@ -3,6 +3,7 @@
     <b-tooltip
       :label="t('actions.consolidate', locale)"
       append-to-body
+      position="is-right"
       type="is-dark">
       <!-- <code>{{ isConsolidating }}</code> -->
       <b-dropdown

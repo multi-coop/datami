@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getFileToken: 'git-data/getFileToken',
+      // getFileToken: 'git-data/getFileToken',
       getUserGit: 'git-user/getUserGit'
     }),
     userGit () {
@@ -118,7 +118,7 @@ export default {
   },
   mounted () {
     // console.log('C > ButtonChangeUserToken > this.gitObj : ', this.gitObj)
-    const originalToken = this.getFileToken(this.fileId)
+    const originalToken = this.fileToken // this.getFileToken(this.fileId)
     // console.log('C > ButtonChangeUserToken > originalToken : ', originalToken)
     this.usertoken = originalToken
   },

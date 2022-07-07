@@ -5,38 +5,47 @@
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
 
-    <!-- WRAP CELL SWITCH -->
+    <!-- SIMPLE STRING -->
     <div
-      v-if="isString && !field.subtype && !isDiffView"
-      :class="`${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      v-if="isString && !field.subtype"
+      :class="`is-flex is-flex-direction-row ${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
       <ButtonWrapCell
+        v-if="!isCardView"
         v-model="nowrap"
         :show-expand="showExpand"
         :locale="locale"/>
-      <span>
+      <div
+        class="has-wrap-btn"
+        @click="nowrap = !nowrap">
+        <!-- <b-tooltip
+          :active="showExpand && field.foreignKey"
+          multilined
+          append-to-body
+          type="is-dark">
+          <template #content>
+            <div>
+              {{ field.foreignKey }}
+            </div>
+          </template> -->
         {{ trimmedText }}
-      </span>
+        <!-- </b-tooltip> -->
+      </div>
     </div>
 
-    <!-- STRING -->
+    <!-- LONG TEXT STRING -->
     <div
       v-if="isString && isLongText"
-      :class="`${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
-      <b-tooltip
-        v-if="showExpand"
-        :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
-        append-to-body
-        type="is-dark">
-        <b-icon
-          :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
-          class="mr-1"
-          :type="nowrap ? 'is-grey-light' : 'is-dark'"
-          size="is-small"
-          @click.native="nowrap = !nowrap"/>
-      </b-tooltip>
-      <span>
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      <ButtonWrapCell
+        v-if="!isCardView"
+        v-model="nowrap"
+        :show-expand="showExpand"
+        :locale="locale"/>
+      <div
+        class="has-wrap-btn"
+        @click="nowrap = !nowrap">
         {{ trimmedText }}
-      </span>
+      </div>
     </div>
 
     <!-- BOOLEAN -->
@@ -45,39 +54,32 @@
       :class="`has-text-centered`">
       <!-- {{ value }} -->
       <b-icon
-        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank-outline'}`"
-        size="is-small"/>
+        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank-outline'}`"/>
     </div>
 
     <!-- TAG / TAGS -->
     <div
       v-if="value && isTag"
-      :class="`${isCategory && !isCardView ? 'has-text-centered' : ''}`">
+      :class="`is-flex is-flex-direction-row`">
       <!-- value : <code>{{ value }}</code><br> -->
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
         :show-expand="showExpand"
         :locale="locale"/>
-      {{ currentEditViewMode }}
-      <b-tag
-        v-for="(val, tagIdx) in tagsArray"
-        :key="`tags-${field.field}-${tagIdx}`"
-        :class="`mr-2 mb-2 has-text-weight-bold`"
-        :style="`color: ${tagColor(val, field.bgColor, isDiffView)}; background-color:  ${tagBackgroundColor(val, field.bgColor, isDiffView)}`">
-        <span v-if="isMini">
-          <b-tooltip
-            :label="val"
-            multilined
-            type="is-dark"
-            position="is-top">
-            {{ trimText(val) }}
-          </b-tooltip>
-        </span>
-        <span v-else>
-          {{ val }}
-        </span>
-      </b-tag>
+      <!-- <pre class="has-text-left"><code>{{ field }}</code></pre> -->
+      <div :class="`has-wrap-btn ${isCategory && !isCardView ? 'has-text-centered' : ''}`">
+        <PreviewTagValue
+          v-for="(val, tagIdx) in tagsArray"
+          :key="`tags-${field.field}-${tagIdx}`"
+          :file-id="fileId"
+          :val="val"
+          :tag-style="`color: ${tagColor(val, field.bgColor, isDiffView)}; background-color:  ${tagBackgroundColor(val, field.bgColor, isDiffView)}`"
+          :field="field"
+          :is-mini="isMini"
+          :locale="locale"
+          @expand="nowrap = !nowrap"/>
+      </div>
     </div>
 
     <!-- LINK -->
@@ -108,14 +110,14 @@
         icon-left="email-outline"
         :href="`mailto:${value}`"
         expanded>
-        {{ value }}
+        {{ trimmedText }}
       </b-button>
     </div>
 
     <!-- NUMBER -->
     <div
       v-if="isNumber"
-      :class="`has-text-right`">
+      :class="`has-text-right has-text-weight-bold is-size-6`">
       {{ value }}
     </div>
   </div>
@@ -123,20 +125,27 @@
 
 <script>
 
-import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
+import { mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
 
 import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
+import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
 
 export default {
   name: 'PreviewCell',
   components: {
-    ButtonWrapCell
+    ButtonWrapCell,
+    PreviewTagValue
   },
   mixins: [
     mixinGlobal,
-    mixinValue
+    mixinValue,
+    mixinForeignKeys
   ],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     value: {
       default: false,
       type: [String, Boolean, Number]
@@ -170,7 +179,9 @@ export default {
     return {
       showExpand: false,
       nowrap: true,
-      defaultMaxTextLength: 30
+      defaultMaxTextLength: 30,
+      defaultMaxTags: 2,
+      showTag: undefined
     }
   },
   computed: {
@@ -195,8 +206,8 @@ export default {
       let allTags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
       allTags = allTags.filter(v => v !== '')
       if (this.nowrap) {
-        tags = allTags.slice(0, 2)
-        tags = allTags.length > 2 ? [...tags, '...'] : tags
+        tags = allTags.slice(0, this.defaultMaxTags)
+        tags = allTags.length > this.defaultMaxTags ? [...tags, '...'] : tags
       } else {
         tags = allTags
       }
@@ -232,5 +243,8 @@ export default {
   }
   .gitribute-wrap {
     min-height: 3em;
+  }
+  .has-wrap-btn {
+
   }
 </style>

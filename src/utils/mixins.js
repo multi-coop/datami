@@ -1,4 +1,4 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -7,6 +7,7 @@ import {
   itemsPerPageChoicesCards2perRow,
   itemsPerPageChoicesCards3perRow,
   itemsPerPageChoicesCards4perRow,
+  findFromPath,
   paginate,
   getClosest,
   defaultTagsSeparator,
@@ -63,6 +64,7 @@ export const mixinGlobal = {
       getEditViewMode: 'git-data/getEditViewMode',
       getViewMode: 'git-data/getViewMode',
       getGitInfosObj: 'getGitInfosObj',
+      getFileToken: 'git-data/getFileToken',
       getFileOptionsObj: 'getFileOptionsObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
       fileNeedsSaving: 'git-data/fileNeedsSaving',
@@ -71,6 +73,9 @@ export const mixinGlobal = {
       getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors'
     }),
+    fileToken () {
+      return this.getFileToken(this.fileId)
+    },
     gitObj () {
       return this.fileId && this.getGitInfosObj(this.fileId)
     },
@@ -78,6 +83,9 @@ export const mixinGlobal = {
       // const FileType = this.fileTypes[this.fileType]
       // return (FileType && FileType.family) || 'other'
       return this.gitObj && this.gitObj.filefamily
+    },
+    isFileTypeTable () {
+      return this.fileTypeFamily && this.fileTypeFamily === 'table'
     },
     currentEditViewMode () {
       return this.getEditViewMode(this.fileId)
@@ -87,6 +95,15 @@ export const mixinGlobal = {
     },
     fileOptions () {
       return this.getFileOptionsObj(this.fileId)
+    },
+    fileSchema () {
+      return this.fileOptions && this.fileOptions.schema
+    },
+    hasFileSchemaFile () {
+      return this.fileSchema && this.fileSchema.file
+    },
+    fileCustomProps () {
+      return this.fileOptions && this.fileOptions.customProps
     },
     fileIsLoading () {
       const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
@@ -154,10 +171,110 @@ export const mixinGlobal = {
     }
   },
   methods: {
-    uuidv4
+    uuidv4,
+    findFromPath
   }
 }
 
+export const mixinForeignKeys = {
+  computed: {
+    ...mapState({
+      loadingShared: (state) => state['git-data'].loadingShared,
+      loadingExtRessources: (state) => state['git-data'].loadingExtRessources
+    }),
+    ...mapGetters({
+      shareableFiles: 'git-data/getShareableFiles',
+      shareableAreSet: 'git-data/areAllShareableSet',
+      isInShareableAndSet: 'git-data/isInShareableAndSet',
+      isInShareableAndLoaded: 'git-data/isInShareableAndLoaded',
+      sharedData: 'git-data/getSharedData',
+      getSharedDatasetByRessource: 'git-data/getSharedDatasetByRessource',
+      getSharedDatasetByGitfile: 'git-data/getSharedDatasetByGitfile',
+      readyToCopyRessources: 'git-data/readyToCopyRessources',
+      readyToLoadExtRessources: 'git-data/readyToLoadExtRessources',
+      getLoadedSharedData: 'git-data/getLoadedSharedData',
+      getLoadedSharedDataItem: 'git-data/getLoadedSharedDataItem'
+    }),
+    sharedDataIsLoaded () {
+      const loadedDatasets = this.getSharedDatasetByGitfile(this.gitObj.id).map(sd => sd.isLoaded)
+      return loadedDatasets.every(b => !!b)
+    },
+    ressourceInfos () {
+      const foreignKey = this.field.foreignKey
+      const resrc = foreignKey && foreignKey.ressource
+      const resrcFilename = resrc && resrc.split('/').at(-1)
+      return {
+        url: resrc,
+        filename: resrcFilename
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateShareableFiles: 'git-data/updateShareableFiles',
+      updateSharedData: 'git-data/updateSharedData',
+      updateLoadingRessources: 'git-data/updateLoadingRessources',
+      updateLoadedSharedData: 'git-data/updateLoadedSharedData'
+    }),
+    loadedSharedData (gitfile) {
+      return this.getLoadedSharedData(gitfile)
+    },
+    getForeignItemRaw (field, value) {
+      const foreignKey = field.foreignKey
+      const ressource = foreignKey.ressource
+      const fields = foreignKey.fields
+      const itemRaw = this.getLoadedSharedDataItem(ressource, fields, value)
+      return itemRaw
+    },
+    getForeignItem (field, value) {
+      const returnFields = field.foreignKey.returnFields
+      const itemRaw = this.getForeignItemRaw(field, value)
+      // console.log('M > mixinForeignKeys > getForeignItem > itemRaw : ', itemRaw)
+      const headers = itemRaw && itemRaw.headers && itemRaw.headers.filter(h => returnFields.includes(h.name))
+      const item = {}
+      headers && itemRaw.item && headers.forEach(h => {
+        item[h.name] = itemRaw.item[h.field]
+      })
+      return item
+    },
+    debugShared (shared) {
+      const data = shared && shared.data && {
+        header: [...shared.data.headers.slice(0, 1), '...'],
+        data: [...shared.data.data.slice(0, 1), '...']
+      }
+      const copy = {
+        ...shared && shared,
+        ...data && { data: data }
+      }
+      return copy
+    }
+  }
+}
+
+export const mixinData = {
+  computed: {
+    ...mapGetters({
+      getFileDataFromStore: 'git-data/getFileDataFromStore'
+    }),
+    fileData () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'data')
+    },
+    fileDataFields () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'dataFields')
+    },
+    fileEdited () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'edited')
+    },
+    fileEditedFields () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'editedFields')
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateDataOrEdited: 'git-data/updateDataOrEdited'
+    })
+  }
+}
 export const mixinGit = {
   computed: {
     ...mapGetters({
@@ -332,6 +449,15 @@ export const mixinValue = {
     tagSeparator () {
       return this.field.tagSeparator || this.defaultTagsSeparator
     },
+    isPrimaryKey () {
+      return this.field.primaryKey
+    },
+    fieldForeignKey () {
+      return this.field.foreignKey
+    },
+    isForeignKey () {
+      return this.fieldForeignKey && this.fieldForeignKey.activate
+    },
     isGitributeField () {
       return this.fieldType === 'gitribute'
     },
@@ -342,6 +468,22 @@ export const mixinValue = {
   methods: {
     booleanFromValue,
     trimText,
+    getValueDefinition (value, field = undefined) {
+      const Field = field || this.field
+      const definitions = Field.definitions
+      const definition = definitions && definitions.find(def => def.value === value)
+      return definition
+    },
+    getValueDefinitionLabel (value, field = undefined) {
+      const definition = this.getValueDefinition(value, field)
+      const label = definition && definition.label
+      return label || value
+    },
+    getValueDefinitionDescription (value, field = undefined) {
+      const definition = this.getValueDefinition(value, field)
+      const description = definition && definition.description
+      return description
+    },
     tagBackgroundColor (value, bgColor = undefined, isDiff = false) {
       let color
       if (!isDiff) {
