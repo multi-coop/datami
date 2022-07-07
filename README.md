@@ -70,7 +70,7 @@ The **roadmap** for a first proof of concept (POC) is the following :
   - [x] Component to update user's token (if user has a specific one for direct commits) ;
   - [x] Component to switch between `french` and `english` for now ;
 - [x] Create a "ghost user" on gitlab and github for test purposes, acting as anonymous gitlab/github users (with their token, injected in web component) ;
-- [ ] Other main components :
+- [x] Other main components :
   - [x] On each preview (for every file type), switch between 'preview' and 'edition' views ;
     - [x] for `csv` files (`.csv` and `.tsv` types)
     - [x] for `text` files (`.md` types)
@@ -78,10 +78,10 @@ The **roadmap** for a first proof of concept (POC) is the following :
     - [x] for `mediwiki` ressources (only preview for now)
   - [x]  Add an `Upload` button + dialog + actions to overwrite whole edited data ;
   - [x]  Add a `lockHeaders` options in widget to only protect keys from edition ;
-  - [ ]  Add a `Save` button + dialog + actions :
+  - [x]  Add a `Save` button + dialog + actions :
     - [x] `POST` create a separate branch on the file's repo ;
     - [x] `PUT` after edition on client's side, acting as a commit to the file's git repo on a separate branch ;
-    - [ ] create a merge request (commit and request by default done the "ghost user") ;
+    - [x] create a merge request (commit and request by default done the "ghost user") ;
 - [x] Deploy on Netlify for test purposes => [test deploy here](https://multi-gitribute-test.netlify.app/)
 - [ ] A good documentation for each web component (at least in this readme for now)
 
@@ -93,9 +93,16 @@ The **roadmap** for a first proof of concept (POC) is the following :
 
 ### Test deploy
 
-Website : [multi-gitribute-test](https://multi-gitribute-test.netlify.app/)
-
 [![Netlify Status](https://api.netlify.com/api/v1/badges/693b562e-5ff8-4101-9cdb-157f7be2d3d2/deploy-status)](https://app.netlify.com/sites/multi-gitribute-test/deploys)
+
+- Website : [multi-gitribute-test](https://multi-gitribute-test.netlify.app/)
+
+### Prod deploy
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1cd66edf-3b08-43db-bd21-6490377bb24a/deploy-status)](https://app.netlify.com/sites/multi-gitribute/deploys)
+
+- Website : [multi-gitribute](https://multi-gitribute.netlify.app/)
+- Preprod : [multi-gitribute (preprod)](https://preprod--multi-gitribute.netlify.app/)
 
 ---
 
@@ -108,6 +115,7 @@ An open source project by **[multi](https://multi.coop)**
 ```bash
 nvm use
 npm install
+cp example.env .env
 ```
 
 ### Compiles and hot-reloads for development
@@ -264,7 +272,13 @@ The `usertoken` parameter is one of the most important features of this project.
 - **Push a commit** to the new branch ;
 - **Create a merge request** from the new branch onto the reference branch.
 
-Our strategy to simplify those operations for 'normal' people (who does not give a s*** to git) was to create one or several "ghost users", so we could set the repositories' permissions and tokens in advance.
+Our strategy to simplify those operations for 'normal' people (who does not give a s*** about git) was to create one or several "ghost users", so we could set the repositories' permissions and tokens in advance.
+
+In order to deploy a Gitribute demo on a domain we chose to store those tokens on an `.env` file, based on the `example.env` file at the project's root. So you can have several strategies to inject a default token :
+
+- create an `.env` file, but you will have to deploy your own instance of Gitribute ;
+- copy-paste the html block, filling the widget's `usertoken` parameter ;
+- leave all blank and ask your users to create their own tokens on Gitub or Gitlab...
 
 So you can read more on those topics here =>
 

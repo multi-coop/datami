@@ -1,4 +1,4 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -7,19 +7,42 @@ import {
   itemsPerPageChoicesCards2perRow,
   itemsPerPageChoicesCards3perRow,
   itemsPerPageChoicesCards4perRow,
+  findFromPath,
   paginate,
   getClosest,
-  trimText
+  defaultTagsSeparator,
+  stringToColor,
+  booleanFromValue,
+  trimText,
+  getContrastYIQ
 } from '@/utils/globalUtils'
-import { extractGitInfos } from '@/utils/utilsGitUrl.js'
-import { getFileData, getFileDataRaw } from '@/utils/gitProvidersAPI.js'
+import {
+  extractGitInfos
+} from '@/utils/utilsGitUrl.js'
+import {
+  getFileData,
+  getFileDataRaw,
+  getUserInfosFromToken
+} from '@/utils/gitProvidersAPI.js'
 import {
   authorizedFileTypes,
+  fieldTypeIcons,
   editViewsOptions
 } from '@/utils/fileTypesUtils.js'
-import { csvToObject, ObjectToCsv } from '@/utils/csvUtils.js'
-import { mdToObject, objectToMd } from '@/utils/mdUtils.js'
-import { nodeTypes, objToNodes, setEditInNode, nodeToObj } from '@/utils/jsonUtils.js'
+import {
+  csvToObject,
+  ObjectToCsv
+} from '@/utils/csvUtils.js'
+import {
+  mdToObject,
+  objectToMd
+} from '@/utils/mdUtils.js'
+import {
+  nodeTypes,
+  objToNodes,
+  setEditInNode,
+  nodeToObj
+} from '@/utils/jsonUtils.js'
 import {
   extractWikiInfos,
   getMediawikiData,
@@ -27,6 +50,9 @@ import {
   getMediawikitItem,
   restructurePageData
 } from '@/utils/utilsWikiUrl.js'
+import {
+  getConsolidationApiUrl
+} from '@/utils/consolidationUtils'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -38,13 +64,18 @@ export const mixinGlobal = {
       getEditViewMode: 'git-data/getEditViewMode',
       getViewMode: 'git-data/getViewMode',
       getGitInfosObj: 'getGitInfosObj',
+      getFileToken: 'git-data/getFileToken',
       getFileOptionsObj: 'getFileOptionsObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
       fileNeedsSaving: 'git-data/fileNeedsSaving',
       fileNeedsDownloading: 'git-data/fileNeedsDownloading',
       fileIsCommitting: 'git-data/fileIsCommitting',
+      getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors'
     }),
+    fileToken () {
+      return this.getFileToken(this.fileId)
+    },
     gitObj () {
       return this.fileId && this.getGitInfosObj(this.fileId)
     },
@@ -52,6 +83,9 @@ export const mixinGlobal = {
       // const FileType = this.fileTypes[this.fileType]
       // return (FileType && FileType.family) || 'other'
       return this.gitObj && this.gitObj.filefamily
+    },
+    isFileTypeTable () {
+      return this.fileTypeFamily && this.fileTypeFamily === 'table'
     },
     currentEditViewMode () {
       return this.getEditViewMode(this.fileId)
@@ -61,6 +95,15 @@ export const mixinGlobal = {
     },
     fileOptions () {
       return this.getFileOptionsObj(this.fileId)
+    },
+    fileSchema () {
+      return this.fileOptions && this.fileOptions.schema
+    },
+    hasFileSchemaFile () {
+      return this.fileSchema && this.fileSchema.file
+    },
+    fileCustomProps () {
+      return this.fileOptions && this.fileOptions.customProps
     },
     fileIsLoading () {
       const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
@@ -75,6 +118,9 @@ export const mixinGlobal = {
     },
     isCommitting () {
       return this.fileIsCommitting(this.fileId)
+    },
+    notifications () {
+      return this.getReqNotifications(this.fileId)
     },
     errors () {
       return this.getReqErrors(this.fileId)
@@ -117,26 +163,173 @@ export const mixinGlobal = {
     },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
+    },
+
+    // DATA CONNSOLIDATION
+    hasConsolidation () {
+      return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
     }
   },
   methods: {
     uuidv4,
-    trimText
+    findFromPath
   }
 }
 
+export const mixinForeignKeys = {
+  computed: {
+    ...mapState({
+      loadingShared: (state) => state['git-data'].loadingShared,
+      loadingExtRessources: (state) => state['git-data'].loadingExtRessources
+    }),
+    ...mapGetters({
+      shareableFiles: 'git-data/getShareableFiles',
+      shareableAreSet: 'git-data/areAllShareableSet',
+      isInShareableAndSet: 'git-data/isInShareableAndSet',
+      isInShareableAndLoaded: 'git-data/isInShareableAndLoaded',
+      sharedData: 'git-data/getSharedData',
+      getSharedDatasetByRessource: 'git-data/getSharedDatasetByRessource',
+      getSharedDatasetByGitfile: 'git-data/getSharedDatasetByGitfile',
+      readyToCopyRessources: 'git-data/readyToCopyRessources',
+      readyToLoadExtRessources: 'git-data/readyToLoadExtRessources',
+      getLoadedSharedData: 'git-data/getLoadedSharedData',
+      getLoadedSharedDataItem: 'git-data/getLoadedSharedDataItem'
+    }),
+    sharedDataIsLoaded () {
+      const loadedDatasets = this.getSharedDatasetByGitfile(this.gitObj.id).map(sd => sd.isLoaded)
+      return loadedDatasets.every(b => !!b)
+    },
+    ressourceInfos () {
+      const foreignKey = this.field.foreignKey
+      const resrc = foreignKey && foreignKey.ressource
+      const resrcFilename = resrc && resrc.split('/').at(-1)
+      return {
+        url: resrc,
+        filename: resrcFilename
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateShareableFiles: 'git-data/updateShareableFiles',
+      updateSharedData: 'git-data/updateSharedData',
+      updateLoadingRessources: 'git-data/updateLoadingRessources',
+      updateLoadedSharedData: 'git-data/updateLoadedSharedData'
+    }),
+    loadedSharedData (gitfile) {
+      return this.getLoadedSharedData(gitfile)
+    },
+    getForeignItemRaw (field, value) {
+      const foreignKey = field.foreignKey
+      const ressource = foreignKey.ressource
+      const fields = foreignKey.fields
+      const itemRaw = this.getLoadedSharedDataItem(ressource, fields, value)
+      return itemRaw
+    },
+    getForeignItem (field, value) {
+      const returnFields = field.foreignKey.returnFields
+      const itemRaw = this.getForeignItemRaw(field, value)
+      // console.log('M > mixinForeignKeys > getForeignItem > itemRaw : ', itemRaw)
+      const headers = itemRaw && itemRaw.headers && itemRaw.headers.filter(h => returnFields.includes(h.name))
+      const item = {}
+      headers && itemRaw.item && headers.forEach(h => {
+        item[h.name] = itemRaw.item[h.field]
+      })
+      return item
+    },
+    debugShared (shared) {
+      const data = shared && shared.data && {
+        header: [...shared.data.headers.slice(0, 1), '...'],
+        data: [...shared.data.data.slice(0, 1), '...']
+      }
+      const copy = {
+        ...shared && shared,
+        ...data && { data: data }
+      }
+      return copy
+    }
+  }
+}
+
+export const mixinData = {
+  computed: {
+    ...mapGetters({
+      getFileDataFromStore: 'git-data/getFileDataFromStore'
+    }),
+    fileData () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'data')
+    },
+    fileDataFields () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'dataFields')
+    },
+    fileEdited () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'edited')
+    },
+    fileEditedFields () {
+      return this.fileId && this.getFileDataFromStore(this.fileId, 'editedFields')
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateDataOrEdited: 'git-data/updateDataOrEdited'
+    })
+  }
+}
 export const mixinGit = {
+  computed: {
+    ...mapGetters({
+      getUserGit: 'git-user/getUserGit',
+      getUserBranches: 'git-user/getUserBranches',
+      getRefBranch: 'git-user/getRefBranch',
+      getUserBranchesNotRef: 'git-user/getUserBranchesNotRef',
+      getUserActiveBranch: 'git-user/getUserActiveBranch',
+      userBranch: 'git-user/getUserBranch'
+    }),
+    userGit () {
+      return this.getUserGit(this.fileId)
+    },
+    userBranches () {
+      return this.getUserBranches(this.fileId)
+    },
+    refBranch () {
+      return this.getRefBranch(this.fileId)
+    },
+    notRefBranches () {
+      return this.getUserBranchesNotRef(this.fileId)
+    },
+    userActiveBranch () {
+      return this.getUserActiveBranch(this.fileId)
+    }
+  },
   methods: {
     extractGitInfos,
     getFileData,
-    getFileDataRaw
+    getFileDataRaw,
+    getUserInfosFromToken,
+    ...mapActions({
+      updateUserBranches: 'git-user/updateUserBranches',
+      changeActiveUserBranch: 'git-user/changeActiveUserBranch'
+    })
   }
 }
 
 export const mixinCommit = {
   computed: {
     ...mapGetters({
-      buildNewBranchName: 'buildNewBranchName'
+      getUserGit: 'git-user/getUserGit',
+      buildNewBranchName: 'buildNewBranchName',
+      getUserBranches: 'git-user/getUserBranches'
+    }),
+    userGit () {
+      return this.getUserGit(this.fileId)
+    },
+    userBranches () {
+      return this.getUserBranches(this.fileId)
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateUserBranches: 'git-user/updateUserBranches'
     })
   }
 }
@@ -145,6 +338,17 @@ export const mixinIcons = {
   methods: {
     getIcon (view) {
       return editViewsOptions.find(i => i.code === view).icon
+    },
+    getIconFieldType (field) {
+      // console.log('\nC > mixinDownload > getIconFieldType > field.label : ', field.label)
+      // console.log('C > mixinDownload > getIconFieldType > field : ', field)
+      const icons = fieldTypeIcons.filter(f => f.type === field.type)
+      // console.log('C > mixinDownload > getIconFieldType > icons (1) : ', icons)
+      const icon = icons.find(f => f.subtype === field.subtype) || icons[0]
+      // console.log('C > mixinDownload > getIconFieldType > icon (2) : ', icon)
+      const iconDefault = fieldTypeIcons.find(f => f.default)
+      const result = icon || iconDefault
+      return result.icon
     }
   }
 }
@@ -197,6 +401,112 @@ export const mixinDownload = {
   }
 }
 
+export const mixinValue = {
+  data () {
+    return {
+      numberTypes: ['number', 'integer', 'float'],
+      tagTypes: ['tag', 'tags'],
+      defaultTagsSeparator: defaultTagsSeparator
+    }
+  },
+  computed: {
+    fieldType () {
+      return (this.field && this.field.type) || 'string'
+    },
+    fieldSubtype () {
+      return this.field && this.field.subtype
+    },
+    isString () {
+      return this.fieldType === 'string'
+    },
+    isBoolean () {
+      return this.fieldType === 'boolean'
+    },
+    isLink () {
+      return this.fieldSubtype === 'link'
+    },
+    isEmail () {
+      return this.fieldSubtype === 'email'
+    },
+    isNumber () {
+      return this.numberTypes.includes(this.fieldType)
+    },
+    isInteger () {
+      return this.fieldType === 'integer'
+    },
+    isLongText () {
+      return this.fieldSubtype === 'longtext'
+    },
+    isTag () {
+      return this.field && this.tagTypes.includes(this.field.subtype)
+    },
+    isCategory () {
+      return this.fieldSubtype === 'tag'
+    },
+    tagsEnum () {
+      return (this.field && this.field.enumArr) || []
+    },
+    tagSeparator () {
+      return this.field.tagSeparator || this.defaultTagsSeparator
+    },
+    isPrimaryKey () {
+      return this.field.primaryKey
+    },
+    fieldForeignKey () {
+      return this.field.foreignKey
+    },
+    isForeignKey () {
+      return this.fieldForeignKey && this.fieldForeignKey.activate
+    },
+    isGitributeField () {
+      return this.fieldType === 'gitribute'
+    },
+    isConsolidation () {
+      return this.isGitributeField && this.fieldSubtype === 'consolidation'
+    }
+  },
+  methods: {
+    booleanFromValue,
+    trimText,
+    getValueDefinition (value, field = undefined) {
+      const Field = field || this.field
+      const definitions = Field.definitions
+      const definition = definitions && definitions.find(def => def.value === value)
+      return definition
+    },
+    getValueDefinitionLabel (value, field = undefined) {
+      const definition = this.getValueDefinition(value, field)
+      const label = definition && definition.label
+      return label || value
+    },
+    getValueDefinitionDescription (value, field = undefined) {
+      const definition = this.getValueDefinition(value, field)
+      const description = definition && definition.description
+      return description
+    },
+    tagBackgroundColor (value, bgColor = undefined, isDiff = false) {
+      let color
+      if (!isDiff) {
+        color = bgColor ?? stringToColor(value)
+      } else {
+        color = '#363636'
+      }
+      return color
+    },
+
+    tagColor (value, bgColor = undefined, isDiff = false) {
+      let textColor
+      if (isDiff) {
+        textColor = 'white'
+      } else {
+        const hex = this.tagBackgroundColor(value, bgColor)
+        textColor = getContrastYIQ(hex)
+      }
+      return textColor
+    }
+  }
+}
+
 export const mixinInput = {
   methods: {
     debounce
@@ -210,7 +520,23 @@ export const mixinDiff = {
       delFragClass: 'git-del'
     }
   },
+  computed: {
+    ...mapGetters({
+      getChangesFields: 'git-data/getChangesFields',
+      getChangesData: 'git-data/getChangesData'
+    }),
+
+    fieldsChanges () {
+      return this.getChangesFields(this.fileId)
+    },
+    dataChanges () {
+      return this.getChangesData(this.fileId)
+    }
+  },
   methods: {
+    ...mapActions({
+      updateFileChanges: 'git-data/updateFileChanges'
+    }),
     createTwoFilesPatch,
     diffWords,
     diffHtmlChars (diff) {
@@ -230,6 +556,56 @@ export const mixinDiff = {
       })
       // console.log('C > mixins > diffHtmlChars  > diffText : \n', diffText)
       return diffText
+    },
+    getCharDiff (content, edited) {
+      const diffStr = this.diffWords(content, edited || '')
+      return diffStr
+    },
+    getDiffHtmlChars (isHeader, wasAdded, field, val, rowId) {
+      // console.log('\nM > mixinDiff > getDiffHtmlChars > isHeader : ', isHeader)
+      // console.log('M > mixinDiff > getDiffHtmlChars > wasAdded : ', wasAdded)
+      // console.log('M > mixinDiff > getDiffHtmlChars > field : ', field)
+      // console.log('M > mixinDiff > getDiffHtmlChars > rowId : ', rowId)
+      // console.log('M > mixinDiff > getDiffHtmlChars > val : ', val)
+      let oldVal, newVal
+      const changes = this.isInChanges(isHeader, wasAdded, field, rowId)
+      // console.log('M > mixinDiff > getDiffHtmlChars > changes : ', changes)
+      const wasDeleted = changes.action === 'deleted'
+      // console.log('M > mixinDiff > getDiffHtmlChars > wasDeleted : ', wasDeleted)
+      if (wasAdded && !wasDeleted) {
+        oldVal = ''
+        newVal = val || ''
+      } else if (!wasAdded && wasDeleted) {
+        oldVal = val || ''
+        newVal = ''
+      } else {
+        oldVal = changes.oldVal
+        newVal = changes.val
+      }
+      // console.log('C > mixinValue > getDiffHtmlChars > valDef : ', valDef)
+
+      const charDiff = this.getCharDiff(oldVal, newVal)
+      const diffText = this.diffHtmlChars(charDiff)
+      return diffText
+    },
+    isInChanges (isHeader, wasAdded, field, rowId) {
+      // const isFirstRow = rowId === '0'
+      // isFirstRow && console.log('\nM > mixinDiff > isInChanges > isHeader : ', isHeader)
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > wasAdded : ', wasAdded)
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > field : ', field)
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > rowId : ', rowId)
+      let bool, boolDeleted
+      if (isHeader) {
+        bool = this.fieldsChanges.find(h => h.field === field)
+      } else {
+        // isFirstRow && console.log('M > mixinDiff > isInChanges > this.dataChanges : ', this.dataChanges)
+        bool = this.dataChanges.find(r => r.field === field && r.id === rowId)
+        boolDeleted = this.dataChanges.find(r => r.id === rowId && r.action === 'deleted')
+        if (boolDeleted) bool = boolDeleted
+      }
+      if (wasAdded) bool = true
+      // isFirstRow && console.log('M > mixinDiff > isInChanges > bool : ', bool)
+      return bool
     }
   }
 }
@@ -281,6 +657,7 @@ export const mixinCsv = {
   methods: {
     ...mapActions({
       setSorting: 'git-sortings/setSortingSettings',
+      setSortings: 'git-sortings/setSortingsSettings',
       setFilters: 'git-filters/setFiltersSettings',
       updateFiltersSettings: 'git-filters/updateFiltersSettings'
     }),
@@ -353,5 +730,11 @@ export const mixinJsonNode = {
       const infos = this.getNodeTypeInfosByType(nodeType)
       return infos && infos.icon
     }
+  }
+}
+
+export const mixinConsolidation = {
+  methods: {
+    getConsolidationApiUrl
   }
 }

@@ -5,12 +5,30 @@ export default {
     test: 'test nested global',
     link: 'Lien',
     yes: 'oui',
-    no: 'non'
+    no: 'non',
+    value: 'Valeur',
+    noValue: '(pas de valeur)',
+    oldValue: 'Ancienne valeur',
+    newValue: 'Nouvelle valeur',
+    thanks: 'Merci d\'utiliser {{gitributeRepo}} !',
+    understood: 'Compris'
+  },
+  tabs: {
+    switchPosition: 'Changer la position des onglets'
   },
   git: {
     provider: 'Provider',
     branch: 'Branche',
-    commitBranch: 'Branche de commit'
+    sourceBranch: 'Branche source',
+    newBranch: 'Nouvelle branche',
+    commitBranch: 'Branche de commit',
+    commitSuccess: 'Votre proposition de contribution a bien été envoyée',
+    mergeRequestUrl: 'Lien vers la "merge request"',
+    mergeRequestUrlLink: 'Voir la merge request',
+    branchRef: 'Branche de référence',
+    branchesUser: 'Vos branches',
+    branchUrl: 'Lien vers la branche',
+    branchUrlLink: 'Voir le fichier sur la branche'
   },
   file: {
     text: 'texte',
@@ -25,14 +43,16 @@ export default {
     fileUrlRaw: 'URL de la source (brut)',
     linkToFile: 'Lien vers le fichier',
     linkToFileRaw: 'Lien vers le fichier source (brut)',
-    fileInfos: 'Informations sur le fichier'
+    fileInfos: 'Informations sur le fichier',
+    fileSchema: 'Schéma des données',
+    fileCustomProps: 'Fichier des propriétés'
   },
   preview: {
     edition: 'Edition',
     editView: 'Editer',
     diffView: 'Comparer',
     previewView: 'Aperçu',
-    cardsView: 'Liste',
+    cardsView: 'Liste de  fiches',
     tableView: 'Tableau',
     showCardDetails: 'Afficher les détails',
     closeCardDetails: 'Fermer la vue détaillée',
@@ -52,6 +72,8 @@ export default {
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
+    expandCell: 'Agrandir la cellule',
+    reduceCell: 'Réduire la cellule',
     openLinkInNew: 'Ouvrir le lien dans une nouvelle fenêtre',
     reloadFile: 'Recharger le fichier',
     downloadFile: 'Télécharger le fichier',
@@ -61,7 +83,17 @@ export default {
     clickOrDropFile: 'Glisser/déposer votre fichier ou cliquer pour importer',
     changeLocale: 'Choisir la langue',
     changeToken: "Changer votre jeton d'accès",
-    commitChanges: 'Proposer vos modifications'
+    changeActiveBranch: 'Changer de branche',
+    commitChanges: 'Proposer vos modifications',
+    consolidate: 'Consolider cette ligne',
+    selectConsolidationFields: 'Sélectionner les champs à mettre à jour',
+    validateConsolidation: 'Valider les changements',
+    copyWidget: 'Pour intégrer le widget dans votre site, copie du bloc html du widget',
+    widgetCopied: 'Le widget est copié dans le presse-papier',
+    addTag: 'Ajouter un tag',
+    addTagHelp: 'Cliquer sur + pour ajouter votre tag',
+    clearTag: 'Supprimer le tag',
+    clickForMoreTags: 'Cliquer pour voir plus de tags'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -70,12 +102,15 @@ export default {
     label: 'Trier',
     sortBy: 'Trier par un champ',
     sortAscending: 'Trier par ordre croissant',
-    sortDescending: 'Trier par ordre décroissant'
+    sortDescending: 'Trier par ordre décroissant',
+    sortedAsc: 'Tri par ordre croissant',
+    sortedDesc: 'Tri par ordre décroissant'
   },
   filters: {
     label: 'Filtrer',
     filterBy: 'Filtrer par un champ et une valeur',
     filterByField: 'Filtrer par le champ',
+    resetFilter: 'Réinitialiser ce filtre',
     removeFilter: 'Supprimer ce filtre',
     removeFilters: 'Supprimer tous les filtres'
   },
@@ -92,14 +127,45 @@ export default {
     currentPage: 'Page actuelle',
     itemsPerPage: 'éléments par page'
   },
+  field: {
+    field: 'Champ',
+    label: 'Libellé',
+    type: 'Type',
+    title: 'Titre',
+    description: 'Description',
+    category: 'Catégorie',
+    string: 'Texte',
+    longtext: 'Texte long',
+    link: 'Lien',
+    email: 'Email',
+    geopoint: 'Coordonnée géographique',
+    tag: 'Etiquette',
+    tags: 'Etiquettes',
+    number: 'Nombre',
+    integer: 'Nombre entier',
+    boolean: 'Bouléen',
+    primaryKey: 'Clé principale',
+    foreignKey: 'Clé étrangère',
+    ressource: 'Ressource',
+    ressourceValues: 'Valeurs liées',
+    definition: 'Définition',
+    gitribute: 'Champ spécial',
+    consolidation: 'Consolidation'
+  },
   edit: {
     uploadData: 'Importer/écraser les données',
     headerLocked: "L'intitulé de cette colonne est protégé en écriture"
+  },
+  consolidation: {
+    consolidationApi: "Consolidation par l'API",
+    apiFormat: "Format de l'API",
+    sourceFields: 'Données utilisées'
   },
   editCsv: {
     noSelect: 'Aucun',
     noResult: 'Pas de résultat',
     results: 'lignes',
+    colType: 'Colonne de type',
     addRow: 'Ajouter une nouvelle ligne',
     addTheNewRow: 'Ajouter la nouvelle ligne',
     importData: 'Importer/écraser les données',
@@ -149,14 +215,27 @@ export default {
     userEmail: 'Email',
     userMessage: 'Message'
   },
+  notifications: {
+    notif: 'Notification',
+    notifFunction: 'Notification de la fonction',
+    notifCode: 'Code de réponse',
+    notifMessage: 'Message'
+  },
   errors: {
     error: 'Erreur',
     errorFunction: 'Erreur de la fonction',
     errorCode: "Code d'erreur",
     errorMessage: "Message d'erreur"
   },
+  widget: {
+    widgetCopiedMsg: 'Le widget {{widgetName}}<br>intitulé {{widgetTitle}}<br>est copié dans votre presse-papier.',
+    widgetUse: 'Vous pouvez désormais l\'insérer dans la page html de votre choix.',
+    widgetCopied: 'Widget copié'
+  },
   credits: {
-    reclaim: 'Un widget open source codé avec 🤍  &nbsp; par',
+    reclaim: 'Un widget open source',
+    byLove: 'codé avec 🤍 ',
+    byCooperative: 'par la coopérative',
     code: 'Code source'
   }
 }

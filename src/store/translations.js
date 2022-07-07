@@ -24,14 +24,14 @@ export const translations = {
       // console.log('S > translatioons > G > getCurrentLocale > loc : ', loc)
       return loc
     },
-    getTranslation: (state, getters, rootState, rootGetters) => (key, locale = undefined, debug = false) => {
+    getTranslation: (state, getters, rootState, rootGetters) => (key, locale = undefined, params = undefined, debug = false) => {
       // console.log('S > translatioons > G > getTranslation > key : ', key)
       // console.log('S > translatioons > G > getTranslation > rootGetters : ', rootGetters)
       // console.log('S > translatioons > G > getTranslation > locale : ', locale)
       const loc = getters.getCurrentLocale(locale)
       // console.log('S > translatioons > G > getTranslation > loc : ', loc)
       // return state.dict[key][loc] || key
-      return translate(key, loc, debug)
+      return translate(key, loc, params, debug)
     }
   },
   mutations: {

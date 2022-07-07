@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewModeBtns gitribute-component">
+  <div class="ViewModeBtns gitribute-component is-flex is-align-items-center">
     <!-- BUTTONS -->
     <!-- :class="`${ onlyPreview ? '' : 'ml-5'}`" -->
     <b-field

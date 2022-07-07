@@ -35,6 +35,7 @@
           :locale="locale"
           :is-mini="true"
           @toggleDetail="toggleDetail"
+          @action="SendActionToParent"
           @updateCellValue="emitUpdate"/>
       </div>
     </div>
@@ -53,6 +54,7 @@
           :show-detail="showDetail"
           :locale="locale"
           @toggleDetail="toggleDetail"
+          @action="SendActionToParent"
           @updateCellValue="emitUpdate"/>
       </div>
     </div>
@@ -120,6 +122,10 @@ export default {
       return this.cardsSettings.mapping.map(h => {
         return {
           field: h.field,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
+          tagSeparator: h.tagSeparator,
           ...h.mini
         }
       })
@@ -128,6 +134,10 @@ export default {
       return this.cardsSettings.mapping.map(h => {
         return {
           field: h.field,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
+          tagSeparator: h.tagSeparator,
           ...h.detail
         }
       })
@@ -155,6 +165,9 @@ export default {
     emitUpdate (event) {
       // console.log('\nC > GitributeCardsGrid > emitUpdate > event : ', event)
       this.$emit('updateCellValue', event)
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     }
   }
 }
