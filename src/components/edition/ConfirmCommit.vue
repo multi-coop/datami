@@ -224,7 +224,7 @@ export default {
   computed: {
     ...mapGetters({
       getCommitData: 'git-data/getCommitData',
-      getFileToken: 'git-data/getFileToken',
+      // getFileToken: 'git-data/getFileToken',
       getFileReqInfosObj: 'getFileReqInfosObj'
     }),
     commitData () {
@@ -300,7 +300,7 @@ export default {
       console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
 
       // get token
-      const token = this.getFileToken(this.fileId)
+      const token = this.fileToken // this.getFileToken(this.fileId)
       commitData.token = token
       commitData.userGit = this.userGit
       commitData.userBranches = this.userBranches

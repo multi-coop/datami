@@ -6,6 +6,7 @@ export default {
     link: 'Link',
     yes: 'yes',
     no: 'no',
+    value: 'Value',
     noValue: '(no value)',
     oldValue: 'Old value',
     newValue: 'New value',
@@ -42,7 +43,9 @@ export default {
     fileUrlRaw: 'Source file URL (raw)',
     linkToFile: 'Link to the source file',
     linkToFileRaw: 'Link to the source file (raw)',
-    fileInfos: "File's informations"
+    fileInfos: "File's informations",
+    fileSchema: "File's schema",
+    fileCustomProps: "File's custom options"
   },
   preview: {
     edition: 'Edition',
@@ -82,14 +85,15 @@ export default {
     changeToken: 'Change your user token',
     changeActiveBranch: 'Change your branch',
     commitChanges: 'Submit your modifications',
-    consolidate: 'Consolidate your data',
+    consolidate: 'Consolidate this line',
     selectConsolidationFields: 'Select the fields to update',
     validateConsolidation: 'Validate the changes',
     copyWidget: "To insert the widget in your website, copy the widget's html block",
     widgetCopied: 'The widget code was copied to the clipboard',
     addTag: 'Add a tag',
     addTagHelp: 'Click on + to add your tag',
-    clearTag: 'Remove the tag'
+    clearTag: 'Remove the tag',
+    clickForMoreTags: 'Click to see more tags'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -140,12 +144,22 @@ export default {
     number: 'Number',
     integer: 'Integer',
     boolean: 'Boolean',
+    primaryKey: 'Primary key',
+    foreignKey: 'Foreign key',
+    ressource: 'Ressource',
+    ressourceValues: 'Ressource values',
+    definition: 'Definition',
     gitribute: 'Special field',
     consolidation: 'Consolidation'
   },
   edit: {
     uploadData: 'Import/overwrite the data',
     headerLocked: "This column's label is protected from writing"
+  },
+  consolidation: {
+    consolidationApi: 'Consolidation from the API',
+    apiFormat: 'API format',
+    sourceFields: 'Source data'
   },
   editCsv: {
     noSelect: 'None',

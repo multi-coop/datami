@@ -1,6 +1,7 @@
 <template>
   <div class="GitributeMultiFiles gitribute-widget section">
-    <div class="container mb-4">
+    <div
+      class="container mb-4 gitribute-container">
       <!-- DEBUGGING -->
       <div
         v-if="debug"
@@ -34,40 +35,89 @@
         </div>
       </div>
 
+      <!-- DEBUGGING FOREIGN KEYS-->
+      <div
+        v-if="debug && sharedData"
+        class="columns is-multiline mb-4">
+        <div class="column is-4">
+          shareableAreSet : <code>{{ shareableAreSet }}</code>
+        </div>
+        <div class="column is-4">
+          loadingShared :<br>
+          <pre><code>{{ loadingShared }}</code></pre>
+        </div>
+        <div class="column is-4">
+          loadingExtRessources :<br>
+          <pre><code>{{ loadingExtRessources }}</code></pre>
+        </div>
+        <div class="column is-6">
+          shareableFiles:<br>
+          <pre><code>{{ shareableFiles }}</code></pre>
+        </div>
+        <div class="column is-6">
+          readyToCopyRessources:<br>
+          <pre><code>{{ readyToCopyRessources }}</code></pre>
+          <hr class="my-1">
+          readyToLoadExtRessources:<br>
+          <pre><code>{{ readyToLoadExtRessources }}</code></pre>
+        </div>
+        <div
+          v-for="(shared, idx) in sharedData"
+          :key="`shared-${idx}-${shared.targetFile}`"
+          class="column is-4">
+          isInShareableAndSet:
+          <code>{{ isInShareableAndSet(shared.ressource).length }}</code>
+          <br>
+          isInShareableAndLoaded:
+          <code>{{ isInShareableAndLoaded(shared.ressource).length }}</code>
+          <hr class="my-1">
+          sharedData<code>[{{ idx }}]</code> :<br>
+          <pre><code>{{ debugShared(shared) }}</code></pre>
+          <hr class="my-1">
+          loadedSharedData<code>[{{ idx }}]</code> :<br>
+          <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
+        </div>
+      </div>
+
       <!-- TABS : LOOP FILES -->
       <section>
+        <!-- <code>{{ activeTab }}</code> -->
         <b-tabs
           v-model="activeTab"
           :type="tabsVertical ? '' : 'is-boxed'"
           :vertical="tabsVertical"
-          :class="`multi-files-tabs is-flex-wrap-nowrap ${tabsVertical ? (hovered ? 'width-70' : 'width-80') : ''}`"
+          :class="`multi-files-tabs is-flex-wrap-nowrap ${tabsVertical ? 'width-80' : ''}`"
           multiline>
           <template>
             <b-tab-item
-              v-for="(fileTab, fileTabIdx) in files"
+              v-for="(fileTab, fileTabIdx) in files.filter(f => f.activate)"
               :key="fileTab.id"
               :value="fileTab.id"
               header-class="gitribute-multi-files-tab">
               <!-- TAB HEADER -->
               <template #header>
                 <div
-                  v-if="fileTab.activate"
                   @mouseover="hovered = fileTab.id"
                   @mouseleave="hovered = undefined">
                   <b-tag
-                    class="mr-2"
+                    class="mr-2 has-text-weight-bold"
+                    :type="`is-${(activeTab === fileTab.id) ? 'dark' : hovered === fileTab.id ? 'white' : 'grey' }`"
                     rounded>
                     {{ fileTabIdx + 1 }}
                   </b-tag>
-                  <span>
-                    {{ trimText(fileTab.title, hovered === fileTab.id ? 25 : 15) }}
+                  <span :class="`${hovered === fileTab.id ? 'has-text-black' : ''}`">
+                    <span v-if="!tabsVertical">
+                      {{ trimText(fileTab.title, 15) }}
+                    </span>
+                    <span v-else>
+                      {{ fileTab.title }}
+                    </span>
                   </span>
                 </div>
               </template>
 
               <!-- TAB CONTENT -->
               <div
-                v-if="fileTab.activate"
                 :class="`columns multifiles-container${tabsVertical ? '-top' : ''}`">
                 <div
                   :class="`column is-12 pt-0 ${tabsVertical ? 'pr-0' : 'px-0'}`">
@@ -83,8 +133,8 @@
                     :gitfile="fileTab.gitfile"
                     :options="fileTab.options"
                     :usertoken="fileTab.usertoken"
-                    :locale="fileTab.locale"
-                    :onlypreview="fileTab.onlypreview"
+                    :locale="locale || fileTab.locale"
+                    :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
                     :from-multi-files-vertical="tabsVertical"/>
 
@@ -97,7 +147,7 @@
                     :options="fileTab.options"
                     :usertoken="fileTab.usertoken"
                     :locale="fileTab.locale"
-                    :onlypreview="fileTab.onlypreview"
+                    :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
                     :from-multi-files-vertical="tabsVertical"/>
                 </div>
@@ -111,11 +161,11 @@
 </template>
 
 <script>
-import { trimText } from '@/utils/globalUtils'
+import { trimText, booleanFromValue } from '@/utils/globalUtils'
 
 import { mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
 
 import MultiFilesTabsPosition from '@/components/user/MultiFilesTabsPosition'
 import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
@@ -131,7 +181,8 @@ export default {
     GitributeExplowiki
   },
   mixins: [
-    mixinGlobal
+    mixinGlobal,
+    mixinForeignKeys
   ],
   props: {
     title: {
@@ -167,9 +218,10 @@ export default {
     }
   },
   beforeMount () {
-    // set up files
+    // Set up files
     // console.log('\nC > GitributeMultiFiles > beforeMount > this.gitfiles : ', this.gitfiles)
     const files = this.gitfiles && JSON.parse(this.gitfiles)
+    // console.log('C > GitributeMultiFiles > beforeMount > files : ', files)
     const filesParsed = files && files.map(file => {
       const isMediawiki = file.wikipages || file.wikilist
       const fileSettings = {
@@ -181,13 +233,16 @@ export default {
       }
       return fileSettings
     })
-    const defaultFile = files.find(file => file['default-tab']) ?? files[0]
+
+    // Set default active tab
+    const defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || files[0]
+    // console.log('C > GitributeMultiFiles > beforeMount > defaultFile : ', defaultFile)
     this.activeTab = defaultFile.id
 
     // console.log('C > GitributeMultiFiles > beforeMount > files : ', files)
     this.files = filesParsed || []
 
-    // set up options
+    // Set up options
     const multiFilesOptions = {
       uuid: this.uuidv4(),
       title: this.title,
@@ -199,12 +254,20 @@ export default {
     this.defaultDisplay = multiFilesOptions.options.display
     this.tabsVertical = this.defaultDisplay === 'vertical'
 
-    // set in store
-    console.log('\nC > GitributeMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
+    // Set in store
+    // console.log('\nC > GitributeMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
     this.addFileOptions(multiFilesOptions)
+  },
+  mounted () {
+    // Pre-store files for possible further sharing
+    this.files.forEach(file => {
+      // console.log('C > GitributeMultiFiles > mounted > file.gitfile : ', file.gitfile)
+      this.updateShareableFiles({ gitfile: file.gitfile, isSet: false })
+    })
   },
   methods: {
     trimText,
+    booleanFromValue,
     ...mapActions({
       addFileOptions: 'addFileOptions'
     }),
@@ -217,11 +280,16 @@ export default {
 </script>
 
 <style>
+
+.gitribute-container {
+  max-width: 100% !important;
+}
+
 .multi-files-tabs.is-vertical.width-80 > .tab-content {
   width: 80%;
 }
-.multi-files-tabs.is-vertical.width-70 > .tab-content {
-  width: 65%;
+.multi-files-tabs.is-vertical.width-80 > .tabs {
+  width: 20%;
 }
 .gitribute-multi-files-tab a {
   color: grey !important;

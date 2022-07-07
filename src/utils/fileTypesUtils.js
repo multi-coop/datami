@@ -7,6 +7,16 @@ export const authorizedFileTypes = {
   geojson: { family: 'json', type: 'application/json' },
   wiki: { family: 'table', type: 'data:text/csv' }
 }
+const authorizedTableTypes = []
+for (const t in authorizedFileTypes) {
+  if (authorizedFileTypes[t].family === 'table') authorizedTableTypes.push(t)
+}
+export const isTableExt = (filename) => {
+  // console.log('\nU > fileTypesUtils > isTableExt > filename : ', filename)
+  const ext = filename.split('.').at(-1)
+  // console.log('U > fileTypesUtils > isTableExt > ext : ', ext)
+  return authorizedTableTypes.includes(ext)
+}
 
 // ICONS
 export const providerIcons = [

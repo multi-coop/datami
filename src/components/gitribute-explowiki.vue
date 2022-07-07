@@ -1,8 +1,10 @@
 <template>
   <div
-    :class="`GitributeExplowiki gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
+    :class="`GitributeExplowiki gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    style="max-width: 100%">
     <div
-      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
+      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
+      style="max-width; 100%">
       <div class="columns is-centered mb-4">
         <!-- FILE TITLE -->
         <div class="filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
@@ -145,7 +147,7 @@
     <!-- PREVIEWS CSV / CARDS WIKI -->
     <div
       v-if="wikiItems && fileTypeFamily === 'table'"
-      class="container">
+      class="container gitribute-container">
       <PreviewCsv
         :file-id="fileId"
         :file-is-loading="fileIsLoading"
@@ -445,6 +447,10 @@ export default {
 </script>
 
 <style>
+
+.gitribute-container {
+  max-width: 100% !important;
+}
 
 .no-text-transform {
   text-transform: none!important;
