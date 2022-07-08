@@ -297,6 +297,7 @@ export default {
     // console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
     // console.log('C > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > GitributeExploWiki > beforeMount > this.options : ', this.options)
+    this.setWidgetCopy()
 
     const wikiUuid = this.uuidv4()
 

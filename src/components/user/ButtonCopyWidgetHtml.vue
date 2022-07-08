@@ -39,7 +39,7 @@ export default {
       const prettyChar = 2
       const gitributeLink = '<a class="has-text-weight-bold has-text-dark is-underlined" href="https://giltlab.com/multi-coop/gitribute" target="_blank">Gitribute</a>'
       let widgetName
-      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN ?? 'multi-gitribute.netlify.app'
+      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN ?? 'gitribute.multi.coop'
       const fileOpts = { ...this.fileOptions }
       delete fileOpts.uuid
       let widgetTitle
@@ -95,8 +95,6 @@ export default {
       }
 
       htmlStr += `\
-<link type="text/css" href="https://${widgetProvider}/js/app.css" rel="stylesheet">\r
-<link type="text/css" href="https://${widgetProvider}/fonts/materialdesignicons-webfont.woff2" rel="stylesheet">\r
 <!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi.coop -->\
 `
       // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > htmlStr : \n', htmlStr)
