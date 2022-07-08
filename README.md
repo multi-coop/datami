@@ -54,7 +54,7 @@ This project aims to create a serie of widgets to interact with ressources store
 
 Check out our website for a full documentation, technical and more !
 
-- Documentation website : [gitribute-docs.multi.coop](https://gitribute.multi.coop)
+- Documentation website : [gitribute-docs.multi.coop](https://gitribute-docs.multi.coop)
 
 ---
 
