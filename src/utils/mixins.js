@@ -172,7 +172,69 @@ export const mixinGlobal = {
   },
   methods: {
     uuidv4,
-    findFromPath
+    findFromPath,
+    setWidgetCopy () {
+      // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
+      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN || 'gitribute.multi.coop'
+      // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
+
+      /* Stuff we need to add to <head>
+        <script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
+        <link type="text/css" href="https://${widgetProvider}/js/app.css" rel="stylesheet">\r
+        <link type="text/css" href="https://${widgetProvider}/fonts/materialdesignicons-webfont.woff2" rel="stylesheet">\r
+      */
+
+      // const scripts = [
+      //   {
+      //     src: `https://${widgetProvider}/js/app.js`,
+      //     type: 'text/javascript',
+      //     async: true,
+      //     body: true
+      //   }
+      // ]
+      const links = [
+        {
+          type: 'text/css',
+          href: `https://${widgetProvider}/js/app.css`,
+          rel: 'stylesheet'
+        },
+        {
+          type: 'font/woff2',
+          href: `https://${widgetProvider}/fonts/materialdesignicons-webfont.woff2`,
+          rel: 'stylesheet',
+          as: 'font'
+        }
+      ]
+      // console.log('M > mixinGlobal > setWidgetCopy > scripts : ', scripts)
+      // console.log('M > mixinGlobal > setWidgetCopy > links : ', links)
+
+      const head = document.head
+      // console.log('M > mixinGlobal > setWidgetCopy > head : ', head)
+
+      // scripts.forEach(script => {
+      //   const tagScript = document.createElement('script')
+      //   const existingScript = head.querySelector(`[src='${script.src}']`)
+      //   // console.log('M > mixinGlobal > setWidgetCopy > existingScript : ', existingScript)
+      //   if (!existingScript) {
+      //     Object.keys(script).forEach(scriptKey => {
+      //       tagScript.setAttribute(scriptKey, script[scriptKey])
+      //     })
+      //     document.head.appendChild(tagScript)
+      //   }
+      // })
+
+      links.forEach(link => {
+        const tagCss = document.createElement('link')
+        const existingLink = head.querySelector(`[href='${link.href}']`)
+        // console.log('M > mixinGlobal > setWidgetCopy > existingLink : ', existingLink)
+        if (!existingLink) {
+          Object.keys(link).forEach(linkKey => {
+            tagCss.setAttribute(linkKey, link[linkKey])
+          })
+          document.head.appendChild(tagCss)
+        }
+      })
+    }
   }
 }
 

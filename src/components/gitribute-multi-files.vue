@@ -218,6 +218,8 @@ export default {
     }
   },
   beforeMount () {
+    this.setWidgetCopy()
+
     // Set up files
     // console.log('\nC > GitributeMultiFiles > beforeMount > this.gitfiles : ', this.gitfiles)
     const files = this.gitfiles && JSON.parse(this.gitfiles)
