@@ -44,6 +44,9 @@ export default {
       delete fileOpts.uuid
       let widgetTitle
       let fileOptionsStr
+
+      const scriptStr = 'script'
+
       let htmlStr = `\
 <!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi.coop -->\n
 <!-- GITRIBUTE WIDGET'S HTML BLOCK-->\r
@@ -75,7 +78,7 @@ export default {
   options='${fileOptionsStr}'\r
   onlypreview="${!!this.gitObj.onlyPreview}"\r
   locale="${this.locale}"\r
-></script>${widgetName}>\n
+></${widgetName}>\n
 `
       } else {
         // CASE : MULTI-FILES
@@ -94,7 +97,6 @@ export default {
 `
       }
 
-      const scriptStr = 'script'
       htmlStr += `\
 <!-- GITRIBUTE WIDGET'S APP.JS SCRIPT -->\r
 <${scriptStr} src="https://${widgetProvider}/js/app.js" type="text/javascript" defer></${scriptStr}>\n
