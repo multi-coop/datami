@@ -44,11 +44,8 @@ export default {
       delete fileOpts.uuid
       let widgetTitle
       let fileOptionsStr
+      let htmlStr = ''
 
-      let htmlStr = `\
-<!-- GITRIBUTE WIDGET BLOCK -->\r
-<script src="https://${widgetProvider}/js/app.js" type="text/javascript" defer body/>\n
-`
       if (!this.fromMultiFiles) {
         // CASE : GITFILE OR EXPLOWIKI
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > this.gitObj : ', this.gitObj)
@@ -97,6 +94,12 @@ export default {
       htmlStr += `\
 <!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi.coop -->\
 `
+
+      htmlStr += `\
+<!-- GITRIBUTE WIDGET BLOCK -->\r
+<script src="https://${widgetProvider}/js/app.js" type="text/javascript" defer/>\n
+`
+
       // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > htmlStr : \n', htmlStr)
       const widgetBlocStr = `&lt;${widgetName}&gt;`
       const title = this.t('widget.widgetCopied', this.locale)
