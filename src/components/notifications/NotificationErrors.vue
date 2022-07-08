@@ -68,8 +68,8 @@ export default {
     }
   },
   methods: {
-    getErrorMessage (error) {
-      return error.message || error.statusText || error
+    getErrorMessage (errResp) {
+      return errResp.resp || errResp.statusText || errResp
     }
   }
 }
