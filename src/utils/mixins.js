@@ -363,15 +363,15 @@ export const mixinDownload = {
       const filetype = authorizedFileTypes[this.gitObj.filetype].type
       const type = `${filetype};charset=utf-8`
       const fileName = this.gitObj.filetype === 'wiki' ? `${this.gitObj.filefullname.replaceAll('.', '-').replaceAll(' => ', '---')}.tsv` : this.gitObj.filefullname
-      console.log('\nC > mixinDownload > buildFileLink > fileName : ', fileName)
+      // console.log('\nC > mixinDownload > buildFileLink > fileName : ', fileName)
       // const fileBlob = new Blob([data])
       const fileBlob = new Blob([data], {
         type: type
       })
-      console.log('C > mixinDownload > buildFileLink > fileBlob : ', fileBlob)
+      // console.log('C > mixinDownload > buildFileLink > fileBlob : ', fileBlob)
       const dl = document.createElement('a')
       const fileUrl = window.URL.createObjectURL(fileBlob)
-      console.log('C > mixinDownload > buildFileLink > fileUrl : ', fileUrl)
+      // console.log('C > mixinDownload > buildFileLink > fileUrl : ', fileUrl)
       dl.href = fileUrl
       dl.download = fileName
       dl.display = 'none'

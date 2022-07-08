@@ -347,7 +347,7 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
     responseData = await response.json()
     // console.log('U > utilsWikiUrl > getMediawikitItem > responseData : ', responseData)
   } catch (error) {
-    console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
+    // console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
     errors = [error]
   }
 
