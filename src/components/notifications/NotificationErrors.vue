@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     getErrorMessage (errResp) {
-      return errResp.resp || errResp.statusText || errResp
+      return errResp.message || errResp.statusText || errResp
     }
   }
 }
