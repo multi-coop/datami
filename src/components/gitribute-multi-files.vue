@@ -202,7 +202,7 @@ export default {
       type: String
     },
     debug: {
-      default: true,
+      default: false,
       type: Boolean
     }
   },
