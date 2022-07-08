@@ -3,7 +3,7 @@
     <b-tooltip
       :label="t('actions.copyWidget', locale)"
       type="is-dark"
-      position="is-top">
+      position="is-left">
       <b-button
         size="is-small"
         class="ml-1"
@@ -44,7 +44,10 @@ export default {
       delete fileOpts.uuid
       let widgetTitle
       let fileOptionsStr
-      let htmlStr = ''
+      let htmlStr = `\
+<!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi.coop -->\n
+<!-- GITRIBUTE WIDGET'S HTML BLOCK-->\r
+`
 
       if (!this.fromMultiFiles) {
         // CASE : GITFILE OR EXPLOWIKI
@@ -72,7 +75,7 @@ export default {
   options='${fileOptionsStr}'\r
   onlypreview="${!!this.gitObj.onlyPreview}"\r
   locale="${this.locale}"\r
-/>\n
+></${widgetName}>\n
 `
       } else {
         // CASE : MULTI-FILES
@@ -87,17 +90,14 @@ export default {
   options='${fileOptionsStr}'\r
   gitfiles='${gitfilesStr}'\r
   locale="${this.locale}"\r
-/>\n
+></${widgetName}>\n
 `
       }
 
+      const scriptStr = 'script'
       htmlStr += `\
-<!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi.coop -->\
-`
-
-      htmlStr += `\
-<!-- GITRIBUTE WIDGET BLOCK -->\r
-<script src="https://${widgetProvider}/js/app.js" type="text/javascript" defer/>\n
+<!-- GITRIBUTE WIDGET'S APP.JS SCRIPT -->\r
+<${scriptStr} src="https://${widgetProvider}/js/app.js" type="text/javascript" defer></${scriptStr}>\n
 `
 
       // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > htmlStr : \n', htmlStr)
@@ -126,4 +126,4 @@ export default {
     }
   }
 }
-</script>
+</>
