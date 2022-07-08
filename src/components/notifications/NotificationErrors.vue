@@ -3,16 +3,31 @@
     <b-notification
       v-model="isActive"
       aria-close-label="Close notification">
-      <div class="class columns is-vcentered is-mobile">
-        <div class="column is-1 has-text-centered">
+      <div class="class columns is-mobile is-multiline">
+        <!-- ERROR TITLES -->
+        <div class="column is-1 pt-5 has-text-centered">
           <b-icon
             type="is-danger"
             icon="alert"/>
         </div>
         <div class="column is-3 has-text-centered">
-          <h4 class="has-text-weight-bold mb-2">
+          <h4 class="has-text-weight-bold">
             {{ t('errors.errorFunction', locale) }}
           </h4>
+        </div>
+        <div class="column is-3 has-text-centered">
+          <h4 class="has-text-weight-bold">
+            {{ t('errors.errorCode', locale) }}
+          </h4>
+        </div>
+        <div class="column is-5 has-text-centered">
+          <h4 class="has-text-weight-bold">
+            {{ t('errors.errorMessage', locale) }}
+          </h4>
+        </div>
+
+        <!-- ERROR VALUES -->
+        <div class="column is-3 is-offset-1 has-text-centered">
           <p>
             <code>
               {{ error.function }}
@@ -20,9 +35,6 @@
           </p>
         </div>
         <div class="column is-3 has-text-centered">
-          <h4 class="has-text-weight-bold mb-2">
-            {{ t('errors.errorCode', locale) }}
-          </h4>
           <p>
             <code>
               {{ error.code }}
@@ -30,11 +42,8 @@
           </p>
         </div>
         <div class="column is-5 has-text-centered">
-          <h4 class="has-text-weight-bold mb-2">
-            {{ t('errors.errorMessage', locale) }}
-          </h4>
           <p>
-            <pre><code> {{ getErrorMessage(error.resp) }} </code></pre>
+            <pre class="break-spaces"><code> {{ getErrorMessage(error.resp) }} </code></pre>
           </p>
         </div>
       </div>
@@ -74,3 +83,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.break-spaces {
+  white-space: break-spaces !important;
+}
+</style>
