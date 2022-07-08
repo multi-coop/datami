@@ -10,20 +10,26 @@ import {
 // see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
-export async function getFileData (gitObj) {
+export async function getFileData (gitObj, token = undefined) {
   const errors = []
 
   // get correct API url
   const url = gitObj.apiFile
-  // console.log('\nU > gitProvidersAPI > getFileData > url : ', url)
+  // console.log('\nU > gitProvidersAPI > getFileData > gitObj : ', gitObj)
+  // console.log('U > gitProvidersAPI > getFileData > url : ', url)
+  // console.log('U > gitProvidersAPI > getFileData > token : ', token)
 
   // --- DEPRECATED ---
   // test with axios
   // const req = await $axios.get(url)
   // return req.data
 
+  // const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
+  // console.log('U > gitProvidersAPI > getFileDataRaw > getFileData > userInfosUrl : ', userInfosUrl)
+
   // test with pure fetch
   const req = await fetch(url)
+  // const req = await fetch(url, userInfosUrl.requestOptions)
   // console.log('U > gitProvidersAPI > getFileData > req : ', req)
 
   const resp = await req.json()
@@ -44,20 +50,25 @@ export async function getFileData (gitObj) {
   }
 }
 
-export async function getFileDataRaw (gitObj) {
+export async function getFileDataRaw (gitObj, token = undefined) {
   const errors = []
 
   // get correct API url
   const url = gitObj.apiFileRaw
   // console.log('\nU > gitProvidersAPI > getFileDataRaw > getFileData > url : ', url)
+  // console.log('U > gitProvidersAPI > getFileDataRaw > getFileData > token : ', token)
 
   // --- DEPRECATED ---
   // test with axios
   // const req = await $axios.get(url)
   // return req.data
 
+  // const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
+  // console.log('U > gitProvidersAPI > getFileDataRaw > getFileData > userInfosUrl : ', userInfosUrl)
+
   // test with pure fetch
   const req = await fetch(url)
+  // const req = await fetch(url, userInfosUrl.requestOptions)
   // console.log('U > gitProvidersAPI > getFileDataRaw > getUrl > req : ', req)
 
   let resp = await req.text()

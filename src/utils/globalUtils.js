@@ -37,18 +37,18 @@ export const deepAssign = (target, ...sources) => {
 }
 
 export const findFromPath = (path, obj, debug = false, separator = '.') => {
-  debug && console.log('U > globalUtils > findFromPath > path : ', path)
-  debug && console.log('U > globalUtils > findFromPath > obj : ', obj)
+  // debug && console.log('U > globalUtils > findFromPath > path : ', path)
+  // debug && console.log('U > globalUtils > findFromPath > obj : ', obj)
   const props = Array.isArray(path) ? path : path.split(separator)
-  debug && console.log('U > globalUtils > findFromPath > props : ', props)
+  // debug && console.log('U > globalUtils > findFromPath > props : ', props)
   const result = props.reduce((prev, curr) => {
-    debug && console.log('\nU > ... > globalUtils > findFromPath > prev : ', prev)
-    debug && console.log('U > ... > globalUtils > findFromPath > curr : ', curr)
+    // debug && console.log('\nU > ... > globalUtils > findFromPath > prev : ', prev)
+    // debug && console.log('U > ... > globalUtils > findFromPath > curr : ', curr)
     const temp = prev && prev[curr]
-    debug && console.log('U > ... > globalUtils > findFromPath > temp : ', temp)
+    // debug && console.log('U > ... > globalUtils > findFromPath > temp : ', temp)
     return temp
   }, obj)
-  debug && console.log('\nU > globalUtils > findFromPath > result : ', result)
+  // debug && console.log('\nU > globalUtils > findFromPath > result : ', result)
   return result
 }
 

@@ -135,7 +135,33 @@
             :key="`${field.field}-${i}-${val}`"
             :class="`dropdown-item py-1 is-size-7 ${val === input ? 'is-active is-tag-active' : ''}`"
             @click="changeValue(val)">
-            {{ val }}
+            <div
+              v-if="field.foreignKey"
+              class="has-text-left mb-2">
+              <p class="mb-0 has-text-weight-bold">
+                {{ t('global.value', locale) }} :
+                {{ val }}
+                <b-icon
+                  icon="information-outline"
+                  size="is-small"
+                  class="mx-1"/>
+              </p>
+              <span
+                v-for="entry in Object.entries(itemDirect(field, val))"
+                :key="`${entry[0]}`"
+                class="pl-2">
+                <span>
+                  {{ entry[0] }} :
+                </span>
+                <span class="has-text-weight-bold">
+                  {{ entry[1] }}
+                </span>
+                <br>
+              </span>
+            </div>
+            <span v-else>
+              {{ val }}
+            </span>
           </a>
           <div class="mt-3 px-4 pb-3">
             <b-button
@@ -156,11 +182,14 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
 
 export default {
   name: 'EditTagValue',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinGlobal,
+    mixinForeignKeys
+  ],
   props: {
     input: {
       default: undefined,
@@ -215,6 +244,9 @@ export default {
     changeValue (value) {
       this.showMenu = false
       this.$emit('updateInput', value)
+    },
+    itemDirect (field, val) {
+      return this.getForeignItem(field, val)
     }
   }
 }

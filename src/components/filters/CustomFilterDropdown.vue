@@ -51,7 +51,47 @@
         class="mr-2"
         size="is-small"
         icon="close-thick"/>
+      <!-- FILTER + FOREIGN KEY || DEFINITIONS -->
+      <div v-if="filter.foreignKey || filter.definitions">
+        <span>
+          <span v-if="filter.foreignKey">
+            {{ filter.label }} :
+          </span>
+          <span class="has-text-weight-bold">
+            {{ trimText(filterVal, 50) }}
+          </span>
+          <b-icon
+            icon="information-outline"
+            size="is-small"
+            class="mx-1"/>
+        </span>
+        <br>
+        <!-- HELPERS FOREIGN KEY -->
+        <span v-if="filter.foreignKey">
+          <span
+            v-for="entry in Object.entries(itemDirect(filter, filterVal))"
+            :key="`${entry[0]}`">
+            <span>
+              {{ entry[0] }} :
+            </span>
+            <span class="has-text-weight-bold">
+              {{ entry[1] }}
+            </span>
+            <br>
+          </span>
+        </span>
+        <!-- HELPERS DEFINITION -->
+        <span v-if="filter.definitions">
+          <span class="pt-1">
+            {{ trimText(getValueDefinitionLabel(filterVal, filter), 35) }}
+          </span>
+          <br>
+        </span>
+      </div>
+
+      <!-- SIMPLE FILTER -->
       <span
+        v-else
         :class="`${isActive(filterVal) ? 'has-text-weight-bold' : '' }`">
         {{ trimText(filterVal, 50) }}
       </span>
@@ -61,13 +101,18 @@
 
 <script>
 
-import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinValue,
+  mixinForeignKeys
+} from '@/utils/mixins.js'
 
 export default {
   name: 'CustomFilterDropdown',
   mixins: [
     mixinGlobal,
-    mixinValue
+    mixinValue,
+    mixinForeignKeys
   ],
   props: {
     fileId: {
@@ -100,6 +145,9 @@ export default {
     isActive (filterVal) {
       const activeTags = this.fieldActiveTags.map(t => t.value)
       return activeTags.includes(filterVal)
+    },
+    itemDirect (field, val) {
+      return this.getForeignItem(field, val)
     },
     updateActiveTag (filterVal) {
       // console.log('\nC > CustomFilterDropdown > updateActiveTag > filterVal : ', filterVal)

@@ -1,5 +1,5 @@
 <template>
-  <span class="ButtonWrapCell pl-2 pr-1">
+  <div class="ButtonWrapCell pl-2 pr-1">
     <b-tooltip
       v-if="showExpand"
       :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
@@ -14,7 +14,7 @@
     <b-icon
       v-else
       size="is-small"/>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -53,3 +53,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.ButtonWrapCell {
+  position: relative;
+  left: -2px;
+  top: 0px;
+}
+
+</style>

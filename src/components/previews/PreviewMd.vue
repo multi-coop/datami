@@ -6,13 +6,35 @@
       class="columns is-multiline">
       <div class="column is-full">
         <p>
-          data:
+          currentEditViewMode : <code>{{ currentEditViewMode }}</code>
+        </p>
+      </div>
+      <div class="column is-6">
+        <p>
+          contentData:
           <code>
-            <pre>{{ data }}</pre>
+            <pre>{{ contentData }}</pre>
           </code>
         </p>
         <p>
-          currentEditViewMode : {{ currentEditViewMode }}
+          content:
+          <code>
+            <pre>{{ content }}</pre>
+          </code>
+        </p>
+      </div>
+      <div class="column is-6">
+        <p>
+          contentDataEdited:
+          <code>
+            <pre>{{ contentDataEdited }}</pre>
+          </code>
+        </p>
+        <p>
+          contentEdited:
+          <code>
+            <pre>{{ contentEdited }}</pre>
+          </code>
         </p>
       </div>
     </div>
@@ -33,40 +55,85 @@
         :file-family="'text'"
         :locale="locale"/>
 
+      <!-- DEBUGGING -->
+      <div
+        v-if="debug"
+        class="columns is-multiline">
+        <!-- DEBUG EDITED -->
+        <div
+          v-if="true && fileContentData"
+          class="column is-6">
+          <p>
+            fileContentData:<br>
+            <pre>{{ JSON.stringify(fileContentData, null, 2) }}</pre>
+          </p>
+        </div>
+        <div
+          v-if="true && fileContent"
+          class="column is-6">
+          <p>
+            fileContent:<br>
+            <pre>{{ JSON.stringify(fileContent, null, 2) }}</pre>
+          </p>
+        </div>
+        <div
+          v-if="true && fileContentDataEdited"
+          class="column is-6">
+          <p>
+            fileContentDataEdited:<br>
+            <pre>{{ JSON.stringify(fileContentDataEdited, null, 2) }}</pre>
+          </p>
+        </div>
+        <div
+          v-if="true && fileContentEdited"
+          class="column is-6">
+          <p>
+            fileContentEdited:<br>
+            <pre>{{ JSON.stringify(fileContentEdited, null, 2) }}</pre>
+          </p>
+        </div>
+      </div>
+
       <!-- VIEWS -->
       <div
-        v-if="edited"
+        v-if="contentEdited"
         class="columns is-mobile">
         <!-- EDIT VIEW -->
         <div
           v-show="currentEditViewMode === 'edit'"
-          :class="`column is-half pr-6`">
+          :class="`column is-half pr-3`">
           <p class="is-italic">
             {{ t('preview.yamlPart', locale) }}
           </p>
-          <b-field>
-            <b-input
-              v-model="dataEdited"
-              custom-class="edit-md mb-4"
-              type="textarea"
-              :rows="numberLinesData"/>
-          </b-field>
+          <div class="is-flex is-flex-direction-column">
+            <b-field class="edit-md-data-wrapper">
+              <!-- :rows="numberLinesData" -->
+              <b-input
+                v-model="contentDataEdited"
+                custom-class="edit-md mb-4 edit-md-data"
+                type="textarea"
+                @input="resizeTextarea('edit-md-data')"/>
+            </b-field>
+          </div>
           <p class="is-italic">
             {{ t('preview.textPart', locale) }}
           </p>
-          <b-field>
-            <b-input
-              v-model="edited"
-              custom-class="edit-md"
-              type="textarea"
-              :rows="numberLines"/>
-          </b-field>
+          <div class="is-flex is-flex-direction-column">
+            <b-field class="edit-md-content-wrapper">
+              <!-- :rows="numberLines" -->
+              <b-input
+                v-model="contentEdited"
+                custom-class="edit-md edit-md-content"
+                type="textarea"
+                @input="resizeTextarea('edit-md-content')"/>
+            </b-field>
+          </div>
         </div>
 
         <!-- DIFF VIEW -->
         <div
           v-show="currentEditViewMode === 'diff'"
-          :class="`column is-half pr-6`">
+          :class="`column is-half pr-3`">
           <p class="is-italic">
             {{ t('preview.yamlPart', locale) }}
           </p>
@@ -98,7 +165,7 @@
 
         <!-- PREVIEW -->
         <div
-          :class="`column ${currentEditViewMode !== 'preview' ? 'pl-6' : ''}`">
+          :class="`column ${currentEditViewMode !== 'preview' ? 'is-6 pl-3 pr-5' : ''}`">
           <p
             v-if="currentEditViewMode !== 'preview'"
             class="is-italic">
@@ -107,14 +174,14 @@
           <div
             v-if="currentEditViewMode !== 'preview'"
             class="diff-data"
-            v-html="currentEditViewMode === 'diff' ? getDataString(data) : dataEdited"/>
+            v-html="currentEditViewMode === 'diff' ? getDataString(contentData) : contentDataEdited"/>
           <p
             v-if="currentEditViewMode !== 'preview'"
             class="is-italic">
             {{ t('preview.textPart', locale) }}
           </p>
           <ShowDown
-            :markdown="currentEditViewMode === 'diff' ? content : edited"
+            :markdown="currentEditViewMode === 'diff' ? content : contentEdited"
             flavor="github"/>
         </div>
       </div>
@@ -125,7 +192,14 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinCommit, mixinIcons, mixinDiff, mixinMd } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinData,
+  mixinCommit,
+  mixinIcons,
+  mixinDiff,
+  mixinMd
+} from '@/utils/mixins.js'
 
 import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderMD from '@/components/loaders/LoaderMD'
@@ -149,6 +223,7 @@ export default {
   },
   mixins: [
     mixinGlobal,
+    mixinData,
     mixinCommit,
     mixinIcons,
     mixinDiff,
@@ -184,43 +259,43 @@ export default {
     return {
       contentIsSet: false,
       beginEdit: false,
-      data: null,
-      dataEdited: null,
+      contentData: null,
+      contentDataEdited: null,
       content: null,
-      edited: null
+      contentEdited: null
     }
   },
   computed: {
     dataAsMarkdown () {
-      return this.objectAsMarkdown(this.data)
+      return this.objectAsMarkdown(this.contentData)
     },
     numberLines () {
       let result = 2
-      if (this.edited) { result = this.edited.split(/\r\n|\r|\n/).length + result }
+      if (this.contentEdited) { result = this.contentEdited.split(/\r\n|\r|\n/).length + result }
       return result
     },
     numberLinesData () {
       let result = 0
-      if (this.dataEdited) {
-        result = this.dataEdited.split(/\r\n|\r|\n/).length - 1
+      if (this.contentDataEdited) {
+        result = this.contentDataEdited.split(/\r\n|\r|\n/).length - 1
       }
       return result
     },
     getUnifiedDiff () {
       // console.log('C > PreviewMd > getUnifiedDiff  > createTwoFilesPatch : \n', createTwoFilesPatch)
       const fileName = this.gitObj.filefullname
-      const diffStr = this.createTwoFilesPatch(fileName, fileName, this.content, this.edited)
+      const diffStr = this.createTwoFilesPatch(fileName, fileName, this.content, this.contentEdited)
       return diffStr
     },
     // getCharDiff () {
     //   // console.log('C > PreviewMd > getCharDiff  > diffChars : \n', diffChars)
-    //   // const diffStr = diffChars(this.content, this.edited)
-    //   const diffStr = this.diffWords(this.content, this.edited)
+    //   // const diffStr = diffChars(this.content, this.contentEdited)
+    //   const diffStr = this.diffWords(this.content, this.contentEdited)
     //   return diffStr
     // },
     getCharDiffData () {
-      const dataAsMarkdown = this.getDataString(this.data)
-      const diffStr = this.diffWords(dataAsMarkdown, this.dataEdited)
+      const dataAsMarkdown = this.getDataString(this.contentData)
+      const diffStr = this.diffWords(dataAsMarkdown, this.contentDataEdited)
       return diffStr
     },
     // getDiffHtmlUnified () {
@@ -234,7 +309,7 @@ export default {
     //   return Diff2Html.html(diff, options)
     // },
     getMdDiffHtmlChars () {
-      const charDiff = this.getCharDiff(this.content, this.edited)
+      const charDiff = this.getCharDiff(this.content, this.contentEdited)
       const diffText = this.diffHtmlChars(charDiff)
       return diffText
     },
@@ -242,43 +317,59 @@ export default {
       const diffText = this.diffHtmlChars(this.getCharDiffData)
       return diffText
     }
-    // fileIsSaving () {
-    //   const resp = !this.gitObj || this.fileNeedsSaving(this.fileId)
-    //   return resp
-    // }
   },
   watch: {
+    currentEditViewMode (next) {
+      if (next === 'edit') {
+        // console.log('\nC > PreviewMd > watch > currentEditViewMode > next :', next)
+        this.resizeTextarea('edit-md-data')
+        this.resizeTextarea('edit-md-content')
+      }
+    },
     fileRaw (next) {
       if (next && next !== '') {
-        // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
+        // console.log('\nC > PreviewMd > watch > fileRaw > !!next : ', !!next)
         // console.log('C > PreviewMd > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataRaw = this.mdToObject(next, this.fileOptions)
-        this.content = dataRaw.content
-        this.data = dataRaw.data
+        const contentData = dataRaw.data
+        const content = dataRaw.content
+        this.contentData = contentData
+        this.content = content
         if (!this.contentIsSet) { this.contentIsSet = true }
       }
     },
     fileClientRaw (next) {
       if (next) {
+        // console.log('\nC > PreviewMd > watch > fileClientRaw > !!next : ', !!next)
         const dataRaw = this.mdToObject(next, this.fileOptions)
-        this.edited = dataRaw.content
-        this.dataEdited = this.objectToMd('', dataRaw.data)
+        const contentDataEdited = this.objectToMd('', dataRaw.data)
+        const contentEdited = dataRaw.content
+        this.contentDataEdited = contentDataEdited
+        this.contentEdited = contentEdited
       }
     },
     contentIsSet (next) {
-      // console.log('C > PreviewMd > watch > fileRaw > next : \n', next)
       if (next) {
-        this.edited = this.content
-        this.dataEdited = this.objectToMd('', this.data)
+        // console.log('\nC > PreviewMd > watch > contentIsSet > next : ', next)
+        const contentDataEdited = this.objectToMd('', this.contentData)
+        const contentEdited = this.content
+        this.contentDataEdited = contentDataEdited
+        this.contentEdited = contentEdited
+        // this.resizeTextarea('edit-md-data')
+        // this.resizeTextarea('edit-md-content')
       }
     },
-    edited (next, prev) {
-      if (next && !prev) {
+    contentDataEdited (next) {
+      if (next) {
+        // console.log('C > PreviewMd > watch > contentDataEdited > !!next : ', !!next)
+        // this.resizeTextarea('edit-md-data')
         this.bufferizeEdited()
       }
     },
-    dataEdited (next) {
-      if (next) {
+    contentEdited (next, prev) {
+      if (next && !prev) {
+        // console.log('C > PreviewMd > watch > contentEdited > !!next : ', !!next)
+        // this.resizeTextarea('edit-md-content')
         this.bufferizeEdited()
       }
     },
@@ -304,15 +395,26 @@ export default {
       return this.formatAsYaml(dataString)
     },
     bufferizeEdited () {
-      // const edited = this.objectToMd(this.edited, this.data)
-      const edited = `${this.dataEdited}\n${this.edited}`
+      const edited = `${this.contentDataEdited}\n${this.contentEdited}`
       const commitData = {
         gitObj: this.gitObj,
-        // edited: this.edited,
         edited: edited,
         newBranch: this.buildNewBranchName(this.gitObj.filefullname, this.fileId)
       }
       this.updateBuffer({ ...commitData, addToBuffer: true })
+    },
+    resizeTextarea (pointer) {
+      // console.log('\nC > PreviewMd > resizeTextarea > pointer : ', pointer)
+      const textArea = document.querySelector(`.${pointer}`)
+      if (textArea && textArea.scrollHeight) {
+        const height = textArea.scrollHeight
+        textArea.style.height = `${height}px`
+      } else if (textArea && !textArea.scrollHeight) {
+        setTimeout(() => {
+          const height = textArea.scrollHeight
+          textArea.style.height = `${height + 4}px`
+        }, 100)
+      }
     }
   }
 }
@@ -320,10 +422,15 @@ export default {
 
 <style>
 
+.edit-md-full-height {
+  height: 100% !important;
+}
 .edit-md {
   color: white;
   font-family: monospace;
   background-color: #191919;
+  max-height: 100% !important;
+  overflow: hidden;
 }
 .diff-data {
   overflow-x: auto;

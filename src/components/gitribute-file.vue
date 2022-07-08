@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`GitributeFile gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
+    :class="`GitributeFile gitribute-widget gitribute-container section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
     <div
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
       <div class="columns is-centered mb-4">
@@ -88,12 +88,63 @@
       :locale="locale"
       @action="processAction"/>
 
+    <!-- DEBUGGING FOREIGN KEYS-->
+    <div
+      v-if="debug && sharedData"
+      class="columns is-multiline mb-4">
+      <div class="column is-full">
+        fileId : <code>{{ fileId }}</code>
+      </div>
+    </div>
+    <div
+      v-if="debug && !fromMultiFiles && sharedData"
+      class="columns is-multiline mb-4">
+      <div class="column is-4">
+        shareableAreSet : <code>{{ shareableAreSet }}</code>
+      </div>
+      <div class="column is-4">
+        loadingShared :<br>
+        <pre><code>{{ loadingShared }}</code></pre>
+      </div>
+      <div class="column is-4">
+        loadingExtRessources :<br>
+        <pre><code>{{ loadingExtRessources }}</code></pre>
+      </div>
+      <div class="column is-6">
+        shareableFiles:<br>
+        <pre><code>{{ shareableFiles }}</code></pre>
+      </div>
+      <div class="column is-6">
+        readyToCopyRessources:<br>
+        <pre><code>{{ readyToCopyRessources }}</code></pre>
+        <hr class="my-1">
+        readyToLoadExtRessources:<br>
+        <pre><code>{{ readyToLoadExtRessources }}</code></pre>
+      </div>
+      <div
+        v-for="(shared, idx) in sharedData"
+        :key="`shared-${idx}-${shared.targetFile}`"
+        class="column is-4">
+        isInShareableAndSet:
+        <code>{{ isInShareableAndSet(shared.ressource).length }}</code>
+        <br>
+        isInShareableAndLoaded:
+        <code>{{ isInShareableAndLoaded(shared.ressource).length }}</code>
+        <hr class="my-1">
+        sharedData<code>[{{ idx }}]</code> :<br>
+        <pre><code>{{ debugShared(shared) }}</code></pre>
+        <hr class="my-1">
+        loadedSharedData<code>[{{ idx }}]</code> :<br>
+        <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
+      </div>
+    </div>
+
     <!-- PREVIEWS - SWITCH BY FILE TYPE -->
     <div v-show="!fileIsSaving">
       <!-- PREVIEWS CSV -->
       <div
         v-if="fileTypeFamily === 'table'"
-        class="container">
+        class="container gitribute-container">
         <PreviewCsv
           :only-preview="onlypreview"
           :file-id="fileId"
@@ -106,7 +157,7 @@
       <!-- PREVIEWS MD -->
       <div
         v-if="fileTypeFamily === 'text'"
-        class="container">
+        class="container gitribute-container">
         <PreviewMd
           :only-preview="onlypreview"
           :file-id="fileId"
@@ -119,7 +170,7 @@
       <!-- PREVIEWS JSON -->
       <div
         v-if="fileTypeFamily === 'json'"
-        class="container">
+        class="container gitribute-container">
         <PreviewJson
           :only-preview="onlypreview"
           :file-id="fileId"
@@ -139,7 +190,8 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
+import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
+import { csvToObject } from '@/utils/csvUtils'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
@@ -178,6 +230,7 @@ export default {
   },
   mixins: [
     mixinGlobal,
+    mixinForeignKeys,
     mixinGit
   ],
   props: {
@@ -232,15 +285,31 @@ export default {
   },
   watch: {
     fileIsLoading (next) {
-      // console.log('C > GitributeFile > watch > fileIsLoading > next : ', next)
       if (next) { this.reloadFile() }
+    },
+    shareableFiles (next) {
+      const goNoGo = next && next.length && next.map(i => i.isSet)
+      if (goNoGo && goNoGo.every(b => b)) {
+        // console.log('\nC >>> GitributeFile > watch > shareableFiles > this.gitObj.id : ', this.gitObj.id)
+        // console.log('C >>> GitributeFile > watch > shareableFiles > goNoGo : ', goNoGo)
+        // console.log('C >>> GitributeFile > watch > shareableFiles > this.shareableFiles.map(i => i.isSet) : ', this.shareableFiles.map(i => i.isSet))
+        this.updateLoadingRessources({ key: 'loadingShared', loadState: 'loading', from: this.fileId })
+        this.updateLoadingRessources({ key: 'loadingExtRessources', loadState: 'loading', from: this.fileId })
+      }
+    },
+    async loadingExtRessources (next) {
+      if (next.loadState === 'loading' && next.initiator === this.fileId && this.readyToLoadExtRessources) {
+        await this.loadExtRessources()
+      }
     }
   },
   async beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
+
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
     const fileUuid = this.uuidv4()
+    this.updateShareableFiles({ gitfile: this.gitfile, fileId: fileUuid, isSet: false })
     gitInfosObject.uuid = fileUuid
     gitInfosObject.title = this.title
     gitInfosObject.onlyPreview = this.onlypreview
@@ -273,7 +342,7 @@ export default {
     if (fileSchema && fileSchema.file) {
       const schemaGitObj = this.extractGitInfos(fileSchema.file)
       // console.log('C > GitributeFile > beforeMount > schemaGitObj : ', schemaGitObj)
-      const schemaRaw = await this.getFileDataRaw(schemaGitObj)
+      const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
       const schemaData = schemaRaw && schemaRaw.data
       const schema = JSON.parse(schemaData)
       // console.log('C > GitributeFile > beforeMount > schema : ', schema)
@@ -283,11 +352,16 @@ export default {
     let fileCustomProps = fileOptions['fields-custom-properties']
     if (fileCustomProps && fileCustomProps.file) {
       const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
-      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
       const customPropsData = customPropsRaw && customPropsRaw.data
       const customProps = JSON.parse(customPropsData)
       fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
+    // fileCustomProps && console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
+    // fileCustomProps && console.log('C > GitributeFile > beforeMount > fileCustomProps : ', fileCustomProps)
+
+    // parse fields to look for foreign keys
+    this.processForeignKeys(fileCustomProps)
 
     // update fileOptions with schema and consolidation settings
     fileOptions = {
@@ -325,7 +399,7 @@ export default {
       this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // Request API for file infos
-      const respData = await this.getFileData(this.gitObj)
+      const respData = await this.getFileData(this.gitObj, this.fileToken)
       // console.log('\nC > GitributeFile > reloadFile > respData : ', respData)
       const fileInfos = respData.data
       const fileInfosErrors = respData.errors
@@ -335,7 +409,7 @@ export default {
       // console.log('C > GitributeFile > reloadFile > this.fileInfos : ', this.fileInfos)
 
       // Request API for file content
-      const respDataRaw = await this.getFileDataRaw(this.gitObj)
+      const respDataRaw = await this.getFileDataRaw(this.gitObj, this.fileToken)
       // console.log('C > GitributeFile > reloadFile > respDataRaw : ', respDataRaw)
       const fileRaw = respDataRaw.data
       const fileRawErrors = respDataRaw.errors
@@ -349,6 +423,79 @@ export default {
 
       // Update reloading in store - false
       this.updateReloading({ fileId: this.fileId, isLoading: false })
+
+      // Data is set again
+      const currentFile = this.gitObj.id
+      this.updateShareableFiles({ gitfile: currentFile, fileId: this.fileId, isSet: true })
+    },
+    processForeignKeys (fileCustomProps) {
+      const foreignKeysFields = fileCustomProps && fileCustomProps.fields && fileCustomProps.fields.filter(field => field.foreignKey && field.foreignKey.activate)
+      if (foreignKeysFields && foreignKeysFields.length) {
+        // console.log('\nC > GitributeFile > processForeignKeys > this.gitfile : ', this.gitfile)
+        // console.log('C > GitributeFile > processForeignKeys > foreignKeysFields : ', foreignKeysFields)
+        foreignKeysFields.forEach(field => {
+          const payload = {
+            ressource: field.foreignKey.ressource,
+            fromFileId: this.gitObj.uuid,
+            fromGitfile: this.gitfile,
+            field: {
+              name: field.name
+            },
+            foreignKey: {
+              fields: field.foreignKey.fields
+            },
+            options: field.foreignKey.ressourceOptions,
+            isLoaded: false
+          }
+          // console.log('C > GitributeFile > processForeignKeys > payload : ', payload)
+          this.updateSharedData(payload)
+        })
+      }
+    },
+    async loadExtRessources () {
+      // console.log('\nC >>> GitributeFile > loadExtRessources > this.gitObj.id : ', this.gitObj.id)
+      // console.log('C >>> GitributeFile > loadExtRessources > this.readyToLoadExtRessources : ', this.readyToLoadExtRessources)
+      for (const resrc of this.readyToLoadExtRessources) {
+        // console.log('C >>> GitributeFile > loadExtRessources > resrc : ', resrc)
+        const fileUrl = resrc.ressource
+        // console.log('... C >>> GitributeFile > loadExtRessources > fileUrl : ', fileUrl)
+        const ressourceGitObj = this.extractGitInfos(fileUrl)
+        const ressourceRaw = await this.getFileDataRaw(ressourceGitObj, this.fileToken)
+        // console.log('C >>> GitributeFile > loadExtRessources > ressourceRaw : ', ressourceRaw)
+        const dataObj = csvToObject(ressourceRaw.data, resrc.options)
+        // console.log('C >>> GitributeFile > loadExtRessources > dataObj : ', dataObj)
+
+        // save data in loadedSharedData
+        const fields = Object.entries(dataObj.headers)
+          .map((entry, idx) => {
+            const fieldId = entry[0]
+            const fieldLabel = entry[1].trim()
+            const fieldData = {
+              field: fieldId,
+              label: fieldLabel.trim(),
+              type: 'string',
+              name: fieldLabel
+            }
+            return fieldData
+          })
+        const payloadData = {
+          ressource: resrc.ressource,
+          ressourceId: resrc.ressourceId,
+          data: {
+            headers: fields,
+            data: dataObj.data
+          }
+        }
+        // console.log('C >>> GitributeFile > loadExtRessources > payloadData : ', payloadData)
+        this.updateLoadedSharedData(payloadData)
+
+        // update sharedData
+        const payload = {
+          ...resrc,
+          isLoaded: true
+        }
+        this.updateSharedData(payload)
+      }
     },
     processAction (event) {
       // console.log('\nC > GitributeFile > processAction > event : ', event)
@@ -367,11 +514,15 @@ export default {
 
 <style>
 
+.gitribute-container {
+  max-width: 100% !important;
+}
+
 .no-text-transform{
   text-transform: none!important;
 }
 
-@media(max-width:768px){
+@media(max-width:768px) {
   .filetitle-and-viewmodes{
     justify-content: center;
     flex-direction: column-reverse;
