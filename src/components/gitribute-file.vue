@@ -10,7 +10,6 @@
             :file-id="fileId"
             :locale="locale"/>
           <FileTitle
-            class="mb-3"
             :show-file-infos="showFileInfos"
             :title="title"
             :file-id="fileId"

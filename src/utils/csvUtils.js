@@ -129,9 +129,6 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
   // console.log('\nU > csvToObject > options : ', options)
   // console.log('U > csvToObject > csvRaw : \n', csvRaw)
 
-  // const schema = options.schema
-  // console.log('U > csvToObject > schema : ', schema)
-
   const separator = options.separator || ','
   const quoteChar = options.quoteChar || '"'
   let headersArr
