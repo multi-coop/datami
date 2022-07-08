@@ -432,7 +432,7 @@ import {
 } from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
-
+import { mapActions } from 'vuex'
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import ButtonSortByField from '@/components/sorting/ButtonSortByField'
 import FilterTags from '@/components/filters/FilterTags'
@@ -826,7 +826,11 @@ export default {
     this.itemsPerRow = pagination.itemsPerRow
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
+
   methods: {
+    ...mapActions({
+      updateReqErrors: 'git-data/updateReqErrors'
+    }),
     columnThAttrs (column) {
       // console.log('\nC > GitributeTable > columnThAttrs > column : ', column)
       return {
@@ -1021,7 +1025,8 @@ export default {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
@@ -1053,10 +1058,14 @@ export default {
       // respConsolidation.rowData = rowData
       // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
-      // update loaders
+      // update loaders & errors
       this.consolidating = this.consolidating.filter(id => id !== rowId)
-      this.consolidationData.push(respConsolidation)
-      this.openedDetails.push(rowId)
+      if (!respConsolidation.consolidation) {
+        this.updateReqErrors({ fileId: this.fileId, errors: respConsolidation.errors, addToErrors: true })
+      } else {
+        this.consolidationData.push(respConsolidation)
+        this.openedDetails.push(rowId)
+      }
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)
@@ -1066,9 +1075,9 @@ export default {
       this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
     },
     updateConsolidatedValues (event) {
-      console.log('\nC > GitributeTable > updateConsolidatedValues > event : ', event)
+      // console.log('\nC > GitributeTable > updateConsolidatedValues > event : ', event)
       event.newValues.forEach(e => {
-        console.log('C > GitributeTable > updateConsolidatedValues > e : ', e)
+        // console.log('C > GitributeTable > updateConsolidatedValues > e : ', e)
         this.$emit('updateEdited', e)
       })
       this.closeConsolidationDetail(event.rowId)

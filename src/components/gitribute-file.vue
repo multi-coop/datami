@@ -52,6 +52,7 @@
     </div>
 
     <!-- ERRORS -->
+    <!-- <pre><code>{{ errors }}</code></pre> -->
     <div
       v-if="errors && errors.length"
       class="mb-6">
@@ -305,6 +306,10 @@ export default {
   },
   async beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
+
+    if (!this.fromMultiFiles) {
+      this.setWidgetCopy()
+    }
 
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
