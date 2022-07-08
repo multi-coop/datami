@@ -60,7 +60,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
   console.log('U > consolidationUtils > getConsolidationApiUrl > consolidation : ', consolidation)
 
   let isAllEmpty = consolidation && consolidation.map(c => c.newValue)
-  isAllEmpty = isAllEmpty.every(i => !i)
+  isAllEmpty = isAllEmpty && isAllEmpty.every(i => !i)
   if (isAllEmpty) {
     consolidation = undefined
     const emptyErr = {
