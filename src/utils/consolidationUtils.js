@@ -14,20 +14,30 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
     // console.log('U > consolidationUtils > getConsolidationApiUrl > valueStr : ', valueStr)
     apiUrl = apiUrl.replace(`{{${sf.name}}}`, valueStr)
   })
-  // console.log('U > consolidationUtils > getConsolidationApiUrl > apiUrl : ', apiUrl)
+  console.log('U > consolidationUtils > getConsolidationApiUrl > apiUrl : ', apiUrl)
 
-  const resp = await fetch(apiUrl)
-  // console.log('U > consolidationUtils > getConsolidationApiUrl > resp : ', resp)
-  const respData = await resp.json()
-  // console.log('U > consolidationUtils > getConsolidationApiUrl > respData : ', respData)
+  let reqError = { ok: true }
+  const req = await fetch(apiUrl)
+    .catch(err => {
+      reqError = {
+        ok: false,
+        status: 500,
+        err: err
+      }
+    })
+  console.log('U > consolidationUtils > getConsolidationApiUrl > req : ', req)
+  console.log('U > consolidationUtils > getConsolidationApiUrl > reqError : ', reqError)
 
-  if (!resp.ok) {
+  const resp = req && await req.json()
+  console.log('U > consolidationUtils > getConsolidationApiUrl > resp : ', resp)
+
+  if (!reqError.ok || !req.ok) {
     const err = {
       function: 'getConsolidationApiUrl',
-      code: resp.status,
-      resp: resp
+      code: reqError.status || req.status,
+      resp: req || reqError.err
     }
-
+    console.log('U > consolidationUtils > getConsolidationApiUrl > err : ', err)
     errors.push(err)
   } else {
     const resultsMapping = consolidationData.api.results_fields
@@ -43,7 +53,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
       return {
         fromField: m.resp_field,
         toField: targetField,
-        newValue: findFromPath(m.resp_field, respData)
+        newValue: findFromPath(m.resp_field, resp)
       }
     })
   }
@@ -51,7 +61,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
   // return consolidation data
   return {
     // data: respData,
-    consolidation: resp.ok && consolidation,
+    consolidation: req && req.ok && consolidation,
     errors: errors
   }
 }
