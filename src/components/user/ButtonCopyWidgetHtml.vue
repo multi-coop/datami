@@ -47,7 +47,7 @@ export default {
 
       let htmlStr = `\
 <!-- GITRIBUTE WIDGET BLOCK -->\r
-<script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
+<script src="https://${widgetProvider}/js/app.js" type="text/javascript" defer body/>\n
 `
       if (!this.fromMultiFiles) {
         // CASE : GITFILE OR EXPLOWIKI
