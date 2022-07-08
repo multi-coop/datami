@@ -57,6 +57,19 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
       }
     })
   }
+  console.log('U > consolidationUtils > getConsolidationApiUrl > consolidation : ', consolidation)
+
+  let isAllEmpty = consolidation && consolidation.map(c => c.newValue)
+  isAllEmpty = isAllEmpty.every(i => !i)
+  if (isAllEmpty) {
+    consolidation = undefined
+    const emptyErr = {
+      function: 'getConsolidationApiUrl',
+      code: 200,
+      resp: 'No one single new value retrieved from the API'
+    }
+    errors.push(emptyErr)
+  }
 
   // return consolidation data
   return {

@@ -1026,6 +1026,7 @@ export default {
     },
     async consolidateRow (consolidationSettings) {
       console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
@@ -1055,9 +1056,9 @@ export default {
       respConsolidation.sourceFields = sourceFields
       respConsolidation.api = consolidationSettings.api.api
       // respConsolidation.rowData = rowData
-      // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
+      console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
-      // update loaders
+      // update loaders & errors
       this.consolidating = this.consolidating.filter(id => id !== rowId)
       if (!respConsolidation.consolidation) {
         this.updateReqErrors({ fileId: this.fileId, errors: respConsolidation.errors, addToErrors: true })
