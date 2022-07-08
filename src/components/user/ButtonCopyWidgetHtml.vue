@@ -3,7 +3,8 @@
     <b-tooltip
       :label="t('actions.copyWidget', locale)"
       type="is-dark"
-      position="is-top">
+      multilined
+      position="is-left">
       <b-button
         size="is-small"
         class="ml-1"
@@ -44,12 +45,20 @@ export default {
       delete fileOpts.uuid
       let widgetTitle
       let fileOptionsStr
-      let htmlStr = ''
+
+      const scriptStr = 'script'
+      const quoteReplacer = '-'
+
+      let htmlStr = `\n
+<!-- GITRIBUTE - contribute with GIT ...but without minding it-->\r
+<!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi : https://multi.coop -->\n
+<!-- GITRIBUTE WIDGET'S HTML BLOCK-->\r
+`
 
       if (!this.fromMultiFiles) {
         // CASE : GITFILE OR EXPLOWIKI
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > this.gitObj : ', this.gitObj)
-        widgetTitle = this.gitObj.title.replaceAll("'", '&quot;')
+        widgetTitle = this.gitObj.title.replaceAll("'", quoteReplacer)
         const isWiki = this.gitObj.provider === 'mediawiki'
         widgetName = `multi-gitribute-${isWiki ? 'explowiki' : 'file'}`
         const fileKey = isWiki ? 'wikilist' : 'gitfile'
@@ -63,7 +72,7 @@ export default {
         fileOpts['fields-custom-properties'] = fileCustomProps && fileCustomProps.file ? { file: fileCustomProps.file } : fileCustomProps
         delete fileOpts.customProps
 
-        fileOptionsStr = JSON.stringify(fileOpts, null, prettyChar).replaceAll("'", '&quot;')
+        fileOptionsStr = JSON.stringify(fileOpts, null, prettyChar).replaceAll("'", quoteReplacer)
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > fileOptionsStr : ', fileOptionsStr)
         htmlStr += `\
 <${widgetName}\r
@@ -72,32 +81,28 @@ export default {
   options='${fileOptionsStr}'\r
   onlypreview="${!!this.gitObj.onlyPreview}"\r
   locale="${this.locale}"\r
-/>\n
+></${widgetName}>\n
 `
       } else {
         // CASE : MULTI-FILES
-        widgetTitle = fileOpts.title.replaceAll("'", '&quot;')
+        widgetTitle = fileOpts.title.replaceAll("'", quoteReplacer)
         widgetName = 'multi-gitribute-multi-files'
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > fromMultiFiles > fileOpts : ', fileOpts)
         fileOptionsStr = JSON.stringify(fileOpts.options, null, prettyChar)
-        const gitfilesStr = JSON.stringify(fileOpts.gitfiles, null, prettyChar).replaceAll("'", '&quot;')
+        const gitfilesStr = JSON.stringify(fileOpts.gitfiles, null, prettyChar).replaceAll("'", quoteReplacer)
         htmlStr += `\
 <${widgetName}\r
   title="${widgetTitle}"\r
   options='${fileOptionsStr}'\r
   gitfiles='${gitfilesStr}'\r
   locale="${this.locale}"\r
-/>\n
+></${widgetName}>\n
 `
       }
 
       htmlStr += `\
-<!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi.coop -->\
-`
-
-      htmlStr += `\
-<!-- GITRIBUTE WIDGET BLOCK -->\r
-<script src="https://${widgetProvider}/js/app.js" type="text/javascript" defer/>\n
+<!-- GITRIBUTE WIDGET'S APP.JS SCRIPT -->\r
+<${scriptStr} src="https://${widgetProvider}/js/app.js" type="text/javascript" defer></${scriptStr}>\n
 `
 
       // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > htmlStr : \n', htmlStr)
