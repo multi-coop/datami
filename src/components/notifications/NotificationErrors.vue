@@ -34,7 +34,7 @@
             {{ t('errors.errorMessage', locale) }}
           </h4>
           <p>
-            <pre><code> {{ getErrorMessage(error.message) }} </code></pre>
+            <pre><code> {{ getErrorMessage(error.resp) }} </code></pre>
           </p>
         </div>
       </div>
