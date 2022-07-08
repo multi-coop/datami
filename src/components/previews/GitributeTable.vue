@@ -1051,14 +1051,9 @@ export default {
 
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
-<<<<<<< HEAD
-      respConsolidation.fromApi = consolidationSettings.api.api_name
-
-=======
       respConsolidation.apiName = consolidationSettings.api.api_name
       respConsolidation.sourceFields = sourceFields
       respConsolidation.api = consolidationSettings.api.api
->>>>>>> 96a08d6d7f0fee2bbb80e76ae02d90292f5a73df
       // respConsolidation.rowData = rowData
       // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
