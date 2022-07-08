@@ -14,7 +14,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
     // console.log('U > consolidationUtils > getConsolidationApiUrl > valueStr : ', valueStr)
     apiUrl = apiUrl.replace(`{{${sf.name}}}`, valueStr)
   })
-  console.log('U > consolidationUtils > getConsolidationApiUrl > apiUrl : ', apiUrl)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > apiUrl : ', apiUrl)
 
   let reqError = { ok: true }
   const req = await fetch(apiUrl)
@@ -25,11 +25,11 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
         err: err
       }
     })
-  console.log('U > consolidationUtils > getConsolidationApiUrl > req : ', req)
-  console.log('U > consolidationUtils > getConsolidationApiUrl > reqError : ', reqError)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > req : ', req)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > reqError : ', reqError)
 
   const resp = req && await req.json()
-  console.log('U > consolidationUtils > getConsolidationApiUrl > resp : ', resp)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > resp : ', resp)
 
   if (!reqError.ok || !req.ok) {
     const err = {
@@ -37,7 +37,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
       code: reqError.status || req.status,
       resp: req || reqError.err
     }
-    console.log('U > consolidationUtils > getConsolidationApiUrl > err : ', err)
+    // console.log('U > consolidationUtils > getConsolidationApiUrl > err : ', err)
     errors.push(err)
   } else {
     const resultsMapping = consolidationData.api.results_fields
@@ -57,7 +57,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
       }
     })
   }
-  console.log('U > consolidationUtils > getConsolidationApiUrl > consolidation : ', consolidation)
+  // console.log('U > consolidationUtils > getConsolidationApiUrl > consolidation : ', consolidation)
 
   let isAllEmpty = consolidation && consolidation.map(c => c.newValue)
   isAllEmpty = isAllEmpty && isAllEmpty.every(i => !i)

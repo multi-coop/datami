@@ -317,7 +317,7 @@ export const buildContributionResume = (commitData, responsesData, onlyCommit = 
 
 // WRAP UP : post new branch > put commit to new branch > make a new merge request
 export async function sendContribution (commitData) {
-  console.log('\nU > gitProvidersAPI > sendContribution > commitData : ', commitData)
+  // console.log('\nU > gitProvidersAPI > sendContribution > commitData : ', commitData)
 
   const ok = true
   const responsesData = {}
@@ -326,14 +326,14 @@ export async function sendContribution (commitData) {
   const branch = commitData.userBranches.find(branch => branch.branch === commitData.newBranch)
   const branchExists = branch && !!branch.branch
   const mergeRequestExists = branchExists && branch.hasMergeRequest
-  console.log('U > gitProvidersAPI > sendContribution > branch : ', branch)
-  console.log('U > gitProvidersAPI > sendContribution > branchExists : ', branchExists)
-  console.log('U > gitProvidersAPI > sendContribution > mergeRequestExists : ', mergeRequestExists)
+  // console.log('U > gitProvidersAPI > sendContribution > branch : ', branch)
+  // console.log('U > gitProvidersAPI > sendContribution > branchExists : ', branchExists)
+  // console.log('U > gitProvidersAPI > sendContribution > mergeRequestExists : ', mergeRequestExists)
 
   // post new branch (if necessary)
   if (!branchExists) {
     const respBranch = await postNewBranch(commitData)
-    console.log('\nU > gitProvidersAPI > sendContribution > respBranch :', respBranch)
+    // console.log('\nU > gitProvidersAPI > sendContribution > respBranch :', respBranch)
     responsesData.respPostBranch = respBranch
     errors.push(...respBranch.errors)
   } else {
@@ -342,14 +342,14 @@ export async function sendContribution (commitData) {
 
   // put commit to branch
   const respCommit = await putCommitToBranch(commitData)
-  console.log('\nU > gitProvidersAPI > sendContribution > respCommit :', respCommit)
+  // console.log('\nU > gitProvidersAPI > sendContribution > respCommit :', respCommit)
   responsesData.respPutCommit = respCommit
   errors.push(...respCommit.errors)
 
   // post a new merge request (if necessary)
   if (!mergeRequestExists) {
     const respMergeRequest = await postMergeRequest(commitData)
-    console.log('\nU > gitProvidersAPI > sendContribution > respMergeRequest :', respMergeRequest)
+    // console.log('\nU > gitProvidersAPI > sendContribution > respMergeRequest :', respMergeRequest)
     responsesData.respPostMergeRequest = respMergeRequest
     errors.push(...respMergeRequest.errors)
   } else {
