@@ -217,7 +217,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
 
   // specific to gitlab
   let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
-  let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
+  let prePostCheckTargetBranch, prePostCheckTargetBranchResp
 
   // specific to github
   let prePostRequestUrl, prePostResponse, prePostResponseData, revisionHash
@@ -247,8 +247,8 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
       // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
       prePostCheckTargetBranchResp = await fetch(prePostCheckTargetBranch)
       // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
-      prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
+      // prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
 
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
       if (prePostCheckTargetBranchResp.ok) { newBranchAlreadyExists = true }
