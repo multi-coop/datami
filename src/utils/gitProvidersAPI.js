@@ -38,7 +38,7 @@ export async function getFileData (gitObj, token = undefined) {
     const err = {
       function: 'getFileData',
       code: req.status,
-      message: resp.message
+      resp: resp
     }
     errors.push(err)
   }
@@ -78,7 +78,7 @@ export async function getFileDataRaw (gitObj, token = undefined) {
     const err = {
       function: 'getFileDataRaw',
       code: req.status,
-      message: resp.message
+      resp: resp
     }
     errors.push(err)
   }
@@ -158,7 +158,7 @@ export async function postNewBranch (commitData) {
     const err = {
       function: 'postNewBranch',
       code: req.status,
-      message: resp.message
+      resp: resp
     }
     errors.push(err)
   }
@@ -212,7 +212,7 @@ export async function putCommitToBranch (commitData) {
     const err = {
       function: 'putCommitToBranch',
       code: req.status,
-      message: resp.message
+      resp: resp
     }
     errors.push(err)
   }
@@ -271,7 +271,7 @@ export async function postMergeRequest (commitData) {
     const err = {
       function: 'postMergeRequest',
       code: req.status,
-      message: resp.message
+      resp: resp
     }
     errors.push(err)
   }

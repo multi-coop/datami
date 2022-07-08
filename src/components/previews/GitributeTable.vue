@@ -432,7 +432,7 @@ import {
 } from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
-
+import { mapActions } from 'vuex'
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import ButtonSortByField from '@/components/sorting/ButtonSortByField'
 import FilterTags from '@/components/filters/FilterTags'
@@ -826,7 +826,11 @@ export default {
     this.itemsPerRow = pagination.itemsPerRow
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
+
   methods: {
+    ...mapActions({
+      updateReqErrors: 'git-data/updateReqErrors'
+    }),
     columnThAttrs (column) {
       // console.log('\nC > GitributeTable > columnThAttrs > column : ', column)
       return {
@@ -1047,16 +1051,25 @@ export default {
 
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
+<<<<<<< HEAD
+      respConsolidation.fromApi = consolidationSettings.api.api_name
+
+=======
       respConsolidation.apiName = consolidationSettings.api.api_name
       respConsolidation.sourceFields = sourceFields
       respConsolidation.api = consolidationSettings.api.api
+>>>>>>> 96a08d6d7f0fee2bbb80e76ae02d90292f5a73df
       // respConsolidation.rowData = rowData
       // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
 
       // update loaders
       this.consolidating = this.consolidating.filter(id => id !== rowId)
-      this.consolidationData.push(respConsolidation)
-      this.openedDetails.push(rowId)
+      if (!respConsolidation.consolidation) {
+        this.updateReqErrors({ fileId: this.fileId, errors: respConsolidation.errors, addToErrors: true })
+      } else {
+        this.consolidationData.push(respConsolidation)
+        this.openedDetails.push(rowId)
+      }
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)

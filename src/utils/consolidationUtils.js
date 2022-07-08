@@ -25,8 +25,9 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
     const err = {
       function: 'getConsolidationApiUrl',
       code: resp.status,
-      message: resp.message
+      resp: resp
     }
+
     errors.push(err)
   } else {
     const resultsMapping = consolidationData.api.results_fields
