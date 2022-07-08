@@ -195,7 +195,7 @@ export const mixinGlobal = {
       const links = [
         {
           type: 'text/css',
-          href: `https://${widgetProvider}/js/app.css`,
+          href: `https://${widgetProvider}/css/app.css`,
           rel: 'stylesheet'
         },
         {
