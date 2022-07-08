@@ -75,7 +75,7 @@ export default {
   options='${fileOptionsStr}'\r
   onlypreview="${!!this.gitObj.onlyPreview}"\r
   locale="${this.locale}"\r
-></${widgetName}>\n
+></script>${widgetName}>\n
 `
       } else {
         // CASE : MULTI-FILES
@@ -126,4 +126,4 @@ export default {
     }
   }
 }
-</>
+</script>
