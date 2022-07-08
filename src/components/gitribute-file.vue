@@ -39,7 +39,7 @@
       @closeDialogFileInfos="showFileInfos = false"/>
 
     <!-- NOTIFICATIONS -->
-    <pre><code>{{ notifications }}</code></pre>
+    <!-- <pre><code>{{ notifications }}</code></pre> -->
     <div
       v-if="notifications && notifications.length"
       class="mb-6">
@@ -52,6 +52,7 @@
     </div>
 
     <!-- ERRORS -->
+    <pre><code>{{ errors }}</code></pre>
     <div
       v-if="errors && errors.length"
       class="mb-6">
