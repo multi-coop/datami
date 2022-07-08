@@ -47,7 +47,7 @@ export default {
       let fileOptionsStr
 
       const scriptStr = 'script'
-      const quoteReplacer = ' '
+      const quoteReplacer = '-'
 
       let htmlStr = `\n
 <!-- GITRIBUTE - contribute with GIT ...but without minding it-->\r
