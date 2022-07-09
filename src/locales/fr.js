@@ -11,7 +11,9 @@ export default {
     oldValue: 'Ancienne valeur',
     newValue: 'Nouvelle valeur',
     thanks: 'Merci d\'utiliser {{gitributeRepo}} !',
-    understood: 'Compris'
+    understood: 'Compris',
+    documentation: 'Documentation',
+    docsWebsite: 'Site de documentation'
   },
   tabs: {
     switchPosition: 'Changer la position des onglets'

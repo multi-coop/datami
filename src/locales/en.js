@@ -11,7 +11,9 @@ export default {
     oldValue: 'Old value',
     newValue: 'New value',
     thanks: 'Thanks for using {{gitributeRepo}} !',
-    understood: 'Understood'
+    understood: 'Understood',
+    documentation: 'Documentation',
+    docsWebsite: 'Documentation website'
   },
   tabs: {
     switchPosition: 'Change tabs position'

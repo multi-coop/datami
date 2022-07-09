@@ -1,5 +1,5 @@
 <template>
-  <div class="GitObjInfos gitribute-component tile is-ancestor my-2">
+  <div class="GitObjInfos gitribute-component tile is-ancestor mt-2 mb-n-1">
     <div class="tile is-vertical is-12">
       <!-- GITOBJ INFOS -->
       <div
@@ -70,6 +70,34 @@
             <code v-else>
               {{ findFromPath(optionsInfos.key, fileOptions) }}
             </code>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTATION INFOS -->
+      <hr class="mt-2 mb-2">
+      <div
+        class="tile is-12">
+        <div
+          class="tile is-parent py-1">
+          <div class="tile is-child is-4">
+            <b-icon
+              icon="book-open-variant"
+              size="is-small"/>&nbsp;
+            {{ t('global.documentation', locale) }}
+          </div>
+          <div class="tile is-child is-8 pl-2">
+            <span>
+              <b-icon
+                class="mr-2"
+                size="is-small"
+                icon="book-open-variant"/>
+              <a
+                target="_blank"
+                :href="`https://${docsUrl}`">
+                {{ t('global.docsWebsite', locale) }}
+              </a>
+            </span>
           </div>
         </div>
       </div>
@@ -150,6 +178,10 @@ export default {
     customPropsFileName () {
       const schemaFile = this.fileCustomProps && this.fileCustomProps.file
       return schemaFile.split('/').at(-1)
+    },
+    docsUrl () {
+      const documentationUrl = process.env.VUE_APP_GITRIBUTE_DOCUMENTATION || 'gitribute-docs.multi.coop'
+      return documentationUrl
     }
   }
 }
