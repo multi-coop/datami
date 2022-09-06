@@ -63,7 +63,9 @@
                 icon="open-in-new"/>
               <a
                 target="_blank"
-                :href="notif.branchUrl">
+                :href="notif.branchUrl"
+                class="outlink"
+                @click="trackLink(notif.branchUrl)">
                 {{ t('git.branchUrlLink', locale) }}
               </a>
             </div>
@@ -85,7 +87,9 @@
                 icon="open-in-new"/>
               <a
                 target="_blank"
-                :href="notif.mergeRequestUrl">
+                :href="notif.mergeRequestUrl"
+                class="outlink"
+                @click="trackLink(notif.mergeRequestUrl)">
                 {{ t('git.mergeRequestUrlLink', locale) }}
               </a>
             </div>

@@ -283,6 +283,8 @@ export default {
     },
     cancelCommit () {
       this.updateSaving({ fileId: this.fileId, isSaving: false })
+      // track with matomo
+      this.trackEvent('cancelCommit')
     },
     async confirmCommit () {
       console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
@@ -346,6 +348,9 @@ export default {
 
         // set isSaving as false now all is finished
         this.updateSaving({ fileId: this.fileId, isSaving: false })
+
+        // track with matomo
+        this.trackEvent('confirmCommit')
       }
     }
   }

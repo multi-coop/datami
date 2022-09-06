@@ -174,6 +174,9 @@ export default {
       }
       // console.log('C > EditJsonCell > emitChange > payload : ', payload)
       this.$emit('updateJson', payload)
+
+      // track with matomo
+      this.trackEvent('updateJson')
     }
   }
 }

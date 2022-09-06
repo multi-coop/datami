@@ -1,188 +1,235 @@
 <template>
   <div
-    :class="`GitributeFile gitribute-widget gitribute-container section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`">
+    :id="fileId"
+    :class="`GitributeFile gitribute-widget gitribute-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
+    <!-- style="z-index: 0;"> -->
+    <!-- MATOMO -->
+    <MatomoScript
+      :file-id="fileId"/>
+
+    <!-- WIDGET -->
     <div
-      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`">
-      <div class="columns is-centered mb-4">
-        <!-- FILE TITLE -->
-        <div class="filetitle-and-viewmodes column is-12-mobile is-8-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
-          <ViewModeBtns
-            :file-id="fileId"
-            :locale="locale"/>
-          <FileTitle
-            :show-file-infos="showFileInfos"
-            :title="title"
-            :file-id="fileId"
-            :locale="locale"
-            @toggleInfos="showFileInfos = !showFileInfos"/>
+      :id="`gitribute-widget-${fileId}`"
+      :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
+      <div
+        :id="`file-navbar-${fileId}`"
+        :class="`upper-container ${currentViewMode === 'map' ? 'px-3' : ''}`"
+        style="z-index: 1;">
+        <!-- NAVBAR FILE TITLE / USER BTNS -->
+        <div
+          :class="`container mb-0 ${currentViewMode === 'map' || userFullscreen ? 'pt-6' : ''} ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
+          style="z-index: 2">
+          <div class="columns is-centered mb-0">
+            <!-- FILE TITLE -->
+            <div class="filetitle-and-viewmodes column is-12-mobile is-7-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
+              <ViewModeBtns
+                :file-id="fileId"
+                :locale="locale"/>
+              <FileTitle
+                :show-file-infos="showFileInfos"
+                :title="title"
+                :file-id="fileId"
+                :locale="locale"
+                @toggleInfos="showFileInfos = !showFileInfos"/>
+            </div>
+
+            <!-- USER NAVBAR -->
+            <div class="usernavbar column is-12-mobile is-5-tablet is-3-desktop is-flex is-direction-row is-align-items-center">
+              <UserOptions
+                v-if="gitObj"
+                :file-id="fileId"
+                :only-preview="onlypreview"
+                :locale="locale"/>
+            </div>
+          </div>
         </div>
 
-        <!-- USER NAVBAR -->
-        <div class="usernavbar column is-12-mobile is-4-tablet is-3-desktop is-flex is-direction-row is-align-items-center is-justify-content-end">
-          <UserOptions
-            v-if="gitObj"
+        <!-- FILE INFOS -->
+        <DialogFileInfos
+          v-show="showFileInfos"
+          v-model="showFileInfos"
+          :file-id="fileId"
+          :locale="locale"
+          :debug="debug"
+          @closeDialogFileInfos="showFileInfos = false"/>
+
+        <!-- NOTIFICATIONS -->
+        <!-- <pre><code>{{ notifications }}</code></pre> -->
+        <div
+          v-if="notifications && notifications.length"
+          class="mb-6">
+          <NotificationInfos
+            v-for="(notif, index) in notifications"
+            :key="`notif-${fileId}-${index}-${notif.code}`"
             :file-id="fileId"
+            :notif="notif"
+            :locale="locale"/>
+        </div>
+
+        <!-- ERRORS -->
+        <!-- <pre><code>{{ errors }}</code></pre> -->
+        <div
+          v-if="errors && errors.length"
+          class="mb-6">
+          <NotificationErrors
+            v-for="(error, index) in errors"
+            :key="`error-${fileId}-${index}-${error.code}`"
+            :file-id="fileId"
+            :error="error"
+            :locale="locale"/>
+        </div>
+
+        <!-- FILE NAVBAR BUTTONS -->
+        <!-- {{ fileOptions }} -->
+        <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
+        <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
+        <EditNavbarSkeleton
+          v-if="fileOptions && !fileIsLoading && !fileIsSaving && !showUploadFileDialog"
+          :file-id="fileId"
+          :show-upload-file-dialog="showUploadFileDialog"
+          :only-preview="onlypreview"
+          :locale="locale"
+          @action="processAction"/>
+      </div>
+
+      <!-- CONFIRM COMMIT MODAL -->
+      <ConfirmCommit
+        v-show="fileIsSaving && !fileIsLoading"
+        :file-id="fileId"
+        :locale="locale"
+        :debug="debug"/>
+      <DialogUploadFile
+        v-show="showUploadFileDialog"
+        v-model="showUploadFileDialog"
+        :file-id="fileId"
+        :locale="locale"
+        @action="processAction"/>
+
+      <!-- DEBUGGING FOREIGN KEYS-->
+      <div
+        v-if="debug && sharedData"
+        class="columns is-multiline mb-4">
+        <div class="column is-full">
+          fileId : <code>{{ fileId }}</code>
+        </div>
+      </div>
+      <div
+        v-if="debug && !fromMultiFiles && sharedData"
+        class="columns is-multiline mb-4">
+        <div class="column is-4">
+          shareableAreSet : <code>{{ shareableAreSet }}</code>
+        </div>
+        <div class="column is-4">
+          loadingShared :<br>
+          <pre><code>{{ loadingShared }}</code></pre>
+        </div>
+        <div class="column is-4">
+          loadingExtRessources :<br>
+          <pre><code>{{ loadingExtRessources }}</code></pre>
+        </div>
+        <div class="column is-6">
+          shareableFiles:<br>
+          <pre><code>{{ shareableFiles }}</code></pre>
+        </div>
+        <div class="column is-6">
+          readyToCopyRessources:<br>
+          <pre><code>{{ readyToCopyRessources }}</code></pre>
+          <hr class="my-1">
+          readyToLoadExtRessources:<br>
+          <pre><code>{{ readyToLoadExtRessources }}</code></pre>
+        </div>
+        <div
+          v-for="(shared, idx) in sharedData"
+          :key="`shared-${idx}-${shared.targetFile}`"
+          class="column is-4">
+          isInShareableAndSet:
+          <code>{{ isInShareableAndSet(shared.ressource).length }}</code>
+          <br>
+          isInShareableAndLoaded:
+          <code>{{ isInShareableAndLoaded(shared.ressource).length }}</code>
+          <hr class="my-1">
+          sharedData<code>[{{ idx }}]</code> :<br>
+          <pre><code>{{ debugShared(shared) }}</code></pre>
+          <hr class="my-1">
+          loadedSharedData<code>[{{ idx }}]</code> :<br>
+          <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
+        </div>
+      </div>
+
+      <!-- DEBUGGING -->
+      <div
+        v-if="debug"
+        class="columns is-multiline mt-4">
+        <div
+          v-if="true"
+          class="column is-3">
+          fileTypeFamily : <code>{{ fileTypeFamily }}</code>
+        </div>
+        <div
+          v-if="true"
+          class="column is-3">
+          fileOptionsReady : <code>{{ fileOptionsReady }}</code>
+        </div>
+        <div
+          v-if="false"
+          class="column is-8">
+          fileOptions :<br>
+          <pre><code>{{ fileOptions }}</code></pre>
+        </div>
+      </div>
+
+      <!-- PREVIEWS - SWITCH BY FILE TYPE -->
+      <div
+        v-show="!fileIsSaving && !showFileInfos"
+        class="gitribute-file-previews">
+        <!-- PREVIEWS CSV -->
+        <div
+          v-if="fileTypeFamily === 'table'"
+          class="container gitribute-container"
+          style="z-index: 1;">
+          <PreviewCsv
             :only-preview="onlypreview"
-            :locale="locale"/>
+            :file-id="fileId"
+            :file-raw="fileRaw"
+            :file-client-raw="fileClientRaw"
+            :locale="locale"
+            :debug="debug"/>
         </div>
-      </div>
-    </div>
 
-    <!-- FILE INFOS -->
-    <DialogFileInfos
-      v-show="showFileInfos"
-      v-model="showFileInfos"
-      :file-id="fileId"
-      :locale="locale"
-      :debug="debug"
-      @closeDialogFileInfos="showFileInfos = false"/>
+        <!-- PREVIEWS MD -->
+        <div
+          v-if="fileTypeFamily === 'text'"
+          class="container gitribute-container"
+          style="z-index: 1;">
+          <PreviewMd
+            :only-preview="onlypreview"
+            :file-id="fileId"
+            :file-raw="fileRaw"
+            :file-client-raw="fileClientRaw"
+            :locale="locale"
+            :debug="debug"/>
+        </div>
 
-    <!-- NOTIFICATIONS -->
-    <!-- <pre><code>{{ notifications }}</code></pre> -->
-    <div
-      v-if="notifications && notifications.length"
-      class="mb-6">
-      <NotificationInfos
-        v-for="(notif, index) in notifications"
-        :key="`notif-${fileId}-${index}-${notif.code}`"
-        :file-id="fileId"
-        :notif="notif"
-        :locale="locale"/>
-    </div>
-
-    <!-- ERRORS -->
-    <!-- <pre><code>{{ errors }}</code></pre> -->
-    <div
-      v-if="errors && errors.length"
-      class="mb-6">
-      <NotificationErrors
-        v-for="(error, index) in errors"
-        :key="`error-${fileId}-${index}-${error.code}`"
-        :file-id="fileId"
-        :error="error"
-        :locale="locale"/>
-    </div>
-
-    <!-- FILE NAVBAR BUTTONS -->
-    <!-- {{ fileOptions }} -->
-    <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
-    <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
-    <EditNavbarSkeleton
-      v-if="!fileIsLoading && !fileIsSaving && !showUploadFileDialog"
-      :file-id="fileId"
-      :show-upload-file-dialog="showUploadFileDialog"
-      :only-preview="onlypreview"
-      :locale="locale"
-      @action="processAction"/>
-
-    <!-- CONFIRM COMMIT MODAL -->
-    <ConfirmCommit
-      v-show="fileIsSaving && !fileIsLoading"
-      :file-id="fileId"
-      :locale="locale"
-      :debug="debug"/>
-    <DialogUploadFile
-      v-show="showUploadFileDialog"
-      v-model="showUploadFileDialog"
-      :file-id="fileId"
-      :locale="locale"
-      @action="processAction"/>
-
-    <!-- DEBUGGING FOREIGN KEYS-->
-    <div
-      v-if="debug && sharedData"
-      class="columns is-multiline mb-4">
-      <div class="column is-full">
-        fileId : <code>{{ fileId }}</code>
-      </div>
-    </div>
-    <div
-      v-if="debug && !fromMultiFiles && sharedData"
-      class="columns is-multiline mb-4">
-      <div class="column is-4">
-        shareableAreSet : <code>{{ shareableAreSet }}</code>
-      </div>
-      <div class="column is-4">
-        loadingShared :<br>
-        <pre><code>{{ loadingShared }}</code></pre>
-      </div>
-      <div class="column is-4">
-        loadingExtRessources :<br>
-        <pre><code>{{ loadingExtRessources }}</code></pre>
-      </div>
-      <div class="column is-6">
-        shareableFiles:<br>
-        <pre><code>{{ shareableFiles }}</code></pre>
-      </div>
-      <div class="column is-6">
-        readyToCopyRessources:<br>
-        <pre><code>{{ readyToCopyRessources }}</code></pre>
-        <hr class="my-1">
-        readyToLoadExtRessources:<br>
-        <pre><code>{{ readyToLoadExtRessources }}</code></pre>
-      </div>
-      <div
-        v-for="(shared, idx) in sharedData"
-        :key="`shared-${idx}-${shared.targetFile}`"
-        class="column is-4">
-        isInShareableAndSet:
-        <code>{{ isInShareableAndSet(shared.ressource).length }}</code>
-        <br>
-        isInShareableAndLoaded:
-        <code>{{ isInShareableAndLoaded(shared.ressource).length }}</code>
-        <hr class="my-1">
-        sharedData<code>[{{ idx }}]</code> :<br>
-        <pre><code>{{ debugShared(shared) }}</code></pre>
-        <hr class="my-1">
-        loadedSharedData<code>[{{ idx }}]</code> :<br>
-        <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
-      </div>
-    </div>
-
-    <!-- PREVIEWS - SWITCH BY FILE TYPE -->
-    <div v-show="!fileIsSaving">
-      <!-- PREVIEWS CSV -->
-      <div
-        v-if="fileTypeFamily === 'table'"
-        class="container gitribute-container">
-        <PreviewCsv
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-raw="fileRaw"
-          :file-client-raw="fileClientRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
-
-      <!-- PREVIEWS MD -->
-      <div
-        v-if="fileTypeFamily === 'text'"
-        class="container gitribute-container">
-        <PreviewMd
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-raw="fileRaw"
-          :file-client-raw="fileClientRaw"
-          :locale="locale"
-          :debug="debug"/>
-      </div>
-
-      <!-- PREVIEWS JSON -->
-      <div
-        v-if="fileTypeFamily === 'json'"
-        class="container gitribute-container">
-        <PreviewJson
-          :only-preview="onlypreview"
-          :file-id="fileId"
-          :file-raw="fileRaw"
-          :file-client-raw="fileClientRaw"
-          :locale="locale"
-          :debug="debug"/>
+        <!-- PREVIEWS JSON -->
+        <div
+          v-if="fileTypeFamily === 'json'"
+          class="container gitribute-container"
+          style="z-index: 1;">
+          <PreviewJson
+            :only-preview="onlypreview"
+            :file-id="fileId"
+            :file-raw="fileRaw"
+            :file-client-raw="fileClientRaw"
+            :locale="locale"
+            :debug="debug"/>
+        </div>
       </div>
     </div>
 
     <!-- CREDITS -->
     <GitributeCredits
+      :file-id="fileId"
       :locale="locale"/>
   </div>
 </template>
@@ -192,6 +239,8 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
+
+import MatomoScript from '@/components/matomo/MatomoScript'
 
 import FileTitle from '@/components/navbar/FileTitle'
 import ViewModeBtns from '@/components/previews/ViewModeBtns'
@@ -214,6 +263,7 @@ import GitributeCredits from '@/components/credits/GitributeCredits'
 export default {
   name: 'GitributeFile',
   components: {
+    MatomoScript,
     FileTitle,
     ViewModeBtns,
     UserOptions,
@@ -258,6 +308,10 @@ export default {
       default: false,
       type: Boolean
     },
+    trackalloutlinks: {
+      default: false,
+      type: Boolean
+    },
     debug: {
       default: false,
       type: Boolean
@@ -284,6 +338,12 @@ export default {
     }
   },
   watch: {
+    showFileInfos (next) {
+      if (next) {
+        // track with matomo
+        this.trackEvent('openFileInfos', 'FileTitle')
+      }
+    },
     fileIsLoading (next) {
       if (next) { this.reloadFile() }
     },
@@ -306,13 +366,17 @@ export default {
   async beforeMount () {
     // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
 
+    const fileUuid = this.uuidv4()
+
+    // console.log('\nC > GitributeFile > beforeMount > this.trackalloutlinks : ', this.trackalloutlinks)
+    this.activateTrackAllOutlinks({ uuid: fileUuid, val: this.trackalloutlinks })
+
     if (!this.fromMultiFiles) {
       this.setWidgetCopy()
     }
 
     const gitInfosObject = this.extractGitInfos(this.gitfile)
     // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
-    const fileUuid = this.uuidv4()
     this.updateShareableFiles({ gitfile: this.gitfile, fileId: fileUuid, isSet: false })
     gitInfosObject.uuid = fileUuid
     gitInfosObject.title = this.title
@@ -347,11 +411,15 @@ export default {
       const schemaGitObj = this.extractGitInfos(fileSchema.file)
       // console.log('C > GitributeFile > beforeMount > schemaGitObj : ', schemaGitObj)
       const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
+      // console.log('C > GitributeFile > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
+      // console.log('C > GitributeFile > beforeMount > schemaData : ', schemaData)
       const schema = JSON.parse(schemaData)
       // console.log('C > GitributeFile > beforeMount > schema : ', schema)
       fileSchema = { ...schema, file: fileSchema.file }
     }
+    // fileSchema && console.log('C > GitributeFile > beforeMount > fileSchema : ', fileSchema)
+
     // get custom props if any
     let fileCustomProps = fileOptions['fields-custom-properties']
     if (fileCustomProps && fileCustomProps.file) {
@@ -364,15 +432,48 @@ export default {
     // fileCustomProps && console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
     // fileCustomProps && console.log('C > GitributeFile > beforeMount > fileCustomProps : ', fileCustomProps)
 
+    // get dataviz props if any
+    let fileDataviz = fileOptions.datavizview
+    if (fileDataviz && fileDataviz.file) {
+      const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
+      const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
+      const datavizPropsData = datavizPropsRaw && datavizPropsRaw.data
+      const datavizProps = JSON.parse(datavizPropsData)
+      fileDataviz = { ...fileDataviz, ...datavizProps }
+    }
+    // fileDataviz && console.log('C > GitributeFile > beforeMount > fileDataviz : ', fileDataviz)
+
+    // get maps props if any
+    const fileMaps = fileOptions.mapview
+    if (fileMaps && fileMaps.maps) {
+      const maps = []
+      for (const map of fileMaps.maps) {
+        let mapSettings = { ...map }
+        if (map.file) {
+          const mapPropsGitObj = this.extractGitInfos(map.file)
+          const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
+          const mapPropsData = mapPropsRaw && mapPropsRaw.data
+          const mapProps = JSON.parse(mapPropsData)
+          mapSettings = { ...map, ...mapProps }
+        }
+        maps.push(mapSettings)
+      }
+      fileMaps.maps = maps
+    }
+    // fileMaps && console.log('C > GitributeFile > beforeMount > fileMaps : ', fileMaps)
+
     // parse fields to look for foreign keys
     this.processForeignKeys(fileCustomProps)
 
-    // update fileOptions with schema and consolidation settings
+    // update fileOptions with settings for : schema, consolidation, dataviz, maps
     fileOptions = {
       ...fileOptions,
       ...fileSchema && { schema: fileSchema },
-      ...fileCustomProps && { customProps: fileCustomProps }
+      ...fileCustomProps && { customProps: fileCustomProps },
+      ...fileDataviz && { datavizview: fileDataviz },
+      ...fileMaps && { mapview: fileMaps }
     }
+    // console.log('C > GitributeFile > beforeMount > fileOptions : ', fileOptions)
 
     // add fileOptions in store
     this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
@@ -395,7 +496,8 @@ export default {
       addFileReqInfos: 'addFileReqInfos',
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',
-      updateReqErrors: 'git-data/updateReqErrors'
+      updateReqErrors: 'git-data/updateReqErrors',
+      activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     async reloadFile () {
       // Update reloading in store - true

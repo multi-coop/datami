@@ -54,6 +54,9 @@ export default {
         value: filterPayload
       }
       this.$emit('action', payload)
+
+      // track with matomo
+      this.trackEvent(this.searchValue)
     }
   }
 }

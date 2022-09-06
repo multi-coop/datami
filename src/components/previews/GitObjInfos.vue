@@ -24,7 +24,9 @@
                 icon="open-in-new"/>
               <a
                 target="_blank"
-                :href="gitObj[info.key]">
+                :href="gitObj[info.key]"
+                class="outlink"
+                @click="trackLink(gitObj[info.key])">
                 {{ t(info.linkTxt, locale) }}
               </a>
             </span>
@@ -35,7 +37,7 @@
         </div>
       </div>
 
-      <!-- SCHEMA / OTPIONS FILES INFO IF ANY -->
+      <!-- SCHEMA / OPTIONS FILES INFO IF ANY -->
       <div
         v-for="optionsInfos in optionsRows"
         :key="optionsInfos.key"
@@ -58,18 +60,55 @@
                 icon="open-in-new"/>
               <a
                 target="_blank"
-                :href="findFromPath(optionsInfos.key, fileOptions)">
+                :href="findFromPath(optionsInfos.key, fileOptions)"
+                class="outlink"
+                @click="trackLink(findFromPath(optionsInfos.key, fileOptions))">
                 <span v-if="optionsInfos.schemaLink">
                   {{ schemaFileName }}
                 </span>
-                <span v-if="optionsInfos.schemaProps">
+                <span v-else-if="optionsInfos.schemaProps">
                   {{ customPropsFileName }}
+                </span>
+                <span v-else>
+                  {{ filenameFromPath(optionsInfos.key, fileOptions) }}
                 </span>
               </a>
             </span>
             <code v-else>
-              {{ findFromPath(optionsInfos.key, fileOptions) }}
+              {{ findFromPath(optionsInfos.key, fileOptions, true) }}
             </code>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="optionsMapsList">
+        <div
+          v-for="(mapFile, idx) in optionsMapsList"
+          :key="`map-config-${idx}`"
+          class="tile is-12">
+          <div
+            class="tile is-parent py-1">
+            <div class="tile is-child is-4">
+              <b-icon
+                icon="link"
+                size="is-small"/>&nbsp;
+              {{ t('file.fileMaps', locale) }} ({{ idx }})
+            </div>
+            <div class="tile is-child is-8 pl-2">
+              <span>
+                <b-icon
+                  class="mr-2"
+                  size="is-small"
+                  icon="open-in-new"/>
+                <a
+                  target="_blank"
+                  :href="mapFile"
+                  class="outlink"
+                  @click="trackLink(mapFile)">
+                  {{ trimFileName(mapFile) }}
+                </a>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -94,7 +133,9 @@
                 icon="book-open-variant"/>
               <a
                 target="_blank"
-                :href="`https://${docsUrl}`">
+                :href="`https://${docsUrl}`"
+                class="outlink"
+                @click="trackLink(`https://${docsUrl}`)">
                 {{ t('global.docsWebsite', locale) }}
               </a>
             </span>
@@ -138,7 +179,8 @@ export default {
       ],
       optionsRows: [
         { txt: 'file.fileSchema', key: 'schema.file', icon: 'link', link: true, schemaLink: true },
-        { txt: 'file.fileCustomProps', key: 'customProps.file', icon: 'link', link: true, schemaProps: true }
+        { txt: 'file.fileCustomProps', key: 'customProps.file', icon: 'link', link: true, schemaProps: true },
+        { txt: 'file.fileDataviz', key: 'datavizview.file', icon: 'link', link: true }
       ]
     }
   },
@@ -173,15 +215,37 @@ export default {
     },
     schemaFileName () {
       const schemaFile = this.fileSchema && this.fileSchema.file
-      return schemaFile.split('/').at(-1)
+      // console.log('\nC > schemaFileName > schemaFile : ', schemaFile)
+      return this.trimFileName(schemaFile)
     },
     customPropsFileName () {
-      const schemaFile = this.fileCustomProps && this.fileCustomProps.file
-      return schemaFile.split('/').at(-1)
+      const propsFile = this.fileCustomProps && this.fileCustomProps.file
+      // console.log('\nC > customPropsFileName > propsFile : ', propsFile)
+      return this.trimFileName(propsFile)
+    },
+    datavizFileName () {
+      const datavizFile = this.datavizViewOptions && this.datavizViewOptions.file
+      // console.log('\nC > datavizFileName > datavizFile : ', datavizFile)
+      return this.trimFileName(datavizFile)
+    },
+    optionsMapsList () {
+      // console.log('\nC > optionsMapsList > this.fileOptions : ', this.fileOptions)
+      const mapSettings = this.mapViewOptions
+      return mapSettings && mapSettings.maps.map(m => m.file)
     },
     docsUrl () {
       const documentationUrl = process.env.VUE_APP_GITRIBUTE_DOCUMENTATION || 'gitribute-docs.multi.coop'
       return documentationUrl
+    }
+  },
+  methods: {
+    trimFileName (file) {
+      // console.log('C > schemaFileName > file : ', file)
+      return file && file.split('/').at(-1)
+    },
+    filenameFromPath (key, options) {
+      const fullname = this.findFromPath(key, options)
+      return this.trimFileName(fullname)
     }
   }
 }

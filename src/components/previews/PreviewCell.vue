@@ -88,12 +88,13 @@
       :class="``">
       <b-button
         tag="a"
-        class=""
+        class="outlink"
         size="is-small"
         icon-left="open-in-new"
         :href="value"
         expanded
-        target="_blank">
+        target="_blank"
+        @click="trackLink(value)">
         <!-- {{ t('global.link', locale) }} -->
         {{ linkDomain(value) }}
       </b-button>
@@ -105,10 +106,11 @@
       :class="``">
       <b-button
         tag="a"
-        class=""
+        class="outlink"
         size="is-small"
         icon-left="email-outline"
         :href="`mailto:${value}`"
+        @click="trackLink(`mailto:${value}`)">
         expanded>
         {{ trimmedText }}
       </b-button>
@@ -119,6 +121,11 @@
       v-if="isNumber"
       :class="`has-text-right has-text-weight-bold is-size-6`">
       {{ value }}
+      <span
+        v-if="isPercent"
+        class="ml-2">
+        %
+      </span>
     </div>
   </div>
 </template>
@@ -242,7 +249,7 @@ export default {
     white-space: nowrap;
   }
   .gitribute-wrap {
-    min-height: 3em;
+    min-height: 2em;
   }
   .has-wrap-btn {
 

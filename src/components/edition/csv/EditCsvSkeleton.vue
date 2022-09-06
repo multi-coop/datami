@@ -1,9 +1,11 @@
 <template>
   <div class="EditCsvSkeleton gitribute-component container">
-    <div class="columns is-mobile is-vcentered">
+    <div :class="`columns is-mobile is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
       <!-- RESULTS -->
-      <div class="column is-3 has-text-left">
-        <p class="has-text-weight-bold is-size-6 ml-1">
+      <div
+        class="column is-3 has-text-left"
+        style="z-index: 1;">
+        <p class="has-text-weight-bold is-size-6 ml-1 text-shadow">
           <span>
             {{ (dataEditedFiltered && dataEditedFiltered.length)|| 0 }}
           </span>
@@ -17,10 +19,25 @@
         </p>
       </div>
 
+      <div
+        class="column is-6 has-text-centered"
+        style="z-index: 1;">
+        <!-- FILTER TAGS -->
+        <div
+          v-if="filterTags && filterTags.length">
+          <FilterTags
+            :file-id="fileId"
+            :headers="headers"
+            :tags="filterTags"
+            :locale="locale"
+            @action="SendActionToParent"/>
+        </div>
+      </div>
+
       <!-- EDIT BUTTONS -->
       <div
         v-if="currentEditViewMode === 'edit'"
-        :class="`column is-9 is-justify-content-end is-flex is-flex-direction-row is-align-content-end`">
+        :class="`column is-3 is-justify-content-end is-flex is-flex-direction-row is-align-content-end`">
         <ButtonAddRow
           :locale="locale"
           @action="SendActionToParent"/>
@@ -36,12 +53,14 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
+import FilterTags from '@/components/filters/FilterTags'
 import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
   name: 'EditCsvSkeleton',
   components: {
+    FilterTags,
     ButtonAddRow,
     ButtonDeleteRows
   },
@@ -70,6 +89,14 @@ export default {
       default: null,
       type: Number
     },
+    headers: {
+      default: null,
+      type: Array
+    },
+    filterTags: {
+      default: null,
+      type: Array
+    },
     locale: {
       default: 'en',
       type: String
@@ -87,3 +114,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.text-shadow {
+  text-shadow: 0 0 10px white, 0 0 10px white;
+}
+</style>

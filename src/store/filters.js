@@ -3,12 +3,17 @@ import Vue from 'vue'
 export const filters = {
   namespaced: true,
   state: {
-    fileFilters: []
+    fileFilters: [],
+    fileActiveFilterTags: []
   },
   getters: {
     getFiltersById: (state) => (fileId) => {
       const filters = state.fileFilters.filter(filter => filter.fileId === fileId)
       return filters
+    },
+    getActiveFilterTagsById: (state) => (fileId) => {
+      const fileActiveTags = state.fileActiveFilterTags.find(fileTags => fileTags.fileId === fileId)
+      return fileActiveTags && fileActiveTags.tags
     }
   },
   mutations: {
@@ -38,6 +43,15 @@ export const filters = {
       } else {
         state.fileFilters.push(filterInfos)
       }
+    },
+    setFilterTags (state, filterTagsInfos) {
+      const index = state.fileActiveFilterTags.findIndex(fileTags => fileTags.fileId === filterTagsInfos.fileId)
+      // console.log('S-filters > M > setFilterTags > filterTagsInfos : ', filterTagsInfos)
+      if (index !== -1) {
+        Vue.set(state.fileActiveFilterTags, index, filterTagsInfos)
+      } else {
+        state.fileActiveFilterTags.push(filterTagsInfos)
+      }
     }
   },
   actions: {
@@ -47,6 +61,10 @@ export const filters = {
     setFiltersSettings ({ commit }, filterInfos) {
       // console.log('S-filters > A > setFiltersSettings > filterInfos : ', filterInfos)
       commit('setFilter', filterInfos)
+    },
+    updateFilterTags ({ commit }, filterTagsInfos) {
+      // console.log('S-filters > A > updateFilterTags > filterTagsInfos : ', filterTagsInfos)
+      commit('setFilterTags', filterTagsInfos)
     }
   }
 }

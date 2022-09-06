@@ -1,6 +1,8 @@
 <template>
   <!-- HELPERS -->
-  <div class="PreviewHelpers gitribute-component columns is-multiline is-mobile">
+  <div
+    v-show="showEditNavbar"
+    class="PreviewHelpers gitribute-component columns my-0 is-multiline is-mobile">
     <div
       v-for="helper in getSettings"
       :key="helper"

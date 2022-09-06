@@ -109,7 +109,9 @@
             <a
               style="color: grey; text-decoration: underline;"
               :href="ressourceInfos.url"
-              target="_blank">
+              target="_blank"
+              class="outlink"
+              @click="trackLink(ressourceInfos.url)">
               {{ ressourceInfos.filename }}
             </a>
           </p>

@@ -1,6 +1,6 @@
 <template>
   <div class="PreviewCsv content">
-    <!-- DEBUG -->
+    <!-- DEBUGGING -->
     <div
       v-if="debug"
       class="columns is-multiline">
@@ -18,9 +18,10 @@
           <code>{{ fileIsLoading }}</code>
         </p>
       </div>
+
       <!-- DEBUG RAW CONTENT OBJECTS -->
       <div
-        v-if="true"
+        v-if="debug"
         class="column is-6">
         <p>
           dataRaw:
@@ -29,7 +30,7 @@
         </p>
       </div>
       <div
-        v-if="true"
+        v-if="debug"
         class="column is-6">
         <p>
           wikiRaw:
@@ -59,19 +60,25 @@
     </div>
 
     <!-- LOADERS -->
-    <div v-if="fileIsLoading">
-      <LoaderEditNavbar
+    <div
+      v-if="fileIsLoading || !fileOptions"
+      class="gitribute-loaders">
+      <!-- <LoaderEditNavbar
         :file-id="fileId"
-        :only-preview="onlyPreview"/>
+        :only-preview="onlyPreview"/> -->
       <LoaderSortFilters/>
-      <LoaderCards v-show="currentViewMode === 'cards'"/>
-      <LoaderCSV v-show="currentViewMode === 'table'"/>
+      <LoaderCards v-if="currentViewMode === 'cards'"/>
+      <LoaderCSV v-else-if="currentViewMode === 'dataviz'"/>
+      <LoaderCSV v-else-if="currentViewMode === 'map'"/>
+      <LoaderCSV v-else/>
     </div>
 
-    <div v-if="!fileIsLoading">
+    <div
+      v-if="!fileIsLoading"
+      class="gitribute-preview-helpers">
       <!-- HELPERS -->
       <PreviewHelpers
-        v-if="!onlyPreview"
+        v-if="!onlyPreview && currentViewMode !== 'map'"
         :file-id="fileId"
         :file-family="'table'"
         :locale="locale"/>
@@ -115,7 +122,9 @@
       </div> -->
 
       <!-- PREVIEWS -->
-      <div v-if="data">
+      <div
+        v-if="data && fileOptions"
+        class="gitribute-table-previews">
         <!-- ORIGINAL DATA -->
         <GitributeTable
           :file-id="fileId"
@@ -149,7 +158,7 @@ import {
   mixinDownload
 } from '@/utils/mixins.js'
 
-import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
 import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
 import LoaderCSV from '@/components/loaders/LoaderCSV'
 import LoaderCards from '@/components/loaders/LoaderCards'
@@ -162,7 +171,7 @@ import { defaultTagsSeparator } from '@/utils/globalUtils'
 export default {
   name: 'PreviewCsv',
   components: {
-    LoaderEditNavbar,
+    // LoaderEditNavbar,
     LoaderSortFilters,
     LoaderCSV,
     LoaderCards,
@@ -298,6 +307,14 @@ export default {
         }
       }
     },
+    fileOptions (next) {
+      if (next && this.dataIsSet) {
+        // console.log('C > PreviewCsv > watch > fileOptions > next & this.dataIsSet : \n', next)
+        const dataColumns = this.buildColumns(this.dataRaw)
+        this.dataColumns = dataColumns
+        this.editedColumns = dataColumns
+      }
+    },
     async fileClientRaw (next) {
       if (next) {
         // console.log('C > PreviewCsv > watch > fileClientRaw > next : \n', next)
@@ -320,8 +337,8 @@ export default {
         const editedCsv = this.ObjectToCsv(this.dataColumns, this.data, this.fileOptions)
         // console.log('C > PreviewCsv > watch > fileIsDownloading > editedCsv : ', editedCsv)
         const dl = this.buildFileLink(editedCsv, window)
-        console.log('C > PreviewCsv > watch > fileIsDownloading > dl : ', dl)
-        // this.removeLink(dl)
+        // console.log('C > PreviewCsv > watch > fileIsDownloading > dl : ', dl)
+        this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
     },

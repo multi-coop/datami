@@ -4,7 +4,8 @@
       <!-- SORT & FILTERS CSV NAVABAR -->
       <div
         v-show="!isAnyDialogOpen"
-        class="column is-12 pt-0">
+        :id="`sort-and-filters-skeleton-${fileId}`"
+        class="column is-12 py-0 mt-2">
         <SortAndFiltersSkeleton
           :file-id="fileId"
           :columns="columnsEdited"
@@ -44,22 +45,10 @@
         <pre><code>{{ searchText }}</code></pre><br>
       </div>
 
-      <!-- FILTER TAGS -->
-      <div
-        v-if="filterTags && filterTags.length"
-        :class="`column is-${ currentViewMode === 'cards' ? 12 : 12}`">
-        <FilterTags
-          v-show="!isAnyDialogOpen"
-          :file-id="fileId"
-          :headers="columnsEdited"
-          :tags="filterTags"
-          :locale="locale"
-          @action="processAction"/>
-      </div>
-
       <!-- COUNTS & EDIT CSV NAVABAR -->
       <div
         v-show="!isAnyDialogOpen"
+        :id="`edit-csv-skeleton-${fileId}`"
         class="column is-12 pt-0">
         <EditCsvSkeleton
           :file-id="fileId"
@@ -67,6 +56,8 @@
           :data-edited-filtered="dataEditedFiltered"
           :items-total="itemsTotal"
           :checked-rows="checkedRows"
+          :headers="columnsEdited"
+          :filter-tags="filterTags"
           :locale="locale"
           @action="processAction"/>
       </div>
@@ -75,12 +66,14 @@
       <DialogAddRow
         v-show="showAddRowDialog"
         v-model="showAddRowDialog"
+        :file-id="fileId"
         :headers="columnsEdited"
         :locale="locale"
         @action="processAction"/>
       <DialogDeleteRows
         v-show="showDeleteRowsDialog"
         v-model="showDeleteRowsDialog"
+        :file-id="fileId"
         :headers="columnsEdited"
         :checked-rows="checkedRows"
         :locale="locale"
@@ -100,16 +93,17 @@
         lockHeaders: <code>{{ lockHeaders }}</code>
       </div>
 
-      <!-- TABLE -->
+      <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
-        v-show="dataEditedPaginated && dataEditedPaginated.length"
-        :class="`column is-${ currentViewMode === 'cards' ? 10 : 12}`">
+        v-show="dataForView && dataForView.length"
+        :class="`gitribute-table-container column is-${ currentViewMode === 'cards' ? 10 : 12} ${ currentViewMode === 'map' ? 'pt-0' : ''} `">
         <!-- :sticky-checkbox="currentEditViewMode === 'edit'" -->
         <div
-          v-show="!isAnyDialogOpen && currentViewMode === 'table'">
+          v-show="!isAnyDialogOpen && currentViewMode === 'table'"
+          class="gitribute-table-view-table">
           <b-table
             :data="dataEditedPaginated"
-            :height="fileOptions.height || '400px'"
+            :height="(fileOptions && fileOptions.height) || '400px'"
             :checkable="currentEditViewMode === 'edit'"
             :checked-rows.sync="checkedRows"
             :detailed="currentEditViewMode === 'edit'"
@@ -160,7 +154,7 @@
                   <!-- DIFF HEADERS -->
                   <div v-if="currentEditViewMode === 'diff'">
                     <div
-                      v-if="isInChanges (true, col.added, col.field)">
+                      v-if="isInChanges(true, col.added, col.field)">
                       <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
                     </div>
                     <span v-else>
@@ -272,13 +266,51 @@
         <!-- CARDS -->
         <div
           v-if="hasCardsView"
-          v-show="!isAnyDialogOpen && currentViewMode === 'cards'">
+          v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
+          class="gitribute-table-view-cards">
+          <!-- v-model="showCardDetails" -->
           <GitributeCardsGrid
-            v-model="showCardDetails"
             :file-id="fileId"
             :cards-settings="cardsSettingsFromFileOptions"
             :items-per-row="itemsPerRow"
             :items="dataEditedPaginated"
+            :locale="locale"
+            @toggleDetail="toggleDetail"
+            @action="processAction"
+            @updateCellValue="emitUpdate"/>
+        </div>
+
+        <!-- DATAVIZ & MAP DEBUGGING-->
+        <p v-if="debug">
+          hasDatavizView: <code>{{ hasDatavizView }}</code><br>
+          currentViewMode: <code>{{ currentViewMode }}</code>
+        </p>
+
+        <!-- DATAVIZ -->
+        <div
+          v-if="fileOptions && hasDatavizView"
+          v-show="!isAnyDialogOpen && currentViewMode === 'dataviz'"
+          class="gitribute-table-view-dataviz"
+          :style="`${ userFullscreen ? 'height: 90%;' : '' }`">
+          <GitributeDatavizGrid
+            :file-id="fileId"
+            :dataviz-settings="datavizViewOptions"
+            :items="dataForView"
+            :fields="columns"
+            :locale="locale"
+            @action="processAction"/>
+        </div>
+
+        <!-- MAPS -->
+        <div
+          v-if="fileOptions && hasMapView"
+          v-show="!isAnyDialogOpen && currentViewMode === 'map'"
+          class="gitribute-table-view-map">
+          <!-- v-model="showCardDetails" -->
+          <GitributeMapGrid
+            :file-id="fileId"
+            :items="dataForView"
+            :fields="columns"
             :locale="locale"
             @action="processAction"
             @updateCellValue="emitUpdate"/>
@@ -305,9 +337,10 @@
 
       <!-- PAGINATION -->
       <div
-        v-show="!isAnyDialogOpen && !isCardDetailsOpen"
+        v-show="!isAnyDialogOpen && !isCardDetailsOpen && viewsWithPagination.includes(currentViewMode)"
         class="column is-12">
         <PagesNavigation
+          :file-id="fileId"
           :total-items="totalItemsDataEdited"
           :items-per-page="itemsPerPage"
           :items-per-page-choices="itemsPerPageChoices"
@@ -433,9 +466,9 @@ import {
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
 import { mapActions } from 'vuex'
+
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import ButtonSortByField from '@/components/sorting/ButtonSortByField'
-import FilterTags from '@/components/filters/FilterTags'
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
@@ -444,7 +477,10 @@ import PreviewField from '@/components/previews/PreviewField'
 import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
 import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
-import GitributeCardsGrid from '@/components/previews/GitributeCardsGrid'
+
+import GitributeCardsGrid from '@/components/previews/cards/GitributeCardsGrid'
+import GitributeDatavizGrid from '@/components/previews/dataviz/GitributeDatavizGrid'
+import GitributeMapGrid from '@/components/previews/maps/GitributeMapGrid'
 
 import PagesNavigation from '@/components/pagination/PagesNavigation'
 
@@ -453,7 +489,6 @@ export default {
   components: {
     SortAndFiltersSkeleton,
     ButtonSortByField,
-    FilterTags,
     EditCsvSkeleton,
     DialogAddRow,
     DialogDeleteRows,
@@ -462,6 +497,8 @@ export default {
     EditCell,
     PreviewConsolidation,
     GitributeCardsGrid,
+    GitributeDatavizGrid,
+    GitributeMapGrid,
     PagesNavigation
   },
   mixins: [
@@ -511,6 +548,9 @@ export default {
       checkedRows: [],
       showCardDetails: false,
 
+      // VIEWS SETTINGS
+      viewsWithPagination: ['table', 'cards'],
+
       // DIALOGS
       showAddRowDialog: false,
       showDeleteRowsDialog: false,
@@ -554,15 +594,15 @@ export default {
       const settingsFields = this.customFiltersConfig.filterfields
       return this.columns.filter(col => settingsFields.includes(col.label))
     },
-    hasCardsView () {
-      return !!this.fileOptions.cardsview
-    },
+    // hasCardsView () {
+    //   return !!this.fileOptions.cardsview
+    // },
     cardsSettingsFromFileOptions () {
       let cardsSettings
       if (this.hasCardsView) {
-        const settings = this.fileOptions.cardssettings
+        const settings = this.cardsSettingsFromOptions
         const miniSettings = settings.mini
-        const detailSettins = settings.detail
+        const detailSettings = settings.detail
         const mapping = this.columns.map(h => {
           const fieldMap = {
             ...h,
@@ -570,15 +610,17 @@ export default {
             // type: h.type,
             // subtype: h.subtype,
             // mini: miniSettings,
-            mini: miniSettings[h.label],
-            detail: detailSettins[h.label]
+            mini: miniSettings[h.name],
+            detail: detailSettings[h.name]
           }
+          const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
+          if (hasTemplate) { fieldMap.templating = hasTemplate }
           return fieldMap
         })
         cardsSettings = {
           originalHeaders: this.columns,
           editedHeaders: this.columnsForView,
-          settings: { mini: miniSettings, detail: detailSettins },
+          settings: { mini: miniSettings, detail: detailSettings },
           mapping: mapping
         }
       }
@@ -782,6 +824,12 @@ export default {
     currentViewMode (next) {
       // console.log('\nC > GitributeTable > watch > currentViewMode > next : ', next)
       this.itemsPerPage = next === 'cards' ? this.itemsPerPageCards : this.itemsPerPageTable
+    },
+    filterTags (next) {
+      if (next.length) {
+        // console.log('\nC > GitributeTable > watch > filterTags > next : ', next)
+        this.updateFilterTags({ fileId: this.fileId, tags: this.filterTags })
+      }
     }
   },
   beforeMount () {
@@ -1081,6 +1129,16 @@ export default {
         this.$emit('updateEdited', e)
       })
       this.closeConsolidationDetail(event.rowId)
+    },
+    toggleDetail (event) {
+      // console.log('\nC > GitributeTable > toggleDetail > event : ', event)
+      // console.log('C > GitributeTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
+      // this.showCardDetails = !event.showDetail
+      if (event.showDetail) {
+        this.showCardDetails = false
+      } else {
+        this.showCardDetails = true
+      }
     }
   }
 }

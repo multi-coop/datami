@@ -159,10 +159,11 @@
             v-if="isForeignKey"
             class="column is-8 pt-0 pb-1 px-1">
             <a
-              class="is-size-7"
+              class="is-size-7 outlink"
               style="color: white; text-decoration: underline;"
               :href="ressourceInfos.url"
-              target="_blank">
+              target="_blank"
+              @click="trackLink(ressourceInfos.url)">
               {{ ressourceInfos.filename }}
             </a>
             <!-- DEBUGGING -->

@@ -8,6 +8,7 @@ export default {
     no: 'no',
     value: 'Value',
     noValue: '(no value)',
+    noLinkValue: '(no link)',
     oldValue: 'Old value',
     newValue: 'New value',
     thanks: 'Thanks for using {{gitributeRepo}} !',
@@ -47,7 +48,9 @@ export default {
     linkToFileRaw: 'Link to the source file (raw)',
     fileInfos: "File's informations",
     fileSchema: "File's schema",
-    fileCustomProps: "File's custom options"
+    fileCustomProps: "File's custom options",
+    fileDataviz: "Settings file for file's data-visualizations",
+    fileMaps: "Settings file for file's cartographies"
   },
   preview: {
     edition: 'Edition',
@@ -56,7 +59,10 @@ export default {
     previewView: 'Preview',
     cardsView: 'Cards list',
     tableView: 'Table',
+    datavizView: 'Datavisualisation',
+    mapView: 'Cartography',
     showCardDetails: 'Show details',
+    closeCard: 'Close card',
     closeCardDetails: 'Close detailed card',
     noIllustration: 'no illustration',
     original: 'Original content',
@@ -67,8 +73,17 @@ export default {
     textPart: 'Text part',
     changes: 'Changes'
   },
+  map: {
+    layers: 'Layers',
+    layersBtn: 'Activate / deactivate the layers of the map',
+    legend: 'Legend',
+    legendBtn: 'Legend of the colors and symbols used on the map'
+  },
   actions: {
+    changeViewMode: 'Change the view mode',
     edit: 'Edit',
+    enterEdit: 'Enter the edition mode',
+    quitEdit: 'Exit the edit mode',
     change: 'Change',
     save: 'Save',
     send: 'Send',
@@ -95,7 +110,9 @@ export default {
     addTag: 'Add a tag',
     addTagHelp: 'Click on + to add your tag',
     clearTag: 'Remove the tag',
-    clickForMoreTags: 'Click to see more tags'
+    clickForMoreTags: 'Click to see more tags',
+    fullscreenOn: 'See this widget on fullscreen',
+    fullscreenOff: 'Close the fullscreen mode'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -227,7 +244,8 @@ export default {
     error: 'Error',
     errorFunction: 'Error from function',
     errorCode: 'Error code',
-    errorMessage: 'Error message'
+    errorMessage: 'Error message',
+    templateMissing: 'The template for the current language is missing'
   },
   widget: {
     widgetCopiedMsg: 'The widget code for {{widgetName}}<br>with the title {{widgetTitle}}<br>was copied to your clipboard.',

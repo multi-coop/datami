@@ -21,6 +21,8 @@ export const data = {
     // VIEW MODES
     cards: [],
     table: [],
+    dataviz: [],
+    map: [],
 
     // SORTING
     sorting: [],
@@ -142,6 +144,8 @@ export const data = {
     getViewMode: (state) => (fileId) => {
       if (state.cards.includes(fileId)) return 'cards'
       if (state.table.includes(fileId)) return 'table'
+      if (state.dataviz.includes(fileId)) return 'dataviz'
+      if (state.map.includes(fileId)) return 'map'
     },
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)
@@ -392,6 +396,7 @@ export const data = {
       // console.log('S-data > M > changeViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = viewModes.filter(v => v !== mode)
+      // console.log('S-data > M > changeViewMode > switchOffModes : ', switchOffModes)
       switchOffModes.forEach(v => {
         commit('removeFromState', { key: v, fileId: fileId })
       })
