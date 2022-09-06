@@ -8,6 +8,7 @@ export default {
     no: 'non',
     value: 'Valeur',
     noValue: '(pas de valeur)',
+    noLinkValue: '(pas de lien)',
     oldValue: 'Ancienne valeur',
     newValue: 'Nouvelle valeur',
     thanks: 'Merci d\'utiliser {{gitributeRepo}} !',
@@ -47,7 +48,9 @@ export default {
     linkToFileRaw: 'Lien vers le fichier source (brut)',
     fileInfos: 'Informations sur le fichier',
     fileSchema: 'Schéma des données',
-    fileCustomProps: 'Fichier des propriétés'
+    fileCustomProps: 'Fichier des propriétés',
+    fileDataviz: 'Fichier de configuration des data-visualisations',
+    fileMaps: 'Fichier de configuration des cartographies'
   },
   preview: {
     edition: 'Edition',
@@ -56,8 +59,11 @@ export default {
     previewView: 'Aperçu',
     cardsView: 'Liste de  fiches',
     tableView: 'Tableau',
+    datavizView: 'Datavisualisation',
+    mapView: 'Cartographie',
     showCardDetails: 'Afficher les détails',
-    closeCardDetails: 'Fermer la vue détaillée',
+    closeCard: 'Fermer la fiche',
+    closeCardDetails: 'Fermer la fiche détaillée',
     noIllustration: "pas d'illustration",
     original: 'Contenu original',
     edited: 'Contenu édité',
@@ -67,8 +73,17 @@ export default {
     textPart: 'Partie texte',
     changes: 'Modifications'
   },
+  map: {
+    layers: 'Calques',
+    layersBtn: 'Activer / désactiver les calques de la carte',
+    legend: 'Légende',
+    legendBtn: 'Légende des couleurs et symboles de la carte'
+  },
   actions: {
+    changeViewMode: 'Changer de vue',
     edit: 'Editer',
+    enterEdit: 'Passer en mode édition',
+    quitEdit: 'Quitter le mode édition',
     change: 'Changer',
     save: 'Sauver',
     send: 'Envoyer',
@@ -95,7 +110,9 @@ export default {
     addTag: 'Ajouter un tag',
     addTagHelp: 'Cliquer sur + pour ajouter votre tag',
     clearTag: 'Supprimer le tag',
-    clickForMoreTags: 'Cliquer pour voir plus de tags'
+    clickForMoreTags: 'Cliquer pour voir plus de tags',
+    fullscreenOn: 'Voir le widget en plein écran',
+    fullscreenOff: 'Quitter le mode plein écran'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -227,7 +244,8 @@ export default {
     error: 'Erreur',
     errorFunction: 'Erreur de la fonction',
     errorCode: "Code d'erreur",
-    errorMessage: "Message d'erreur"
+    errorMessage: "Message d'erreur",
+    templateMissing: 'Il manque le canevas pour le langage choisi'
   },
   widget: {
     widgetCopiedMsg: 'Le widget {{widgetName}}<br>intitulé {{widgetTitle}}<br>est copié dans votre presse-papier.',

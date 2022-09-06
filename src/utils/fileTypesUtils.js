@@ -64,7 +64,7 @@ export const fieldTypeIcons = [
     type: 'string',
     subtype: undefined,
     icon: 'alphabetical',
-    default: true
+    default: true // default icon for strings
   },
   {
     type: 'string',
@@ -94,17 +94,25 @@ export const fieldTypeIcons = [
   {
     type: 'boolean',
     subtype: undefined,
-    icon: 'check-bold'
+    icon: 'check-bold',
+    default: true // default icon for booleans
   },
   {
     type: 'integer',
     subtype: undefined,
-    icon: 'numeric'
+    icon: 'numeric',
+    default: true // default icon for integers
   },
   {
     type: 'number',
     subtype: undefined,
-    icon: 'numeric'
+    icon: 'numeric',
+    default: true // default icon for numbers
+  },
+  {
+    type: 'number',
+    subtype: 'percent',
+    icon: 'percent'
   },
   {
     type: 'number',
@@ -114,7 +122,8 @@ export const fieldTypeIcons = [
   {
     type: 'date',
     subtype: undefined,
-    icon: 'calendar-range'
+    icon: 'calendar-range',
+    default: true // default icon for date
   },
   {
     type: 'any',
@@ -141,6 +150,8 @@ export const editModes = editViewsOptions.map(v => v.code)
 // FOR VIEWS
 export const viewsOptions = [
   { code: 'cards', icon: 'card-outline', textCode: 'preview.cardsView' },
-  { code: 'table', icon: 'table', textCode: 'preview.tableView' }
+  { code: 'table', icon: 'table', textCode: 'preview.tableView' },
+  { code: 'dataviz', icon: 'chart-bar', textCode: 'preview.datavizView' },
+  { code: 'map', icon: 'map-outline', textCode: 'preview.mapView' }
 ]
 export const viewModes = viewsOptions.map(v => v.code)

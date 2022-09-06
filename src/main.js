@@ -10,6 +10,8 @@ import '@mdi/font/css/materialdesignicons.min.css'
 
 import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 
+import VueApexCharts from 'vue-apexcharts'
+
 // import { VueShowdown, VueShowdownPlugin } from 'vue-showdown'
 
 import GitributeFile from './components/gitribute-file.vue'
@@ -21,6 +23,9 @@ Vue.config.productionTip = false
 Vue.use(Buefy, {
   defaultIconPack: 'mdi'
 })
+
+Vue.use(VueApexCharts)
+Vue.component('ApexChart', VueApexCharts)
 
 GitributeFile.store = store
 GitributeExploWiki.store = store

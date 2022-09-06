@@ -14,7 +14,7 @@
             icon-left="account"
             aria-haspopup="true"
             aria-controls="dropdown-user-token"
-            @click="showContent = !showContent"/>
+            @click="toggleBtn"/>
         </b-tooltip>
       </div>
       <!-- INPUT -->
@@ -127,6 +127,12 @@ export default {
       updateUserGit: 'git-user/updateUserGit',
       updateToken: 'git-data/updateToken'
     }),
+    toggleBtn () {
+      this.showContent = !this.showContent
+
+      // track with matomo
+      this.trackEvent('click')
+    },
     inputAction () {
       if (this.editToken) {
         // console.log('C > ButtonChangeUserToken > this.usertoken : ', this.usertoken)

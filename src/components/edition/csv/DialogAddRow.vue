@@ -83,6 +83,10 @@ export default {
       default: false,
       type: Boolean
     },
+    fileId: {
+      default: null,
+      type: String
+    },
     headers: {
       default: null,
       type: Array
@@ -124,6 +128,9 @@ export default {
     },
     closeDialog () {
       this.handleInput(false)
+
+      // track with matomo
+      this.trackEvent('closeDialog')
     },
     sendNewRowToParent () {
       console.log('\nC > DialogAddRow > sendNewRowToParent > this.temp :', this.temp)
@@ -134,6 +141,9 @@ export default {
       this.$emit('action', payload)
       this.closeDialog()
       this.temp = {}
+
+      // track with matomo
+      this.trackEvent('addNewRow')
     }
   }
 }

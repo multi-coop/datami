@@ -48,7 +48,7 @@ export const findFromPath = (path, obj, debug = false, separator = '.') => {
     // debug && console.log('U > ... > globalUtils > findFromPath > temp : ', temp)
     return temp
   }, obj)
-  // debug && console.log('\nU > globalUtils > findFromPath > result : ', result)
+  debug && console.log('\nU > globalUtils > findFromPath > result : ', result)
   return result
 }
 
@@ -155,4 +155,48 @@ export const getContrastYIQ = (hexcolor) => {
   const b = parseInt(hexcolor.substr(4, 2), 16)
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000
   return (yiq >= 128) ? 'black' : 'white'
+}
+
+// NUMBERS UTILS
+export const range = (max, min = 0, step = 1) => {
+  const arr = []
+  for (let i = min; i <= max; i += step) {
+    arr.push(i)
+  }
+  return arr
+}
+
+// AGGREGATION UTILS
+export const groupByField = (items, groupKey) => {
+  const groups = items.reduce((group, item) => {
+    const name = item[groupKey]
+    const index = group.findIndex(grp => grp.name === name)
+    if (index !== -1) {
+      group[index].items.push(item)
+    } else {
+      group.push({
+        name: name,
+        items: [item]
+      })
+    }
+    return group
+  }, [])
+  return groups
+}
+
+export const aggregateByField = (items, aggregationKey, aggregationtype = 'countitems') => {
+  const aggregated = items.reduce((series, item) => {
+    const name = item[aggregationKey]
+    const index = series.findIndex(grp => grp.name === name)
+    if (index !== -1 && aggregationtype === 'countitems') {
+      series[index].data += 1
+    } else {
+      series.push({
+        name: name,
+        data: 1
+      })
+    }
+    return series
+  }, [])
+  return aggregated
 }

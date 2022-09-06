@@ -1,11 +1,14 @@
 <template>
   <div class="SortAndFiltersSkeleton gitribute-component container">
     <b-navbar
-      type="is-white">
+      type="is-white"
+      class="is-align-items-center"
+      style="background-color: transparent;">
       <!-- FULL TEXT SEARCH -->
       <template #start>
         <b-navbar-item
-          tag="div">
+          tag="div"
+          class="py-0">
           <SearchFullText
             :file-id="fileId"
             :locale="locale"
@@ -136,3 +139,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.SortAndFiltersSkeleton > .navbar > .navbar-menu > .navbar-end {
+  margin-right: .75rem;
+}
+</style>

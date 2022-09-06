@@ -50,6 +50,9 @@ export default {
       this.loading = true
       // console.log('C > ButtonReloadFile > ReloadFile > this.gitObj : ', this.gitObj)
       this.updateReloading({ fileId: this.fileId, isLoading: true })
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

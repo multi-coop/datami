@@ -364,6 +364,9 @@ export default {
         // console.log('C > PreviewMd > watch > contentDataEdited > !!next : ', !!next)
         // this.resizeTextarea('edit-md-data')
         this.bufferizeEdited()
+
+        // track with matomo
+        this.trackEvent('contentDataEdited')
       }
     },
     contentEdited (next, prev) {
@@ -371,6 +374,9 @@ export default {
         // console.log('C > PreviewMd > watch > contentEdited > !!next : ', !!next)
         // this.resizeTextarea('edit-md-content')
         this.bufferizeEdited()
+
+        // track with matomo
+        this.trackEvent('contentEdited')
       }
     },
     fileIsSaving (next) {

@@ -68,6 +68,9 @@ export default {
       // console.log('C > MultiFilesTabsPosition > changePosition > btn : ', btn)
       this.activeButton = btn
       this.$emit('switch', btn)
+
+      // track with matomo
+      this.trackEvent(btn.id)
     }
   }
 

@@ -260,6 +260,9 @@ export default {
       }
       // console.log('C > EditCell > emitChange > payload : ', payload)
       this.$emit('updateCellValue', payload)
+
+      // track with matomo
+      this.trackEvent('updateCellValue')
     },
     SendActionToParent (event) {
       this.$emit('action', event)

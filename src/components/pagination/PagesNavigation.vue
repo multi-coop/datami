@@ -91,6 +91,10 @@ export default {
   name: 'PagesNavigation',
   mixins: [mixinGlobal],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     totalItems: {
       default: 0,
       type: Number
@@ -178,6 +182,9 @@ export default {
         value: pagination
       }
       this.$emit('action', payload)
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

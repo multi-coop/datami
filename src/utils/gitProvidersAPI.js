@@ -10,33 +10,23 @@ import {
 // see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
-export async function getFileData (gitObj, token = undefined) {
+export async function getData (url, funcName = undefined, token = undefined, raw = false) {
   const errors = []
 
-  // get correct API url
-  const url = gitObj.apiFile
-  // console.log('\nU > gitProvidersAPI > getFileData > gitObj : ', gitObj)
-  // console.log('U > gitProvidersAPI > getFileData > url : ', url)
-  // console.log('U > gitProvidersAPI > getFileData > token : ', token)
-
-  // --- DEPRECATED ---
-  // test with axios
-  // const req = await $axios.get(url)
-  // return req.data
-
-  // const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
-  // console.log('U > gitProvidersAPI > getFileDataRaw > getFileData > userInfosUrl : ', userInfosUrl)
-
-  // test with pure fetch
+  // pure fetch
   const req = await fetch(url)
-  // const req = await fetch(url, userInfosUrl.requestOptions)
-  // console.log('U > gitProvidersAPI > getFileData > req : ', req)
+  // console.log('U > gitProvidersAPI > getData > req : ', req)
 
-  const resp = await req.json()
-  // console.log('U > gitProvidersAPI > getFileData > resp : ', resp)
+  let resp
+  if (raw) {
+    resp = await req.text()
+  } else {
+    resp = await req.json()
+  }
+  // console.log('U > gitProvidersAPI > getData > resp : ', resp)
   if (!req.ok) {
     const err = {
-      function: 'getFileData',
+      function: funcName,
       code: req.status,
       resp: resp
     }
@@ -50,44 +40,18 @@ export async function getFileData (gitObj, token = undefined) {
   }
 }
 
-export async function getFileDataRaw (gitObj, token = undefined) {
-  const errors = []
+export async function getFileData (gitObj, token = undefined) {
+  // get correct API url
+  const url = gitObj.apiFile
+  const fetched = await getData(url, 'getFileData', token)
+  return fetched
+}
 
+export async function getFileDataRaw (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFileRaw
-  // console.log('\nU > gitProvidersAPI > getFileDataRaw > getFileData > url : ', url)
-  // console.log('U > gitProvidersAPI > getFileDataRaw > getFileData > token : ', token)
-
-  // --- DEPRECATED ---
-  // test with axios
-  // const req = await $axios.get(url)
-  // return req.data
-
-  // const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
-  // console.log('U > gitProvidersAPI > getFileDataRaw > getFileData > userInfosUrl : ', userInfosUrl)
-
-  // test with pure fetch
-  const req = await fetch(url)
-  // const req = await fetch(url, userInfosUrl.requestOptions)
-  // console.log('U > gitProvidersAPI > getFileDataRaw > getUrl > req : ', req)
-
-  let resp = await req.text()
-  // console.log('U > gitProvidersAPI > getFileDataRaw > getUrl > resp : ', resp)
-  if (!req.ok) {
-    resp = await req.json()
-    const err = {
-      function: 'getFileDataRaw',
-      code: req.status,
-      resp: resp
-    }
-    errors.push(err)
-  }
-
-  // return data
-  return {
-    data: resp,
-    errors: errors
-  }
+  const fetched = await getData(url, 'getFileDataRaw', token, true)
+  return fetched
 }
 
 // WORK IN PROGRESS

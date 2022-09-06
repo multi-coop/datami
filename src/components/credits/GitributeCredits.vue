@@ -1,5 +1,7 @@
 <template>
-  <div class="GitributeCredits gitribute-component columns is-centered is-multiline mt-6">
+  <div
+    class="GitributeCredits gitribute-component columns is-centered is-multiline py-3"
+    style="z-index: 0;">
     <!-- CREDITS -->
     <div
       class="column is-full is-italic has-text-centered">
@@ -16,9 +18,10 @@
         <span
           class="has-text-weight-bold">
           <a
-            class="link-multi"
-            href="https://multi.coop"
-            target="_blank">
+            class="link-multi outlink"
+            :href="urlMulti"
+            target="_blank"
+            @click="trackLink(urlMulti)">
             multi
             <!-- <img
               :src="require('@/assets/multi-logo-01.png')"
@@ -31,11 +34,12 @@
         <b-button
           icon-left="gitlab"
           tag="a"
-          href="https://gitlab.com/multi-coop/gitribute"
+          :href="urlSourceCode"
           outlined
           target="_blank"
           size="is-small"
-          class="ml-3 is-size-7">
+          class="ml-3 is-size-7 outlink"
+          @click="trackLink(urlSourceCode)">
           {{ t('credits.code', locale) }}
         </b-button>
       </p>
@@ -44,27 +48,28 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
-export default ({
+export default {
   name: 'GitributeCredits',
   mixins: [mixinGlobal],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     locale: {
       default: '',
       type: String
     }
   },
-  computed: {
-    ...mapState({
-      testTranslation: (state) => state['git-translations'].test
-    })
-  },
-  beforeMount () {
-    // console.log('\nC > GitributeCredits > beforeMount > this.locale : ', this.locale)
+  data () {
+    return {
+      urlMulti: 'https://multi.coop',
+      urlSourceCode: 'https://gitlab.com/multi-coop/gitribute'
+    }
   }
-})
+}
 </script>
 
 <style scoped>

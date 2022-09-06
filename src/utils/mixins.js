@@ -14,7 +14,10 @@ import {
   stringToColor,
   booleanFromValue,
   trimText,
-  getContrastYIQ
+  getContrastYIQ,
+  range,
+  groupByField,
+  aggregateByField
 } from '@/utils/globalUtils'
 import {
   extractGitInfos
@@ -64,6 +67,8 @@ export const mixinGlobal = {
       getEditViewMode: 'git-data/getEditViewMode',
       getViewMode: 'git-data/getViewMode',
       getGitInfosObj: 'getGitInfosObj',
+      getTrackAllOutlinks: 'getTrackAllOutlinks',
+      getEditNavbar: 'getFileEditNavbarStatus',
       getFileToken: 'git-data/getFileToken',
       getFileOptionsObj: 'getFileOptionsObj',
       fileNeedsReload: 'git-data/fileNeedsReload',
@@ -71,13 +76,17 @@ export const mixinGlobal = {
       fileNeedsDownloading: 'git-data/fileNeedsDownloading',
       fileIsCommitting: 'git-data/fileIsCommitting',
       getReqNotifications: 'git-data/getReqNotifications',
-      getReqErrors: 'git-data/getReqErrors'
+      getReqErrors: 'git-data/getReqErrors',
+      getUserFullscreen: 'git-user/getUserFullscreen'
     }),
     fileToken () {
       return this.getFileToken(this.fileId)
     },
     gitObj () {
       return this.fileId && this.getGitInfosObj(this.fileId)
+    },
+    hasTrackAllOutlinks () {
+      return this.getTrackAllOutlinks(this.fileId)
     },
     fileTypeFamily () {
       // const FileType = this.fileTypes[this.fileType]
@@ -125,6 +134,9 @@ export const mixinGlobal = {
     errors () {
       return this.getReqErrors(this.fileId)
     },
+    showEditNavbar () {
+      return this.getEditNavbar(this.fileId)
+    },
 
     // SORTING SETTINGS
     hasCustomSorting () {
@@ -161,13 +173,60 @@ export const mixinGlobal = {
     cardsViewIsDefault () {
       return this.cardsViewOptions && this.cardsViewOptions.default
     },
+    cardsViewIsActive () {
+      return this.cardsViewOptions && this.cardsViewOptions.activate
+    },
     hasCardsDetail () {
       return this.fileOptions && !!this.fileOptions.cardsdetail
+    },
+    cardsSettingsFromOptions () {
+      return this.fileOptions.cardssettings
+    },
+    cardsSettingsTemplates () {
+      return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.templates
+    },
+    cardsSettingsMiniMap () {
+      return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minimap
+    },
+    cardHasMiniMap () {
+      return this.cardsSettingsMiniMap && this.cardsSettingsMiniMap.activate
+    },
+
+    // DATAVIZ SETTINGS
+    hasDatavizView () {
+      return this.fileOptions && !!this.fileOptions.datavizview
+    },
+    datavizViewOptions () {
+      return this.hasDatavizView && this.fileOptions.datavizview
+    },
+    datavizViewIsDefault () {
+      return this.datavizViewOptions && this.datavizViewOptions.default
+    },
+    datavizViewIsActive () {
+      return this.datavizViewOptions && this.datavizViewOptions.activate
+    },
+
+    // MAP SETTINGS
+    hasMapView () {
+      return this.fileOptions && !!this.fileOptions.mapview
+    },
+    mapViewOptions () {
+      return this.hasMapView && this.fileOptions.mapview
+    },
+    mapViewIsDefault () {
+      return this.mapViewOptions && this.mapViewOptions.default
+    },
+    mapViewIsActive () {
+      return this.mapViewOptions && this.mapViewOptions.activate
     },
 
     // DATA CONNSOLIDATION
     hasConsolidation () {
       return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
+    },
+
+    userFullscreen () {
+      return this.getUserFullscreen(this.fileId)
     }
   },
   methods: {
@@ -234,6 +293,36 @@ export const mixinGlobal = {
           document.head.appendChild(tagCss)
         }
       })
+    },
+    trackEvent (value, action = undefined, category = undefined) {
+      const matomoServer = process.env.VUE_APP_GITRIBUTE_MATOMO
+      const matomoSiteId = process.env.VUE_APP_GITRIBUTE_MATOMO_SITE_ID
+
+      if (matomoServer && matomoSiteId) {
+        const domain = document.domain
+        // console.log('\nM > trackEvent > domain :', domain)
+
+        const eventCategory = category || this.gitObj.filefullname
+        // console.log('M > trackEvent > eventCategory :', eventCategory)
+
+        const evAction = action || this.$options.name
+        // console.log('M > trackEvent > evAction : ', evAction)
+
+        // console.log('M > trackEvent > value : ', value)
+
+        const _paq = window._paq
+        // console.log('M > trackEvent > _paq : ', _paq)
+        _paq.push(['trackEvent', eventCategory, evAction, value])
+        _paq.push(['trackEvent', domain, eventCategory, evAction])
+      }
+    },
+    trackLink (link) {
+      // only tracks gitribute outlinks if 'hasTrackAllOutlinks' is false
+      if (!this.hasTrackAllOutlinks) {
+        // console.log('\nM > trackLink > link :', link)
+        const _paq = window._paq
+        _paq.push(['trackLink', link, 'link'])
+      }
     }
   }
 }
@@ -337,6 +426,7 @@ export const mixinData = {
     })
   }
 }
+
 export const mixinGit = {
   computed: {
     ...mapGetters({
@@ -495,6 +585,9 @@ export const mixinValue = {
     },
     isInteger () {
       return this.fieldType === 'integer'
+    },
+    isPercent () {
+      return this.fieldSubtype === 'percent'
     },
     isLongText () {
       return this.fieldSubtype === 'longtext'
@@ -703,13 +796,17 @@ export const mixinCsv = {
   computed: {
     ...mapGetters({
       getSortingById: 'git-sortings/getSortingById',
-      getFiltersById: 'git-filters/getFiltersById'
+      getFiltersById: 'git-filters/getFiltersById',
+      getActiveFilterTagsById: 'git-filters/getActiveFilterTagsById'
     }),
     fileSorting () {
       return this.getSortingById(this.fileId)
     },
     fileFilters () {
       return this.getFiltersById(this.fileId)
+    },
+    activeFilterTags () {
+      return this.getActiveFilterTagsById(this.fileId)
     },
     lockHeaders () {
       const options = this.fileOptions
@@ -721,7 +818,8 @@ export const mixinCsv = {
       setSorting: 'git-sortings/setSortingSettings',
       setSortings: 'git-sortings/setSortingsSettings',
       setFilters: 'git-filters/setFiltersSettings',
-      updateFiltersSettings: 'git-filters/updateFiltersSettings'
+      updateFiltersSettings: 'git-filters/updateFiltersSettings',
+      updateFilterTags: 'git-filters/updateFilterTags'
     }),
     csvToObject,
     ObjectToCsv
@@ -798,5 +896,18 @@ export const mixinJsonNode = {
 export const mixinConsolidation = {
   methods: {
     getConsolidationApiUrl
+  }
+}
+
+export const mixinDataviz = {
+  methods: {
+    groupByField,
+    aggregateByField
+  }
+}
+
+export const mixinMap = {
+  methods: {
+    range
   }
 }

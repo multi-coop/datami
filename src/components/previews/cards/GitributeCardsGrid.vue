@@ -31,7 +31,8 @@
           :fields="cardsSettings.originalHeaders"
           :field-mapping="mappingsForMini"
           :item="item"
-          :show-detail="showDetail"
+          :show-detail="false"
+          :show-detail-card="showDetail"
           :locale="locale"
           :is-mini="true"
           @toggleDetail="toggleDetail"
@@ -42,7 +43,7 @@
 
     <!-- DISPLAY DETAILLED CARD -->
     <div
-      v-if="showDetail && activeCardId"
+      v-show="showDetail && activeCardId"
       class="columns is-centered">
       <div
         :class="`column is-10`">
@@ -51,7 +52,8 @@
           :fields="cardsSettings.originalHeaders"
           :field-mapping="mappingsForDetail"
           :item="getDetailItem"
-          :show-detail="showDetail"
+          :show-detail="true"
+          :show-detail-card="showDetail"
           :locale="locale"
           @toggleDetail="toggleDetail"
           @action="SendActionToParent"
@@ -65,7 +67,7 @@
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import GitributeCard from '@/components/previews/GitributeCard'
+import GitributeCard from '@/components/previews/cards/GitributeCard'
 
 export default {
   name: 'GitributeCardsGrid',
@@ -120,26 +122,34 @@ export default {
   computed: {
     mappingsForMini () {
       return this.cardsSettings.mapping.map(h => {
-        return {
+        const fieldMap = {
           field: h.field,
+          name: h.name,
           type: h.type,
           subtype: h.subtype,
           enumArr: h.enumArr,
           tagSeparator: h.tagSeparator,
           ...h.mini
         }
+        const hasTemplate = h.templating && h.templating.use_on_mini
+        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        return fieldMap
       })
     },
     mappingsForDetail () {
       return this.cardsSettings.mapping.map(h => {
-        return {
+        const fieldMap = {
           field: h.field,
+          name: h.name,
           type: h.type,
           subtype: h.subtype,
           enumArr: h.enumArr,
           tagSeparator: h.tagSeparator,
           ...h.detail
         }
+        const hasTemplate = h.templating && h.templating.use_on_detail
+        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        return fieldMap
       })
     },
     getDetailItem () {
@@ -147,20 +157,21 @@ export default {
     }
   },
   methods: {
-    handleInput (value) {
-      this.$emit('blur', value)
-    },
+    // handleInput (value) {
+    //   this.$emit('blur', value)
+    // },
     toggleDetail (event) {
       // console.log('\nC > GitributeCardsGrid > toggleDetail > event : ', event)
-      if (this.showDetail) {
+      if (event.showDetail) {
         this.showDetail = false
         this.activeCardId = undefined
-        this.handleInput(false)
+        // this.handleInput(false)
       } else {
         this.showDetail = true
-        this.activeCardId = event
-        this.handleInput(true)
+        this.activeCardId = event.itemId
+        // this.handleInput(true)
       }
+      this.$emit('toggleDetail', event)
     },
     emitUpdate (event) {
       // console.log('\nC > GitributeCardsGrid > emitUpdate > event : ', event)

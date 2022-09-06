@@ -48,6 +48,10 @@ export default {
   name: 'ButtonChangeLocale',
   mixins: [mixinGlobal],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     locale: {
       default: 'en',
       type: String
@@ -69,6 +73,9 @@ export default {
     changeLocale (locale) {
       this.updateUserLocale(locale)
       this.updateLocaleGlobally(locale)
+
+      // track with matomo
+      this.trackEvent(locale)
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="FileTitle gitribute-component">
     <div class="is-flex is-align-items-center">
-      <span class="mx-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop has-text-dark">
+      <span class="mx-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop has-text-dark text-shadow">
         {{ title }}
       </span>
       <b-tooltip
@@ -11,7 +11,7 @@
         <b-icon
           icon="information-outline"
           size="is-small"
-          :class="`ml-1 mr-2 has-text-${showFileInfos ? 'black' : 'grey-light'}`"
+          :class="`ml-1 mr-6 has-text-${showFileInfos ? 'black' : 'grey-light'}`"
           @click.native="toggleDialog"/>
       </b-tooltip>
     </div>
@@ -51,7 +51,10 @@ export default {
 </script>
 
 <style scoped>
-  .file-infos {
-    min-width: 37em;
-  }
+.file-infos {
+  min-width: 37em;
+}
+.text-shadow {
+  text-shadow: 0 0 10px white, 0 0 10px white;
+}
 </style>

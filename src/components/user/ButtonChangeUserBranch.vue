@@ -15,7 +15,7 @@
             icon-left="source-branch"
             aria-haspopup="true"
             aria-controls="dropdown-user-branch"
-            @click="showContent = !showContent"/>
+            @click="toggleBtn"/>
         </b-tooltip>
       </div>
       <!-- INPUT -->
@@ -95,7 +95,8 @@
                 outlined
                 expanded
                 size="is-small"
-                class="is-size-7">
+                class="is-size-7 outlink"
+                @click="trackLink(activeBranch.branchUrl)">
                 {{ t('git.branchUrl', locale) }}
               </b-button>
             </div>
@@ -108,7 +109,8 @@
                 outlined
                 expanded
                 size="is-small"
-                class="is-size-7">
+                class="is-size-7 outlink"
+                @click="trackLink(activeBranch.mergeRequestUrl)">
                 {{ t('git.mergeRequestUrl', locale) }}
               </b-button>
             </div>
@@ -160,6 +162,12 @@ export default {
     ...mapActions({
       changeActiveBranch: 'git-user/changeActiveUserBranch'
     }),
+    toggleBtn () {
+      this.showContent = !this.showContent
+
+      // track with matomo
+      this.trackEvent('click')
+    },
     inputAction () {
       console.log('C > ButtonChangeUserBranch > inputAction > this.activeBranch : ', this.activeBranch)
       // this.changeActiveBranch({ fileId: this.fileId, branch: this.activeBranch })

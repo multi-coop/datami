@@ -1,5 +1,11 @@
 <template>
   <div class="GitributeMultiFiles gitribute-widget section">
+    <!-- MATOMO -->
+    <MatomoScript
+      :file-id="multiFilesId"
+      :from-multifiles="true"/>
+
+    <!-- WIDGET -->
     <div
       class="container mb-4 gitribute-container">
       <!-- DEBUGGING -->
@@ -136,7 +142,8 @@
                     :locale="locale || fileTab.locale"
                     :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
-                    :from-multi-files-vertical="tabsVertical"/>
+                    :from-multi-files-vertical="tabsVertical"
+                    :trackalloutlinks="!fileTabIdx ? trackalloutlinks : false"/>
 
                   <!-- CALL GITRIBUTE-FILE COMPONENT HERE -->
                   <GitributeExplowiki
@@ -149,7 +156,8 @@
                     :locale="fileTab.locale"
                     :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
-                    :from-multi-files-vertical="tabsVertical"/>
+                    :from-multi-files-vertical="tabsVertical"
+                    :trackalloutlinks="!fileTabIdx ? trackalloutlinks : false"/>
                 </div>
               </div>
             </b-tab-item>
@@ -167,6 +175,8 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
 
+import MatomoScript from '@/components/matomo/MatomoScript'
+
 import MultiFilesTabsPosition from '@/components/user/MultiFilesTabsPosition'
 import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
 import GitributeFile from '@/components/gitribute-file'
@@ -175,6 +185,7 @@ import GitributeExplowiki from '@/components/gitribute-explowiki'
 export default {
   name: 'GitributeMultiFiles',
   components: {
+    MatomoScript,
     MultiFilesTabsPosition,
     ButtonCopyWidgetHtml,
     GitributeFile,
@@ -200,6 +211,10 @@ export default {
     locale: {
       default: 'en',
       type: String
+    },
+    trackalloutlinks: {
+      default: false,
+      type: Boolean
     },
     debug: {
       default: false,
@@ -259,6 +274,9 @@ export default {
     // Set in store
     // console.log('\nC > GitributeMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
     this.addFileOptions(multiFilesOptions)
+    if (this.trackalloutlinks) {
+      this.activateTrackAllOutlinks()
+    }
   },
   mounted () {
     // Pre-store files for possible further sharing
@@ -271,7 +289,8 @@ export default {
     trimText,
     booleanFromValue,
     ...mapActions({
-      addFileOptions: 'addFileOptions'
+      addFileOptions: 'addFileOptions',
+      activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     switchTabsPosition (btn) {
       // console.log('C > GitributeMultiFiles > switchTabsPosition > btn : ', btn)

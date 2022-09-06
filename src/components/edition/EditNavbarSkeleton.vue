@@ -1,12 +1,14 @@
 <template>
-  <div class="EditNavbarSkeleton gitribute-component container">
+  <div
+    v-show="showEditNavbar && !noEditNavbarViews.includes(currentViewMode)"
+    class="EditNavbarSkeleton gitribute-component container">
     <div
       v-if="gitObj"
       class="columns is-multiline is-mobile is-justify-content-end mb-2">
       <!-- UPLOAD FILE -->
       <div
         v-if="!onlyPreview"
-        class="column is-5-mobile is-1-tablet">
+        class="column py-0 is-5-mobile is-1-tablet">
         <ButtonImportData
           :locale="locale"
           :show-upload-file-dialog="showUploadFileDialog"
@@ -15,7 +17,7 @@
 
       <!-- EDIT VIEW CHOICES -->
       <div
-        :class="`column is-4 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
+        :class="`column py-0 is-4 is-offset-${ onlyPreview ? '4' : '3'} has-text-centered`">
         <EditModeBtns
           :only-preview="onlyPreview"
           :file-id="fileId"
@@ -25,7 +27,7 @@
       <!-- EDIT OR SAVE/COMMIT BUTTON -->
       <!-- class="column is-3 is-offset-1"> -->
       <div
-        class="column is-12-mobile is-3-tablet mr-3-tablet mr-0-desktop is-offset-1">
+        class="column py-0 is-12-mobile is-4-tablet is-3-desktop is-offset-1 edit-save-button">
         <b-button
           v-if="!onlyPreview"
           type="is-dark"
@@ -47,7 +49,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
@@ -81,7 +83,16 @@ export default {
   },
   data () {
     return {
-      loading: false
+      loading: false,
+      noEditNavbarViews: ['dataviz']
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getEditNavbar: 'getFileEditNavbarStatus'
+    }),
+    showEditNavbar () {
+      return this.getEditNavbar(this.fileId)
     }
   },
   methods: {
@@ -95,6 +106,8 @@ export default {
       } else {
         this.commitChanges()
       }
+      // track with matomo
+      this.trackEvent('click', 'EditNavbarEditToggleBtn')
     },
     changeEditMode (code) {
       // console.log('C > EditNavbarSkeleton > changeEditMode > code :', code)
@@ -109,3 +122,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.edit-save-button {
+  z-index: 3;
+}
+
+</style>

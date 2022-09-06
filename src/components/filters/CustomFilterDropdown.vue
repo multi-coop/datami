@@ -4,7 +4,8 @@
     arrowless
     right
     tag="div"
-    class="CustomFilterDropdown">
+    class="CustomFilterDropdown ml-1"
+    style="background-color: white; height: 2.5em;">
     <!-- LABEL SLOT -->
     <template #label>
       <b-tooltip
@@ -153,6 +154,9 @@ export default {
       // console.log('\nC > CustomFilterDropdown > updateActiveTag > filterVal : ', filterVal)
       const remove = this.isActive(filterVal)
       this.SendActionToParent(filterVal, remove)
+
+      // track with matomo
+      this.trackEvent(this.filter.label)
     },
     removeAllFilters () {
       this.SendActionToParent(null, false, true)
@@ -204,6 +208,11 @@ export default {
   background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
+}
+
+.CustomFilterDropdown > .navbar-link {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 </style>

@@ -40,7 +40,7 @@ export default {
   name: 'LoaderCSV',
   data () {
     return {
-      columns: 6,
+      columns: 4,
       rows: 5,
       cellWidth: '120px'
     }

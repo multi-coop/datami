@@ -14,7 +14,9 @@ const defaultStore = {
   state: {
     gitInfos: [],
     fileOptions: [],
-    fileReqInfos: []
+    fileReqInfos: [],
+    fileEditNavbar: [],
+    trackAllOutlinks: []
   },
   getters: {
     getGitObj: (state) => {
@@ -31,6 +33,14 @@ const defaultStore = {
     getFileReqInfosObj: (state) => (uuid) => {
       const fileReqInfosObj = state.fileReqInfos.find(fileReq => fileReq.uuid === uuid)
       return fileReqInfosObj
+    },
+    getFileEditNavbarStatus: (state) => (uuid) => {
+      const fileEditNavbar = state.fileEditNavbar.find(fileEditStatus => fileEditStatus.uuid === uuid)
+      return fileEditNavbar && fileEditNavbar.status
+    },
+    getTrackAllOutlinks: (state) => (uuid) => {
+      const trackAllOutlinks = state.trackAllOutlinks.find(trackOutlinks => trackOutlinks.uuid === uuid)
+      return trackAllOutlinks.val
     },
     buildNewBranchName: (state) => (filefullname, fileId) => {
       const now = Date.now()
@@ -67,6 +77,13 @@ const defaultStore = {
     },
     addFileReqInfos ({ commit }, fileReqInfos) {
       commit('setState', { key: 'fileReqInfos', data: fileReqInfos })
+    },
+    toggleEditNavbar ({ commit }, fileEditNavbar) {
+      // console.log('S-index > A > toggleEditNavbar > fileEditNavbar : ', fileEditNavbar)
+      commit('setState', { key: 'fileEditNavbar', data: fileEditNavbar })
+    },
+    activateTrackAllOutlinks ({ commit }, fileTrackOutlinks) {
+      commit('setState', { key: 'trackAllOutlinks', data: fileTrackOutlinks })
     }
   }
 }

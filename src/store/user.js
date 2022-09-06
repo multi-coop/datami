@@ -5,7 +5,8 @@ export const user = {
   state: {
     userLocale: 'en',
     userGit: [],
-    userBranches: []
+    userBranches: [],
+    fullscreens: []
   },
   getters: {
     getUserLocale: (state) => {
@@ -31,6 +32,10 @@ export const user = {
     getUserActiveBranch: (state, getters) => (fileId) => {
       const userBranches = getters.getUserBranchesNotRef(fileId)
       return userBranches && userBranches.find(branch => branch.activeBranch)
+    },
+    getUserFullscreen: (state) => (fileId) => {
+      const userFullscreen = state.fullscreens.find(fullscreen => fullscreen.fileId === fileId)
+      return userFullscreen && userFullscreen.isFullscreen
     }
   },
   mutations: {
@@ -57,6 +62,14 @@ export const user = {
       } else {
         state.userBranches.push(userBranches)
       }
+    },
+    setUserFullscreen (state, fullscreenInfos) {
+      const index = state.fullscreens.findIndex(fullscreen => fullscreen.uuid === fullscreenInfos.uuid)
+      if (index !== -1) {
+        Vue.set(state.fullscreens, index, fullscreenInfos)
+      } else {
+        state.fullscreens.push(fullscreenInfos)
+      }
     }
   },
   actions: {
@@ -82,6 +95,10 @@ export const user = {
     },
     changeActiveUserBranch ({ commit }, { fileId, userBranch }) {
       console.log('\nS-user > G > getUserBranches > userBranch : ', userBranch)
+      // TO DO ...
+    },
+    updateFullscreen ({ commit }, fullscreenInfos) {
+      commit('setUserFullscreen', fullscreenInfos)
     }
   }
 }

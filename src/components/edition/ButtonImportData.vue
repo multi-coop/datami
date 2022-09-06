@@ -40,6 +40,9 @@ export default {
         action: 'toggleUploadFileDialog'
       }
       this.$emit('action', payload)
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

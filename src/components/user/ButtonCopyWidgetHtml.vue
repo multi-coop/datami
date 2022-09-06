@@ -47,7 +47,7 @@ export default {
       let fileOptionsStr
 
       const scriptStr = 'script'
-      const quoteReplacer = '-'
+      const quoteReplacer = '&lsquo;'
 
       let htmlStr = `\n
 <!-- GITRIBUTE - contribute with GIT ...but without minding it-->\r
@@ -128,6 +128,9 @@ export default {
             confirmText: confirmText
           })
         )
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

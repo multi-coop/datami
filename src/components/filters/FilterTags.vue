@@ -1,12 +1,12 @@
 <template>
-  <div class="FilterTags mt-2 gitribute-component container is-flex is-flex-direction-row is-align-content-center is-justify-content-center">
+  <div class="FilterTags gitribute-component container is-flex is-flex-direction-row is-align-content-top is-justify-content-center">
     <b-field
       grouped
       group-multiline>
       <div
         v-for="tag in tags"
         :key="`${tag.field}-${tag.value}`"
-        class="control">
+        class="control filter-tag">
         <b-taglist
           attached
           closable
@@ -176,5 +176,8 @@ export default {
 <style scoped>
 .divider::after, .divider::before {
   background-color: grey !important;
+}
+.filter-tag {
+  border: 3px solid white;
 }
 </style>

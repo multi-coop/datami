@@ -55,6 +55,9 @@ export default {
         // this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }
