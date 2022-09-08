@@ -1,5 +1,5 @@
 <template>
-  <div class="FilterTags gitribute-component container is-flex is-flex-direction-row is-align-content-top is-justify-content-center">
+  <div class="FilterTags datami-component container is-flex is-flex-direction-row is-align-content-top is-justify-content-center">
     <b-field
       grouped
       group-multiline>

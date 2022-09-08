@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonImportData gitribute-component">
+  <div class="ButtonImportData datami-component">
     <b-tooltip
       :label="t(`edit.uploadData`, locale)"
       type="is-dark"

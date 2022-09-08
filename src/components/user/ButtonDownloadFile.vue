@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonDownloadFile gitribute-component">
+  <div class="ButtonDownloadFile datami-component">
     <b-tooltip
       :label="t('actions.downloadFile', locale)"
       type="is-dark"

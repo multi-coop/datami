@@ -101,12 +101,12 @@ export const extractGitInfos = (str) => {
   if (orga === 'github') {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
-    // https://raw.githubusercontent.com/multi-coop/gitribute-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
+    // https://raw.githubusercontent.com/multi-coop/datami-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
     fileraw = `${rawRoot}${remaining}`
   } else {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
-    // https://gitlab.com/multi-coop/gitribute-content-test/-/raw/main/texts/markdown/test-file-gitribute-fr.md
+    // https://gitlab.com/multi-coop/datami-content-test/-/raw/main/texts/markdown/test-file-datami-fr.md
     fileraw = `${rawRoot}${remaining}`
   }
 
@@ -394,7 +394,7 @@ export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch,
       username = userInfosData.username
 
       postBody = {
-        title: `Gitribute ... Contribution from : ${username}`,
+        title: `Datami ... Contribution from : ${username}`,
         description: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
         source_branch: `${newBranch}`,
         target_branch: targetBranch
@@ -411,7 +411,7 @@ export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch,
       username = userInfosData.login
 
       postBody = {
-        title: `Gitribute ... Contribution from : ${username}`,
+        title: `Datami ... Contribution from : ${username}`,
         body: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
         head: `${newBranch}`,
         base: targetBranch

@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewMd gitribute-component content">
+  <div class="PreviewMd datami-component content">
     <!-- DEBUG -->
     <div
       v-if="debug"

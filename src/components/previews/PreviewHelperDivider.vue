@@ -1,6 +1,6 @@
 <template>
   <div
-    class="PreviewHelperDivider gitribute-component divider my-0">
+    class="PreviewHelperDivider datami-component divider my-0">
     <span class="no-text-transform is-size-6 has-text-grey-light">
       <b-icon
         :icon="icon"

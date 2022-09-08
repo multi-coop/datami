@@ -1,5 +1,5 @@
 <template>
-  <div class="CustomFilters gitribute-component">
+  <div class="CustomFilters datami-component">
     <!-- FILTERS -->
     <div
       v-if="filtersDisplay"

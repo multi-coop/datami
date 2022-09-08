@@ -1,5 +1,5 @@
 <template>
-  <div class="GitributeMapGrid gitribute-component">
+  <div class="DatamiMapGrid datami-component">
     <!-- DISPLAY MAPS -->
     <div
       class="columns is-multiline is-centered">
@@ -8,7 +8,7 @@
         :key="`${fileId}-map-${idx}`"
         :class="`column is-${map.cols || 6}`">
         <!-- {{ map.title[locale] }} -->
-        <GitributeMap
+        <DatamiMap
           v-if="map.mapOptions"
           :file-id="fileId"
           :map-id="`g-map-${fileId}-${idx}`"
@@ -41,12 +41,12 @@
 
 import { mixinGlobal, mixinMap } from '@/utils/mixins.js'
 
-import GitributeMap from '@/components/previews/maps/GitributeMap'
+import DatamiMap from '@/components/previews/maps/DatamiMap'
 
 export default {
-  name: 'GitributeMapGridGrid',
+  name: 'DatamiMapGridGrid',
   components: {
-    GitributeMap
+    DatamiMap
   },
   mixins: [
     mixinGlobal,
@@ -76,16 +76,16 @@ export default {
   },
   methods: {
     isMapOnTop (map, idx) {
-      // console.log('\nC > GitributeMapGridGrid > isMapOnTop > map : ', map)
+      // console.log('\nC > DatamiMapGridGrid > isMapOnTop > map : ', map)
       if (!idx) {
         return true
       } else {
         const mapsRange = this.range(idx)
-        // console.log('C > GitributeMapGridGrid > isMapOnTop > mapsRange : ', mapsRange)
+        // console.log('C > DatamiMapGridGrid > isMapOnTop > mapsRange : ', mapsRange)
         const mapsColsSum = mapsRange.reduce((acc, mapIdx) => {
           return acc + this.mapViewOptions.maps[mapIdx].cols
         }, 0)
-        // console.log('C > GitributeMapGridGrid > isMapOnTop > mapsColsSum : ', mapsColsSum)
+        // console.log('C > DatamiMapGridGrid > isMapOnTop > mapsColsSum : ', mapsColsSum)
         return mapsColsSum <= 12
       }
     }

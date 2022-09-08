@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonEditFile gitribute-component">
+  <div class="ButtonEditFile datami-component">
     <b-tooltip
       :label="t(`actions.${showEditNavbar ? 'quitEdit' : 'enterEdit'}`, locale)"
       type="is-dark"

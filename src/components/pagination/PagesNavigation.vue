@@ -1,5 +1,5 @@
 <template>
-  <div class="PagesNavigation gitribute-component">
+  <div class="PagesNavigation datami-component">
     <div>
       <b-pagination
         v-model="currentPage"

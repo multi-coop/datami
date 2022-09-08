@@ -1,7 +1,7 @@
 <template>
   <div
     :id="fileId"
-    :class="`GitributeExplowiki gitribute-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :class="`DatamiExplowiki datami-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
     :style="`z-index: 0; max-width: 100%; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0; max-width: 100%"> -->
     <!-- MATOMO -->
@@ -10,7 +10,7 @@
 
     <!-- WIDGET -->
     <div
-      :id="`gitribute-widget-${fileId}`"
+      :id="`datami-widget-${fileId}`"
       :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
       :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
       <!-- NAVBAR FILE TITLE / USER BTNS -->
@@ -159,7 +159,7 @@
     <!-- PREVIEWS CSV / CARDS WIKI -->
     <div
       v-if="wikiItems && fileTypeFamily === 'table'"
-      class="container gitribute-container"
+      class="container datami-container"
       style="z-index: 1;">
       <PreviewCsv
         :file-id="fileId"
@@ -182,7 +182,7 @@
       :locale="locale"/>
 
     <!-- CREDITS -->
-    <GitributeCredits
+    <DatamiCredits
       :file-id="fileId"
       :locale="locale"/>
   </div>
@@ -212,10 +212,10 @@ import LoaderWiki from '@/components/loaders/LoaderWIKI'
 
 import PreviewCsv from '@/components/previews/PreviewCsv'
 
-import GitributeCredits from '@/components/credits/GitributeCredits'
+import DatamiCredits from '@/components/credits/DatamiCredits'
 
 export default {
-  name: 'GitributeExploWiki',
+  name: 'DatamiExploWiki',
   components: {
     MatomoScript,
     FileTitle,
@@ -227,7 +227,7 @@ export default {
     DialogFileInfos,
     LoaderWiki,
     PreviewCsv,
-    GitributeCredits
+    DatamiCredits
   },
   mixins: [
     mixinGlobal,
@@ -237,7 +237,7 @@ export default {
   ],
   props: {
     title: {
-      default: 'gitribute',
+      default: 'datami',
       type: String
     },
     wikilist: {
@@ -316,14 +316,14 @@ export default {
       }
     },
     fileIsLoading (next) {
-      // console.log('C > GitributeExploWiki > watch > fileIsLoading > next : ', next)
+      // console.log('C > DatamiExploWiki > watch > fileIsLoading > next : ', next)
       if (next) { this.reloadMediawikiRessources() }
     }
   },
   async beforeMount () {
-    // console.log('\nC > GitributeExploWiki > beforeMount > this.wikifile : ', this.wikifile)
-    // console.log('C > GitributeExploWiki > beforeMount > this.wikilist : ', this.wikilist)
-    // console.log('C > GitributeExploWiki > beforeMount > this.options : ', this.options)
+    // console.log('\nC > DatamiExploWiki > beforeMount > this.wikifile : ', this.wikifile)
+    // console.log('C > DatamiExploWiki > beforeMount > this.wikilist : ', this.wikilist)
+    // console.log('C > DatamiExploWiki > beforeMount > this.options : ', this.options)
     this.setWidgetCopy()
 
     const wikiUuid = this.uuidv4()
@@ -336,7 +336,7 @@ export default {
     this.mediawikiOptions = mediawikiOptions
 
     // add default fields for pages structuration
-    // console.log('C > GitributeExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)
+    // console.log('C > DatamiExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)
     const fields = [...this.mediawikiDefaultFields, ...mediawikiOptions.wikisettings.fields]
     this.wikiFields = { ...fields }
 
@@ -349,24 +349,24 @@ export default {
     this.wikiObj = wikiInfosObject
     this.fileId = wikiInfosObject.uuid
     this.fileType = wikiInfosObject.filetype
-    // console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
+    // console.log('C > DatamiExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
     if (!this.getGitInfosObj[wikiUuid]) {
       this.addGitInfos(wikiInfosObject)
     }
     // get schema if any
     let mediawikiSchema = mediawikiOptions.schema
-    // console.log('C > GitributeExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
+    // console.log('C > DatamiExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
     if (mediawikiSchema && mediawikiSchema.file) {
       const schemaGitObj = extractGitInfos(mediawikiSchema.file)
-      // console.log('C > GitributeExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
+      // console.log('C > DatamiExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
       const schemaRaw = await getFileDataRaw(schemaGitObj)
-      // console.log('C > GitributeExploWiki > beforeMount > schemaRaw : ', schemaRaw)
+      // console.log('C > DatamiExploWiki > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
-      // console.log('C > GitributeExploWiki > beforeMount > schemaData : ', schemaData)
+      // console.log('C > DatamiExploWiki > beforeMount > schemaData : ', schemaData)
       const schema = JSON.parse(schemaData)
       mediawikiSchema = { ...schema, file: mediawikiSchema.file }
       // mediawikiOptions.schema = schema
-      // console.log('C > GitributeExploWiki > beforeMount > schema : ', schema)
+      // console.log('C > DatamiExploWiki > beforeMount > schema : ', schema)
     }
 
     // get custom props if any
@@ -387,7 +387,7 @@ export default {
     }
 
     this.addFileOptions({ ...mediawikiOptions, uuid: wikiUuid })
-    // console.log('C > GitributeExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
+    // console.log('C > DatamiExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
   },
   async mounted () {
     await this.reloadMediawikiRessources()
@@ -413,11 +413,11 @@ export default {
 
       // get wikipages list if any
       const wikipages = this.wikiObj.wikipages
-      // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikipages : ', wikipages)
+      // console.log('C > DatamiExploWiki > reloadMediawikiRessources > wikipages : ', wikipages)
       if (wikipages && wikipages.length) {
         for (const pageUrl of wikipages) {
           const pageData = await this.getMediaWikiPage(this.wikiObj, pageUrl, this.uuidv4(), this.mediawikiOptions.wikisettings)
-          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
           this.wikiPages.push(pageData.temp)
           this.wikiItems.push(pageData.item)
@@ -427,24 +427,24 @@ export default {
 
       // Request API for wiki pages data
       const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
-      // console.log('\nC > GitributeExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
+      // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
       if (respWikidataRaw.data) {
         // let wikiItems = respWikidataRaw.data.slice(0, 10)
         wikiItems = respWikidataRaw.data
         wikiItems = wikiItems.map(item => { return { ...item, id: this.uuidv4() } })
-        // console.log('C > GitributeExploWiki > reloadMediawikiRessources > wikiItems : ', wikiItems)
+        // console.log('C > DatamiExploWiki > reloadMediawikiRessources > wikiItems : ', wikiItems)
         this.wikiItems.push(...wikiItems)
 
         // Update reloading in store - false
         this.updateReloading({ fileId: this.fileId, isLoading: false })
 
         // this.wikiHeaders = new Set()
-        // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pages : ', pages)
+        // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pages : ', pages)
         for (const item of this.wikiItems.filter(item => !item.isLoaded)) {
           const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
-          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
-          // console.log('C > GitributeExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)
           this.wikiPages.push(pageData.temp)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
         }
@@ -453,14 +453,14 @@ export default {
     updateCustomFilters (data) {
       // build filters from options config
       this.fileFilters.forEach(filter => {
-        // console.log('\n... C > GitributeExploWiki > updateCustomFilters > filter : ', filter)
+        // console.log('\n... C > DatamiExploWiki > updateCustomFilters > filter : ', filter)
         const field = filter.field
 
         // get only last value from new data object
         const hasData = !!data[field]
         if (hasData) {
           const dataTagsRaw = data[field]
-          // console.log('... C > GitributeExploWiki > updateCustomFilters > dataTagsRaw : ', dataTagsRaw)
+          // console.log('... C > DatamiExploWiki > updateCustomFilters > dataTagsRaw : ', dataTagsRaw)
           let dataTags = dataTagsRaw.split(this.customFiltersConfig.tagsSeparator)
           dataTags = dataTags.map(tag => tag.trim())
           this.updateFiltersSettings({
@@ -470,7 +470,7 @@ export default {
           })
         }
       })
-      // console.log('C > GitributeExploWiki > updateCustomFilters > this.fileFilters : ', this.fileFilters)
+      // console.log('C > DatamiExploWiki > updateCustomFilters > this.fileFilters : ', this.fileFilters)
     }
   }
 }
@@ -478,7 +478,7 @@ export default {
 
 <style>
 
-.gitribute-container {
+.datami-container {
   max-width: 100% !important;
 }
 

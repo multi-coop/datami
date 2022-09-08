@@ -133,7 +133,7 @@ export const fieldTypeIcons = [
 
   // GITRIBUTE ICONS
   {
-    type: 'gitribute',
+    type: 'datami',
     subtype: 'consolidation',
     icon: 'wrench'
   }

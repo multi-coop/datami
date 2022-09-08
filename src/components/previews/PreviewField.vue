@@ -18,13 +18,13 @@
         <!-- FIELD TYPE ICON -->
         <b-icon
           :icon="getIconFieldType(field)"
-          :class="`${isGitributeField ? '' : 'ml-2 mr-2'}`"
+          :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
           :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
           size="is-small"/>
 
-        <!-- FIELD LABEL FOR isGitributeField -->
+        <!-- FIELD LABEL FOR isDatamiField -->
         <span
-          v-if="isGitributeField"
+          v-if="isDatamiField"
           class="mr-2">
           <!-- {{ t(field.label, locale) }} -->
         </span>
@@ -91,7 +91,7 @@
             {{ t('field.label', locale) }}
           </div>
           <div class="column is-8 py-1 px-1 has-text-weight-bold">
-            <span v-if="!isGitributeField">
+            <span v-if="!isDatamiField">
               {{ field.label }}
             </span>
             <span v-else>
@@ -175,7 +175,7 @@
 
     <!-- LOCKED OR NOT -->
     <b-tooltip
-      v-if="lockHeaders && currentEditViewMode !== 'preview' && !isGitributeField"
+      v-if="lockHeaders && currentEditViewMode !== 'preview' && !isDatamiField"
       :label="t('edit.headerLocked', locale)"
       position="is-top"
       multilined

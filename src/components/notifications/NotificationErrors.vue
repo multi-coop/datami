@@ -1,5 +1,5 @@
 <template>
-  <div class="NotificationErrors gitribute-component container px-6 mb-2">
+  <div class="NotificationErrors datami-component container px-6 mb-2">
     <b-notification
       v-model="isActive"
       aria-close-label="Close notification">

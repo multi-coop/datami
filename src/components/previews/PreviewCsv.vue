@@ -62,7 +62,7 @@
     <!-- LOADERS -->
     <div
       v-if="fileIsLoading || !fileOptions"
-      class="gitribute-loaders">
+      class="datami-loaders">
       <!-- <LoaderEditNavbar
         :file-id="fileId"
         :only-preview="onlyPreview"/> -->
@@ -75,7 +75,7 @@
 
     <div
       v-if="!fileIsLoading"
-      class="gitribute-preview-helpers">
+      class="datami-preview-helpers">
       <!-- HELPERS -->
       <PreviewHelpers
         v-if="!onlyPreview && currentViewMode !== 'map'"
@@ -124,9 +124,9 @@
       <!-- PREVIEWS -->
       <div
         v-if="data && fileOptions"
-        class="gitribute-table-previews">
+        class="datami-table-previews">
         <!-- ORIGINAL DATA -->
-        <GitributeTable
+        <DatamiTable
           :file-id="fileId"
           :data="data"
           :columns="dataColumns"
@@ -164,7 +164,7 @@ import LoaderCSV from '@/components/loaders/LoaderCSV'
 import LoaderCards from '@/components/loaders/LoaderCards'
 
 import PreviewHelpers from '@/components/previews/PreviewHelpers'
-import GitributeTable from '@/components/previews/GitributeTable'
+import DatamiTable from '@/components/previews/DatamiTable'
 
 import { defaultTagsSeparator } from '@/utils/globalUtils'
 
@@ -176,7 +176,7 @@ export default {
     LoaderCSV,
     LoaderCards,
     PreviewHelpers,
-    GitributeTable
+    DatamiTable
   },
   mixins: [
     mixinGlobal,
@@ -370,7 +370,7 @@ export default {
                 data: this.edited
               }
             }
-            // console.log('C >>> GitributeFile > loadingShared > payloadData : ', payloadData)
+            // console.log('C >>> DatamiFile > loadingShared > payloadData : ', payloadData)
             this.updateLoadedSharedData(payloadData)
 
             // update sharedData
@@ -386,7 +386,7 @@ export default {
             ...shareableFile,
             isLoaded: true
           }
-          // console.log('C >>> GitributeFile > loadingShared > updatedShareableFile : ', updatedShareableFile)
+          // console.log('C >>> DatamiFile > loadingShared > updatedShareableFile : ', updatedShareableFile)
           this.updateShareableFiles(updatedShareableFile)
         }
       }

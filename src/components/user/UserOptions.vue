@@ -1,6 +1,6 @@
 <template>
   <div
-    class="UserOptions gitribute-component is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
+    class="UserOptions datami-component is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between"
     style="flex: fit-content;">
     <ButtonEditFile
       v-if="!onlyPreview"

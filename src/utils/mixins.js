@@ -234,7 +234,7 @@ export const mixinGlobal = {
     findFromPath,
     setWidgetCopy () {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
-      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN || 'gitribute.multi.coop'
+      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN || 'datami.multi.coop'
       // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
 
       /* Stuff we need to add to <head>
@@ -317,7 +317,7 @@ export const mixinGlobal = {
       }
     },
     trackLink (link) {
-      // only tracks gitribute outlinks if 'hasTrackAllOutlinks' is false
+      // only tracks datami outlinks if 'hasTrackAllOutlinks' is false
       if (!this.hasTrackAllOutlinks) {
         // console.log('\nM > trackLink > link :', link)
         const _paq = window._paq
@@ -613,11 +613,11 @@ export const mixinValue = {
     isForeignKey () {
       return this.fieldForeignKey && this.fieldForeignKey.activate
     },
-    isGitributeField () {
-      return this.fieldType === 'gitribute'
+    isDatamiField () {
+      return this.fieldType === 'datami'
     },
     isConsolidation () {
-      return this.isGitributeField && this.fieldSubtype === 'consolidation'
+      return this.isDatamiField && this.fieldSubtype === 'consolidation'
     }
   },
   methods: {

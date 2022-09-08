@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewModeBtns gitribute-component is-flex is-align-items-center">
+  <div class="ViewModeBtns datami-component is-flex is-align-items-center">
     <!-- BUTTONS -->
     <!-- <b-field
       v-if="fileTypeFamily === 'table' && hasCardsView"

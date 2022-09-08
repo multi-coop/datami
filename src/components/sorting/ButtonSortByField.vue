@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonSortByField gitribute-component px-2">
+  <div class="ButtonSortByField datami-component px-2">
     <!-- DEBUGGING -->
     <div v-if="debug">
       counter: {{ counter }}

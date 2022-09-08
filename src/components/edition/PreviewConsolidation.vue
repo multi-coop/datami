@@ -2,7 +2,7 @@
   <div class="PreviewConsolidation">
     <!-- ACTION BUTTON -->
     <article class="media">
-      <div class="media-left gitribute-selection pt-1 has-text-centered">
+      <div class="media-left datami-selection pt-1 has-text-centered">
         <b-icon
           icon="wrench"
           type="is-dark"/>
@@ -86,7 +86,7 @@
       v-for="cData in activeConsolidationItems"
       :key="cData.toField.field"
       class="media pt-2 mt-2">
-      <div class="media-left gitribute-selection">
+      <div class="media-left datami-selection">
         <div class="content">
           <!-- DEBUGGING -->
           <div
@@ -136,7 +136,7 @@
 
     <!-- ACTION BUTTONS -->
     <article class="media mb-4">
-      <div class="media-left gitribute-selection">
+      <div class="media-left datami-selection">
         <div class="content">
           <b-button
             class="mr-3"
@@ -250,7 +250,7 @@ export default {
 </script>
 
 <style scoped>
-.gitribute-selection {
+.datami-selection {
   min-width: 150px;
 }
 </style>
