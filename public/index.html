@@ -141,10 +141,10 @@
       "customfilters": {
         "activate": true,
         "filterfields": [
-          "Type",
+          { "name": "Type", "filtering": "OR" },
           "Enjeux politiques",
-          "Enjeux Opérationnels",
-          "Phase"
+          "Phase",
+          "Enjeux Opérationnels"
         ]
       },
       "schema": {
@@ -307,7 +307,7 @@
         "customfilters": {
           "activate": true, 
           "filterfields" : [ 
-            "type",
+            { "name": "type", "filtering": "OR" },
             "platform_clean"
           ]
         },
