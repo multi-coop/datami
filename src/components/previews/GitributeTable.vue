@@ -591,8 +591,27 @@ export default {
   },
   computed: {
     filterFields () {
-      const settingsFields = this.customFiltersConfig.filterfields
-      return this.columns.filter(col => settingsFields.includes(col.label))
+      const settingsFields = this.customFiltersConfig.filterfields.map(filterField => filterField.name || filterField)
+      // console.log('\nC > GitributeTable > filterFields > settingsFields : ', settingsFields)
+      // console.log('C > GitributeTable > filterFields > this.columns : ', this.columns)
+      const filterFields = this.columns
+        .filter(col => {
+          // Filter out only columns whose name is in settingsFields
+          // console.log('C > GitributeTable > filterFields > col : ', col)
+          const hasLabel = settingsFields.includes(col.name)
+          return hasLabel
+        })
+        .map(col => {
+          // Inject 'filtering' key and value to column data
+          const filterSettings = this.customFiltersConfig.filterfields.find(f => (f.name === col.name || f === col.name))
+          return { ...col, filtering: filterSettings.filtering || 'AND' }
+        })
+        .sort((a, b) => {
+          // Sort columns in settingsFields order
+          return settingsFields.indexOf(a.name) - settingsFields.indexOf(b.name)
+        })
+      // console.log('C > GitributeTable > filterFields > filterFields : ', filterFields)
+      return filterFields
     },
     // hasCardsView () {
     //   return !!this.fileOptions.cardsview
@@ -856,7 +875,6 @@ export default {
     // prepare filters from custom settings if any
     if (this.hasCustomFilters) {
       // console.log('\nC > GitributeTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
-      // console.log('C > GitributeTable > beforeMount > this.filterFields : ', this.filterFields)
       const filters = [...this.filterFields]
       filters.forEach(filter => {
         filter.fileId = this.fileId
@@ -905,47 +923,98 @@ export default {
       }
     },
     filterData (dataset) {
+      // console.log('\nC > GitributeTable > filterData > ...')
       let data = [...dataset]
-      // console.log('\nC > GitributeTable > dataEditedFiltered > this.columnsForView : ', this.columnsForView)
+      // console.log('\nC > GitributeTable > filterData > this.columnsForView : ', this.columnsForView)
       const colFields = this.columnsForView.map(col => col.field)
-      // console.log('C > GitributeTable > dataEditedFiltered > colFields : ', colFields)
+      // console.log('C > GitributeTable > filterData > colFields : ', colFields)
 
       const searchStr = this.searchText
-      // console.log('C > GitributeTable > dataEditedFiltered > searchStr : ', searchStr)
+      // console.log('C > GitributeTable > filterData > searchStr : ', searchStr)
       const filterTags = this.filterTags
-      // console.log('C > GitributeTable > dataEditedFiltered > filterTags : ', filterTags)
+      // console.log('C > GitributeTable > filterData > filterTags : ', filterTags)
+
+      // grouping active tags by field
+      const regroupedFilterTags = []
+      filterTags.forEach(activeTag => {
+        const alreadyGrouped = regroupedFilterTags.find(filterField => filterField.field === activeTag.field)
+        const tagValueLower = activeTag.value.toString().toLowerCase()
+        if (alreadyGrouped) {
+          alreadyGrouped.activeValues.push(tagValueLower)
+        } else {
+          const filterField = this.filterFields.find(f => f.field === activeTag.field)
+          regroupedFilterTags.push({
+            field: activeTag.field,
+            filtering: filterField.filtering,
+            activeValues: [tagValueLower]
+          })
+        }
+      })
+      // console.log('C > GitributeTable > filterData > regroupedFilterTags : ', regroupedFilterTags)
+
+      // console.log('filtres sélectionnés', filterTags)
       // const filterTagsFields = filterTags.map(f => f.field) || []
-      // console.log('C > GitributeTable > dataEditedFiltered > filterTagsFields : ', filterTagsFields)
+      // console.log('C > GitributeTable > filterData > filterTagsFields : ', filterTagsFields)
+
+      // const customFiltersConfig = this.customFiltersConfig
+      // console.log('C > GitributeTable > dataEditedFiltered > customFiltersConfig : ', customFiltersConfig)
 
       // filter out data
       data = data.filter(row => {
+        // console.log('\nC > GitributeTable > dataEditedFiltered > row.id : ', row.id)
         const hasSearchVal = searchStr ? [] : [true]
-        const hasFilterValues = [true]
-        // console.log('\nC > GitributeTable > dataEditedFiltered > row : ', row)
+        // console.log('\nC > GitributeTable > filterData > row : ', row)
 
+        // FOR SEARCHBAR FILTER
         for (const field in colFields) {
-          // console.log('C > GitributeTable > dataEditedFiltered > field : ', field)
+          // console.log('C > GitributeTable > filterData > field : ', field)
           const rowVal = row[field] && row[field].toString().toLowerCase()
-          // console.log('C > GitributeTable > dataEditedFiltered > rowVal : ', rowVal)
+          // console.log('C > GitributeTable > filterData > rowVal : ', rowVal)
           // search text
           if (searchStr) {
             const cellHasSearch = rowVal && rowVal.includes(searchStr.toLowerCase())
             hasSearchVal.push(cellHasSearch)
           }
         }
-        // filter tags
-        filterTags.forEach(filterTag => {
-          // if (filterTagsFields.includes(field)) {
-          // const filterTag = filterTags.find(f => f.field === field)
-          const rowVal = row[filterTag.field]
-          const rowValLow = rowVal && rowVal.toString().toLowerCase()
-          const filterVal = filterTag.value.toLowerCase()
-          const hasFilterVal = rowValLow && rowValLow.includes(filterVal)
-          hasFilterValues.push(hasFilterVal)
+        const boolSearch = hasSearchVal.some(b => b)
+
+        // AND / OR FILTERS
+        const boolAndOrFilters = []
+
+        // BEGINNING NEW FILTERING PROCESS
+        regroupedFilterTags.forEach(filterField => {
+          // console.log('C > GitributeTable > dataEditedFiltered > filterField : ', filterField)
+          const cellVal = row[filterField.field]
+          const cellValLow = cellVal && cellVal.toString().toLowerCase()
+          // console.log('\nC > GitributeTable > dataEditedFiltered > filterField.field : ', filterField.field)
+          // console.log('C > GitributeTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
+          // console.log('C > GitributeTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+
+          // console.log('C > GitributeTable > dataEditedFiltered > cellValLow : ', cellValLow)
+          // const filterVal = filterField.value.toLowerCase()
+          const boolArr = filterField.activeValues.map(activeValue => {
+            return cellValLow.includes(activeValue)
+          })
+          // console.log('C > GitributeTable > dataEditedFiltered > boolArr : ', boolArr)
+
+          let fieldBool = true
+          if (filterField.filtering === 'OR') {
+            fieldBool = boolArr.some(b => b)
+          } else if (filterField.filtering === 'AND') {
+            fieldBool = boolArr.every(b => b)
+          }
+          boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
+          // console.log('C > GitributeTable > dataEditedFiltered > fieldBool : ', fieldBool)
         })
 
-        const boolSearch = hasSearchVal.some(b => b)
-        const boolFilters = hasFilterValues.every(b => b)
+        // console.log('\nC > GitributeTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
+
+        const boolFilters = boolAndOrFilters
+          .map(b => b.bool)
+          .every(b => b) // HORIZONTAL "AND" CONDITION
+
+        // console.log('C > GitributeTable > dataEditedFiltered > boolSearch : ', boolSearch)
+        // console.log('C > GitributeTable > dataEditedFiltered > boolFilters : ', boolFilters)
 
         return boolSearch && boolFilters
       })

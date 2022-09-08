@@ -59,6 +59,15 @@ Check out our website for a full documentation, technical and more !
 ---
 
 ## Project setup [⇡](#summary)
+The current project is working with :
+```bash 
+npm 8.3.2
+``` 
+version
+To install it, use the command : 
+```bash
+npm install -g npm@8.3.2
+```
 
 ```bash
 nvm use
