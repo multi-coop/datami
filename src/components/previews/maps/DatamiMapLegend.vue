@@ -1,6 +1,6 @@
 <template>
   <div
-    class="GitributeMapLegend gitribute-component">
+    class="DatamiMapLegend datami-component">
     <div
       class="card map-legend"
       style="">
@@ -55,7 +55,7 @@ import { mapGetters } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'GitributeMapLegend',
+  name: 'DatamiMapLegend',
   mixins: [mixinGlobal],
   props: {
     fileId: {
@@ -95,7 +95,7 @@ export default {
     })
   },
   beforeMount () {
-    // console.log('\nC > GitributeMapLegend > beforeMount > this.currentChoroSource : ', this.currentChoroSource)
+    // console.log('\nC > DatamiMapLegend > beforeMount > this.currentChoroSource : ', this.currentChoroSource)
     this.isDrawerOpen = this.isDefaultOpen
   },
   methods: {

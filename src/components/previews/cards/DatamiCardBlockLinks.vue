@@ -1,12 +1,12 @@
 <template>
-  <div class="GitributeCardBlockTags gitribute-component mb-3">
+  <div class="DatamiCardBlockLinks datami-component mb-4">
     <p
       v-if="currentEditViewMode !== 'preview'"
-      class="is-size-6 has-text-weight-bold mb-2 is-uppercase">
+      class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
       <!-- FIELD TYPE ICON -->
       <b-icon
         :icon="getIconFieldType(field)"
-        :class="`${isGitributeField ? '' : 'ml-2 mr-2'}`"
+        :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
       {{ fieldLabel }}
@@ -20,36 +20,45 @@
       </span>
     </p>
     <div v-if="currentEditViewMode === 'preview'">
-      <PreviewCell
+      <b-button
         v-if="itemValue"
-        :file-id="fileId"
-        :value="itemValue"
-        :field="field"
-        :is-card-view="true"
-        :is-mini="isMini"
-        :locale="locale"/>
+        tag="a"
+        size="is-small"
+        icon-left="open-in-new"
+        :href="itemValue"
+        target="_blank"
+        class="outlink"
+        @click="trackLink(itemValue)">
+        {{ t('global.link', locale) }}
+      </b-button>
       <span v-else>
-        {{ t('global.noValue', locale) }}
+        <b-icon
+          icon="link-variant-off"
+          size="is-small"
+          type="is-dark"
+          class="mr-1"/>
+        {{ t('global.noLinkValue', locale) }}
       </span>
     </div>
     <div v-if="currentEditViewMode === 'diff'">
       <div v-if="isInChanges(false, itemAdded, field.field, itemId)">
-        <span v-html="getDiffHtmlChars(false, itemAdded, f.field, itemValue, itemId)"/>
+        <span v-html="getDiffHtmlChars(false, itemAdded, field.field, itemValue, itemId)"/>
       </div>
-      <PreviewCell
+      <b-button
         v-else
-        :file-id="fileId"
-        :value="itemValue"
-        :is-diff-view="true"
-        :is-card-view="true"
-        :is-mini="isMini"
-        :field="field"
-        :locale="locale"/>
+        tag="a"
+        size="is-small"
+        icon-left="open-in-new"
+        :href="itemValue"
+        target="_blank"
+        class="outlink"
+        @click="trackLink(itemValue)">
+        {{ t('global.link', locale) }}
+      </b-button>
     </div>
     <div
       v-if="currentEditViewMode === 'edit'"
       class="mr-2">
-      <!-- {{ field }} -->
       <EditCell
         :file-id="fileId"
         :field="field"
@@ -58,7 +67,6 @@
         :input-data="itemValue || ''"
         :locale="locale"
         :is-card-view="true"
-        @action="SendActionToParent"
         @updateCellValue="emitUpdate"/>
     </div>
   </div>
@@ -67,13 +75,13 @@
 <script>
 import { mixinGlobal, mixinValue, mixinDiff, mixinIcons } from '@/utils/mixins.js'
 
-import PreviewCell from '@/components/previews/PreviewCell'
+// import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
-  name: 'GitributeCardBlockTags',
+  name: 'DatamiCardBlockLinks',
   components: {
-    PreviewCell,
+    // PreviewCell,
     EditCell
   },
   mixins: [
@@ -133,11 +141,11 @@ export default {
     }
   },
   // beforeMount () {
-  //   console.log('\nC > GitributeCardBlockTags > beforeMount > this.itemId :', this.itemId)
-  //   console.log('C > GitributeCardBlockTags > beforeMount > this.position :', this.position)
-  //   console.log('C > GitributeCardBlockTags > beforeMount > this.fieldLabel :', this.fieldLabel)
-  //   console.log('C > GitributeCardBlockTags > beforeMount > this.field :', this.field)
-  //   console.log('C > GitributeCardBlockTags > beforeMount > this.itemValue :', this.itemValue)
+  //   console.log('\nC > DatamiCardBlockLinks > beforeMount > this.itemId :', this.itemId)
+  //   console.log('C > DatamiCardBlockLinks > beforeMount > this.position :', this.position)
+  //   console.log('C > DatamiCardBlockLinks > beforeMount > this.fieldLabel :', this.fieldLabel)
+  //   console.log('C > DatamiCardBlockLinks > beforeMount > this.field :', this.field)
+  //   console.log('C > DatamiCardBlockLinks > beforeMount > this.itemValue :', this.itemValue)
   // },
   methods: {
     emitUpdate (event) {

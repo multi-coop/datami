@@ -1,6 +1,6 @@
 <template>
   <div
-    class="GitributeCredits gitribute-component columns is-centered is-multiline py-3"
+    class="DatamiCredits datami-component columns is-centered is-multiline py-3"
     style="z-index: 0;">
     <!-- CREDITS -->
     <div
@@ -51,7 +51,7 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'GitributeCredits',
+  name: 'DatamiCredits',
   mixins: [mixinGlobal],
   props: {
     fileId: {
@@ -66,7 +66,7 @@ export default {
   data () {
     return {
       urlMulti: 'https://multi.coop',
-      urlSourceCode: 'https://gitlab.com/multi-coop/gitribute'
+      urlSourceCode: 'https://gitlab.com/multi-coop/datami'
     }
   }
 }

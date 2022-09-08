@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderEditNavbar gitribute-component container">
+  <div class="LoaderEditNavbar datami-component container">
     <!-- FAKE EDIT NAVBAR -->
     <!-- {{ fileOptions }} -->
     <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->

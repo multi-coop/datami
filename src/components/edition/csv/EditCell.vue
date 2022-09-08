@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`EditCell gitribute-component gitribute-cell is-flex is-align-items-center ${field && ['boolean', 'gitribute'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
+    :class="`EditCell datami-component datami-cell is-flex is-align-items-center ${field && ['boolean', 'datami'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
     <!-- DEBUGGING -->
     <b-tooltip
       v-if="debug"
@@ -33,7 +33,7 @@
     </b-tooltip>
 
     <!-- USER BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
-    <div v-if="field && isGitributeField">
+    <div v-if="field && isDatamiField">
       <ButtonConsolidation
         v-if="isConsolidation"
         :field="field"
@@ -45,7 +45,7 @@
 
     <!-- VALUE INPUT -->
     <b-field
-      v-if="field && !isGitributeField"
+      v-if="field && !isDatamiField"
       class="has-text-centered">
       <!--BOOLEAN -->
       <b-checkbox
@@ -274,7 +274,7 @@ export default {
 
 <style>
 
-.gitribute-cell > .field {
+.datami-cell > .field {
   /* border: none; */
   width: 100%;
 }

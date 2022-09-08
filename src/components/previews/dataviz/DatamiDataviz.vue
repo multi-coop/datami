@@ -1,5 +1,5 @@
 <template>
-  <div class="GitributeDataviz gitribute-component">
+  <div class="DatamiDataviz datami-component">
     <!-- DISPLAY CHART -->
     <ApexChart
       :ref="chartId"
@@ -29,7 +29,7 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'GitributeDataviz',
+  name: 'DatamiDataviz',
   mixins: [mixinGlobal],
   props: {
     fileId: {
@@ -65,14 +65,14 @@ export default {
   // },
   watch: {
     currentViewMode (next) {
-      // console.log('\nC-GitributeDataviz > watch > currentViewMode : ', next)
+      // console.log('\nC-DatamiDataviz > watch > currentViewMode : ', next)
       this.$refs[this.chartId].updateOptions({ ...this.chartData.chartOptions })
       // window.dispatchEvent(new Event('resize'))
     }
   },
   mounted () {
-    // console.log('\nC-GitributeDataviz > mounted ...')
-    // console.log('\nC-GitributeDataviz > mounted > this.chartData: ', this.chartData)
+    // console.log('\nC-DatamiDataviz > mounted ...')
+    // console.log('\nC-DatamiDataviz > mounted > this.chartData: ', this.chartData)
     // window.dispatchEvent(new Event('resize'))
   }
 }

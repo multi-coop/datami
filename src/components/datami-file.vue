@@ -1,7 +1,7 @@
 <template>
   <div
     :id="fileId"
-    :class="`GitributeFile gitribute-widget gitribute-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
     <!-- MATOMO -->
@@ -10,7 +10,7 @@
 
     <!-- WIDGET -->
     <div
-      :id="`gitribute-widget-${fileId}`"
+      :id="`datami-widget-${fileId}`"
       :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
       <div
         :id="`file-navbar-${fileId}`"
@@ -182,11 +182,11 @@
       <!-- PREVIEWS - SWITCH BY FILE TYPE -->
       <div
         v-show="!fileIsSaving && !showFileInfos"
-        class="gitribute-file-previews">
+        class="datami-file-previews">
         <!-- PREVIEWS CSV -->
         <div
           v-if="fileTypeFamily === 'table'"
-          class="container gitribute-container"
+          class="container datami-container"
           style="z-index: 1;">
           <PreviewCsv
             :only-preview="onlypreview"
@@ -200,7 +200,7 @@
         <!-- PREVIEWS MD -->
         <div
           v-if="fileTypeFamily === 'text'"
-          class="container gitribute-container"
+          class="container datami-container"
           style="z-index: 1;">
           <PreviewMd
             :only-preview="onlypreview"
@@ -214,7 +214,7 @@
         <!-- PREVIEWS JSON -->
         <div
           v-if="fileTypeFamily === 'json'"
-          class="container gitribute-container"
+          class="container datami-container"
           style="z-index: 1;">
           <PreviewJson
             :only-preview="onlypreview"
@@ -228,7 +228,7 @@
     </div>
 
     <!-- CREDITS -->
-    <GitributeCredits
+    <DatamiCredits
       :file-id="fileId"
       :locale="locale"/>
   </div>
@@ -258,10 +258,10 @@ import PreviewCsv from '@/components/previews/PreviewCsv'
 import PreviewMd from '@/components/previews/PreviewMd'
 import PreviewJson from '@/components/previews/PreviewJson'
 
-import GitributeCredits from '@/components/credits/GitributeCredits'
+import DatamiCredits from '@/components/credits/DatamiCredits'
 
 export default {
-  name: 'GitributeFile',
+  name: 'DatamiFile',
   components: {
     MatomoScript,
     FileTitle,
@@ -276,7 +276,7 @@ export default {
     PreviewCsv,
     PreviewMd,
     PreviewJson,
-    GitributeCredits
+    DatamiCredits
   },
   mixins: [
     mixinGlobal,
@@ -285,7 +285,7 @@ export default {
   ],
   props: {
     title: {
-      default: 'gitribute',
+      default: 'datami',
       type: String
     },
     gitfile: {
@@ -350,9 +350,9 @@ export default {
     shareableFiles (next) {
       const goNoGo = next && next.length && next.map(i => i.isSet)
       if (goNoGo && goNoGo.every(b => b)) {
-        // console.log('\nC >>> GitributeFile > watch > shareableFiles > this.gitObj.id : ', this.gitObj.id)
-        // console.log('C >>> GitributeFile > watch > shareableFiles > goNoGo : ', goNoGo)
-        // console.log('C >>> GitributeFile > watch > shareableFiles > this.shareableFiles.map(i => i.isSet) : ', this.shareableFiles.map(i => i.isSet))
+        // console.log('\nC >>> DatamiFile > watch > shareableFiles > this.gitObj.id : ', this.gitObj.id)
+        // console.log('C >>> DatamiFile > watch > shareableFiles > goNoGo : ', goNoGo)
+        // console.log('C >>> DatamiFile > watch > shareableFiles > this.shareableFiles.map(i => i.isSet) : ', this.shareableFiles.map(i => i.isSet))
         this.updateLoadingRessources({ key: 'loadingShared', loadState: 'loading', from: this.fileId })
         this.updateLoadingRessources({ key: 'loadingExtRessources', loadState: 'loading', from: this.fileId })
       }
@@ -364,11 +364,11 @@ export default {
     }
   },
   async beforeMount () {
-    // console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
+    // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
 
     const fileUuid = this.uuidv4()
 
-    // console.log('\nC > GitributeFile > beforeMount > this.trackalloutlinks : ', this.trackalloutlinks)
+    // console.log('\nC > DatamiFile > beforeMount > this.trackalloutlinks : ', this.trackalloutlinks)
     this.activateTrackAllOutlinks({ uuid: fileUuid, val: this.trackalloutlinks })
 
     if (!this.fromMultiFiles) {
@@ -376,18 +376,18 @@ export default {
     }
 
     const gitInfosObject = this.extractGitInfos(this.gitfile)
-    // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
+    // console.log('C > DatamiFile > beforeMount > gitInfosObject : ', gitInfosObject)
     this.updateShareableFiles({ gitfile: this.gitfile, fileId: fileUuid, isSet: false })
     gitInfosObject.uuid = fileUuid
     gitInfosObject.title = this.title
     gitInfosObject.onlyPreview = this.onlypreview
-    // console.log('C > GitributeFile > beforeMount > gitInfosObject : ', gitInfosObject)
+    // console.log('C > DatamiFile > beforeMount > gitInfosObject : ', gitInfosObject)
     this.fileId = gitInfosObject.uuid
     this.fileType = gitInfosObject.filetype
     if (!this.getGitInfosObj[this.fileId]) {
       // load token
       let token = this.usertoken && this.usertoken !== '' && this.usertoken
-      // console.log('C > GitributeFile > beforeMount > process.env : ', process.env)
+      // console.log('C > DatamiFile > beforeMount > process.env : ', process.env)
       if (!token) {
         switch (gitInfosObject.provider) {
           case 'gitlab':
@@ -401,24 +401,24 @@ export default {
       this.updateToken({ fileId: this.fileId, token: token })
       this.addGitInfos(gitInfosObject)
     }
-    // console.log('C > GitributeFile > beforeMount > this.gitObj : ', this.gitObj)
+    // console.log('C > DatamiFile > beforeMount > this.gitObj : ', this.gitObj)
 
     // build options object
     let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
     let fileSchema = fileOptions.schema
-    // console.log('C > GitributeFile > beforeMount > fileSchema : ', fileSchema)
+    // console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
     if (fileSchema && fileSchema.file) {
       const schemaGitObj = this.extractGitInfos(fileSchema.file)
-      // console.log('C > GitributeFile > beforeMount > schemaGitObj : ', schemaGitObj)
+      // console.log('C > DatamiFile > beforeMount > schemaGitObj : ', schemaGitObj)
       const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
-      // console.log('C > GitributeFile > beforeMount > schemaRaw : ', schemaRaw)
+      // console.log('C > DatamiFile > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
-      // console.log('C > GitributeFile > beforeMount > schemaData : ', schemaData)
+      // console.log('C > DatamiFile > beforeMount > schemaData : ', schemaData)
       const schema = JSON.parse(schemaData)
-      // console.log('C > GitributeFile > beforeMount > schema : ', schema)
+      // console.log('C > DatamiFile > beforeMount > schema : ', schema)
       fileSchema = { ...schema, file: fileSchema.file }
     }
-    // fileSchema && console.log('C > GitributeFile > beforeMount > fileSchema : ', fileSchema)
+    // fileSchema && console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
 
     // get custom props if any
     let fileCustomProps = fileOptions['fields-custom-properties']
@@ -429,8 +429,8 @@ export default {
       const customProps = JSON.parse(customPropsData)
       fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
-    // fileCustomProps && console.log('\nC > GitributeFile > beforeMount > this.gitfile : ', this.gitfile)
-    // fileCustomProps && console.log('C > GitributeFile > beforeMount > fileCustomProps : ', fileCustomProps)
+    // fileCustomProps && console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
+    // fileCustomProps && console.log('C > DatamiFile > beforeMount > fileCustomProps : ', fileCustomProps)
 
     // get dataviz props if any
     let fileDataviz = fileOptions.datavizview
@@ -441,7 +441,7 @@ export default {
       const datavizProps = JSON.parse(datavizPropsData)
       fileDataviz = { ...fileDataviz, ...datavizProps }
     }
-    // fileDataviz && console.log('C > GitributeFile > beforeMount > fileDataviz : ', fileDataviz)
+    // fileDataviz && console.log('C > DatamiFile > beforeMount > fileDataviz : ', fileDataviz)
 
     // get maps props if any
     const fileMaps = fileOptions.mapview
@@ -460,7 +460,7 @@ export default {
       }
       fileMaps.maps = maps
     }
-    // fileMaps && console.log('C > GitributeFile > beforeMount > fileMaps : ', fileMaps)
+    // fileMaps && console.log('C > DatamiFile > beforeMount > fileMaps : ', fileMaps)
 
     // parse fields to look for foreign keys
     this.processForeignKeys(fileCustomProps)
@@ -473,16 +473,16 @@ export default {
       ...fileDataviz && { datavizview: fileDataviz },
       ...fileMaps && { mapview: fileMaps }
     }
-    // console.log('C > GitributeFile > beforeMount > fileOptions : ', fileOptions)
+    // console.log('C > DatamiFile > beforeMount > fileOptions : ', fileOptions)
 
     // add fileOptions in store
     this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
   },
   async mounted () {
-    // console.log('\nC > GitributeFile > mounted > this.gitInfos : ', this.gitInfos)
-    // console.log('C > GitributeFile > mounted > this.gitObj : ', this.gitObj)
-    // console.log('C > GitributeFile > mounted > this.usertoken : ', this.usertoken)
-    // console.log('C > GitributeFile > mounted > this.fileInfos : ', this.fileInfos)
+    // console.log('\nC > DatamiFile > mounted > this.gitInfos : ', this.gitInfos)
+    // console.log('C > DatamiFile > mounted > this.gitObj : ', this.gitObj)
+    // console.log('C > DatamiFile > mounted > this.usertoken : ', this.usertoken)
+    // console.log('C > DatamiFile > mounted > this.fileInfos : ', this.fileInfos)
 
     const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
     this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
@@ -506,17 +506,17 @@ export default {
 
       // Request API for file infos
       const respData = await this.getFileData(this.gitObj, this.fileToken)
-      // console.log('\nC > GitributeFile > reloadFile > respData : ', respData)
+      // console.log('\nC > DatamiFile > reloadFile > respData : ', respData)
       const fileInfos = respData.data
       const fileInfosErrors = respData.errors
       fileInfos.uuid = this.fileId
       this.addFileReqInfos(fileInfos)
       this.fileInfos = fileInfos
-      // console.log('C > GitributeFile > reloadFile > this.fileInfos : ', this.fileInfos)
+      // console.log('C > DatamiFile > reloadFile > this.fileInfos : ', this.fileInfos)
 
       // Request API for file content
       const respDataRaw = await this.getFileDataRaw(this.gitObj, this.fileToken)
-      // console.log('C > GitributeFile > reloadFile > respDataRaw : ', respDataRaw)
+      // console.log('C > DatamiFile > reloadFile > respDataRaw : ', respDataRaw)
       const fileRaw = respDataRaw.data
       const fileRawErrors = respDataRaw.errors
       this.fileRaw = fileRaw
@@ -537,8 +537,8 @@ export default {
     processForeignKeys (fileCustomProps) {
       const foreignKeysFields = fileCustomProps && fileCustomProps.fields && fileCustomProps.fields.filter(field => field.foreignKey && field.foreignKey.activate)
       if (foreignKeysFields && foreignKeysFields.length) {
-        // console.log('\nC > GitributeFile > processForeignKeys > this.gitfile : ', this.gitfile)
-        // console.log('C > GitributeFile > processForeignKeys > foreignKeysFields : ', foreignKeysFields)
+        // console.log('\nC > DatamiFile > processForeignKeys > this.gitfile : ', this.gitfile)
+        // console.log('C > DatamiFile > processForeignKeys > foreignKeysFields : ', foreignKeysFields)
         foreignKeysFields.forEach(field => {
           const payload = {
             ressource: field.foreignKey.ressource,
@@ -553,23 +553,23 @@ export default {
             options: field.foreignKey.ressourceOptions,
             isLoaded: false
           }
-          // console.log('C > GitributeFile > processForeignKeys > payload : ', payload)
+          // console.log('C > DatamiFile > processForeignKeys > payload : ', payload)
           this.updateSharedData(payload)
         })
       }
     },
     async loadExtRessources () {
-      // console.log('\nC >>> GitributeFile > loadExtRessources > this.gitObj.id : ', this.gitObj.id)
-      // console.log('C >>> GitributeFile > loadExtRessources > this.readyToLoadExtRessources : ', this.readyToLoadExtRessources)
+      // console.log('\nC >>> DatamiFile > loadExtRessources > this.gitObj.id : ', this.gitObj.id)
+      // console.log('C >>> DatamiFile > loadExtRessources > this.readyToLoadExtRessources : ', this.readyToLoadExtRessources)
       for (const resrc of this.readyToLoadExtRessources) {
-        // console.log('C >>> GitributeFile > loadExtRessources > resrc : ', resrc)
+        // console.log('C >>> DatamiFile > loadExtRessources > resrc : ', resrc)
         const fileUrl = resrc.ressource
-        // console.log('... C >>> GitributeFile > loadExtRessources > fileUrl : ', fileUrl)
+        // console.log('... C >>> DatamiFile > loadExtRessources > fileUrl : ', fileUrl)
         const ressourceGitObj = this.extractGitInfos(fileUrl)
         const ressourceRaw = await this.getFileDataRaw(ressourceGitObj, this.fileToken)
-        // console.log('C >>> GitributeFile > loadExtRessources > ressourceRaw : ', ressourceRaw)
+        // console.log('C >>> DatamiFile > loadExtRessources > ressourceRaw : ', ressourceRaw)
         const dataObj = csvToObject(ressourceRaw.data, resrc.options)
-        // console.log('C >>> GitributeFile > loadExtRessources > dataObj : ', dataObj)
+        // console.log('C >>> DatamiFile > loadExtRessources > dataObj : ', dataObj)
 
         // save data in loadedSharedData
         const fields = Object.entries(dataObj.headers)
@@ -592,7 +592,7 @@ export default {
             data: dataObj.data
           }
         }
-        // console.log('C >>> GitributeFile > loadExtRessources > payloadData : ', payloadData)
+        // console.log('C >>> DatamiFile > loadExtRessources > payloadData : ', payloadData)
         this.updateLoadedSharedData(payloadData)
 
         // update sharedData
@@ -604,7 +604,7 @@ export default {
       }
     },
     processAction (event) {
-      // console.log('\nC > GitributeFile > processAction > event : ', event)
+      // console.log('\nC > DatamiFile > processAction > event : ', event)
       switch (event.action) {
         case 'toggleUploadFileDialog':
           this.showUploadFileDialog = !this.showUploadFileDialog
@@ -620,7 +620,7 @@ export default {
 
 <style>
 
-.gitribute-container {
+.datami-container {
   max-width: 100% !important;
 }
 

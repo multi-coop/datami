@@ -1,5 +1,5 @@
 <template>
-  <div class="DialogDeleteRow gitribute-component container">
+  <div class="DialogDeleteRow datami-component container">
     <div class="columns is-vcentered is-centered">
       <div class="column is-9">
         <div class="card">

@@ -1,5 +1,5 @@
 <template>
-  <div class="SortAndFiltersSkeleton gitribute-component container">
+  <div class="SortAndFiltersSkeleton datami-component container">
     <b-navbar
       type="is-white"
       class="is-align-items-center"

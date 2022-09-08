@@ -18,8 +18,8 @@ export const defaultCsvOptions = {
   asJson: false
 }
 
-export const dblQuotesGitribute = '~~gitribute-quotes~~'
-export const breaklineGitribute = '~~gitribute-br~~'
+export const dblQuotesDatami = '~~datami-quotes~~'
+export const breaklineDatami = '~~datami-br~~'
 
 // cf : https://stackoverflow.com/questions/28543821/convert-csv-lines-into-javascript-objects
 
@@ -55,7 +55,7 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
   const dblQuoteChar = quoteChar.repeat(2) // `${quoteChar}${quoteChar}`
 
   // replace dblQuotes
-  let textClean = text.replaceAll(dblQuoteChar, dblQuotesGitribute)
+  let textClean = text.replaceAll(dblQuoteChar, dblQuotesDatami)
   // console.log('U > csvToJson > textClean (start) : ', textClean)
 
   // prepare regex
@@ -67,7 +67,7 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
   textClean = textClean.split(quotesRegex)
   // console.log('\nU > csvToJson > textClean (A) : ', textClean)
   textClean = textClean.map(item => {
-    const s = item.includes(quoteChar) ? item.replace('\n', breaklineGitribute) : item
+    const s = item.includes(quoteChar) ? item.replace('\n', breaklineDatami) : item
     return s
   })
   // console.log('\nU > csvToJson > textClean (B) : ', textClean)
@@ -93,7 +93,7 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
       let val = cur.length === 0 ? null : cur
       // const val = cur.toString()
       // Put back quotes and breaklines indicators in cells
-      val = Number(cur) || cur.replaceAll(dblQuotesGitribute, quoteChar).replaceAll(breaklineGitribute, '\n')
+      val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
       const key = heads[i] ?? `extra_${i}`
       return { ...acc, [key]: val }
     }, {})

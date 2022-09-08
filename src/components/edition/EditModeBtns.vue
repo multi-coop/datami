@@ -1,5 +1,5 @@
 <template>
-  <div class="EditModeBtns gitribute-component content is-flex is-justify-content-center">
+  <div class="EditModeBtns datami-component content is-flex is-justify-content-center">
     <!-- DEBUG -->
     <div
       v-if="debug"

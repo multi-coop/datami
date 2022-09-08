@@ -19,11 +19,11 @@ const matomoScript = (matomoServer, siteId, domain, hasTrackAllOutlinks = false)
   //     _paq.push(['trackPageView']);
   //     _paq.push(['enableLinkTracking']);
   //     (function() {
-  //       var u="https://gitributemulticoop.matomo.cloud/";
+  //       var u="https://datamimulticoop.matomo.cloud/";
   //       _paq.push(['setTrackerUrl', u+'matomo.php']);
   //       _paq.push(['setSiteId', '1']);
   //       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-  //       g.async=true; g.src='//cdn.matomo.cloud/gitributemulticoop.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+  //       g.async=true; g.src='//cdn.matomo.cloud/datamimulticoop.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
   //     })()
   //   <!-- End Matomo Code -->
 
@@ -81,7 +81,7 @@ export default {
     return {
       matomoServer: 'matomo',
       matomoSiteId: '1',
-      scriptUniqueId: 'gitribute-matomo-script'
+      scriptUniqueId: 'datami-matomo-script'
     }
   },
   mounted () {

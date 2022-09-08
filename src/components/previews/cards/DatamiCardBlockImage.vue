@@ -1,12 +1,12 @@
 <template>
-  <div class="GitributeCardBlockImage gitribute-component">
+  <div class="DatamiCardBlockImage datami-component">
     <p
       v-if="currentEditViewMode === 'edit'"
       class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
       <!-- FIELD TYPE ICON -->
       <b-icon
         :icon="getIconFieldType(field)"
-        :class="`${isGitributeField ? '' : 'ml-2 mr-2'}`"
+        :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
       {{ fieldLabel }}
@@ -61,7 +61,7 @@ import { mixinGlobal, mixinValue, mixinIcons } from '@/utils/mixins.js'
 import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
-  name: 'GitributeCardBlockImage',
+  name: 'DatamiCardBlockImage',
   components: {
     // PreviewCell,
     EditCell
@@ -110,9 +110,9 @@ export default {
     }
   },
   beforeMount () {
-    console.log('\nC > GitributeCardBlockImage > beforeMount > this.itemId :', this.itemId)
-    console.log('C > GitributeCardBlockImage > beforeMount > this.field :', this.field)
-    console.log('C > GitributeCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
+    console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemId :', this.itemId)
+    console.log('C > DatamiCardBlockImage > beforeMount > this.field :', this.field)
+    console.log('C > DatamiCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
   }
 }
 </script>

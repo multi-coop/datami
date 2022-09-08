@@ -14,9 +14,9 @@ import VueApexCharts from 'vue-apexcharts'
 
 // import { VueShowdown, VueShowdownPlugin } from 'vue-showdown'
 
-import GitributeFile from './components/gitribute-file.vue'
-import GitributeExploWiki from './components/gitribute-explowiki.vue'
-import GitributeMultiFiles from './components/gitribute-multi-files.vue'
+import DatamiFile from './components/datami-file.vue'
+import DatamiExploWiki from './components/datami-explowiki.vue'
+import DatamiMultiFiles from './components/datami-multi-files.vue'
 
 Vue.config.productionTip = false
 
@@ -27,13 +27,13 @@ Vue.use(Buefy, {
 Vue.use(VueApexCharts)
 Vue.component('ApexChart', VueApexCharts)
 
-GitributeFile.store = store
-GitributeExploWiki.store = store
-GitributeMultiFiles.store = store
+DatamiFile.store = store
+DatamiExploWiki.store = store
+DatamiMultiFiles.store = store
 
 Vue.use(vueCustomElement, {
   shadow: true
 })
-Vue.customElement('multi-gitribute-file', GitributeFile)
-Vue.customElement('multi-gitribute-explowiki', GitributeExploWiki)
-Vue.customElement('multi-gitribute-multi-files', GitributeMultiFiles)
+Vue.customElement('datami-file', DatamiFile)
+Vue.customElement('datami-explowiki', DatamiExploWiki)
+Vue.customElement('datami-multi-files', DatamiMultiFiles)

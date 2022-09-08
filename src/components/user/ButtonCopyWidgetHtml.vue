@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonCopyWidgetHtml gitribute-component">
+  <div class="ButtonCopyWidgetHtml datami-component">
     <b-tooltip
       :label="t('actions.copyWidget', locale)"
       type="is-dark"
@@ -38,9 +38,9 @@ export default {
   methods: {
     CopyWidgetHtml () {
       const prettyChar = 2
-      const gitributeLink = '<a class="has-text-weight-bold has-text-dark is-underlined" href="https://giltlab.com/multi-coop/gitribute" target="_blank">Gitribute</a>'
+      const datamiLink = '<a class="has-text-weight-bold has-text-dark is-underlined" href="https://giltlab.com/multi-coop/datami" target="_blank">Datami</a>'
       let widgetName
-      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN ?? 'gitribute.multi.coop'
+      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN ?? 'datami.multi.coop'
       const fileOpts = { ...this.fileOptions }
       delete fileOpts.uuid
       let widgetTitle
@@ -60,7 +60,7 @@ export default {
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > this.gitObj : ', this.gitObj)
         widgetTitle = this.gitObj.title.replaceAll("'", quoteReplacer)
         const isWiki = this.gitObj.provider === 'mediawiki'
-        widgetName = `multi-gitribute-${isWiki ? 'explowiki' : 'file'}`
+        widgetName = `multi-datami-${isWiki ? 'explowiki' : 'file'}`
         const fileKey = isWiki ? 'wikilist' : 'gitfile'
         const wikiPagesStr = isWiki && this.gitObj.wikipages ? `\r  wikipages='${JSON.stringify(this.gitObj.wikipages, null, prettyChar)}'\r` : ''
 
@@ -86,7 +86,7 @@ export default {
       } else {
         // CASE : MULTI-FILES
         widgetTitle = fileOpts.title.replaceAll("'", quoteReplacer)
-        widgetName = 'multi-gitribute-multi-files'
+        widgetName = 'multi-datami-multi-files'
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > fromMultiFiles > fileOpts : ', fileOpts)
         fileOptionsStr = JSON.stringify(fileOpts.options, null, prettyChar)
         const gitfilesStr = JSON.stringify(fileOpts.gitfiles, null, prettyChar).replaceAll("'", quoteReplacer)
@@ -114,7 +114,7 @@ export default {
           widgetName: `<code>${widgetBlocStr}</code>`
       })}</p>`
       message += `<br><p>${this.t('widget.widgetUse', this.locale)}</p>`
-      message += `<br><p>${this.t('global.thanks', this.locale, { gitributeRepo: gitributeLink })}</p>`
+      message += `<br><p>${this.t('global.thanks', this.locale, { datamiRepo: datamiLink })}</p>`
       const confirmText = this.t('global.understood', this.locale)
 
       navigator.clipboard.writeText(htmlStr)

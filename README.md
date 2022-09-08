@@ -1,26 +1,26 @@
-![LOGO-GITRIBUTE](./src/assets/logo_GITRIBUTE_title.png)
+![LOGO-DATAMI](./src/assets/logo_DATAMI_title.png)
 
-<!-- <img src="./src/assets/logo_GITRIBUTE_title.png" alt="drawing" width="120" style="float: left; margin-right:10px"/> -->
+<!-- <img src="./src/assets/logo_DATAMI_title.png" alt="drawing" width="120" style="float: left; margin-right:10px"/> -->
 
 ---
-<!-- # Gitribute -->
-**Contribute easily with git**
+<!-- #  DATAMI -->
+**Contribute easily to data stored with git**
 _but without having to use Github or Gitlab interfaces_
 
 ---
 
 ## Summary
 
-- [What is Gitribute for ?](#what-is-gitribute-for-)
+- [What is Datami for ?](#what-is-datami-for-)
 - [Websites](#websites-)
 - [Documentation](#documentation-)
 - [Project setup](#project-setup-)
-- [How to integrate the Gitribute widgets](#how-to-integrate-the-gitribute-widgets-)
+- [How to integrate the Datami widgets](#how-to-integrate-the-datami-widgets-)
 - [Stack](#stack-)
 
 ---
 
-## What is Gitribute for ? [⇡](#summary)
+## What is Datami for ? [⇡](#summary)
 
 This project aims to create a serie of widgets to interact with ressources stored on Gitlab, Github, or mediawiki :
 
@@ -38,13 +38,15 @@ This project aims to create a serie of widgets to interact with ressources store
 
 ## Websites [⇡](#summary)
 
-### Prod deploy &nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/1cd66edf-3b08-43db-bd21-6490377bb24a/deploy-status)](https://app.netlify.com/sites/multi-gitribute/deploys)
+- Official website : [datami.multi.coop](https://datami.multi.coop/)
 
-- Website (widgets demo) : [gitribute.multi.coop](https://gitribute.multi.coop/)
+### Prod deploy &nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/1cd66edf-3b08-43db-bd21-6490377bb24a/deploy-status)](https://app.netlify.com/sites/datami/deploys)
+
+- Website (widgets demo) : [datami-widget.multi.coop](https://datami-widget.multi.coop/)
 
 ### Preprod deploy
 
-- Preprod : [multi-gitribute (preprod)](https://preprod--multi-gitribute.netlify.app/)
+- Preprod : [Datami (preprod)](https://preprod--multi-datami.netlify.app/)
 
 ---
 
@@ -54,17 +56,16 @@ This project aims to create a serie of widgets to interact with ressources store
 
 Check out our website for a full documentation, technical and more !
 
-- Documentation website : [gitribute-docs.multi.coop](https://gitribute-docs.multi.coop)
+- Documentation website : [datami-docs.multi.coop](https://datami-docs.multi.coop)
 
 ---
 
 ## Project setup [⇡](#summary)
-The current project is working with :
-```bash 
-npm 8.3.2
-``` 
-version
-To install it, use the command : 
+
+The current project is working with `npm 8.3.2` version
+
+To install it, use the command :
+
 ```bash
 npm install -g npm@8.3.2
 ```

@@ -1,5 +1,5 @@
 <template>
-  <div class="EditCsvSkeleton gitribute-component container">
+  <div class="EditCsvSkeleton datami-component container">
     <div :class="`columns is-mobile is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
       <!-- RESULTS -->
       <div

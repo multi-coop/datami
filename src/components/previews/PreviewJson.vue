@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewJson gitribute-component content">
+  <div class="PreviewJson datami-component content">
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
       <LoaderEditNavbar

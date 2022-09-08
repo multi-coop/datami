@@ -47,7 +47,7 @@ const defaultStore = {
       const today = new Date(now)
       const stringDate = today.toISOString().substring(0, 10)
       const fileFullnameClean = filefullname.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')
-      return `gitribute-${stringDate}-${fileFullnameClean}-${fileId}`
+      return `datami-${stringDate}-${fileFullnameClean}-${fileId}`
     }
   },
   mutations: {

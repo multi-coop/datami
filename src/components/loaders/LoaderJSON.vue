@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderJSON gitribute-component container mb-5">
+  <div class="LoaderJSON datami-component container mb-5">
     <div class="columns is-multiline is-centered">
       <div class="column is-8 pb-0">
         <b-skeleton

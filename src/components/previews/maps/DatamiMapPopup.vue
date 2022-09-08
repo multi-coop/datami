@@ -37,7 +37,7 @@ import Vue from 'vue'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default Vue.extend({
-  name: 'GitributeMapPopup',
+  name: 'DatamiMapPopup',
   mixins: [mixinGlobal],
   props: {
     fileId: {
@@ -76,12 +76,12 @@ export default Vue.extend({
       return posConfig.class
     },
     getFieldValue (position) {
-      // console.log('\nC-GitributeMapPopup > getFieldValue > this.config : ', this.config)
-      // console.log('C-GitributeMapPopup > getFieldValue > this.item : ', this.item)
-      // console.log('C-GitributeMapPopup > getFieldValue > position : ', position)
+      // console.log('\nC-DatamiMapPopup > getFieldValue > this.config : ', this.config)
+      // console.log('C-DatamiMapPopup > getFieldValue > this.item : ', this.item)
+      // console.log('C-DatamiMapPopup > getFieldValue > position : ', position)
 
       const posConfig = this.getPosition(position)
-      // console.log('C-GitributeMapPopup > getFieldValue > posConfig : ', posConfig)
+      // console.log('C-DatamiMapPopup > getFieldValue > posConfig : ', posConfig)
 
       let prop = posConfig && this.item[posConfig.field]
 

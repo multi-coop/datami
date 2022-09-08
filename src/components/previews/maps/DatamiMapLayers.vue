@@ -1,6 +1,6 @@
 <template>
   <div
-    class="GitributeMapLayers gitribute-component">
+    class="DatamiMapLayers datami-component">
     <div
       class="card map-layers"
       style="">
@@ -56,7 +56,7 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'GitributeMapLayers',
+  name: 'DatamiMapLayers',
   mixins: [mixinGlobal],
   props: {
     fileId: {
@@ -91,7 +91,7 @@ export default {
     }
   },
   beforeMount () {
-    // console.log('\nC > GitributeMap > beforeMount > this.layersSwitches : ', this.layersSwitches)
+    // console.log('\nC > DatamiMap > beforeMount > this.layersSwitches : ', this.layersSwitches)
     this.isDrawerOpen = this.isDefaultOpen
     this.visibleLayers = this.layersSwitches.map(layer => {
       return {
@@ -109,7 +109,7 @@ export default {
       this.trackEvent(`click-${this.isDrawerOpen ? 'on' : 'off'}`)
     },
     switchLayerVisibility (layer) {
-      // console.log('\nC > GitributeMap > switchLayerVisibility > layer : ', layer)
+      // console.log('\nC > DatamiMap > switchLayerVisibility > layer : ', layer)
       this.$emit('switchLayer', layer)
 
       // track with matomo

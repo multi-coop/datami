@@ -1,5 +1,5 @@
 <template>
-  <div class="GitObjInfos gitribute-component tile is-ancestor mt-2 mb-n-1">
+  <div class="GitObjInfos datami-component tile is-ancestor mt-2 mb-n-1">
     <div class="tile is-vertical is-12">
       <!-- GITOBJ INFOS -->
       <div
@@ -234,7 +234,7 @@ export default {
       return mapSettings && mapSettings.maps.map(m => m.file)
     },
     docsUrl () {
-      const documentationUrl = process.env.VUE_APP_GITRIBUTE_DOCUMENTATION || 'gitribute-docs.multi.coop'
+      const documentationUrl = process.env.VUE_APP_GITRIBUTE_DOCUMENTATION || 'datami-docs.multi.coop'
       return documentationUrl
     }
   },

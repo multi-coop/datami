@@ -1,5 +1,5 @@
 element.mozRequestFullScreen<template>
-  <div class="ButtonFullscreen gitribute-component">
+  <div class="ButtonFullscreen datami-component">
     <b-tooltip
       :label="t(`actions.fullscreen${isFullscreen ? 'Off' : 'On'}`, locale)"
       type="is-dark"
@@ -94,7 +94,7 @@ export default {
         window.document.exitFullscreen ? window.document.exitFullscreen() : window.document.mozCancelFullScreen ? window.document.mozCancelFullScreen() : window.document.msExitFullscreen ? window.document.msExitFullscreen() : window.document.webkitCancelFullScreen && window.document.webkitCancelFullScreen()
       } else {
         this.isFullscreen = true
-        const widgetElement = document.getElementById(`gitribute-widget-${this.fileId}`)
+        const widgetElement = document.getElementById(`datami-widget-${this.fileId}`)
         widgetElement.requestFullscreen ? widgetElement.requestFullscreen() : widgetElement.mozRequestFullScreen ? widgetElement.mozRequestFullScreen() : widgetElement.msRequestFullscreen ? widgetElement.msRequestFullscreen() : widgetElement.webkitRequestFullscreen && widgetElement.webkitRequestFullscreen()
       }
       // console.log('C > ButtonFullscreen > toggleFullsceen > this.isFullscreen :', this.isFullscreen)

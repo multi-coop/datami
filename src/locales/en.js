@@ -11,7 +11,7 @@ export default {
     noLinkValue: '(no link)',
     oldValue: 'Old value',
     newValue: 'New value',
-    thanks: 'Thanks for using {{gitributeRepo}} !',
+    thanks: 'Thanks for using {{datamiRepo}} !',
     understood: 'Understood',
     documentation: 'Documentation',
     docsWebsite: 'Documentation website'
@@ -168,7 +168,7 @@ export default {
     ressource: 'Ressource',
     ressourceValues: 'Ressource values',
     definition: 'Definition',
-    gitribute: 'Special field',
+    datami: 'Special field',
     consolidation: 'Consolidation'
   },
   edit: {

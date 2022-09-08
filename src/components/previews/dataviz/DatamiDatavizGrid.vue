@@ -1,5 +1,5 @@
 <template>
-  <div :class="`GitributeDatavizGrid gitribute-component ${ userFullscreen ? 'dataviz-scroll' : ''}`">
+  <div :class="`DatamiDatavizGrid datami-component ${ userFullscreen ? 'dataviz-scroll' : ''}`">
     <!-- DISPLAY CHARTS GRID -->
     <div
       class="columns is-multiline is-centered">
@@ -12,7 +12,7 @@
         </p>
 
         <div :style="`height: ${ chart.chartOptions.chart.height + 10}px`">
-          <GitributeDataviz
+          <DatamiDataviz
             :file-id="fileId"
             :chart-id="`g-dataviz-${fileId}-${idx}`"
             :chart-type="chart.chartOptions.chart.type"
@@ -43,12 +43,12 @@
 
 import { mixinGlobal, mixinDataviz } from '@/utils/mixins.js'
 
-import GitributeDataviz from '@/components/previews/dataviz/GitributeDataviz'
+import DatamiDataviz from '@/components/previews/dataviz/DatamiDataviz'
 
 export default {
-  name: 'GitributeDatavizGrid',
+  name: 'DatamiDatavizGrid',
   components: {
-    GitributeDataviz
+    DatamiDataviz
   },
   mixins: [
     mixinGlobal,
@@ -81,9 +81,9 @@ export default {
     }
   },
   // beforeMount () {
-  //   console.log('\nC > GitributeDataviz > beforeMount > this.datavizSettings : ', this.datavizSettings)
-  //   console.log('C > GitributeDataviz > beforeMount > this.fields : ', this.fields)
-  //   console.log('C > GitributeDataviz > beforeMount > this.fileOptions : ', this.fileOptions)
+  //   console.log('\nC > DatamiDataviz > beforeMount > this.datavizSettings : ', this.datavizSettings)
+  //   console.log('C > DatamiDataviz > beforeMount > this.fields : ', this.fields)
+  //   console.log('C > DatamiDataviz > beforeMount > this.fileOptions : ', this.fileOptions)
   // },
   methods: {
     computeSerie (chart) {
@@ -95,27 +95,27 @@ export default {
       const categoriesBy = chart.categoriesbyfield
       const categoriesField = this.fields.find(f => f.name === categoriesBy)
       const categoriesFieldIdx = categoriesField && categoriesField.field
-      // console.log('\nC > GitributeDataviz > computeSerie > categoriesBy : ', categoriesBy)
-      // console.log('C > GitributeDataviz > computeSerie > categoriesField : ', categoriesField)
-      // console.log('C > GitributeDataviz > computeSerie > categoriesFieldIdx : ', categoriesFieldIdx)
+      // console.log('\nC > DatamiDataviz > computeSerie > categoriesBy : ', categoriesBy)
+      // console.log('C > DatamiDataviz > computeSerie > categoriesField : ', categoriesField)
+      // console.log('C > DatamiDataviz > computeSerie > categoriesFieldIdx : ', categoriesFieldIdx)
 
       const aggregateBy = chart.aggregatebyfield
       const aggregationField = this.fields.find(f => f.name === aggregateBy)
       const aggregationFieldIdx = aggregationField && aggregationField.field
-      // console.log('C > GitributeDataviz > computeSerie > aggregateBy : ', aggregateBy)
-      // console.log('C > GitributeDataviz > computeSerie ( grouped or not ) > aggregationField : ', aggregationField)
-      // console.log('C > GitributeDataviz > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
+      // console.log('C > DatamiDataviz > computeSerie > aggregateBy : ', aggregateBy)
+      // console.log('C > DatamiDataviz > computeSerie ( grouped or not ) > aggregationField : ', aggregationField)
+      // console.log('C > DatamiDataviz > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
 
       chartOptions.labels = aggregationField.enumArr
 
       if (categoriesFieldIdx) {
         const grouped = this.groupByField(this.items, categoriesFieldIdx)
-        // console.log('\nC > GitributeDataviz > computeSerie > grouped : ', grouped)
+        // console.log('\nC > DatamiDataviz > computeSerie > grouped : ', grouped)
         // const labelsSet = new Set()
         series = grouped.map(g => {
           let serie = this.aggregateByField(g.items, aggregationFieldIdx, chart.aggregationtype)
-          // console.log('\nC > GitributeDataviz > computeSerie (grouped) > g.name : ', g.name)
-          // console.log('C > GitributeDataviz > computeSerie (grouped) > serie : ', serie)
+          // console.log('\nC > DatamiDataviz > computeSerie (grouped) > g.name : ', g.name)
+          // console.log('C > DatamiDataviz > computeSerie (grouped) > serie : ', serie)
           serie = {
             name: g.name,
             data: aggregationField.enumArr.map(k => {
@@ -143,7 +143,7 @@ export default {
         })
       } else {
         const dataset = this.aggregateByField(this.items, aggregationFieldIdx, chart.aggregationtype)
-        // console.log('\nC > GitributeDataviz > computeSerie (not grouped) > series : ', series)
+        // console.log('\nC > DatamiDataviz > computeSerie (not grouped) > series : ', series)
         series = aggregationField.enumArr.map(k => {
           let data
           const obj = dataset.find(i => i.name === k) || { data: 0 }

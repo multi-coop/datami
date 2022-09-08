@@ -1,5 +1,5 @@
 <template>
-  <div class="GitributeTable content">
+  <div class="DatamiTable content">
     <div class="columns is-multiline is-mobile is-centered">
       <!-- SORT & FILTERS CSV NAVABAR -->
       <div
@@ -96,11 +96,11 @@
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
         v-show="dataForView && dataForView.length"
-        :class="`gitribute-table-container column is-${ currentViewMode === 'cards' ? 10 : 12} ${ currentViewMode === 'map' ? 'pt-0' : ''} `">
+        :class="`datami-table-container column is-${ currentViewMode === 'cards' ? 10 : 12} ${ currentViewMode === 'map' ? 'pt-0' : ''} `">
         <!-- :sticky-checkbox="currentEditViewMode === 'edit'" -->
         <div
           v-show="!isAnyDialogOpen && currentViewMode === 'table'"
-          class="gitribute-table-view-table">
+          class="datami-table-view-table">
           <b-table
             :data="dataEditedPaginated"
             :height="(fileOptions && fileOptions.height) || '400px'"
@@ -130,7 +130,7 @@
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div
-                  class="is-flex is-flex-direction-row is-align-items-center gitribute-nowrap"
+                  class="is-flex is-flex-direction-row is-align-items-center datami-nowrap"
                   style="white-space: nowrap;">
                   <!-- EDITION HEADERS-->
                   <div v-if="currentEditViewMode === 'edit'">
@@ -178,7 +178,7 @@
 
                   <!-- SORTING -->
                   <ButtonSortByField
-                    v-if="col.type !== 'gitribute' && !noSortingFields.includes(col.subtype)"
+                    v-if="col.type !== 'datami' && !noSortingFields.includes(col.subtype)"
                     :file-id="fileId"
                     :field="col"
                     :locale="locale"
@@ -199,7 +199,7 @@
                 <!-- EDITION -->
                 <div
                   v-if="currentEditViewMode === 'edit'"
-                  class="gitribute-cell">
+                  class="datami-cell">
                   <PreviewCell
                     v-if="col.locked"
                     :file-id="fileId"
@@ -224,7 +224,7 @@
                 <!-- DIFF -->
                 <div
                   v-if="currentEditViewMode === 'diff'"
-                  class="gitribute-cell">
+                  class="datami-cell">
                   <div v-if="isInChanges(false, props.row.added, col.field, props.row.id)">
                     <span v-html="getDiffHtmlChars(false, props.row.added, col.field, props.row[col.field], props.row.id)"/>
                   </div>
@@ -240,7 +240,7 @@
                 <!-- PREVIEW -->
                 <div
                   v-if="currentEditViewMode === 'preview'"
-                  class="gitribute-cell">
+                  class="datami-cell">
                   <!-- {{ props.row[col.field] }} -->
                   <PreviewCell
                     :file-id="fileId"
@@ -267,9 +267,9 @@
         <div
           v-if="hasCardsView"
           v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
-          class="gitribute-table-view-cards">
+          class="datami-table-view-cards">
           <!-- v-model="showCardDetails" -->
-          <GitributeCardsGrid
+          <DatamiCardsGrid
             :file-id="fileId"
             :cards-settings="cardsSettingsFromFileOptions"
             :items-per-row="itemsPerRow"
@@ -290,9 +290,9 @@
         <div
           v-if="fileOptions && hasDatavizView"
           v-show="!isAnyDialogOpen && currentViewMode === 'dataviz'"
-          class="gitribute-table-view-dataviz"
+          class="datami-table-view-dataviz"
           :style="`${ userFullscreen ? 'height: 90%;' : '' }`">
-          <GitributeDatavizGrid
+          <DatamiDatavizGrid
             :file-id="fileId"
             :dataviz-settings="datavizViewOptions"
             :items="dataForView"
@@ -305,9 +305,9 @@
         <div
           v-if="fileOptions && hasMapView"
           v-show="!isAnyDialogOpen && currentViewMode === 'map'"
-          class="gitribute-table-view-map">
+          class="datami-table-view-map">
           <!-- v-model="showCardDetails" -->
-          <GitributeMapGrid
+          <DatamiMapGrid
             :file-id="fileId"
             :items="dataForView"
             :fields="columns"
@@ -478,14 +478,14 @@ import PreviewCell from '@/components/previews/PreviewCell'
 import EditCell from '@/components/edition/csv/EditCell'
 import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
 
-import GitributeCardsGrid from '@/components/previews/cards/GitributeCardsGrid'
-import GitributeDatavizGrid from '@/components/previews/dataviz/GitributeDatavizGrid'
-import GitributeMapGrid from '@/components/previews/maps/GitributeMapGrid'
+import DatamiCardsGrid from '@/components/previews/cards/DatamiCardsGrid'
+import DatamiDatavizGrid from '@/components/previews/dataviz/DatamiDatavizGrid'
+import DatamiMapGrid from '@/components/previews/maps/DatamiMapGrid'
 
 import PagesNavigation from '@/components/pagination/PagesNavigation'
 
 export default {
-  name: 'GitributeTable',
+  name: 'DatamiTable',
   components: {
     SortAndFiltersSkeleton,
     ButtonSortByField,
@@ -496,9 +496,9 @@ export default {
     PreviewCell,
     EditCell,
     PreviewConsolidation,
-    GitributeCardsGrid,
-    GitributeDatavizGrid,
-    GitributeMapGrid,
+    DatamiCardsGrid,
+    DatamiDatavizGrid,
+    DatamiMapGrid,
     PagesNavigation
   },
   mixins: [
@@ -580,7 +580,7 @@ export default {
 
       // CONSOLIDATION
       consolidationField: {
-        type: 'gitribute'
+        type: 'datami'
       },
       consolidating: [],
       consolidationData: [],
@@ -647,37 +647,37 @@ export default {
     },
     itemsPerPageChoices () {
       let result
-      // console.log('\nC > GitributeTable > itemsPerPageChoices > this.currentViewMode : ', this.currentViewMode)
+      // console.log('\nC > DatamiTable > itemsPerPageChoices > this.currentViewMode : ', this.currentViewMode)
       if (this.currentViewMode === 'table') {
         result = this.itemsPerPageChoicesTable
       }
       if (this.currentViewMode === 'cards') {
-        // console.log('C > GitributeTable > itemsPerPageChoices > this.itemsPerRow : ', this.itemsPerRow)
+        // console.log('C > DatamiTable > itemsPerPageChoices > this.itemsPerRow : ', this.itemsPerRow)
         const itemsPerRow = this.itemsPerRow
         switch (itemsPerRow) {
           case 2:
-            // console.log('C > GitributeTable > itemsPerPageChoices > case 2 > this.itemsPerRow : ', this.itemsPerRow)
+            // console.log('C > DatamiTable > itemsPerPageChoices > case 2 > this.itemsPerRow : ', this.itemsPerRow)
             result = this.itemsPerPageChoicesCards2perRow
             break
           case 3:
-            // console.log('C > GitributeTable > itemsPerPageChoices > case 3 > this.itemsPerRow : ', this.itemsPerRow)
-            // console.log('C > GitributeTable > itemsPerPageChoices > case 3 > this.itemsPerPageChoicesCards3PerRow : ', this.itemsPerPageChoicesCards3PerRow)
+            // console.log('C > DatamiTable > itemsPerPageChoices > case 3 > this.itemsPerRow : ', this.itemsPerRow)
+            // console.log('C > DatamiTable > itemsPerPageChoices > case 3 > this.itemsPerPageChoicesCards3PerRow : ', this.itemsPerPageChoicesCards3PerRow)
             result = this.itemsPerPageChoicesCards3perRow
             break
           case 4:
-            // console.log('C > GitributeTable > itemsPerPageChoices > case 4 > this.itemsPerRow : ', this.itemsPerRow)
+            // console.log('C > DatamiTable > itemsPerPageChoices > case 4 > this.itemsPerRow : ', this.itemsPerRow)
             result = this.itemsPerPageChoicesCards4perRow
             break
           default:
-            // console.log('C > GitributeTable > itemsPerPageChoices > default: > this.itemsPerRow : ', this.itemsPerRow)
+            // console.log('C > DatamiTable > itemsPerPageChoices > default: > this.itemsPerRow : ', this.itemsPerRow)
             result = this.itemsPerPageChoicesCards3perRow
         }
       }
-      // console.log('C > GitributeTable > itemsPerPageChoices > result : ', result)
+      // console.log('C > DatamiTable > itemsPerPageChoices > result : ', result)
       return result
     },
     paginationFromFileOptions () {
-      // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
+      // console.log('C > DatamiTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
       const pagination = {
         itemsPerPage: this.itemsPerPageDefault,
         itemsPerPageTable: this.itemsPerPageDefault,
@@ -688,7 +688,7 @@ export default {
       // retrieve options from file options
       const hasPaginationOptions = this.fileOptions && this.fileOptions.pagination
       if (hasPaginationOptions) {
-        // console.log('C > GitributeTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
+        // console.log('C > DatamiTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
         Object.keys(hasPaginationOptions).forEach(key => {
           pagination[key] = hasPaginationOptions[key]
         })
@@ -731,7 +731,7 @@ export default {
     dataEditedSorted () {
       let data = [...this.dataEditedFiltered]
       if (this.fileSorting && this.fileSorting.length) {
-        // console.log('\nC > GitributeTable > dataEditedSorted > this.fileSorting : ', this.fileSorting)
+        // console.log('\nC > DatamiTable > dataEditedSorted > this.fileSorting : ', this.fileSorting)
         this.fileSorting.forEach(sorting => {
           const sortingField = sorting.field
           const sortIsAscending = sorting.ascending
@@ -760,7 +760,7 @@ export default {
 
           concat = [...editedIndices, ...originalIndices]
           uniquesIndices = [...new Set(concat)]
-          // console.log('\nC > GitributeTable > dataForView > diff > uniquesIndices : ', uniquesIndices)
+          // console.log('\nC > DatamiTable > dataForView > diff > uniquesIndices : ', uniquesIndices)
           data = uniquesIndices.map(i => {
             let row = dataEditedSorted.find(r => r.id === i)
             if (!row) {
@@ -779,8 +779,8 @@ export default {
       const data = [...this.dataForView]
       const page = this.currentPage
       const perPage = this.itemsPerPage
-      // console.log('\nC > GitributeTable > dataEditedPaginated > page : ', page)
-      // console.log('C > GitributeTable > dataEditedPaginated > perPage : ', perPage)
+      // console.log('\nC > DatamiTable > dataEditedPaginated > page : ', page)
+      // console.log('C > DatamiTable > dataEditedPaginated > perPage : ', perPage)
       return this.paginate(data, perPage, page)
     },
     totalItemsDataEdited () {
@@ -789,7 +789,7 @@ export default {
     columnsForView () {
       let columns
       let originalFields, editedFields, concat, uniquesFields
-      // console.log('\nC > GitributeTable > dataForView > this.currentEditViewMode : ', this.currentEditViewMode)
+      // console.log('\nC > DatamiTable > dataForView > this.currentEditViewMode : ', this.currentEditViewMode)
       switch (this.currentEditViewMode) {
         case 'edit':
           if (this.hasConsolidation) {
@@ -812,7 +812,7 @@ export default {
           editedFields = this.columnsEdited.map(r => r.field)
           concat = [...originalFields, ...editedFields]
           uniquesFields = [...new Set(concat)]
-          // console.log('\nC > GitributeTable > dataForView > diff > uniquesFields : ', uniquesFields)
+          // console.log('\nC > DatamiTable > dataForView > diff > uniquesFields : ', uniquesFields)
           columns = uniquesFields.map(f => {
             let col = this.columnsEdited.find(c => c.field === f)
             if (!col) {
@@ -822,11 +822,11 @@ export default {
           })
           break
         case 'preview':
-          // console.log('C > GitributeTable > dataForView > preview > this.columnsEdited : ', this.columnsEdited)
-          columns = this.columnsEdited.filter(c => c.type !== 'gitribute')
+          // console.log('C > DatamiTable > dataForView > preview > this.columnsEdited : ', this.columnsEdited)
+          columns = this.columnsEdited.filter(c => c.type !== 'datami')
           break
       }
-      // console.log('C > GitributeTable > dataForView > preview > columns : ', columns)
+      // console.log('C > DatamiTable > dataForView > preview > columns : ', columns)
       return columns
     },
     isAnyDialogOpen () {
@@ -838,15 +838,15 @@ export default {
   },
   watch: {
     // edited (next) {
-    //   console.log('\nC > GitributeTable > watch > edited > next : ', next)
+    //   console.log('\nC > DatamiTable > watch > edited > next : ', next)
     // },
     currentViewMode (next) {
-      // console.log('\nC > GitributeTable > watch > currentViewMode > next : ', next)
+      // console.log('\nC > DatamiTable > watch > currentViewMode > next : ', next)
       this.itemsPerPage = next === 'cards' ? this.itemsPerPageCards : this.itemsPerPageTable
     },
     filterTags (next) {
       if (next.length) {
-        // console.log('\nC > GitributeTable > watch > filterTags > next : ', next)
+        // console.log('\nC > DatamiTable > watch > filterTags > next : ', next)
         this.updateFilterTags({ fileId: this.fileId, tags: this.filterTags })
       }
     }
@@ -854,7 +854,7 @@ export default {
   beforeMount () {
     // prepare sorting from custom settings if any
     if (this.hasCustomSorting) {
-      // console.log('\nC > GitributeTable > beforeMount > this.columns : ', this.columns)
+      // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {
         const fieldName = f.name || f
         const header = this.columns.find(c => c.name === fieldName)
@@ -864,7 +864,7 @@ export default {
           ascending: !!f.ascending
         }
       })
-      // console.log('C > GitributeTable > beforeMount > settingsSortings : ', settingsSortings)
+      // console.log('C > DatamiTable > beforeMount > settingsSortings : ', settingsSortings)
       const sortings = {
         fileId: this.fileId,
         fields: settingsSortings.filter(f => f.field)
@@ -886,7 +886,7 @@ export default {
 
     // build pagination options
     const pagination = this.paginationFromFileOptions
-    // console.log('\nC > GitributeTable > beforeMount > pagination : ', pagination)
+    // console.log('\nC > DatamiTable > beforeMount > pagination : ', pagination)
     this.itemsPerPage = this.cardsViewIsDefault ? pagination.itemsPerPageCards : pagination.itemsPerPageTable
     this.itemsPerPageTable = pagination.itemsPerPageTable
     this.itemsPerRow = pagination.itemsPerRow
@@ -898,26 +898,26 @@ export default {
       updateReqErrors: 'git-data/updateReqErrors'
     }),
     columnThAttrs (column) {
-      // console.log('\nC > GitributeTable > columnThAttrs > column : ', column)
+      // console.log('\nC > DatamiTable > columnThAttrs > column : ', column)
       return {
-        class: 'gitribute-table gitribute-table-th has-text-centered'
+        class: 'datami-table datami-table-th has-text-centered'
       }
     },
     columnTdAttrs (row, column) {
-      // console.log('\nC > GitributeTable > columnTdAttrs > column : ', column)
-      // console.log('C > GitributeTable > columnTdAttrs > row : ', row)
+      // console.log('\nC > DatamiTable > columnTdAttrs > column : ', column)
+      // console.log('C > DatamiTable > columnTdAttrs > row : ', row)
       const fieldId = column.field
-      // console.log('C > GitributeTable > columnTdAttrs > fieldId : ', fieldId)
+      // console.log('C > DatamiTable > columnTdAttrs > fieldId : ', fieldId)
       const field = this.columnsForView.find(f => f.field === fieldId)
-      // console.log('C > GitributeTable > columnTdAttrs > field : ', field)
+      // console.log('C > DatamiTable > columnTdAttrs > field : ', field)
       const fieldType = field && field.type
       const fieldSubype = field && field.subtype
-      // console.log('C > GitributeTable > columnTdAttrs > fieldType : ', fieldType)
-      // console.log('C > GitributeTable > columnTdAttrs > fieldSubype : ', fieldSubype)
+      // console.log('C > DatamiTable > columnTdAttrs > fieldType : ', fieldType)
+      // console.log('C > DatamiTable > columnTdAttrs > fieldSubype : ', fieldSubype)
       // const props = fieldTypeIcons.find(ft => ft.type === fieldType && ft.subtype === fieldSubype)
-      let classTd = 'gitribute-table gitribute-table-td'
+      let classTd = 'datami-table datami-table-td'
       classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''}`
-      classTd += `${this.currentEditViewMode === 'edit' ? ' gitribute-table-td-edit' : ''}`
+      classTd += `${this.currentEditViewMode === 'edit' ? ' datami-table-td-edit' : ''}`
       return {
         class: classTd
       }
@@ -1021,11 +1021,11 @@ export default {
       return data
     },
     async processAction (event) {
-      // console.log('\nC > GitributeTable > processAction > event : ', event)
+      // console.log('\nC > DatamiTable > processAction > event : ', event)
       switch (event.action) {
         // ADD TAG TO ENUM
         case 'addTagToEnum':
-          // console.log('\nC > GitributeTable > processAction > event : ', event)
+          // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.$emit('addTagToEnum', event.value)
           break
 
@@ -1053,7 +1053,7 @@ export default {
 
         // SORTING
         case 'sortBy':
-          // console.log('\nC > GitributeTable > processAction > event : ', event)
+          // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.sortingByField = event.value.header
           this.sortingAscending = event.value.ascending
           this.$emit('sortRows', event)
@@ -1061,7 +1061,7 @@ export default {
 
         // FILTERING
         case 'searchText':
-          // console.log('\nC > GitributeTable > processAction > event : ', event)
+          // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.processSearch(event.value)
           break
         case 'filterBy':
@@ -1087,31 +1087,31 @@ export default {
 
         // CONSOLIDATION
         case 'consolidate':
-          // console.log('\nC > GitributeTable > processAction > consolidation > event : ', event)
+          // console.log('\nC > DatamiTable > processAction > consolidation > event : ', event)
           await this.consolidateRow(event)
           break
         case 'cancelConsolidation':
-          // console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
+          // console.log('\nC > DatamiTable > processAction > mergeConsolidation > event : ', event)
           // this.openedDetails = this.openedDetails.filter(id => id !== event.rowId)
           this.closeConsolidationDetail(event.rowId)
           break
         case 'mergeConsolidation':
-          // console.log('\nC > GitributeTable > processAction > mergeConsolidation > event : ', event)
+          // console.log('\nC > DatamiTable > processAction > mergeConsolidation > event : ', event)
           this.updateConsolidatedValues(event)
           break
       }
     },
     emitUpdate (event) {
-      // console.log('C > GitributeTable > emitUpdate > event : ', event)
+      // console.log('C > DatamiTable > emitUpdate > event : ', event)
       this.$emit('updateEdited', event)
     },
     processSearch (search) {
-      // console.log('C > GitributeTable > processSearch > search : ', search)
+      // console.log('C > DatamiTable > processSearch > search : ', search)
       const reset = search.reset
       this.searchText = !reset ? search.value : undefined
     },
     processFilter (filter) {
-      // console.log('C > GitributeTable > processFilter > filter : ', filter)
+      // console.log('C > DatamiTable > processFilter > filter : ', filter)
       const active = !!filter.field
       const reset = filter.reset
       if (!reset && active) {
@@ -1122,8 +1122,8 @@ export default {
       }
     },
     processFilterValue (tag, remove = false) {
-      // console.log('C > GitributeTable > processFilterValue > tag : ', tag)
-      // console.log('C > GitributeTable > processFilterValue > remove : ', remove)
+      // console.log('C > DatamiTable > processFilterValue > tag : ', tag)
+      // console.log('C > DatamiTable > processFilterValue > remove : ', remove)
       const filterTags = this.filterTags.filter(t => {
         const sameField = t.field === tag.field
         const sameValue = t.value === tag.value
@@ -1135,14 +1135,14 @@ export default {
       this.filterTags = filterTags
     },
     removeTag (tag) {
-      // console.log('\nC > GitributeTable > removeTag > tag : ', tag)
+      // console.log('\nC > DatamiTable > removeTag > tag : ', tag)
       this.processFilterValue(tag, true)
     },
     isConsolidating (rowId) {
       return this.consolidating.includes(rowId)
     },
     async consolidateRow (consolidationSettings) {
-      // console.log('\nC > GitributeTable > consolidateRow > consolidationSettings : ', consolidationSettings)
+      // console.log('\nC > DatamiTable > consolidateRow > consolidationSettings : ', consolidationSettings)
       this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
@@ -1150,10 +1150,10 @@ export default {
       // this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
       // this.openedDetails = this.openedDetails.filter(id => id !== rowId)
 
-      // console.log('\nC > GitributeTable > consolidateRow > this.consolidationData : ', this.consolidationData)
-      // console.log('C > GitributeTable > consolidateRow > this.columns : ', this.columns)
+      // console.log('\nC > DatamiTable > consolidateRow > this.consolidationData : ', this.consolidationData)
+      // console.log('C > DatamiTable > consolidateRow > this.columns : ', this.columns)
       const rowData = this.dataEdited.find(row => row.id === rowId)
-      // console.log('C > GitributeTable > consolidateRow > rowData : ', rowData)
+      // console.log('C > DatamiTable > consolidateRow > rowData : ', rowData)
       let sourceFields = consolidationSettings.api.source_fields
       sourceFields = sourceFields.map(f => {
         const colField = this.columns.find(cf => cf.name === f.name)
@@ -1165,7 +1165,7 @@ export default {
           value: rowDataValue
         }
       })
-      // console.log('C > GitributeTable > sourceFields : ', sourceFields)
+      // console.log('C > DatamiTable > sourceFields : ', sourceFields)
 
       const respConsolidation = await this.getConsolidationApiUrl(consolidationSettings, this.columns, sourceFields)
       respConsolidation.rowId = rowId
@@ -1173,7 +1173,7 @@ export default {
       respConsolidation.sourceFields = sourceFields
       respConsolidation.api = consolidationSettings.api.api
       // respConsolidation.rowData = rowData
-      // console.log('C > GitributeTable > consolidateRow > respConsolidation : ', respConsolidation)
+      // console.log('C > DatamiTable > consolidateRow > respConsolidation : ', respConsolidation)
 
       // update loaders & errors
       this.consolidating = this.consolidating.filter(id => id !== rowId)
@@ -1192,16 +1192,16 @@ export default {
       this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
     },
     updateConsolidatedValues (event) {
-      // console.log('\nC > GitributeTable > updateConsolidatedValues > event : ', event)
+      // console.log('\nC > DatamiTable > updateConsolidatedValues > event : ', event)
       event.newValues.forEach(e => {
-        // console.log('C > GitributeTable > updateConsolidatedValues > e : ', e)
+        // console.log('C > DatamiTable > updateConsolidatedValues > e : ', e)
         this.$emit('updateEdited', e)
       })
       this.closeConsolidationDetail(event.rowId)
     },
     toggleDetail (event) {
-      // console.log('\nC > GitributeTable > toggleDetail > event : ', event)
-      // console.log('C > GitributeTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
+      // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
+      // console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
       // this.showCardDetails = !event.showDetail
       if (event.showDetail) {
         this.showCardDetails = false
@@ -1214,10 +1214,10 @@ export default {
 </script>
 
 <style>
-.gitribute-nowrap {
+.datami-nowrap {
   white-space: nowrap;
 }
-.gitribute-table {
+.datami-table {
   /* min-width: 100px; */
   max-width: 350px;
   overflow: auto;
@@ -1225,20 +1225,20 @@ export default {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-.gitribute-table::-webkit-scrollbar {
+.datami-table::-webkit-scrollbar {
   display: none;
 }
-.gitribute-table-td {
+.datami-table-td {
   /* padding: .2em .25em !important; */
   min-width: 100px;
 }
-.gitribute-table-td.is-sticky {
+.datami-table-td.is-sticky {
   z-index: 2 !important;
 }
 .th-wrap {
   justify-content: center !important;
 }
-.gitribute-table-td-edit {
+.datami-table-td-edit {
   border: none !important;
 }
 .g-td-string {

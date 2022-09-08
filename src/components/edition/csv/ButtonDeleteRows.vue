@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonDeleteRows gitribute-component">
+  <div class="ButtonDeleteRows datami-component">
     <b-tooltip
       :label="t(`editCsv.${getTootlipLabel}`, locale)"
       type="is-dark"

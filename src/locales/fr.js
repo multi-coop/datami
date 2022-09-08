@@ -11,7 +11,7 @@ export default {
     noLinkValue: '(pas de lien)',
     oldValue: 'Ancienne valeur',
     newValue: 'Nouvelle valeur',
-    thanks: 'Merci d\'utiliser {{gitributeRepo}} !',
+    thanks: 'Merci d\'utiliser {{datamiRepo}} !',
     understood: 'Compris',
     documentation: 'Documentation',
     docsWebsite: 'Site de documentation'
@@ -168,7 +168,7 @@ export default {
     ressource: 'Ressource',
     ressourceValues: 'Valeurs liées',
     definition: 'Définition',
-    gitribute: 'Champ spécial',
+    datami: 'Champ spécial',
     consolidation: 'Consolidation'
   },
   edit: {

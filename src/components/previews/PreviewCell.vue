@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`PreviewCell gitribute-${nowrap && !isLongText && !isDiffView && !isCardView ? 'nowrap' : 'wrap'}`"
+    :class="`PreviewCell datami-${nowrap && !isLongText && !isDiffView && !isCardView ? 'nowrap' : 'wrap'}`"
     @mouseover="showExpand = true"
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
@@ -245,10 +245,10 @@ export default {
 </script>
 
 <style scoped>
-  .gitribute-nowrap {
+  .datami-nowrap {
     white-space: nowrap;
   }
-  .gitribute-wrap {
+  .datami-wrap {
     min-height: 2em;
   }
   .has-wrap-btn {
