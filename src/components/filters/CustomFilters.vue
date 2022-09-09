@@ -1,5 +1,5 @@
 <template>
-  <div class="CustomFilters gitribute-component">
+  <div class="CustomFilters datami-component">
     <!-- FILTERS -->
     <div
       v-if="filtersDisplay"
@@ -79,7 +79,7 @@ export default {
           return {
             field: filter.field,
             label: filter.label,
-            choices: Array.from(filter.choices).sort((a, b) => a.localeCompare(b))
+            enumArr: Array.from(filter.enumArr).sort((a, b) => a.localeCompare(b))
           }
         })
       }

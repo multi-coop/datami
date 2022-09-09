@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonChangeLocale gitribute-component">
+  <div class="ButtonChangeLocale datami-component">
     <!-- {{ currentLocale(locale) }} -
     {{ allowedLocales }} -->
     <div class="dropdown is-hoverable is-right">
@@ -13,7 +13,8 @@
         <div
           id="dropdown-locales"
           class="dropdown-menu"
-          role="menu">
+          role="menu"
+          style="z-index: 90;">
           <div class="dropdown-content">
             <div class="dropdown-item">
               <span class="is-italic">
@@ -47,6 +48,10 @@ export default {
   name: 'ButtonChangeLocale',
   mixins: [mixinGlobal],
   props: {
+    fileId: {
+      default: null,
+      type: String
+    },
     locale: {
       default: 'en',
       type: String
@@ -68,6 +73,9 @@ export default {
     changeLocale (locale) {
       this.updateUserLocale(locale)
       this.updateLocaleGlobally(locale)
+
+      // track with matomo
+      this.trackEvent(locale)
     }
   }
 }

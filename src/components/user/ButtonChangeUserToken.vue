@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonChangeUserToken gitribute-component">
+  <div class="ButtonChangeUserToken datami-component">
     <div :class="`dropdown is-right ${showContent ? 'is-active' : '' }`">
       <!-- TRIGGER BUTTON -->
       <div class="dropdown-trigger">
@@ -14,7 +14,7 @@
             icon-left="account"
             aria-haspopup="true"
             aria-controls="dropdown-user-token"
-            @click="showContent = !showContent"/>
+            @click="toggleBtn"/>
         </b-tooltip>
       </div>
       <!-- INPUT -->
@@ -22,9 +22,37 @@
         id="dropdown-user-token"
         class="dropdown-menu token-input"
         role="menu">
-        <div class="dropdown-content px-3 py-3">
-          <b-field
-            :label="editToken ? t('actions.changeToken', locale) : t('user.userToken', locale)">
+        <div class="dropdown-content px-4 py-4">
+          <!-- TITLE -->
+          <div class="columns mb-3 is-vcentered">
+            <div class="column pb-0 is-8 is-offset-2 has-text-centered has-text-weight-bold">
+              <b-icon
+                :icon="editToken ? 'lock-open' : 'lock'"
+                size="is-small"/>
+              {{ editToken ? t('actions.changeToken', locale) : t('user.userToken', locale) }}
+            </div>
+            <div class="column pb-0 is-2 has-text-right">
+              <b-button
+                type="is-white"
+                icon-left="close"
+                @click="showContent = false"/>
+            </div>
+          </div>
+
+          <!-- USER RESUME -->
+          <p
+            v-if="userGit"
+            class="mb-3 has-text-centered">
+            <b-icon
+              icon="account"
+              size="is-small"/>
+            {{ t('user.user', locale) }} :
+            <code>{{ userGit.username }}</code>
+          </p>
+
+          <!-- TOKEN INPUT -->
+          <b-field>
+            <!-- :label="editToken ? t('actions.changeToken', locale) : t('user.userToken', locale)"> -->
             <b-input
               v-model="usertoken"
               :icon="editToken ? 'lock-open' : 'lock'"
@@ -50,6 +78,8 @@ import { mapGetters, mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
 
+import { getUserInfosFromToken } from '@/utils/gitProvidersAPI.js'
+
 export default {
   name: 'ButtonChangeUserToken',
   mixins: [mixinGlobal],
@@ -72,19 +102,37 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getFileToken: 'git-data/getFileToken'
-    })
+      // getFileToken: 'git-data/getFileToken',
+      getUserGit: 'git-user/getUserGit'
+    }),
+    userGit () {
+      return this.getUserGit(this.fileId)
+    }
+  },
+  watch: {
+    usertoken (next) {
+      if (next) {
+        this.getUserInfos()
+      }
+    }
   },
   mounted () {
     // console.log('C > ButtonChangeUserToken > this.gitObj : ', this.gitObj)
-    const originalToken = this.getFileToken(this.fileId)
+    const originalToken = this.fileToken // this.getFileToken(this.fileId)
     // console.log('C > ButtonChangeUserToken > originalToken : ', originalToken)
     this.usertoken = originalToken
   },
   methods: {
     ...mapActions({
+      updateUserGit: 'git-user/updateUserGit',
       updateToken: 'git-data/updateToken'
     }),
+    toggleBtn () {
+      this.showContent = !this.showContent
+
+      // track with matomo
+      this.trackEvent('click')
+    },
     inputAction () {
       if (this.editToken) {
         // console.log('C > ButtonChangeUserToken > this.usertoken : ', this.usertoken)
@@ -94,6 +142,12 @@ export default {
       } else {
         this.editToken = true
       }
+    },
+    async getUserInfos () {
+      // console.log('\nC > ButtonChangeUserToken > getUserInfos > this.usertoken : ', this.usertoken)
+      const gitUserInfos = await getUserInfosFromToken(this.gitObj, this.usertoken)
+      // console.log('C > ButtonChangeUserToken > getUserInfos > gitUserInfos : ', gitUserInfos)
+      this.updateUserGit({ fileId: this.fileId, userGitInfos: gitUserInfos })
     }
   }
 }
@@ -101,6 +155,7 @@ export default {
 
 <style scoped>
   .token-input {
-    min-width: 25em;
+    min-width: 30em;
+    z-index: 50;
   }
 </style>

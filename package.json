@@ -1,5 +1,5 @@
 {
-  "name": "multi-gitribute",
+  "name": "Datami",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,9 @@
   "dependencies": {
     "@creativebulma/bulma-divider": "^1.1.0",
     "@mdi/font": "^6.6.96",
-    "buefy": "^0.9.19",
+    "@turf/turf": "^6.5.0",
+    "apexcharts": "^3.35.4",
+    "buefy": "^0.9.21",
     "buffer": "^6.0.3",
     "bulma-extensions": "^6.2.7",
     "core-js": "^3.8.3",
@@ -19,11 +21,13 @@
     "diff2html": "^3.4.16",
     "document-register-element": "^1.14.10",
     "gray-matter": "^4.0.3",
+    "maplibre-gl": "^2.3.0",
     "register-service-worker": "^1.7.2",
     "showdown": "^2.0.3",
     "showdown-table": "^1.0.1",
     "uuid": "^8.3.2",
     "vue": "^2.6.14",
+    "vue-apexcharts": "^1.6.2",
     "vue-custom-element": "^3.3.0",
     "vue-showdown": "^3.1.0",
     "vuex": "^3.6.2",

@@ -101,12 +101,12 @@ export const extractGitInfos = (str) => {
   if (orga === 'github') {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
-    // https://raw.githubusercontent.com/multi-coop/gitribute-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
+    // https://raw.githubusercontent.com/multi-coop/datami-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
     fileraw = `${rawRoot}${remaining}`
   } else {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
-    // https://gitlab.com/multi-coop/gitribute-content-test/-/raw/main/texts/markdown/test-file-gitribute-fr.md
+    // https://gitlab.com/multi-coop/datami-content-test/-/raw/main/texts/markdown/test-file-datami-fr.md
     fileraw = `${rawRoot}${remaining}`
   }
 
@@ -147,10 +147,11 @@ export const extractGitInfos = (str) => {
   return gitInfos
 }
 
-export const buildGitRequestOptions = (method, provider, token, body = undefined) => {
-  console.log('\nU > utilsGitUrl > buildGitRequestOptions > method : ', method)
-  console.log('U > utilsGitUrl > buildGitRequestOptions > provider : ', provider)
-  console.log('U > utilsGitUrl > buildGitRequestOptions > token : ', token)
+export const buildGitRequestOptions = (method, provider, token, body = undefined, action = undefined) => {
+  // console.log('\nU > utilsGitUrl > buildGitRequestOptions > method : ', method)
+  // console.log('U > utilsGitUrl > buildGitRequestOptions > provider : ', provider)
+  // console.log('U > utilsGitUrl > buildGitRequestOptions > token : ', token)
+  // console.log('U > utilsGitUrl > buildGitRequestOptions > action : ', action)
   // console.log('U > utilsGitUrl > buildGitRequestOptions > body : ', body)
   const requestOptions = {
     method: method
@@ -160,6 +161,9 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
   switch (provider) {
     case 'gitlab':
       authHeader = { 'PRIVATE-TOKEN': token }
+      if (action === 'merge-request') {
+        authHeader['Content-Type'] = 'application/json'
+      }
       break
     case 'github':
       authHeader = { Authorization: `Token ${token}` }
@@ -175,8 +179,37 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
   return requestOptions
 }
 
+export const buildGitUserInfosUrl = (gitObj, token = undefined, method = 'GET') => {
+  // console.log('\nU > utilsGitUrl > buildGitUserInfosUrl > ...')
+  // console.log('U > utilsGitUrl > buildGitUserInfosUrl > gitObj : ', gitObj)
+
+  let userInfosUrl
+  const requestOptions = {
+    method: method
+  }
+  const authHeader = {}
+
+  switch (gitObj.provider) {
+    case 'gitlab':
+      userInfosUrl = `${gitObj.api}/user`
+      authHeader['PRIVATE-TOKEN'] = token
+      authHeader['Content-Type'] = 'application/json'
+      break
+    case 'github':
+      userInfosUrl = 'https://api.github.com/user'
+      authHeader.Authorization = `Token ${token}`
+      authHeader.Accept = 'application/vnd.github.v3+json'
+      break
+  }
+  requestOptions.headers = authHeader
+  return {
+    url: userInfosUrl,
+    requestOptions: requestOptions
+  }
+}
+
 export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token = undefined) {
-  console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
+  // console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
 
   const errors = []
   let newBranchAlreadyExists = false
@@ -184,7 +217,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
 
   // specific to gitlab
   let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
-  let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
+  let prePostCheckTargetBranch, prePostCheckTargetBranchResp
 
   // specific to github
   let prePostRequestUrl, prePostResponse, prePostResponseData, revisionHash
@@ -195,11 +228,11 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
     case 'gitlab':
       // check source branch
       prePostCheckSourceBranch = `${gitObj.apiRepo}/repository/branches/${sourceBranch}`
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranch : ', prePostCheckSourceBranch)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranch : ', prePostCheckSourceBranch)
       prePostCheckSourceBranchResp = await fetch(prePostCheckSourceBranch)
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp : ', prePostCheckSourceBranchResp)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp : ', prePostCheckSourceBranchResp)
       prePostCheckSourceBranchData = await prePostCheckSourceBranchResp.json()
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchData : ', prePostCheckSourceBranchData)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchData : ', prePostCheckSourceBranchData)
       if (!prePostCheckSourceBranchResp.ok) {
         const err = {
           function: 'postNewBranch',
@@ -211,11 +244,11 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
 
       // check target branch
       prePostCheckTargetBranch = `${gitObj.apiRepo}/repository/branches/${newBranch}`
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
       prePostCheckTargetBranchResp = await fetch(prePostCheckTargetBranch)
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
-      prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
+      // prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
 
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
       if (prePostCheckTargetBranchResp.ok) { newBranchAlreadyExists = true }
@@ -319,5 +352,75 @@ export async function buildPutCommitReqData (gitObj, branch, edited, message, au
   return {
     url: url,
     body: bodyObj
+  }
+}
+
+export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch, token = undefined, userGit = undefined) {
+  console.log('\nU > utilsGitUrl > buildPostMergeRequestUrl > ...')
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitObj : ', gitObj)
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > targetBranch : ', targetBranch)
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > newBranch : ', newBranch)
+  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > token : ', token)
+
+  const errors = []
+  let urlPostMergeRequest
+  let username
+
+  // specific to gitlab
+  // let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
+  // let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
+
+  // specific to github
+  // let prePostRequestUrl // prePostResponse, prePostResponseData, revisionHash
+
+  let postBody, userInfosData
+
+  if (!userGit) {
+    const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
+    const userInfosReq = await fetch(userInfosUrl.url, userInfosUrl.requestOptions)
+    userInfosData = await userInfosReq.json()
+    console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosUrl : ', userInfosUrl)
+    console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosData : ', userInfosData)
+  } else {
+    userInfosData = userGit
+  }
+
+  switch (gitObj.provider) {
+    case 'gitlab':
+      // build url for urlPostMergeRequest
+      urlPostMergeRequest = `${gitObj.apiRepo}/merge_requests`
+      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > urlPostMergeRequest : ', urlPostMergeRequest)
+
+      username = userInfosData.username
+
+      postBody = {
+        title: `Datami ... Contribution from : ${username}`,
+        description: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
+        source_branch: `${newBranch}`,
+        target_branch: targetBranch
+      }
+      break
+
+    case 'github':
+      // GET from : https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
+
+      // build url for urlPostMergeRequest
+      urlPostMergeRequest = `${gitObj.apiRepo}/pulls`
+      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > urlPostMergeRequest : ', urlPostMergeRequest)
+
+      username = userInfosData.login
+
+      postBody = {
+        title: `Datami ... Contribution from : ${username}`,
+        body: `${username} added some contributions on branch '${newBranch}', to add to branch '${targetBranch}'`,
+        head: `${newBranch}`,
+        base: targetBranch
+      }
+      break
+  }
+  return {
+    url: urlPostMergeRequest,
+    body: postBody,
+    errors: errors
   }
 }

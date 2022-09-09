@@ -10,10 +10,13 @@ import '@mdi/font/css/materialdesignicons.min.css'
 
 import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 
+import VueApexCharts from 'vue-apexcharts'
+
 // import { VueShowdown, VueShowdownPlugin } from 'vue-showdown'
 
-import GitributeFile from './components/gitribute-file.vue'
-import GitributeExploWiki from './components/gitribute-explowiki.vue'
+import DatamiFile from './components/datami-file.vue'
+import DatamiExploWiki from './components/datami-explowiki.vue'
+import DatamiMultiFiles from './components/datami-multi-files.vue'
 
 Vue.config.productionTip = false
 
@@ -21,11 +24,16 @@ Vue.use(Buefy, {
   defaultIconPack: 'mdi'
 })
 
-GitributeFile.store = store
-GitributeExploWiki.store = store
+Vue.use(VueApexCharts)
+Vue.component('ApexChart', VueApexCharts)
+
+DatamiFile.store = store
+DatamiExploWiki.store = store
+DatamiMultiFiles.store = store
 
 Vue.use(vueCustomElement, {
   shadow: true
 })
-Vue.customElement('multi-gitribute-file', GitributeFile)
-Vue.customElement('multi-gitribute-explowiki', GitributeExploWiki)
+Vue.customElement('datami-file', DatamiFile)
+Vue.customElement('datami-explowiki', DatamiExploWiki)
+Vue.customElement('datami-multi-files', DatamiMultiFiles)

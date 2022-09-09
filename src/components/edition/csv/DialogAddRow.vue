@@ -1,5 +1,5 @@
 <template>
-  <div class="DialogAddRow gitribute-component container">
+  <div class="DialogAddRow datami-component container">
     <div class="columns is-vcentered is-centered">
       <div class="column is-9">
         <div class="card">
@@ -83,6 +83,10 @@ export default {
       default: false,
       type: Boolean
     },
+    fileId: {
+      default: null,
+      type: String
+    },
     headers: {
       default: null,
       type: Array
@@ -124,6 +128,9 @@ export default {
     },
     closeDialog () {
       this.handleInput(false)
+
+      // track with matomo
+      this.trackEvent('closeDialog')
     },
     sendNewRowToParent () {
       console.log('\nC > DialogAddRow > sendNewRowToParent > this.temp :', this.temp)
@@ -134,6 +141,9 @@ export default {
       this.$emit('action', payload)
       this.closeDialog()
       this.temp = {}
+
+      // track with matomo
+      this.trackEvent('addNewRow')
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewJson gitribute-component content">
+  <div class="PreviewJson datami-component content">
     <!-- LOADERS -->
     <div v-if="fileIsLoading">
       <LoaderEditNavbar
@@ -14,6 +14,37 @@
         :file-id="fileId"
         :file-family="'json'"
         :locale="locale"/>
+
+      <!-- DEBUGGING -->
+      <div
+        v-if="false"
+        class="columns is-multiline">
+        <!-- DEBUG EDITED -->
+        <div
+          v-if="true && fileData"
+          class="column is-6">
+          <p>
+            fileData.uuid: <br>
+            <code>{{ fileData.uuid }}</code>
+          </p>
+          <p>
+            fileData.fileUrl: <br>
+            <code>{{ fileData.fileUrl }}</code>
+          </p>
+        </div>
+        <div
+          v-if="true && fileEdited"
+          class="column is-6">
+          <p>
+            fileEdited.uuid: <br>
+            <code>{{ fileEdited.uuid }}</code>
+          </p>
+          <p>
+            fileEdited.fileUrl: <br>
+            <code>{{ fileEdited.fileUrl }}</code>
+          </p>
+        </div>
+      </div>
 
       <!-- VIEWS -->
       <div
@@ -167,6 +198,7 @@ import { mapActions } from 'vuex'
 
 import {
   mixinGlobal,
+  mixinData,
   mixinCommit,
   mixinIcons,
   mixinDiff,
@@ -191,6 +223,7 @@ export default {
   },
   mixins: [
     mixinGlobal,
+    mixinData,
     mixinCommit,
     mixinIcons,
     mixinDiff,
@@ -261,6 +294,7 @@ export default {
   watch: {
     fileRaw (next) {
       if (next) {
+        // console.log('C > PreviewJson > watch > fileRaw > next :', next)
         // update default depth from file options
         let defaultDepth = this.defaultDepth
         const depthFromOptions = this.fileOptions.defaultDepth
@@ -269,10 +303,6 @@ export default {
           if (depthFromOptions === 'all') { defaultDepth = undefined }
         }
         this.defaultDepth = defaultDepth
-
-        // const dataParsed = JSON.parse(this.fileRaw)
-        // this.data = JSON.parse(this.fileRaw)
-        // this.data = this.testJson
         if (!this.contentIsSet) { this.contentIsSet = true }
       }
     },
@@ -281,24 +311,21 @@ export default {
         // console.log('C > PreviewJson > watch > fileClientRaw > next :', next)
         const dataParsed = JSON.parse(next)
         // console.log('C > PreviewJson > watch > fileClientRaw > dataParsed :', dataParsed)
-        this.edited = this.objToNodes(dataParsed, 'root')
+        const edited = this.objToNodes(dataParsed, 'root')
+        this.edited = edited
       }
     },
     contentIsSet (next) {
       if (next) {
-        console.log('C > PreviewJson > watch > contentIsSet > next :', next)
+        // console.log('C > PreviewJson > watch > contentIsSet > next :', next)
         const dataParsed = JSON.parse(this.fileRaw)
-        this.data = this.objToNodes(dataParsed, 'root')
-        this.edited = this.objToNodes(dataParsed, 'root')
+        const data = this.objToNodes(dataParsed, 'root')
+        this.data = data
+        this.edited = data
       }
     },
     edited (next, prev) {
       if (next && !prev) {
-        this.bufferizeEdited()
-      }
-    },
-    dataEdited (next) {
-      if (next) {
         this.bufferizeEdited()
       }
     },
@@ -353,12 +380,22 @@ export default {
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
       console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
+      // set in local store
       this.changesNodes = copyChanges
+
+      // set in global store
+      // const changesPayload = {
+      //   fileId: this.fileId,
+      //   isFields: isHeader,
+      //   changes: copyChanges
+      // }
+      // this.updateFileChanges(changesPayload)
     },
     UpdateEditedJson (event) {
       console.log('\nC > PreviewJson > UpdateEditedJson > event : ', event)
       this.setChanges(event)
-      this.edited = this.setEditInNode(this.edited, event)
+      const edited = this.setEditInNode(this.edited, event)
+      this.edited = edited
     }
   }
 }

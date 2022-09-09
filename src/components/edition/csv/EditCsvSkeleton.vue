@@ -1,80 +1,50 @@
 <template>
-  <div class="EditCsvSkeleton gitribute-component container">
-    <div class="columns is-multiline is-centered">
-      <!-- SORTING -->
+  <div class="EditCsvSkeleton datami-component container">
+    <div :class="`columns is-mobile is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
+      <!-- RESULTS -->
       <div
-        :class="`column is-4 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
-        <ButtonSortBy
-          :headers="sortingHeaders"
-          :locale="locale"
-          @action="SendActionToParent"/>
+        class="column is-3 has-text-left"
+        style="z-index: 1;">
+        <p class="has-text-weight-bold is-size-6 ml-1 text-shadow">
+          <span>
+            {{ (dataEditedFiltered && dataEditedFiltered.length)|| 0 }}
+          </span>
+          <span class="is-size-7">
+            /
+            {{ itemsTotal || 0 }}
+          </span>
+          <span class="ml-2">
+            {{ t(`edit${gitObj.filetype === 'wiki' ? 'Wiki' : 'Csv'}.results`, locale) }}
+          </span>
+        </p>
       </div>
 
-      <!-- FILTERS -->
       <div
-        v-if="!hasCustomFilters"
-        :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
-        <ButtonFilterBy
-          :headers="columns"
-          :is-active-tags="isActiveTags"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </div>
-      <!-- <div
-        v-if="hasCustomFilters"
-        :class="`column is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
-        <CustomFilters
-          :file-id="fileId"
-          :active-tags="activeTags"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </div> -->
-      <!-- FILTERS -->
-      <div
-        v-for="filter in filtersDisplay"
-        :key="`filter-${fileId}-${filter.field}`"
-        :class="`column is-4 is-flex is-flex-direction-row is-align-content-end is-justify-content-center`">
-        <CustomFilter
-          v-if="hasCustomFilters && filtersDisplay"
-          :file-id="fileId"
-          :filter="filter"
-          :field-active-tags="fieldActiveTags(filter.field)"
-          :locale="locale"
-          @action="SendActionToParent"/>
+        class="column is-6 has-text-centered"
+        style="z-index: 1;">
+        <!-- FILTER TAGS -->
+        <div
+          v-if="filterTags && filterTags.length">
+          <FilterTags
+            :file-id="fileId"
+            :headers="headers"
+            :tags="filterTags"
+            :locale="locale"
+            @action="SendActionToParent"/>
+        </div>
       </div>
 
       <!-- EDIT BUTTONS -->
       <div
         v-if="currentEditViewMode === 'edit'"
-        :class="`column is-2 is-flex is-flex-direction-row is-align-items-end is-justify-content-center`">
+        :class="`column is-3 is-justify-content-end is-flex is-flex-direction-row is-align-content-end`">
         <ButtonAddRow
           :locale="locale"
           @action="SendActionToParent"/>
-        <!-- <ButtonImportData
-          :locale="locale"
-          @action="SendActionToParent"/> -->
         <ButtonDeleteRows
           :checked-rows="checkedRows"
           :locale="locale"
           @action="SendActionToParent"/>
-      </div>
-    </div>
-
-    <!-- DEBUG -->
-    <div
-      v-if="debug"
-      class="columns is-multiline">
-      <div class="column is-6">
-        columns :
-        <code>
-          <pre>{{ columns }}</pre>
-        </code>
-      </div>
-      <div class="column is-6">
-        checkedRows :
-        <code>
-          <pre>{{ checkedRows }}</pre>
-        </code>
       </div>
     </div>
   </div>
@@ -83,24 +53,15 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-// import ViewModeBtns from '@/components/previews/ViewModeBtns'
-
+import FilterTags from '@/components/filters/FilterTags'
 import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
-// import ButtonImportData from '@/components/edition/csv/ButtonImportData'
-import ButtonSortBy from '@/components/sorting/ButtonSortBy'
-import ButtonFilterBy from '@/components/filters/ButtonFilterBy'
-import CustomFilter from '@/components/filters/CustomFilter'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
   name: 'EditCsvSkeleton',
   components: {
-    // ViewModeBtns,
+    FilterTags,
     ButtonAddRow,
-    // ButtonImportData,
-    ButtonSortBy,
-    ButtonFilterBy,
-    CustomFilter,
     ButtonDeleteRows
   },
   mixins: [
@@ -120,7 +81,19 @@ export default {
       default: null,
       type: Array
     },
-    activeTags: {
+    dataEditedFiltered: {
+      default: null,
+      type: Array
+    },
+    itemsTotal: {
+      default: null,
+      type: Number
+    },
+    headers: {
+      default: null,
+      type: Array
+    },
+    filterTags: {
       default: null,
       type: Array
     },
@@ -133,36 +106,7 @@ export default {
       type: Boolean
     }
   },
-  computed: {
-    sortingHeaders () {
-      let sortingHeaders = this.columns
-      if (this.hasCustomSorting) {
-        sortingHeaders = this.fileSorting.fields
-      }
-      return sortingHeaders
-    },
-    filtersDisplay () {
-      let filters
-      if (this.fileFilters && this.fileFilters.length) {
-        filters = this.fileFilters.map(filter => {
-          return {
-            field: filter.field,
-            label: filter.label,
-            choices: Array.from(filter.choices).sort((a, b) => a.localeCompare(b))
-          }
-        })
-      }
-      return filters
-    },
-    isActiveTags () {
-      return this.activeTags && !!this.activeTags.length
-    }
-  },
   methods: {
-    fieldActiveTags (field) {
-      // console.log('\nC > CustomFilters > fieldActiveTags > field : ', field)
-      return this.activeTags.filter(t => t.field === field)
-    },
     SendActionToParent (event) {
       // console.log('\nC > EditCsvSkeleton > SendActionToParent > event.action : ', event.action)
       this.$emit('action', event)
@@ -170,3 +114,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.text-shadow {
+  text-shadow: 0 0 10px white, 0 0 10px white;
+}
+</style>

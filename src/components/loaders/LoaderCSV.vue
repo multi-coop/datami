@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderCSV gitribute-component container">
+  <div class="LoaderCSV datami-component container">
     <div class="columns is-mobile is-multiline mb-5 pb-4">
       <!-- FAKE TABLE -->
       <div class="column is-12 mt-2">
@@ -40,7 +40,7 @@ export default {
   name: 'LoaderCSV',
   data () {
     return {
-      columns: 8,
+      columns: 4,
       rows: 5,
       cellWidth: '120px'
     }

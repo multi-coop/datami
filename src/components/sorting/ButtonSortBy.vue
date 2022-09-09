@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonSortBy gitribute-component px-2">
+  <div class="ButtonSortBy datami-component px-2">
     <b-field
       grouped
       custom-class="gt-label-sort mr-2 is-align-content-center">

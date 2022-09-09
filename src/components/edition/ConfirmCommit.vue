@@ -1,5 +1,5 @@
 <template>
-  <div class="ConfirmCommit gitribute-component container">
+  <div class="ConfirmCommit datami-component container">
     <div class="columns is-vcentered is-centered">
       <div class="column is-9">
         <div class="card">
@@ -224,7 +224,7 @@ export default {
   computed: {
     ...mapGetters({
       getCommitData: 'git-data/getCommitData',
-      getFileToken: 'git-data/getFileToken',
+      // getFileToken: 'git-data/getFileToken',
       getFileReqInfosObj: 'getFileReqInfosObj'
     }),
     commitData () {
@@ -283,6 +283,8 @@ export default {
     },
     cancelCommit () {
       this.updateSaving({ fileId: this.fileId, isSaving: false })
+      // track with matomo
+      this.trackEvent('cancelCommit')
     },
     async confirmCommit () {
       console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
@@ -300,8 +302,10 @@ export default {
       console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
 
       // get token
-      const token = this.getFileToken(this.fileId)
+      const token = this.fileToken // this.getFileToken(this.fileId)
       commitData.token = token
+      commitData.userGit = this.userGit
+      commitData.userBranches = this.userBranches
       console.log('C > ConfirmCommit > confirmCommit > token :', token)
 
       // append commit message and infos
@@ -320,14 +324,33 @@ export default {
       const respContribution = await sendContribution(commitData)
       console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
       const respContributionErrors = respContribution.errors
+      // const respContributionData = respContribution.data
+      const respContributionResume = respContribution.resume
 
       // clean store
-      this.updateCommitting({ fileId: this.fileId, isCommitting: false })
+      this.updateCommitting({ fileId: this.fileId, isCommitting: false, data: respContributionResume })
 
       // update errors if any
       if (respContributionErrors && respContributionErrors.length) {
         const errors = [...respContributionErrors]
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
+      } else if (!respContributionResume.branchExists) {
+        // update user's branches for curent file
+        const commitBranch = {
+          branch: respContributionResume.branch,
+          userBranch: true,
+          activeBranch: true,
+          hasMergeRequest: !!respContributionResume.mergeRequestUrl,
+          branchUrl: respContributionResume.branchUrl,
+          mergeRequestUrl: respContributionResume.mergeRequestUrl
+        }
+        this.updateUserBranches({ fileId: this.fileId, branches: commitBranch })
+
+        // set isSaving as false now all is finished
+        this.updateSaving({ fileId: this.fileId, isSaving: false })
+
+        // track with matomo
+        this.trackEvent('confirmCommit')
       }
     }
   }

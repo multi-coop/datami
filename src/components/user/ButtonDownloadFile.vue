@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonDownloadFile gitribute-component">
+  <div class="ButtonDownloadFile datami-component">
     <b-tooltip
       :label="t('actions.downloadFile', locale)"
       type="is-dark"
@@ -55,6 +55,9 @@ export default {
         // this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

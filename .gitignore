@@ -24,3 +24,5 @@ pnpm-debug.log*
 
 # secret files
 *.secret
+*.env
+!example.env

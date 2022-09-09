@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { editModes, viewModes } from '@/utils/fileTypesUtils.js'
+import { editModes, viewModes, isTableExt } from '@/utils/fileTypesUtils.js'
 
 export const data = {
   namespaced: true,
@@ -21,16 +21,107 @@ export const data = {
     // VIEW MODES
     cards: [],
     table: [],
+    dataviz: [],
+    map: [],
+
+    // SORTING
+    sorting: [],
+
+    // FOREIGN KEYS
+    shareableFiles: [],
+    sharedData: [],
+    loadingShared: { loadState: 'waiting' }, // 'waiting' | 'loading' | 'finished'
+    loadingExtRessources: { loadState: 'waiting' }, // 'waiting' | 'loading' | 'finished'
+    loadedSharedData: [],
 
     // DATA STORED
     buffer: [],
-    errors: []
+    notifications: [],
+    errors: [],
 
+    // DIFF DATA
+    changesFields: [],
+    changesData: []
   },
   getters: {
-    getLoadedData: (state) => (fileId) => {
-      return state.loadedData[fileId]
+    // shareableFiles
+    getShareableFiles: (state) => {
+      return state.shareableFiles
     },
+    getSetSharedFiles: (state, getters) => {
+      const shareableSetFiles = state.shareableFiles.filter(sh => sh.isSet)
+      return shareableSetFiles
+    },
+    areAllShareableSet: (state) => {
+      return state.shareableFiles.every(b => b.isSet)
+    },
+    isInShareableAndSet: (state) => (ressource) => {
+      return state.shareableFiles.filter(file => file.isSet && file.gitfile === ressource)
+    },
+    isInShareableAndLoaded: (state, getters) => (ressource) => {
+      const shareableSet = getters.isInShareableAndSet(ressource)
+      return shareableSet.filter(file => file.isLoaded)
+    },
+
+    // sharedData and ressources
+    getSharedData: (state) => {
+      return state.sharedData
+    },
+    getSharedDatasetByRessource: (state) => (ressource) => {
+      return state.sharedData.filter(item => item.ressource === ressource)
+    },
+    getSharedDatasetByGitfile: (state) => (fromGitfile) => {
+      return state.sharedData.filter(item => item.fromGitfile === fromGitfile)
+    },
+    getFileDataFromStore: (state) => (fileId, key) => {
+      return state[key].find(item => item.uuid === fileId || item.fileUrl === fileId)
+    },
+    readyToCopyRessources: (state, getters) => {
+      const setSharedFiles = getters.getSetSharedFiles.filter(sh => !sh.isLoaded)
+      return setSharedFiles
+    },
+    readyToLoadExtRessources: (state) => {
+      const shareableFiles = state.shareableFiles.filter(i => i.isSet).map(i => i.gitfile)
+      const extRessources = state.sharedData.filter(i => !i.isLoaded && !shareableFiles.includes(i.ressource))
+      return extRessources
+    },
+
+    // loadedSharedData
+    getLoadingStateSharedAndExtRessource: (state) => (key) => {
+      if (key === 'loadingShared') return state.loadingShared
+      if (key === 'loadingExtRessources') return state.loadingExtRessources
+    },
+    getLoadedSharedData: (state) => (ressource) => {
+      return state.loadedSharedData.find(d => d.ressource === ressource)
+    },
+    getLoadedSharedDataset: (state, getters) => (ressource) => {
+      const loadedData = getters.getLoadedSharedData(ressource)
+      return loadedData && loadedData.data
+    },
+    getLoadedSharedDataField: (state, getters) => (ressource, fields) => {
+      const loadedSharedData = getters.getLoadedSharedDataset(ressource)
+      const loadedField = loadedSharedData && loadedSharedData.headers.find(f => f.name === fields)
+      return loadedField
+    },
+    getLoadedSharedDataItem: (state, getters) => (ressource, fields, value) => {
+      // console.log('\nS-data > G > getLoadedSharedDataItem > ressource : ', ressource)
+      // console.log('S-data > G > getLoadedSharedDataItem > fields : ', fields)
+      // console.log('S-data > G > getLoadedSharedDataItem > value : ', value)
+      const loadedField = getters.getLoadedSharedDataField(ressource, fields)
+      // console.log('S-data > G > getLoadedSharedDataItem > loadedField : ', loadedField)
+      const loadedSharedData = getters.getLoadedSharedDataset(ressource)
+      // console.log('S-data > G > getLoadedSharedDataItem > loadedSharedData : ', loadedSharedData)
+      const loadedObj = loadedSharedData && loadedSharedData.data.find(d => {
+        return d[loadedField.field].toString() === value
+      })
+      // console.log('S-data > G > getLoadedSharedDataItem > loadedObj : ', loadedObj)
+      return {
+        headers: loadedSharedData && loadedSharedData.headers,
+        item: loadedObj
+      }
+    },
+
+    // flags
     fileNeedsReload: (state) => (fileId) => {
       return state.reloading.includes(fileId)
     },
@@ -40,6 +131,8 @@ export const data = {
     fileNeedsDownloading: (state) => (fileId) => {
       return state.downloading.includes(fileId)
     },
+
+    // utils
     getFileToken: (state) => (fileId) => {
       return state.tokens[fileId]
     },
@@ -51,6 +144,8 @@ export const data = {
     getViewMode: (state) => (fileId) => {
       if (state.cards.includes(fileId)) return 'cards'
       if (state.table.includes(fileId)) return 'table'
+      if (state.dataviz.includes(fileId)) return 'dataviz'
+      if (state.map.includes(fileId)) return 'map'
     },
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)
@@ -59,13 +154,67 @@ export const data = {
       // console.log('\nS-data > G > getCommitData > state.buffer : ', state.buffer)
       return state.buffer.find(commitData => commitData.uuid === fileId)
     },
+    getReqNotifications: (state) => (fileId) => {
+      // console.log('\nS-data > G > getReqNotifications > state.notifications : ', state.notifications)
+      const fielNotifs = state.notifications.find(notif => notif.uuid === fileId)
+      return fielNotifs && fielNotifs.data
+    },
     getReqErrors: (state) => (fileId) => {
       // console.log('\nS-data > G > getErrors > state.errors : ', state.errors)
       const fileErrors = state.errors.find(err => err.uuid === fileId)
       return fileErrors && fileErrors.errors
+    },
+    getChangesFields: (state) => (fileId) => {
+      const fileChanges = state.changesFields.find(changes => changes.fileId === fileId)
+      return (fileChanges && fileChanges.changes) || []
+    },
+    getChangesData: (state) => (fileId) => {
+      const fileChanges = state.changesData.find(changes => changes.fileId === fileId)
+      return (fileChanges && fileChanges.changes) || []
     }
   },
   mutations: {
+    setShareableFile (state, gitfileInfos) {
+      // console.log('S-data > M > setShareableFile > gitfileInfos : ', gitfileInfos)
+      const index = state.shareableFiles.findIndex(fileInfos => fileInfos.gitfile === gitfileInfos.gitfile)
+      if (index !== -1) {
+        Vue.set(state.shareableFiles, index, gitfileInfos)
+      } else {
+        state.shareableFiles.push(gitfileInfos)
+      }
+    },
+    setSharedData (state, sharedDataset) {
+      // console.log('S-data > M > setSharedData > sharedDataset : ', sharedDataset)
+      const index = state.sharedData.findIndex(data => {
+        const sameTarget = data.ressource === sharedDataset.ressource
+        const sameGitfile = data.fromGitfile === sharedDataset.fromGitfile
+        return sameTarget && sameGitfile
+      })
+      if (index !== -1) {
+        Vue.set(state.sharedData, index, sharedDataset)
+      } else {
+        state.sharedData.push(sharedDataset)
+      }
+    },
+    setLoadingRessources (state, { key, loadInfos }) {
+      switch (key) {
+        case 'loadingShared':
+          state.loadingShared = loadInfos
+          break
+        case 'loadingExtRessources':
+          state.loadingExtRessources = loadInfos
+          break
+      }
+    },
+    setLoadedSharedData (state, payload) {
+      const index = state.loadedSharedData.findIndex(data => data.ressource === payload.ressource)
+      if (index !== -1) {
+        Vue.set(state.loadedSharedData, index, payload)
+      } else {
+        state.loadedSharedData.push(payload)
+      }
+    },
+
     setState (state, { key, fileId, data }) {
       // console.log('\nS-data > M > setState > key : ', key)
       // console.log('S-data > M > setState > fileId : ', fileId)
@@ -92,6 +241,20 @@ export const data = {
       state.buffer = state.buffer.filter(data => data.uuid !== commitData.uuid)
       // console.log('S-data > M > removeFromBuffer > state.buffer : ', state.buffer)
     },
+    addToNotifications (state, reqNotifs) {
+      const index = state.notifications.findIndex(notifs => notifs.uuid === reqNotifs.uuid)
+      if (index !== -1) {
+        Vue.set(state.notifications, index, reqNotifs)
+      } else {
+        state.notifications.push(reqNotifs)
+      }
+      // console.log('S-data > M > addToNotifications > state.notifications : ', state.notifications)
+    },
+    removeFromNotifications (state, reqNotifs) {
+      // console.log('S-data > M > removeFromNotifications > state.notifications : ', state.notifications)
+      state.errors = state.notifications.filter(notifs => notifs.uuid !== reqNotifs.uuid)
+      // console.log('S-data > M > removeFromNotifications > state.notifications : ', state.notifications)
+    },
     addToErrors (state, reqErrors) {
       const index = state.errors.findIndex(err => err.uuid === reqErrors.uuid)
       if (index !== -1) {
@@ -105,12 +268,61 @@ export const data = {
       // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
       state.errors = state.errors.filter(err => err.uuid !== reqErrors.uuid)
       // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
+    },
+    addToChanges (state, fileChanges) {
+      const storeChanges = fileChanges.isFields ? state.changesFields : state.changesData
+      const index = storeChanges.findIndex(item => item.uuid === fileChanges.uuid)
+      if (index !== -1) {
+        Vue.set(storeChanges, index, fileChanges)
+      } else {
+        storeChanges.push(fileChanges)
+      }
+      // console.log('S-data > M > addToChanges > storeChanges : ', storeChanges)
     }
   },
   actions: {
+    // shareableFiles
+    updateShareableFiles ({ commit }, gitfileInfos) {
+      const isTableFamily = isTableExt(gitfileInfos.gitfile) || gitfileInfos.isLoaded
+      gitfileInfos.isLoaded = !!gitfileInfos.isLoaded
+      isTableFamily && commit('setShareableFile', gitfileInfos)
+    },
+    // sharedData
+    updateSharedData ({ commit }, sharedDataset) {
+      commit('setSharedData', sharedDataset)
+    },
+    // loadingRessources
+    updateLoadingRessources ({ commit, state, getters }, load) {
+      const loadState = load.loadState
+      const loadKey = load.key
+      const from = load.from
+      const payload = {
+        key: loadKey,
+        loadInfos: {
+          loadState: loadState
+        }
+      }
+      const currentLoadState = getters.getLoadingStateSharedAndExtRessource(loadKey)
+      let canContinue = !currentLoadState.initiator
+      if (loadState === 'loading') {
+        canContinue = canContinue && currentLoadState.loadState === 'waiting'
+        payload.loadInfos.initiator = from
+      }
+      // canContinue && console.log('\nS-data > A > updateLoadingRessources > loadState : ', loadState)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > loadState : ', loadState)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > loadKey : ', loadKey)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > from : ', from)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > currentLoadState : ', currentLoadState)
+      canContinue && commit('setLoadingRessources', payload)
+    },
+
     updateLoadedData ({ commit }, { fileId, data }) {
       commit('setState', { key: 'loadedData', fileId: fileId, data: data })
     },
+    updateLoadedSharedData ({ commit }, payload) {
+      commit('setLoadedSharedData', payload)
+    },
+
     updateReloading ({ commit }, { fileId, isLoading }) {
       // console.log('\nS-data > A > updateReloading > fileId : ', fileId)
       if (isLoading) {
@@ -134,11 +346,39 @@ export const data = {
         commit('removeFromState', { key: 'downloading', fileId: fileId })
       }
     },
-    updateCommitting ({ commit }, { fileId, isCommitting }) {
+    updateCommitting ({ commit }, { fileId, isCommitting, data }) {
+      // console.log('\nS-data > A > updateCommitting > fileId : ', fileId)
+      // console.log('S-data > A > updateCommitting > isCommitting : ', isCommitting)
+      // console.log('S-data > A > updateCommitting > data : ', data)
+      const reqNotifsData = { uuid: fileId }
+
       if (isCommitting) {
         commit('addToState', { key: 'committing', fileId: fileId })
+        commit('removeFromNotifications', reqNotifsData)
       } else {
+        // spread data into notifs
+        // const notifBranch = {
+        //   action: 'addBranch',
+        //   data: data.respPostBranch
+        // }
+        // const notifCommit = {
+        //   action: 'addCommit',
+        //   data: data.respPutCommit
+        // }
+        // const notifMergeRequest = {
+        //   action: 'addMergeRequest',
+        //   data: data.respPostMergeRequest
+        // }
+        // const notifs = [
+        //   notifBranch,
+        //   notifCommit,
+        //   notifMergeRequest
+        // ]
+        reqNotifsData.data = [data]
+
+        // console.log('S-data > A > updateCommitting > reqNotifsData : ', reqNotifsData)
         commit('removeFromState', { key: 'committing', fileId: fileId })
+        commit('addToNotifications', reqNotifsData)
       }
     },
     updateToken ({ commit }, { fileId, token }) {
@@ -156,6 +396,7 @@ export const data = {
       // console.log('S-data > M > changeViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = viewModes.filter(v => v !== mode)
+      // console.log('S-data > M > changeViewMode > switchOffModes : ', switchOffModes)
       switchOffModes.forEach(v => {
         commit('removeFromState', { key: v, fileId: fileId })
       })
@@ -189,6 +430,10 @@ export const data = {
       } else {
         commit('removeFromErrors', reqErrorData)
       }
+    },
+    updateFileChanges ({ commit }, fileChanges) {
+      // console.log('\nS-data > A > updateReqErrors > fileChanges : ', fileChanges)
+      commit('addToChanges', fileChanges)
     }
   }
 }

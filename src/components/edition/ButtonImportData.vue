@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonImportData gitribute-component">
+  <div class="ButtonImportData datami-component">
     <b-tooltip
       :label="t(`edit.uploadData`, locale)"
       type="is-dark"
@@ -40,6 +40,9 @@ export default {
         action: 'toggleUploadFileDialog'
       }
       this.$emit('action', payload)
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

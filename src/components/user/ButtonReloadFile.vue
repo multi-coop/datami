@@ -1,5 +1,5 @@
 <template>
-  <div class="ButtonReloadFile gitribute-component">
+  <div class="ButtonReloadFile datami-component">
     <b-tooltip
       :label="t('actions.reloadFile', locale)"
       type="is-dark"
@@ -50,6 +50,9 @@ export default {
       this.loading = true
       // console.log('C > ButtonReloadFile > ReloadFile > this.gitObj : ', this.gitObj)
       this.updateReloading({ fileId: this.fileId, isLoading: true })
+
+      // track with matomo
+      this.trackEvent('click')
     }
   }
 }

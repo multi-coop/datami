@@ -1,5 +1,5 @@
 <template>
-  <div class="DialogUploadFile gitribute-component container mb-4">
+  <div class="DialogUploadFile datami-component container mb-4">
     <div class="columns is-vcentered is-centered">
       <div class="column is-9">
         <div class="card">
@@ -209,6 +209,9 @@ export default {
     },
     closeDialog () {
       this.handleInput(false)
+
+      // track with matomo
+      this.trackEvent('closeDialog')
     },
     deleteFile (index) {
       this.file = {}
@@ -224,6 +227,9 @@ export default {
       this.closeDialog()
       this.file = undefined
       this.uploaded = undefined
+
+      // track with matomo
+      this.trackEvent('sendUploadToParent')
     }
   }
 }

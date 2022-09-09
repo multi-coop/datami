@@ -1,5 +1,5 @@
 <template>
-  <span class="EditJsonCell gitribute-component is-flex is-flex-direction-row is-align-items-center">
+  <span class="EditJsonCell datami-component is-flex is-flex-direction-row is-align-items-center">
     <!-- <code>{{ inputData }}</code> -->
 
     <!-- EDIT LABEL -->
@@ -174,6 +174,9 @@ export default {
       }
       // console.log('C > EditJsonCell > emitChange > payload : ', payload)
       this.$emit('updateJson', payload)
+
+      // track with matomo
+      this.trackEvent('updateJson')
     }
   }
 }

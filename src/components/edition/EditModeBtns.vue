@@ -1,5 +1,5 @@
 <template>
-  <div class="EditModeBtns gitribute-component content is-flex is-justify-content-center">
+  <div class="EditModeBtns datami-component content is-flex is-justify-content-center">
     <!-- DEBUG -->
     <div
       v-if="debug"
@@ -30,7 +30,7 @@
         <p
           v-for="btn in buttonsEdit"
           :key="`btn-edit-${btn.code}`"
-          class="control">
+          class="control edit-mode-button mb-0">
           <b-tooltip
             :label="t(btn.textCode, locale)"
             type="is-dark"
@@ -79,6 +79,7 @@ export default {
     }
   },
   beforeMount () {
+    // console.log('\nC > EditModeBtns > beforeMount ... : ')
     this.changeEdit('preview')
     // this.changeView('table')
   },
@@ -89,6 +90,9 @@ export default {
     changeEdit (code) {
       // console.log('\nC > EditModeBtns > changeEditMode > code : ', code)
       this.changeEditViewMode({ fileId: this.fileId, mode: code })
+
+      // track with matomo
+      this.trackEvent(code)
     }
   }
 }
@@ -96,8 +100,18 @@ export default {
 
 <style>
 
+.edit-mode-button {
+  z-index: 3;
+}
+
 .EditModeBtns > .field > .field-body > .field.has-addons {
   justify-content: center !important;
+}
+
+@media(max-width: 768px){
+  .EditModeBtns{
+    justify-content: end !important;
+  }
 }
 
 </style>

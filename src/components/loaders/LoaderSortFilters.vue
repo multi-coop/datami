@@ -1,18 +1,18 @@
 <template>
-  <div class="LoaderSortFilters gitribute-component container">
+  <div class="LoaderSortFilters datami-component container">
     <div class="columns is-mobile is-multiline mb-3 mt-0">
       <!-- FAKE SORTINGS -->
-      <div class="column is-4 is-offset-2 pt-2">
+      <div class="column is-3 pt-2">
         <b-skeleton
-          position="is-centered"
+          position="is-left"
           size="is-large"
           animated
           width="75%"/>
       </div>
       <!-- FAKE FILTERS -->
-      <div class="column is-4 pt-2">
+      <div class="column is-3 is-offset-6 pt-2">
         <b-skeleton
-          position="is-centered"
+          position="is-right"
           size="is-large"
           animated
           width="75%"/>
