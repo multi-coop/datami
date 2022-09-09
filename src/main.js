@@ -37,3 +37,11 @@ Vue.use(vueCustomElement, {
 Vue.customElement('datami-file', DatamiFile)
 Vue.customElement('datami-explowiki', DatamiExploWiki)
 Vue.customElement('datami-multi-files', DatamiMultiFiles)
+
+Vue.customElement('gitribute-file', DatamiFile)
+Vue.customElement('gitribute-explowiki', DatamiExploWiki)
+Vue.customElement('gitribute-multi-files', DatamiMultiFiles)
+
+Vue.customElement('multi-gitribute-file', DatamiFile)
+Vue.customElement('multi-gitribute-explowiki', DatamiExploWiki)
+Vue.customElement('multi-gitribute-multi-files', DatamiMultiFiles)

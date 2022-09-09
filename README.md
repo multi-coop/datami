@@ -40,21 +40,19 @@ This project aims to create a serie of widgets to interact with ressources store
 
 - Official website : [datami.multi.coop](https://datami.multi.coop/)
 
-### Prod deploy &nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/1cd66edf-3b08-43db-bd21-6490377bb24a/deploy-status)](https://app.netlify.com/sites/datami/deploys)
+### Prod deploy &nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/1cd66edf-3b08-43db-bd21-6490377bb24a/deploy-status)](https://app.netlify.com/sites/datami-widget/deploys)
 
 - Website (widgets demo) : [datami-widget.multi.coop](https://datami-widget.multi.coop/)
 
 ### Preprod deploy
 
-- Preprod : [Datami (preprod)](https://preprod--multi-datami.netlify.app/)
+- Preprod : [Datami (preprod)](https://preprod--datami.netlify.app/)
 
 ---
 
 ## Documentation [⇡](#summary)
 
-> WORK IN PROGRESS
-
-Check out our website for a full documentation, technical and more !
+Check out our brand new documentation website for technical support :
 
 - Documentation website : [datami-docs.multi.coop](https://datami-docs.multi.coop)
 
