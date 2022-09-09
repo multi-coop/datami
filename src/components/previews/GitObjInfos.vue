@@ -234,7 +234,7 @@ export default {
       return mapSettings && mapSettings.maps.map(m => m.file)
     },
     docsUrl () {
-      const documentationUrl = process.env.VUE_APP_GITRIBUTE_DOCUMENTATION || 'datami-docs.multi.coop'
+      const documentationUrl = process.env.VUE_APP_DATAMI_DOCUMENTATION || 'datami-docs.multi.coop'
       return documentationUrl
     }
   },

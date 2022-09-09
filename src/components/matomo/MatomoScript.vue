@@ -90,10 +90,10 @@ export default {
 
     const domain = document.domain === 'localhost' ? 'localhost (dev)' : document.domain
 
-    const matomoServer = process.env.VUE_APP_GITRIBUTE_MATOMO
+    const matomoServer = process.env.VUE_APP_DATAMI_MATOMO
     // console.log('C > MatomoScript > mounted > matomoServer :', matomoServer)
 
-    const matomoSiteId = process.env.VUE_APP_GITRIBUTE_MATOMO_SITE_ID
+    const matomoSiteId = process.env.VUE_APP_DATAMI_MATOMO_SITE_ID
     // console.log('C > MatomoScript > mounted > matomoSiteId :', matomoSiteId)
 
     this.matomoServer = matomoServer

@@ -234,7 +234,7 @@ export const mixinGlobal = {
     findFromPath,
     setWidgetCopy () {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
-      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN || 'datami.multi.coop'
+      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
       // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
 
       /* Stuff we need to add to <head>
@@ -295,8 +295,8 @@ export const mixinGlobal = {
       })
     },
     trackEvent (value, action = undefined, category = undefined) {
-      const matomoServer = process.env.VUE_APP_GITRIBUTE_MATOMO
-      const matomoSiteId = process.env.VUE_APP_GITRIBUTE_MATOMO_SITE_ID
+      const matomoServer = process.env.VUE_APP_DATAMI_MATOMO
+      const matomoSiteId = process.env.VUE_APP_DATAMI_MATOMO_SITE_ID
 
       if (matomoServer && matomoSiteId) {
         const domain = document.domain

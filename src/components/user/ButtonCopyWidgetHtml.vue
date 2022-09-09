@@ -40,7 +40,7 @@ export default {
       const prettyChar = 2
       const datamiLink = '<a class="has-text-weight-bold has-text-dark is-underlined" href="https://giltlab.com/multi-coop/datami" target="_blank">Datami</a>'
       let widgetName
-      const widgetProvider = process.env.VUE_APP_GITRIBUTE_DEPLOY_DOMAIN ?? 'datami.multi.coop'
+      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN ?? 'datami-widget.multi.coop'
       const fileOpts = { ...this.fileOptions }
       delete fileOpts.uuid
       let widgetTitle
