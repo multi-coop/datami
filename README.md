@@ -46,7 +46,7 @@ This project aims to create a serie of widgets to interact with ressources store
 
 ### Preprod deploy
 
-- Preprod : [Datami (preprod)](https://preprod--datami.netlify.app/)
+- Preprod : [Datami (preprod)](https://preprod--datami-widget.netlify.app/)
 
 ---
 

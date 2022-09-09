@@ -398,6 +398,7 @@ export async function extractWikiContent (wikiInfosObject, responseData, item, e
     pageId: item.pageid,
     pageUrl: `${wikiInfosObject.pageUrlRoot}${item.title.replace(' ', '_')}`,
     title: item.title,
+    // imageUrlDeprecated: imageUrl,
     imageUrl: imageUrl,
     // responseData: responseData,
     item: item,
