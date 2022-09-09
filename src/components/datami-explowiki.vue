@@ -44,7 +44,7 @@
 
     <!-- DEBUG -->
     <div
-      v-if="false"
+      v-if="debug"
       class=" container columns is-multiline">
       <div class="column is-full">
         <p>
@@ -419,7 +419,7 @@ export default {
           const pageData = await this.getMediaWikiPage(this.wikiObj, pageUrl, this.uuidv4(), this.mediawikiOptions.wikisettings)
           // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
-          console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           this.wikiPages.push(pageData.temp)
           this.wikiItems.push(pageData.item)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }

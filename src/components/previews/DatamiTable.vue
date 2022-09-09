@@ -281,7 +281,7 @@
         </div>
 
         <!-- DATAVIZ & MAP DEBUGGING-->
-        <p v-if="false">
+        <p v-if="debug">
           hasDatavizView: <code>{{ hasDatavizView }}</code><br>
           currentViewMode: <code>{{ currentViewMode }}</code>
         </p>
