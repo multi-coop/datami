@@ -121,6 +121,7 @@ export default {
           }
         })
       }
+      // console.log('C > SortAndFiltersSkeleton > filtersDisplay > filters : ', filters)
       return filters
     },
     isActiveTags () {

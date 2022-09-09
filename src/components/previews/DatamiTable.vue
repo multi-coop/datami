@@ -925,6 +925,7 @@ export default {
     filterData (dataset) {
       // console.log('\nC > GitributeTable > filterData > ...')
       let data = [...dataset]
+      // console.log('C > GitributeTable > filterData > data : ', data)
       // console.log('\nC > GitributeTable > filterData > this.columnsForView : ', this.columnsForView)
       const colFields = this.columnsForView.map(col => col.field)
       // console.log('C > GitributeTable > filterData > colFields : ', colFields)
@@ -968,11 +969,12 @@ export default {
         // FOR SEARCHBAR FILTER
         for (const field in colFields) {
           // console.log('C > GitributeTable > filterData > field : ', field)
-          const rowVal = row[field] && row[field].toString().toLowerCase()
+          const cellValSearch = row[field] || ''
+          const cellValLowSearch = cellValSearch.toString().toLowerCase()
           // console.log('C > GitributeTable > filterData > rowVal : ', rowVal)
           // search text
           if (searchStr) {
-            const cellHasSearch = rowVal && rowVal.includes(searchStr.toLowerCase())
+            const cellHasSearch = cellValLowSearch.includes(searchStr.toLowerCase())
             hasSearchVal.push(cellHasSearch)
           }
         }
@@ -984,8 +986,8 @@ export default {
         // BEGINNING NEW FILTERING PROCESS
         regroupedFilterTags.forEach(filterField => {
           // console.log('C > GitributeTable > dataEditedFiltered > filterField : ', filterField)
-          const cellVal = row[filterField.field]
-          const cellValLow = cellVal && cellVal.toString().toLowerCase()
+          const cellVal = row[filterField.field] || ''
+          const cellValLow = cellVal.toString().toLowerCase()
           // console.log('\nC > GitributeTable > dataEditedFiltered > filterField.field : ', filterField.field)
           // console.log('C > GitributeTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
           // console.log('C > GitributeTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
