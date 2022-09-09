@@ -21,7 +21,6 @@
         <!-- FILE TITLE -->
         <div class="filetitle-and-viewmodes column is-12-mobile is-7-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
           <ViewModeBtns
-            v-if="fileOptions"
             :file-id="fileId"
             :locale="locale"/>
           <FileTitle
@@ -162,13 +161,13 @@
       class="container datami-container"
       style="z-index: 1;">
       <PreviewCsv
+        :only-preview="true"
         :file-id="fileId"
         :file-is-loading="fileIsLoading"
         :file-raw="fileRaw"
         :wiki-raw="wikiRaw"
         :items-total="wikiItems && wikiItems.length"
         :locale="locale"
-        :only-preview="true"
         :debug="debug"/>
     </div>
 
@@ -284,6 +283,7 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
+      fileClientRaw: undefined,
       showFileInfos: false,
 
       // tests for mediawiki fetching
@@ -419,6 +419,7 @@ export default {
           const pageData = await this.getMediaWikiPage(this.wikiObj, pageUrl, this.uuidv4(), this.mediawikiOptions.wikisettings)
           // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           pageData.temp = this.restructurePageData(pageData, this.wikiFields)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
           this.wikiPages.push(pageData.temp)
           this.wikiItems.push(pageData.item)
           if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }

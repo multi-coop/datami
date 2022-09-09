@@ -108,11 +108,11 @@ export default {
       default: false,
       type: Boolean
     }
-  },
-  beforeMount () {
-    console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemId :', this.itemId)
-    console.log('C > DatamiCardBlockImage > beforeMount > this.field :', this.field)
-    console.log('C > DatamiCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
   }
+  // beforeMount () {
+  //   console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemId :', this.itemId)
+  //   console.log('C > DatamiCardBlockImage > beforeMount > this.field :', this.field)
+  //   console.log('C > DatamiCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
+  // }
 }
 </script>

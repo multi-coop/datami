@@ -255,7 +255,7 @@
             <div
               v-if="hasAnyContentByPosition(['image', 'gallery'])"
               class="column is-12">
-              <div v-if="hasContentByPosition('image')">
+              <div v-if="showDetail && hasContentByPosition('image')">
                 <DatamiCardBlockImage
                   v-for="(fieldObj, i) in getFieldsByPosition('image')"
                   :key="`image-${i}-${fieldObj.field}`"
