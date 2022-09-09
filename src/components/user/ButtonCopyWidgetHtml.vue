@@ -50,9 +50,9 @@ export default {
       const quoteReplacer = '&lsquo;'
 
       let htmlStr = `\n
-<!-- GITRIBUTE - contribute with GIT ...but without minding it-->\r
+<!-- DATAMI - contribute with GIT ...but without minding it-->\r
 <!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi : https://multi.coop -->\n
-<!-- GITRIBUTE WIDGET'S HTML BLOCK-->\r
+<!-- DATAMI WIDGET'S HTML BLOCK-->\r
 `
 
       if (!this.fromMultiFiles) {
@@ -60,17 +60,55 @@ export default {
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > this.gitObj : ', this.gitObj)
         widgetTitle = this.gitObj.title.replaceAll("'", quoteReplacer)
         const isWiki = this.gitObj.provider === 'mediawiki'
-        widgetName = `multi-datami-${isWiki ? 'explowiki' : 'file'}`
+        widgetName = `datami-${isWiki ? 'explowiki' : 'file'}`
         const fileKey = isWiki ? 'wikilist' : 'gitfile'
         const wikiPagesStr = isWiki && this.gitObj.wikipages ? `\r  wikipages='${JSON.stringify(this.gitObj.wikipages, null, prettyChar)}'\r` : ''
 
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > fileOpts : ', fileOpts)
+
+        // Copy schema settings
         const fileSchema = fileOpts.schema
         fileOpts.schema = fileSchema && fileSchema.file ? { file: fileSchema.file } : fileSchema
 
+        // Copy custom props settings
         const fileCustomProps = fileOpts['fields-custom-properties']
         fileOpts['fields-custom-properties'] = fileCustomProps && fileCustomProps.file ? { file: fileCustomProps.file } : fileCustomProps
         delete fileOpts.customProps
+
+        // Copy cards settings
+        const fileCardsSettings = fileOpts.cardssettings
+        // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > fileCardsSettings : ', fileCardsSettings)
+        fileOpts.cardssettings = fileCardsSettings && fileCardsSettings.file ? { file: fileCardsSettings.file } : fileCardsSettings
+
+        // Copy dataviz settings
+        const fileDatavizSettings = fileOpts.datavizview
+        // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > fileDatavizSettings : ', fileDatavizSettings)
+        fileOpts.datavizview = fileDatavizSettings && fileDatavizSettings.file ? { file: fileDatavizSettings.file } : fileDatavizSettings
+        if (fileDatavizSettings && fileDatavizSettings.file) {
+          fileOpts.datavizview = {
+            activate: fileDatavizSettings.activate,
+            default: fileDatavizSettings.default,
+            file: fileDatavizSettings.file
+          }
+        } else {
+          fileOpts.datavizview = fileDatavizSettings
+        }
+
+        // Copy maps settings
+        const fileMapSettings = fileOpts.mapview
+        // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > fileMapSettings : ', fileMapSettings)
+        if (fileMapSettings) {
+          const mapViewSettings = {
+            activate: fileMapSettings.activate,
+            default: fileMapSettings.default,
+            maps: []
+          }
+          fileMapSettings.maps.forEach(mapOpts => {
+            const mapSettings = mapOpts.file ? { file: mapOpts.file, cols: mapOpts.cols, title: mapOpts.title } : mapOpts
+            mapViewSettings.maps.push(mapSettings)
+          })
+          fileOpts.mapview = mapViewSettings
+        }
 
         fileOptionsStr = JSON.stringify(fileOpts, null, prettyChar).replaceAll("'", quoteReplacer)
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > fileOptionsStr : ', fileOptionsStr)
@@ -86,7 +124,7 @@ export default {
       } else {
         // CASE : MULTI-FILES
         widgetTitle = fileOpts.title.replaceAll("'", quoteReplacer)
-        widgetName = 'multi-datami-multi-files'
+        widgetName = 'datami-multi-files'
         // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > fromMultiFiles > fileOpts : ', fileOpts)
         fileOptionsStr = JSON.stringify(fileOpts.options, null, prettyChar)
         const gitfilesStr = JSON.stringify(fileOpts.gitfiles, null, prettyChar).replaceAll("'", quoteReplacer)
@@ -101,7 +139,7 @@ export default {
       }
 
       htmlStr += `\
-<!-- GITRIBUTE WIDGET'S APP.JS SCRIPT -->\r
+<!-- DATAMI WIDGET'S APP.JS SCRIPT -->\r
 <${scriptStr} src="https://${widgetProvider}/js/app.js" type="text/javascript" defer></${scriptStr}>\n
 `
 
