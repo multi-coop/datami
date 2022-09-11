@@ -33,6 +33,10 @@ export const providerIcons = [
     providers: ['mediawiki']
   },
   {
+    icon: 'laptop-user',
+    providers: ['localhost']
+  },
+  {
     icon: 'source',
     providers: ['other']
   }

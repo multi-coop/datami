@@ -11,11 +11,17 @@ import {
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
 export async function getData (url, funcName = undefined, token = undefined, raw = false) {
+  // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
+  // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
+  // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
   const errors = []
 
   // pure fetch
   const req = await fetch(url)
-  // console.log('U > gitProvidersAPI > getData > req : ', req)
+  // console.log('\nU > gitProvidersAPI > getData > B > url : ', url)
+  // console.log('U > gitProvidersAPI > getData > B > req : ', req)
+  // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)
+  // console.log('U > gitProvidersAPI > getData > B > raw : ', raw)
 
   let resp
   if (raw) {
@@ -23,7 +29,8 @@ export async function getData (url, funcName = undefined, token = undefined, raw
   } else {
     resp = await req.json()
   }
-  // console.log('U > gitProvidersAPI > getData > resp : ', resp)
+  // console.log('U > gitProvidersAPI > getData > B > resp : ', resp)
+
   if (!req.ok) {
     const err = {
       function: funcName,
@@ -50,7 +57,9 @@ export async function getFileData (gitObj, token = undefined) {
 export async function getFileDataRaw (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFileRaw
+  // const getRaw = gitObj.provider !== 'localhost'
   const fetched = await getData(url, 'getFileDataRaw', token, true)
+  // const fetched = await getData(url, 'getFileDataRaw', token, getRaw)
   return fetched
 }
 

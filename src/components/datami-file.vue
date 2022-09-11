@@ -396,15 +396,20 @@ export default {
           case 'github':
             token = process.env.VUE_APP_DEFAULT_GITHUB_TOKEN
             break
+          case 'localhost':
+            token = 'NO-TOKEN-FOR-LOCAL-DEV'
+            break
         }
       }
       this.updateToken({ fileId: this.fileId, token: token })
       this.addGitInfos(gitInfosObject)
     }
-    // console.log('C > DatamiFile > beforeMount > this.gitObj : ', this.gitObj)
+    // console.log('\nC > DatamiFile > beforeMount > this.gitObj : ', this.gitObj)
 
+    // console.log('C > DatamiFile > beforeMount > this.options : ', this.options)
     // build options object
     let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+    // console.log('C > DatamiFile > beforeMount > fileOptions : ', fileOptions)
     let fileSchema = fileOptions.schema
     // console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
     if (fileSchema && fileSchema.file) {
@@ -424,9 +429,13 @@ export default {
     let fileCustomProps = fileOptions['fields-custom-properties']
     if (fileCustomProps && fileCustomProps.file) {
       const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
+      // console.log('C > DatamiFile > beforeMount > customPropsGitObj : ', customPropsGitObj)
       const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
+      // console.log('C > DatamiFile > beforeMount > customPropsRaw : ', customPropsRaw)
       const customPropsData = customPropsRaw && customPropsRaw.data
+      // console.log('C > DatamiFile > beforeMount > customPropsData : ', customPropsData)
       const customProps = JSON.parse(customPropsData)
+      // console.log('C > DatamiFile > beforeMount > customProps : ', customProps)
       fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
     // fileCustomProps && console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
@@ -505,6 +514,7 @@ export default {
       this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // Request API for file infos
+      // console.log('\nC > DatamiFile > reloadFile > respData > ... ')
       const respData = await this.getFileData(this.gitObj, this.fileToken)
       // console.log('\nC > DatamiFile > reloadFile > respData : ', respData)
       const fileInfos = respData.data
@@ -515,6 +525,7 @@ export default {
       // console.log('C > DatamiFile > reloadFile > this.fileInfos : ', this.fileInfos)
 
       // Request API for file content
+      // console.log('\nC > DatamiFile > reloadFile > respDataRaw > ... ')
       const respDataRaw = await this.getFileDataRaw(this.gitObj, this.fileToken)
       // console.log('C > DatamiFile > reloadFile > respDataRaw : ', respDataRaw)
       const fileRaw = respDataRaw.data
