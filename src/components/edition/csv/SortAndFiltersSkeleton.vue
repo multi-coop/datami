@@ -113,6 +113,7 @@ export default {
           const enumArr = filter.enumArr || []
           return {
             field: filter.field,
+            title: filter.title,
             label: filter.label,
             enumArr: enumArr,
             bgColor: filter.bgColor,

@@ -312,8 +312,10 @@ export const mixinGlobal = {
 
         const _paq = window._paq
         // console.log('M > trackEvent > _paq : ', _paq)
-        _paq.push(['trackEvent', eventCategory, evAction, value])
-        _paq.push(['trackEvent', domain, eventCategory, evAction])
+        if (_paq) {
+          _paq.push(['trackEvent', eventCategory, evAction, value])
+          _paq.push(['trackEvent', domain, eventCategory, evAction])
+        }
       }
     },
     trackLink (link) {
@@ -321,7 +323,9 @@ export const mixinGlobal = {
       if (!this.hasTrackAllOutlinks) {
         // console.log('\nM > trackLink > link :', link)
         const _paq = window._paq
-        _paq.push(['trackLink', link, 'link'])
+        if (_paq) {
+          _paq.push(['trackLink', link, 'link'])
+        }
       }
     }
   }

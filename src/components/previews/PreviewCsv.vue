@@ -250,7 +250,7 @@ export default {
   },
   watch: {
     fileRaw (next) {
-      if (next && next !== '') {
+      if (next && next !== '' && this.fileOptions) {
         // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
         // console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataObj = this.csvToObject(next, this.fileOptions)
@@ -308,11 +308,22 @@ export default {
       }
     },
     fileOptions (next) {
-      if (next && this.dataIsSet) {
-        // console.log('C > PreviewCsv > watch > fileOptions > next & this.dataIsSet : \n', next)
-        const dataColumns = this.buildColumns(this.dataRaw)
-        this.dataColumns = dataColumns
-        this.editedColumns = dataColumns
+      // console.log('C > PreviewCsv > watch > fileOptions > next : \n', next)
+      // if (next && this.dataIsSet) {
+      // if (next && this.dataIsSet) {
+      //   console.log('C > PreviewCsv > watch > fileOptions > next & this.dataIsSet : \n', next)
+      //   const dataColumns = this.buildColumns(this.dataRaw)
+      //   this.dataColumns = dataColumns
+      //   this.editedColumns = dataColumns
+      // }
+      if (next && this.fileRaw && this.fileRaw !== '') {
+        // console.log('C > PreviewCsv > watch > fileOptions > next : \n', next)
+        // console.log('C > PreviewCsv > watch > fileOptions > this.fileRaw : ', this.fileRaw)
+        if (!this.dataIsSet) {
+          const dataObj = this.csvToObject(this.fileRaw, next)
+          this.dataRaw = dataObj
+          this.dataIsSet = true
+        }
       }
     },
     async fileClientRaw (next) {

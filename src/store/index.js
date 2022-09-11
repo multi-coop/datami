@@ -40,7 +40,7 @@ const defaultStore = {
     },
     getTrackAllOutlinks: (state) => (uuid) => {
       const trackAllOutlinks = state.trackAllOutlinks.find(trackOutlinks => trackOutlinks.uuid === uuid)
-      return trackAllOutlinks.val
+      return trackAllOutlinks && trackAllOutlinks.val
     },
     buildNewBranchName: (state) => (filefullname, fileId) => {
       const now = Date.now()

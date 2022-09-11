@@ -19,7 +19,8 @@
           size="is-small"/>
         <span
           :class="`${isActiveField ? 'has-text-weight-bold' : '' }`">
-          {{ filter.label }}
+          {{ filter.title || filter.label }}
+          <!-- {{ filter }} -->
         </span>
       </b-tooltip>
     </template>
