@@ -133,7 +133,7 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
   // console.log('C > mapUtils > createAllPoints > layerId : ', layerId)
   // console.log('C > mapUtils > createAllPoints > fields : ', fields)
 
-  let circleColor = vars.circle_color
+  let circleColor = vars.circle_color || '#363636'
   if (typeof circleColor !== 'string') {
     circleColor = [...circleColor]
     const getter = circleColor[1][0]
