@@ -142,7 +142,7 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
     const fieldId = field && field.field | fieldName
     circleColor[1] = [getter, `${fieldId}`]
   }
-  console.log('C > mapUtils > createAllPoints > circleColor : ', circleColor)
+  // console.log('C > mapUtils > createAllPoints > circleColor : ', circleColor)
 
   const layerConfig = {
     id: layerId,
