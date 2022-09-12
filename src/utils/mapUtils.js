@@ -125,8 +125,24 @@ export const createClusterUnclusteredLayer = (sourceId, vars, layerId = 'unclust
 }
 
 // GEOJSON LAYERS - ALL POINTS CIRCLES
-export const createAllPoints = (sourceId, vars, layerId = 'all-points') => {
+export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields = undefined) => {
   const activatedColor = vars.circle_color_activated ? vars.circle_color_activated : '#e75b0e'
+
+  // console.log('\nC > mapUtils > createAllPoints > sourceId : ', sourceId)
+  // console.log('C > mapUtils > createAllPoints > vars : ', vars)
+  // console.log('C > mapUtils > createAllPoints > layerId : ', layerId)
+  // console.log('C > mapUtils > createAllPoints > fields : ', fields)
+
+  let circleColor = vars.circle_color || '#363636'
+  if (typeof circleColor !== 'string') {
+    circleColor = [...circleColor]
+    const getter = circleColor[1][0]
+    const fieldName = circleColor[1][1]
+    const field = fields.find(f => f.name === fieldName)
+    const fieldId = field && field.field | fieldName
+    circleColor[1] = [getter, `${fieldId}`]
+  }
+  // console.log('C > mapUtils > createAllPoints > circleColor : ', circleColor)
 
   const layerConfig = {
     id: layerId,
@@ -143,14 +159,14 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points') => {
         vars.max_zoom, 1
       ],
 
-      'circle-stroke-color': vars.circle_stroke_color,
+      'circle-stroke-color': vars.circle_stroke_color || '#FFFFFF',
 
       // "circle-color": vars.circle_color,
       'circle-color': [
         'case',
         ['boolean', ['feature-state', 'selected'], false],
         activatedColor,
-        vars.circle_color
+        circleColor
       ],
 
       // "circle-opacity": vars.circle_opacity,

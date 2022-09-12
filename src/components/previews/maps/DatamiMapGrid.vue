@@ -44,7 +44,7 @@ import { mixinGlobal, mixinMap } from '@/utils/mixins.js'
 import DatamiMap from '@/components/previews/maps/DatamiMap'
 
 export default {
-  name: 'DatamiMapGridGrid',
+  name: 'DatamiMapGrid',
   components: {
     DatamiMap
   },
@@ -76,16 +76,16 @@ export default {
   },
   methods: {
     isMapOnTop (map, idx) {
-      // console.log('\nC > DatamiMapGridGrid > isMapOnTop > map : ', map)
+      // console.log('\nC > DatamiMapGrid > isMapOnTop > map : ', map)
       if (!idx) {
         return true
       } else {
         const mapsRange = this.range(idx)
-        // console.log('C > DatamiMapGridGrid > isMapOnTop > mapsRange : ', mapsRange)
+        // console.log('C > DatamiMapGrid > isMapOnTop > mapsRange : ', mapsRange)
         const mapsColsSum = mapsRange.reduce((acc, mapIdx) => {
           return acc + this.mapViewOptions.maps[mapIdx].cols
         }, 0)
-        // console.log('C > DatamiMapGridGrid > isMapOnTop > mapsColsSum : ', mapsColsSum)
+        // console.log('C > DatamiMapGrid > isMapOnTop > mapsColsSum : ', mapsColsSum)
         return mapsColsSum <= 12
       }
     }

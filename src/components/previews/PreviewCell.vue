@@ -110,8 +110,8 @@
         size="is-small"
         icon-left="email-outline"
         :href="`mailto:${value}`"
+        expanded
         @click="trackLink(`mailto:${value}`)">
-        expanded>
         {{ trimmedText }}
       </b-button>
     </div>
