@@ -226,7 +226,7 @@ export default {
       // iconSizeHighlighted: [49, 49],
 
       // FIELDS MAPPER
-      contentFields: undefined,
+      // contentFields: undefined,
 
       // ITEMS
       showCard: false,
@@ -467,7 +467,7 @@ export default {
     // set up fields mapper
     this.getSizesScreen()
 
-    this.contentFields = this.mapSettings.contentFields
+    // this.contentFields = this.mapSettings.contentFields
     // console.log('C > DatamiMap > beforeMount > this.mapCardsSettingsMini : ', this.mapCardsSettingsMini)
     // console.log('C > DatamiMap > beforeMount > this.contentFields : ', this.contentFields)
 
