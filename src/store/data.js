@@ -92,6 +92,8 @@ export const data = {
       if (key === 'loadingExtRessources') return state.loadingExtRessources
     },
     getLoadedSharedData: (state) => (ressource) => {
+      // console.log('\nS-data > G > getLoadedSharedDataField > ressource : ', ressource)
+      // console.log('S-data > G > getLoadedSharedDataField > state.loadedSharedData : ', state.loadedSharedData)
       return state.loadedSharedData.find(d => d.ressource === ressource)
     },
     getLoadedSharedDataset: (state, getters) => (ressource) => {
@@ -99,7 +101,9 @@ export const data = {
       return loadedData && loadedData.data
     },
     getLoadedSharedDataField: (state, getters) => (ressource, fields) => {
+      // console.log('\nS-data > G > getLoadedSharedDataField > ressource : ', ressource)
       const loadedSharedData = getters.getLoadedSharedDataset(ressource)
+      // console.log('S-data > G > getLoadedSharedDataField > loadedSharedData : ', loadedSharedData)
       const loadedField = loadedSharedData && loadedSharedData.headers.find(f => f.name === fields)
       return loadedField
     },
@@ -308,11 +312,11 @@ export const data = {
         canContinue = canContinue && currentLoadState.loadState === 'waiting'
         payload.loadInfos.initiator = from
       }
-      // canContinue && console.log('\nS-data > A > updateLoadingRessources > loadState : ', loadState)
-      // canContinue && console.log('S-data > A > updateLoadingRessources > loadState : ', loadState)
-      // canContinue && console.log('S-data > A > updateLoadingRessources > loadKey : ', loadKey)
-      // canContinue && console.log('S-data > A > updateLoadingRessources > from : ', from)
-      // canContinue && console.log('S-data > A > updateLoadingRessources > currentLoadState : ', currentLoadState)
+      canContinue && console.log('\nS-data > A > updateLoadingRessources > loadState : ', loadState)
+      canContinue && console.log('S-data > A > updateLoadingRessources > loadState : ', loadState)
+      canContinue && console.log('S-data > A > updateLoadingRessources > loadKey : ', loadKey)
+      canContinue && console.log('S-data > A > updateLoadingRessources > from : ', from)
+      canContinue && console.log('S-data > A > updateLoadingRessources > currentLoadState : ', currentLoadState)
       canContinue && commit('setLoadingRessources', payload)
     },
 
