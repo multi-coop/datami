@@ -312,11 +312,11 @@ export const data = {
         canContinue = canContinue && currentLoadState.loadState === 'waiting'
         payload.loadInfos.initiator = from
       }
-      canContinue && console.log('\nS-data > A > updateLoadingRessources > loadState : ', loadState)
-      canContinue && console.log('S-data > A > updateLoadingRessources > loadState : ', loadState)
-      canContinue && console.log('S-data > A > updateLoadingRessources > loadKey : ', loadKey)
-      canContinue && console.log('S-data > A > updateLoadingRessources > from : ', from)
-      canContinue && console.log('S-data > A > updateLoadingRessources > currentLoadState : ', currentLoadState)
+      // canContinue && console.log('\nS-data > A > updateLoadingRessources > loadState : ', loadState)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > loadState : ', loadState)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > loadKey : ', loadKey)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > from : ', from)
+      // canContinue && console.log('S-data > A > updateLoadingRessources > currentLoadState : ', currentLoadState)
       canContinue && commit('setLoadingRessources', payload)
     },
 

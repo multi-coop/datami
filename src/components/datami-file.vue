@@ -349,17 +349,17 @@ export default {
     },
     shareableFiles (next) {
       const goNoGo = next && next.length && next.map(i => i.isSet)
-      next && next.length && console.log('\nC >>> DatamiFile > watch > shareableFiles > next.map : ', next.map(i => `${i.gitfile}-${i.isSet}`))
+      // next && next.length && console.log('\nC >>> DatamiFile > watch > shareableFiles > next.map : ', next.map(i => `${i.gitfile}-${i.isSet}`))
       if (goNoGo && goNoGo.every(b => b)) {
-        console.log('C >>> DatamiFile > watch > shareableFiles > this.gitObj.id : ', this.gitObj.id)
-        console.log('C >>> DatamiFile > watch > shareableFiles > goNoGo : ', goNoGo)
-        console.log('C >>> DatamiFile > watch > shareableFiles > this.shareableFiles.map(i => i.isSet) : ', this.shareableFiles.map(i => i.isSet))
+        // console.log('C >>> DatamiFile > watch > shareableFiles > this.gitObj.id : ', this.gitObj.id)
+        // console.log('C >>> DatamiFile > watch > shareableFiles > goNoGo : ', goNoGo)
+        // console.log('C >>> DatamiFile > watch > shareableFiles > this.shareableFiles.map(i => i.isSet) : ', this.shareableFiles.map(i => i.isSet))
         this.updateLoadingRessources({ key: 'loadingShared', loadState: 'loading', from: this.fileId })
         this.updateLoadingRessources({ key: 'loadingExtRessources', loadState: 'loading', from: this.fileId })
       }
     },
     async loadingExtRessources (next) {
-      console.log('C >>> DatamiFile > watch > loadingExtRessources > next : ', next)
+      // console.log('C >>> DatamiFile > watch > loadingExtRessources > next : ', next)
       if (next.loadState === 'loading' && next.initiator === this.fileId && this.readyToLoadExtRessources) {
         await this.loadExtRessources()
       }
@@ -572,17 +572,17 @@ export default {
       }
     },
     async loadExtRessources () {
-      console.log('\nC >>> DatamiFile > loadExtRessources > this.gitObj.id : ', this.gitObj.id)
-      console.log('C >>> DatamiFile > loadExtRessources > this.readyToLoadExtRessources : ', this.readyToLoadExtRessources)
+      // console.log('\nC >>> DatamiFile > loadExtRessources > this.gitObj.id : ', this.gitObj.id)
+      // console.log('C >>> DatamiFile > loadExtRessources > this.readyToLoadExtRessources : ', this.readyToLoadExtRessources)
       for (const resrc of this.readyToLoadExtRessources) {
-        console.log('C >>> DatamiFile > loadExtRessources > resrc : ', resrc)
+        // console.log('C >>> DatamiFile > loadExtRessources > resrc : ', resrc)
         const fileUrl = resrc.ressource
-        console.log('... C >>> DatamiFile > loadExtRessources > fileUrl : ', fileUrl)
+        // console.log('... C >>> DatamiFile > loadExtRessources > fileUrl : ', fileUrl)
         const ressourceGitObj = this.extractGitInfos(fileUrl)
         const ressourceRaw = await this.getFileDataRaw(ressourceGitObj, this.fileToken)
-        console.log('C >>> DatamiFile > loadExtRessources > ressourceRaw : ', ressourceRaw)
+        // console.log('C >>> DatamiFile > loadExtRessources > ressourceRaw : ', ressourceRaw)
         const dataObj = csvToObject(ressourceRaw.data, resrc.options)
-        console.log('C >>> DatamiFile > loadExtRessources > dataObj : ', dataObj)
+        // console.log('C >>> DatamiFile > loadExtRessources > dataObj : ', dataObj)
 
         // save data in loadedSharedData
         const fields = Object.entries(dataObj.headers)
@@ -605,7 +605,7 @@ export default {
             data: dataObj.data
           }
         }
-        console.log('C >>> DatamiFile > loadExtRessources > payloadData : ', payloadData)
+        // console.log('C >>> DatamiFile > loadExtRessources > payloadData : ', payloadData)
         this.updateLoadedSharedData(payloadData)
 
         // update sharedData
