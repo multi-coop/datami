@@ -476,6 +476,8 @@ export default {
             ...fieldSchema && fieldSchema.description && { description: fieldSchema.description },
             ...isPrimaryKey && { primaryKey: isPrimaryKey },
             ...fieldSubtype && { subtype: fieldSubtype },
+            ...fieldCustomProps && fieldCustomProps.title && { title: fieldCustomProps.title },
+            ...fieldCustomProps && fieldCustomProps.description && { description: fieldCustomProps.description },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.maxLength && { maxLength: fieldCustomProps.maxLength },
             ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },

@@ -57,7 +57,7 @@
       <div v-if="filter.foreignKey || filter.definitions">
         <span>
           <span v-if="filter.foreignKey">
-            {{ filter.label }} :
+            {{ filter.title || filter.label }} :
           </span>
           <span class="has-text-weight-bold">
             {{ trimText(filterVal, 50) }}
