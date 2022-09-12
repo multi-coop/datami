@@ -10,20 +10,38 @@ import {
 // see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
-export async function getData (url, funcName = undefined, token = undefined, raw = false) {
+export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined) {
+  // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
+  // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
+  // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
   const errors = []
 
   // pure fetch
   const req = await fetch(url)
-  // console.log('U > gitProvidersAPI > getData > req : ', req)
+  // console.log('\nU > gitProvidersAPI > getData > B > url : ', url)
+  // console.log('U > gitProvidersAPI > getData > B > req : ', req)
+  // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)
+  // console.log('U > gitProvidersAPI > getData > B > raw : ', raw)
+  // console.log('U > gitProvidersAPI > getData > B > provider : ', provider)
 
   let resp
-  if (raw) {
+  if (raw || provider === 'localhost') {
+    // console.log('U > gitProvidersAPI > getData > B > req.text : ', req.text)
     resp = await req.text()
   } else {
+    // console.log('U > gitProvidersAPI > getData > B > req.json : ', req.json)
     resp = await req.json()
   }
-  // console.log('U > gitProvidersAPI > getData > resp : ', resp)
+  if (provider === 'localhost' && !raw) {
+    const filePath = url.split('/')
+    resp = {
+      name: filePath[filePath.length - 1],
+      url: url,
+      data: resp
+    }
+  }
+  // console.log('U > gitProvidersAPI > getData > B > resp : ', resp)
+
   if (!req.ok) {
     const err = {
       function: funcName,
@@ -43,14 +61,20 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 export async function getFileData (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFile
-  const fetched = await getData(url, 'getFileData', token)
+  // const getRaw = gitObj.provider === 'localhost'
+  const provider = gitObj.provider
+  // const fetched = await getData(url, 'getFileData', token)
+  const fetched = await getData(url, 'getFileData', token, false, provider)
   return fetched
 }
 
 export async function getFileDataRaw (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFileRaw
-  const fetched = await getData(url, 'getFileDataRaw', token, true)
+  // const getRaw = gitObj.provider === 'localhost'
+  const provider = gitObj.provider
+  // const fetched = await getData(url, 'getFileDataRaw', token, true)
+  const fetched = await getData(url, 'getFileDataRaw', token, true, provider)
   return fetched
 }
 

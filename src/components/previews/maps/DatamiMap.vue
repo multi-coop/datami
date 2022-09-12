@@ -226,7 +226,7 @@ export default {
       // iconSizeHighlighted: [49, 49],
 
       // FIELDS MAPPER
-      contentFields: undefined,
+      // contentFields: undefined,
 
       // ITEMS
       showCard: false,
@@ -466,7 +466,10 @@ export default {
     // console.log('C > DatamiMap > beforeMount > this.fields : ', this.fields)
     // set up fields mapper
     this.getSizesScreen()
-    this.contentFields = this.mapSettings.contentFields
+
+    // this.contentFields = this.mapSettings.contentFields
+    // console.log('C > DatamiMap > beforeMount > this.mapCardsSettingsMini : ', this.mapCardsSettingsMini)
+    // console.log('C > DatamiMap > beforeMount > this.contentFields : ', this.contentFields)
 
     const mapOptions = this.mapOptions
 
@@ -482,6 +485,9 @@ export default {
     this.item_geo_fields = mapOptions.item_geo_fields || { latitude: 'lat', longitude: 'lon' }
     this.fieldLat = this.fields.find(f => f.name === this.item_geo_fields.latitude).field
     this.fieldLong = this.fields.find(f => f.name === this.item_geo_fields.longitude).field
+    // console.log('C > DatamiMap > beforeMount > this.item_geo_fields : ', this.item_geo_fields)
+    // console.log('C > DatamiMap > beforeMount > this.fieldLat : ', this.fieldLat)
+    // console.log('C > DatamiMap > beforeMount > this.fieldLong : ', this.fieldLong)
 
     // set up map's basic parameters
     // this.item_marker = mapOptions.item_marker || 'map-marker'
@@ -993,8 +999,10 @@ export default {
         const allPointsConfig = createAllPoints(
           geoJsonSourceId.allPointsId,
           allPointsConfigOptions,
-          allPointsLayerId
+          allPointsLayerId,
+          fields
         )
+        // console.log('C > DatamiMap > createAddGeoJsonLayers > allPointsConfig : ', allPointsConfig)
         this.map.addLayer(allPointsConfig)
         if (allPointsConfigOptions.is_clickable) {
           // CLICK
@@ -1452,7 +1460,9 @@ export default {
       // console.log('C > DatamiMap > getBlockField > fieldBlock : ', fieldBlock)
       // console.log('C > DatamiMap > getBlockField > this.contentFields : ', this.contentFields)
       // console.log('C > DatamiMap > getBlockField > this.fields : ', this.fields)
-      const contentField = this.contentFields.find(f => f.position === fieldBlock)
+
+      const contentField = this.mapCardsSettingsMini.find(f => f.position === fieldBlock)
+      // const contentField = this.contentFields.find(f => f.position === fieldBlock)
       if (contentField) {
         // console.log('C > DatamiMap > getBlockField > contentField : ', contentField)
         return this.getItemField(contentField.field)
