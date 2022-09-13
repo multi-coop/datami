@@ -87,6 +87,8 @@ export default {
   // },
   methods: {
     computeSerie (chart) {
+      // console.log('\nC > DatamiDataviz > computeSerie > chart : ', chart)
+      // console.log('C > DatamiDataviz > beforeMount > this.fields : ', this.fields)
       const chartOptions = { ...chart.chartOptions }
       const chartType = chartOptions.chart.type
       let series = []
@@ -95,7 +97,7 @@ export default {
       const categoriesBy = chart.categoriesbyfield
       const categoriesField = this.fields.find(f => f.name === categoriesBy)
       const categoriesFieldIdx = categoriesField && categoriesField.field
-      // console.log('\nC > DatamiDataviz > computeSerie > categoriesBy : ', categoriesBy)
+      // console.log('C > DatamiDataviz > computeSerie > categoriesBy : ', categoriesBy)
       // console.log('C > DatamiDataviz > computeSerie > categoriesField : ', categoriesField)
       // console.log('C > DatamiDataviz > computeSerie > categoriesFieldIdx : ', categoriesFieldIdx)
 

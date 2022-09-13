@@ -5,7 +5,7 @@
       <div
         v-show="!isAnyDialogOpen"
         :id="`sort-and-filters-skeleton-${fileId}`"
-        class="column is-12 py-0 mt-2">
+        :class="`column is-12 py-0 ${currentViewMode === 'map' ? 'px-5' : '' } mt-2`">
         <SortAndFiltersSkeleton
           :file-id="fileId"
           :columns="columnsEdited"
