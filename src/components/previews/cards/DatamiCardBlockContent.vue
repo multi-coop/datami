@@ -164,7 +164,7 @@ export default {
     return {
       classes: {
         title: {
-          content: 'is-size-4 mb-0 has-text-weight-bold',
+          content: 'is-size-4 mb-0 has-text-weight-bold title-line-height',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         subtitle: {
@@ -229,3 +229,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .title-line-height {
+    line-height: 1.2em;
+  }
+</style>

@@ -1,6 +1,15 @@
 import { authorizedFileTypes as fileTypes } from '@/utils/fileTypesUtils.js'
 
 export const gitProviders = {
+  localhost: {
+    root: 'http://localhost',
+    rootFix: '',
+    raw: '',
+    apiFix: '',
+    fix: ''
+    // root: 'https://gitlab.com/jailbreak/jailbreak.paris/ -/blob/ master/package.json'
+    // raw:  'https://gitlab.com/jailbreak/jailbreak.paris/ -/raw/  master/package.json',
+  },
   github: {
     root: 'https://github.com/',
     rootFix: '/blob',
@@ -47,6 +56,13 @@ export const buildApiRoots = (gitInfos) => {
     apiFileBase = `${apiRepo}/contents/${gitInfos.filepath}`
     apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
     apiFileRaw = `${gitInfos.rawRoot}${gitInfos.filepath}`
+  } else if (gitInfos.provider === 'localhost') {
+    // const URIrepo = encodeURIComponent(`${gitInfos.repo}`)
+    const URIfilepath = encodeURIComponent(gitInfos.filepath)
+    apiRepo = `${gitInfos.api}`
+    apiFileBase = `${apiRepo}/${URIfilepath}`
+    apiFile = `${apiFileBase}`
+    apiFileRaw = `${apiFileBase}`
   } else {
     // cf : https://docs.gitlab.com/ee/api/repository_files.html
     const URIrepo = encodeURIComponent(`${gitInfos.orga}/${gitInfos.repo}`)
@@ -80,6 +96,22 @@ export const extractGitInfos = (str) => {
     branch = rawUrl ? split[2] : split[3]
     remaining = rawUrl ? split.splice(3).join('/') : split.splice(4).join('/')
     api = gitRef.apiFix
+  } else if (str.startsWith(gitProviders.localhost.root)) {
+    // For local host dev
+    provider = 'localhost'
+    gitRef = { ...gitProviders.localhost }
+    const urlCut = str.split('//')
+    const host = urlCut[1].split('/')[0]
+    // console.log('U > utilsGitUrl > extractGitInfos > localhost > host : ', host)
+    gitRef.root = `http://${host}`
+    gitRef.raw = `http://${host}`
+    split = urlCut[1].split('/').slice(1)
+    // console.log('U > utilsGitUrl > extractGitInfos > localhost > split : ', split)
+    orga = 'localhost'
+    repo = ''
+    branch = ''
+    remaining = split.join('/')
+    api = `http://${host}`
   } else {
     provider = 'gitlab'
     gitRef = gitProviders.gitlab
@@ -94,8 +126,15 @@ export const extractGitInfos = (str) => {
     api = `https://${host}/${gitRef.apiFix}`
   }
 
+  // console.log('U > utilsGitUrl > extractGitInfos > orga : ', orga)
+  // console.log('U > utilsGitUrl > extractGitInfos > api : ', api)
+  // console.log('U > utilsGitUrl > extractGitInfos > repo : ', repo)
+  // console.log('U > utilsGitUrl > extractGitInfos > branch : ', branch)
+  // console.log('U > utilsGitUrl > extractGitInfos > remaining : ', remaining)
+
   rawRoot = `${gitRef.raw}${orga}/${repo}`
-  const publicRootUrl = `${gitRef.root}${orga}/${repo}`
+  let publicRootUrl = `${gitRef.root}${orga}/${repo}`
+
   let fileraw
 
   if (orga === 'github') {
@@ -103,12 +142,21 @@ export const extractGitInfos = (str) => {
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
     // https://raw.githubusercontent.com/multi-coop/datami-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
     fileraw = `${rawRoot}${remaining}`
+  } else if (orga === 'localhost') {
+    rawRoot = `${api}`
+    publicRoot = `${api}`
+    publicRootUrl = `${api}`
+    fileraw = `${rawRoot}/${remaining}`
   } else {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
     // https://gitlab.com/multi-coop/datami-content-test/-/raw/main/texts/markdown/test-file-datami-fr.md
     fileraw = `${rawRoot}${remaining}`
   }
+
+  // console.log('U > utilsGitUrl > extractGitInfos > publicRootUrl : ', publicRootUrl)
+  // console.log('U > utilsGitUrl > extractGitInfos > rawRoot : ', rawRoot)
+  // console.log('U > utilsGitUrl > extractGitInfos > fileraw : ', fileraw)
 
   // if file in remaining string
   if (remaining !== '') {
@@ -142,7 +190,7 @@ export const extractGitInfos = (str) => {
   gitInfos.apiFile = apiRoots.file
   gitInfos.apiFileRaw = apiRoots.fileRaw
 
-  // console.log('\nU > utilsGitUrl > extractGitInfos > gitInfos : ', gitInfos)
+  // console.log('U > utilsGitUrl > extractGitInfos > gitInfos : ', gitInfos)
 
   return gitInfos
 }

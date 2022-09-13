@@ -36,9 +36,6 @@
       <div class="column is-4">
         activeTags : <pre><code>{{ activeTags }}</code></pre>
       </div>
-      <!-- <div class="column is-8">
-        filtersDisplay : <pre><code>{{ filtersDisplay }}</code></pre>
-      </div> -->
     </div>
 
     <!-- DEBUG -->
@@ -46,17 +43,20 @@
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-6">
+        filtersDisplay : <pre><code>{{ filtersDisplay }}</code></pre>
+      </div>
+      <div class="column is-6">
         columns :
         <code>
           <pre>{{ columns }}</pre>
         </code>
       </div>
-      <div class="column is-6">
+      <!-- <div class="column is-6">
         checkedRows :
         <code>
           <pre>{{ checkedRows }}</pre>
         </code>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -113,6 +113,7 @@ export default {
           const enumArr = filter.enumArr || []
           return {
             field: filter.field,
+            title: filter.title,
             label: filter.label,
             enumArr: enumArr,
             bgColor: filter.bgColor,

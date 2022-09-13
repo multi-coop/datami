@@ -13,7 +13,7 @@
         @click="toggleDetail('showDetailButton')">
         <div
           v-if="!showDetail"
-          class="columns is-multiline pt-5 pl-5">
+          class="columns is-multiline my-0 pl-5">
           <!-- TITLE BLOCK : 'title' -->
           <div class="column is-12 px-0 py-0">
             <DatamiCardBlockContent
