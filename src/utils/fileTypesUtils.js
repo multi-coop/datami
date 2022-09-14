@@ -76,6 +76,11 @@ export const fieldTypeIcons = [
     icon: 'text-long'
   },
   {
+    type: 'uri',
+    subtype: 'image',
+    icon: 'image'
+  },
+  {
     type: 'string',
     subtype: 'link',
     icon: 'link-variant'

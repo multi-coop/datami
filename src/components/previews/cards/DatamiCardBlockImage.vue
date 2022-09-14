@@ -14,10 +14,11 @@
 
     <figure
       v-if="currentEditViewMode !== 'edit' && itemValue"
-      class="image mx-0 image-wrapper is-flex is-align-items-center is-justify-content-center">
+      :class="`image image-wrapper ${position === 'logo' ? 'ml-0 mr-2' : 'mx-0'} is-flex is-align-items-center is-justify-content-center`">
       <img
         :src="itemValue"
         class="image-constrained"
+        :style="`${position === 'logo' ? 'max-height: 40px; max-width: 65px; width: auto; height: auto;' : ''}`"
         :alt="`image-${itemId}`">
       <!-- <p v-if="currentEditViewMode !== 'edit' && !itemValue">
         {{ t('global.noValue', locale) }}
@@ -40,13 +41,15 @@
     <!-- NO IMAGE FOUND -->
     <article
       v-if="currentEditViewMode !== 'edit' && !itemValue"
-      class="notification is-light image-wrapper is-flex is-align-items-center is-justify-content-center">
-      <p class="subtitle py-4 has-text-centered">
+      :class="`notification is-light image-wrapper ${position === 'logo' ? 'py-1 px-1 mr-3' : ''} is-flex is-align-items-center is-justify-content-center`">
+      <p :class="`subtitle ${position === 'logo' ? 'py-1 px-1' : 'py-4'} has-text-centered`">
         <b-icon
           icon="image-off-outline"
           size="is-small"/>
         <br>
-        <span class="is-size-7">
+        <span
+          v-if="position !== 'logo'"
+          class="is-size-7">
           {{ t('preview.noIllustration', locale) }}
         </span>
       </p>
@@ -73,6 +76,10 @@ export default {
   ],
   props: {
     fileId: {
+      default: null,
+      type: String
+    },
+    position: {
       default: null,
       type: String
     },

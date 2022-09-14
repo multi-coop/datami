@@ -585,6 +585,9 @@ export const mixinValue = {
     isEmail () {
       return this.fieldSubtype === 'email'
     },
+    isImage () {
+      return this.fieldSubtype === 'image'
+    },
     isNumber () {
       return this.numberTypes.includes(this.fieldType)
     },
