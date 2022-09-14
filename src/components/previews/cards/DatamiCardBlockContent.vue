@@ -27,7 +27,9 @@
 
     <!-- ITEM VALUE IF PREVIEW MODE -->
     <p
-      v-if="currentEditViewMode === 'preview' && !field.templating">
+      v-if="currentEditViewMode === 'preview' && !field.templating"
+      class="is-flex is-flex-direction-row is-align-items-center">
+      <slot name="logo"></slot>
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"
