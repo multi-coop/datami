@@ -127,6 +127,37 @@
         %
       </span>
     </div>
+
+    <!-- IMAGE -->
+    <div
+      v-if="isImage"
+      :class="`has-text-right has-text-weight-bold is-size-6`">
+      <!-- {{ value }} -->
+      <!-- FIGURE IF ANY -->
+      <figure
+        v-if="value && value !== ''"
+        class="image mx-0 image-wrapper">
+        <img
+          :src="value"
+          class="image-constrained"
+          style="max-height: 75px; width: auto;"
+          :alt="`${value}`">
+      </figure>
+      <!-- NO IMAGE FOUND -->
+      <article
+        v-else
+        class="notification is-light image-wrapper is-flex is-align-items-center is-justify-content-center">
+        <p class="subtitle py-1 has-text-centered">
+          <b-icon
+            icon="image-off-outline"
+            size="is-small"/>
+          <br>
+          <span class="is-size-7">
+            {{ t('preview.noIllustration', locale) }}
+          </span>
+        </p>
+      </article>
+    </div>
   </div>
 </template>
 
