@@ -92,6 +92,12 @@
       <div v-if="debug">
         lockHeaders: <code>{{ lockHeaders }}</code>
       </div>
+      <div v-if="debug">
+        dataForView: <code>{{ dataForView }}</code>
+      </div>
+      <div v-if="debug">
+        currentViewMode: <code>{{ currentViewMode }}</code>
+      </div>
 
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
@@ -265,7 +271,7 @@
 
         <!-- CARDS -->
         <div
-          v-if="hasCardsView"
+          v-if="hasCardsView && cardsViewIsActive"
           v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
           class="datami-table-view-cards">
           <!-- v-model="showCardDetails" -->
@@ -288,7 +294,7 @@
 
         <!-- DATAVIZ -->
         <div
-          v-if="fileOptions && hasDatavizView"
+          v-if="fileOptions && hasDatavizView && datavizViewIsActive"
           v-show="!isAnyDialogOpen && currentViewMode === 'dataviz'"
           class="datami-table-view-dataviz"
           :style="`${ userFullscreen ? 'height: 90%;' : '' }`">
@@ -303,7 +309,7 @@
 
         <!-- MAPS -->
         <div
-          v-if="fileOptions && hasMapView"
+          v-if="fileOptions && hasMapView && mapViewIsActive"
           v-show="!isAnyDialogOpen && currentViewMode === 'map'"
           class="datami-table-view-map">
           <!-- v-model="showCardDetails" -->
@@ -618,7 +624,8 @@ export default {
     // },
     cardsSettingsFromFileOptions () {
       let cardsSettings
-      if (this.hasCardsView) {
+      // console.log('\nC > GitributeTable > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      if (this.hasCardsView && this.cardsViewIsActive) {
         const settings = this.cardsSettingsFromOptions
         const miniSettings = settings.mini
         const detailSettings = settings.detail
@@ -853,6 +860,9 @@ export default {
   },
   beforeMount () {
     // prepare sorting from custom settings if any
+    // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
+    // console.log('\nC > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
+    // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
     if (this.hasCustomSorting) {
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {

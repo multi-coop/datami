@@ -59,6 +59,7 @@
           class="ml-1 mr-2"
           :icon-left="getIcon(currentViewMode)"
           aria-haspopup="true"
+          :disabled="btnsEdit.length === 1"
           aria-controls="dropdown-views"/>
         <div
           id="dropdown-views"
@@ -141,31 +142,40 @@ export default {
   },
   watch: {
     fileOptions (next) {
+      // console.log('C > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
         const defaultViews = [
           {
             view: 'cards',
+            activate: this.cardsViewIsActive,
             isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
           },
           {
             view: 'dataviz',
+            activate: this.datavizViewIsActive,
             isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
           },
           {
             view: 'map',
+            activate: this.mapViewIsActive,
             isDefault: this.mapViewIsActive && this.mapViewIsDefault
           },
           {
             view: 'table',
+            activate: true,
             isDefault: true
           }
         ]
-        // console.log('C > ViewModeBtns > mounted > defaultViews : ', defaultViews)
         const defaultView = defaultViews.find(v => v.isDefault)
-        // console.log('C > ViewModeBtns > mounted > defaultView : ', defaultView)
+        // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
         this.changeView(defaultView.view)
       }
     }
+  },
+  beforeMount () {
+    // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
+    // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
+    this.changeView('table')
   },
   methods: {
     ...mapActions({

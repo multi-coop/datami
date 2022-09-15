@@ -106,13 +106,13 @@ export const mixinGlobal = {
       return this.getFileOptionsObj(this.fileId)
     },
     fileSchema () {
-      return this.fileOptions && this.fileOptions.schema
+      return (this.fileOptions && this.fileOptions.schema) || {}
     },
     hasFileSchemaFile () {
       return this.fileSchema && this.fileSchema.file
     },
     fileCustomProps () {
-      return this.fileOptions && this.fileOptions.customProps
+      return (this.fileOptions && this.fileOptions.customProps) || {}
     },
     fileIsLoading () {
       const resp = !this.gitObj || this.fileNeedsReload(this.fileId)
