@@ -425,7 +425,7 @@ export default {
       // console.log('C > DatamiFile > beforeMount > schema : ', schema)
       fileSchema = { ...schema, file: fileSchema.file }
     }
-    // fileSchema && console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
+    fileSchema && console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
 
     // get custom props if any
     let fileCustomProps = fileOptions['fields-custom-properties']
@@ -441,7 +441,7 @@ export default {
       fileCustomProps = { ...customProps, file: fileCustomProps.file }
     }
     // fileCustomProps && console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
-    // fileCustomProps && console.log('C > DatamiFile > beforeMount > fileCustomProps : ', fileCustomProps)
+    fileCustomProps && console.log('C > DatamiFile > beforeMount > fileCustomProps : ', fileCustomProps)
 
     // get dataviz props if any
     let fileDataviz = fileOptions.datavizview

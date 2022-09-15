@@ -92,6 +92,12 @@
       <div v-if="debug">
         lockHeaders: <code>{{ lockHeaders }}</code>
       </div>
+      <div v-if="debug">
+        dataForView: <code>{{ dataForView }}</code>
+      </div>
+      <div v-if="debug">
+        currentViewMode: <code>{{ currentViewMode }}</code>
+      </div>
 
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
@@ -618,6 +624,7 @@ export default {
     // },
     cardsSettingsFromFileOptions () {
       let cardsSettings
+      // console.log('\nC > GitributeTable > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
       if (this.hasCardsView) {
         const settings = this.cardsSettingsFromOptions
         const miniSettings = settings.mini
@@ -853,6 +860,9 @@ export default {
   },
   beforeMount () {
     // prepare sorting from custom settings if any
+    // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
+    // console.log('\nC > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
+    // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
     if (this.hasCustomSorting) {
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {
