@@ -163,6 +163,7 @@ export default {
     tags: 'Etiquettes',
     number: 'Nombre',
     integer: 'Nombre entier',
+    percent: 'Pour cent',
     boolean: 'Bouléen',
     primaryKey: 'Clé principale',
     foreignKey: 'Clé étrangère',

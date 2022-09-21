@@ -486,6 +486,8 @@ export default {
             ...fieldCustomProps && fieldCustomProps.primaryKey && { primaryKey: fieldCustomProps.primaryKey },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
+            ...fieldCustomProps && fieldCustomProps.round && { round: fieldCustomProps.round },
+            ...fieldCustomProps && fieldCustomProps.transform && { transform: fieldCustomProps.transform },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
           // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)

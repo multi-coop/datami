@@ -52,7 +52,7 @@
       </span>
     </p>
 
-    <!-- DEBUGGING - APPLY TEMPLATE IF ANY -->
+    <!-- APPLY TEMPLATE IF ANY -->
     <div v-if="currentEditViewMode === 'preview' && field.templating">
       <p
         v-for="(paragraph, idx) in templatedValues"

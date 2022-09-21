@@ -166,6 +166,10 @@ export const range = (max, min = 0, step = 1) => {
   return arr
 }
 
+export const roundOff = (value, decimals) => {
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals)
+}
+
 // AGGREGATION UTILS
 export const groupByField = (items, groupKey) => {
   const groups = items.reduce((group, item) => {

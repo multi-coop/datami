@@ -163,6 +163,7 @@ export default {
     tags: 'Tags',
     number: 'Number',
     integer: 'Integer',
+    percent: 'Percent',
     boolean: 'Boolean',
     primaryKey: 'Primary key',
     foreignKey: 'Foreign key',

@@ -16,6 +16,7 @@ import {
   trimText,
   getContrastYIQ,
   range,
+  roundOff,
   groupByField,
   aggregateByField
 } from '@/utils/globalUtils'
@@ -631,6 +632,7 @@ export const mixinValue = {
   methods: {
     booleanFromValue,
     trimText,
+    roundOff,
     getValueDefinition (value, field = undefined) {
       const Field = field || this.field
       const definitions = Field.definitions
