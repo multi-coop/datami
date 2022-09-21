@@ -584,6 +584,7 @@ export default {
     },
     applyTemplate (text) {
       // replace value fields
+      // console.log('\nC > DatamiCard > applyTemplate > text :', text)
       const fieldStart = '{{'
       const fieldEnd = '}}'
       const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
@@ -598,6 +599,7 @@ export default {
             const fieldObj = this.fields.find(f => f.name === fieldName)
             // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
             const itemValue = this.item[fieldObj.field]
+            // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
             strClean = itemValue || this.t('global.noValue', this.locale)
             // replace by value defintion if any in fieldObj
             if (itemValue && fieldObj.definitions) {

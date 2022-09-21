@@ -1270,8 +1270,8 @@ export default {
       }
     },
     createAddChoroplethLayers (source) {
-      // console.log('\nC > DatamiMap > createAddChoroplethLayers ... ')
-      // console.log('C > DatamiMap > createAddChoroplethLayers > source : ', source)
+      console.log('\nC > DatamiMap > createAddChoroplethLayers ... ')
+      console.log('C > DatamiMap > createAddChoroplethLayers > source : ', source)
 
       const mapLibre = this.map
       const choroplethSourceId = source.source_id
@@ -1534,15 +1534,15 @@ export default {
     // UTILS
     // - - - - - - - - - - - - - - - - - - //
     joinProjectsToPolygon (source, dataLoaded, choroRefIdex, noDataProxy = false) {
-      console.log('\nC > DatamiMap > joinProjectsToPolygon ...')
-      console.log('C > DatamiMap > joinProjectsToPolygon > source : ', source)
-      console.log('C > DatamiMap > joinProjectsToPolygon > source.polygon_prop_id : ', source.polygon_prop_id)
-      console.log('C > DatamiMap > joinProjectsToPolygon > source.join_polygon_id_to_field : ', source.join_polygon_id_to_field)
-      console.log('C > DatamiMap > joinProjectsToPolygon > source.agregated_data_field : ', source.agregated_data_field)
+      // console.log('\nC > DatamiMap > joinProjectsToPolygon ...')
+      // console.log('C > DatamiMap > joinProjectsToPolygon > source : ', source)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > source.polygon_prop_id : ', source.polygon_prop_id)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > source.join_polygon_id_to_field : ', source.join_polygon_id_to_field)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > source.agregated_data_field : ', source.agregated_data_field)
 
-      console.log('C > DatamiMap > joinProjectsToPolygon > this.contentFields : ', this.contentFields)
-      console.log('C > DatamiMap > joinProjectsToPolygon > this.fields : ', this.fields)
-      console.log('C > DatamiMap > joinProjectsToPolygon > this.items : ', this.items)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > this.contentFields : ', this.contentFields)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > this.fields : ', this.fields)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > this.items : ', this.items)
 
       // modify > agregate data
       this.showLoader = true
@@ -1551,7 +1551,7 @@ export default {
       // console.log('C > DatamiMap > joinProjectsToPolygon > dataFeatures : ', dataFeatures)
       const jointureFieldPolygon = source.polygon_prop_id
       const jointureFieldItem = this.getItemField(source.join_polygon_id_to_field)
-      console.log('C > DatamiMap > joinProjectsToPolygon > jointureFieldItem : ', jointureFieldItem)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > jointureFieldItem : ', jointureFieldItem)
 
       // looping each choropleth source geojson feature
       dataFeatures.forEach(i => {
@@ -1583,7 +1583,7 @@ export default {
         }
       })
       dataLoaded.features = dataFeatures
-      console.log('C > DatamiMap > joinProjectsToPolygon > dataLoaded : ', dataLoaded)
+      // console.log('C > DatamiMap > joinProjectsToPolygon > dataLoaded : ', dataLoaded)
 
       this.map.getSource(source.source_id).setData(dataLoaded)
 
