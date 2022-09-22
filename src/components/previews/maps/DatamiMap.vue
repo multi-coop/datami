@@ -411,7 +411,9 @@ export default {
         this.trackEvent('showCard')
       }
     },
-    currentViewMode (next) {
+    currentViewMode (next, prev) {
+      console.log('\nC > DatamiMap > watch > currentViewMode > next :', next)
+      console.log('C > DatamiMap > watch > currentViewMode > prev :', prev)
       if (next === 'map' && this.map) {
         this.map.redraw()
       }
@@ -1270,8 +1272,8 @@ export default {
       }
     },
     createAddChoroplethLayers (source) {
-      console.log('\nC > DatamiMap > createAddChoroplethLayers ... ')
-      console.log('C > DatamiMap > createAddChoroplethLayers > source : ', source)
+      // console.log('\nC > DatamiMap > createAddChoroplethLayers ... ')
+      // console.log('C > DatamiMap > createAddChoroplethLayers > source : ', source)
 
       const mapLibre = this.map
       const choroplethSourceId = source.source_id
@@ -1286,7 +1288,7 @@ export default {
         source,
         choroplethLayerId
       )
-      console.log('C > DatamiMap > createAddChoroplethLayers > choroplethConfig : ', choroplethConfig)
+      // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethConfig : ', choroplethConfig)
       this.map.addLayer(choroplethConfig)
 
       if (source.has_popup) {
@@ -1301,7 +1303,7 @@ export default {
         })
 
         this.map.on(source.popup_config.action, choroplethLayerId, (e) => {
-          // console.log("C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - e : ", e)
+          // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - e : ', e)
 
           const featuresPolygon = mapLibre.queryRenderedFeatures(e.point, { layers: [choroplethLayerId] })
           // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ", featuresPolygon)
@@ -1318,7 +1320,7 @@ export default {
           // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - coordinates : ", coordinates)
 
           const itemProps = featuresPolygon[0].properties
-          console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
+          // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
 
           const pop = popup
             .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
