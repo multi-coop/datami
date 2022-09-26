@@ -50,9 +50,9 @@ export default {
       const quoteReplacer = '&lsquo;'
 
       let htmlStr = `\n
-<!-- DATAMI - contribute with GIT ...but without minding it-->\r
+<!-- DATAMI - contribute with GIT ...but without minding it -->\r
 <!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi : https://multi.coop -->\n
-<!-- DATAMI WIDGET'S HTML BLOCK-->\r
+<!-- DATAMI WIDGET'S HTML BLOCK -->\r
 `
 
       if (!this.fromMultiFiles) {
