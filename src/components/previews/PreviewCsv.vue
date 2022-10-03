@@ -578,6 +578,7 @@ export default {
       const isDiff = changeObj.oldVal !== changeObj.val
       // console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
       // console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
+      console.log('setChanges', changeObj)
       if (isHeader) {
         changeId = changeObj.field
         // create a filtered copy of changesColumns
@@ -636,6 +637,23 @@ export default {
       const changeObj = {
         action: 'added',
         id: newRow.id
+      }
+      this.setChanges(changeObj)
+    },
+    addColumnEvent (event) {
+      // console.log('\nC > PreviewCsv > addColumnEvent > event : ', event)
+      // update edited
+      const newColumnId = this.uuidv4()
+      const newColumn = { ...event.column, id: newColumnId, added: true }
+      // console.log('C > PreviewCsv > addColumnEvent > newColumn : ', newColumn)
+      // console.log('C > PreviewCsv > addColumnEvent > this.edited : ', this.edited)
+      this.edited.push(newColumn)
+      // console.log('C > PreviewCsv > addColumnEvent > this.edited : ', this.edited)
+
+      // update changesData
+      const changeObj = {
+        action: 'added',
+        id: newColumn.id
       }
       this.setChanges(changeObj)
     },

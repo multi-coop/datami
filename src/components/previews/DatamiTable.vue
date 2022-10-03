@@ -1053,6 +1053,7 @@ export default {
           this.showAddColumnDialog = true
           break
         case 'addNewColumn':
+          console.log('DatamiTable > processAction > addNewColumn > event', event)
           this.$emit('addColumn', event)
           break
 
