@@ -45,6 +45,9 @@
           :checked-rows="checkedRows"
           :locale="locale"
           @action="SendActionToParent"/>
+        <ButtonAddColumn
+          :locale="locale"
+          @action="SendActionToParent"/>
       </div>
     </div>
   </div>
@@ -56,13 +59,15 @@ import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 import FilterTags from '@/components/filters/FilterTags'
 import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
 import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
+import ButtonAddColumn from '@/components/edition/csv/ButtonAddColumn'
 
 export default {
   name: 'EditCsvSkeleton',
   components: {
     FilterTags,
     ButtonAddRow,
-    ButtonDeleteRows
+    ButtonDeleteRows,
+    ButtonAddColumn
   },
   mixins: [
     mixinGlobal,

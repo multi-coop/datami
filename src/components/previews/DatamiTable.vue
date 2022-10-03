@@ -70,6 +70,13 @@
         :headers="columnsEdited"
         :locale="locale"
         @action="processAction"/>
+      <DialogAddColumn
+        v-show="showAddColumnDialog"
+        v-model="showAddColumnDialog"
+        :file-id="fileId"
+        :headers="columnsEdited"
+        :locale="locale"
+        @action="processAction"/>
       <DialogDeleteRows
         v-show="showDeleteRowsDialog"
         v-model="showDeleteRowsDialog"
@@ -471,6 +478,7 @@ import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkele
 import ButtonSortByField from '@/components/sorting/ButtonSortByField'
 import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
 import DialogAddRow from '@/components/edition/csv/DialogAddRow'
+import DialogAddColumn from '@/components/edition/csv/DialogAddColumn'
 import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 
 import PreviewField from '@/components/previews/PreviewField'
@@ -491,6 +499,7 @@ export default {
     ButtonSortByField,
     EditCsvSkeleton,
     DialogAddRow,
+    DialogAddColumn,
     DialogDeleteRows,
     PreviewField,
     PreviewCell,
@@ -553,6 +562,7 @@ export default {
 
       // DIALOGS
       showAddRowDialog: false,
+      showAddColumnDialog: false,
       showDeleteRowsDialog: false,
       showUploadFileDialog: false,
 
@@ -830,7 +840,7 @@ export default {
       return columns
     },
     isAnyDialogOpen () {
-      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog
+      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog || this.showAddColumnDialog
     },
     isCardDetailsOpen () {
       return this.showCardDetails && this.currentViewMode === 'cards'
@@ -1037,6 +1047,13 @@ export default {
           break
         case 'addNewRow':
           this.$emit('addRow', event)
+          break
+        // ADD COLUMN
+        case 'openAddColumnDialog':
+          this.showAddColumnDialog = true
+          break
+        case 'addNewColumn':
+          this.$emit('addColumn', event)
           break
 
         // IMPORT DATA

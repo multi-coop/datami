@@ -139,6 +139,7 @@
           @addTagToEnum="addTagToEnum"
           @deleteRows="deleteRowsEvent"
           @addRow="addRowEvent"
+          @addColumn="addColumnEvent"
           @sortRows="sortEdited"/>
       </div>
     </div>
