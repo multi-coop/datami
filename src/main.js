@@ -1,8 +1,16 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import vueCustomElement from 'vue-custom-element'
 import 'document-register-element/build/document-register-element'
 import './registerServiceWorker'
-import { store } from './store'
+
+// import { store } from './store'
+import { defaultStore } from './store'
+import { user } from '@/store/user.js'
+import { data } from '@/store/data.js'
+import { filters } from '@/store/filters.js'
+import { sortings } from '@/store/sortings.js'
+import { translations } from '@/store/translations.js'
 
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.min.css'
@@ -27,6 +35,18 @@ Vue.use(Buefy, {
 Vue.use(VueApexCharts)
 Vue.component('ApexChart', VueApexCharts)
 
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  ...defaultStore,
+  modules: {
+    'git-translations': translations,
+    'git-user': user,
+    'git-filters': filters,
+    'git-sortings': sortings,
+    'git-data': data
+  }
+})
 DatamiFile.store = store
 DatamiExploWiki.store = store
 DatamiMultiFiles.store = store

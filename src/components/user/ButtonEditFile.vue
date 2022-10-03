@@ -1,16 +1,46 @@
 <template>
-  <div class="ButtonEditFile datami-component">
-    <b-tooltip
+  <div
+    class="ButtonEditFile datami-component"
+    style="_flex: fit-content;">
+    <!-- <b-tooltip
       :label="t(`actions.${showEditNavbar ? 'quitEdit' : 'enterEdit'}`, locale)"
       type="is-dark"
-      position="is-top">
-      <b-button
-        size="is-small"
-        :type="showEditNavbar ? 'is-dark' : ''"
-        class="ml-1"
-        icon-left="pencil"
-        @click="ToggleEditNavbar"/>
-    </b-tooltip>
+      position="is-top"> -->
+    <b-field
+      v-if="currentEditViewMode !== 'preview'"
+      class="ml-1 is-flex is-flex-grow-1">
+      <p class="control is-flex is-flex-grow-1">
+        <b-button
+          :label="t('actions.sendContrib', locale)"
+          size="is-small"
+          type="is-dark"
+          expanded
+          icon-left="pencil"
+          @click="commitChanges"/>
+      </p>
+      <p class="control">
+        <b-tooltip
+          :label="t('actions.quitEdit', locale)"
+          type="is-dark"
+          position="is-top">
+          <b-button
+            size="is-small"
+            type="is-grey"
+            icon-left="close"
+            @click="closeEditMode"/>
+        </b-tooltip>
+      </p>
+    </b-field>
+
+    <b-button
+      v-if="currentEditViewMode === 'preview'"
+      size="is-small"
+      :label="t('actions.contribute', locale)"
+      class="ml-1"
+      icon-left="pencil"
+      expanded
+      @click="openEditMode"/>
+    <!-- </b-tooltip> -->
   </div>
 </template>
 
@@ -37,24 +67,60 @@ export default {
     ...mapActions({
       changeViewMode: 'git-data/changeViewMode',
       changeEditViewMode: 'git-data/changeEditViewMode',
-      toggleEditNavbar: 'toggleEditNavbar'
+      toggleEditNavbar: 'toggleEditNavbar',
+      updateSaving: 'git-data/updateSaving'
     }),
-    ToggleEditNavbar () {
-      // console.log('C > ButtonEditFile > ToggleEditNavbar > this.showEditNavbar : ', this.showEditNavbar)
-      this.toggleEditNavbar({ uuid: this.fileId, status: !this.showEditNavbar })
+    // toggleButton () {
+    //   if (this.currentEditViewMode === 'preview') {
+    //     this.changeEditMode('edit')
+    //   } else {
+    //     this.commitChanges()
+    //   }
+    //   // track with matomo
+    //   this.trackEvent('click', 'EditNavbarEditToggleBtn')
+    // },
+    // changeEditMode (code) {
+    //   // console.log('C > EditNavbarSkeleton > changeEditMode > code :', code)
+    //   this.changeEditViewMode({ fileId: this.fileId, mode: code })
+    // },
+    openEditMode () {
+      this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
+      this.toggleEditNavbar({ uuid: this.fileId, status: true })
+      // specific view to switch back to table
       const viewsToSwitch = ['dataviz']
-      if (this.showEditNavbar) {
-        this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
-        if (viewsToSwitch.includes(this.currentViewMode)) {
-          this.changeViewMode({ fileId: this.fileId, mode: 'table' })
-        }
-      } else {
-        this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+      if (viewsToSwitch.includes(this.currentViewMode)) {
+        this.changeViewMode({ fileId: this.fileId, mode: 'table' })
       }
-
-      // track with matomo
-      this.trackEvent('click')
+    },
+    closeEditMode () {
+      this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+      this.toggleEditNavbar({ uuid: this.fileId, status: false })
+    },
+    commitChanges () {
+      this.updateSaving({ fileId: this.fileId, isSaving: true })
     }
+    // ToggleEditNavbar () {
+    //   // switch to edit mode or commit
+    //   console.log('C > EditNavbarSkeleton > ToggleEditNavbar > this.currentEditViewMode :', this.currentEditViewMode)
+    //   console.log('C > EditNavbarSkeleton > ToggleEditNavbar > this.showEditNavbar :', this.showEditNavbar)
+
+    //   if (this.currentEditViewMode === 'preview') {
+    //     // this.toggleEditNavbar({ uuid: this.fileId, status: !this.showEditNavbar })
+    //     const viewsToSwitch = ['dataviz']
+    //     if (this.showEditNavbar) {
+    //       this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
+    //       if (viewsToSwitch.includes(this.currentViewMode)) {
+    //         this.changeViewMode({ fileId: this.fileId, mode: 'table' })
+    //       }
+    //     } else {
+    //       this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+    //     }
+    //     // track with matomo
+    //     this.trackEvent('click')
+    //   } else {
+    //     this.commitChanges()
+    //   }
+    // }
   }
 }
 </script>

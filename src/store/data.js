@@ -1,4 +1,5 @@
 import Vue from 'vue'
+// import { Vue } from '.'
 import { editModes, viewModes, isTableExt } from '@/utils/fileTypesUtils.js'
 
 export const data = {
@@ -45,9 +46,9 @@ export const data = {
   },
   getters: {
     // shareableFiles
-    getShareableFiles: (state) => {
-      return state.shareableFiles
-    },
+    // getShareableFiles: (state) => {
+    //   return state.shareableFiles
+    // },
     getSetSharedFiles: (state, getters) => {
       const shareableSetFiles = state.shareableFiles.filter(sh => sh.isSet)
       return shareableSetFiles
@@ -64,9 +65,9 @@ export const data = {
     },
 
     // sharedData and ressources
-    getSharedData: (state) => {
-      return state.sharedData
-    },
+    // getSharedData: (state) => {
+    //   return state.sharedData
+    // },
     getSharedDatasetByRessource: (state) => (ressource) => {
       return state.sharedData.filter(item => item.ressource === ressource)
     },

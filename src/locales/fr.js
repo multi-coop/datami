@@ -82,10 +82,12 @@ export default {
   actions: {
     changeViewMode: 'Changer de vue',
     edit: 'Editer',
+    contribute: 'Contribuer',
     enterEdit: 'Passer en mode édition',
     quitEdit: 'Quitter le mode édition',
     change: 'Changer',
     save: 'Sauver',
+    sendContrib: 'Proposer vos modifications',
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
@@ -233,7 +235,9 @@ export default {
     userName: 'Prénom',
     userSurname: 'Nom',
     userEmail: 'Email',
-    userMessage: 'Message'
+    userMessage: 'Message',
+    showOptions: 'Afficher les options',
+    hideOptions: 'Cacher les options'
   },
   notifications: {
     notif: 'Notification',

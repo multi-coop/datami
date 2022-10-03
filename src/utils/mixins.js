@@ -236,6 +236,7 @@ export const mixinGlobal = {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
       const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
       // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
+      const Http = widgetProvider.startsWith('localhost') ? 'http' : 'https'
 
       /* Stuff we need to add to <head>
         <script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
@@ -245,7 +246,7 @@ export const mixinGlobal = {
 
       // const scripts = [
       //   {
-      //     src: `https://${widgetProvider}/js/app.js`,
+      //     src: `${Http}://${widgetProvider}/js/app.js`,
       //     type: 'text/javascript',
       //     async: true,
       //     body: true
@@ -254,12 +255,12 @@ export const mixinGlobal = {
       const links = [
         {
           type: 'text/css',
-          href: `https://${widgetProvider}/css/app.css`,
+          href: `${Http}://${widgetProvider}/css/app.css`,
           rel: 'stylesheet'
         },
         {
           type: 'font/woff2',
-          href: `https://${widgetProvider}/fonts/materialdesignicons-webfont.woff2`,
+          href: `${Http}://${widgetProvider}/fonts/materialdesignicons-webfont.woff2`,
           rel: 'stylesheet',
           as: 'font'
         }
@@ -334,15 +335,17 @@ export const mixinGlobal = {
 export const mixinForeignKeys = {
   computed: {
     ...mapState({
+      shareableFiles: (state) => state['git-data'].shareableFiles,
+      sharedData: (state) => state['git-data'].sharedData,
       loadingShared: (state) => state['git-data'].loadingShared,
       loadingExtRessources: (state) => state['git-data'].loadingExtRessources
     }),
     ...mapGetters({
-      shareableFiles: 'git-data/getShareableFiles',
+      // shareableFiles: 'git-data/getShareableFiles',
       shareableAreSet: 'git-data/areAllShareableSet',
       isInShareableAndSet: 'git-data/isInShareableAndSet',
       isInShareableAndLoaded: 'git-data/isInShareableAndLoaded',
-      sharedData: 'git-data/getSharedData',
+      // sharedData: 'git-data/getSharedData',
       getSharedDatasetByRessource: 'git-data/getSharedDatasetByRessource',
       getSharedDatasetByGitfile: 'git-data/getSharedDatasetByGitfile',
       readyToCopyRessources: 'git-data/readyToCopyRessources',
