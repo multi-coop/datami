@@ -155,6 +155,7 @@ export default {
     category: 'Catégorie',
     string: 'Texte',
     longtext: 'Texte long',
+    image: 'Image`',
     link: 'Lien',
     email: 'Email',
     geopoint: 'Coordonnée géographique',
