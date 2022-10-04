@@ -89,6 +89,7 @@ export default {
     save: 'Save',
     send: 'Send',
     sendContrib: 'Send your contribution',
+    sendContribHelp: "Your modifications will be sent to the dataset's owners. The owners will moderate your contribution before merging them into the dataset.",
     cancel: 'Cancel',
     search: 'Search',
     expandCell: 'Expand cell content',

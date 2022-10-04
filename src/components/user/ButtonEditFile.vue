@@ -5,13 +5,20 @@
       grouped
       class="is-flex is-flex-grow-1">
       <p class="control is-flex is-flex-grow-1">
-        <b-button
-          :label="t('actions.sendContrib', locale)"
-          size="is-small"
+        <b-tooltip
+          :label="t('actions.sendContribHelp', locale)"
           type="is-dark"
-          expanded
-          icon-left="pencil"
-          @click="commitChanges"/>
+          class="is-flex is-flex-grow-1"
+          multilined
+          position="is-top">
+          <b-button
+            :label="t('actions.sendContrib', locale)"
+            size="is-small"
+            type="is-dark"
+            expanded
+            icon-left="pencil"
+            @click="commitChanges"/>
+        </b-tooltip>
       </p>
       <p class="control">
         <b-tooltip
