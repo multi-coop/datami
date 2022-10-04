@@ -83,7 +83,7 @@ export default {
     changeViewMode: 'Changer de vue',
     edit: 'Editer',
     contribute: 'Contribuer',
-    enterEdit: 'Passer en mode contribution',
+    enterEdit: 'Passer en mode édition / contribution',
     quitEdit: 'Quitter le mode contribution',
     change: 'Changer',
     save: 'Sauver',

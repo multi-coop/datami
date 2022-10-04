@@ -2,6 +2,7 @@
   <div class="ButtonEditFile datami-component">
     <b-field
       v-if="showEditNavbar"
+      grouped
       class="is-flex is-flex-grow-1">
       <p class="control is-flex is-flex-grow-1">
         <b-button
@@ -19,20 +20,26 @@
           position="is-top">
           <b-button
             size="is-small"
-            type="is-grey"
-            icon-left="close"
+            type="is-dark"
+            icon-left="close-thick"
             @click="closeEditMode"/>
         </b-tooltip>
       </p>
     </b-field>
 
-    <b-button
+    <b-tooltip
       v-if="!showEditNavbar"
-      size="is-small"
-      :label="t('actions.contribute', locale)"
-      icon-left="pencil"
-      expanded
-      @click="openEditMode"/>
+      :label="t('actions.enterEdit', locale)"
+      type="is-dark"
+      position="is-top"
+      class="is-flex is-flex-grow-1">
+      <b-button
+        size="is-small"
+        :label="t('actions.contribute', locale)"
+        icon-left="pencil"
+        expanded
+        @click="openEditMode"/>
+    </b-tooltip>
   </div>
 </template>
 
