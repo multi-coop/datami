@@ -2,7 +2,7 @@
   <div class="UserOptions datami-component columns is-gapless is-mobile is-flex is-flex-grow-1">
     <div
       v-if="!onlyPreview && !showOptions"
-      :class="`column is-${showOptions ? 2 : 10} is-${showOptions ? 3 : 8}-tablet is-${showOptions ? 3 : 8}-mobile`">
+      :class="`column is-10 is-10-mobile is-offset-1`">
       <ButtonEditFile
         :file-id="fileId"
         :locale="locale"
@@ -10,7 +10,7 @@
     </div>
     <div
       v-if="showOptions"
-      class="column is-10 is-7-tablet is-7-mobile is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
+      class="column is-10 is-10-mobile is-offset-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
       <ButtonReloadFile
         :file-id="fileId"
         :locale="locale"/>
@@ -36,7 +36,7 @@
         :locale="locale"/>
     </div>
     <div
-      class="column is-2 is-3-tablet is-3-mobile has-text-right">
+      class="column is-1 is-1-mobile has-text-right">
       <b-tooltip
         :label="t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale)"
         type="is-dark"

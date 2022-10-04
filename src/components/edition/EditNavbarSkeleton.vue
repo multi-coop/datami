@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="showEditNavbar && !noEditNavbarViews.includes(currentViewMode)"
-    class="EditNavbarSkeleton datami-component container">
+    class="EditNavbarSkeleton datami-component container mt-2">
     <div
       v-if="gitObj"
       class="columns is-multiline is-mobile mb-2">

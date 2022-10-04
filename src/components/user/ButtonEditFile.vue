@@ -1,13 +1,11 @@
 <template>
-  <div
-    class="ButtonEditFile datami-component"
-    style="_flex: fit-content;">
+  <div class="ButtonEditFile datami-component">
     <!-- <b-tooltip
       :label="t(`actions.${showEditNavbar ? 'quitEdit' : 'enterEdit'}`, locale)"
       type="is-dark"
       position="is-top"> -->
     <b-field
-      v-if="currentEditViewMode !== 'preview'"
+      v-if="showEditNavbar"
       class="ml-1 is-flex is-flex-grow-1">
       <p class="control is-flex is-flex-grow-1">
         <b-button
@@ -33,7 +31,7 @@
     </b-field>
 
     <b-button
-      v-if="currentEditViewMode === 'preview'"
+      v-if="!showEditNavbar"
       size="is-small"
       :label="t('actions.contribute', locale)"
       class="ml-1"
@@ -61,6 +59,11 @@ export default {
     locale: {
       default: 'en',
       type: String
+    }
+  },
+  data () {
+    return {
+      notPreviewModes: ['edit', 'diff']
     }
   },
   methods: {
@@ -124,3 +127,13 @@ export default {
   }
 }
 </script>
+
+<style>
+
+  .ButtonEditFile > .field > .field-body {
+    -webkit-box-flex: 1!important;
+    -ms-flex-positive: 1!important;
+    flex-grow: 1!important;
+  }
+
+</style>

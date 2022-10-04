@@ -1,7 +1,7 @@
 <template>
   <div class="FileTitle datami-component">
     <div class="is-flex is-align-items-center">
-      <span class="mx-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop has-text-dark text-shadow">
+      <span class="px-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop has-text-dark text-shadow">
         {{ title }}
       </span>
       <b-tooltip
