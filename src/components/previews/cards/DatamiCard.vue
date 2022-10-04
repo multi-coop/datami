@@ -13,9 +13,9 @@
         @click="toggleDetail('showDetailButton')">
         <div
           v-if="!showDetail"
-          class="columns is-multiline my-0 pl-5">
-          <!-- TITLE BLOCK : 'title' -->
+          class="columns is-multiline my-0 pl-3">
           <div class="column is-12 px-0 py-0">
+            <!-- TITLE BLOCK : 'title' -->
             <DatamiCardBlockContent
               v-for="(fieldObj, i) in getFieldsByPosition('title')"
               :key="`title-${i}-${fieldObj.field}`"
@@ -30,11 +30,31 @@
               :is-mini="isMini"
               :locale="locale"
               @updateCellValue="emitUpdate"
-              @toggleDetail="toggleDetail"/>
+              @toggleDetail="toggleDetail">
+              <template #logo>
+                <div v-if="hasContentByPosition('logo')">
+                  <!-- LOGO BLOCK : 'logo' -->
+                  <div
+                    v-for="(fieldObj, i) in getFieldsByPosition('logo')"
+                    :key="`logo-${i}-${fieldObj.field}`"
+                    class="card-logo"
+                    @click="toggleDetail">
+                    <DatamiCardBlockImage
+                      :key="`logo-${i}-${fieldObj.field}`"
+                      :file-id="fileId"
+                      :position="'logo'"
+                      :field="fieldObj"
+                      :field-label="getFieldLabel(fieldObj.field)"
+                      :item-id="item.id"
+                      :item-value="item[fieldObj.field]"
+                      :is-mini="isMini"
+                      :locale="locale"/>
+                  </div>
+                </div>
+              </template>
+            </DatamiCardBlockContent>
           </div>
-          <!-- <p>
-            showDetail: {{ showDetail }}
-          </p> -->
+
           <!-- SUBTITLE BLOCK : 'subtitle' -->
           <div class="column is-12 px-0 py-0">
             <div v-if="hasContentByPosition('subtitle')">
@@ -56,6 +76,7 @@
           </div>
         </div>
       </div>
+
       <button
         class="card-header-icon"
         @click="toggleDetail('closeButton')">
@@ -73,7 +94,7 @@
     <!-- IMAGE BLOCK : 'image' -->
     <div
       v-if="!showDetail && hasContentByPosition('image')"
-      class="card-image"
+      class="card-image mb-2"
       @click="toggleDetail">
       <DatamiCardBlockImage
         v-for="(fieldObj, i) in getFieldsByPosition('image')"
@@ -121,7 +142,7 @@
           <div class="columns is-multiline">
             <!-- TITLE / SUBTITLE / ADRESS -->
             <div
-              v-if="hasAnyContentByPosition(['title', 'subtitle', 'adress'])"
+              v-if="hasAnyContentByPosition(['title', 'subtitle', 'adress', 'logo'])"
               class="column is-12">
               <div
                 :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
@@ -142,7 +163,27 @@
                     :is-mini="isMini"
                     :locale="locale"
                     @updateCellValue="emitUpdate"
-                    @toggleDetail="toggleDetail"/>
+                    @toggleDetail="toggleDetail">
+                    <template #logo>
+                      <!-- LOGO BLOCK : 'logo' -->
+                      <div
+                        v-for="(fieldObj, i) in getFieldsByPosition('logo')"
+                        :key="`logo-${i}-${fieldObj.field}`"
+                        class="card-logo"
+                        @click="toggleDetail">
+                        <DatamiCardBlockImage
+                          :key="`logo-${i}-${fieldObj.field}`"
+                          :file-id="fileId"
+                          :position="'logo'"
+                          :field="fieldObj"
+                          :field-label="getFieldLabel(fieldObj.field)"
+                          :item-id="item.id"
+                          :item-value="item[fieldObj.field]"
+                          :is-mini="isMini"
+                          :locale="locale"/>
+                      </div>
+                    </template>
+                  </DatamiCardBlockContent>
 
                   <!-- SUBTITLE BLOCK : 'subtitle' -->
                   <div v-if="hasContentByPosition('subtitle')">
