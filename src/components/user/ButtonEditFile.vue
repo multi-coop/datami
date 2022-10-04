@@ -1,12 +1,8 @@
 <template>
   <div class="ButtonEditFile datami-component">
-    <!-- <b-tooltip
-      :label="t(`actions.${showEditNavbar ? 'quitEdit' : 'enterEdit'}`, locale)"
-      type="is-dark"
-      position="is-top"> -->
     <b-field
       v-if="showEditNavbar"
-      class="ml-1 is-flex is-flex-grow-1">
+      class="is-flex is-flex-grow-1">
       <p class="control is-flex is-flex-grow-1">
         <b-button
           :label="t('actions.sendContrib', locale)"
@@ -34,11 +30,9 @@
       v-if="!showEditNavbar"
       size="is-small"
       :label="t('actions.contribute', locale)"
-      class="ml-1"
       icon-left="pencil"
       expanded
       @click="openEditMode"/>
-    <!-- </b-tooltip> -->
   </div>
 </template>
 

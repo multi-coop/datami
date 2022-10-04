@@ -11,6 +11,9 @@
     <div
       v-if="showOptions"
       class="column is-10 is-10-mobile is-offset-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
+      <ButtonCopyWidgetHtml
+        :file-id="fileId"
+        :locale="locale"/>
       <ButtonReloadFile
         :file-id="fileId"
         :locale="locale"/>
@@ -25,13 +28,10 @@
         v-if="!onlyPreview"
         :file-id="fileId"
         :locale="locale"/>
-      <ButtonChangeLocale
-        :file-id="fileId"
-        :locale="locale"/>
       <ButtonFullscreen
         :file-id="fileId"
         :locale="locale"/>
-      <ButtonCopyWidgetHtml
+      <ButtonChangeLocale
         :file-id="fileId"
         :locale="locale"/>
     </div>
