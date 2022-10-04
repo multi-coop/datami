@@ -8,9 +8,7 @@
     <!-- MATOMO -->
     <MatomoScript
       :file-id="fileId"/>
-    <p class="is-size-2">
-      test
-    </p>
+
     <!-- WIDGET -->
     <div
       :id="`datami-widget-${fileId}`"
