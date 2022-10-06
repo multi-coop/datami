@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
 import { mixinGlobal } from '@/utils/mixins.js'
 
 import ButtonImportData from '@/components/edition/ButtonImportData'
@@ -66,18 +64,7 @@ export default {
       noEditNavbarViews: ['dataviz']
     }
   },
-  computed: {
-    ...mapGetters({
-      getEditNavbar: 'getFileEditNavbarStatus'
-    }),
-    showEditNavbar () {
-      return this.getEditNavbar(this.fileId)
-    }
-  },
   methods: {
-    ...mapActions({
-      changeEditViewMode: 'git-data/changeEditViewMode'
-    }),
     SendActionToParent (event) {
       this.$emit('action', event)
     }
