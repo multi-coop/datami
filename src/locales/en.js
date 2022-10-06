@@ -82,11 +82,14 @@ export default {
   actions: {
     changeViewMode: 'Change the view mode',
     edit: 'Edit',
-    enterEdit: 'Enter the edition mode',
-    quitEdit: 'Exit the edit mode',
+    contribute: 'Contribute',
+    enterEdit: 'Enter the edition / contribution mode',
+    quitEdit: 'Exit the contribution mode',
     change: 'Change',
     save: 'Save',
     send: 'Send',
+    sendContrib: 'Send your contribution',
+    sendContribHelp: "Your modifications will be sent to the dataset's owners. The owners will moderate your contribution before merging them into the dataset.",
     cancel: 'Cancel',
     search: 'Search',
     expandCell: 'Expand cell content',
@@ -233,7 +236,9 @@ export default {
     userName: 'Name',
     userSurname: 'Surname',
     userEmail: 'Email',
-    userMessage: 'Message'
+    userMessage: 'Message',
+    showOptions: 'Show the options',
+    hideOptions: 'Hide the options'
   },
   notifications: {
     notif: 'Notification',

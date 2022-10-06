@@ -3,7 +3,7 @@
     <b-tooltip
       :label="t(`edit.uploadData`, locale)"
       type="is-dark"
-      position="is-right">
+      position="is-left">
       <b-button
         size="is-small"
         class="ml-1"

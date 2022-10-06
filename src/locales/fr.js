@@ -82,10 +82,13 @@ export default {
   actions: {
     changeViewMode: 'Changer de vue',
     edit: 'Editer',
-    enterEdit: 'Passer en mode édition',
-    quitEdit: 'Quitter le mode édition',
+    contribute: 'Contribuer',
+    enterEdit: 'Passer en mode édition / contribution',
+    quitEdit: 'Quitter le mode contribution',
     change: 'Changer',
     save: 'Sauver',
+    sendContrib: 'Envoyer votre contribution',
+    sendContribHelp: 'Vos modifications seront envoyées aux responsables du jeu de données. Les responsables modèrera votre proprosition avant de merger les modifications aux données.',
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
@@ -233,7 +236,9 @@ export default {
     userName: 'Prénom',
     userSurname: 'Nom',
     userEmail: 'Email',
-    userMessage: 'Message'
+    userMessage: 'Message',
+    showOptions: 'Afficher les options',
+    hideOptions: 'Cacher les options'
   },
   notifications: {
     notif: 'Notification',
