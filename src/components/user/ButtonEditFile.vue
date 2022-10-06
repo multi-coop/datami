@@ -81,19 +81,6 @@ export default {
       toggleEditNavbar: 'toggleEditNavbar',
       updateSaving: 'git-data/updateSaving'
     }),
-    // toggleButton () {
-    //   if (this.currentEditViewMode === 'preview') {
-    //     this.changeEditMode('edit')
-    //   } else {
-    //     this.commitChanges()
-    //   }
-    //   // track with matomo
-    //   this.trackEvent('click', 'EditNavbarEditToggleBtn')
-    // },
-    // changeEditMode (code) {
-    //   // console.log('C > EditNavbarSkeleton > changeEditMode > code :', code)
-    //   this.changeEditViewMode({ fileId: this.fileId, mode: code })
-    // },
     openEditMode () {
       this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
       this.toggleEditNavbar({ uuid: this.fileId, status: true })
@@ -110,28 +97,6 @@ export default {
     commitChanges () {
       this.updateSaving({ fileId: this.fileId, isSaving: true })
     }
-    // ToggleEditNavbar () {
-    //   // switch to edit mode or commit
-    //   console.log('C > EditNavbarSkeleton > ToggleEditNavbar > this.currentEditViewMode :', this.currentEditViewMode)
-    //   console.log('C > EditNavbarSkeleton > ToggleEditNavbar > this.showEditNavbar :', this.showEditNavbar)
-
-    //   if (this.currentEditViewMode === 'preview') {
-    //     // this.toggleEditNavbar({ uuid: this.fileId, status: !this.showEditNavbar })
-    //     const viewsToSwitch = ['dataviz']
-    //     if (this.showEditNavbar) {
-    //       this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
-    //       if (viewsToSwitch.includes(this.currentViewMode)) {
-    //         this.changeViewMode({ fileId: this.fileId, mode: 'table' })
-    //       }
-    //     } else {
-    //       this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
-    //     }
-    //     // track with matomo
-    //     this.trackEvent('click')
-    //   } else {
-    //     this.commitChanges()
-    //   }
-    // }
   }
 }
 </script>

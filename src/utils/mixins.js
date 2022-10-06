@@ -341,11 +341,9 @@ export const mixinForeignKeys = {
       loadingExtRessources: (state) => state['git-data'].loadingExtRessources
     }),
     ...mapGetters({
-      // shareableFiles: 'git-data/getShareableFiles',
       shareableAreSet: 'git-data/areAllShareableSet',
       isInShareableAndSet: 'git-data/isInShareableAndSet',
       isInShareableAndLoaded: 'git-data/isInShareableAndLoaded',
-      // sharedData: 'git-data/getSharedData',
       getSharedDatasetByRessource: 'git-data/getSharedDatasetByRessource',
       getSharedDatasetByGitfile: 'git-data/getSharedDatasetByGitfile',
       readyToCopyRessources: 'git-data/readyToCopyRessources',

@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mapGetters } from 'vuex'
 
 import ButtonEditFile from '@/components/user/ButtonEditFile'
 import ButtonReloadFile from '@/components/user/ButtonReloadFile'
@@ -77,7 +77,6 @@ export default {
     ButtonCopyWidgetHtml,
     ButtonFullscreen
   },
-  mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -96,6 +95,11 @@ export default {
     return {
       showOptions: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      t: 'git-translations/getTranslation'
+    })
   }
 }
 </script>
