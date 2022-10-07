@@ -2,7 +2,7 @@
   <div class="ButtonDownloadFile datami-component">
     <b-tooltip
       :label="t('actions.downloadFile', locale)"
-      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-top">
       <b-button
         size="is-small"
