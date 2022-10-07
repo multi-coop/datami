@@ -2,7 +2,7 @@
   <div class="ButtonCopyWidgetHtml datami-component">
     <b-tooltip
       :label="t('actions.copyWidget', locale)"
-      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       multilined
       position="is-left">
       <b-button
