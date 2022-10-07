@@ -22,7 +22,7 @@
               v-if="getFieldForeignKey(tag.field) || getFieldDefinitions(tag.field)"
               multilined
               size="is-large"
-              :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`">
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
               <template #content>
                 <!-- {{ getFieldForeignKey(tag.field) }} -->
                 <!-- <hr> -->
