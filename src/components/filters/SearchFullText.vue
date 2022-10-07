@@ -8,7 +8,7 @@
         v-model="searchValue"
         :placeholder="`${t('actions.search', locale)}...`"
         icon="magnify"
-        :class=" `${isDarkMode ? 'has-text-white white' : ''} ` "
+        :class="`${isDarkMode ? 'has-text-white white' : ''}`"
         :icon-right="`${searchValue ? 'close-thick' : ''}`"
         icon-right-clickable
         @icon-right-click="clearInput"
