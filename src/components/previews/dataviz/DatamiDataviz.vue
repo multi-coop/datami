@@ -25,7 +25,6 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
