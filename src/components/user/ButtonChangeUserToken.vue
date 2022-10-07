@@ -5,7 +5,7 @@
       <div class="dropdown-trigger">
         <b-tooltip
           :label="t('actions.changeToken', locale)"
-          :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+          :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
           position="is-top">
           <b-button
             size="is-small"
