@@ -1,5 +1,7 @@
 <template>
-  <div class="SearchFullText">
+  <!-- :class=" `SearchFullText ${isDarkMode ? 'gitribute-darkmode-grey-background' : ''} ` " -->
+  <div
+    type="is-dark">
     <b-field
       expanded
       type="is-dark">
@@ -7,6 +9,7 @@
         v-model="searchValue"
         :placeholder="`${t('actions.search', locale)}...`"
         icon="magnify"
+        :class=" `${isDarkMode ? 'has-text-white white' : ''} ` "
         :icon-right="`${searchValue ? 'close-thick' : ''}`"
         icon-right-clickable
         @icon-right-click="clearInput"
@@ -61,3 +64,13 @@ export default {
   }
 }
 </script>
+
+<style>
+  .gitribute-darkmode-grey-background{
+    background-color: rgb(151, 151, 150) !important;
+  }
+  .white{
+    color: white !important;
+  }
+
+</style>

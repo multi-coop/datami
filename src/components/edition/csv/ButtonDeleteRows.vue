@@ -2,7 +2,7 @@
   <div class="ButtonDeleteRows datami-component">
     <b-tooltip
       :label="t(`editCsv.${getTootlipLabel}`, locale)"
-      type="is-dark"
+      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-left">
       <b-button
         size="is-small"

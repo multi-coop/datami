@@ -1,69 +1,21 @@
 <template>
   <div class="ViewModeBtns datami-component is-flex is-align-items-center">
     <!-- BUTTONS -->
-    <!-- <b-field
-      v-if="fileTypeFamily === 'table' && hasCardsView"
-      class="mr-4"
-      custom-class="is-small edit-mode-btns">
-      <b-tooltip
-        v-for="btn in buttonsView"
-        :key="btn.code"
-        :label="`${t(btn.textCode, locale)}`"
-        type="is-dark"
-        position="is-top">
-        <b-button
-          :icon-left="btn.icon"
-          :type="currentViewMode === btn.code ? 'is-dark' : ''"
-          :active="currentViewMode === btn.code"
-          size="is-small"
-          @click="changeView(btn.code)"/>
-      </b-tooltip>
-    </b-field> -->
-
-    <!-- <b-dropdown
-      v-model="viewMode"
-      class="g-view-mode-dropdown"
-      :triggers="['hover']"
-      aria-role="list">
-      <template #trigger>
-        <b-tooltip
-          :label="t('preview.changeViewMode', locale)"
-          type="is-dark"
-          position="is-top">
-          <b-button
-            :icon-left="getIcon(viewMode)"/>
-        </b-tooltip>
-      </template>
-
-      <b-dropdown-item
-        v-for="btn in buttonsView"
-        :key="btn.code"
-        :value="btn.code"
-        aria-role="listitem"
-        @click="changeView(btn.code)">
-        <div class="media">
-          <b-icon
-            class="media-left"
-            :icon="btn.icon"/>
-          <div class="media-content">
-            <h3>{{ t(btn.textCode, locale) }}</h3>
-          </div>
-        </div>
-      </b-dropdown-item>
-    </b-dropdown> -->
-
     <div class="dropdown is-hoverable is-left">
       <div class="dropdown-trigger">
         <b-button
           size="is-small"
-          class="ml-1 mr-2"
+          :class="`ml-1 mr-2 ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+          :type="isDarkMode ? 'is-white' : ''"
+          :outlined="isDarkMode"
           :icon-left="getIcon(currentViewMode)"
           aria-haspopup="true"
-          :disabled="btnsEdit.length === 1"
+          :disabled="btnsEdit.length < 2"
           aria-controls="dropdown-views"/>
         <div
+          v-if="btnsEdit.length > 1"
           id="dropdown-views"
-          class="dropdown-menu"
+          :class="`dropdown-menu datami-dropdown-viewmode-${isDarkMode ? 'darkmode' : 'clearmode'}`"
           role="menu"
           style="z-index: 90;">
           <div class="dropdown-content">
@@ -76,7 +28,7 @@
             <a
               v-for="btn in btnsEdit"
               :key="btn.code"
-              :class="`dropdown-item ${ btn.code === currentViewMode ? 'is-active is-dark' : ''}`"
+              :class="`dropdown-item ${ btn.code === currentViewMode ? 'is-active' : ''}`"
               @click="changeView(btn.code)">
               <b-icon
                 class="media-left"
@@ -197,7 +149,31 @@ export default {
   .is-active {
     background-color: #000000 !important;
   }
-  /* .EditModeBtns > .field > .field-body > .field.has-addons {
-    justify-content: center !important;
-  } */
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content {
+    color: white !important;
+    background-color: black !important;
+  }
+  .datami-dropdown-viewmode-clearmode > .dropdown-content {
+    color: black !important;
+    background-color: white !important;
+  }
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item {
+    color: white !important;
+  }
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item.is-active {
+    color: black !important;
+    background-color: white !important;
+  }
+  .datami-dropdown-viewmode-clearmode > .dropdown-content > .dropdown-item.is-active {
+    color: white !important;
+    background-color: black !important;
+  }
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content > a.dropdown-item:hover:not(.is-active) {
+    color: black !important;
+  }
+
 </style>

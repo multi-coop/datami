@@ -193,7 +193,7 @@ export default {
   watch: {
     file (next) {
       if (next) {
-        console.log('\nC > DialogUploadFile > watch > file > next :', next)
+        // console.log('\nC > DialogUploadFile > watch > file > next :', next)
         const reader = new FileReader()
         reader.onload = e => {
           this.uploaded = e.target.result
@@ -217,7 +217,7 @@ export default {
       this.file = {}
     },
     sendUploadToParent () {
-      console.log('\nC > DialogUploadFile > sendUploadToParent > this.uploaded :', this.uploaded)
+      // console.log('\nC > DialogUploadFile > sendUploadToParent > this.uploaded :', this.uploaded)
       const payload = {
         action: 'uploadFileData',
         file: this.file,

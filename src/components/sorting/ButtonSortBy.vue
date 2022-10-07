@@ -7,7 +7,7 @@
         <div class="is-flex">
           <b-tooltip
             :label="t(`sort.sortBy`, locale)"
-            type="is-dark"
+            :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
             position="is-top">
             <b-icon
               icon="sort"

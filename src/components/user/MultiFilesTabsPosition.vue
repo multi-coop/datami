@@ -11,8 +11,9 @@
           :label="`${t('tabs.switchPosition', locale)}: ${btn.id}`">
           <b-button
             :icon-left="btn.icon"
-            type="is-grey"
             size="is-small"
+            :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+            :type="isDarkMode ? 'is-white' : 'is-grey'"
             outlined
             @click="changePosition(btn)"/>
         </b-tooltip>

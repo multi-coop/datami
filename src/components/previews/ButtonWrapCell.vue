@@ -4,7 +4,7 @@
       v-if="showExpand"
       :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
       append-to-body
-      type="is-dark">
+      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`">
       <b-icon
         :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
         :type="nowrap ? 'is-grey-light' : 'is-dark'"

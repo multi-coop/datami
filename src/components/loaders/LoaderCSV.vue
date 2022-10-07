@@ -3,7 +3,7 @@
     <div class="columns is-mobile is-multiline mb-5 pb-4">
       <!-- FAKE TABLE -->
       <div class="column is-12 mt-2">
-        <table class="table">
+        <table :class="`table ${isDarkMode ? 'datami-darkmode-loader-background' : ''}`">
           <thead>
             <th
               v-for="col in columns"
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'LoaderCSV',
@@ -44,6 +45,17 @@ export default {
       rows: 5,
       cellWidth: '120px'
     }
+  },
+  computed: {
+    ...mapGetters({
+      isDarkMode: 'git-storage/isDarkMode'
+    })
   }
 }
 </script>
+
+<style scoped>
+.datami-darkmode-loader-background {
+  background-color: #2d2d30;
+}
+</style>

@@ -1,10 +1,13 @@
 <template>
-  <div class="ShowDown datami-component">
-    <div v-html="outputHtml"/>
+  <div class="ShowDown datami-component datami-component-shodown">
+    <div
+      :style="`---txtColor: ${ isDarkMode ? 'white' : '#363636' };`"
+      v-html="outputHtml"/>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import showdown from 'showdown'
 import table from 'showdown-table'
 
@@ -49,6 +52,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isDarkMode: 'git-storage/isDarkMode'
+    }),
     converter () {
       // Create a showdown converter instance
       // const instance = new showdown.Converter({ extensions: [table] })
@@ -85,3 +91,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .datami-component-shodown div p, h1, h2, h3, h4, h6 {
+    color: var(---txtColor) !important;
+  }
+</style>

@@ -21,6 +21,7 @@
         <CustomFilterDropdown
           v-for="filter in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}`"
+          :class="isDarkMode ? 'is-dark' : 'is-white'"
           :filter="filter"
           :file-id="fileId"
           :field-active-tags="fieldActiveTags(filter.field)"

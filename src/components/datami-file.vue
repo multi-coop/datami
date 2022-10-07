@@ -2,7 +2,7 @@
   <div
     v-if="gitfile"
     :id="fileId"
-    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
     <!-- MATOMO -->
@@ -324,6 +324,10 @@ export default {
     fromMultiFilesVertical: {
       default: false,
       type: Boolean
+    },
+    theme: {
+      default: '',
+      type: String
     }
   },
   data () {
@@ -369,13 +373,15 @@ export default {
       }
     },
     async loadingExtRessources (next) {
-      console.log('C >>> DatamiFile > watch > loadingExtRessources > next : ', next)
+      // console.log('C >>> DatamiFile > watch > loadingExtRessources > next : ', next)
       if (next && next.loadState === 'loading' && next.initiator === this.fileId && this.readyToLoadExtRessources) {
         await this.loadExtRessources()
       }
     }
   },
   async beforeMount () {
+    // INITIALIZING LOCAL STORAGE
+    this.initializeStorage()
     // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
     await this.initWidget()
   },
@@ -401,7 +407,8 @@ export default {
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors',
-      activateTrackAllOutlinks: 'activateTrackAllOutlinks'
+      activateTrackAllOutlinks: 'activateTrackAllOutlinks',
+      initializeStorage: 'git-storage/initializeStorage'
     }),
     async initWidget () {
       const fileUuid = this.uuidv4()
@@ -655,7 +662,12 @@ export default {
 .no-text-transform{
   text-transform: none!important;
 }
-
+.datami-darkmode-white-text{
+  color: white !important;
+}
+.datami-darkmode{
+  background-color: #2d2d30 !important;
+}
 @media(max-width:768px) {
   .filetitle-and-viewmodes{
     justify-content: center;

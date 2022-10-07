@@ -321,6 +321,9 @@ export default {
     }
   },
   async beforeMount () {
+    // INITIALIZING LOCAL STORAGE
+    this.initializeStorage()
+
     // console.log('\nC > DatamiExploWiki > beforeMount > this.wikifile : ', this.wikifile)
     // console.log('C > DatamiExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > DatamiExploWiki > beforeMount > this.options : ', this.options)
@@ -399,6 +402,7 @@ export default {
       addFileReqInfos: 'addFileReqInfos',
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors',
+      initializeStorage: 'git-storage/initializeStorage',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     async reloadMediawikiRessources () {

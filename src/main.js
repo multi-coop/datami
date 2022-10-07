@@ -11,6 +11,7 @@ import { data } from '@/store/data.js'
 import { filters } from '@/store/filters.js'
 import { sortings } from '@/store/sortings.js'
 import { translations } from '@/store/translations.js'
+import { storage } from '@/store/storage.js'
 
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.min.css'
@@ -44,7 +45,8 @@ const store = new Vuex.Store({
     'git-user': user,
     'git-filters': filters,
     'git-sortings': sortings,
-    'git-data': data
+    'git-data': data,
+    'git-storage': storage
   }
 })
 DatamiFile.store = store

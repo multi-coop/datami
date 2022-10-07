@@ -6,7 +6,9 @@
       <div class="dropdown-trigger">
         <b-button
           size="is-small"
-          class="ml-1"
+          :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+          :type="isDarkMode ? 'is-white' : ''"
+          :outlined="isDarkMode"
           icon-left="translate"
           aria-haspopup="true"
           aria-controls="dropdown-locales"/>

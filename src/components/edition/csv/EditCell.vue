@@ -54,20 +54,20 @@
         :value="input"
         :disabled="isConsolidating"
         size="is-small"
-        type="is-dark"
+        :type="isDarkMode ? 'is-light' : 'is-dark'"
         @input="emitChange"/>
 
       <!-- NUMBERS -->
       <b-numberinput
         v-else-if="!isHeader && isNumber"
-        :custom-class="`g-cell py-0`"
+        :custom-class="`g-cell py-0 ${isDarkMode ? 'g-cell-number-darkmode' :''}`"
         :value="input"
         :step="isInteger ? 1 : 0.01"
         :disabled="isConsolidating"
         controls-position="compact"
         controls-rounded
         size="is-small"
-        type="is-light"
+        :type="isDarkMode ? 'is-dark' : 'is-light'"
         @input="emitChange"/>
 
       <!-- TAG / CATEGORY (SELECT) -->
@@ -108,7 +108,7 @@
       <!-- ANY STRING -->
       <b-input
         v-else
-        :custom-class="`g-cell py-0 ${isHeader ? 'g-header' : ''}`"
+        :custom-class="`${isDarkMode ? 'g-cell-darkmode' : 'g-cell'} py-0 ${isHeader ? 'g-header' : ''} ${isDarkMode ? 'has-background-white' : ''}`"
         :value="input"
         :disabled="isConsolidating"
         :type="!isHeader && isLongText ? 'textarea' : 'text'"
@@ -280,8 +280,12 @@ export default {
 }
 .g-cell {
   background-color: transparent;
-  /* border: none; */
-  /* border-color: none; */
+}
+.g-cell-darkmode {
+  background-color: white;
+}
+.g-cell-number-darkmode {
+  background-color: white !important;
 }
 .g-header {
   font-size: .85em!important;
