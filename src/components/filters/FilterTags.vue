@@ -94,7 +94,7 @@
             <!-- TAG REMOVER -->
             <b-tooltip
               :label="t(`filters.removeFilter`, locale)"
-              :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
               position="is-top">
               <b-icon
                 size="is-small"
