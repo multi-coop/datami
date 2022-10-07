@@ -57,26 +57,6 @@ export default {
       type: Boolean
     }
   },
-  // data () {
-  //   return {
-  //     options: undefined,
-  //     series: undefined
-  //   }
-  // },
-  // computed: {
-  //   ...mapGetters({
-  //     isDarkMode: 'git-storage/isDarkMode'
-  //   })
-  // },
-  // computed: {
-  //   handleTextColorApexCharts (next) {
-  //     const apexChartsTexts = Array.from(document.querySelectorAll('.apexcharts-legend-text'))
-  //     // apexChartsTexts.classList.add(`${this.isDarkMode ? 'datami-darkmode-white-text' : ''}`)
-  //     // console.log('apexChartsTexts', apexChartsTexts)
-  //     apexChartsTexts.forEach(text => text.classList.add(`${this.isDarkMode ? 'datami-darkmode-white-text' : 'datami-darkmode-none'}`))
-  //     return null
-  //   }
-  // },
   watch: {
     currentViewMode (next) {
       // console.log('\nC-DatamiDataviz > watch > currentViewMode : ', next)
@@ -102,10 +82,6 @@ export default {
 </script>
 
 <style>
-/* .datami-darkmode-white-text{
-  color: white !important;
-} */
-
 .apexcharts-legend-text{
   background-color: white !important;
   padding: 1% !important;
