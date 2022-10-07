@@ -2,7 +2,7 @@
   <div class="ButtonAddRow datami-component">
     <b-tooltip
       :label="t(`editCsv.addRow`, locale)"
-      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-left">
       <b-button
         size="is-small"
