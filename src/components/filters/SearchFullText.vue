@@ -1,5 +1,4 @@
 <template>
-  <!-- :class=" `SearchFullText ${isDarkMode ? 'gitribute-darkmode-grey-background' : ''} ` " -->
   <div
     type="is-dark">
     <b-field
