@@ -111,12 +111,6 @@ export default {
       chartOptions.labels = aggregationField.enumArr
       // console.log('C > DatamiDataviz > beforeMount > this.chartOptions : ', this.chartOptions)
 
-      // if (this.isDarkmode) {
-      //   const tooltipConfig = { ...chartOptions.tooltip } || {}
-      //   tooltipConfig.theme = 'dark'
-      //   chartOptions.tooltip = tooltipConfig
-      // }
-
       if (categoriesFieldIdx) {
         const grouped = this.groupByField(this.items, categoriesFieldIdx)
         // console.log('\nC > DatamiDataviz > computeSerie > grouped : ', grouped)
