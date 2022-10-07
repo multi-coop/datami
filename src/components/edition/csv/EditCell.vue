@@ -108,7 +108,7 @@
       <!-- ANY STRING -->
       <b-input
         v-else
-        :custom-class="`${isDarkMode ? 'g-cell-darkmode' : 'g-cell'} py-0 ${isHeader ? 'g-header' : ''} ${isDarkMode ? 'has-background-white' : ''}`"
+        :custom-class="`${isDarkMode ? 'g-cell-darkmode has-background-white' : 'g-cell'} py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         :disabled="isConsolidating"
         :type="!isHeader && isLongText ? 'textarea' : 'text'"
