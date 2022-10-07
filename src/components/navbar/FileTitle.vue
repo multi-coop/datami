@@ -6,7 +6,7 @@
       </span>
       <b-tooltip
         :label="t('file.fileInfos', locale)"
-        :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
         position="is-top">
         <b-icon
           icon="information-outline"
