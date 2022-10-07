@@ -1,5 +1,5 @@
 <template>
-  <div class="DatamiDataviz datami-component">
+  <div :class="`DatamiDataviz datami-component ${isDarkMode ? 'datami-dataviz-darkmode' : ''}`">
     <!-- DISPLAY CHART -->
     <ApexChart
       :ref="chartId"
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-
+// import { mapGetters } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
@@ -63,18 +63,55 @@ export default {
   //     series: undefined
   //   }
   // },
+  // computed: {
+  //   ...mapGetters({
+  //     isDarkMode: 'git-storage/isDarkMode'
+  //   })
+  // },
+  // computed: {
+  //   handleTextColorApexCharts (next) {
+  //     const apexChartsTexts = Array.from(document.querySelectorAll('.apexcharts-legend-text'))
+  //     // apexChartsTexts.classList.add(`${this.isDarkMode ? 'datami-darkmode-white-text' : ''}`)
+  //     // console.log('apexChartsTexts', apexChartsTexts)
+  //     apexChartsTexts.forEach(text => text.classList.add(`${this.isDarkMode ? 'datami-darkmode-white-text' : 'datami-darkmode-none'}`))
+  //     return null
+  //   }
+  // },
   watch: {
     currentViewMode (next) {
       // console.log('\nC-DatamiDataviz > watch > currentViewMode : ', next)
       this.$refs[this.chartId].updateOptions({ ...this.chartData.chartOptions })
       // window.dispatchEvent(new Event('resize'))
+    },
+    handleTextColorApexCharts (next) {
+      const apexChartsTexts = Array.from(document.querySelectorAll('.apexcharts-legend-text'))
+      // console.log('apexChartsTexts', apexChartsTexts)
+      apexChartsTexts.forEach(text => text.classList.add(`${this.isDarkMode ? 'datami-darkmode-white-text' : 'datami-darkmode-none'}`))
     }
   },
   mounted () {
     // console.log('\nC-DatamiDataviz > mounted ...')
     // console.log('\nC-DatamiDataviz > mounted > this.chartData: ', this.chartData)
     // window.dispatchEvent(new Event('resize'))
+    const apexChartsTexts = Array.from(document.querySelectorAll('.apexcharts-legend-text'))
+    // console.log('apexChartsTexts', apexChartsTexts)
+    apexChartsTexts.forEach(text => text.classList.add(`${this.isDarkMode ? 'datami-darkmode-white-text' : 'datami-darkmode-none'}`))
   }
 }
 
 </script>
+
+<style>
+/* .datami-darkmode-white-text{
+  color: white !important;
+} */
+
+.apexcharts-legend-text{
+  background-color: white !important;
+  padding: 1% !important;
+}
+
+.datami-dataviz-darkmode .apexcharts-tooltip {
+  color: black !important;
+}
+</style>

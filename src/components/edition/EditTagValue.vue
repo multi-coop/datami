@@ -92,7 +92,7 @@
           expanded
           aria-haspopup="true"
           aria-controls="dropdown-menu"
-          type="is-dark"
+          :type=" `${isDarkMode ? 'is-white' : 'is-dark'}` "
           :outlined="!showMenu"
           @click="showMenu = !showMenu">
           <span class="has-text-weight-bold">

@@ -2,7 +2,7 @@
   <div class="ButtonImportData datami-component">
     <b-tooltip
       :label="t(`edit.uploadData`, locale)"
-      type="is-dark"
+      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-left">
       <b-button
         size="is-small"

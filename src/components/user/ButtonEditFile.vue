@@ -7,14 +7,16 @@
       <p class="control is-flex is-flex-grow-1">
         <b-tooltip
           :label="t('actions.sendContribHelp', locale)"
-          type="is-dark"
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
           class="is-flex is-flex-grow-1"
           multilined
           position="is-top">
           <b-button
             :label="t('actions.sendContrib', locale)"
+            :type="isDarkMode ? 'is-white' : 'is-dark'"
+            :outlined="isDarkMode"
+            :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
             size="is-small"
-            type="is-dark"
             expanded
             icon-left="pencil"
             @click="commitChanges"/>
@@ -23,11 +25,13 @@
       <p class="control">
         <b-tooltip
           :label="t('actions.quitEdit', locale)"
-          type="is-dark"
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
           position="is-top">
           <b-button
+            :type="isDarkMode ? 'is-white' : 'is-dark'"
+            :outlined="isDarkMode"
+            :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
             size="is-small"
-            type="is-dark"
             icon-left="close-thick"
             @click="closeEditMode"/>
         </b-tooltip>
@@ -37,13 +41,14 @@
     <b-tooltip
       v-if="!showEditNavbar"
       :label="t('actions.enterEdit', locale)"
-      type="is-dark"
+      :type="isDarkMode ? 'is-white' : 'is-dark'"
       position="is-top"
       class="is-flex is-flex-grow-1">
       <b-button
         size="is-small"
         :label="t('actions.contribute', locale)"
         icon-left="pencil"
+        :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
         expanded
         @click="openEditMode"/>
     </b-tooltip>
@@ -109,4 +114,10 @@ export default {
     flex-grow: 1!important;
   }
 
+</style>
+
+<style scoped>
+  .datami-darkmode {
+    background-color: #2d2d30 !important;
+  }
 </style>

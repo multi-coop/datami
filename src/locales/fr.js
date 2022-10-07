@@ -115,7 +115,11 @@ export default {
     clearTag: 'Supprimer le tag',
     clickForMoreTags: 'Cliquer pour voir plus de tags',
     fullscreenOn: 'Voir le widget en plein écran',
-    fullscreenOff: 'Quitter le mode plein écran'
+    fullscreenOff: 'Quitter le mode plein écran',
+    setLightMode: 'Passer en mode clair',
+    lightMode: 'Mode clair',
+    setDarkMode: 'Passer en mode sombre (expérimental)',
+    darkMode: 'Mode sombre'
     // nest: {
     //   test: 'test nested actions'
     // }

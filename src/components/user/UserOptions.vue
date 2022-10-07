@@ -2,7 +2,7 @@
   <div class="UserOptions datami-component columns is-gapless is-mobile is-flex is-flex-grow-1">
     <div
       v-if="!onlyPreview && !showOptions"
-      :class="`column is-10 is-10-mobile is-offset-1`">
+      :class="`column is-10 is-10-mobile`">
       <ButtonEditFile
         :file-id="fileId"
         :locale="locale"
@@ -10,7 +10,7 @@
     </div>
     <div
       v-if="showOptions"
-      class="column is-10 is-10-mobile is-offset-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
+      class="column is-10 is-10-mobile is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
       <ButtonCopyWidgetHtml
         :file-id="fileId"
         :locale="locale"/>
@@ -31,20 +31,23 @@
       <ButtonFullscreen
         :file-id="fileId"
         :locale="locale"/>
+      <ButtonDarkMode
+        :locale="locale"/>
       <ButtonChangeLocale
         :file-id="fileId"
         :locale="locale"/>
     </div>
     <div
-      class="column is-1 is-1-mobile has-text-right">
+      :class="`column ${onlyPreview && !showOptions ? 'is-offset-10' : ''} is-2 is-2-mobile has-text-right`">
       <b-tooltip
         :label="t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale)"
-        type="is-dark"
+        :type="isDarkMode ? 'is-white' : 'is-dark'"
         position="is-top">
         <b-button
           size="is-small"
-          type="is-text"
-          class="ml-1"
+          :type="isDarkMode ? 'is-white' : 'is-text'"
+          :outlined="isDarkMode"
+          :class="isDarkMode ? 'datami-darkmode' : ''"
           expanded
           icon-left="dots-vertical"
           @click="showOptions = !showOptions"/>
@@ -64,6 +67,7 @@ import ButtonChangeUserBranch from '@/components/user/ButtonChangeUserBranch'
 import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
 import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
 import ButtonFullscreen from '@/components/user/ButtonFullscreen'
+import ButtonDarkMode from '@/components/user/ButtonDarkMode'
 
 export default {
   name: 'UserOptions',
@@ -75,7 +79,8 @@ export default {
     ButtonChangeUserBranch,
     ButtonChangeLocale,
     ButtonCopyWidgetHtml,
-    ButtonFullscreen
+    ButtonFullscreen,
+    ButtonDarkMode
   },
   props: {
     fileId: {
@@ -98,8 +103,19 @@ export default {
   },
   computed: {
     ...mapGetters({
-      t: 'git-translations/getTranslation'
-    })
+      t: 'git-translations/getTranslation',
+      getViewMode: 'git-data/getViewMode',
+      isDarkMode: 'git-storage/isDarkMode'
+    }),
+    currentViewMode () {
+      return this.getViewMode(this.fileId)
+    }
   }
 }
 </script>
+
+<style scoped>
+  .datami-darkmode {
+    background-color: #2d2d30 !important;
+  }
+</style>

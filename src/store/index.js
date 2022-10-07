@@ -6,6 +6,7 @@ import Vue from 'vue'
 // import { filters } from '@/store/filters.js'
 // import { sortings } from '@/store/sortings.js'
 // import { translations } from '@/store/translations.js'
+// import { storage } from '@/store/storage.js'
 
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 
@@ -96,6 +97,7 @@ export const defaultStore = {
 //     'git-user': user,
 //     'git-filters': filters,
 //     'git-sortings': sortings,
-//     'git-data': data
+//     'git-data': data,
+//     'git-storage': theme
 //   }
 // })

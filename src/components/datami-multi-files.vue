@@ -1,5 +1,5 @@
 <template>
-  <div class="DatamiMultiFiles datami-widget section">
+  <div :class="`DatamiMultiFiles datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
     <!-- MATOMO -->
     <MatomoScript
       :file-id="multiFilesId"
@@ -99,7 +99,7 @@
               v-for="(fileTab, fileTabIdx) in files.filter(f => f.activate)"
               :key="fileTab.id"
               :value="fileTab.id"
-              header-class="datami-multi-files-tab">
+              :header-class="`datami-multi-files-tab datami-${isDarkMode ? 'darkmode' : 'clearmode'}-tab-header`">
               <!-- TAB HEADER -->
               <template #header>
                 <div
@@ -107,11 +107,11 @@
                   @mouseleave="hovered = undefined">
                   <b-tag
                     class="mr-2 has-text-weight-bold"
-                    :type="`is-${(activeTab === fileTab.id) ? 'dark' : hovered === fileTab.id ? 'white' : 'grey' }`"
+                    :type="`is-${isDarkMode ? 'white' : activeTab === fileTab.id ? 'dark' : hovered === fileTab.id ? 'white' : 'grey' }`"
                     rounded>
                     {{ fileTabIdx + 1 }}
                   </b-tag>
-                  <span :class="`${hovered === fileTab.id ? 'has-text-black' : ''}`">
+                  <span>
                     <span v-if="!tabsVertical">
                       {{ trimText(fileTab.title, 15) }}
                     </span>
@@ -302,8 +302,19 @@ export default {
 
 <style>
 
+.datami-darkmode-white-text{
+  color: white !important;
+}
+.datami-darkmode{
+  background-color: #2d2d30 !important;
+}
+
 .datami-container {
   max-width: 100% !important;
+}
+.datami-darkmode-tab-header.is-active > a {
+  background-color: #2d2d30 !important;
+  border: 1px solid white !important;
 }
 
 .multi-files-tabs.is-vertical.width-80 > .tab-content {
@@ -312,12 +323,39 @@ export default {
 .multi-files-tabs.is-vertical.width-80 > .tabs {
   width: 20%;
 }
-.datami-multi-files-tab a {
+
+.datami-multi-files-tab:not(.is-active):hover {
+  background-color: white !important;
+}
+
+.datami-clearmode-tab-header a {
   color: grey !important;
 }
-.datami-multi-files-tab.is-active a {
-  color: #363636 !important;
+.datami-darkmode-tab-header a {
+  color: white !important;
 }
+
+.datami-multi-files-tab.datami-darkmode-tab-header.is-active a {
+  color: white !important;
+}
+.datami-multi-files-tab.datami-clearmode-tab-header.is-active a {
+  color: black !important;
+}
+
+.datami-multi-files-tab.datami-darkmode-tab-header.is-active a:hover {
+  color: white !important;
+}
+.datami-multi-files-tab.datami-clearmode-tab-header.is-active a:hover {
+  color: black !important;
+}
+
+.datami-multi-files-tab.datami-darkmode-tab-header:not(.is-active) a:hover {
+  color: black !important;
+}
+.datami-multi-files-tab.datami-clearmode-tab-header:not(.is-active) a:hover {
+  color: black !important;
+}
+
 .multifiles-container {
   margin-left: -1em;
   margin-right: -1em;

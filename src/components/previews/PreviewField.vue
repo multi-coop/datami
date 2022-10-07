@@ -12,7 +12,7 @@
       append-to-body
       :animated="false"
       size="is-large"
-      type="is-dark">
+      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`">
       <span style="cursor: pointer;">
 
         <!-- FIELD TYPE ICON -->
