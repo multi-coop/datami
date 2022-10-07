@@ -10,7 +10,7 @@
     <!-- FIELD'S SORT ICON -->
     <b-tooltip
       :label="t(getSortTooltip, locale)"
-      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-top"
       append-to-body>
       <b-icon
