@@ -13,7 +13,7 @@
       :animated="false"
       style="z-index: 1"
       size="is-large"
-      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`">
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
       <template #content>
         <div
           v-if="val !== '...' && (field.foreignKey || field.definitions)"
