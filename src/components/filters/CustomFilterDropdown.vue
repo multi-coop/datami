@@ -10,7 +10,7 @@
     <template #label>
       <b-tooltip
         :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
-        :type=" `${isDarkMode ? 'is-white' : 'is-dark'} ` "
+        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
         position="is-left">
         <b-icon
           icon="filter"
