@@ -8,7 +8,7 @@
         <div class="is-flex">
           <b-tooltip
             :label="`${ t(`filters.filterByField`, locale) } : ${filter.label}`"
-            type="is-dark"
+            :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
             position="is-top">
             <b-icon
               icon="filter"

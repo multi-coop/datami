@@ -1,5 +1,5 @@
 <template>
-  <div class="PagesNavigation datami-component">
+  <div :class="`PagesNavigation datami-component ${isDarkMode ? 'datami-darkmode' : ''}`">
     <div>
       <b-pagination
         v-model="currentPage"
@@ -19,7 +19,8 @@
         <!-- PREVIOUS PAGE BUTTON -->
         <template #previous="props">
           <b-pagination-button
-            :page="props.page">
+            :page="props.page"
+            :class="`${isDarkMode ? 'datami-darkmode-white-text-dark-bg' : ''}`">
             <b-icon
               :size="size"
               :icon="prevIcon"/>
@@ -30,7 +31,8 @@
         <!-- NEXT PAGE BUTTON -->
         <template #next="props">
           <b-pagination-button
-            :page="props.page">
+            :page="props.page"
+            :class="`${isDarkMode ? 'datami-darkmode-white-text-dark-bg' : ''}`">
             {{ t('pagination.nextPage', locale) }}
             <b-icon
               :size="size"
@@ -39,6 +41,7 @@
         </template>
       </b-pagination>
     </div>
+
     <!-- HELPERS PAGINATION -->
     <div class="mt-4 ml-5 columns is-multiline">
       <div class="column is-12 has-text-centered py-0">
@@ -69,6 +72,7 @@
           <b-select
             v-model="itemsPerPageSelected"
             rounded
+            :class="`${isDarkMode ? 'select-datami-darkmode' : ''}`"
             placeholder="---"
             size="is-small">
             <option
@@ -191,8 +195,37 @@ export default {
 </script>
 
 <style>
+.PagesNavigation.datami-darkmode > div > nav > ul.pagination-list > li > a {
+  color: white !important;
+  border: 1px solid white !important;
+}
+
+.datami-darkmode-white-text{
+  color: white !important;
+}
+
+/* .pagination-link{
+  color: aliceblue !important;
+} */
+
+.datami-darkmode-white-text-dark-bg{
+  color: white !important;
+  background-color: #363636 !important;
+
+}
 .pagination-link.is-current {
-  background-color: #363636!important;
-  border-color: #363636!important;
+  background-color: #363636;
+  border-color: #363636;
+}
+.select-datami-darkmode > span > select {
+  color: white !important;
+  border: 1px solid white !important;
+  background-color: #363636 !important;
+}
+.select-datami-darkmode > span > select:hover::after {
+  border-color: white !important;
+}
+.select-datami-darkmode > span > select::after {
+  border-color: white !important;
 }
 </style>

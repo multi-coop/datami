@@ -4,18 +4,18 @@
     arrowless
     right
     tag="div"
-    class="CustomFilterDropdown ml-1"
-    style="background-color: white; height: 2.5em;">
+    :class="`CustomFilterDropdown ml-1 ${isDarkMode ? 'dark-background' : 'clear-background'}`"
+    style="height: 2.5em;">
     <!-- LABEL SLOT -->
     <template #label>
       <b-tooltip
         :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
-        type="is-dark"
+        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
         position="is-left">
         <b-icon
           icon="filter"
           class="mr-2"
-          :type="isActiveField ? 'is-dark' : 'is-grey'"
+          :type="isDarkMode ? 'is-white' : isActiveField ? 'is-dark' : 'is-grey'"
           size="is-small"/>
         <span
           :class="`${isActiveField ? 'has-text-weight-bold' : '' }`">
@@ -40,7 +40,7 @@
     </b-navbar-item>
     <hr
       v-if="isActiveField"
-      class="mx-0 mt-2 mb-3">
+      class="`mx-0 mt-2 mb-3">
 
     <!-- TAG VALUES LOOP -->
     <b-navbar-item
@@ -182,11 +182,23 @@ export default {
 </script>
 
 <style>
+.CustomFilterDropdown.dark-background > .navbar-link {
+  color: white !important;
+  background-color: #2d2d30 !important;
+  border: 1px solid white !important;
+}
+.CustomFilterDropdown.dark-background > .navbar-link:hover {
+  background-color: black !important;
+}
+
 .CustomFilterDropdown > .navbar-dropdown {
   max-height: 275px;
   overflow: auto;
   padding-bottom: 1.5em;
+}
 
+.CustomFilterDropdown.clear-background > .navbar-dropdown {
+  background-color: white !important;
   /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
   background:
     /* Shadow covers */
@@ -203,17 +215,60 @@ export default {
     /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
-
   background-repeat: no-repeat;
-  background-color: white;
+  /* background-color: white; */
   background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
+}
+.CustomFilterDropdown.dark-background > .navbar-dropdown {
+  background-color: black !important;
+  background:
+    /* Shadow covers */
+    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+
+  background:
+    /* Shadow covers */
+    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
+  background-repeat: no-repeat;
+  /* background-color: white; */
+  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item {
+  color: white !important;
+}
+.CustomFilterDropdown.dark-background > .navbar-dropdown > a.navbar-item:hover {
+  color: black !important;
+}
+.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item > a:hover {
+  color: black !important;
 }
 
 .CustomFilterDropdown > .navbar-link {
   padding-top: 0;
   padding-bottom: 0;
+  background-color: white !important;
+}
+.CustomFilterDropdown > .navbar-link:hover {
+  background-color: #f2f2f2 !important;
+}
+
+.datami-darkmode-dark-background{
+  background-color: black !important;
+}
+
+.datami-darkmode-hover-grey:hover{
+  background-color: rgb(86, 83, 79) !important;
 }
 
 </style>

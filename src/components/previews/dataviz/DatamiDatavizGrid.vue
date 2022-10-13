@@ -7,7 +7,7 @@
         v-for="(chart, idx) in datavizSettings.charts"
         :key="`${fileId}-chart-${idx}`"
         :class="`column mt-3 mb-6 is-${chart.cols || 6}`">
-        <p class="subtitle has-text-centered has-text-weight-bold">
+        <p :class=" `subtitle has-text-centered has-text-weight-bold ${isDarkMode ? 'has-text-white' : ''}` ">
           {{ chart.title[locale] }}
         </p>
 
@@ -109,6 +109,7 @@ export default {
       // console.log('C > DatamiDataviz > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
 
       chartOptions.labels = aggregationField.enumArr
+      // console.log('C > DatamiDataviz > beforeMount > this.chartOptions : ', this.chartOptions)
 
       if (categoriesFieldIdx) {
         const grouped = this.groupByField(this.items, categoriesFieldIdx)

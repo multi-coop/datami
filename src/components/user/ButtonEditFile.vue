@@ -1,15 +1,56 @@
 <template>
   <div class="ButtonEditFile datami-component">
+    <b-field
+      v-if="showEditNavbar"
+      grouped
+      class="is-flex is-flex-grow-1">
+      <p class="control is-flex is-flex-grow-1">
+        <b-tooltip
+          :label="t('actions.sendContribHelp', locale)"
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
+          class="is-flex is-flex-grow-1"
+          multilined
+          position="is-top">
+          <b-button
+            :label="t('actions.sendContrib', locale)"
+            :type="isDarkMode ? 'is-white' : 'is-dark'"
+            :outlined="isDarkMode"
+            :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+            size="is-small"
+            expanded
+            icon-left="pencil"
+            @click="commitChanges"/>
+        </b-tooltip>
+      </p>
+      <p class="control">
+        <b-tooltip
+          :label="t('actions.quitEdit', locale)"
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
+          position="is-top">
+          <b-button
+            :type="isDarkMode ? 'is-white' : 'is-dark'"
+            :outlined="isDarkMode"
+            :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+            size="is-small"
+            icon-left="close-thick"
+            @click="closeEditMode"/>
+        </b-tooltip>
+      </p>
+    </b-field>
+
     <b-tooltip
-      :label="t(`actions.${showEditNavbar ? 'quitEdit' : 'enterEdit'}`, locale)"
-      type="is-dark"
-      position="is-top">
+      v-if="!showEditNavbar"
+      :label="t('actions.enterEdit', locale)"
+      :type="isDarkMode ? 'is-white' : 'is-dark'"
+      position="is-top"
+      class="is-flex is-flex-grow-1">
       <b-button
         size="is-small"
-        :type="showEditNavbar ? 'is-dark' : ''"
-        class="ml-1"
+        :label="t('actions.contribute', locale)"
         icon-left="pencil"
-        @click="ToggleEditNavbar"/>
+        :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+        expanded
+        @click="openEditMode"/>
     </b-tooltip>
   </div>
 </template>
@@ -33,28 +74,50 @@ export default {
       type: String
     }
   },
+  data () {
+    return {
+      notPreviewModes: ['edit', 'diff']
+    }
+  },
   methods: {
     ...mapActions({
       changeViewMode: 'git-data/changeViewMode',
       changeEditViewMode: 'git-data/changeEditViewMode',
-      toggleEditNavbar: 'toggleEditNavbar'
+      toggleEditNavbar: 'toggleEditNavbar',
+      updateSaving: 'git-data/updateSaving'
     }),
-    ToggleEditNavbar () {
-      // console.log('C > ButtonEditFile > ToggleEditNavbar > this.showEditNavbar : ', this.showEditNavbar)
-      this.toggleEditNavbar({ uuid: this.fileId, status: !this.showEditNavbar })
+    openEditMode () {
+      this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
+      this.toggleEditNavbar({ uuid: this.fileId, status: true })
+      // specific view to switch back to table
       const viewsToSwitch = ['dataviz']
-      if (this.showEditNavbar) {
-        this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
-        if (viewsToSwitch.includes(this.currentViewMode)) {
-          this.changeViewMode({ fileId: this.fileId, mode: 'table' })
-        }
-      } else {
-        this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+      if (viewsToSwitch.includes(this.currentViewMode)) {
+        this.changeViewMode({ fileId: this.fileId, mode: 'table' })
       }
-
-      // track with matomo
-      this.trackEvent('click')
+    },
+    closeEditMode () {
+      this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+      this.toggleEditNavbar({ uuid: this.fileId, status: false })
+    },
+    commitChanges () {
+      this.updateSaving({ fileId: this.fileId, isSaving: true })
     }
   }
 }
 </script>
+
+<style>
+
+  .ButtonEditFile > .field > .field-body {
+    -webkit-box-flex: 1!important;
+    -ms-flex-positive: 1!important;
+    flex-grow: 1!important;
+  }
+
+</style>
+
+<style scoped>
+  .datami-darkmode {
+    background-color: #2d2d30 !important;
+  }
+</style>

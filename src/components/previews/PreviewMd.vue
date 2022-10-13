@@ -450,6 +450,7 @@ export default {
   font-family: monospace;
   margin-bottom: 3em;
 }
+
 .git-ins {
   text-decoration: none !important;
   background-color: #d4fcbc !important;

@@ -2,11 +2,13 @@
   <div class="ButtonReloadFile datami-component">
     <b-tooltip
       :label="t('actions.reloadFile', locale)"
-      type="is-dark"
+      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-top">
       <b-button
         size="is-small"
-        class="ml-1"
+        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+        :type="isDarkMode ? 'is-white' : ''"
+        :outlined="isDarkMode"
         icon-left="reload"
         :loading="loading"
         @click="ReloadFile()"/>

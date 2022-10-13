@@ -33,11 +33,12 @@
           class="control edit-mode-button mb-0">
           <b-tooltip
             :label="t(btn.textCode, locale)"
-            type="is-dark"
+            :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
             :position="`is-top`">
             <b-button
+              :class="`datami-darkmode-border-${isDarkMode ? 'white' : 'dark' }`"
               :icon-left="btn.icon"
-              :type="currentEditViewMode === btn.code ? 'is-dark' : ''"
+              :type="getBtnType(btn.code)"
               :active="currentEditViewMode === btn.code"
               size="is-small"
               @click="changeEdit(btn.code)"/>
@@ -84,6 +85,19 @@ export default {
     // this.changeView('table')
   },
   methods: {
+    getBtnType (btnCode) {
+      const isCurrentEditMode = this.currentEditViewMode === btnCode
+      const isDarkMode = this.isDarkMode
+      if (isCurrentEditMode && !isDarkMode) {
+        return 'is-dark'
+      } else if (isCurrentEditMode && isDarkMode) {
+        return 'is-white'
+      } else if (!isCurrentEditMode && isDarkMode) {
+        return 'is-dark'
+      } else if (!isCurrentEditMode && !isDarkMode) {
+        return 'is-white'
+      }
+    },
     ...mapActions({
       changeEditViewMode: 'git-data/changeEditViewMode'
     }),
@@ -108,7 +122,14 @@ export default {
   justify-content: center !important;
 }
 
-@media(max-width: 768px){
+.datami-darkmode-border-white {
+  border: 1px solid white !important;
+}
+.datami-darkmode-border-dark {
+  border: 1px solid #363636 !important;
+}
+
+@media(max-width: 768px) {
   .EditModeBtns{
     justify-content: end !important;
   }

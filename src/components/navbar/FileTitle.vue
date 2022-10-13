@@ -1,12 +1,12 @@
 <template>
   <div class="FileTitle datami-component">
     <div class="is-flex is-align-items-center">
-      <span class="mx-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop has-text-dark text-shadow">
+      <span :class="`px-2 is-size-5-mobile is-size-4-tablet is-size-3-desktop ${currentViewMode === 'map' ? 'text-shadow' : ''} ${isDarkMode && currentViewMode !== 'map' ? 'datami-darkmode-white-text' : 'has-text-dark'}`">
         {{ title }}
       </span>
       <b-tooltip
         :label="t('file.fileInfos', locale)"
-        type="is-dark"
+        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
         position="is-top">
         <b-icon
           icon="information-outline"
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
@@ -42,6 +43,11 @@ export default {
       type: Boolean
     }
   },
+  computed: {
+    ...mapGetters({
+      isDarkMode: 'git-storage/isDarkMode'
+    })
+  },
   methods: {
     toggleDialog () {
       this.$emit('toggleInfos')
@@ -56,5 +62,8 @@ export default {
 }
 .text-shadow {
   text-shadow: 0 0 10px white, 0 0 10px white;
+}
+.datami-darkmode-white-text{
+  color: white !important;
 }
 </style>
