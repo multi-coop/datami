@@ -3,7 +3,7 @@ export const storage = {
   namespaced: true,
   state: {
     theme: { darkmode: undefined },
-    userLastView: null
+    userLastView: undefined
   },
   getters: {
     isDarkMode: (state) => {
