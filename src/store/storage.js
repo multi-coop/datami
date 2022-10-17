@@ -42,9 +42,7 @@ export const storage = {
         state.userLastView = 'map'
       } else {
         state.userLastView = userLastView
-        console.log('initialization at', userLastView)
-        // changeViewMode(fileId, state.userLastView)
-        // Call changeViewMode
+        // console.log('initialization at', userLastView)
       }
     },
     changeUserLastView (state, lastView) {
