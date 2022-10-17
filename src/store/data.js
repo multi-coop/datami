@@ -389,7 +389,7 @@ export const data = {
       })
     },
     changeViewMode ({ commit }, { fileId, mode }) {
-      // console.log('S-data > M > changeViewMode > mode : ', mode)
+      console.log('S-data > M > changeViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = viewModes.filter(v => v !== mode)
       // console.log('S-data > M > changeViewMode > switchOffModes : ', switchOffModes)
