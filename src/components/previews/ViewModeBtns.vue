@@ -57,7 +57,6 @@
 import { mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
-// import { changeUserLastView } from '@/store/storage'
 import { viewsOptions } from '@/utils/fileTypesUtils.js'
 
 export default {
@@ -97,48 +96,51 @@ export default {
     fileOptions (next) {
       // console.log('C > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
-        const defaultViews = [
-          {
-            view: 'cards',
-            activate: this.cardsViewIsActive,
-            isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
-          },
-          {
-            view: 'dataviz',
-            activate: this.datavizViewIsActive,
-            isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
-          },
-          {
-            view: 'map',
-            activate: this.mapViewIsActive,
-            isDefault: this.mapViewIsActive && this.mapViewIsDefault
-          },
-          {
-            view: 'table',
-            activate: true,
-            isDefault: true
-          }
-        ]
-        const defaultView = defaultViews.find(v => v.isDefault)
+        // const defaultViews = [
+        //   {
+        //     view: 'cards',
+        //     activate: this.cardsViewIsActive,
+        //     isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
+        //   },
+        //   {
+        //     view: 'dataviz',
+        //     activate: this.datavizViewIsActive,
+        //     isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
+        //   },
+        //   {
+        //     view: 'map',
+        //     activate: this.mapViewIsActive,
+        //     isDefault: this.mapViewIsActive && this.mapViewIsDefault
+        //   },
+        //   {
+        //     view: 'table',
+        //     activate: true,
+        //     isDefault: true
+        //   }
+        // ]
+        // const defaultView = defaultViews.find(v => v.isDefault)
+        // console.log(defaultView)
         // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
-        this.changeView(defaultView.view)
+        this.changeView(this.getUserLastView)
       }
     }
   },
   beforeMount () {
     // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
-    this.changeView('table')
+    // this.changeView('table')
+    this.initializeUserLastView(this.fileId)
+    this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
   },
   methods: {
     ...mapActions({
       changeViewMode: 'git-data/changeViewMode',
+      initializeUserLastView: 'git-storage/initializeUserLastView',
       saveUserLastView: 'git-storage/saveUserLastView'
     }),
     changeView (code) {
-      this.changeViewMode({ fileId: this.fileId, mode: code })
-      console.log('changing mode', code)
       this.saveUserLastView(code)
+      this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
       this.trackEvent(code)
     },
     getIcon (code) {

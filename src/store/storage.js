@@ -1,4 +1,4 @@
-import { changeViewMode } from '@/store/data'
+// import { changeViewMode } from '@/store/data'
 export const storage = {
   namespaced: true,
   state: {
@@ -41,18 +41,18 @@ export const storage = {
         localStorage.setItem('datamiUserLastView', 'map')
         state.userLastView = 'map'
       } else {
-        state.userLastView = JSON.parse(userLastView)
-        changeViewMode(fileId, state.userLastView)
+        state.userLastView = userLastView
+        console.log('initialization at', userLastView)
+        // changeViewMode(fileId, state.userLastView)
         // Call changeViewMode
       }
     },
-    changeUserLastView (lastView) {
-      console.log('localstorage userLastView!', lastView.userLastView)
-      if (this.state.userLastView) {
-        localStorage.setItem('datamiUserLastView', `${lastView}`)
-        console.log('localstorage userLastView', localStorage.getItem('datamiUserLastView'))
-        // state.userLastView = lastView
-      }
+    changeUserLastView (state, lastView) {
+      // if (state.userLastView) {
+      localStorage.setItem('datamiUserLastView', lastView)
+      console.log('localstorage userLastView', localStorage.getItem('datamiUserLastView'))
+      state.userLastView = lastView
+      // }
     }
   },
   actions: {
@@ -62,11 +62,11 @@ export const storage = {
     initializeStorage ({ commit }) {
       commit('setDefaultContrastMode')
     },
-    initializeUserLastView ({ commit }) {
-      commit('setUserLastView')
+    initializeUserLastView ({ commit }, payload) {
+      commit('setUserLastView', payload)
     },
-    saveUserLastView ({ commit }, lastView) {
-      commit('changeUserLastView')
+    saveUserLastView ({ commit }, payload) {
+      commit('changeUserLastView', payload)
     }
   }
 }
