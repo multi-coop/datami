@@ -47,8 +47,9 @@ export const parseLine = (line) => JSON.parse(`[${line}]`)
  * @returns {object[]} An array of JavaScript objects containing headers as keys
  * and row entries as values.
  */
-export const csvToJson = (text, separator = ',', quoteChar = '"', headers = undefined) => {
+export const csvToJson = (text, separator = ',', quoteChar = '"', headers = undefined, schema = undefined) => {
   // console.log('\nU > csvToJson > headers : ', headers)
+  // console.log('U > csvToJson > schema : ', schema)
   // console.log('U > csvToJson > quoteChar : ', quoteChar)
   // console.log('U > csvToJson > text : ', text)
 
@@ -83,18 +84,38 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
   let lines = textClean.split('\n')
   // filter empty lines
   lines = lines.filter(l => l !== '')
+
+  // get csv headers
   const heads = headers ?? match(lines.shift())
+  // const heads = match(lines.shift())
   // console.log('U > csvToJson > lines : ', lines)
   // console.log('U > csvToJson > heads : ', heads)
+  const headsEnriched = heads.map(h => {
+    const headerFromSchema = schema.fields.find(f => f.name === h)
+    const header = headerFromSchema || { name: h }
+    return header
+  })
+  // console.log('U > csvToJson > headsEnriched : ', headsEnriched)
 
   return lines.map(line => {
     return match(line).reduce((acc, cur, i) => {
-      // Attempt to parse as a number; replace blank matches with `false` (or `null`)
+      //  get corresponding header
+      const header = headsEnriched[i]
+      const cellType = header.type || 'string'
+
+      // get value
       let val = cur.length === 0 ? null : cur
       // const val = cur.toString()
       // Put back quotes and breaklines indicators in cells
-      val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
-      const key = heads[i] ?? `extra_${i}`
+      // val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
+      if (cellType === 'number') {
+        // DEPRECATED : Attempt to parse as a number; replace blank matches with `false` (or `null`)
+        val = Number(cur)
+      } else {
+        val = cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
+      }
+      // const key = heads[i] ?? `extra_${i}`
+      const key = header.name ?? `extra_${i}`
       return { ...acc, [key]: val }
     }, {})
   })
@@ -138,7 +159,7 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
   // console.log('U > csvToObject > headerLine : ', headerLine)
 
   // use csvToJson function
-  let lines = csvToJson(csvRaw, separator, quoteChar, headersArr)
+  let lines = csvToJson(csvRaw, separator, quoteChar, headersArr, options.schema)
   // console.log('U > csvToObject > lines (A) : ', lines)
 
   // get headers
