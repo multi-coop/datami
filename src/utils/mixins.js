@@ -78,7 +78,8 @@ export const mixinGlobal = {
       getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors',
       getUserFullscreen: 'git-user/getUserFullscreen',
-      isDarkMode: 'git-storage/isDarkMode'
+      isDarkMode: 'git-storage/isDarkMode',
+      getUserLastView: 'git-storage/getUserLastView'
     }),
     fileToken () {
       return this.getFileToken(this.fileId)

@@ -46,10 +46,11 @@ export const storage = {
         // Call changeViewMode
       }
     },
-    changeUserLastView (state, lastView) {
-      if (state.userLastView) {
+    changeUserLastView (lastView) {
+      console.log('localstorage userLastView!', lastView.userLastView)
+      if (this.state.userLastView) {
         localStorage.setItem('datamiUserLastView', `${lastView}`)
-        console.log('localstorage', localStorage.getItem('datamiUserLastView'))
+        console.log('localstorage userLastView', localStorage.getItem('datamiUserLastView'))
         // state.userLastView = lastView
       }
     }
@@ -64,7 +65,7 @@ export const storage = {
     initializeUserLastView ({ commit }) {
       commit('setUserLastView')
     },
-    saveUserLastView ({ commit }) {
+    saveUserLastView ({ commit }, lastView) {
       commit('changeUserLastView')
     }
   }

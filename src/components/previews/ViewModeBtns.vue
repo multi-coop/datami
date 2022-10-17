@@ -57,7 +57,7 @@
 import { mapActions } from 'vuex'
 
 import { mixinGlobal } from '@/utils/mixins.js'
-import { changeUserLastView } from '@/store/storage'
+// import { changeUserLastView } from '@/store/storage'
 import { viewsOptions } from '@/utils/fileTypesUtils.js'
 
 export default {
@@ -133,12 +133,12 @@ export default {
   methods: {
     ...mapActions({
       changeViewMode: 'git-data/changeViewMode',
-      changeUserLastView: ''
+      saveUserLastView: 'git-storage/saveUserLastView'
     }),
     changeView (code) {
-      // console.log('changing mode', code)
       this.changeViewMode({ fileId: this.fileId, mode: code })
-      changeUserLastView(code)
+      console.log('changing mode', code)
+      this.saveUserLastView(code)
       this.trackEvent(code)
     },
     getIcon (code) {
