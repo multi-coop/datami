@@ -386,8 +386,6 @@ export default {
     await this.initWidget()
   },
   async mounted () {
-    // this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
-    // console.log(this.fileId)
     // console.log('\nC > DatamiFile > mounted > this.gitInfos : ', this.gitInfos)
     // console.log('C > DatamiFile > mounted > this.gitObj : ', this.gitObj)
     // console.log('C > DatamiFile > mounted > this.usertoken : ', this.usertoken)
@@ -410,8 +408,7 @@ export default {
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks',
-      initializeStorage: 'git-storage/initializeStorage',
-      initializeUserLastView: 'git-storage/initializeUserLastView'
+      initializeStorage: 'git-storage/initializeStorage'
     }),
     async initWidget () {
       const fileUuid = this.uuidv4()

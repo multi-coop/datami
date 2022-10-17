@@ -50,7 +50,7 @@ export const storage = {
     changeUserLastView (state, lastView) {
       // if (state.userLastView) {
       localStorage.setItem('datamiUserLastView', lastView)
-      console.log('localstorage userLastView', localStorage.getItem('datamiUserLastView'))
+      // console.log('localstorage userLastView', localStorage.getItem('datamiUserLastView'))
       state.userLastView = lastView
       // }
     }
