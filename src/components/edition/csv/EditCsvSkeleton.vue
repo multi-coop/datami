@@ -5,7 +5,7 @@
       <div
         class="column is-3 has-text-left"
         style="z-index: 1;">
-        <p class="has-text-weight-bold is-size-6 ml-1 text-shadow">
+        <p :class="`has-text-weight-bold is-size-6 ml-1 ${currentViewMode === 'map' ? 'text-shadow' : ''} ${isDarkMode && currentViewMode !== 'map' ? 'datami-darkmode-white-text' : 'has-text-dark'}`">
           <span>
             {{ (dataEditedFiltered && dataEditedFiltered.length)|| 0 }}
           </span>
@@ -118,5 +118,8 @@ export default {
 <style scoped>
 .text-shadow {
   text-shadow: 0 0 10px white, 0 0 10px white;
+}
+.datami-darkmode-white-text{
+  color: white !important;
 }
 </style>

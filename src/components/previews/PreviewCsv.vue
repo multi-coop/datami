@@ -454,7 +454,7 @@ export default {
         .map((entry, idx) => {
           const fieldId = entry[0]
           const fieldLabel = entry[1].trim()
-          const fieldSchema = schema && schema.fields.find(schema => schema.name === fieldLabel)
+          const fieldSchema = schema && schema.fields && schema.fields.find(schema => schema.name === fieldLabel)
           const fieldConstraints = fieldSchema && fieldSchema.constraints
           // console.log('C > PreviewCsv > buildColumns > fieldConstraints : ', fieldConstraints)
           const fieldCustomProps = fieldsCustomProperties && fieldsCustomProperties.find(schema => schema.name === fieldLabel)

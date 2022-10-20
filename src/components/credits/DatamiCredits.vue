@@ -4,15 +4,15 @@
     style="z-index: 0;">
     <!-- CREDITS -->
     <div
-      class="column is-full is-italic has-text-centered">
+      :class="`column is-full is-italic has-text-centered`">
       <p class="has-text-grey is-size-7 mb-2">
-        <span>
+        <span :class=" ` ${isDarkMode ? 'gitribute-darkmode-white-text' : '' } ` ">
           {{ t('credits.reclaim', locale) }}
         </span>
-        <span>
+        <span :class=" ` ${isDarkMode ? 'gitribute-darkmode-white-text' : '' } ` ">
           {{ t('credits.byLove', locale) }}
         </span>
-        <span class="ml-1">
+        <span :class=" `ml-1 ${isDarkMode ? 'gitribute-darkmode-white-text' : '' }` ">
           {{ t('credits.byCooperative', locale) }}
         </span>
         <span
@@ -38,6 +38,7 @@
           outlined
           target="_blank"
           size="is-small"
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
           class="ml-3 is-size-7 outlink"
           @click="trackLink(urlSourceCode)">
           {{ t('credits.code', locale) }}
@@ -73,6 +74,10 @@ export default {
 </script>
 
 <style scoped>
+.gitribute-darkmode-white-text{
+  color: white !important;
+}
+
 .link-multi {
   color: grey;
   text-decoration: underline;

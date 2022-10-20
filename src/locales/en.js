@@ -82,11 +82,14 @@ export default {
   actions: {
     changeViewMode: 'Change the view mode',
     edit: 'Edit',
-    enterEdit: 'Enter the edition mode',
-    quitEdit: 'Exit the edit mode',
+    contribute: 'Contribute',
+    enterEdit: 'Enter the edition / contribution mode',
+    quitEdit: 'Exit the contribution mode',
     change: 'Change',
     save: 'Save',
     send: 'Send',
+    sendContrib: 'Send your contribution',
+    sendContribHelp: "Your modifications will be sent to the dataset's owners. The owners will moderate your contribution before merging them into the dataset.",
     cancel: 'Cancel',
     search: 'Search',
     expandCell: 'Expand cell content',
@@ -112,7 +115,11 @@ export default {
     clearTag: 'Remove the tag',
     clickForMoreTags: 'Click to see more tags',
     fullscreenOn: 'See this widget on fullscreen',
-    fullscreenOff: 'Close the fullscreen mode'
+    fullscreenOff: 'Close the fullscreen mode',
+    setLightMode: 'Switch to light mode',
+    lightMode: 'Light mode',
+    setDarkMode: 'Switch to dark mode (experimental)',
+    darkMode: 'Dark mode'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -233,7 +240,9 @@ export default {
     userName: 'Name',
     userSurname: 'Surname',
     userEmail: 'Email',
-    userMessage: 'Message'
+    userMessage: 'Message',
+    showOptions: 'Show the options',
+    hideOptions: 'Hide the options'
   },
   notifications: {
     notif: 'Notification',

@@ -2,12 +2,14 @@
   <div class="ButtonCopyWidgetHtml datami-component">
     <b-tooltip
       :label="t('actions.copyWidget', locale)"
-      type="is-dark"
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       multilined
       position="is-left">
       <b-button
         size="is-small"
-        class="ml-1"
+        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+        :type="isDarkMode ? 'is-white' : ''"
+        :outlined="isDarkMode"
         icon-left="code-tags"
         @click="CopyWidgetHtml()"/>
     </b-tooltip>
@@ -50,9 +52,9 @@ export default {
       const quoteReplacer = '&lsquo;'
 
       let htmlStr = `\n
-<!-- DATAMI - contribute with GIT ...but without minding it-->\r
+<!-- DATAMI - contribute with GIT ...but without minding it -->\r
 <!-- ${this.t('credits.reclaim', 'en')} ${this.t('credits.byLove', 'en')} ${this.t('credits.byCooperative', 'en')} multi : https://multi.coop -->\n
-<!-- DATAMI WIDGET'S HTML BLOCK-->\r
+<!-- DATAMI WIDGET'S HTML BLOCK -->\r
 `
 
       if (!this.fromMultiFiles) {

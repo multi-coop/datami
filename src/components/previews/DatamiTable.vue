@@ -92,11 +92,17 @@
       <div v-if="debug">
         lockHeaders: <code>{{ lockHeaders }}</code>
       </div>
+      <div v-if="debug">
+        dataForView: <code>{{ dataForView }}</code>
+      </div>
+      <div v-if="debug">
+        currentViewMode: <code>{{ currentViewMode }}</code>
+      </div>
 
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
         v-show="dataForView && dataForView.length"
-        :class="`datami-table-container column is-${ currentViewMode === 'cards' ? 10 : 12} ${ currentViewMode === 'map' ? 'pt-0' : ''} `">
+        :class="`datami-table-container column is-${ currentViewMode === 'cards' ? 10 : 12} ${ currentViewMode === 'map' ? 'pt-0' : ''} ${isDarkMode ? 'datami-darkmode' : ''}`">
         <!-- :sticky-checkbox="currentEditViewMode === 'edit'" -->
         <div
           v-show="!isAnyDialogOpen && currentViewMode === 'table'"
@@ -265,7 +271,7 @@
 
         <!-- CARDS -->
         <div
-          v-if="hasCardsView"
+          v-if="hasCardsView && cardsViewIsActive"
           v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
           class="datami-table-view-cards">
           <!-- v-model="showCardDetails" -->
@@ -288,7 +294,7 @@
 
         <!-- DATAVIZ -->
         <div
-          v-if="fileOptions && hasDatavizView"
+          v-if="fileOptions && hasDatavizView && datavizViewIsActive"
           v-show="!isAnyDialogOpen && currentViewMode === 'dataviz'"
           class="datami-table-view-dataviz"
           :style="`${ userFullscreen ? 'height: 90%;' : '' }`">
@@ -303,7 +309,7 @@
 
         <!-- MAPS -->
         <div
-          v-if="fileOptions && hasMapView"
+          v-if="fileOptions && hasMapView && mapViewIsActive"
           v-show="!isAnyDialogOpen && currentViewMode === 'map'"
           class="datami-table-view-map">
           <!-- v-model="showCardDetails" -->
@@ -465,7 +471,7 @@ import {
 } from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
 import ButtonSortByField from '@/components/sorting/ButtonSortByField'
@@ -589,6 +595,11 @@ export default {
       transitionName: 'fade'
     }
   },
+  getters: {
+    ...mapGetters({
+      isDarkMode: 'git-storage/isDarkMode'
+    })
+  },
   computed: {
     filterFields () {
       const settingsFields = this.customFiltersConfig.filterfields.map(filterField => filterField.name || filterField)
@@ -618,7 +629,8 @@ export default {
     // },
     cardsSettingsFromFileOptions () {
       let cardsSettings
-      if (this.hasCardsView) {
+      // console.log('\nC > GitributeTable > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      if (this.hasCardsView && this.cardsViewIsActive) {
         const settings = this.cardsSettingsFromOptions
         const miniSettings = settings.mini
         const detailSettings = settings.detail
@@ -853,6 +865,9 @@ export default {
   },
   beforeMount () {
     // prepare sorting from custom settings if any
+    // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
+    // console.log('\nC > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
+    // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
     if (this.hasCustomSorting) {
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {
@@ -900,7 +915,7 @@ export default {
     columnThAttrs (column) {
       // console.log('\nC > DatamiTable > columnThAttrs > column : ', column)
       return {
-        class: 'datami-table datami-table-th has-text-centered'
+        class: `datami-table datami-table-th has-text-centered ${this.isDarkMode ? 'datami-darkmode' : ''}`
       }
     },
     columnTdAttrs (row, column) {
@@ -916,7 +931,7 @@ export default {
       // console.log('C > DatamiTable > columnTdAttrs > fieldSubype : ', fieldSubype)
       // const props = fieldTypeIcons.find(ft => ft.type === fieldType && ft.subtype === fieldSubype)
       let classTd = 'datami-table datami-table-td'
-      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''}`
+      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''} ${this.isDarkMode ? 'datami-darkmode-grey-shades' : ''}`
       classTd += `${this.currentEditViewMode === 'edit' ? ' datami-table-td-edit' : ''}`
       return {
         class: classTd
@@ -1219,6 +1234,22 @@ export default {
 .datami-nowrap {
   white-space: nowrap;
 }
+  /* SET DARKMODE */
+.datami-darkmode{
+  background-color: rgb(60, 59, 59) !important;
+  color: white !important;
+}
+
+.datami-darkmode-grey-shades{
+  background-color: rgb(81, 79, 79) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.datami-darkmode-grey-shades:nth-child(even){
+  background-color: rgb(83, 86, 86) !important;
+}
+
 .datami-table {
   /* min-width: 100px; */
   max-width: 350px;

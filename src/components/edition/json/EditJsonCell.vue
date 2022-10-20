@@ -29,7 +29,7 @@
         v-if="nodeType === 'bool'"
         :value="input"
         size="is-small"
-        type="is-dark"
+        :type="isDarkMode ? 'is-light' : 'is-dark'"
         @input="emitChange">
         {{ input }}
       </b-switch>
@@ -37,12 +37,12 @@
         v-if="nodeType === 'num' || nodeType === 'float'"
         v-model="input"
         size="is-small"
-        type="is-light"
+        :type="isDarkMode ? 'is-dark' : 'is-light'"
         controls-position="compact"
         @input="emitChange"/>
       <b-input
         v-if="nodeType === 'str' || isLabel"
-        :custom-class="`g-cell py-0 ${isLabel ? 'g-label' : ''}`"
+        :custom-class="`${isDarkMode ? 'g-cell-darkmode' : 'g-cell' } py-0 ${isLabel ? 'g-label' : ''}`"
         clearable
         :value="input"
         size="is-small"
@@ -187,6 +187,10 @@ export default {
 
 .g-cell {
   background-color: transparent;
+  /* border: none; */
+}
+.g-cell-darkmode {
+  background-color: white;
   /* border: none; */
 }
 .g-label {

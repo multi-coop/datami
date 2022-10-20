@@ -22,7 +22,7 @@
               v-if="getFieldForeignKey(tag.field) || getFieldDefinitions(tag.field)"
               multilined
               size="is-large"
-              type="is-dark">
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
               <template #content>
                 <!-- {{ getFieldForeignKey(tag.field) }} -->
                 <!-- <hr> -->
@@ -94,7 +94,7 @@
             <!-- TAG REMOVER -->
             <b-tooltip
               :label="t(`filters.removeFilter`, locale)"
-              type="is-dark"
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
               position="is-top">
               <b-icon
                 size="is-small"
