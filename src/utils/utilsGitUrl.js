@@ -73,7 +73,7 @@ export const buildApiRoots = (gitInfos) => {
     apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
     apiFileRaw = `${apiFileBase}/raw?ref=${gitInfos.branch}`
   } else {
-    // console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
+    console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
   }
   // console.log('U > utilsGitUrl > buildApiRoots > apiRepo : ', apiRepo)
   // console.log('U > utilsGitUrl > buildApiRoots > apiFile : ', apiFile)
@@ -150,7 +150,7 @@ export const extractGitInfos = (str) => {
     remaining = splitRight.slice(1, splitRight.length).join('/')
     api = `https://${host}/${gitRef.apiFix}`
   } else {
-    // console.log('U > utilsGitUrl > extractGitInfos > ERROR A > str : ', str)
+    console.log('U > utilsGitUrl > extractGitInfos > ERROR A > str : ', str)
   }
   const subgroupsStr = subgroups.length ? subgroups.join('/') : undefined
 
