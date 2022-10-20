@@ -49,7 +49,7 @@ export const b64decode = (str) => {
 }
 
 export const buildApiRoots = (gitInfos) => {
-  console.log('U > utilsGitUrl > buildApiRoots > gitInfos : ', gitInfos)
+  // console.log('U > utilsGitUrl > buildApiRoots > gitInfos : ', gitInfos)
   let apiRepo, apiFile, apiFileBase, apiFileRaw
   if (gitInfos.provider === 'github') {
     // cf : https://docs.github.com/en/rest/reference/repos#contents
@@ -73,11 +73,11 @@ export const buildApiRoots = (gitInfos) => {
     apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
     apiFileRaw = `${apiFileBase}/raw?ref=${gitInfos.branch}`
   } else {
-    console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
+    // console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
   }
-  console.log('U > utilsGitUrl > buildApiRoots > apiRepo : ', apiRepo)
-  console.log('U > utilsGitUrl > buildApiRoots > apiFile : ', apiFile)
-  console.log('U > utilsGitUrl > buildApiRoots > apiFileRaw : ', apiFileRaw)
+  // console.log('U > utilsGitUrl > buildApiRoots > apiRepo : ', apiRepo)
+  // console.log('U > utilsGitUrl > buildApiRoots > apiFile : ', apiFile)
+  // console.log('U > utilsGitUrl > buildApiRoots > apiFileRaw : ', apiFileRaw)
   return {
     repo: apiRepo,
     file: apiFile,
@@ -86,7 +86,7 @@ export const buildApiRoots = (gitInfos) => {
 }
 
 export const extractGitInfos = (str) => {
-  console.log('\nU > utilsGitUrl > extractGitInfos > str : ', str)
+  // console.log('\nU > utilsGitUrl > extractGitInfos > str : ', str)
   let provider, orga, repo, branch, rawRoot, publicRoot, remaining, api
   let subgroups = []
   let gitRef, trimmed, split, rawUrl
@@ -127,7 +127,7 @@ export const extractGitInfos = (str) => {
     trimmed = str.replace(gitRef.root, '')
 
     const isRaw = trimmed.includes(gitProviders.gitlab.fix)
-    console.log('U > utilsGitUrl > extractGitInfos > gitlab > isRaw : ', isRaw)
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > isRaw : ', isRaw)
     let gitlabSplit
     if (isRaw) {
       // for url as : https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/raw/main/data/csv/ODF-Observatoire-organisations.csv
@@ -136,14 +136,12 @@ export const extractGitInfos = (str) => {
       // for url as : https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/csv/ODF-Observatoire-organisations.csv
       gitlabSplit = trimmed.split('/-/blob/')
     }
-    console.log('U > utilsGitUrl > extractGitInfos > gitlab > gitlabSplit : ', gitlabSplit)
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > gitlabSplit : ', gitlabSplit)
     const splitLeft = gitlabSplit[0].split('/')
     const splitRight = gitlabSplit[1].split('/')
-    console.log('U > utilsGitUrl > extractGitInfos > gitlab > splitLeft : ', splitLeft)
-    console.log('U > utilsGitUrl > extractGitInfos > gitlab > splitRight : ', splitRight)
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > splitLeft : ', splitLeft)
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > splitRight : ', splitRight)
 
-    // split = trimmed.split('/')
-    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > split : ', split)
     // split by branch to get on the left orga > group > repo ... and on the right : branch > (path) > file
     orga = splitLeft[0]
     repo = splitLeft.at(-1)
@@ -152,16 +150,16 @@ export const extractGitInfos = (str) => {
     remaining = splitRight.slice(1, splitRight.length).join('/')
     api = `https://${host}/${gitRef.apiFix}`
   } else {
-    console.log('U > utilsGitUrl > extractGitInfos > ERROR A > str : ', str)
+    // console.log('U > utilsGitUrl > extractGitInfos > ERROR A > str : ', str)
   }
   const subgroupsStr = subgroups.length ? subgroups.join('/') : undefined
 
-  console.log('U > utilsGitUrl > extractGitInfos > orga : ', orga)
-  console.log('U > utilsGitUrl > extractGitInfos > subgroups : ', subgroups)
-  console.log('U > utilsGitUrl > extractGitInfos > api : ', api)
-  console.log('U > utilsGitUrl > extractGitInfos > repo : ', repo)
-  console.log('U > utilsGitUrl > extractGitInfos > branch : ', branch)
-  console.log('U > utilsGitUrl > extractGitInfos > remaining : ', remaining)
+  // console.log('U > utilsGitUrl > extractGitInfos > orga : ', orga)
+  // console.log('U > utilsGitUrl > extractGitInfos > subgroups : ', subgroups)
+  // console.log('U > utilsGitUrl > extractGitInfos > api : ', api)
+  // console.log('U > utilsGitUrl > extractGitInfos > repo : ', repo)
+  // console.log('U > utilsGitUrl > extractGitInfos > branch : ', branch)
+  // console.log('U > utilsGitUrl > extractGitInfos > remaining : ', remaining)
 
   rawRoot = `${gitRef.raw}${orga}${subgroupsStr ? '/' + subgroupsStr : ''}/${repo}`
   let publicRootUrl = `${gitRef.root}${orga}${subgroupsStr ? '/' + subgroupsStr : ''}/${repo}`
@@ -181,9 +179,9 @@ export const extractGitInfos = (str) => {
     fileraw = `${rawRoot}${remaining}`
   }
 
-  console.log('U > utilsGitUrl > extractGitInfos > publicRootUrl : ', publicRootUrl)
-  console.log('U > utilsGitUrl > extractGitInfos > rawRoot : ', rawRoot)
-  console.log('U > utilsGitUrl > extractGitInfos > fileraw : ', fileraw)
+  // console.log('U > utilsGitUrl > extractGitInfos > publicRootUrl : ', publicRootUrl)
+  // console.log('U > utilsGitUrl > extractGitInfos > rawRoot : ', rawRoot)
+  // console.log('U > utilsGitUrl > extractGitInfos > fileraw : ', fileraw)
 
   // if file in remaining string
   if (remaining !== '') {
@@ -193,9 +191,9 @@ export const extractGitInfos = (str) => {
     filename = filenameArray.slice(0, -1).join()
     filetype = filenameArray[filenameArray.length - 1]
   }
-  console.log('U > utilsGitUrl > extractGitInfos > filefullname : ', filefullname)
-  console.log('U > utilsGitUrl > extractGitInfos > filename : ', filename)
-  console.log('U > utilsGitUrl > extractGitInfos > filetype : ', filetype)
+  // console.log('U > utilsGitUrl > extractGitInfos > filefullname : ', filefullname)
+  // console.log('U > utilsGitUrl > extractGitInfos > filename : ', filename)
+  // console.log('U > utilsGitUrl > extractGitInfos > filetype : ', filetype)
 
   const gitInfos = {
     id: str,
@@ -222,7 +220,7 @@ export const extractGitInfos = (str) => {
   gitInfos.apiFile = apiRoots.file
   gitInfos.apiFileRaw = apiRoots.fileRaw
 
-  console.log('U > utilsGitUrl > extractGitInfos > gitInfos : ', gitInfos)
+  // console.log('U > utilsGitUrl > extractGitInfos > gitInfos : ', gitInfos)
 
   return gitInfos
 }
@@ -289,10 +287,10 @@ export const buildGitUserInfosUrl = (gitObj, token = undefined, method = 'GET') 
 }
 
 export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token = undefined) {
-  console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
-  console.log('U > utilsGitUrl > buildPostBranchUrl > gitObj : ', gitObj)
-  console.log('U > utilsGitUrl > buildPostBranchUrl > sourceBranch : ', sourceBranch)
-  console.log('U > utilsGitUrl > buildPostBranchUrl > newBranch : ', newBranch)
+  // console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
+  // console.log('U > utilsGitUrl > buildPostBranchUrl > gitObj : ', gitObj)
+  // console.log('U > utilsGitUrl > buildPostBranchUrl > sourceBranch : ', sourceBranch)
+  // console.log('U > utilsGitUrl > buildPostBranchUrl > newBranch : ', newBranch)
 
   const errors = []
   let newBranchAlreadyExists = false
@@ -311,35 +309,35 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
     case 'gitlab':
       // check source branch
       prePostCheckSourceBranch = `${gitObj.apiRepo}/repository/branches/${sourceBranch}`
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranch : ', prePostCheckSourceBranch)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranch : ', prePostCheckSourceBranch)
       prePostCheckSourceBranchResp = await fetch(prePostCheckSourceBranch)
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp : ', prePostCheckSourceBranchResp)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp : ', prePostCheckSourceBranchResp)
       prePostCheckSourceBranchData = await prePostCheckSourceBranchResp.json()
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchData : ', prePostCheckSourceBranchData)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchData : ', prePostCheckSourceBranchData)
       if (!prePostCheckSourceBranchResp.ok) {
         const err = {
           function: 'postNewBranch',
           code: prePostCheckSourceBranchResp.status,
           message: prePostCheckSourceBranchData.message
         }
-        console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > err : ', err)
+        // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp > err : ', err)
         errors.push(err)
       }
 
       // check target branch
       prePostCheckTargetBranch = `${gitObj.apiRepo}/repository/branches/${newBranch}`
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
       prePostCheckTargetBranchResp = await fetch(prePostCheckTargetBranch)
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
       prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
-      console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
+      // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
       if (!prePostCheckTargetBranchResp.ok) {
         const err = {
           function: 'postNewBranch',
           code: prePostCheckTargetBranchResp.status,
           message: prePostCheckTargetBranchData.message
         }
-        console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > err : ', err)
+        // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp > err : ', err)
         errors.push(err)
       }
 
@@ -410,23 +408,23 @@ export async function buildPutCommitReqData (gitObj, branch, edited, message, au
 
       // build url for prePostRequest
       prePostRequestUrl = `${gitObj.apiFile}`
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostRequestUrl : ', prePostRequestUrl)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostRequestUrl : ', prePostRequestUrl)
 
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
       // if () { newBranchAlreadyExists = true }
 
       prePostResponse = await fetch(prePostRequestUrl)
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponse : ', prePostResponse)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponse : ', prePostResponse)
       prePostResponseData = await prePostResponse.json()
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponseData : ', prePostResponseData)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponseData : ', prePostResponseData)
 
       // Copy sha
       revisionHash = prePostResponseData.sha
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > revisionHash : ', revisionHash)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > revisionHash : ', revisionHash)
 
       // encode content / edited
       base64Content = b64encode(edited)
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > base64Content : ', base64Content)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > base64Content : ', base64Content)
 
       bodyObj = {
         branch: branch,
