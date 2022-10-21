@@ -110,7 +110,7 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
       // val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
       if (cellType === 'number') {
         // DEPRECATED : Attempt to parse as a number; replace blank matches with `false` (or `null`)
-        val = Number(cur)
+        val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
       } else {
         val = cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
       }
