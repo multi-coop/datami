@@ -87,11 +87,10 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
 
   // get csv headers
   const heads = headers ?? match(lines.shift())
-  // const heads = match(lines.shift())
   // console.log('U > csvToJson > lines : ', lines)
   // console.log('U > csvToJson > heads : ', heads)
   const headsEnriched = heads.map(h => {
-    const headerFromSchema = schema.fields.find(f => f.name === h)
+    const headerFromSchema = schema && schema.fields && schema.fields.find(f => f.name === h)
     const header = headerFromSchema || { name: h }
     return header
   })
@@ -103,18 +102,16 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
       const header = headsEnriched[i]
       const cellType = header.type || 'string'
 
-      // get value
-      let val = cur.length === 0 ? null : cur
-      // const val = cur.toString()
-      // Put back quotes and breaklines indicators in cells
-      // val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
+      // get value according to schema
+      // let val = cur.length === 0 ? null : cur
+      let val = cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n') || cur
       if (cellType === 'number') {
-        // DEPRECATED : Attempt to parse as a number; replace blank matches with `false` (or `null`)
-        val = Number(cur) || cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
-      } else {
-        val = cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n')
+        // Attempt to parse as a number
+        val = Number(cur) || val
+      } else if (cellType === 'integer') {
+        // Attempt to parse as an integer
+        val = parseInt(cur) || val
       }
-      // const key = heads[i] ?? `extra_${i}`
       const key = header.name ?? `extra_${i}`
       return { ...acc, [key]: val }
     }, {})
