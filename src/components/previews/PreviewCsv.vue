@@ -254,6 +254,7 @@ export default {
         // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
         // console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataObj = this.csvToObject(next, this.fileOptions)
+        // console.log('C > PreviewCsv > watch > fileRaw > dataObj : ', dataObj)
         this.dataRaw = dataObj
         if (!this.dataIsSet) { this.dataIsSet = true }
       }
