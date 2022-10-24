@@ -100,7 +100,9 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
     return match(line).reduce((acc, cur, i) => {
       //  get corresponding header
       const header = headsEnriched[i]
-      const cellType = header.type || 'string'
+      // console.log('U > csvToJson > header : ', header)
+      const cellType = (header && header.type) || 'string'
+      // console.log('U > csvToJson > cellType : ', cellType)
 
       // get value according to schema
       // let val = cur.length === 0 ? null : cur
@@ -112,7 +114,7 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
         // Attempt to parse as an integer
         val = parseInt(cur) || val
       }
-      const key = header.name ?? `extra_${i}`
+      const key = (header && header.name) || `extra_datami_header_${i}`
       return { ...acc, [key]: val }
     }, {})
   })
