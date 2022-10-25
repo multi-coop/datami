@@ -18,7 +18,11 @@ export const defaultStore = {
     fileOptions: [],
     fileReqInfos: [],
     fileEditNavbar: [],
-    trackAllOutlinks: []
+    trackAllOutlinks: [],
+    urlMulti: 'https://multi.coop',
+    urlDocumentation: 'https://datami-docs.multi.coop',
+    urlSourceCode: 'https://gitlab.com/multi-coop/datami-project/datami',
+    urlReportIssue: 'https://gitlab.com/multi-coop/datami-project/datami/-/issues/new'
   },
   getters: {
     getGitObj: (state) => {

@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
@@ -64,11 +65,11 @@ export default {
       type: String
     }
   },
-  data () {
-    return {
-      urlMulti: 'https://multi.coop',
-      urlSourceCode: 'https://gitlab.com/multi-coop/datami'
-    }
+  computed: {
+    ...mapState({
+      urlMulti: (state) => state.urlMulti,
+      urlSourceCode: (state) => state.urlSourceCode
+    })
   }
 }
 </script>
