@@ -14,8 +14,8 @@ export default {
     thanks: 'Merci d\'utiliser {{datamiRepo}} !',
     understood: 'Compris',
     documentation: 'Documentation',
-    docsWebsite: 'Site de documentation',
-    reportIssue: 'Signaler un problème',
+    docsWebsite: 'Site de documentation technique',
+    reportIssue: 'Signaler un bug',
     reportIssueWebsite: 'Ajouter un signalement de bug'
   },
   tabs: {

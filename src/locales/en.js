@@ -15,7 +15,7 @@ export default {
     understood: 'Understood',
     documentation: 'Documentation',
     docsWebsite: 'Documentation website',
-    reportIssue: 'Report an issue',
+    reportIssue: 'Report a bug',
     reportIssueWebsite: 'Add a bug report'
   },
   tabs: {
