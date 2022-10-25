@@ -115,6 +115,7 @@
 
       <!-- DOCUMENTATION INFOS -->
       <hr class="mt-2 mb-2">
+      <!-- DOCUMENTATION -->
       <div
         class="tile is-12">
         <div
@@ -133,10 +134,38 @@
                 icon="book-open-variant"/>
               <a
                 target="_blank"
-                :href="`https://${docsUrl}`"
+                :href="docsUrl"
                 class="outlink"
-                @click="trackLink(`https://${docsUrl}`)">
+                @click="trackLink(docsUrl)">
                 {{ t('global.docsWebsite', locale) }}
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- REPORT ISSUE -->
+      <div
+        class="tile is-12">
+        <div
+          class="tile is-parent py-1">
+          <div class="tile is-child is-4">
+            <b-icon
+              icon="alert"
+              size="is-small"/>&nbsp;
+            {{ t('global.reportIssue', locale) }}
+          </div>
+          <div class="tile is-child is-8 pl-2">
+            <span>
+              <b-icon
+                class="mr-2"
+                size="is-small"
+                icon="alert"/>
+              <a
+                target="_blank"
+                :href="reportUrl"
+                class="outlink"
+                @click="trackLink(reportUrl)">
+                {{ t('global.reportIssueWebsite', locale) }}
               </a>
             </span>
           </div>
@@ -147,6 +176,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { mixinGlobal } from '@/utils/mixins.js'
 
 import { providerIcons, typesIcons } from '@/utils/fileTypesUtils.js'
@@ -185,6 +215,10 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      documentationtUrl: (state) => state.urlDocumentation,
+      reportUrl: (state) => state.urlReportIssue
+    }),
     infoRowsPopulated () {
       let infos = [...this.infoRows]
       infos = infos.map(i => {
@@ -234,7 +268,7 @@ export default {
       return mapSettings && mapSettings.maps.map(m => m.file)
     },
     docsUrl () {
-      const documentationUrl = process.env.VUE_APP_DATAMI_DOCUMENTATION || 'datami-docs.multi.coop'
+      const documentationUrl = `https://${process.env.VUE_APP_DATAMI_DOCUMENTATION}` || this.documentationtUrl
       return documentationUrl
     }
   },

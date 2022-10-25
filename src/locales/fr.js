@@ -14,10 +14,14 @@ export default {
     thanks: 'Merci d\'utiliser {{datamiRepo}} !',
     understood: 'Compris',
     documentation: 'Documentation',
-    docsWebsite: 'Site de documentation'
+    docsWebsite: 'Site de documentation technique',
+    reportIssue: 'Signaler un bug',
+    reportIssueWebsite: 'Ajouter un signalement de bug'
   },
   tabs: {
-    switchPosition: 'Changer la position des onglets'
+    switchPosition: 'Changer la position des onglets',
+    vertical: 'vertical',
+    horizontal: 'horizontal'
   },
   git: {
     provider: 'Provider',
