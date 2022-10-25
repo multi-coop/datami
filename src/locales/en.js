@@ -14,7 +14,9 @@ export default {
     thanks: 'Thanks for using {{datamiRepo}} !',
     understood: 'Understood',
     documentation: 'Documentation',
-    docsWebsite: 'Documentation website'
+    docsWebsite: 'Documentation website',
+    reportIssue: 'Report an issue',
+    reportIssueWebsite: 'Signaler un problème'
   },
   tabs: {
     switchPosition: 'Change tabs position'

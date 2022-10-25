@@ -14,7 +14,9 @@ export default {
     thanks: 'Merci d\'utiliser {{datamiRepo}} !',
     understood: 'Compris',
     documentation: 'Documentation',
-    docsWebsite: 'Site de documentation'
+    docsWebsite: 'Site de documentation',
+    reportIssue: 'Signaler un problème',
+    reportIssueWebsite: 'Signaler un problème'
   },
   tabs: {
     switchPosition: 'Changer la position des onglets'

@@ -115,6 +115,7 @@
 
       <!-- DOCUMENTATION INFOS -->
       <hr class="mt-2 mb-2">
+      <!-- DOCUMENTATION -->
       <div
         class="tile is-12">
         <div
@@ -137,6 +138,34 @@
                 class="outlink"
                 @click="trackLink(`https://${docsUrl}`)">
                 {{ t('global.docsWebsite', locale) }}
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- REPORT ISSUE -->
+      <div
+        class="tile is-12">
+        <div
+          class="tile is-parent py-1">
+          <div class="tile is-child is-4">
+            <b-icon
+              icon="alert"
+              size="is-small"/>&nbsp;
+            {{ t('global.reportIssue', locale) }}
+          </div>
+          <div class="tile is-child is-8 pl-2">
+            <span>
+              <b-icon
+                class="mr-2"
+                size="is-small"
+                icon="alert"/>
+              <a
+                target="_blank"
+                :href="`https://${docsUrl}`"
+                class="outlink"
+                @click="trackLink(`https://${docsUrl}`)">
+                {{ t('global.reportIssueWebsite', locale) }}
               </a>
             </span>
           </div>
