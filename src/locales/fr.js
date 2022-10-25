@@ -17,7 +17,9 @@ export default {
     docsWebsite: 'Site de documentation'
   },
   tabs: {
-    switchPosition: 'Changer la position des onglets'
+    switchPosition: 'Changer la position des onglets',
+    vertical: 'vertical',
+    horizontal: 'horizontal'
   },
   git: {
     provider: 'Provider',

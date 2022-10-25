@@ -7,8 +7,8 @@
         class="control">
         <b-tooltip
           type="is-dark"
-          multiline
-          :label="`${t('tabs.switchPosition', locale)}: ${btn.id}`">
+          :label="`${t('tabs.switchPosition', locale)}: ${t('tabs.' + btn.id, locale)}`"
+          multiline>
           <b-button
             :icon-left="btn.icon"
             size="is-small"

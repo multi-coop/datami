@@ -17,7 +17,9 @@ export default {
     docsWebsite: 'Documentation website'
   },
   tabs: {
-    switchPosition: 'Change tabs position'
+    switchPosition: 'Change tabs position',
+    vertical: 'vertical',
+    horizontal: 'horizontal'
   },
   git: {
     provider: 'Provider',

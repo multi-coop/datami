@@ -44,12 +44,12 @@
         :type="isDarkMode ? 'is-white' : 'is-dark'"
         position="is-top">
         <b-button
-          size="is-small"
-          :type="isDarkMode ? 'is-white' : 'is-text'"
+          :type="isDarkMode ? 'is-white' : ''"
           :outlined="isDarkMode"
-          :class="isDarkMode ? 'datami-darkmode' : ''"
-          expanded
+          :class="isDarkMode ? 'datami-darkmode' : 'datami-clearmode'"
           icon-left="dots-vertical"
+          size="is-small"
+          expanded
           @click="showOptions = !showOptions"/>
       </b-tooltip>
     </div>
@@ -117,5 +117,9 @@ export default {
 <style scoped>
   .datami-darkmode {
     background-color: #2d2d30 !important;
+  }
+  .datami-clearmode {
+    color: #2d2d30 !important;
+    background-color: white !important;
   }
 </style>

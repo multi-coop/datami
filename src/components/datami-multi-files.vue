@@ -13,32 +13,40 @@
         v-if="debug"
         class=" container columns is-multiline">
         <div class="column is-6">
-          activeTab : <code>{{ activeTab }}</code>
+          hideTitle : <code>{{ hideTitle }}</code>
         </div>
         <div class="column is-6">
-          multiFilesOptions : <code>{{ multiFilesOptions }}</code>
+          activeTab : <code>{{ activeTab }}</code>
+        </div>
+        <div
+          v-if="false"
+          class="column is-6">
+          multiFilesOptions : <code><pre>{{ multiFilesOptions }}</pre></code>
         </div>
       </div>
 
       <!-- TITLE AND TAB OPTIONS -->
-      <div class="columns is-mobile">
-        <div class="column is-10 is-flex is-flex-direction-row is-align-items-center">
-          <!-- TABS POSITION -->
-          <MultiFilesTabsPosition
-            :default-display="defaultDisplay"
-            :locale="locale"
-            @switch="switchTabsPosition"/>
-          <!-- TITLE -->
-          <span class="is-size-3 ml-5">
-            {{ title }}
-          </span>
-        </div>
-        <div class="column is-2 is-flex is-flex-direction-row is-align-items-center is-justify-content-flex-end pt-2">
-          <ButtonCopyWidgetHtml
-            :file-id="multiFilesId"
-            :from-multi-files="true"
-            :locale="locale"/>
-        </div>
+      <div
+        v-if="!hideTitle"
+        class="is-flex is-flex-direction-row is-align-items-center mb-4">
+        <!-- TABS POSITION -->
+        <MultiFilesTabsPosition
+          :default-display="defaultDisplay"
+          :locale="locale"
+          @switch="switchTabsPosition"/>
+        <!-- TITLE -->
+        <span class="is-size-3 ml-5">
+          {{ title }}
+        </span>
+      </div>
+
+      <div
+        v-if="!tabsVertical"
+        class="datami-floating-right">
+        <ButtonCopyWidgetHtml
+          :file-id="multiFilesId"
+          :from-multi-files="true"
+          :locale="locale"/>
       </div>
 
       <!-- DEBUGGING FOREIGN KEYS-->
@@ -88,9 +96,9 @@
       <!-- TABS : LOOP FILES -->
       <section>
         <!-- <code>{{ activeTab }}</code> -->
+        <!-- :type="tabsVertical ? '' : 'is-boxed'" -->
         <b-tabs
           v-model="activeTab"
-          :type="tabsVertical ? '' : 'is-boxed'"
           :vertical="tabsVertical"
           :class="`multi-files-tabs is-flex-wrap-nowrap ${tabsVertical ? 'width-80' : ''}`"
           multiline>
@@ -99,7 +107,7 @@
               v-for="(fileTab, fileTabIdx) in files.filter(f => f.activate)"
               :key="fileTab.id"
               :value="fileTab.id"
-              :header-class="`datami-multi-files-tab datami-${isDarkMode ? 'darkmode' : 'clearmode'}-tab-header`">
+              :header-class="`datami-multi-files-tab datami-${isDarkMode ? 'darkmode' : 'clearmode'}-tab-header datami-multi-files-tab-${ tabsVertical ? 'vertical' : 'horizontal'}`">
               <!-- TAB HEADER -->
               <template #header>
                 <div
@@ -112,11 +120,8 @@
                     {{ fileTabIdx + 1 }}
                   </b-tag>
                   <span>
-                    <span v-if="!tabsVertical">
+                    <span>
                       {{ trimText(fileTab.title, 15) }}
-                    </span>
-                    <span v-else>
-                      {{ fileTab.title }}
                     </span>
                   </span>
                 </div>
@@ -224,6 +229,7 @@ export default {
   data () {
     return {
       multiFilesId: undefined,
+      hideTitle: false,
       files: [],
       hovered: undefined,
       defaultDisplay: undefined,
@@ -270,6 +276,7 @@ export default {
     this.multiFilesOptions = multiFilesOptions
     this.defaultDisplay = multiFilesOptions.options.display
     this.tabsVertical = this.defaultDisplay === 'vertical'
+    this.hideTitle = !!multiFilesOptions.options.hidetitle
 
     // Set in store
     // console.log('\nC > DatamiMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
@@ -302,6 +309,10 @@ export default {
 
 <style>
 
+.datami-floating-right {
+  float: right;
+}
+
 .datami-darkmode-white-text{
   color: white !important;
 }
@@ -324,7 +335,36 @@ export default {
   width: 20%;
 }
 
-.datami-multi-files-tab:not(.is-active):hover {
+.multi-files-tabs > nav > ul {
+  border-bottom: none !important;
+}
+
+.datami-multi-files-tab-horizontal.is-active a {
+  border: #dbdbdb thin solid !important;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-bottom-color: transparent !important;
+}
+
+.datami-multi-files-tab-horizontal:not(.is-active) a:hover {
+  border: #dbdbdb thin solid !important;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  background-color: white !important;
+}
+
+.datami-multi-files-tab-vertical.is-active a {
+  border: #dbdbdb thin solid !important;
+  border-radius: 6px;
+}
+
+.datami-multi-files-tab-vertical:not(.is-active) a {
+  border: none !important;
+}
+
+.datami-multi-files-tab-vertical:not(.is-active) a:hover {
+  border: #dbdbdb thin solid !important;
+  border-radius: 6px;
   background-color: white !important;
 }
 
@@ -368,6 +408,7 @@ export default {
   border-left: 1px solid #dbdbdb;
   border-right: 1px solid #dbdbdb;
   border-bottom: 1px solid #dbdbdb;
+  border-top: 1px solid #dbdbdb;
 }
 .add-multifiles-border-top {
   border-top: 1px solid #dbdbdb;
