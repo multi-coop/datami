@@ -73,6 +73,7 @@ export default {
       if (event.keyCode === 27) {
         this.isFullscreen = false
         this.updateFullscreen({ fileId: this.fileId, isFullscreen: false })
+        this.map.redraw()
       }
     },
     getZoomLevel () {
