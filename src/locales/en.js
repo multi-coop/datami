@@ -19,7 +19,9 @@ export default {
     reportIssueWebsite: 'Add a bug report'
   },
   tabs: {
-    switchPosition: 'Change tabs position'
+    switchPosition: 'Change tabs position',
+    vertical: 'vertical',
+    horizontal: 'horizontal'
   },
   git: {
     provider: 'Provider',

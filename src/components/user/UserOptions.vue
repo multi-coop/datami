@@ -44,12 +44,12 @@
         :type="isDarkMode ? 'is-white' : 'is-dark'"
         position="is-top">
         <b-button
-          size="is-small"
-          :type="isDarkMode ? 'is-white' : 'is-text'"
+          :type="isDarkMode ? 'is-white' : ''"
           :outlined="isDarkMode"
           :class="isDarkMode ? 'datami-darkmode' : ''"
-          expanded
           icon-left="dots-vertical"
+          size="is-small"
+          expanded
           @click="showOptions = !showOptions"/>
       </b-tooltip>
     </div>

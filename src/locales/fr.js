@@ -19,7 +19,9 @@ export default {
     reportIssueWebsite: 'Ajouter un signalement de bug'
   },
   tabs: {
-    switchPosition: 'Changer la position des onglets'
+    switchPosition: 'Changer la position des onglets',
+    vertical: 'vertical',
+    horizontal: 'horizontal'
   },
   git: {
     provider: 'Provider',
