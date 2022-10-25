@@ -46,7 +46,7 @@
         <b-button
           :type="isDarkMode ? 'is-white' : ''"
           :outlined="isDarkMode"
-          :class="isDarkMode ? 'datami-darkmode' : 'datami-clearmode'"
+          :class="isDarkMode ? 'datami-darkmode' : ''"
           icon-left="dots-vertical"
           size="is-small"
           expanded
