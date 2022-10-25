@@ -96,7 +96,6 @@
       <!-- TABS : LOOP FILES -->
       <section>
         <!-- <code>{{ activeTab }}</code> -->
-        <!-- :type="tabsVertical ? '' : 'is-boxed'" -->
         <b-tabs
           v-model="activeTab"
           :vertical="tabsVertical"

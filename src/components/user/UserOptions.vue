@@ -118,8 +118,4 @@ export default {
   .datami-darkmode {
     background-color: #2d2d30 !important;
   }
-  .datami-clearmode {
-    color: #2d2d30 !important;
-    background-color: white !important;
-  }
 </style>
