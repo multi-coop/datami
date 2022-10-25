@@ -16,7 +16,7 @@ export default {
     documentation: 'Documentation',
     docsWebsite: 'Documentation website',
     reportIssue: 'Report an issue',
-    reportIssueWebsite: 'Signaler un problème'
+    reportIssueWebsite: 'Add a bug report'
   },
   tabs: {
     switchPosition: 'Change tabs position'

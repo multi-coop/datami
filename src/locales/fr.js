@@ -16,7 +16,7 @@ export default {
     documentation: 'Documentation',
     docsWebsite: 'Site de documentation',
     reportIssue: 'Signaler un problème',
-    reportIssueWebsite: 'Signaler un problème'
+    reportIssueWebsite: 'Ajouter un signalement de bug'
   },
   tabs: {
     switchPosition: 'Changer la position des onglets'
