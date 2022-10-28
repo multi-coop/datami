@@ -78,7 +78,8 @@ export default {
   },
   data () {
     return {
-      buttonsView: viewsOptions
+      buttonsView: viewsOptions,
+      defaultView: undefined
     }
   },
   computed: {
@@ -96,31 +97,32 @@ export default {
     fileOptions (next) {
       // console.log('C > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
-        // const defaultViews = [
-        //   {
-        //     view: 'cards',
-        //     activate: this.cardsViewIsActive,
-        //     isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
-        //   },
-        //   {
-        //     view: 'dataviz',
-        //     activate: this.datavizViewIsActive,
-        //     isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
-        //   },
-        //   {
-        //     view: 'map',
-        //     activate: this.mapViewIsActive,
-        //     isDefault: this.mapViewIsActive && this.mapViewIsDefault
-        //   },
-        //   {
-        //     view: 'table',
-        //     activate: true,
-        //     isDefault: true
-        //   }
-        // ]
-        // const defaultView = defaultViews.find(v => v.isDefault)
-        // console.log(defaultView)
+        const defaultViews = [
+          {
+            view: 'cards',
+            activate: this.cardsViewIsActive,
+            isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
+          },
+          {
+            view: 'dataviz',
+            activate: this.datavizViewIsActive,
+            isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
+          },
+          {
+            view: 'map',
+            activate: this.mapViewIsActive,
+            isDefault: this.mapViewIsActive && this.mapViewIsDefault
+          },
+          {
+            view: 'table',
+            activate: true,
+            isDefault: true
+          }
+        ]
+        const defaultView = defaultViews.find(v => v.isDefault)
         // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
+        this.defaultView = defaultView.view
+        this.initializeUserLastView({ fileId: this.fileId, defaultView: defaultView.view })
         this.changeView(this.getUserLastView)
       }
     }
@@ -129,7 +131,6 @@ export default {
     // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
     // this.changeView('table')
-    this.initializeUserLastView(this.fileId)
     this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
   },
   methods: {
@@ -139,7 +140,7 @@ export default {
       saveUserLastView: 'git-storage/saveUserLastView'
     }),
     changeView (code) {
-      this.saveUserLastView(code)
+      this.saveUserLastView({ fileId: this.fileId, lastView: code })
       this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
       this.trackEvent(code)
     },

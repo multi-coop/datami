@@ -3,7 +3,11 @@ export const storage = {
   namespaced: true,
   state: {
     theme: { darkmode: undefined },
-    userLastView: undefined
+    userLastView: {
+      fileId: undefined,
+      lastView: undefined,
+      defaultView: undefined
+    }
   },
   getters: {
     isDarkMode: (state) => {
@@ -11,14 +15,13 @@ export const storage = {
       return state.theme.darkmode || userStorage.darkmode
     },
     getUserLastView: (state) => {
-      const userLastView = localStorage.getItem('datamiUserLastView') || 'map'
-      return state.userLastView || userLastView
+      const userLastView = state.userLastView.lastView || state.userLastView.defaultView
+      return userLastView
     }
   },
   mutations: {
     setDefaultContrastMode (state) {
       const userStorage = localStorage.getItem('datamiTheme') || undefined
-      // console.log('S > storage > setDefaultContrastMode > userStorage : ', userStorage)
       if (!userStorage) {
         localStorage.setItem('datamiTheme', '{ "darkmode": false }')
         state.theme = { darkmode: false }
@@ -35,22 +38,22 @@ export const storage = {
         state.theme = { darkmode: true }
       }
     },
-    setUserLastView (state, fileId) {
+    setUserLastView (state, payload) {
+      // localStorage.removeItem('datamiUserLastView')
       const userLastView = localStorage.getItem('datamiUserLastView') || undefined
       if (!userLastView) {
-        localStorage.setItem('datamiUserLastView', 'map')
-        state.userLastView = 'map'
+        const datamiUserLastView = `{"fileId": "${payload.fileId}", "lastView": "${payload.defaultView}", "defaultView": "${payload.defaultView}"}`
+        localStorage.setItem('datamiUserLastView', datamiUserLastView)
+        state.userLastView = { fileId: payload.fileId, lastView: payload.defaultView, defaultView: payload.defaultView }
       } else {
-        state.userLastView = userLastView
-        // console.log('initialization at', userLastView)
+        state.userLastView = JSON.parse(userLastView)
+        console.log('initialization at', JSON.parse(userLastView).lastView)
       }
     },
-    changeUserLastView (state, lastView) {
-      // if (state.userLastView) {
-      localStorage.setItem('datamiUserLastView', lastView)
-      // console.log('localstorage userLastView', localStorage.getItem('datamiUserLastView'))
-      state.userLastView = lastView
-      // }
+    changeUserLastView (state, payload) {
+      localStorage.setItem('datamiUserLastView', `{"fileId": "${payload.fileId}", "lastView": "${payload.lastView}", "defaultView": "${state.defaultView}"}`)
+      state.userLastView.fileId = payload.fileId
+      state.userLastView.lastView = payload.lastView
     }
   },
   actions: {
