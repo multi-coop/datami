@@ -15,7 +15,6 @@ _but without having to use Github or Gitlab interfaces_
 - [Websites](#websites-)
 - [Documentation](#documentation-)
 - [Project setup](#project-setup-)
-- [How to integrate the Datami widgets](#how-to-integrate-the-datami-widgets-)
 - [Stack](#stack-)
 
 ---
@@ -46,7 +45,7 @@ This project aims to create a serie of widgets to interact with ressources store
 
 ### Preprod deploy
 
-- Preprod : [Datami (preprod)](https://preprod--datami-widget.netlify.app/)
+- Preprod : [Datami (preprod on Netlify)](https://preprod--datami-widget.netlify.app/)
 
 ---
 
@@ -68,6 +67,8 @@ To install it, use the command :
 npm install -g npm@8.3.2
 ```
 
+Then you can install the dependancies and add a dummy `.env` file based on the example.
+
 ```bash
 nvm use
 npm install
@@ -77,6 +78,8 @@ cp example.env .env
 ```
 
 ### Compiles and hot-reloads for development
+
+To run locally Datami you just have to type :
 
 ```bash
 npm run serve
@@ -120,8 +123,10 @@ We only used open source packages and technologies, coz' that's what we do... :
 - [`Fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch): for requests to Github's or Gitlab's API ;
 - [`JSDiff`](https://github.com/kpdecker/jsdiff) : to get diff between an original content and its edited version
 - [`Diff2html`](https://www.npmjs.com/package/diff2html) : to display diff like in github / gitlab
+- [`MapLibre`](https://maplibre.org) : the open and free fork from MapboxGl.js to make maps
+- [`ApexCharts`](https://apexcharts.com) : an open library to make charts
 - ...and a lot of Stackoverflow help...
 
 ---
 
-An open source project by the coop **[multi](https://multi.coop)**
+Datami is an open source project by the tech cooperative **[multi](https://multi.coop)**
