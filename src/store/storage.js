@@ -45,9 +45,10 @@ export const storage = {
         const datamiUserLastView = `{"fileId": "${payload.fileId}", "lastView": "${payload.defaultView}", "defaultView": "${payload.defaultView}"}`
         localStorage.setItem('datamiUserLastView', datamiUserLastView)
         state.userLastView = { fileId: payload.fileId, lastView: payload.defaultView, defaultView: payload.defaultView }
+        // console.log('initialization at', JSON.parse(userLastView).lastView)
       } else {
         state.userLastView = JSON.parse(userLastView)
-        // console.log('initialization at', JSON.parse(userLastView).lastView)
+        state.userLastView.defaultView = payload.defaultView
       }
     },
     changeUserLastView (state, payload) {
