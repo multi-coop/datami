@@ -78,8 +78,7 @@ export default {
   },
   data () {
     return {
-      buttonsView: viewsOptions,
-      defaultView: undefined
+      buttonsView: viewsOptions
     }
   },
   computed: {
@@ -121,9 +120,9 @@ export default {
         ]
         const defaultView = defaultViews.find(v => v.isDefault)
         // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
-        this.defaultView = defaultView.view
         this.initializeUserLastView({ fileId: this.fileId, defaultView: defaultView.view })
         this.changeView(this.getUserLastView)
+        this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
       }
     }
   },
@@ -131,7 +130,6 @@ export default {
     // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
     // this.changeView('table')
-    this.changeViewMode({ fileId: this.fileId, mode: this.getUserLastView })
   },
   methods: {
     ...mapActions({

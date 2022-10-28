@@ -47,7 +47,7 @@ export const storage = {
         state.userLastView = { fileId: payload.fileId, lastView: payload.defaultView, defaultView: payload.defaultView }
       } else {
         state.userLastView = JSON.parse(userLastView)
-        console.log('initialization at', JSON.parse(userLastView).lastView)
+        // console.log('initialization at', JSON.parse(userLastView).lastView)
       }
     },
     changeUserLastView (state, payload) {
