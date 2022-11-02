@@ -4,6 +4,7 @@
     <ApexChart
       :ref="chartId"
       :type="chartType"
+      height="370vh"
       :options="chartData.chartOptions"
       :series="chartData.series"/>
 
