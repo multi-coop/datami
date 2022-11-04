@@ -87,7 +87,7 @@ export default {
   // },
   methods: {
     computeSerie (chart) {
-      // console.log('\nC > DatamiDataviz > computeSerie > chart : ', chart)
+      console.log('\nC > DatamiDataviz > computeSerie > chart : ', chart)
       // console.log('C > DatamiDataviz > beforeMount > this.fields : ', this.fields)
       const chartOptions = { ...chart.chartOptions }
       const chartType = chartOptions.chart.type
@@ -185,6 +185,7 @@ export default {
 
 .dataviz-scroll {
   overflow-y: auto;
+  /* overflow: hidden; */
   height: 100%;
 }
 
