@@ -128,6 +128,7 @@ export default {
           type: h.type,
           subtype: h.subtype,
           enumArr: h.enumArr,
+          definitions: h.definitions,
           tagSeparator: h.tagSeparator,
           ...h.mini
         }
@@ -144,6 +145,7 @@ export default {
           type: h.type,
           subtype: h.subtype,
           enumArr: h.enumArr,
+          definitions: h.definitions,
           tagSeparator: h.tagSeparator,
           ...h.detail
         }
