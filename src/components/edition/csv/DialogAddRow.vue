@@ -27,8 +27,22 @@
                 <div
                   v-for="header in headers"
                   :key="header.field"
-                  class="column is-12 py-0">
-                  <b-field horizontal>
+                  class="column is-12 py-1">
+                  <div class="columns">
+                    <div class="column is-4 has-text-weight-bold">
+                      {{ header.label }}
+                    </div>
+                    <div class="column is-8">
+                      <EditCell
+                        :file-id="fileId"
+                        :field="header"
+                        :is-added="true"
+                        :input-data="temp[header.field] || ''"
+                        :locale="locale"
+                        :is-card-view="false"/>
+                    </div>
+                  </div>
+                  <!-- <b-field horizontal>
                     <template #label>
                       {{ header.label }}
                     </template>
@@ -39,7 +53,7 @@
                       icon-right="close-circle"
                       icon-right-clickable
                       @icon-right-click="clearFieldValue(header.field)"/>
-                  </b-field>
+                  </b-field> -->
                 </div>
               </div>
             </div>
@@ -71,8 +85,13 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
+import EditCell from '@/components/edition/csv/EditCell'
+
 export default {
   name: 'DialogAddRow',
+  components: {
+    EditCell
+  },
   mixins: [mixinGlobal],
   model: {
     prop: 'hidden',
