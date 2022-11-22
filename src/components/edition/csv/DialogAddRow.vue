@@ -22,6 +22,10 @@
           <!-- NEW ROW VALUES -->
           <div class="card-content">
             <div class="content">
+              <!-- DEBUG -->
+              <div v-if="debug">
+                temp : <pre><code>{{ temp }}</code></pre>
+              </div>
               <div class="columns is-centered is-multiline mt-3">
                 <!-- HEADER FIELD -->
                 <div
@@ -39,7 +43,8 @@
                         :is-added="true"
                         :input-data="temp[header.field] || ''"
                         :locale="locale"
-                        :is-card-view="false"/>
+                        :is-card-view="false"
+                        @updateCellValue="updateTemp"/>
                     </div>
                   </div>
                   <!-- <b-field horizontal>
@@ -150,6 +155,11 @@ export default {
 
       // track with matomo
       this.trackEvent('closeDialog')
+    },
+    updateTemp (event) {
+      // console.log('\nC > DialogAddRow > updateTemp > event :', event)
+      // console.log('C > DialogAddRow > updateTemp > this.temp :', this.temp)
+      this.temp[event.colField] = event.val
     },
     sendNewRowToParent () {
       console.log('\nC > DialogAddRow > sendNewRowToParent > this.temp :', this.temp)
