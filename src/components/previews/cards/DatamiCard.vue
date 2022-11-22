@@ -121,18 +121,18 @@
             <pre>{{ fieldMapping }}</pre>
           </code>
         </p>
-        <p>
+        <!-- <p>
           getFieldsByPosition('description'): <br>
           <code>
             <pre>{{ getFieldsByPosition('description') }}</pre>
           </code>
-        </p>
-        <p>
+        </p> -->
+        <!-- <p>
           item: <br>
           <code>
             <pre>{{ item }}</pre>
           </code>
-        </p>
+        </p> -->
       </div>
 
       <div class="columns is-8 is-multiline">

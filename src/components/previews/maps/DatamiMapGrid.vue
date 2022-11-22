@@ -1,5 +1,14 @@
 <template>
   <div class="DatamiMapGrid datami-component">
+    <!-- DEBUG -->
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-3">
+        fields: <br><pre><code>{{ fields }}</code></pre>
+      </div>
+    </div>
+
     <!-- DISPLAY MAPS -->
     <div
       class="columns is-multiline is-centered">

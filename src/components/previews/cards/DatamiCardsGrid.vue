@@ -7,9 +7,9 @@
       <div class="column is-3">
         cardsSettings.originalHeaders: <br><pre><code>{{ cardsSettings.originalHeaders }}</code></pre>
       </div>
-      <!-- <div class="column is-3">
+      <div class="column is-3">
         cardsSettings.editedHeaders: <br><pre><code>{{ cardsSettings.editedHeaders }}</code></pre>
-      </div> -->
+      </div>
       <div class="column is-3">
         cardsSettings.settings: <br><pre><code>{{ cardsSettings.settings }}</code></pre>
       </div>
@@ -128,6 +128,7 @@ export default {
           type: h.type,
           subtype: h.subtype,
           enumArr: h.enumArr,
+          definitions: h.definitions,
           tagSeparator: h.tagSeparator,
           ...h.mini
         }
@@ -144,6 +145,7 @@ export default {
           type: h.type,
           subtype: h.subtype,
           enumArr: h.enumArr,
+          definitions: h.definitions,
           tagSeparator: h.tagSeparator,
           ...h.detail
         }

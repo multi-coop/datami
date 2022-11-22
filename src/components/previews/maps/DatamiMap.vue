@@ -287,6 +287,7 @@ export default {
           type: f.type,
           subtype: f.subtype,
           enumArr: f.enumArr,
+          definitions: f.definitions,
           tagSeparator: f.tagSeparator,
           ...this.mapCardsSettings.mini[f.name]
         }
@@ -304,6 +305,7 @@ export default {
           type: f.type,
           subtype: f.subtype,
           enumArr: f.enumArr,
+          definitions: f.definitions,
           tagSeparator: f.tagSeparator,
           ...this.mapCardsSettings.detail[f.name]
         }
