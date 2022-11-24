@@ -5,6 +5,15 @@
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
 
+    <div
+      v-if="isOpenCardField"
+      class="has-text-centered">
+      <ButtonOpenCard
+        :row-id="rowId"
+        :locale="locale"
+        @action="SendActionToParent"/>
+    </div>
+
     <!-- SIMPLE STRING -->
     <div
       v-if="isString && !field.subtype"
@@ -51,10 +60,17 @@
     <!-- BOOLEAN -->
     <div
       v-if="isBoolean"
-      :class="`has-text-centered`">
-      <!-- {{ value }} -->
+      :class="`has-text-left is-flex is-align-content-center ml-4`">
       <b-icon
-        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank-outline'}`"/>
+        :icon="`checkbox-${booleanFromValue(value, field) ? 'marked' : 'blank-outline'}`"/>
+      <span class="ml-2">
+        <span v-if="value === ''">
+          {{ t('global.noValue', locale) }}
+        </span>
+        <span v-else>
+          {{ value }}
+        </span>
+      </span>
     </div>
 
     <!-- TAG / TAGS -->
@@ -165,14 +181,17 @@
 
 import { mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
 
-import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
-import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
+// import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
+// import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
 
 export default {
   name: 'PreviewCell',
   components: {
-    ButtonWrapCell,
-    PreviewTagValue
+    // ButtonWrapCell,
+    // PreviewTagValue
+    ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
+    ButtonWrapCell: () => import(/* webpackChunkName: "ButtonWrapCell" */ '@/components/previews/ButtonWrapCell.vue'),
+    PreviewTagValue: () => import(/* webpackChunkName: "PreviewTagValue" */ '@/components/previews/PreviewTagValue.vue')
   },
   mixins: [
     mixinGlobal,
@@ -181,6 +200,10 @@ export default {
   ],
   props: {
     fileId: {
+      default: null,
+      type: String
+    },
+    rowId: {
       default: null,
       type: String
     },
@@ -263,6 +286,9 @@ export default {
       }
       // console.log('C > PreviewCell > linkDomain > urlObj : ', urlObj)
       return urlObj.hostname || this.t('global.link', this.locale)
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     }
   }
   // beforeMount () {

@@ -181,6 +181,7 @@ export default {
     ressourceValues: 'Ressource values',
     definition: 'Definition',
     datami: 'Special field',
+    openDatamiCard: 'Open card',
     consolidation: 'Consolidation'
   },
   edit: {

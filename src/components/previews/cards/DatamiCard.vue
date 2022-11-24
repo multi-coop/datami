@@ -481,12 +481,12 @@
 
 import { mixinGlobal, mixinValue, mixinDiff } from '@/utils/mixins.js'
 
-import DatamiCardBlockImage from '@/components/previews/cards/DatamiCardBlockImage'
-import DatamiCardBlockContent from '@/components/previews/cards/DatamiCardBlockContent'
-import DatamiCardBlockTags from '@/components/previews/cards/DatamiCardBlockTags'
-import DatamiCardBlockLinks from '@/components/previews/cards/DatamiCardBlockLinks'
+// import DatamiCardBlockImage from '@/components/previews/cards/DatamiCardBlockImage'
+// import DatamiCardBlockContent from '@/components/previews/cards/DatamiCardBlockContent'
+// import DatamiCardBlockTags from '@/components/previews/cards/DatamiCardBlockTags'
+// import DatamiCardBlockLinks from '@/components/previews/cards/DatamiCardBlockLinks'
 
-import DatamiMiniMap from '@/components/previews/maps/DatamiMiniMap'
+// import DatamiMiniMap from '@/components/previews/maps/DatamiMiniMap'
 
 // import PreviewCell from '@/components/previews/PreviewCell'
 // import EditCell from '@/components/edition/csv/EditCell'
@@ -494,13 +494,18 @@ import DatamiMiniMap from '@/components/previews/maps/DatamiMiniMap'
 export default {
   name: 'DatamiCard',
   components: {
-    DatamiCardBlockImage,
-    DatamiCardBlockContent,
-    DatamiCardBlockTags,
-    DatamiCardBlockLinks,
-    DatamiMiniMap
+    // DatamiCardBlockImage,
+    // DatamiCardBlockContent,
+    // DatamiCardBlockTags,
+    // DatamiCardBlockLinks,
+    // DatamiMiniMap
     // PreviewCell,
     // EditCell
+    DatamiCardBlockImage: () => import(/* webpackChunkName: "DatamiCardBlockImage" */ '@/components/previews/cards/DatamiCardBlockImage.vue'),
+    DatamiCardBlockContent: () => import(/* webpackChunkName: "DatamiCardBlockContent" */ '@/components/previews/cards/DatamiCardBlockContent.vue'),
+    DatamiCardBlockTags: () => import(/* webpackChunkName: "DatamiCardBlockTags" */ '@/components/previews/cards/DatamiCardBlockTags.vue'),
+    DatamiCardBlockLinks: () => import(/* webpackChunkName: "DatamiCardBlockLinks" */ '@/components/previews/cards/DatamiCardBlockLinks.vue'),
+    DatamiMiniMap: () => import(/* webpackChunkName: "DatamiMiniMap" */ '@/components/previews/maps/DatamiMiniMap.vue')
   },
   mixins: [
     mixinGlobal,
@@ -541,6 +546,10 @@ export default {
       type: String
     },
     onlyPreview: {
+      default: false,
+      type: Boolean
+    },
+    fromTable: {
       default: false,
       type: Boolean
     },

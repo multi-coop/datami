@@ -159,12 +159,12 @@ import {
 } from '@/utils/mixins.js'
 
 // import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
-import LoaderCSV from '@/components/loaders/LoaderCSV'
-import LoaderCards from '@/components/loaders/LoaderCards'
+// import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
+// import LoaderCSV from '@/components/loaders/LoaderCSV'
+// import LoaderCards from '@/components/loaders/LoaderCards'
 
-import PreviewHelpers from '@/components/previews/PreviewHelpers'
-import DatamiTable from '@/components/previews/DatamiTable'
+// import PreviewHelpers from '@/components/previews/PreviewHelpers'
+// import DatamiTable from '@/components/previews/DatamiTable'
 
 import { defaultTagsSeparator } from '@/utils/globalUtils'
 
@@ -172,11 +172,17 @@ export default {
   name: 'PreviewCsv',
   components: {
     // LoaderEditNavbar,
-    LoaderSortFilters,
-    LoaderCSV,
-    LoaderCards,
-    PreviewHelpers,
-    DatamiTable
+    // LoaderSortFilters,
+    // LoaderCSV,
+    // LoaderCards,
+    // PreviewHelpers,
+    // DatamiTable
+    LoaderSortFilters: () => import(/* webpackChunkName: "LoaderSortFilters" */ '@/components/loaders/LoaderSortFilters.vue'),
+    LoaderCSV: () => import(/* webpackChunkName: "LoaderCSV" */ '@/components/loaders/LoaderCSV.vue'),
+    LoaderCards: () => import(/* webpackChunkName: "LoaderCards" */ '@/components/loaders/LoaderCards.vue'),
+    PreviewHelpers: () => import(/* webpackChunkName: "PreviewHelpers" */ '@/components/previews/PreviewHelpers.vue'),
+    DatamiTable: () => import(/* webpackChunkName: "DatamiTable" */ '@/components/previews/DatamiTable.vue')
+
   },
   mixins: [
     mixinGlobal,
@@ -428,7 +434,7 @@ export default {
       const enumArr = [...dataParsedSet].sort((a, b) => {
         return a.localeCompare(b, this.locale, { numeric: true })
       })
-      console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
+      // console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
       return enumArr
     },
     buildColumns (dataRaw) {
@@ -488,6 +494,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
+            ...fieldCustomProps && fieldCustomProps.booleanOptions && { booleanOptions: fieldCustomProps.booleanOptions },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
           // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)

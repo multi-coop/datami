@@ -181,6 +181,7 @@ export default {
     ressourceValues: 'Valeurs liées',
     definition: 'Définition',
     datami: 'Champ spécial',
+    openDatamiCard: 'Ouvrir la fiche',
     consolidation: 'Consolidation'
   },
   edit: {

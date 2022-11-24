@@ -63,13 +63,14 @@
 import { mixinGlobal, mixinValue, mixinIcons } from '@/utils/mixins.js'
 
 // import PreviewCell from '@/components/previews/PreviewCell'
-import EditCell from '@/components/edition/csv/EditCell'
+// import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'DatamiCardBlockImage',
   components: {
     // PreviewCell,
-    EditCell
+    // EditCell
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
   },
   mixins: [
     mixinGlobal,

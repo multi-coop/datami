@@ -24,7 +24,8 @@
             <div class="content">
               <!-- DEBUG -->
               <div v-if="debug">
-                temp : <pre><code>{{ temp }}</code></pre>
+                headers : <pre><code>{{ headers }}</code></pre><br>
+                <!-- temp : <pre><code>{{ temp }}</code></pre> -->
               </div>
               <div class="columns is-centered is-multiline mt-3">
                 <!-- HEADER AND INPUT FIELDS -->
@@ -85,14 +86,16 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import PreviewField from '@/components/previews/PreviewField'
-import EditCell from '@/components/edition/csv/EditCell'
+// import PreviewField from '@/components/previews/PreviewField'
+// import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'DialogAddRow',
   components: {
-    PreviewField,
-    EditCell
+    // PreviewField,
+    // EditCell
+    PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
   },
   mixins: [mixinGlobal],
   model: {

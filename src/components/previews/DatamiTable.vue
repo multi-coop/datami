@@ -196,7 +196,7 @@
               <template #default="props">
                 <!-- DEBUG -->
                 <div
-                  v-if="false"
+                  v-if="debug"
                   class="mb-3">
                   <!-- row: <code>{{ props.row }}</code><br> -->
                   <code>row id</code>: <code>{{ props.row.id }}</code><br>
@@ -209,10 +209,12 @@
                   <PreviewCell
                     v-if="col.locked"
                     :file-id="fileId"
+                    :row-id="props.row.id"
                     :value="props.row[col.field]"
                     :field="col"
                     :is-edit-view="true"
-                    :locale="locale"/>
+                    :locale="locale"
+                    @action="processAction"/>
                   <EditCell
                     v-else
                     :file-id="fileId"
@@ -237,10 +239,12 @@
                   <PreviewCell
                     v-else
                     :file-id="fileId"
+                    :row-id="props.row.id"
                     :value="props.row[col.field]"
                     :is-diff-view="true"
                     :field="col"
-                    :locale="locale"/>
+                    :locale="locale"
+                    @action="processAction"/>
                 </div>
 
                 <!-- PREVIEW -->
@@ -250,9 +254,11 @@
                   <!-- {{ props.row[col.field] }} -->
                   <PreviewCell
                     :file-id="fileId"
+                    :row-id="props.row.id"
                     :value="props.row[col.field]"
                     :field="col"
-                    :locale="locale"/>
+                    :locale="locale"
+                    @action="processAction"/>
                 </div>
               </template>
             </b-table-column>
@@ -269,6 +275,27 @@
           </b-table>
         </div>
 
+        <!-- DISPLAY DETAILLED CARD FOR TABLE VIEW -->
+        <div
+          v-show="currentViewMode === 'table' && activeTableCardId"
+          class="columns is-centered">
+          <div
+            :class="`column is-10`">
+            <DatamiCard
+              :file-id="fileId"
+              :fields="columns"
+              :field-mapping="mappingsForDetail"
+              :item="getDetailItem(activeTableCardId)"
+              :show-detail="true"
+              :show-detail-card="false"
+              :locale="locale"
+              :from-table="true"
+              @action="processAction"
+              @updateCellValue="emitUpdate"
+              @toggleDetail="activeTableCardId = undefined"/>
+          </div>
+        </div>
+
         <!-- CARDS -->
         <div
           v-if="hasCardsView && cardsViewIsActive"
@@ -278,6 +305,8 @@
           <DatamiCardsGrid
             :file-id="fileId"
             :cards-settings="cardsSettingsFromFileOptions"
+            :mappings-for-mini="mappingsForMini"
+            :mappings-for-detail="mappingsForDetail"
             :items-per-row="itemsPerRow"
             :items="dataEditedPaginated"
             :locale="locale"
@@ -466,6 +495,7 @@ import {
   mixinIcons,
   mixinDiff,
   mixinCsv,
+  // mixinCards,
   mixinPagination,
   mixinConsolidation
 } from '@/utils/mixins.js'
@@ -503,6 +533,7 @@ export default {
     EditCell,
     PreviewConsolidation,
     DatamiCardsGrid,
+    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DatamiDatavizGrid,
     DatamiMapGrid,
     PagesNavigation
@@ -512,6 +543,7 @@ export default {
     mixinIcons,
     mixinDiff,
     mixinCsv,
+    // mixinCards,
     mixinPagination,
     mixinConsolidation
   ],
@@ -562,6 +594,9 @@ export default {
       showDeleteRowsDialog: false,
       showUploadFileDialog: false,
 
+      // CARDS FOR TABLE VIEW
+      activeTableCardId: undefined,
+
       // SORTING
       noSortingFields: ['tags'],
       sortingByField: undefined,
@@ -583,6 +618,11 @@ export default {
       itemsPerRowDefault: 3,
       itemsPerPageCards: undefined,
       itemsPerPageCardsDefault: 6,
+
+      // CONSOLIDATION
+      openCardField: {
+        type: 'datami'
+      },
 
       // CONSOLIDATION
       consolidationField: {
@@ -624,9 +664,6 @@ export default {
       // console.log('C > DatamiTable > filterFields > filterFields : ', filterFields)
       return filterFields
     },
-    // hasCardsView () {
-    //   return !!this.fileOptions.cardsview
-    // },
     cardsSettingsFromFileOptions () {
       let cardsSettings
       // console.log('\nC > DatamiTable > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
@@ -637,10 +674,6 @@ export default {
         const mapping = this.columns.map(h => {
           const fieldMap = {
             ...h,
-            // field: h.field,
-            // type: h.type,
-            // subtype: h.subtype,
-            // mini: miniSettings,
             mini: miniSettings[h.name],
             detail: detailSettings[h.name]
           }
@@ -656,6 +689,40 @@ export default {
         }
       }
       return cardsSettings
+    },
+    mappingsForMini () {
+      return this.cardsSettingsFromFileOptions.mapping.map(h => {
+        const fieldMap = {
+          field: h.field,
+          name: h.name,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
+          definitions: h.definitions,
+          tagSeparator: h.tagSeparator,
+          ...h.mini
+        }
+        const hasTemplate = h.templating && h.templating.use_on_mini
+        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        return fieldMap
+      })
+    },
+    mappingsForDetail () {
+      return this.cardsSettingsFromFileOptions.mapping.map(h => {
+        const fieldMap = {
+          field: h.field,
+          name: h.name,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
+          definitions: h.definitions,
+          tagSeparator: h.tagSeparator,
+          ...h.detail
+        }
+        const hasTemplate = h.templating && h.templating.use_on_detail
+        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        return fieldMap
+      })
     },
     itemsPerPageChoices () {
       let result
@@ -844,11 +911,23 @@ export default {
           columns = this.columnsEdited.filter(c => c.type !== 'datami')
           break
       }
+
       // console.log('C > DatamiTable > dataForView > preview > columns : ', columns)
-      return columns
+      if (this.hasCardsView && this.cardsViewIsActive) {
+        const openCardColumn = {
+          ...this.openCardField,
+          field: 'openDatamiCard',
+          subtype: 'openDatamiCard',
+          label: 'field.openDatamiCard'
+        }
+        openCardColumn.icon = this.getIconFieldType(openCardColumn)
+        return [openCardColumn, ...columns]
+      } else {
+        return columns
+      }
     },
     isAnyDialogOpen () {
-      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog
+      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog || this.activeTableCardId
     },
     isCardDetailsOpen () {
       return this.showCardDetails && this.currentViewMode === 'cards'
@@ -1046,6 +1125,12 @@ export default {
     async processAction (event) {
       // console.log('\nC > DatamiTable > processAction > event : ', event)
       switch (event.action) {
+        // OPEN CARD
+        case 'openCard':
+          // console.log('\nC > DatamiTable > processAction > event : ', event)
+          this.activeTableCardId = event.rowId
+          break
+
         // ADD TAG TO ENUM
         case 'addTagToEnum':
           // console.log('\nC > DatamiTable > processAction > event : ', event)
@@ -1206,6 +1291,9 @@ export default {
         this.consolidationData.push(respConsolidation)
         this.openedDetails.push(rowId)
       }
+    },
+    getDetailItem (rowId) {
+      return this.dataEditedPaginated.find(item => item.id === rowId)
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)

@@ -182,7 +182,7 @@
       }
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></datami-file>
   </div> -->
-  
+
   <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-ping" style="color: white; margin-right:  0.5em;">
       #
@@ -190,17 +190,14 @@
     multifiles PiNG - Tiers-Lieux
   </p>
   <div style="background-color: white; margin: 1em;">
-      <datami-multi-files
-      title="Tiers lieux en Pays de la Loire"
-      options='{
+    <datami-multi-files title="Tiers lieux en Pays de la Loire" options='{
         "display": "horizontal"
-      }'
-      gitfiles='[
+      }' gitfiles='[
         {
           "title": "PING : base de données tiers-lieux",
           "activate": true,
-          "gitfile": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded-test.csv",
-          "gitfile_a": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
+          "gitfile__": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded-test.csv",
+          "gitfile": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
           "gitfile_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
           "default-tab": true,
           "options": {
@@ -425,9 +422,7 @@
           "onlypreview": true,
           "usertoken": ""
         }
-      ]'
-      locale="fr"
-    />
+      ]' locale="fr" />
   </div>
   <!-- <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-odf-observatoire" style="color: white; margin-right:  0.5em;">

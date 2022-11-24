@@ -140,7 +140,12 @@ export const fieldTypeIcons = [
     icon: 'text'
   },
 
-  // GITRIBUTE ICONS
+  // DATAMI ICONS
+  {
+    type: 'datami',
+    subtype: 'openDatamiCard',
+    icon: 'eye'
+  },
   {
     type: 'datami',
     subtype: 'consolidation',

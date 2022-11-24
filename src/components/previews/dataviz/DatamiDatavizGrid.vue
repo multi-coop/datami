@@ -7,11 +7,15 @@
         v-for="(chart, idx) in datavizSettings.charts"
         :key="`${fileId}-chart-${idx}`"
         :class="`column mt-3 mb-6 is-${chart.cols || 6}`">
-        <p :class=" `subtitle has-text-centered has-text-weight-bold ${isDarkMode ? 'has-text-white' : ''}` ">
+        <p
+          v-if="!chart.hide"
+          :class=" `subtitle has-text-centered has-text-weight-bold ${isDarkMode ? 'has-text-white' : ''}` ">
           {{ chart.title[locale] }}
         </p>
 
-        <div :style="`height: ${ chart.chartOptions.chart.height + 10}px`">
+        <div
+          v-if="!chart.hide"
+          :style="`height: ${ chart.chartOptions.chart.height + 10}px`">
           <DatamiDataviz
             :file-id="fileId"
             :chart-id="`g-dataviz-${fileId}-${idx}`"
@@ -81,14 +85,14 @@ export default {
     }
   },
   // beforeMount () {
-  //   console.log('\nC > DatamiDataviz > beforeMount > this.datavizSettings : ', this.datavizSettings)
-  //   console.log('C > DatamiDataviz > beforeMount > this.fields : ', this.fields)
-  //   console.log('C > DatamiDataviz > beforeMount > this.fileOptions : ', this.fileOptions)
+  //   console.log('\nC > DatamiDatavizGrid > beforeMount > this.datavizSettings : ', this.datavizSettings)
+  //   console.log('C > DatamiDatavizGrid > beforeMount > this.fields : ', this.fields)
+  //   console.log('C > DatamiDatavizGrid > beforeMount > this.fileOptions : ', this.fileOptions)
   // },
   methods: {
     computeSerie (chart) {
-      // console.log('\nC > DatamiDataviz > computeSerie > chart : ', chart)
-      // console.log('C > DatamiDataviz > beforeMount > this.fields : ', this.fields)
+      // console.log('\nC > DatamiDatavizGrid > computeSerie > chart : ', chart)
+      // console.log('C > DatamiDatavizGrid > beforeMount > this.fields : ', this.fields)
       const chartOptions = { ...chart.chartOptions }
       const chartType = chartOptions.chart.type
       let series = []
@@ -97,28 +101,28 @@ export default {
       const categoriesBy = chart.categoriesbyfield
       const categoriesField = this.fields.find(f => f.name === categoriesBy)
       const categoriesFieldIdx = categoriesField && categoriesField.field
-      // console.log('C > DatamiDataviz > computeSerie > categoriesBy : ', categoriesBy)
-      // console.log('C > DatamiDataviz > computeSerie > categoriesField : ', categoriesField)
-      // console.log('C > DatamiDataviz > computeSerie > categoriesFieldIdx : ', categoriesFieldIdx)
+      // console.log('C > DatamiDatavizGrid > computeSerie > categoriesBy : ', categoriesBy)
+      // console.log('C > DatamiDatavizGrid > computeSerie > categoriesField : ', categoriesField)
+      // console.log('C > DatamiDatavizGrid > computeSerie > categoriesFieldIdx : ', categoriesFieldIdx)
 
       const aggregateBy = chart.aggregatebyfield
       const aggregationField = this.fields.find(f => f.name === aggregateBy)
       const aggregationFieldIdx = aggregationField && aggregationField.field
-      // console.log('C > DatamiDataviz > computeSerie > aggregateBy : ', aggregateBy)
-      // console.log('C > DatamiDataviz > computeSerie ( grouped or not ) > aggregationField : ', aggregationField)
-      // console.log('C > DatamiDataviz > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
+      // console.log('C > DatamiDatavizGrid > computeSerie > aggregateBy : ', aggregateBy)
+      // console.log('C > DatamiDatavizGrid > computeSerie ( grouped or not ) > aggregationField : ', aggregationField)
+      // console.log('C > DatamiDatavizGrid > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
 
       chartOptions.labels = aggregationField && aggregationField.enumArr
-      // console.log('C > DatamiDataviz > beforeMount > this.chartOptions : ', this.chartOptions)
+      // console.log('C > DatamiDatavizGrid > beforeMount > chartOptions : ', chartOptions)
 
       if (categoriesFieldIdx) {
         const grouped = this.groupByField(this.items, categoriesFieldIdx)
-        // console.log('\nC > DatamiDataviz > computeSerie > grouped : ', grouped)
+        console.log('\nC > DatamiDatavizGrid > computeSerie > grouped : ', grouped)
         // const labelsSet = new Set()
         series = grouped.map(g => {
           let serie = this.aggregateByField(g.items, aggregationFieldIdx, chart.aggregationtype)
-          // console.log('\nC > DatamiDataviz > computeSerie (grouped) > g.name : ', g.name)
-          // console.log('C > DatamiDataviz > computeSerie (grouped) > serie : ', serie)
+          console.log('\nC > DatamiDatavizGrid > computeSerie (grouped) > g.name : ', g.name)
+          console.log('C > DatamiDatavizGrid > computeSerie (grouped) > serie : ', serie)
           serie = {
             name: g.name,
             data: aggregationField && aggregationField.enumArr.map(k => {
@@ -145,37 +149,48 @@ export default {
           return serie
         })
       } else {
-        const dataset = this.aggregateByField(this.items, aggregationFieldIdx, chart.aggregationtype)
-        // console.log('\nC > DatamiDataviz > computeSerie (not grouped) > series : ', series)
+        const dataset = this.aggregateByField(this.items, aggregationField, chart.aggregationtype)
+        // console.log('\nC > DatamiDatavizGrid > computeSerie (not grouped) > series : ', series)
         series = aggregationField && aggregationField.enumArr.map(k => {
           let data
           const obj = dataset.find(i => i.name === k) || { data: 0 }
-          if (chartType === 'treemap') {
-            data = {
-              x: k,
-              y: obj.data
-            }
-          } else {
-            data = obj.data
+          switch (chartType) {
+            case 'treemap':
+              data = {
+                x: k,
+                y: obj.data
+              }
+              break
+            case 'bar':
+              data = {
+                name: k,
+                data: [obj.data]
+              }
+              break
+            default:
+              data = obj.data
+              break
           }
           return data
         })
+        // treemap specific
         if (chartType === 'treemap') {
           const seriesCopy = series && series.sort((a, b) => {
             return b.y - a.y
           })
           series = [{ data: seriesCopy }]
         }
+        // bar specific
+        // if (chartType === 'bar') {
+        // }
       }
 
+      // console.log('C > DatamiDatavizGrid > computeSerie > series : ', series)
       return {
         chartOptions: chartOptions,
         series: series
       }
     }
-    // SendActionToParent (event) {
-    //   this.$emit('action', event)
-    // }
   }
 }
 

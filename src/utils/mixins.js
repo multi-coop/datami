@@ -610,6 +610,19 @@ export const mixinValue = {
     isCategory () {
       return this.fieldSubtype === 'tag'
     },
+    booleanOptions () {
+      const boolOptions = this.field.booleanOptions
+      return {
+        false: {
+          label: (boolOptions && boolOptions.false.label) || false,
+          value: (boolOptions && boolOptions.false.value) || false
+        },
+        true: {
+          label: (boolOptions && boolOptions.true.label) || true,
+          value: (boolOptions && boolOptions.true.value) || true
+        }
+      }
+    },
     tagsEnum () {
       return (this.field && this.field.enumArr) || []
     },
@@ -643,6 +656,9 @@ export const mixinValue = {
     },
     isDatamiField () {
       return this.fieldType === 'datami'
+    },
+    isOpenCardField () {
+      return this.isDatamiField && this.fieldSubtype === 'openDatamiCard'
     },
     isConsolidation () {
       return this.isDatamiField && this.fieldSubtype === 'consolidation'
@@ -803,21 +819,89 @@ export const mixinPagination = {
       itemsPerPageChoicesCards4perRow: itemsPerPageChoicesCards4perRow
     }
   },
-  computed: {
-    cardsSettingsFromFileOptions () {
-      let cardsSettings
-      if (this.hasCardsView) {
-        cardsSettings = {
-          headers: this.columnsForView,
-          settings: this.fileOptions.cardssettings
-        }
-      }
-      return cardsSettings
-    }
-  },
   methods: {
     paginate,
     getClosest
+  }
+}
+
+export const mixinCards = {
+  computed: {
+    cardsSettingsFromFileOptions () {
+      let cardsSettings
+      console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      if (this.hasCardsView && this.cardsViewIsActive) {
+        const settings = this.cardsSettingsFromOptions
+        console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
+        const miniSettings = settings.mini
+        const detailSettings = settings.detail
+        const mapping = this.columns.map(h => {
+          const fieldMap = {
+            ...h,
+            mini: miniSettings[h.name],
+            detail: detailSettings[h.name]
+          }
+          const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
+          if (hasTemplate) { fieldMap.templating = hasTemplate }
+          return fieldMap
+        })
+        cardsSettings = {
+          originalHeaders: this.columns,
+          editedHeaders: this.columnsForView,
+          settings: { mini: miniSettings, detail: detailSettings },
+          mapping: mapping
+        }
+      }
+      console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      return cardsSettings
+    }
+    // mappingForAll () {
+    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
+    //     return {
+    //       field: h.field,
+    //       name: h.name,
+    //       type: h.type,
+    //       subtype: h.subtype,
+    //       enumArr: h.enumArr,
+    //       definitions: h.definitions,
+    //       tagSeparator: h.tagSeparator
+    //     }
+    //   })
+    // },
+    // mappingsForMini () {
+    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
+    //     const fieldMap = {
+    //       field: h.field,
+    //       name: h.name,
+    //       type: h.type,
+    //       subtype: h.subtype,
+    //       enumArr: h.enumArr,
+    //       definitions: h.definitions,
+    //       tagSeparator: h.tagSeparator,
+    //       ...h.mini
+    //     }
+    //     const hasTemplate = h.templating && h.templating.use_on_mini
+    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+    //     return fieldMap
+    //   })
+    // },
+    // mappingsForDetail () {
+    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
+    //     const fieldMap = {
+    //       field: h.field,
+    //       name: h.name,
+    //       type: h.type,
+    //       subtype: h.subtype,
+    //       enumArr: h.enumArr,
+    //       definitions: h.definitions,
+    //       tagSeparator: h.tagSeparator,
+    //       ...h.detail
+    //     }
+    //     const hasTemplate = h.templating && h.templating.use_on_detail
+    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+    //     return fieldMap
+    //   })
+    // }
   }
 }
 

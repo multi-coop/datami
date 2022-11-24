@@ -241,43 +241,57 @@ import { mapActions } from 'vuex'
 import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
-import MatomoScript from '@/components/matomo/MatomoScript'
+// import MatomoScript from '@/components/matomo/MatomoScript'
 
-import FileTitle from '@/components/navbar/FileTitle'
-import ViewModeBtns from '@/components/previews/ViewModeBtns'
-import UserOptions from '@/components/user/UserOptions'
+// import FileTitle from '@/components/navbar/FileTitle'
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
+// import UserOptions from '@/components/user/UserOptions'
 
-import NotificationInfos from '@/components/notifications/NotificationInfos'
-import NotificationErrors from '@/components/notifications/NotificationErrors'
+// import NotificationInfos from '@/components/notifications/NotificationInfos'
+// import NotificationErrors from '@/components/notifications/NotificationErrors'
 
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-import DialogFileInfos from '@/components/previews/DialogFileInfos'
-import DialogUploadFile from '@/components/edition/DialogUploadFile'
-import ConfirmCommit from '@/components/edition/ConfirmCommit'
+// import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+// import DialogFileInfos from '@/components/previews/DialogFileInfos'
+// import DialogUploadFile from '@/components/edition/DialogUploadFile'
+// import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
-import PreviewCsv from '@/components/previews/PreviewCsv'
-import PreviewMd from '@/components/previews/PreviewMd'
-import PreviewJson from '@/components/previews/PreviewJson'
+// import PreviewCsv from '@/components/previews/PreviewCsv'
+// import PreviewMd from '@/components/previews/PreviewMd'
+// import PreviewJson from '@/components/previews/PreviewJson'
 
-import DatamiCredits from '@/components/credits/DatamiCredits'
+// import DatamiCredits from '@/components/credits/DatamiCredits'
 
 export default {
   name: 'DatamiFile',
   components: {
-    MatomoScript,
-    FileTitle,
-    ViewModeBtns,
-    UserOptions,
-    NotificationInfos,
-    NotificationErrors,
-    EditNavbarSkeleton,
-    DialogFileInfos,
-    DialogUploadFile,
-    ConfirmCommit,
-    PreviewCsv,
-    PreviewMd,
-    PreviewJson,
-    DatamiCredits
+    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
+    ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
+    UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
+    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
+    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
+    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
+    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
+    PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
+    PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
+    PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
+    DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
+    // MatomoScript,
+    // FileTitle,
+    // ViewModeBtns,
+    // UserOptions,
+    // NotificationInfos,
+    // NotificationErrors,
+    // EditNavbarSkeleton,
+    // DialogFileInfos,
+    // DialogUploadFile,
+    // ConfirmCommit,
+    // PreviewCsv,
+    // PreviewMd,
+    // PreviewJson,
+    // DatamiCredits
   },
   mixins: [
     mixinGlobal,
