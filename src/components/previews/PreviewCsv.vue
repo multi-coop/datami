@@ -428,7 +428,7 @@ export default {
       const enumArr = [...dataParsedSet].sort((a, b) => {
         return a.localeCompare(b, this.locale, { numeric: true })
       })
-      // console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
+      console.log('C > PreviewCsv > buildEnumArr > enumArr : ', enumArr)
       return enumArr
     },
     buildColumns (dataRaw) {
@@ -485,6 +485,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
             ...fieldCustomProps && fieldCustomProps.bgColor && { bgColor: fieldCustomProps.bgColor },
             ...fieldCustomProps && fieldCustomProps.primaryKey && { primaryKey: fieldCustomProps.primaryKey },
+            ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
@@ -626,11 +627,17 @@ export default {
       // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
       // update edited
       const newRowId = this.uuidv4()
-      const newRow = { ...event.row, id: newRowId, added: true }
+      const newRowPosition = `${this.itemsTotal || this.edited.length}`
+      const newRow = {
+        ...event.row,
+        id: newRowId,
+        position: newRowPosition,
+        added: true
+      }
       // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
-      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
 
       // update changesData
       const changeObj = {

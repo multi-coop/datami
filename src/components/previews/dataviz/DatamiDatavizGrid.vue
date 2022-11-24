@@ -108,7 +108,7 @@ export default {
       // console.log('C > DatamiDataviz > computeSerie ( grouped or not ) > aggregationField : ', aggregationField)
       // console.log('C > DatamiDataviz > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
 
-      chartOptions.labels = aggregationField.enumArr
+      chartOptions.labels = aggregationField && aggregationField.enumArr
       // console.log('C > DatamiDataviz > beforeMount > this.chartOptions : ', this.chartOptions)
 
       if (categoriesFieldIdx) {
@@ -121,7 +121,7 @@ export default {
           // console.log('C > DatamiDataviz > computeSerie (grouped) > serie : ', serie)
           serie = {
             name: g.name,
-            data: aggregationField.enumArr.map(k => {
+            data: aggregationField && aggregationField.enumArr.map(k => {
               const obj = serie.find(i => i.name === k) || { data: 0 }
               if (chartType === 'treemap') {
                 return {
@@ -134,7 +134,7 @@ export default {
             })
           }
           if (chartType === 'treemap') {
-            const seriesCopy = serie.sort((a, b) => {
+            const seriesCopy = serie && serie.sort((a, b) => {
               return b.y - a.y
             })
             serie = {
@@ -147,7 +147,7 @@ export default {
       } else {
         const dataset = this.aggregateByField(this.items, aggregationFieldIdx, chart.aggregationtype)
         // console.log('\nC > DatamiDataviz > computeSerie (not grouped) > series : ', series)
-        series = aggregationField.enumArr.map(k => {
+        series = aggregationField && aggregationField.enumArr.map(k => {
           let data
           const obj = dataset.find(i => i.name === k) || { data: 0 }
           if (chartType === 'treemap') {
@@ -161,7 +161,7 @@ export default {
           return data
         })
         if (chartType === 'treemap') {
-          const seriesCopy = series.sort((a, b) => {
+          const seriesCopy = series && series.sort((a, b) => {
             return b.y - a.y
           })
           series = [{ data: seriesCopy }]

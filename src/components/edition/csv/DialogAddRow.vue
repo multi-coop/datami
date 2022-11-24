@@ -27,16 +27,23 @@
                 temp : <pre><code>{{ temp }}</code></pre>
               </div>
               <div class="columns is-centered is-multiline mt-3">
-                <!-- HEADER FIELD -->
+                <!-- HEADER AND INPUT FIELDS -->
                 <div
                   v-for="header in headers"
                   :key="header.field"
-                  class="column is-12 py-1">
+                  class="column is-12 pb-3">
                   <div class="columns">
-                    <div class="column is-4 has-text-weight-bold">
-                      {{ header.label }}
+                    <!-- HEADER -->
+                    <div class="column is-5 has-text-weight-bold">
+                      <PreviewField
+                        :file-id="fileId"
+                        :field="header"
+                        :lock-headers="true"
+                        :locale="locale"/>
                     </div>
-                    <div class="column is-8">
+
+                    <!-- INPUT -->
+                    <div class="column is-7">
                       <EditCell
                         :file-id="fileId"
                         :field="header"
@@ -47,18 +54,6 @@
                         @updateCellValue="updateTemp"/>
                     </div>
                   </div>
-                  <!-- <b-field horizontal>
-                    <template #label>
-                      {{ header.label }}
-                    </template>
-                    <b-input
-                      v-model="temp[header.field]"
-                      maxlength="50"
-                      :placeholder="t('global.enterValue', locale)"
-                      icon-right="close-circle"
-                      icon-right-clickable
-                      @icon-right-click="clearFieldValue(header.field)"/>
-                  </b-field> -->
                 </div>
               </div>
             </div>
@@ -90,11 +85,13 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
+import PreviewField from '@/components/previews/PreviewField'
 import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'DialogAddRow',
   components: {
+    PreviewField,
     EditCell
   },
   mixins: [mixinGlobal],

@@ -236,8 +236,10 @@ export const mixinGlobal = {
     setWidgetCopy () {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
       const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
-      // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
-      const Http = widgetProvider.startsWith('localhost') ? 'http' : 'https'
+      console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
+
+      const isLocal = widgetProvider.startsWith('localhost')
+      const Http = isLocal ? 'http' : 'https'
 
       /* Stuff we need to add to <head>
         <script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
@@ -256,12 +258,12 @@ export const mixinGlobal = {
       const links = [
         {
           type: 'text/css',
-          href: `${Http}://${widgetProvider}/css/app.css`,
+          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/css/app.css`,
           rel: 'stylesheet'
         },
         {
           type: 'font/woff2',
-          href: `${Http}://${widgetProvider}/fonts/materialdesignicons-webfont.woff2`,
+          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/fonts/materialdesignicons-webfont.woff2`,
           rel: 'stylesheet',
           as: 'font'
         }
@@ -611,6 +613,22 @@ export const mixinValue = {
     tagsEnum () {
       return (this.field && this.field.enumArr) || []
     },
+    tagsDefinitions () {
+      return (this.field && this.field.definitions) || []
+    },
+    tagsEnumEnriched () {
+      const enumArr = this.tagsEnum
+      const definitions = this.tagsDefinitions
+      const enumEnriched = enumArr.map(opt => {
+        const def = definitions.find(d => d.value === opt)
+        const optEnriched = {
+          value: opt,
+          definition: def
+        }
+        return optEnriched
+      })
+      return enumEnriched
+    },
     tagSeparator () {
       return this.field.tagSeparator || this.defaultTagsSeparator
     },
@@ -640,9 +658,10 @@ export const mixinValue = {
       return definition
     },
     getValueDefinitionLabel (value, field = undefined) {
-      const definition = this.getValueDefinition(value, field)
+      const Field = field || this.field
+      const definition = this.getValueDefinition(value, Field)
       const label = definition && definition.label
-      return label || value
+      return label
     },
     getValueDefinitionDescription (value, field = undefined) {
       const definition = this.getValueDefinition(value, field)

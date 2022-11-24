@@ -1,18 +1,20 @@
 <template>
-  <div class="DatamiCardBlockTags datami-component mb-3">
+  <div class="DatamiCardBlockTags datami-component mb-4">
     <p
-      v-if="currentEditViewMode !== 'preview'"
-      class="is-size-6 has-text-weight-bold mb-2 is-uppercase">
+      v-if="currentEditViewMode === 'edit'"
+      class="is-size-6 has-text-weight-bold mb-1 is-uppercase">
       <!-- FIELD TYPE ICON -->
       <b-icon
         :icon="getIconFieldType(field)"
         :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
-      {{ fieldLabel }}
+      <span class="is-size-7">
+        {{ fieldLabel }}
+      </span>
     </p>
     <p
-      v-if="field.block_title"
+      v-if="field.block_title && currentEditViewMode !== 'edit'"
       class="is-size-7 mb-1">
       <span
         class="has-text-weight-bold is-uppercase">
@@ -34,7 +36,7 @@
     </div>
     <div v-if="currentEditViewMode === 'diff'">
       <div v-if="isInChanges(false, itemAdded, field.field, itemId)">
-        <span v-html="getDiffHtmlChars(false, itemAdded, f.field, itemValue, itemId)"/>
+        <span v-html="getDiffHtmlChars(false, itemAdded, field.field, itemValue, itemId)"/>
       </div>
       <PreviewCell
         v-else

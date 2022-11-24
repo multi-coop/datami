@@ -17,7 +17,7 @@
 
     <!-- BLOCK TITLE IF ANY -->
     <p
-      v-if="field.block_title"
+      v-show="currentEditViewMode !== 'edit' && field.block_title"
       class="is-size-7 mb-1">
       <span
         class="has-text-weight-bold is-uppercase">
@@ -29,7 +29,7 @@
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
       class="is-flex is-flex-direction-row is-align-items-center">
-      <slot name="logo"></slot>
+      <slot name="logo"/>
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"

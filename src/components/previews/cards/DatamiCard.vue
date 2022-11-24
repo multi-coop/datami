@@ -35,18 +35,19 @@
                 <div v-if="hasContentByPosition('logo')">
                   <!-- LOGO BLOCK : 'logo' -->
                   <div
-                    v-for="(fieldObj, i) in getFieldsByPosition('logo')"
-                    :key="`logo-${i}-${fieldObj.field}`"
+                    v-for="(fieldObjLogo, iLogo) in getFieldsByPosition('logo')"
+                    :key="`logo-${iLogo}-${fieldObj.field}`"
                     class="card-logo"
                     @click="toggleDetail">
                     <DatamiCardBlockImage
-                      :key="`logo-${i}-${fieldObj.field}`"
+                      :key="`logo-${iLogo}-${fieldObjLogo.field}`"
                       :file-id="fileId"
                       :position="'logo'"
-                      :field="fieldObj"
-                      :field-label="getFieldLabel(fieldObj.field)"
+                      :field="fieldObjLogo"
+                      :field-label="getFieldLabel(fieldObjLogo.field)"
                       :item-id="item.id"
-                      :item-value="item[fieldObj.field]"
+                      :item-value="item[fieldObjLogo.field]"
+                      :item-added="item.added"
                       :is-mini="isMini"
                       :locale="locale"/>
                   </div>
@@ -105,6 +106,7 @@
         :field-label="getFieldLabel(fieldObj.field)"
         :item-id="item.id"
         :item-value="item[fieldObj.field]"
+        :item-added="item.added"
         :is-mini="isMini"
         :locale="locale"/>
     </div>
@@ -167,18 +169,19 @@
                     <template #logo>
                       <!-- LOGO BLOCK : 'logo' -->
                       <div
-                        v-for="(fieldObj, i) in getFieldsByPosition('logo')"
-                        :key="`logo-${i}-${fieldObj.field}`"
+                        v-for="(fieldObjLogo, iLogo) in getFieldsByPosition('logo')"
+                        :key="`logo-${iLogo}-${fieldObjLogo.field}`"
                         class="card-logo"
                         @click="toggleDetail">
                         <DatamiCardBlockImage
-                          :key="`logo-${i}-${fieldObj.field}`"
+                          :key="`logo-${iLogo}-${fieldObjLogo.field}`"
                           :file-id="fileId"
                           :position="'logo'"
-                          :field="fieldObj"
-                          :field-label="getFieldLabel(fieldObj.field)"
+                          :field="fieldObjLogo"
+                          :field-label="getFieldLabel(fieldObjLogo.field)"
                           :item-id="item.id"
-                          :item-value="item[fieldObj.field]"
+                          :item-value="item[fieldObjLogo.field]"
+                          :item-added="item.added"
                           :is-mini="isMini"
                           :locale="locale"/>
                       </div>
@@ -306,6 +309,7 @@
                   :field-label="getFieldLabel(fieldObj.field)"
                   :item-id="item.id"
                   :item-value="item[fieldObj.field]"
+                  :item-added="item.added"
                   :is-mini="isMini"
                   :locale="locale"/>
               </div>

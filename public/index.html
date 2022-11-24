@@ -17,7 +17,7 @@
   <!-- <div id="app"></div> -->
 
   <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
-    <a href="https://gitlab.com/multi-coop/datami" target="_blank">
+    <a href="https://datami.multi.coop" target="_blank">
       <img src="/logo_DATAMI_title.png" alt="logo datami" style="height: 75px !important; width: auto !important">
     </a>
     <!-- <span class="ml-3 pb-3">
@@ -182,8 +182,254 @@
       }
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></datami-file>
   </div> -->
-
-  <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+  
+  <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#datami-multifiles-ping" style="color: white; margin-right:  0.5em;">
+      #
+    </a>
+    multifiles PiNG - Tiers-Lieux
+  </p>
+  <div style="background-color: white; margin: 1em;">
+      <datami-multi-files
+      title="Tiers lieux en Pays de la Loire"
+      options='{
+        "display": "horizontal"
+      }'
+      gitfiles='[
+        {
+          "title": "PING : base de données tiers-lieux",
+          "activate": true,
+          "gitfile": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded-test.csv",
+          "gitfile_a": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
+          "gitfile_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
+          "default-tab": true,
+          "options": {
+            "height": "600px",
+            "separator": ",",
+            "lockcolumns": true,
+            "customfilters": {
+              "activate": true,
+              "filterfields": [
+                {
+                  "name": "SOURCE_codes_temp",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "PUBLICS",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "TYPOLOGIE",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "MODELE_JURIDIQUE",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "ESPACES PROPOSÉS",
+                  "filtering": "OR"
+                }
+              ]
+            },
+            "schema": {
+              "file": "http://localhost:8802/statics/json/Ping-tiers-lieux-schema.json",
+              "file_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-schema.json"
+            },
+            "fields-custom-properties": {
+              "file": "http://localhost:8802/statics/json/Ping-tiers-lieux-fields-custom-props.json",
+              "file_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-fields-custom-props.json"
+            },
+            "cardsview": {
+              "activate": true,
+              "default": false
+            },
+            "cardsdetail": true,
+            "cardssettings": {
+              "mini": {
+                "NOM DU LIEU": {
+                  "position": "title"
+                },
+                "IMAGE": {
+                  "position": "image"
+                },
+                "ADRESSE": {
+                  "position": "adress"
+                },
+                "DESCRIPTION": {
+                  "position": "resume"
+                }
+              },
+              "detail": {
+                "NOM DU LIEU": {
+                  "position": "title"
+                },
+                "IMAGE": {
+                  "position": "image"
+                },
+                "ADRESSE": {
+                  "position": "adress"
+                },
+                "DESCRIPTION": {
+                  "position": "description",
+                  "block_title": "Description"
+                },
+                "DEPARTEMENT": {
+                  "position": "tags",
+                  "block_title": "Département(s)"
+                },
+                "COMMUNE": {
+                  "position": "tags",
+                  "block_title": "Commune",
+                  "right": true
+                },
+                "TYPOLOGIE": {
+                  "position": "tags",
+                  "block_title": "Typologie d&lsquo;usage",
+                  "right": true
+                },
+                "PUBLICS": {
+                  "position": "tags",
+                  "block_title": "Type de public",
+                  "right": true
+                },
+                "MODELE_JURIDIQUE": {
+                  "position": "tags",
+                  "block_title": "Modèle juridique",
+                  "right": true
+                },
+                "SOURCE_codes_temp": {
+                  "position": "tags",
+                  "block_title": "Source",
+                  "right": true
+                },
+                "ESPACES PROPOSÉS": {
+                  "position": "tags",
+                  "block_title": "Espaces proposés",
+                  "right": true
+                },
+                "URL": {
+                  "position": "links",
+                  "block_title": "Lien vers le site du lieu",
+                  "right": false
+                }
+              },
+              "templates": {
+                "siren": {
+                  "use_on_mini": true,
+                  "use_on_detail": true,
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Cette commune représente une population de {{ pop_insee }} habitants."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "{{ nom }} publie sur {{ merge }} avec une plateforme de type {{ platform_clean }}."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Cette organisation a publié {{ nb_ptf }} jeux de données sur sa plateforme et {{ nb_datagouv }} jeux sur data.gouv.fr."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
+                      }
+                    }
+                  ]
+                }
+              },
+              "minimap": {
+                "activate": true,
+                "right_side": false,
+                "mapOptions": {
+                  "zoom": 5,
+                  "maxZoom": 18,
+                  "minZoom": 2,
+                  "item_geo_fields": {
+                    "latitude": "latitude",
+                    "longitude": "longitude"
+                  },
+                  "zoom_item": 13,
+                  "marker_icon": "map-marker",
+                  "marker_height": 45,
+                  "marker_width": 45,
+                  "marker_color": "#4a4a4a"
+                }
+              }
+            },
+            "datavizview": {
+              "activate": true,
+              "default": false,
+              "file": "http://localhost:8802/statics/json/Ping-tiers-lieux-dataviz-settings.json",
+              "file_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-dataviz-settings.json"
+            },
+            "mapview": {
+              "activate": true,
+              "default": false,
+              "maps": [
+                {
+                  "title": {
+                    "fr": "CARTOGRAPHIE"
+                  },
+                  "height": 800,
+                  "cols": 12,
+                  "file": "http://localhost:8802/statics/json/Ping-tiers-lieux-map-settings.json",
+                  "file_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-map-settings.json"
+                }
+              ]
+            }
+          },
+          "usertoken": ""
+        },
+        {
+          "title": "Démarche",
+          "activate": true,
+          "default-tab": false,
+          "gitfile": "http://localhost:8802/statics/markdown/Ping-tiers-lieux-demarche.md",
+          "gitfile_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/markdown/Ping-tiers-lieux-demarche.md",
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "Schéma des données",
+          "activate": true,
+          "default-tab": false,
+          "gitfile_test": "http://localhost:8802/statics/json/Ping-tiers-lieux-schema.json",
+          "gitfile": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-schema.json",
+          "options": {
+            "defaultDepth": 2,
+            "allowKeyEdit": false
+          },
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "Schéma complémentaire",
+          "activate": true,
+          "default-tab": false,
+          "gitfile_test": "http://localhost:8802/statics/json/Ping-tiers-lieux-fields-custom-props.json",
+          "gitfile": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-fields-custom-props.json",
+          "options": {
+            "defaultDepth": 2,
+            "allowKeyEdit": false
+          },
+          "onlypreview": true,
+          "usertoken": ""
+        }
+      ]'
+      locale="fr"
+    />
+  </div>
+  <!-- <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-odf-observatoire" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -363,7 +609,7 @@
           "options": ""
         }
       ]'></datami-multi-files>
-  </div>
+  </div> -->
 
   <!-- <p id="datami-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">

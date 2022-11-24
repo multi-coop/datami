@@ -23,6 +23,7 @@
         </span>
         <span v-if="isTag && isCategory">
           tagsValue : <code>{{ tagsValue }}</code><br>
+          tagsEnum : <code>{{ tagsEnum }}</code><br>
         </span>
         <span v-if="isTag">
           field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
@@ -31,6 +32,12 @@
         <!-- fileOptions: <br><pre><code>{{ fileOptions }}</code></pre> -->
       </template>
     </b-tooltip>
+
+    <div v-if="debug && !isHeader && isTag && !isCategory">
+      tagsValue : <code>{{ tagsValue }}</code><br>
+      tagsEnum : <code>{{ tagsEnum }}</code><br>
+      tagsEnumEnriched : <code>{{ tagsEnumEnriched }}</code><br>
+    </div>
 
     <!-- USER BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
     <div v-if="field && isDatamiField">
@@ -74,8 +81,10 @@
       <EditTagValue
         v-else-if="!isHeader && isCategory"
         :input="input"
+        :def-label="getValueDefinitionLabel(input)"
         :field="field"
         :tags-enum="tagsEnum"
+        :tags-enum-enriched="tagsEnumEnriched"
         :disabled="isConsolidating"
         :locale="locale"
         @addTagToEnum="emitAddToEnum"
@@ -85,23 +94,38 @@
       <b-taginput
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
+        :data="tagsEnumEnriched"
         :class="`g-cell py-0`"
-        :data="tagsEnum"
         :disabled="isConsolidating"
+        :read-only="field.locked"
+        :allow-new="field.allowNew"
         size="is-small"
         open-on-focus
         ellipsis
         autocomplete
-        allow-new
         expanded
         append-to-body
         attached
         type="is-dark"
         @input="emitChange">
+        <template slot-scope="props">
+          <span>
+            {{ props.option.value }}
+            <span v-if="props.option.definition">
+              : {{ props.option.definition.label }}
+            </span>
+          </span>
+        </template>
         <template #tag="tag">
           <div class="test">
             {{ tag.tag }}
+            <span v-if="getValueDefinitionLabel(tag.tag)">
+              : {{ getValueDefinitionLabel(tag.tag) }}
+            </span>
           </div>
+        </template>
+        <template #empty>
+          {{ t('global.noValue', locale) }}
         </template>
       </b-taginput>
 
@@ -197,6 +221,10 @@ export default {
     this.input = this.adaptInput(this.inputData)
   },
   methods: {
+    // getDefinitionFromInput (value) {
+    //   const definition = this.field.definitions && this.field.definitions.find(def => def.value === value)
+    //   return definition
+    // },
     adaptInput (value) {
       let newInput
       if (this.isHeader) {
@@ -218,8 +246,21 @@ export default {
         }
         if (this.isTag && !this.isCategory) {
           // console.log('\nC > EditCell > adaptInput > value : ', value)
+          // console.log('C > EditCell > adaptInput > this.field : ', this.field)
+          // console.log('C > EditCell > adaptInput > this.tagsEnum : ', this.tagsEnum)
+          // console.log('C > EditCell > adaptInput > this.tagsValue : ', this.tagsValue)
+
+          // retrieve definition from field if any
+          // const definition = this.getValueDefinitionLabel(value, this.field)
+          // console.log('C > EditCell > adaptInput > definition : ', definition)
+
+          // console.log('C > EditCell > adaptInput > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
+
+          // update newInput
           const valStr = value && value.toString()
           newInput = valStr && [valStr]
+
+          // update tagsValue
           this.tagsValue = (valStr && valStr.split(this.tagSeparator).filter(v => v !== '')) || []
         }
       }
@@ -229,7 +270,7 @@ export default {
       const updatedField = { ...this.field }
       updatedField.enumArr.push(event)
       updatedField.enumArr = updatedField.enumArr.sort((a, b) => a.localeCompare(b))
-      // console.log('C > EditCell > emitChange > updatedField : ', updatedField)
+      console.log('C > EditCell > emitChange > updatedField : ', updatedField)
       const payload = {
         action: 'addTagToEnum',
         value: {
@@ -239,10 +280,19 @@ export default {
       this.$emit('action', payload)
     },
     emitChange (event) {
-      // console.log('C > EditCell > emitChange > event : ', event)
+      console.log('C > EditCell > emitChange > event : ', event)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
+        value = value.map(v => {
+          let val
+          if (typeof v === 'object') {
+            val = v.value
+          } else {
+            val = v
+          }
+          return val
+        })
         value = event.length ? value.join(this.tagSeparator) : ''
       } else {
         this.input = event
@@ -258,7 +308,7 @@ export default {
       } else {
         payload.isHeader = true
       }
-      // console.log('C > EditCell > emitChange > payload : ', payload)
+      console.log('C > EditCell > emitChange > payload : ', payload)
       this.$emit('updateCellValue', payload)
 
       // track with matomo

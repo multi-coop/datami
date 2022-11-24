@@ -97,6 +97,9 @@
           @click="showMenu = !showMenu">
           <span class="has-text-weight-bold">
             {{ input || t('global.noValue', locale) }}
+            <span v-if="defLabel">
+              : {{ defLabel }}
+            </span>
           </span>
           <b-icon
             size="is-small"
@@ -131,23 +134,23 @@
             </p>
           </b-field>
           <a
-            v-for="(val, i) in tagsEnum"
-            :key="`${field.field}-${i}-${val}`"
-            :class="`dropdown-item py-1 is-size-7 ${val === input ? 'is-active is-tag-active' : ''}`"
-            @click="changeValue(val)">
+            v-for="(val, i) in tagsEnumEnriched"
+            :key="`${field.field}-${i}-${val.value}`"
+            :class="`dropdown-item py-1 is-size-7 ${val.value === input ? 'is-active is-tag-active' : ''}`"
+            @click="changeValue(val.value)">
             <div
               v-if="field.foreignKey"
               class="has-text-left mb-2">
               <p class="mb-0 has-text-weight-bold">
                 {{ t('global.value', locale) }} :
-                {{ val }}
+                {{ val.value }}
                 <b-icon
                   icon="information-outline"
                   size="is-small"
                   class="mx-1"/>
               </p>
               <span
-                v-for="entry in Object.entries(itemDirect(field, val))"
+                v-for="entry in Object.entries(itemDirect(field, val.value))"
                 :key="`${entry[0]}`"
                 class="pl-2">
                 <span>
@@ -160,7 +163,10 @@
               </span>
             </div>
             <span v-else>
-              {{ val }}
+              {{ val.value }}
+              <span v-if="val.definition">
+                : {{ val.definition.label }}
+              </span>
             </span>
           </a>
           <div class="mt-3 px-4 pb-3">
@@ -191,11 +197,15 @@ export default {
     mixinForeignKeys
   ],
   props: {
+    fileId: {
+      default: undefined,
+      type: String
+    },
     input: {
       default: undefined,
       type: [String, Number]
     },
-    fileId: {
+    defLabel: {
       default: undefined,
       type: String
     },
@@ -204,6 +214,10 @@ export default {
       type: Object
     },
     tagsEnum: {
+      default: null,
+      type: Array
+    },
+    tagsEnumEnriched: {
       default: null,
       type: Array
     },
