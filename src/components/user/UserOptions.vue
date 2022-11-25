@@ -59,28 +59,37 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import ButtonEditFile from '@/components/user/ButtonEditFile'
-import ButtonReloadFile from '@/components/user/ButtonReloadFile'
-import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
-import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
-import ButtonChangeUserBranch from '@/components/user/ButtonChangeUserBranch'
-import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
-import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
-import ButtonFullscreen from '@/components/user/ButtonFullscreen'
-import ButtonDarkMode from '@/components/user/ButtonDarkMode'
+// import ButtonEditFile from '@/components/user/ButtonEditFile'
+// import ButtonReloadFile from '@/components/user/ButtonReloadFile'
+// import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
+// import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
+// import ButtonChangeUserBranch from '@/components/user/ButtonChangeUserBranch'
+// import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
+// import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
+// import ButtonFullscreen from '@/components/user/ButtonFullscreen'
+// import ButtonDarkMode from '@/components/user/ButtonDarkMode'
 
 export default {
   name: 'UserOptions',
   components: {
-    ButtonEditFile,
-    ButtonReloadFile,
-    ButtonDownloadFile,
-    ButtonChangeUserToken,
-    ButtonChangeUserBranch,
-    ButtonChangeLocale,
-    ButtonCopyWidgetHtml,
-    ButtonFullscreen,
-    ButtonDarkMode
+    // ButtonEditFile,
+    // ButtonReloadFile,
+    // ButtonDownloadFile,
+    // ButtonChangeUserToken,
+    // ButtonChangeUserBranch,
+    // ButtonChangeLocale,
+    // ButtonCopyWidgetHtml,
+    // ButtonFullscreen,
+    // ButtonDarkMode
+    ButtonEditFile: () => import(/* webpackChunkName: "ButtonEditFile" */ '@/components/user/ButtonEditFile.vue'),
+    ButtonReloadFile: () => import(/* webpackChunkName: "ButtonReloadFile" */ '@/components/user/ButtonReloadFile.vue'),
+    ButtonDownloadFile: () => import(/* webpackChunkName: "ButtonDownloadFile" */ '@/components/user/ButtonDownloadFile.vue'),
+    ButtonChangeUserToken: () => import(/* webpackChunkName: "ButtonChangeUserToken" */ '@/components/user/ButtonChangeUserToken.vue'),
+    ButtonChangeUserBranch: () => import(/* webpackChunkName: "ButtonChangeUserBranch" */ '@/components/user/ButtonChangeUserBranch.vue'),
+    ButtonChangeLocale: () => import(/* webpackChunkName: "ButtonChangeLocale" */ '@/components/user/ButtonChangeLocale.vue'),
+    ButtonCopyWidgetHtml: () => import(/* webpackChunkName: "ButtonCopyWidgetHtml" */ '@/components/user/ButtonCopyWidgetHtml.vue'),
+    ButtonFullscreen: () => import(/* webpackChunkName: "ButtonFullscreen" */ '@/components/user/ButtonFullscreen.vue'),
+    ButtonDarkMode: () => import(/* webpackChunkName: "ButtonDarkMode" */ '@/components/user/ButtonDarkMode.vue')
   },
   props: {
     fileId: {
