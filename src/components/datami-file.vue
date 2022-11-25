@@ -264,20 +264,6 @@ import { csvToObject } from '@/utils/csvUtils'
 export default {
   name: 'DatamiFile',
   components: {
-    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
-    FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
-    ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
-    UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
-    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
-    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
-    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
-    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
-    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
-    PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
-    PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
-    PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
-    DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
     // MatomoScript,
     // FileTitle,
     // ViewModeBtns,
@@ -292,6 +278,20 @@ export default {
     // PreviewMd,
     // PreviewJson,
     // DatamiCredits
+    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
+    ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
+    UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
+    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
+    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
+    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
+    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
+    PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
+    PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
+    PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
+    DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
     mixinGlobal,

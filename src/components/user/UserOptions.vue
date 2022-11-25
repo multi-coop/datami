@@ -119,6 +119,9 @@ export default {
     currentViewMode () {
       return this.getViewMode(this.fileId)
     }
+  },
+  beforeMount () {
+    this.showOptions = this.onlyPreview
   }
 }
 </script>

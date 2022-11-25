@@ -179,21 +179,26 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
 
-import MatomoScript from '@/components/matomo/MatomoScript'
+// import MatomoScript from '@/components/matomo/MatomoScript'
 
-import MultiFilesTabsPosition from '@/components/user/MultiFilesTabsPosition'
-import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
-import DatamiFile from '@/components/datami-file'
-import DatamiExplowiki from '@/components/datami-explowiki'
+// import MultiFilesTabsPosition from '@/components/user/MultiFilesTabsPosition'
+// import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
+// import DatamiFile from '@/components/datami-file'
+// import DatamiExplowiki from '@/components/datami-explowiki'
 
 export default {
   name: 'DatamiMultiFiles',
   components: {
-    MatomoScript,
-    MultiFilesTabsPosition,
-    ButtonCopyWidgetHtml,
-    DatamiFile,
-    DatamiExplowiki
+    // MatomoScript,
+    // MultiFilesTabsPosition,
+    // ButtonCopyWidgetHtml,
+    // DatamiFile,
+    // DatamiExplowiki
+    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    MultiFilesTabsPosition: () => import(/* webpackChunkName: "MultiFilesTabsPosition" */ '@/components/user/MultiFilesTabsPosition.vue'),
+    ButtonCopyWidgetHtml: () => import(/* webpackChunkName: "ButtonCopyWidgetHtml" */ '@/components/user/ButtonCopyWidgetHtml.vue'),
+    DatamiFile: () => import(/* webpackChunkName: "DatamiFile" */ '@/components/datami-file.vue'),
+    DatamiExplowiki: () => import(/* webpackChunkName: "DatamiExplowiki" */ '@/components/datami-explowiki.vue')
   },
   mixins: [
     mixinGlobal,
