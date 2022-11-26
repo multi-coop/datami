@@ -45,6 +45,7 @@
                         </template>
                         <b-input
                           v-model="userMessage"
+                          ref="message"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           type="textarea"
@@ -54,17 +55,18 @@
                           @icon-right-click="clearMessage"/>
                       </b-field>
                     </div>
-                    <!-- NAME -->
+                    <!-- NAME (ANY NAME) -->
                     <div class="column is-5 py-0">
                       <b-field>
                         <template #label>
                           <b-icon
                             icon="account"
                             size="is-small"/>&nbsp;
-                          {{ t('user.userName', locale) }}
+                          {{ t('user.userAnyName', locale) }}
                         </template>
                         <b-input
                           v-model="userName"
+                          ref="username"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           maxlength="50"
@@ -75,7 +77,7 @@
                       </b-field>
                     </div>
                     <!-- SURNAME -->
-                    <div class="column is-5 py-0">
+                    <!-- <div class="column is-5 py-0">
                       <b-field>
                         <template #label>
                           <b-icon
@@ -93,10 +95,10 @@
                           icon-right-clickable
                           @icon-right-click="clearSurname"/>
                       </b-field>
-                    </div>
+                    </div> -->
                     <!-- EMAIL -->
-                    <div class="column is-10 pt-0">
-                      <b-field class="mt-1">
+                    <div class="column is-5 py-0">
+                      <b-field>
                         <template #label>
                           <b-icon
                             icon="at"
@@ -105,6 +107,7 @@
                         </template>
                         <b-input
                           v-model="userEmail"
+                          ref="email"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           type="email"
@@ -112,6 +115,19 @@
                           icon-right="close-circle"
                           icon-right-clickable
                           @icon-right-click="clearEmail"/>
+                      </b-field>
+                    </div>
+                    <!-- RGPD CHECK -->
+                    <div
+                      v-if="userName || userEmail"
+                      class="column is-10 pt-0">
+                      <b-field class="mt-1">
+                        <b-checkbox
+                          v-model="checkRgpd"
+                          type="is-dark"
+                          :disabled="isCommitting || !(userName || userEmail)">
+                          {{ t('user.userRgpd', locale) }}
+                        </b-checkbox>
                       </b-field>
                     </div>
                     <!-- COMMIT BRANCH -->
@@ -167,6 +183,7 @@
               class="card-footer-item mx-3"
               icon-left="check"
               type="is-dark"
+              :disabled="!canCommit"
               :loading="isCommitting"
               @click="confirmCommit()">
               {{ t('actions.send', locale) }}
@@ -186,12 +203,13 @@ import { mixinGlobal, mixinCommit } from '@/utils/mixins.js'
 
 import { sendContribution } from '@/utils/gitProvidersAPI.js'
 
-import GitObjInfos from '@/components/previews/GitObjInfos'
+// import GitObjInfos from '@/components/previews/GitObjInfos'
 
 export default {
   name: 'ConfirmCommit',
   components: {
-    GitObjInfos
+    // GitObjInfos
+    GitObjInfos: () => import(/* webpackChunkName: "GitObjInfos" */ '@/components/previews/GitObjInfos.vue')
   },
   mixins: [
     mixinGlobal,
@@ -215,8 +233,9 @@ export default {
     return {
       activeTab: 0,
       userName: undefined,
-      userSurname: undefined,
+      // userSurname: undefined,
       userEmail: undefined,
+      checkRgpd: false,
       userMessage: '',
       loading: false
     }
@@ -227,6 +246,22 @@ export default {
       // getFileToken: 'git-data/getFileToken',
       getFileReqInfosObj: 'getFileReqInfosObj'
     }),
+    validateRefs () {
+      // const validMsg = this.$refs.message.checkHtml5Validity()
+      // const validUsername = this.$refs.username.checkHtml5Validity()
+      // const validEmail = this.$refs.email.checkHtml5Validity()
+      // return validUsername && validEmail
+      return true
+    },
+    canCommit () {
+      let basicValidation = false
+      if (this.userName || this.userEmail) {
+        basicValidation = this.checkRgpd
+      } else {
+        basicValidation = true
+      }
+      return basicValidation && this.validateRefs
+    },
     commitData () {
       return this.getCommitData(this.fileId)
     },
@@ -242,13 +277,13 @@ export default {
       let msg = this.userMessage
       const hasMore = [
         this.userName,
-        this.userSurname,
+        // this.userSurname,
         this.userEmail
-      ].findIndex(s => s !== '')
+      ].findIndex(s => !!s)
       if (hasMore !== -1) {
         msg += '\n----\n\nContribution from:\n'
-        if (this.userName) { msg += `\nName : ${this.userName}` }
-        if (this.userSurname) { msg += `\nSurname : ${this.userSurname}` }
+        if (this.userName) { msg += `\nUser name : ${this.userName}` }
+        // if (this.userSurname) { msg += `\nSurname : ${this.userSurname}` }
         if (this.userEmail) { msg += `\nEmail : ${this.userEmail}` }
       }
       return msg
@@ -312,12 +347,12 @@ export default {
       commitData.message = this.buildCommitMessage
       const authorEmail = this.userEmail ? this.userEmail : 'contributor@multi.coop'
       const authorName = this.userName ? this.userName : 'anonymous contributor'
-      const authorSurname = this.userSurname ? this.userSurname : 'contributor'
+      // const authorSurname = this.userSurname ? this.userSurname : 'contributor'
       commitData.author = {
         email: authorEmail,
-        name: authorName,
-        surname: authorSurname,
-        nameComplete: `${authorName} ${authorSurname}`
+        name: authorName
+        // surname: authorSurname,
+        // nameComplete: `${authorName} ${authorSurname}`
       }
 
       // Send contribution request...

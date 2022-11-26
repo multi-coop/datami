@@ -503,40 +503,58 @@ import {
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
 import { mapActions, mapGetters } from 'vuex'
 
-import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
-import ButtonSortByField from '@/components/sorting/ButtonSortByField'
-import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
-import DialogAddRow from '@/components/edition/csv/DialogAddRow'
-import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
+// import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
+// import ButtonSortByField from '@/components/sorting/ButtonSortByField'
+// import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
+// import DialogAddRow from '@/components/edition/csv/DialogAddRow'
+// import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 
-import PreviewField from '@/components/previews/PreviewField'
-import PreviewCell from '@/components/previews/PreviewCell'
-import EditCell from '@/components/edition/csv/EditCell'
-import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
+// import PreviewField from '@/components/previews/PreviewField'
+// import PreviewCell from '@/components/previews/PreviewCell'
+// import EditCell from '@/components/edition/csv/EditCell'
+// import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
 
-import DatamiCardsGrid from '@/components/previews/cards/DatamiCardsGrid'
-import DatamiDatavizGrid from '@/components/previews/dataviz/DatamiDatavizGrid'
-import DatamiMapGrid from '@/components/previews/maps/DatamiMapGrid'
+// import DatamiCardsGrid from '@/components/previews/cards/DatamiCardsGrid'
+// import DatamiCard from '@/components/previews/cards/DatamiCard'
+// import DatamiDatavizGrid from '@/components/previews/dataviz/DatamiDatavizGrid'
+// import DatamiMapGrid from '@/components/previews/maps/DatamiMapGrid'
 
-import PagesNavigation from '@/components/pagination/PagesNavigation'
+// import PagesNavigation from '@/components/pagination/PagesNavigation'
 
 export default {
   name: 'DatamiTable',
   components: {
-    SortAndFiltersSkeleton,
-    ButtonSortByField,
-    EditCsvSkeleton,
-    DialogAddRow,
-    DialogDeleteRows,
-    PreviewField,
-    PreviewCell,
-    EditCell,
-    PreviewConsolidation,
-    DatamiCardsGrid,
+    // SortAndFiltersSkeleton,
+    // ButtonSortByField,
+    // EditCsvSkeleton,
+    // DialogAddRow,
+    // DialogDeleteRows,
+    // PreviewField,
+    // PreviewCell,
+    // EditCell,
+    // PreviewConsolidation,
+    // DatamiCardsGrid,
+    // DatamiCard,
+    // DatamiDatavizGrid,
+    // DatamiMapGrid,
+    // PagesNavigation
+    SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/edition/csv/SortAndFiltersSkeleton.vue'),
+    ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
+    EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
+    DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/edition/csv/DialogAddRow.vue'),
+    DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/edition/csv/DialogDeleteRows.vue'),
+
+    PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
+    PreviewCell: () => import(/* webpackChunkName: "PreviewCell" */ '@/components/previews/PreviewCell.vue'),
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue'),
+    PreviewConsolidation: () => import(/* webpackChunkName: "PreviewConsolidation" */ '@/components/edition/PreviewConsolidation.vue'),
+
+    DatamiCardsGrid: () => import(/* webpackChunkName: "DatamiCardsGrid" */ '@/components/previews/cards/DatamiCardsGrid.vue'),
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
-    DatamiDatavizGrid,
-    DatamiMapGrid,
-    PagesNavigation
+    DatamiDatavizGrid: () => import(/* webpackChunkName: "DatamiDatavizGrid" */ '@/components/previews/dataviz/DatamiDatavizGrid.vue'),
+    DatamiMapGrid: () => import(/* webpackChunkName: "DatamiMapGrid" */ '@/components/previews/maps/DatamiMapGrid.vue'),
+
+    PagesNavigation: () => import(/* webpackChunkName: "PagesNavigation" */ '@/components/pagination/PagesNavigation.vue')
   },
   mixins: [
     mixinGlobal,

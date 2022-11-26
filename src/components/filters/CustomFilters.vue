@@ -38,12 +38,13 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-import CustomFilter from '@/components/filters/CustomFilter'
+// import CustomFilter from '@/components/filters/CustomFilter'
 
 export default {
   name: 'CustomFilters',
   components: {
-    CustomFilter
+    // CustomFilter
+    CustomFilter: () => import(/* webpackChunkName: "CustomFilter" */ '@/components/filters/CustomFilter.vue')
   },
   mixins: [
     mixinGlobal,

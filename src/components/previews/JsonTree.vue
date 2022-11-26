@@ -211,16 +211,19 @@
 <script>
 import { mixinGlobal, mixinDiff, mixinJsonNode } from '@/utils/mixins.js'
 
-import EditJsonCell from '@/components/edition/json/EditJsonCell'
-import DialogDeleteNode from '@/components/edition/json/DialogDeleteNode'
-import DialogAddNode from '@/components/edition/json/DialogAddNode'
+// import EditJsonCell from '@/components/edition/json/EditJsonCell'
+// import DialogDeleteNode from '@/components/edition/json/DialogDeleteNode'
+// import DialogAddNode from '@/components/edition/json/DialogAddNode'
 
 export default {
   name: 'JsonTree',
   components: {
-    EditJsonCell,
-    DialogDeleteNode,
-    DialogAddNode
+    // EditJsonCell,
+    // DialogDeleteNode,
+    // DialogAddNode
+    EditJsonCell: () => import(/* webpackChunkName: "EditJsonCell" */ '@/components/edition/json/EditJsonCell.vue'),
+    DialogDeleteNode: () => import(/* webpackChunkName: "DialogDeleteNode" */ '@/components/edition/json/DialogDeleteNode.vue'),
+    DialogAddNode: () => import(/* webpackChunkName: "DialogAddNode" */ '@/components/edition/json/DialogAddNode.vue')
   },
   mixins: [
     mixinGlobal,

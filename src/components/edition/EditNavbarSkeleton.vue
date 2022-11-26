@@ -29,14 +29,17 @@
 
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
-import ButtonImportData from '@/components/edition/ButtonImportData'
-import EditModeBtns from '@/components/edition/EditModeBtns'
+
+// import ButtonImportData from '@/components/edition/ButtonImportData'
+// import EditModeBtns from '@/components/edition/EditModeBtns'
 
 export default {
   name: 'EditNavbarSkeleton',
   components: {
-    ButtonImportData,
-    EditModeBtns
+    // ButtonImportData,
+    // EditModeBtns
+    ButtonImportData: () => import(/* webpackChunkName: "ButtonImportData" */ '@/components/edition/ButtonImportData.vue'),
+    EditModeBtns: () => import(/* webpackChunkName: "EditModeBtns" */ '@/components/edition/EditModeBtns.vue')
   },
   mixins: [mixinGlobal],
   props: {

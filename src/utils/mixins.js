@@ -221,6 +221,19 @@ export const mixinGlobal = {
       return this.mapViewOptions && this.mapViewOptions.activate
     },
 
+    // MARKDOWN SETTINGS
+    hasTxtView () {
+      return this.gitObj && this.gitObj.filetype === 'txt'
+    },
+    hasMdView () {
+      return this.gitObj && this.gitObj.filetype === 'md'
+    },
+
+    // JSON SETTINGS
+    hasJsonView () {
+      return this.fileTypeFamily === 'json'
+    },
+
     // DATA CONNSOLIDATION
     hasConsolidation () {
       return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
@@ -236,7 +249,7 @@ export const mixinGlobal = {
     setWidgetCopy () {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
       const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
-      console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
+      // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
 
       const isLocal = widgetProvider.startsWith('localhost')
       const Http = isLocal ? 'http' : 'https'

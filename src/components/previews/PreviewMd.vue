@@ -201,11 +201,11 @@ import {
   mixinMd
 } from '@/utils/mixins.js'
 
-import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderMD from '@/components/loaders/LoaderMD'
+// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+// import LoaderMD from '@/components/loaders/LoaderMD'
 
-import PreviewHelpers from '@/components/previews/PreviewHelpers'
-import ShowDown from '@/components/previews/ShowDown'
+// import PreviewHelpers from '@/components/previews/PreviewHelpers'
+// import ShowDown from '@/components/previews/ShowDown'
 
 // // see : https://github.com/kpdecker/jsdiff
 // import { createTwoFilesPatch, diffWords } from 'diff'
@@ -216,10 +216,14 @@ import ShowDown from '@/components/previews/ShowDown'
 export default {
   name: 'PreviewMd',
   components: {
-    LoaderEditNavbar,
-    LoaderMD,
-    PreviewHelpers,
-    ShowDown
+    // LoaderEditNavbar,
+    // LoaderMD,
+    // PreviewHelpers,
+    // ShowDown
+    LoaderEditNavbar: () => import(/* webpackChunkName: "LoaderEditNavbar" */ '@/components/loaders/LoaderEditNavbar.vue'),
+    LoaderMD: () => import(/* webpackChunkName: "LoaderMD" */ '@/components/loaders/LoaderMD.vue'),
+    PreviewHelpers: () => import(/* webpackChunkName: "PreviewHelpers" */ '@/components/previews/PreviewHelpers.vue'),
+    ShowDown: () => import(/* webpackChunkName: "ShowDown" */ '@/components/previews/ShowDown.vue')
   },
   mixins: [
     mixinGlobal,

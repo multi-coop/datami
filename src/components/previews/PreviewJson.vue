@@ -206,20 +206,24 @@ import {
   mixinNodeToJson
 } from '@/utils/mixins.js'
 
-import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderJSON from '@/components/loaders/LoaderJSON'
+// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+// import LoaderJSON from '@/components/loaders/LoaderJSON'
 
-import PreviewHelpers from '@/components/previews/PreviewHelpers'
+// import PreviewHelpers from '@/components/previews/PreviewHelpers'
 
-import JsonTree from '@/components/previews/JsonTree'
+// import JsonTree from '@/components/previews/JsonTree'
 
 export default {
   name: 'PreviewJson',
   components: {
-    LoaderEditNavbar,
-    LoaderJSON,
-    PreviewHelpers,
-    JsonTree
+    // LoaderEditNavbar,
+    // LoaderJSON,
+    // PreviewHelpers,
+    // JsonTree
+    LoaderEditNavbar: () => import(/* webpackChunkName: "LoaderEditNavbar" */ '@/components/loaders/LoaderEditNavbar.vue'),
+    LoaderJSON: () => import(/* webpackChunkName: "LoaderJSON" */ '@/components/loaders/LoaderJSON.vue'),
+    PreviewHelpers: () => import(/* webpackChunkName: "PreviewHelpers" */ '@/components/previews/PreviewHelpers.vue'),
+    JsonTree: () => import(/* webpackChunkName: "JsonTree" */ '@/components/previews/JsonTree.vue')
   },
   mixins: [
     mixinGlobal,

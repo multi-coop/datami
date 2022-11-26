@@ -47,12 +47,13 @@
 
 import { mixinGlobal, mixinDataviz } from '@/utils/mixins.js'
 
-import DatamiDataviz from '@/components/previews/dataviz/DatamiDataviz'
+// import DatamiDataviz from '@/components/previews/dataviz/DatamiDataviz'
 
 export default {
   name: 'DatamiDatavizGrid',
   components: {
-    DatamiDataviz
+    // DatamiDataviz
+    DatamiDataviz: () => import(/* webpackChunkName: "DatamiDataviz" */ '@/components/previews/dataviz/DatamiDataviz.vue')
   },
   mixins: [
     mixinGlobal,

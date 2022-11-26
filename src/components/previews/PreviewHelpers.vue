@@ -19,12 +19,13 @@
 
 import { mixinGlobal, mixinIcons } from '@/utils/mixins.js'
 
-import PreviewHelperDivider from '@/components/previews/PreviewHelperDivider'
+// import PreviewHelperDivider from '@/components/previews/PreviewHelperDivider'
 
 export default {
   name: 'PreviewHelpers',
   components: {
-    PreviewHelperDivider
+    // PreviewHelperDivider
+    PreviewHelperDivider: () => import(/* webpackChunkName: "PreviewHelperDivider" */ '@/components/previews/PreviewHelperDivider.vue')
   },
   mixins: [
     mixinGlobal,
