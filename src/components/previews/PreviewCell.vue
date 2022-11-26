@@ -5,6 +5,7 @@
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
 
+    <!-- BTN OPEN CARD -->
     <div
       v-if="isOpenCardField"
       class="has-text-centered">
@@ -54,6 +55,30 @@
         class="has-wrap-btn"
         @click="nowrap = !nowrap">
         {{ trimmedText }}
+      </div>
+    </div>
+
+    <!-- STEP TEXT STRING -->
+    <div
+      v-if="isString && isStepText"
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      <ButtonWrapCell
+        v-if="!isCardView"
+        v-model="nowrap"
+        :show-expand="showExpand"
+        :locale="locale"/>
+      <div
+        class="has-wrap-btn"
+        @click="nowrap = !nowrap">
+        <!-- {{ value }} -->
+        <PreviewStepsText
+          :raw-text="value"
+          :from-table="true"
+          :file-id="fileId"
+          :field="field"
+          :step-options="field.stepOptions"
+          :nowrap="nowrap"
+          :locale="locale"/>
       </div>
     </div>
 
@@ -191,7 +216,8 @@ export default {
     // PreviewTagValue
     ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
     ButtonWrapCell: () => import(/* webpackChunkName: "ButtonWrapCell" */ '@/components/previews/ButtonWrapCell.vue'),
-    PreviewTagValue: () => import(/* webpackChunkName: "PreviewTagValue" */ '@/components/previews/PreviewTagValue.vue')
+    PreviewTagValue: () => import(/* webpackChunkName: "PreviewTagValue" */ '@/components/previews/PreviewTagValue.vue'),
+    PreviewStepsText: () => import(/* webpackChunkName: "PreviewStepsText" */ '@/components/previews/PreviewStepsText.vue')
   },
   mixins: [
     mixinGlobal,

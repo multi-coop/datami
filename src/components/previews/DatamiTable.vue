@@ -700,6 +700,7 @@ export default {
           enumArr: h.enumArr,
           definitions: h.definitions,
           tagSeparator: h.tagSeparator,
+          stepOptions: h.stepOptions,
           ...h.mini
         }
         const hasTemplate = h.templating && h.templating.use_on_mini
@@ -717,6 +718,7 @@ export default {
           enumArr: h.enumArr,
           definitions: h.definitions,
           tagSeparator: h.tagSeparator,
+          stepOptions: h.stepOptions,
           ...h.detail
         }
         const hasTemplate = h.templating && h.templating.use_on_detail

@@ -166,6 +166,7 @@ export default {
     category: 'Category',
     string: 'String',
     longtext: 'Long text',
+    steptext: 'Text with steps',
     image: 'Image`',
     link: 'Link',
     email: 'Email',

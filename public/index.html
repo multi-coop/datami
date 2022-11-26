@@ -196,9 +196,9 @@
         {
           "title": "PING : base de données tiers-lieux",
           "activate": true,
-          "gitfile__": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded-test.csv",
-          "gitfile": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
-          "gitfile_": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
+          "gitfile": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded-test.csv",
+          "gitfile_": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
+          "gitfile__": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
           "default-tab": true,
           "options": {
             "height": "600px",
@@ -255,6 +255,12 @@
                 },
                 "DESCRIPTION": {
                   "position": "resume"
+                },
+                "TYPOLOGIE": {
+                  "position": "tags"
+                },
+                "DEPARTEMENT": {
+                  "position": "tags"
                 }
               },
               "detail": {
@@ -262,7 +268,8 @@
                   "position": "title"
                 },
                 "IMAGE": {
-                  "position": "image"
+                  "position": "image",
+                  "right": true
                 },
                 "ADRESSE": {
                   "position": "adress"
@@ -273,7 +280,8 @@
                 },
                 "DEPARTEMENT": {
                   "position": "tags",
-                  "block_title": "Département(s)"
+                  "block_title": "Département(s)",
+                  "right": true
                 },
                 "COMMUNE": {
                   "position": "tags",
@@ -303,6 +311,11 @@
                 "ESPACES PROPOSÉS": {
                   "position": "tags",
                   "block_title": "Espaces proposés",
+                  "right": true
+                },
+                "STEPS": {
+                  "position": "steps",
+                  "block_title": "Déroulé",
                   "right": true
                 },
                 "URL": {

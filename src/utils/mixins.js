@@ -604,6 +604,9 @@ export const mixinValue = {
     isLongText () {
       return this.fieldSubtype === 'longtext'
     },
+    isStepText () {
+      return this.fieldSubtype === 'steptext'
+    },
     isTag () {
       return this.field && this.tagTypes.includes(this.field.subtype)
     },

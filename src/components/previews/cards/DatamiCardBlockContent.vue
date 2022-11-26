@@ -42,6 +42,17 @@
       <span v-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
+      <PreviewStepsText
+        v-else-if="position === 'steps'"
+        :raw-text="itemValue"
+        :file-id="fileId"
+        :field-id="field.field"
+        :field="field"
+        :step-options="field.stepOptions"
+        :locale="locale"/>
+      <!-- <span v-else-if="position === 'steps'">
+        {{ itemValue }}
+      </span> -->
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
@@ -105,6 +116,7 @@ export default {
   components: {
     // PreviewCell,
     // EditCell
+    PreviewStepsText: () => import(/* webpackChunkName: "PreviewStepsText" */ '@/components/previews/PreviewStepsText.vue'),
     EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
   },
   mixins: [
@@ -187,6 +199,10 @@ export default {
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         infos: {
+          content: 'mb-3',
+          label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
+        },
+        steps: {
           content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         }

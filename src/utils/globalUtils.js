@@ -221,7 +221,7 @@ export const aggregateByField = (items, field, aggregationtype = 'countitems') =
         })
       }
     } else {
-      const vals = name.split(field.tagSeparator)
+      const vals = name.includes(field.tagSeparator) ? name.split(field.tagSeparator) : [name]
       // console.log('U > globalUtils > aggregateByField > vals : ', vals)
       vals.forEach(v => {
         const i = series.findIndex(grp => grp.name === v)
