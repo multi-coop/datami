@@ -44,8 +44,8 @@
                           {{ t('user.userMessage', locale) }}
                         </template>
                         <b-input
-                          v-model="userMessage"
                           ref="message"
+                          v-model="userMessage"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           type="textarea"
@@ -65,8 +65,8 @@
                           {{ t('user.userAnyName', locale) }}
                         </template>
                         <b-input
-                          v-model="userName"
                           ref="username"
+                          v-model="userName"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           maxlength="50"
@@ -106,8 +106,8 @@
                           {{ t('user.userEmail', locale) }}
                         </template>
                         <b-input
-                          v-model="userEmail"
                           ref="email"
+                          v-model="userEmail"
                           :readonly="isCommitting"
                           :disabled="isCommitting"
                           type="email"
@@ -180,6 +180,7 @@
               {{ t('actions.cancel', locale) }}
             </b-button>
             <b-button
+              v-if="isMounted"
               class="card-footer-item mx-3"
               icon-left="check"
               type="is-dark"
@@ -231,12 +232,13 @@ export default {
   },
   data () {
     return {
+      isMounted: false,
       activeTab: 0,
+      userMessage: undefined,
       userName: undefined,
       // userSurname: undefined,
       userEmail: undefined,
       checkRgpd: false,
-      userMessage: '',
       loading: false
     }
   },
@@ -246,13 +248,6 @@ export default {
       // getFileToken: 'git-data/getFileToken',
       getFileReqInfosObj: 'getFileReqInfosObj'
     }),
-    validateRefs () {
-      // const validMsg = this.$refs.message.checkHtml5Validity()
-      // const validUsername = this.$refs.username.checkHtml5Validity()
-      // const validEmail = this.$refs.email.checkHtml5Validity()
-      // return validUsername && validEmail
-      return true
-    },
     canCommit () {
       let basicValidation = false
       if (this.userName || this.userEmail) {
@@ -260,7 +255,7 @@ export default {
       } else {
         basicValidation = true
       }
-      return basicValidation && this.validateRefs
+      return basicValidation && this.validateRefs()
     },
     commitData () {
       return this.getCommitData(this.fileId)
@@ -298,6 +293,9 @@ export default {
     const defaultMessage = `Commit on branch '${commitBranch}'\nDate: ${stringDate}\nTime: ${stringTime}`
     this.userMessage = defaultMessage
   },
+  mounted () {
+    this.isMounted = true
+  },
   methods: {
     ...mapActions({
       updateSaving: 'git-data/updateSaving',
@@ -320,6 +318,20 @@ export default {
       this.updateSaving({ fileId: this.fileId, isSaving: false })
       // track with matomo
       this.trackEvent('cancelCommit')
+    },
+    validateRefs () {
+      // console.log('\nC > ConfirmCommit > confirmCommit > this.userName :', this.userName)
+      // console.log('C > ConfirmCommit > confirmCommit > this.userMessage :', this.userMessage)
+      // console.log('C > ConfirmCommit > confirmCommit > this.userEmail :', this.userEmail)
+      // console.log('C > ConfirmCommit > confirmCommit > this.$refs :', this.$refs)
+      const validMsg = this.$refs.message.checkHtml5Validity()
+      const validUsername = this.$refs.username.checkHtml5Validity()
+      const validEmail = this.$refs.email.checkHtml5Validity()
+      // console.log('C > ConfirmCommit > confirmCommit > validMsg :', validMsg)
+      // console.log('C > ConfirmCommit > confirmCommit > validUsername :', validUsername)
+      // console.log('C > ConfirmCommit > confirmCommit > validEmail :', validEmail)
+      return validMsg && validUsername && validEmail
+      // return true
     },
     async confirmCommit () {
       console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
