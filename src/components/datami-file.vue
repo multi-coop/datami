@@ -405,9 +405,9 @@ export default {
   async beforeMount () {
     // INITIALIZING LOCAL STORAGE
     this.initializeStorage()
-    // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
-    // console.log('C > DatamiFile > beforeMount > this.localdev : ', this.localdev)
-    // console.log('C > DatamiFile > beforeMount > this.gitfilelocal : ', this.gitfilelocal)
+    console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
+    console.log('C > DatamiFile > beforeMount > this.localdev : ', this.localdev)
+    console.log('C > DatamiFile > beforeMount > this.gitfilelocal : ', this.gitfilelocal)
     this.gitfileDatami = this.localdev ? this.gitfilelocal : this.gitfile
     await this.initWidget()
   },
@@ -483,9 +483,9 @@ export default {
       // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
 
       let fileSchema = fileOptions.schema
-      // console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
+      console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
       const fileSchemaLocal = fileSchema && fileSchema.localdev
-      // console.log('C > DatamiFile > initWidget > fileSchemaLocal : ', fileSchemaLocal)
+      console.log('C > DatamiFile > initWidget > fileSchemaLocal : ', fileSchemaLocal)
       if (fileSchema) { fileSchema.file = fileSchemaLocal ? fileSchema.filelocal : fileSchema && fileSchema.file }
       if (fileSchema && fileSchema.file) {
         const schemaGitObj = this.extractGitInfos(fileSchema.file)
@@ -502,8 +502,9 @@ export default {
 
       // get custom props if any
       let fileCustomProps = fileOptions['fields-custom-properties']
+      console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
       const fileCustomPropsLocal = fileCustomProps && fileCustomProps.localdev
-      // console.log('C > DatamiFile > initWidget > fileCustomPropsLocal : ', fileCustomPropsLocal)
+      console.log('C > DatamiFile > initWidget > fileCustomPropsLocal : ', fileCustomPropsLocal)
       if (fileCustomProps) { fileCustomProps.file = fileCustomPropsLocal ? fileCustomProps.filelocal : fileCustomProps && fileCustomProps.file }
       if (fileCustomProps && fileCustomProps.file) {
         const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
@@ -521,8 +522,9 @@ export default {
 
       // get dataviz props if any
       let fileDataviz = fileOptions.datavizview
+      console.log('C > DatamiFile > initWidget > fileDataviz : ', fileDataviz)
       const fileDatavizLocal = fileDataviz && fileDataviz.localdev
-      // console.log('C > DatamiFile > initWidget > fileDatavizLocal : ', fileDatavizLocal)
+      console.log('C > DatamiFile > initWidget > fileDatavizLocal : ', fileDatavizLocal)
       if (fileDataviz) { fileDataviz.file = fileDatavizLocal ? fileDataviz.filelocal : fileDataviz && fileDataviz.file }
       if (fileDataviz && fileDataviz.file) {
         const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
