@@ -511,7 +511,13 @@ export const mixinCommit = {
 export const mixinIcons = {
   methods: {
     getIcon (view) {
-      return editViewsOptions.find(i => i.code === view).icon
+      // console.log('\nC > mixinDownload > getIcon > view : ', view)
+      // console.log('C > mixinDownload > getIcon > editViewsOptions : ', editViewsOptions)
+      if (view) {
+        return editViewsOptions.find(i => i.code === view).icon
+      } else {
+        return 'sync'
+      }
     },
     getIconFieldType (field) {
       // console.log('\nC > mixinDownload > getIconFieldType > field.label : ', field.label)

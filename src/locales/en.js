@@ -57,6 +57,7 @@ export default {
     fileMaps: "Settings file for file's cartographies"
   },
   views: {
+    loading: '...',
     cards: 'Cards',
     table: 'Table',
     dataviz: 'Dataviz',
