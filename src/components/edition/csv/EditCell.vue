@@ -155,8 +155,8 @@
         :custom-class="`${isDarkMode ? 'g-cell-darkmode has-background-white' : 'g-cell'} py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         :disabled="isConsolidating"
-        :type="!isHeader && (isLongText || isStepText) ? 'textarea' : 'text'"
-        :rows="!isHeader && (isLongText || isStepText) ? 3 : false"
+        :type="!isHeader && (isLongText || isTimelineText) ? 'textarea' : 'text'"
+        :rows="!isHeader && (isLongText || isTimelineText) ? 3 : false"
         size="is-small"
         expanded
         @input="emitChange"/>
