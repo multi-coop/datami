@@ -173,7 +173,7 @@
 
     <!-- PROGRESS LOADER -->
     <!-- v-if="wikiItems && wikiItems.length" -->
-    <LoaderWiki
+    <LoaderWikimedia
       v-if="wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length)"
       :file-id="fileId"
       :items-loaded="wikiPages.length"
@@ -235,7 +235,7 @@ export default {
     NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
     EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
     DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
-    LoaderWiki: () => import(/* webpackChunkName: "LoaderWiki" */ '@/components/loaders/LoaderWiki.vue'),
+    LoaderWikimedia: () => import(/* webpackChunkName: "LoaderWikimedia" */ '@/components/loaders/LoaderWikimedia.vue'),
     PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
     DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
