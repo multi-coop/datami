@@ -136,11 +136,13 @@
                     fileTab : <br><pre><code>{{ fileTab }}</code><pre/></pre>
                   </div>
 
-                  <!-- CALL GITRIBUTE-FILE COMPONENT HERE -->
+                  <!-- CALL DATAMI-FILE COMPONENT HERE -->
                   <DatamiFile
                     v-if="fileTab.gitfile"
                     :title="fileTab.title"
                     :gitfile="fileTab.gitfile"
+                    :gitfilelocal="fileTab.gitfilelocal"
+                    :localdev="fileTab.localdev"
                     :options="fileTab.options"
                     :usertoken="fileTab.usertoken"
                     :locale="locale || fileTab.locale"
@@ -149,7 +151,7 @@
                     :from-multi-files-vertical="tabsVertical"
                     :trackalloutlinks="!fileTabIdx ? trackalloutlinks : false"/>
 
-                  <!-- CALL GITRIBUTE-FILE COMPONENT HERE -->
+                  <!-- CALL DATAMI-FILE COMPONENT HERE -->
                   <DatamiExplowiki
                     v-if="fileTab.mediawiki"
                     :title="fileTab.title"
