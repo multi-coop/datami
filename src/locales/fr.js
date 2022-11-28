@@ -179,7 +179,7 @@ export default {
     category: 'Catégorie',
     string: 'Texte',
     longtext: 'Texte long',
-    steptext: 'Texte avec étapes',
+    timelinetext: 'Texte avec étapes',
     image: 'Image`',
     link: 'Lien',
     email: 'Email',

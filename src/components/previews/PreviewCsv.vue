@@ -494,6 +494,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
+            ...fieldCustomProps && fieldCustomProps.longtextOptions && { longtextOptions: fieldCustomProps.longtextOptions },
             ...fieldCustomProps && fieldCustomProps.booleanOptions && { booleanOptions: fieldCustomProps.booleanOptions },
             ...fieldCustomProps && fieldCustomProps.stepSeparator && { stepSeparator: fieldCustomProps.stepSeparator },
             ...fieldCustomProps && fieldCustomProps.stepOptions && { stepOptions: fieldCustomProps.stepOptions },

@@ -54,13 +54,28 @@
       <div
         class="has-wrap-btn"
         @click="nowrap = !nowrap">
-        {{ trimmedText }}
+        <!-- <pre><code>{{ field }}</code></pre> -->
+        <div v-if="field.longtextOptions">
+          <PreviewLongText
+            :raw-text="value"
+            :from-table="true"
+            :file-id="fileId"
+            :field="field"
+            :field-id="field.field"
+            :longtext-options="field.longtextOptions"
+            :max-text-length="maxTextLength"
+            :nowrap="nowrap"
+            :locale="locale"/>
+        </div>
+        <span v-else>
+          {{ trimmedText }}
+        </span>
       </div>
     </div>
 
-    <!-- STEP TEXT STRING -->
+    <!-- TIMELINE TEXT STRING -->
     <div
-      v-if="isString && isStepText"
+      v-if="isString && isTimelineText"
       :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
       <ButtonWrapCell
         v-if="!isCardView"
@@ -71,11 +86,12 @@
         class="has-wrap-btn"
         @click="nowrap = !nowrap">
         <!-- {{ value }} -->
-        <PreviewStepsText
+        <PreviewTimelineText
           :raw-text="value"
           :from-table="true"
           :file-id="fileId"
           :field="field"
+          :field-id="field.field"
           :step-options="field.stepOptions"
           :nowrap="nowrap"
           :locale="locale"/>
@@ -217,7 +233,8 @@ export default {
     ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
     ButtonWrapCell: () => import(/* webpackChunkName: "ButtonWrapCell" */ '@/components/previews/ButtonWrapCell.vue'),
     PreviewTagValue: () => import(/* webpackChunkName: "PreviewTagValue" */ '@/components/previews/PreviewTagValue.vue'),
-    PreviewStepsText: () => import(/* webpackChunkName: "PreviewStepsText" */ '@/components/previews/PreviewStepsText.vue')
+    PreviewLongText: () => import(/* webpackChunkName: "PreviewLongText" */ '@/components/previews/PreviewLongText.vue'),
+    PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue')
   },
   mixins: [
     mixinGlobal,
@@ -272,15 +289,21 @@ export default {
     }
   },
   computed: {
+    maxTextLength () {
+      return this.field.maxLength || this.defaultMaxTextLength
+    },
     trimmedText () {
       // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
       const textToTrim = this.value ?? ''
-      const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
+      // const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
       // console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
-      const exceed = this.nowrap && (textToTrim.length > maxTextLength)
+      const exceed = this.nowrap && (textToTrim.length > this.maxTextLength)
       // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
-      const trimmed = exceed ? `${textToTrim.slice(0, maxTextLength)} [...]` : textToTrim
+      const trimmed = exceed ? `${textToTrim.slice(0, this.maxTextLength)} [...]` : textToTrim
       return trimmed || ''
+    },
+    trimmedLongText () {
+      return true
     },
     tagsArray () {
       // console.log('\nC > PreviewCell > tagsArray > this.value : ', this.value)

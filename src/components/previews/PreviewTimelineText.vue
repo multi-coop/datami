@@ -1,5 +1,5 @@
 <template>
-  <div class="PreviewStepsText">
+  <div class="PreviewTimelineText">
     <!-- DEBUGGING -->
     <p v-if="debug">
       fieldId : <br><pre><code>{{ fieldId }}</code></pre><br>
@@ -58,7 +58,7 @@
         :key="`steps-${fileId}-${fieldId}-${i}-list`"
         class="">
         <p
-          v-if="step.title !== ''"
+          v-if="(!nowrap || i === 0) && step.title !== ''"
           class="pb-0 mb-0 heading has-text-weight-bold">
           {{ step.title }}
         </p>
@@ -75,7 +75,7 @@
 // import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'PreviewStepsText',
+  name: 'PreviewTimelineText',
   // mixins: [mixinGlobal],
   props: {
     fileId: {
@@ -154,7 +154,7 @@ export default {
       if (this.nowrap && txtStepsObjArr.length > 2) {
         txtStepsObjArr = [
           ...txtStepsObjArr.slice(0, 1),
-          { content: '...' }
+          { content: '[...]' }
         ]
       }
       return txtStepsObjArr

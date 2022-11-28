@@ -718,6 +718,8 @@ export default {
           enumArr: h.enumArr,
           definitions: h.definitions,
           tagSeparator: h.tagSeparator,
+          maxLength: h.maxLength,
+          longtextOptions: h.longtextOptions,
           stepOptions: h.stepOptions,
           ...h.mini
         }
@@ -736,6 +738,8 @@ export default {
           enumArr: h.enumArr,
           definitions: h.definitions,
           tagSeparator: h.tagSeparator,
+          maxLength: h.maxLength,
+          longtextOptions: h.longtextOptions,
           stepOptions: h.stepOptions,
           ...h.detail
         }

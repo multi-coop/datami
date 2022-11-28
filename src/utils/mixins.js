@@ -187,7 +187,9 @@ export const mixinGlobal = {
       return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.templates
     },
     cardsSettingsMiniMap () {
-      return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minimap
+      const settings = this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minimap
+      if (settings && !settings.position) { settings.position = 'map_bottom' }
+      return settings
     },
     cardHasMiniMap () {
       return this.cardsSettingsMiniMap && this.cardsSettingsMiniMap.activate
@@ -623,8 +625,8 @@ export const mixinValue = {
     isLongText () {
       return this.fieldSubtype === 'longtext'
     },
-    isStepText () {
-      return this.fieldSubtype === 'steptext'
+    isTimelineText () {
+      return this.fieldSubtype === 'timelinetext'
     },
     isTag () {
       return this.field && this.tagTypes.includes(this.field.subtype)

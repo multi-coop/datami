@@ -227,7 +227,7 @@
               </div>
             </div>
 
-            <!-- RIGHT - IMAGE BLOCK : 'image' -->
+            <!-- LEFT - IMAGE BLOCK : 'image' -->
             <div
               v-if="showDetail && hasAnyContentByPosition(['image', 'gallery'])"
               class="column is-12">
@@ -247,20 +247,21 @@
               </div>
             </div>
 
-            <!-- LEFT - RESUME & DESCRIPTION -->
+            <!-- LEFT COLUMN -->
             <div
-              v-if="hasAnyContentByPosition(['resume', 'description'])"
-              class="column is-12">
+              v-for="pos in positions"
+              :key="pos"
+              :class="`column is-12 position-left-${pos} ${hasAnyContentByPosition([pos]) ? '' : 'py-0'}`">
               <div
+                v-if="hasAnyContentByPosition([pos])"
                 :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <!-- RESUME BLOCK : resume -->
-                <div v-if="hasContentByPosition('resume')">
+                <div v-if="!norTagsNorLinks.includes(pos)  && hasContentByPosition(pos) ">
                   <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('resume')"
-                    :key="`resume-${i}-${fieldObj.field}`"
+                    v-for="(fieldObj, i) in getFieldsByPosition(pos)"
+                    :key="`${pos}-${i}-${fieldObj.field}`"
                     :file-id="fileId"
-                    :position="'resume'"
+                    :position="pos"
                     :field="fieldObj"
                     :field-label="getFieldLabel(fieldObj.field)"
                     :item-id="item.id"
@@ -271,63 +272,7 @@
                     :locale="locale"
                     @updateCellValue="emitUpdate"/>
                 </div>
-
-                <!-- DESCRIPTION BLOCK :'description' -->
-                <div v-if="hasContentByPosition('description')">
-                  <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('description')"
-                    :key="`description-${i}-${fieldObj.field}`"
-                    :file-id="fileId"
-                    :position="'description'"
-                    :field="fieldObj"
-                    :field-label="getFieldLabel(fieldObj.field)"
-                    :item-id="item.id"
-                    :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
-                    :item-added="item.added"
-                    :item-value="item[fieldObj.field]"
-                    :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
-                </div>
-              </div>
-            </div>
-
-            <!-- LEFT - TIMELINE -->
-            <div
-              v-if="hasAnyContentByPosition(['steps'])"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <!-- TIMELINE BLOCK :'steps' -->
-                <div v-if="hasContentByPosition('steps')">
-                  <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('steps')"
-                    :key="`steps-${i}-${fieldObj.field}`"
-                    :file-id="fileId"
-                    :position="'steps'"
-                    :field="fieldObj"
-                    :field-label="getFieldLabel(fieldObj.field)"
-                    :item-id="item.id"
-                    :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
-                    :item-added="item.added"
-                    :item-value="item[fieldObj.field]"
-                    :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
-                </div>
-              </div>
-            </div>
-
-            <!-- LEFT - TAGS BLOCK -->
-            <div
-              v-if="hasAnyContentByPosition(['tags'])"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <!-- TAGS BLOCK : 'tags' -->
-                <div v-if="hasContentByPosition('tags')">
+                <div v-if="pos === 'tags' && hasContentByPosition('tags')">
                   <DatamiCardBlockTags
                     v-for="(fieldObj, i) in getFieldsByPosition('tags')"
                     :key="`tags-${i}-${fieldObj.field}`"
@@ -342,17 +287,7 @@
                     :locale="locale"
                     @updateCellValue="emitUpdate"/>
                 </div>
-              </div>
-            </div>
-
-            <!-- LEFT - LINKS BLOCK : 'links' -->
-            <div
-              v-if="hasAnyContentByPosition(['links'])"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <div v-if="hasContentByPosition('links')">
+                <div v-if="pos === 'links' && hasContentByPosition('links')">
                   <DatamiCardBlockLinks
                     v-for="(fieldObj, i) in getFieldsByPosition('links')"
                     :key="`links-${i}-${fieldObj.field}`"
@@ -368,10 +303,22 @@
                     @updateCellValue="emitUpdate"/>
                 </div>
               </div>
+              <div
+                v-if="mapPositions.includes(pos) && showDetail && cardHasMiniMap && cardsSettingsMiniMap.position === pos && !cardsSettingsMiniMap.right_side"
+                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :style="`background-color: ${showDetail? 'white' : 'white'}`">
+                <DatamiMiniMap
+                  :file-id="fileId"
+                  :map-id="`${fileId}-minimap-${item.id}`"
+                  :fields="fields"
+                  :item="item"
+                  :show-detail-card="showDetailCard"
+                  :locale="locale"/>
+              </div>
             </div>
 
             <!-- LEFT - MINIMAP -->
-            <div
+            <!-- <div
               v-if="showDetail && cardHasMiniMap && !cardsSettingsMiniMap.right_side"
               class="column is-12">
               <div
@@ -385,7 +332,7 @@
                   :show-detail-card="showDetailCard"
                   :locale="locale"/>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -413,20 +360,21 @@
               </div>
             </div>
 
-            <!-- RIGHT - INFOS -->
+            <!-- RIGHT COLUMN -->
             <div
-              v-if="hasAnyContentByPosition(['infos'], true)"
-              class="column is-12">
+              v-for="pos in positions"
+              :key="pos"
+              :class="`column is-12 position-right-${pos} ${hasAnyContentByPosition([pos], true) ? '' : 'py-0'}`">
               <div
+                v-if="hasAnyContentByPosition([pos], true)"
                 :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <!-- INFOS BLOCK : infos -->
-                <div v-if="hasContentByPosition('infos', true)">
+                <div v-if="!norTagsNorLinks.includes(pos) && hasContentByPosition(pos, true) ">
                   <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('infos', true)"
-                    :key="`infos-${i}-${fieldObj.field}`"
+                    v-for="(fieldObj, i) in getFieldsByPosition(pos, true)"
+                    :key="`${pos}-${i}-${fieldObj.field}`"
                     :file-id="fileId"
-                    :position="'infos'"
+                    :position="pos"
                     :field="fieldObj"
                     :field-label="getFieldLabel(fieldObj.field)"
                     :item-id="item.id"
@@ -437,50 +385,27 @@
                     :locale="locale"
                     @updateCellValue="emitUpdate"/>
                 </div>
-              </div>
-            </div>
-
-            <!-- RIGHT - TIMELINE -->
-            <div
-              v-if="hasAnyContentByPosition(['steps'], true)"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <!-- TIMELINE BLOCK :'steps' -->
-                <div v-if="hasContentByPosition('steps',true)">
-                  <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('steps', true)"
-                    :key="`steps-${i}-${fieldObj.field}`"
-                    :file-id="fileId"
-                    :position="'steps'"
-                    :field="fieldObj"
-                    :field-label="getFieldLabel(fieldObj.field)"
-                    :item-id="item.id"
-                    :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
-                    :item-added="item.added"
-                    :item-value="item[fieldObj.field]"
-                    :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
-                </div>
-              </div>
-            </div>
-
-            <!-- RIGHT - TAGS BLOCK -->
-            <div
-              v-if="hasAnyContentByPosition(['tags'], true)"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <!-- TAGS BLOCK : 'tags' -->
-                <div v-if="hasContentByPosition('tags', true)">
+                <div v-if="tagsPositions.includes(pos) && hasContentByPosition(pos, true)">
                   <DatamiCardBlockTags
-                    v-for="(fieldObj, i) in getFieldsByPosition('tags', true)"
-                    :key="`tags-${i}-${fieldObj.field}`"
+                    v-for="(fieldObj, i) in getFieldsByPosition(pos, true)"
+                    :key="`${pos}-${i}-${fieldObj.field}`"
                     :file-id="fileId"
-                    :position="'tags'"
+                    :position="pos"
+                    :field="fieldObj"
+                    :field-label="getFieldLabel(fieldObj.field)"
+                    :item-id="item.id"
+                    :item-added="item.added"
+                    :item-value="item[fieldObj.field]"
+                    :is-mini="isMini"
+                    :locale="locale"
+                    @updateCellValue="emitUpdate"/>
+                </div>
+                <div v-if="linksPositions.includes(pos) && hasContentByPosition(pos, true)">
+                  <DatamiCardBlockLinks
+                    v-for="(fieldObj, i) in getFieldsByPosition(pos, true)"
+                    :key="`${pos}-${i}-${fieldObj.field}`"
+                    :file-id="fileId"
+                    :position="pos"
                     :field="fieldObj"
                     :field-label="getFieldLabel(fieldObj.field)"
                     :item-id="item.id"
@@ -491,35 +416,29 @@
                     @updateCellValue="emitUpdate"/>
                 </div>
               </div>
-            </div>
-
-            <!-- RIGHT - LINKS BLOCK : 'links' -->
-            <div
-              v-if="hasAnyContentByPosition(['links'], true)"
-              class="column is-12">
               <div
+                v-if="mapPositions.includes(pos) && showDetail && cardHasMiniMap && cardsSettingsMiniMap.position === pos && cardsSettingsMiniMap.right_side"
                 :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <div v-if="hasContentByPosition('links', true)">
-                  <DatamiCardBlockLinks
-                    v-for="(fieldObj, i) in getFieldsByPosition('links', true)"
-                    :key="`links-${i}-${fieldObj.field}`"
-                    :file-id="fileId"
-                    :position="'links'"
-                    :field="fieldObj"
-                    :field-label="getFieldLabel(fieldObj.field)"
-                    :item-id="item.id"
-                    :item-added="item.added"
-                    :item-value="item[fieldObj.field]"
-                    :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
-                </div>
+                <DatamiMiniMap
+                  :file-id="fileId"
+                  :map-id="`${fileId}-minimap-${item.id}`"
+                  :fields="fields"
+                  :item="item"
+                  :show-detail-card="showDetailCard"
+                  :locale="locale"/>
               </div>
+              <!-- <div v-if="mapPositions.includes(pos)">
+                {{ pos }} :
+                <br> cardsSettingsMiniMap : <pre><code>{{ cardsSettingsMiniMap }}</code></pre>
+                <br> showDetail : <code>{{ showDetail }}</code>
+                <br> cardHasMiniMap.position : <code>{{ cardHasMiniMap.position }}</code>
+                <br> cardsSettingsMiniMap.right_side : <code>{{ cardsSettingsMiniMap.right_side }}</code>
+              </div> -->
             </div>
 
             <!-- RIGHT - MINIMAP -->
-            <div
+            <!-- <div
               v-if="showDetail && cardHasMiniMap && cardsSettingsMiniMap.right_side"
               class="column is-12">
               <div
@@ -533,7 +452,7 @@
                   :show-detail-card="showDetailCard"
                   :locale="locale"/>
               </div>
-            </div>
+            </div> -->
 
             <!-- DATAVIZ / TO DO -->
             <!-- <div
@@ -690,7 +609,42 @@ export default {
   data () {
     return {
       showRawContent: false,
-      isHovered: false
+      isHovered: false,
+      positions: [
+        'resume',
+        'infos',
+        'links_top',
+        'map_top',
+        'tags_top',
+        'description',
+        'links_middle',
+        'map_middle',
+        'tags_middle',
+        'timeline',
+        'tags',
+        'links',
+        'map_bottom'
+      ],
+      linksPositions: [
+        'links_top',
+        'links_middle',
+        'links'
+      ],
+      tagsPositions: [
+        'tags_top',
+        'tags_middle',
+        'tags'
+      ],
+      mapPositions: [
+        'map_top',
+        'map_middle',
+        'map_bottom'
+      ]
+    }
+  },
+  computed: {
+    norTagsNorLinks () {
+      return [...this.linksPositions, ...this.tagsPositions]
     }
   },
   methods: {
@@ -699,7 +653,7 @@ export default {
       return fieldObj && fieldObj.label
     },
     getFieldsByPosition (position, isRight = false) {
-      // const debug = position === 'image'
+      // const debug = this.mapPositions.includes(position)
       // debug && console.log('\nC > DatamiCard > getFieldsByPosition > position :', position)
       // debug && console.log('C > DatamiCard > getFieldsByPosition > isRight :', isRight)
       // debug && console.log('C > DatamiCard > getFieldsByPosition > this.fieldMapping :', this.fieldMapping)

@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`DatamiCardBlockContent-${position} datami-component ${classes[position].content}`">
+    :class="`DatamiCardBlockContent-${position} datami-component ${classes[position] ? classes[position].content : ''}`">
     <!-- LABEL IF EDIT MODE -->
     <p
       v-if="currentEditViewMode === 'edit'"
@@ -39,20 +39,27 @@
         class="mr-1 has-text-weight-bold">
         {{ field.prefix }}
       </span>
-      <span v-if="isMini && position !== 'subtitle'">
+      <PreviewLongText
+        v-if="field.subtype === 'longtext' && field.longtextOptions"
+        :raw-text="itemValue"
+        :file-id="fileId"
+        :field-id="field.field"
+        :field="field"
+        :longtext-options="field.longtextOptions"
+        :nowrap="isMini"
+        :max-text-length="field.maxLength"
+        :locale="locale"/>
+      <span v-else-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
-      <PreviewStepsText
-        v-else-if="position === 'steps'"
+      <PreviewTimelineText
+        v-else-if="position === 'timeline'"
         :raw-text="itemValue"
         :file-id="fileId"
         :field-id="field.field"
         :field="field"
         :step-options="field.stepOptions"
         :locale="locale"/>
-      <!-- <span v-else-if="position === 'steps'">
-        {{ itemValue }}
-      </span> -->
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
@@ -116,7 +123,8 @@ export default {
   components: {
     // PreviewCell,
     // EditCell
-    PreviewStepsText: () => import(/* webpackChunkName: "PreviewStepsText" */ '@/components/previews/PreviewStepsText.vue'),
+    PreviewLongText: () => import(/* webpackChunkName: "PreviewLongText" */ '@/components/previews/PreviewLongText.vue'),
+    PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue'),
     EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
   },
   mixins: [
@@ -195,7 +203,7 @@ export default {
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         description: {
-          content: 'mb-3',
+          content: 'mb-4',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         infos: {
