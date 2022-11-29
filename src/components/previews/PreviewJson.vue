@@ -277,11 +277,18 @@ export default {
     },
     getPreviewJson () {
       let dataForEditView
+      // console.log('C > PreviewJson > getPreviewJson > this.currentEditViewMode :', this.currentEditViewMode)
       switch (this.currentEditViewMode) {
+        // case 'edit':
+        //   dataForEditView = this.edited
+        //   break
         case 'diff':
           dataForEditView = this.data
           break
         case 'preview':
+          dataForEditView = this.edited
+          break
+        default:
           dataForEditView = this.edited
           break
       }

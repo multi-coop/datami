@@ -47,7 +47,7 @@
           :type="isDarkMode ? 'is-white' : ''"
           :outlined="isDarkMode"
           :class="isDarkMode ? 'datami-darkmode' : ''"
-          icon-left="dots-vertical"
+          icon-left="cog-outline"
           size="is-small"
           expanded
           @click="showOptions = !showOptions"/>
