@@ -211,6 +211,7 @@ export const aggregateByField = (items, field, aggregationtype = 'countitems') =
 
     if (!isTags) {
       index = series.findIndex(grp => grp.name === name)
+      // console.log('U > globalUtils > aggregateByField > name : ', name)
       // console.log('U > globalUtils > aggregateByField > index : ', index)
       if (index !== -1 && aggregationtype === 'countitems') {
         series[index].data += 1

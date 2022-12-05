@@ -446,7 +446,7 @@
       ]' locale="fr" />
   </div> -->
 
-  <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
+  <!-- <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-ping" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -687,10 +687,10 @@
           "usertoken": ""
         }
       ]' locale="fr" />
-  </div>
+  </div> -->
 
 
-  <!-- <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+  <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-odf-observatoire" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -704,6 +704,8 @@
         {
           "title": "Données de l&lsquo;observatoire",
           "activate": true,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8800/statics/data/csv/ODF-Observatoire-organisations.csv",
           "gitfile_": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv",
           "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/csv/ODF-Observatoire-organisations.csv",
           "default-tab": true,
@@ -720,10 +722,11 @@
               ]
             },
             "schema": {
+              "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json",
               "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
             },
             "fields-custom-properties": {
-              "file_": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json",
+              "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json",
               "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json"
             },
             "cardsview": { 
@@ -744,7 +747,7 @@
                 "nom": { "position": "title" },
                 "id_odf" : { "position": "subtitle", "prefix": "Identifiant :" },
                 "adress" : { "position": "adress" },
-                "siren": { "position": "description", "prefix": "Numéro SIREN :", "block_title": "Description" },
+                "siren": { "position": "description", "prefix": "Numéro SIREN :", "block_title": "Description", "right": true },
                 "url_ptf": { "position": "links", "block_title": "Lien vers la plateforme" },
                 "url_datagouv": { "position": "links", "block_title": "Lien vers data.gouv.fr" },
                 "dep_label": { "position": "tags", "block_title": "Département(s)" },
@@ -805,6 +808,9 @@
             "datavizview": {
               "activate": true,
               "default": false,
+              "localdev": false,
+              "filelocal": "http://localhost:8800/statics/data/json/ODF-Observatoire-dataviz-settings.json",
+              "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-dataviz-settings.json",
               "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-dataviz-settings.json"
             },
             "mapview": {
@@ -814,6 +820,7 @@
                 {
                   "title": { "fr": "CARTOGRAPHIE DES ACTEURS DE L&lsquo;OPEN DATA" },
                   "cols": 12,
+                  "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-map-settings.json",
                   "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-map-settings.json"
                 }
               ]
@@ -870,7 +877,7 @@
           "options": ""
         }
       ]'></datami-multi-files>
-  </div> -->
+  </div>
 
   <!-- <p id="datami-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">

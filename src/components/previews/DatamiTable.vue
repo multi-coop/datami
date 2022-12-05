@@ -706,10 +706,14 @@ export default {
           mapping: mapping
         }
       }
+      // console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
     },
+    hasCardMappings () {
+      return this.cardsSettingsFromFileOptions && this.cardsSettingsFromFileOptions.mapping
+    },
     mappingsForMini () {
-      return this.cardsSettingsFromFileOptions.mapping.map(h => {
+      return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
         const fieldMap = {
           field: h.field,
           name: h.name,
@@ -729,7 +733,7 @@ export default {
       })
     },
     mappingsForDetail () {
-      return this.cardsSettingsFromFileOptions.mapping.map(h => {
+      return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
         const fieldMap = {
           field: h.field,
           name: h.name,

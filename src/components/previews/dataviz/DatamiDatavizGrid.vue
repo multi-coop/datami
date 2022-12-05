@@ -4,17 +4,15 @@
     <div
       class="columns is-multiline is-centered">
       <div
-        v-for="(chart, idx) in datavizSettings.charts"
+        v-for="(chart, idx) in datavizSettings.charts.filter(chart => !chart.hide)"
         :key="`${fileId}-chart-${idx}`"
         :class="`column mt-3 mb-6 is-${chart.cols || 6}`">
         <p
-          v-if="!chart.hide"
           :class=" `subtitle has-text-centered has-text-weight-bold ${isDarkMode ? 'has-text-white' : ''}` ">
           {{ chart.title[locale] }}
         </p>
 
         <div
-          v-if="!chart.hide"
           :style="`height: ${ chart.chartOptions.chart.height + 10}px`">
           <DatamiDataviz
             :file-id="fileId"
@@ -108,7 +106,7 @@ export default {
 
       const aggregateBy = chart.aggregatebyfield
       const aggregationField = this.fields.find(f => f.name === aggregateBy)
-      const aggregationFieldIdx = aggregationField && aggregationField.field
+      // const aggregationFieldIdx = aggregationField && aggregationField.field
       // console.log('C > DatamiDatavizGrid > computeSerie > aggregateBy : ', aggregateBy)
       // console.log('C > DatamiDatavizGrid > computeSerie ( grouped or not ) > aggregationField : ', aggregationField)
       // console.log('C > DatamiDatavizGrid > computeSerie > aggregationFieldIdx : ', aggregationFieldIdx)
@@ -118,12 +116,12 @@ export default {
 
       if (categoriesFieldIdx) {
         const grouped = this.groupByField(this.items, categoriesFieldIdx)
-        console.log('\nC > DatamiDatavizGrid > computeSerie > grouped : ', grouped)
+        // console.log('\nC > DatamiDatavizGrid > computeSerie > grouped : ', grouped)
         // const labelsSet = new Set()
         series = grouped.map(g => {
-          let serie = this.aggregateByField(g.items, aggregationFieldIdx, chart.aggregationtype)
-          console.log('\nC > DatamiDatavizGrid > computeSerie (grouped) > g.name : ', g.name)
-          console.log('C > DatamiDatavizGrid > computeSerie (grouped) > serie : ', serie)
+          let serie = this.aggregateByField(g.items, aggregationField, chart.aggregationtype)
+          // console.log('\nC > DatamiDatavizGrid > computeSerie (grouped) > g.name : ', g.name)
+          // console.log('C > DatamiDatavizGrid > computeSerie (grouped) > serie : ', serie)
           serie = {
             name: g.name,
             data: aggregationField && aggregationField.enumArr.map(k => {
