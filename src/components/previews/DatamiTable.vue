@@ -337,9 +337,9 @@
         </div>
 
         <!-- MAPS -->
+        <!-- v-show="!isAnyDialogOpen && currentViewMode === 'map'" -->
         <div
-          v-if="fileOptions && hasMapView && mapViewIsActive"
-          v-show="!isAnyDialogOpen && currentViewMode === 'map'"
+          v-if="fileOptions && hasMapView && mapViewIsActive && !isAnyDialogOpen && currentViewMode === 'map'"
           class="datami-table-view-map">
           <!-- v-model="showCardDetails" -->
           <DatamiMapGrid
