@@ -37,12 +37,13 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
-import GitObjInfos from '@/components/previews/GitObjInfos'
+// import GitObjInfos from '@/components/previews/GitObjInfos'
 
 export default {
   name: 'DialogFileInfos',
   components: {
-    GitObjInfos
+    // GitObjInfos
+    GitObjInfos: () => import(/* webpackChunkName: "GitObjInfos" */ '@/components/previews/GitObjInfos.vue')
   },
   mixins: [mixinGlobal],
   props: {

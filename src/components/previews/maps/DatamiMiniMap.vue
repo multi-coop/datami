@@ -158,6 +158,8 @@ export default {
         style: this.mapStyle
       })
       map.dragRotate.disable()
+      // map.dragPan.disable()
+      map.scrollZoom.disable()
       map.touchZoomRotate.disableRotation()
 
       // console.log('C > DatamiMiniMap > initializeMiniMap > map : ', map)

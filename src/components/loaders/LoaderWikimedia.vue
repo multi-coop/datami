@@ -1,5 +1,5 @@
 <template>
-  <div class="LoaderWIKI datami-component container mt-4 mb-6">
+  <div class="LoaderWikimedia datami-component container mt-4 mb-6">
     <div class="columns is-centered is-mobile">
       <div class="column is-10">
         <p class="has-text-centered has-text-grey mb-4">
@@ -34,7 +34,7 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'LoaderWIKI',
+  name: 'LoaderWikimedia',
   mixins: [mixinGlobal],
   props: {
     fileId: {

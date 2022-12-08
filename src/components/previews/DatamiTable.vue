@@ -196,7 +196,7 @@
               <template #default="props">
                 <!-- DEBUG -->
                 <div
-                  v-if="false"
+                  v-if="debug"
                   class="mb-3">
                   <!-- row: <code>{{ props.row }}</code><br> -->
                   <code>row id</code>: <code>{{ props.row.id }}</code><br>
@@ -209,10 +209,12 @@
                   <PreviewCell
                     v-if="col.locked"
                     :file-id="fileId"
+                    :row-id="props.row.id"
                     :value="props.row[col.field]"
                     :field="col"
                     :is-edit-view="true"
-                    :locale="locale"/>
+                    :locale="locale"
+                    @action="processAction"/>
                   <EditCell
                     v-else
                     :file-id="fileId"
@@ -237,10 +239,12 @@
                   <PreviewCell
                     v-else
                     :file-id="fileId"
+                    :row-id="props.row.id"
                     :value="props.row[col.field]"
                     :is-diff-view="true"
                     :field="col"
-                    :locale="locale"/>
+                    :locale="locale"
+                    @action="processAction"/>
                 </div>
 
                 <!-- PREVIEW -->
@@ -250,9 +254,11 @@
                   <!-- {{ props.row[col.field] }} -->
                   <PreviewCell
                     :file-id="fileId"
+                    :row-id="props.row.id"
                     :value="props.row[col.field]"
                     :field="col"
-                    :locale="locale"/>
+                    :locale="locale"
+                    @action="processAction"/>
                 </div>
               </template>
             </b-table-column>
@@ -269,6 +275,27 @@
           </b-table>
         </div>
 
+        <!-- DISPLAY DETAILLED CARD FOR TABLE VIEW -->
+        <div
+          v-show="currentViewMode === 'table' && activeTableCardId"
+          class="columns is-centered">
+          <div
+            :class="`column is-10`">
+            <DatamiCard
+              :file-id="fileId"
+              :fields="columns"
+              :field-mapping="mappingsForDetail"
+              :item="getDetailItem(activeTableCardId)"
+              :show-detail="true"
+              :show-detail-card="false"
+              :locale="locale"
+              :from-table="true"
+              @action="processAction"
+              @updateCellValue="emitUpdate"
+              @toggleDetail="activeTableCardId = undefined"/>
+          </div>
+        </div>
+
         <!-- CARDS -->
         <div
           v-if="hasCardsView && cardsViewIsActive"
@@ -278,6 +305,8 @@
           <DatamiCardsGrid
             :file-id="fileId"
             :cards-settings="cardsSettingsFromFileOptions"
+            :mappings-for-mini="mappingsForMini"
+            :mappings-for-detail="mappingsForDetail"
             :items-per-row="itemsPerRow"
             :items="dataEditedPaginated"
             :locale="locale"
@@ -308,9 +337,9 @@
         </div>
 
         <!-- MAPS -->
+        <!-- v-show="!isAnyDialogOpen && currentViewMode === 'map'" -->
         <div
-          v-if="fileOptions && hasMapView && mapViewIsActive"
-          v-show="!isAnyDialogOpen && currentViewMode === 'map'"
+          v-if="fileOptions && hasMapView && mapViewIsActive && !isAnyDialogOpen && currentViewMode === 'map'"
           class="datami-table-view-map">
           <!-- v-model="showCardDetails" -->
           <DatamiMapGrid
@@ -466,6 +495,7 @@ import {
   mixinIcons,
   mixinDiff,
   mixinCsv,
+  // mixinCards,
   mixinPagination,
   mixinConsolidation
 } from '@/utils/mixins.js'
@@ -473,45 +503,65 @@ import {
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
 import { mapActions, mapGetters } from 'vuex'
 
-import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
-import ButtonSortByField from '@/components/sorting/ButtonSortByField'
-import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
-import DialogAddRow from '@/components/edition/csv/DialogAddRow'
-import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
+// import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
+// import ButtonSortByField from '@/components/sorting/ButtonSortByField'
+// import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
+// import DialogAddRow from '@/components/edition/csv/DialogAddRow'
+// import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
 
-import PreviewField from '@/components/previews/PreviewField'
-import PreviewCell from '@/components/previews/PreviewCell'
-import EditCell from '@/components/edition/csv/EditCell'
-import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
+// import PreviewField from '@/components/previews/PreviewField'
+// import PreviewCell from '@/components/previews/PreviewCell'
+// import EditCell from '@/components/edition/csv/EditCell'
+// import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
 
-import DatamiCardsGrid from '@/components/previews/cards/DatamiCardsGrid'
-import DatamiDatavizGrid from '@/components/previews/dataviz/DatamiDatavizGrid'
-import DatamiMapGrid from '@/components/previews/maps/DatamiMapGrid'
+// import DatamiCardsGrid from '@/components/previews/cards/DatamiCardsGrid'
+// import DatamiCard from '@/components/previews/cards/DatamiCard'
+// import DatamiDatavizGrid from '@/components/previews/dataviz/DatamiDatavizGrid'
+// import DatamiMapGrid from '@/components/previews/maps/DatamiMapGrid'
 
-import PagesNavigation from '@/components/pagination/PagesNavigation'
+// import PagesNavigation from '@/components/pagination/PagesNavigation'
 
 export default {
   name: 'DatamiTable',
   components: {
-    SortAndFiltersSkeleton,
-    ButtonSortByField,
-    EditCsvSkeleton,
-    DialogAddRow,
-    DialogDeleteRows,
-    PreviewField,
-    PreviewCell,
-    EditCell,
-    PreviewConsolidation,
-    DatamiCardsGrid,
-    DatamiDatavizGrid,
-    DatamiMapGrid,
-    PagesNavigation
+    // SortAndFiltersSkeleton,
+    // ButtonSortByField,
+    // EditCsvSkeleton,
+    // DialogAddRow,
+    // DialogDeleteRows,
+    // PreviewField,
+    // PreviewCell,
+    // EditCell,
+    // PreviewConsolidation,
+    // DatamiCardsGrid,
+    // DatamiCard,
+    // DatamiDatavizGrid,
+    // DatamiMapGrid,
+    // PagesNavigation
+    SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/edition/csv/SortAndFiltersSkeleton.vue'),
+    ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
+    EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
+    DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/edition/csv/DialogAddRow.vue'),
+    DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/edition/csv/DialogDeleteRows.vue'),
+
+    PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
+    PreviewCell: () => import(/* webpackChunkName: "PreviewCell" */ '@/components/previews/PreviewCell.vue'),
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue'),
+    PreviewConsolidation: () => import(/* webpackChunkName: "PreviewConsolidation" */ '@/components/edition/PreviewConsolidation.vue'),
+
+    DatamiCardsGrid: () => import(/* webpackChunkName: "DatamiCardsGrid" */ '@/components/previews/cards/DatamiCardsGrid.vue'),
+    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
+    DatamiDatavizGrid: () => import(/* webpackChunkName: "DatamiDatavizGrid" */ '@/components/previews/dataviz/DatamiDatavizGrid.vue'),
+    DatamiMapGrid: () => import(/* webpackChunkName: "DatamiMapGrid" */ '@/components/previews/maps/DatamiMapGrid.vue'),
+
+    PagesNavigation: () => import(/* webpackChunkName: "PagesNavigation" */ '@/components/pagination/PagesNavigation.vue')
   },
   mixins: [
     mixinGlobal,
     mixinIcons,
     mixinDiff,
     mixinCsv,
+    // mixinCards,
     mixinPagination,
     mixinConsolidation
   ],
@@ -562,6 +612,9 @@ export default {
       showDeleteRowsDialog: false,
       showUploadFileDialog: false,
 
+      // CARDS FOR TABLE VIEW
+      activeTableCardId: undefined,
+
       // SORTING
       noSortingFields: ['tags'],
       sortingByField: undefined,
@@ -585,6 +638,11 @@ export default {
       itemsPerPageCardsDefault: 6,
 
       // CONSOLIDATION
+      openCardField: {
+        type: 'datami'
+      },
+
+      // CONSOLIDATION
       consolidationField: {
         type: 'datami'
       },
@@ -603,12 +661,12 @@ export default {
   computed: {
     filterFields () {
       const settingsFields = this.customFiltersConfig.filterfields.map(filterField => filterField.name || filterField)
-      // console.log('\nC > GitributeTable > filterFields > settingsFields : ', settingsFields)
-      // console.log('C > GitributeTable > filterFields > this.columns : ', this.columns)
+      // console.log('\nC > DatamiTable > filterFields > settingsFields : ', settingsFields)
+      // console.log('C > DatamiTable > filterFields > this.columns : ', this.columns)
       const filterFields = this.columns
         .filter(col => {
           // Filter out only columns whose name is in settingsFields
-          // console.log('C > GitributeTable > filterFields > col : ', col)
+          // console.log('C > DatamiTable > filterFields > col : ', col)
           const hasLabel = settingsFields.includes(col.name)
           return hasLabel
         })
@@ -621,15 +679,12 @@ export default {
           // Sort columns in settingsFields order
           return settingsFields.indexOf(a.name) - settingsFields.indexOf(b.name)
         })
-      // console.log('C > GitributeTable > filterFields > filterFields : ', filterFields)
+      // console.log('C > DatamiTable > filterFields > filterFields : ', filterFields)
       return filterFields
     },
-    // hasCardsView () {
-    //   return !!this.fileOptions.cardsview
-    // },
     cardsSettingsFromFileOptions () {
       let cardsSettings
-      // console.log('\nC > GitributeTable > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      // console.log('\nC > DatamiTable > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
       if (this.hasCardsView && this.cardsViewIsActive) {
         const settings = this.cardsSettingsFromOptions
         const miniSettings = settings.mini
@@ -637,10 +692,6 @@ export default {
         const mapping = this.columns.map(h => {
           const fieldMap = {
             ...h,
-            // field: h.field,
-            // type: h.type,
-            // subtype: h.subtype,
-            // mini: miniSettings,
             mini: miniSettings[h.name],
             detail: detailSettings[h.name]
           }
@@ -655,7 +706,51 @@ export default {
           mapping: mapping
         }
       }
+      // console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
+    },
+    hasCardMappings () {
+      return this.cardsSettingsFromFileOptions && this.cardsSettingsFromFileOptions.mapping
+    },
+    mappingsForMini () {
+      return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
+        const fieldMap = {
+          field: h.field,
+          name: h.name,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
+          definitions: h.definitions,
+          tagSeparator: h.tagSeparator,
+          maxLength: h.maxLength,
+          longtextOptions: h.longtextOptions,
+          stepOptions: h.stepOptions,
+          ...h.mini
+        }
+        const hasTemplate = h.templating && h.templating.use_on_mini
+        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        return fieldMap
+      })
+    },
+    mappingsForDetail () {
+      return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
+        const fieldMap = {
+          field: h.field,
+          name: h.name,
+          type: h.type,
+          subtype: h.subtype,
+          enumArr: h.enumArr,
+          definitions: h.definitions,
+          tagSeparator: h.tagSeparator,
+          maxLength: h.maxLength,
+          longtextOptions: h.longtextOptions,
+          stepOptions: h.stepOptions,
+          ...h.detail
+        }
+        const hasTemplate = h.templating && h.templating.use_on_detail
+        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        return fieldMap
+      })
     },
     itemsPerPageChoices () {
       let result
@@ -742,6 +837,7 @@ export default {
     },
     dataEditedSorted () {
       let data = [...this.dataEditedFiltered]
+      // console.log('\nC > DatamiTable > dataEditedSorted > data : ', data)
       if (this.fileSorting && this.fileSorting.length) {
         // console.log('\nC > DatamiTable > dataEditedSorted > this.fileSorting : ', this.fileSorting)
         this.fileSorting.forEach(sorting => {
@@ -754,7 +850,12 @@ export default {
           }
         })
       } else {
-        data = data.sort((a, b) => a.id > b.id ? 1 : -1)
+        data = data.sort((a, b) => {
+          const idA = a.added ? a.position : a.id
+          const idB = b.added ? b.position : b.id
+          const sorter = idA > idB ? 1 : -1
+          return sorter
+        })
       }
       return data
     },
@@ -838,11 +939,23 @@ export default {
           columns = this.columnsEdited.filter(c => c.type !== 'datami')
           break
       }
+
       // console.log('C > DatamiTable > dataForView > preview > columns : ', columns)
-      return columns
+      if (this.hasCardsView && this.cardsViewIsActive) {
+        const openCardColumn = {
+          ...this.openCardField,
+          field: 'openDatamiCard',
+          subtype: 'openDatamiCard',
+          label: 'field.openDatamiCard'
+        }
+        openCardColumn.icon = this.getIconFieldType(openCardColumn)
+        return [openCardColumn, ...columns]
+      } else {
+        return columns
+      }
     },
     isAnyDialogOpen () {
-      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog
+      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog || this.activeTableCardId
     },
     isCardDetailsOpen () {
       return this.showCardDetails && this.currentViewMode === 'cards'
@@ -889,7 +1002,7 @@ export default {
 
     // prepare filters from custom settings if any
     if (this.hasCustomFilters) {
-      // console.log('\nC > GitributeTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
+      // console.log('\nC > DatamiTable > beforeMount > this.customFiltersConfig : ', this.customFiltersConfig)
       const filters = [...this.filterFields]
       filters.forEach(filter => {
         filter.fileId = this.fileId
@@ -938,17 +1051,17 @@ export default {
       }
     },
     filterData (dataset) {
-      // console.log('\nC > GitributeTable > filterData > ...')
+      // console.log('\nC > DatamiTable > filterData > ...')
       let data = [...dataset]
-      // console.log('C > GitributeTable > filterData > data : ', data)
-      // console.log('\nC > GitributeTable > filterData > this.columnsForView : ', this.columnsForView)
+      // console.log('C > DatamiTable > filterData > data : ', data)
+      // console.log('\nC > DatamiTable > filterData > this.columnsForView : ', this.columnsForView)
       const colFields = this.columnsForView.map(col => col.field)
-      // console.log('C > GitributeTable > filterData > colFields : ', colFields)
+      // console.log('C > DatamiTable > filterData > colFields : ', colFields)
 
       const searchStr = this.searchText
-      // console.log('C > GitributeTable > filterData > searchStr : ', searchStr)
+      // console.log('C > DatamiTable > filterData > searchStr : ', searchStr)
       const filterTags = this.filterTags
-      // console.log('C > GitributeTable > filterData > filterTags : ', filterTags)
+      // console.log('C > DatamiTable > filterData > filterTags : ', filterTags)
 
       // grouping active tags by field
       const regroupedFilterTags = []
@@ -966,27 +1079,27 @@ export default {
           })
         }
       })
-      // console.log('C > GitributeTable > filterData > regroupedFilterTags : ', regroupedFilterTags)
+      // console.log('C > DatamiTable > filterData > regroupedFilterTags : ', regroupedFilterTags)
 
       // console.log('filtres sélectionnés', filterTags)
       // const filterTagsFields = filterTags.map(f => f.field) || []
-      // console.log('C > GitributeTable > filterData > filterTagsFields : ', filterTagsFields)
+      // console.log('C > DatamiTable > filterData > filterTagsFields : ', filterTagsFields)
 
       // const customFiltersConfig = this.customFiltersConfig
-      // console.log('C > GitributeTable > dataEditedFiltered > customFiltersConfig : ', customFiltersConfig)
+      // console.log('C > DatamiTable > dataEditedFiltered > customFiltersConfig : ', customFiltersConfig)
 
       // filter out data
       data = data.filter(row => {
-        // console.log('\nC > GitributeTable > dataEditedFiltered > row.id : ', row.id)
+        // console.log('\nC > DatamiTable > dataEditedFiltered > row.id : ', row.id)
         const hasSearchVal = searchStr ? [] : [true]
-        // console.log('\nC > GitributeTable > filterData > row : ', row)
+        // console.log('\nC > DatamiTable > filterData > row : ', row)
 
         // FOR SEARCHBAR FILTER
         for (const field in colFields) {
-          // console.log('C > GitributeTable > filterData > field : ', field)
+          // console.log('C > DatamiTable > filterData > field : ', field)
           const cellValSearch = row[field] || ''
           const cellValLowSearch = cellValSearch.toString().toLowerCase()
-          // console.log('C > GitributeTable > filterData > rowVal : ', rowVal)
+          // console.log('C > DatamiTable > filterData > rowVal : ', rowVal)
           // search text
           if (searchStr) {
             const cellHasSearch = cellValLowSearch.includes(searchStr.toLowerCase())
@@ -1000,19 +1113,19 @@ export default {
 
         // BEGINNING NEW FILTERING PROCESS
         regroupedFilterTags.forEach(filterField => {
-          // console.log('C > GitributeTable > dataEditedFiltered > filterField : ', filterField)
+          // console.log('C > DatamiTable > dataEditedFiltered > filterField : ', filterField)
           const cellVal = row[filterField.field] || ''
           const cellValLow = cellVal.toString().toLowerCase()
-          // console.log('\nC > GitributeTable > dataEditedFiltered > filterField.field : ', filterField.field)
-          // console.log('C > GitributeTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
-          // console.log('C > GitributeTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+          // console.log('\nC > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
+          // console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
+          // console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
 
-          // console.log('C > GitributeTable > dataEditedFiltered > cellValLow : ', cellValLow)
+          // console.log('C > DatamiTable > dataEditedFiltered > cellValLow : ', cellValLow)
           // const filterVal = filterField.value.toLowerCase()
           const boolArr = filterField.activeValues.map(activeValue => {
             return cellValLow.includes(activeValue)
           })
-          // console.log('C > GitributeTable > dataEditedFiltered > boolArr : ', boolArr)
+          // console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
 
           let fieldBool = true
           if (filterField.filtering === 'OR') {
@@ -1021,17 +1134,17 @@ export default {
             fieldBool = boolArr.every(b => b)
           }
           boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
-          // console.log('C > GitributeTable > dataEditedFiltered > fieldBool : ', fieldBool)
+          // console.log('C > DatamiTable > dataEditedFiltered > fieldBool : ', fieldBool)
         })
 
-        // console.log('\nC > GitributeTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
+        // console.log('\nC > DatamiTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
 
         const boolFilters = boolAndOrFilters
           .map(b => b.bool)
           .every(b => b) // HORIZONTAL "AND" CONDITION
 
-        // console.log('C > GitributeTable > dataEditedFiltered > boolSearch : ', boolSearch)
-        // console.log('C > GitributeTable > dataEditedFiltered > boolFilters : ', boolFilters)
+        // console.log('C > DatamiTable > dataEditedFiltered > boolSearch : ', boolSearch)
+        // console.log('C > DatamiTable > dataEditedFiltered > boolFilters : ', boolFilters)
 
         return boolSearch && boolFilters
       })
@@ -1040,6 +1153,12 @@ export default {
     async processAction (event) {
       // console.log('\nC > DatamiTable > processAction > event : ', event)
       switch (event.action) {
+        // OPEN CARD
+        case 'openCard':
+          // console.log('\nC > DatamiTable > processAction > event : ', event)
+          this.activeTableCardId = event.rowId
+          break
+
         // ADD TAG TO ENUM
         case 'addTagToEnum':
           // console.log('\nC > DatamiTable > processAction > event : ', event)
@@ -1200,6 +1319,9 @@ export default {
         this.consolidationData.push(respConsolidation)
         this.openedDetails.push(rowId)
       }
+    },
+    getDetailItem (rowId) {
+      return this.dataEditedPaginated.find(item => item.id === rowId)
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)

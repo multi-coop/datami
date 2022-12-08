@@ -48,11 +48,17 @@
       :key="`nav-filter-${fileId}-${filter.field}-${idx}-${filterVal}`"
       class="pr-2"
       @click.native="updateActiveTag(filterVal)">
+      <!-- SELECTION ICON -->
       <b-icon
-        v-if="isActive(filterVal)"
+        v-if="isActive(filterVal) && filter.filtering === 'AND'"
         class="mr-2"
         size="is-small"
         icon="close-thick"/>
+      <b-icon
+        v-if="filter.filtering === 'OR'"
+        class="mr-2"
+        size="is-small"
+        :icon="isActive(filterVal) ? 'checkbox-marked' : 'checkbox-blank-outline'"/>
       <!-- FILTER + FOREIGN KEY || DEFINITIONS -->
       <div v-if="filter.foreignKey || filter.definitions">
         <span>

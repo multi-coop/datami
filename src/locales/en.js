@@ -56,6 +56,16 @@ export default {
     fileDataviz: "Settings file for file's data-visualizations",
     fileMaps: "Settings file for file's cartographies"
   },
+  views: {
+    loading: '...',
+    cards: 'Cards',
+    table: 'Table',
+    dataviz: 'Dataviz',
+    map: 'Map',
+    text: 'Text',
+    md: 'Markdown',
+    json: 'Json'
+  },
   preview: {
     edition: 'Edition',
     editView: 'Edit',
@@ -65,6 +75,9 @@ export default {
     tableView: 'Table',
     datavizView: 'Datavisualisation',
     mapView: 'Cartography',
+    textView: 'Text',
+    mdView: 'Markdown',
+    jsonView: 'Json',
     showCardDetails: 'Show details',
     closeCard: 'Close card',
     closeCardDetails: 'Close detailed card',
@@ -166,6 +179,7 @@ export default {
     category: 'Category',
     string: 'String',
     longtext: 'Long text',
+    timelinetext: 'Text with steps',
     image: 'Image`',
     link: 'Link',
     email: 'Email',
@@ -181,6 +195,7 @@ export default {
     ressourceValues: 'Ressource values',
     definition: 'Definition',
     datami: 'Special field',
+    openDatamiCard: 'Open card',
     consolidation: 'Consolidation'
   },
   edit: {
@@ -243,8 +258,10 @@ export default {
     userIntro: "You can add a personalized message to the file's owner",
     userName: 'Name',
     userSurname: 'Surname',
+    userAnyName: 'Surname / Name / Pseudo',
     userEmail: 'Email',
     userMessage: 'Message',
+    userRgpd: "I have read and I accept Datami's CGU",
     showOptions: 'Show the options',
     hideOptions: 'Hide the options'
   },

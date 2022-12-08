@@ -61,7 +61,7 @@ export default Vue.extend({
       type: Array
     },
     locale: {
-      required: false,
+      default: '',
       type: String
     }
   },

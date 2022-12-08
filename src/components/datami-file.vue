@@ -241,43 +241,57 @@ import { mapActions } from 'vuex'
 import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
-import MatomoScript from '@/components/matomo/MatomoScript'
+// import MatomoScript from '@/components/matomo/MatomoScript'
 
-import FileTitle from '@/components/navbar/FileTitle'
-import ViewModeBtns from '@/components/previews/ViewModeBtns'
-import UserOptions from '@/components/user/UserOptions'
+// import FileTitle from '@/components/navbar/FileTitle'
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
+// import UserOptions from '@/components/user/UserOptions'
 
-import NotificationInfos from '@/components/notifications/NotificationInfos'
-import NotificationErrors from '@/components/notifications/NotificationErrors'
+// import NotificationInfos from '@/components/notifications/NotificationInfos'
+// import NotificationErrors from '@/components/notifications/NotificationErrors'
 
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-import DialogFileInfos from '@/components/previews/DialogFileInfos'
-import DialogUploadFile from '@/components/edition/DialogUploadFile'
-import ConfirmCommit from '@/components/edition/ConfirmCommit'
+// import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+// import DialogFileInfos from '@/components/previews/DialogFileInfos'
+// import DialogUploadFile from '@/components/edition/DialogUploadFile'
+// import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
-import PreviewCsv from '@/components/previews/PreviewCsv'
-import PreviewMd from '@/components/previews/PreviewMd'
-import PreviewJson from '@/components/previews/PreviewJson'
+// import PreviewCsv from '@/components/previews/PreviewCsv'
+// import PreviewMd from '@/components/previews/PreviewMd'
+// import PreviewJson from '@/components/previews/PreviewJson'
 
-import DatamiCredits from '@/components/credits/DatamiCredits'
+// import DatamiCredits from '@/components/credits/DatamiCredits'
 
 export default {
   name: 'DatamiFile',
   components: {
-    MatomoScript,
-    FileTitle,
-    ViewModeBtns,
-    UserOptions,
-    NotificationInfos,
-    NotificationErrors,
-    EditNavbarSkeleton,
-    DialogFileInfos,
-    DialogUploadFile,
-    ConfirmCommit,
-    PreviewCsv,
-    PreviewMd,
-    PreviewJson,
-    DatamiCredits
+    // MatomoScript,
+    // FileTitle,
+    // ViewModeBtns,
+    // UserOptions,
+    // NotificationInfos,
+    // NotificationErrors,
+    // EditNavbarSkeleton,
+    // DialogFileInfos,
+    // DialogUploadFile,
+    // ConfirmCommit,
+    // PreviewCsv,
+    // PreviewMd,
+    // PreviewJson,
+    // DatamiCredits
+    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
+    ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
+    UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
+    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
+    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
+    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
+    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
+    PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
+    PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
+    PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
+    DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
     mixinGlobal,
@@ -289,7 +303,15 @@ export default {
       default: 'datami',
       type: String
     },
+    localdev: {
+      default: false,
+      type: Boolean
+    },
     gitfile: {
+      default: '',
+      type: String
+    },
+    gitfilelocal: {
       default: '',
       type: String
     },
@@ -333,6 +355,7 @@ export default {
   data () {
     return {
       // file infos
+      gitfileDatami: undefined,
       fileId: undefined,
       fileType: undefined,
       fileInfos: undefined,
@@ -343,8 +366,8 @@ export default {
     }
   },
   watch: {
-    async gitfile (next) {
-      // console.log('\nC > DatamiFile > watch > gitfile > next : ', next)
+    async gitfileDatami (next) {
+      // console.log('\nC > DatamiFile > watch > gitfileDatami > next : ', next)
       await this.initWidget()
       const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
       this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
@@ -383,6 +406,9 @@ export default {
     // INITIALIZING LOCAL STORAGE
     this.initializeStorage()
     // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
+    // console.log('C > DatamiFile > beforeMount > this.localdev : ', this.localdev)
+    // console.log('C > DatamiFile > beforeMount > this.gitfilelocal : ', this.gitfilelocal)
+    this.gitfileDatami = this.localdev ? this.gitfilelocal : this.gitfile
     await this.initWidget()
   },
   async mounted () {
@@ -419,10 +445,10 @@ export default {
       if (!this.fromMultiFiles) {
         this.setWidgetCopy()
       }
-
-      const gitInfosObject = this.extractGitInfos(this.gitfile)
+      const gitInfosObject = this.extractGitInfos(this.gitfileDatami)
       // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
-      this.updateShareableFiles({ gitfile: this.gitfile, fileId: fileUuid, isSet: false })
+
+      this.updateShareableFiles({ gitfile: this.gitfileDatami, fileId: fileUuid, isSet: false })
       gitInfosObject.uuid = fileUuid
       gitInfosObject.title = this.title
       gitInfosObject.onlyPreview = this.onlypreview
@@ -455,8 +481,12 @@ export default {
       // build options object
       let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
       // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
+
       let fileSchema = fileOptions.schema
       // console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
+      const fileSchemaLocal = fileSchema && fileSchema.localdev
+      // console.log('C > DatamiFile > initWidget > fileSchemaLocal : ', fileSchemaLocal)
+      if (fileSchema) { fileSchema.file = fileSchemaLocal ? fileSchema.filelocal : fileSchema && fileSchema.file }
       if (fileSchema && fileSchema.file) {
         const schemaGitObj = this.extractGitInfos(fileSchema.file)
         // console.log('C > DatamiFile > initWidget > schemaGitObj : ', schemaGitObj)
@@ -472,6 +502,10 @@ export default {
 
       // get custom props if any
       let fileCustomProps = fileOptions['fields-custom-properties']
+      // console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
+      const fileCustomPropsLocal = fileCustomProps && fileCustomProps.localdev
+      // console.log('C > DatamiFile > initWidget > fileCustomPropsLocal : ', fileCustomPropsLocal)
+      if (fileCustomProps) { fileCustomProps.file = fileCustomPropsLocal ? fileCustomProps.filelocal : fileCustomProps && fileCustomProps.file }
       if (fileCustomProps && fileCustomProps.file) {
         const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
         // console.log('C > DatamiFile > initWidget > customPropsGitObj : ', customPropsGitObj)
@@ -483,11 +517,15 @@ export default {
         // console.log('C > DatamiFile > initWidget > customProps : ', customProps)
         fileCustomProps = { ...customProps, file: fileCustomProps.file }
       }
-      // fileCustomProps && console.log('\nC > DatamiFile > initWidget > this.gitfile : ', this.gitfile)
+      // fileCustomProps && console.log('\nC > DatamiFile > initWidget > this.gitfileDatami : ', this.gitfileDatami)
       // fileCustomProps && console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
 
       // get dataviz props if any
       let fileDataviz = fileOptions.datavizview
+      // console.log('C > DatamiFile > initWidget > fileDataviz : ', fileDataviz)
+      const fileDatavizLocal = fileDataviz && fileDataviz.localdev
+      // console.log('C > DatamiFile > initWidget > fileDatavizLocal : ', fileDatavizLocal)
+      if (fileDataviz) { fileDataviz.file = fileDatavizLocal ? fileDataviz.filelocal : fileDataviz && fileDataviz.file }
       if (fileDataviz && fileDataviz.file) {
         const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
         const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
@@ -503,6 +541,9 @@ export default {
         const maps = []
         for (const map of fileMaps.maps) {
           let mapSettings = { ...map }
+          const mapSettingsLocal = mapSettings.localdev
+          // console.log('C > DatamiFile > initWidget > mapSettingsLocal : ', mapSettingsLocal)
+          map.file = mapSettingsLocal ? map.filelocal : map.file
           if (map.file) {
             const mapPropsGitObj = this.extractGitInfos(map.file)
             const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
@@ -572,13 +613,13 @@ export default {
     processForeignKeys (fileCustomProps) {
       const foreignKeysFields = fileCustomProps && fileCustomProps.fields && fileCustomProps.fields.filter(field => field.foreignKey && field.foreignKey.activate)
       if (foreignKeysFields && foreignKeysFields.length) {
-        // console.log('\nC > DatamiFile > processForeignKeys > this.gitfile : ', this.gitfile)
+        // console.log('\nC > DatamiFile > processForeignKeys > this.gitfileDatami : ', this.gitfileDatami)
         // console.log('C > DatamiFile > processForeignKeys > foreignKeysFields : ', foreignKeysFields)
         foreignKeysFields.forEach(field => {
           const payload = {
             ressource: field.foreignKey.ressource,
             fromFileId: this.gitObj.uuid,
-            fromGitfile: this.gitfile,
+            fromGitfile: this.gitfileDatami,
             field: {
               name: field.name
             },

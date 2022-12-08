@@ -53,16 +53,19 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-import FilterTags from '@/components/filters/FilterTags'
-import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
-import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
+// import FilterTags from '@/components/filters/FilterTags'
+// import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
+// import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
   name: 'EditCsvSkeleton',
   components: {
-    FilterTags,
-    ButtonAddRow,
-    ButtonDeleteRows
+    // FilterTags,
+    // ButtonAddRow,
+    // ButtonDeleteRows
+    FilterTags: () => import(/* webpackChunkName: "FilterTags" */ '@/components/filters/FilterTags.vue'),
+    ButtonAddRow: () => import(/* webpackChunkName: "ButtonAddRow" */ '@/components/edition/csv/ButtonAddRow.vue'),
+    ButtonDeleteRows: () => import(/* webpackChunkName: "ButtonDeleteRows" */ '@/components/edition/csv/ButtonDeleteRows.vue')
   },
   mixins: [
     mixinGlobal,

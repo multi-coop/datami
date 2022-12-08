@@ -17,6 +17,8 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.min.css'
 import '@mdi/font/css/materialdesignicons.min.css'
 
+import 'bulma-timeline/dist/css/bulma-timeline.min.css'
+
 import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 
 import VueApexCharts from 'vue-apexcharts'
