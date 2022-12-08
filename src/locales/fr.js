@@ -56,15 +56,28 @@ export default {
     fileDataviz: 'Fichier de configuration des data-visualisations',
     fileMaps: 'Fichier de configuration des cartographies'
   },
+  views: {
+    loading: '...',
+    cards: 'Fiches',
+    table: 'Table',
+    dataviz: 'Dataviz',
+    map: 'Carto',
+    text: 'Texte',
+    md: 'Markdown',
+    json: 'Json'
+  },
   preview: {
     edition: 'Edition',
     editView: 'Editer',
     diffView: 'Comparer',
     previewView: 'Aperçu',
-    cardsView: 'Liste de  fiches',
+    cardsView: 'Liste de fiches',
     tableView: 'Tableau',
     datavizView: 'Datavisualisation',
     mapView: 'Cartographie',
+    textView: 'Texte',
+    mdView: 'Markdown',
+    jsonView: 'Json',
     showCardDetails: 'Afficher les détails',
     closeCard: 'Fermer la fiche',
     closeCardDetails: 'Fermer la fiche détaillée',
@@ -166,6 +179,7 @@ export default {
     category: 'Catégorie',
     string: 'Texte',
     longtext: 'Texte long',
+    timelinetext: 'Texte avec étapes',
     image: 'Image`',
     link: 'Lien',
     email: 'Email',
@@ -181,6 +195,7 @@ export default {
     ressourceValues: 'Valeurs liées',
     definition: 'Définition',
     datami: 'Champ spécial',
+    openDatamiCard: 'Ouvrir la fiche',
     consolidation: 'Consolidation'
   },
   edit: {
@@ -243,8 +258,10 @@ export default {
     userIntro: 'Vous pouvez laisser un message au propriétaire du fichier',
     userName: 'Prénom',
     userSurname: 'Nom',
+    userAnyName: 'Nom / Prénom / Pseudo',
     userEmail: 'Email',
     userMessage: 'Message',
+    userRgpd: "J'ai pris connaissance et j'accepte les règles générales d'utilisation de Datami",
     showOptions: 'Afficher les options',
     hideOptions: 'Cacher les options'
   },

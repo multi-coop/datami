@@ -125,9 +125,9 @@ import {
 } from '@/utils/geoJson.js'
 // import { LoaderTargetPlugin } from 'webpack'
 
-import DatamiCard from '@/components/previews/cards/DatamiCard'
-import DatamiMapLayers from '@/components/previews/maps/DatamiMapLayers'
-import DatamiMapLegend from '@/components/previews/maps/DatamiMapLegend'
+// import DatamiCard from '@/components/previews/cards/DatamiCard'
+// import DatamiMapLayers from '@/components/previews/maps/DatamiMapLayers'
+// import DatamiMapLegend from '@/components/previews/maps/DatamiMapLegend'
 
 import PopupContent from '@/components/previews/maps/DatamiMapPopup'
 const PopupClass = Vue.extend(PopupContent)
@@ -135,9 +135,12 @@ const PopupClass = Vue.extend(PopupContent)
 export default {
   name: 'DatamiMap',
   components: {
-    DatamiCard,
-    DatamiMapLayers,
-    DatamiMapLegend
+    // DatamiCard,
+    // DatamiMapLayers,
+    // DatamiMapLegend
+    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
+    DatamiMapLayers: () => import(/* webpackChunkName: "DatamiMapLayers" */ '@/components/previews/maps/DatamiMapLayers.vue'),
+    DatamiMapLegend: () => import(/* webpackChunkName: "DatamiMapLegend" */ '@/components/previews/maps/DatamiMapLegend.vue')
   },
   mixins: [
     mixinGlobal,
@@ -184,6 +187,7 @@ export default {
       map: undefined,
       // isFullscreen: false,
       showLoader: true,
+      redrawMap: 1,
 
       // MAP FLAGS
       isClusterSet: false,
@@ -410,15 +414,21 @@ export default {
         this.trackEvent('showCard')
       }
     },
+    redrawMap () {
+      // console.log('\nC > DatamiMap > watch > redrawMap :', this.redrawMap)
+      setTimeout(() => {
+        this.map.redraw()
+      }, 150)
+    },
     currentViewMode (next) {
       if (next === 'map' && this.map) {
-        this.map.redraw()
+        this.redrawMap *= -1
       }
     },
     currentEditViewMode (next) {
       if (this.map) {
         this.getMapHeightTop()
-        this.map.redraw()
+        this.redrawMap *= -1
       }
     },
     async items () {

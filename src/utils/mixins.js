@@ -187,7 +187,9 @@ export const mixinGlobal = {
       return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.templates
     },
     cardsSettingsMiniMap () {
-      return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minimap
+      const settings = this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minimap
+      if (settings && !settings.position) { settings.position = 'map_bottom' }
+      return settings
     },
     cardHasMiniMap () {
       return this.cardsSettingsMiniMap && this.cardsSettingsMiniMap.activate
@@ -221,6 +223,19 @@ export const mixinGlobal = {
       return this.mapViewOptions && this.mapViewOptions.activate
     },
 
+    // MARKDOWN SETTINGS
+    hasTxtView () {
+      return this.gitObj && this.gitObj.filetype === 'txt'
+    },
+    hasMdView () {
+      return this.gitObj && this.gitObj.filetype === 'md'
+    },
+
+    // JSON SETTINGS
+    hasJsonView () {
+      return this.fileTypeFamily === 'json'
+    },
+
     // DATA CONNSOLIDATION
     hasConsolidation () {
       return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
@@ -237,7 +252,9 @@ export const mixinGlobal = {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
       const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
       // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
-      const Http = widgetProvider.startsWith('localhost') ? 'http' : 'https'
+
+      const isLocal = widgetProvider.startsWith('localhost')
+      const Http = isLocal ? 'http' : 'https'
 
       /* Stuff we need to add to <head>
         <script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
@@ -256,12 +273,12 @@ export const mixinGlobal = {
       const links = [
         {
           type: 'text/css',
-          href: `${Http}://${widgetProvider}/css/app.css`,
+          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/css/app.css`,
           rel: 'stylesheet'
         },
         {
           type: 'font/woff2',
-          href: `${Http}://${widgetProvider}/fonts/materialdesignicons-webfont.woff2`,
+          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/fonts/materialdesignicons-webfont.woff2`,
           rel: 'stylesheet',
           as: 'font'
         }
@@ -496,7 +513,13 @@ export const mixinCommit = {
 export const mixinIcons = {
   methods: {
     getIcon (view) {
-      return editViewsOptions.find(i => i.code === view).icon
+      // console.log('\nC > mixinDownload > getIcon > view : ', view)
+      // console.log('C > mixinDownload > getIcon > editViewsOptions : ', editViewsOptions)
+      if (view) {
+        return editViewsOptions.find(i => i.code === view).icon
+      } else {
+        return 'sync'
+      }
     },
     getIconFieldType (field) {
       // console.log('\nC > mixinDownload > getIconFieldType > field.label : ', field.label)
@@ -602,14 +625,46 @@ export const mixinValue = {
     isLongText () {
       return this.fieldSubtype === 'longtext'
     },
+    isTimelineText () {
+      return this.fieldSubtype === 'timelinetext'
+    },
     isTag () {
       return this.field && this.tagTypes.includes(this.field.subtype)
     },
     isCategory () {
       return this.fieldSubtype === 'tag'
     },
+    booleanOptions () {
+      const boolOptions = this.field.booleanOptions
+      return {
+        false: {
+          label: (boolOptions && boolOptions.false.label) || false,
+          value: (boolOptions && boolOptions.false.value) || false
+        },
+        true: {
+          label: (boolOptions && boolOptions.true.label) || true,
+          value: (boolOptions && boolOptions.true.value) || true
+        }
+      }
+    },
     tagsEnum () {
       return (this.field && this.field.enumArr) || []
+    },
+    tagsDefinitions () {
+      return (this.field && this.field.definitions) || []
+    },
+    tagsEnumEnriched () {
+      const enumArr = this.tagsEnum
+      const definitions = this.tagsDefinitions
+      const enumEnriched = enumArr.map(opt => {
+        const def = definitions.find(d => d.value === opt)
+        const optEnriched = {
+          value: opt,
+          definition: def
+        }
+        return optEnriched
+      })
+      return enumEnriched
     },
     tagSeparator () {
       return this.field.tagSeparator || this.defaultTagsSeparator
@@ -626,6 +681,9 @@ export const mixinValue = {
     isDatamiField () {
       return this.fieldType === 'datami'
     },
+    isOpenCardField () {
+      return this.isDatamiField && this.fieldSubtype === 'openDatamiCard'
+    },
     isConsolidation () {
       return this.isDatamiField && this.fieldSubtype === 'consolidation'
     }
@@ -640,9 +698,10 @@ export const mixinValue = {
       return definition
     },
     getValueDefinitionLabel (value, field = undefined) {
-      const definition = this.getValueDefinition(value, field)
+      const Field = field || this.field
+      const definition = this.getValueDefinition(value, Field)
       const label = definition && definition.label
-      return label || value
+      return label
     },
     getValueDefinitionDescription (value, field = undefined) {
       const definition = this.getValueDefinition(value, field)
@@ -784,21 +843,89 @@ export const mixinPagination = {
       itemsPerPageChoicesCards4perRow: itemsPerPageChoicesCards4perRow
     }
   },
-  computed: {
-    cardsSettingsFromFileOptions () {
-      let cardsSettings
-      if (this.hasCardsView) {
-        cardsSettings = {
-          headers: this.columnsForView,
-          settings: this.fileOptions.cardssettings
-        }
-      }
-      return cardsSettings
-    }
-  },
   methods: {
     paginate,
     getClosest
+  }
+}
+
+export const mixinCards = {
+  computed: {
+    cardsSettingsFromFileOptions () {
+      let cardsSettings
+      console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      if (this.hasCardsView && this.cardsViewIsActive) {
+        const settings = this.cardsSettingsFromOptions
+        console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
+        const miniSettings = settings.mini
+        const detailSettings = settings.detail
+        const mapping = this.columns.map(h => {
+          const fieldMap = {
+            ...h,
+            mini: miniSettings[h.name],
+            detail: detailSettings[h.name]
+          }
+          const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
+          if (hasTemplate) { fieldMap.templating = hasTemplate }
+          return fieldMap
+        })
+        cardsSettings = {
+          originalHeaders: this.columns,
+          editedHeaders: this.columnsForView,
+          settings: { mini: miniSettings, detail: detailSettings },
+          mapping: mapping
+        }
+      }
+      console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      return cardsSettings
+    }
+    // mappingForAll () {
+    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
+    //     return {
+    //       field: h.field,
+    //       name: h.name,
+    //       type: h.type,
+    //       subtype: h.subtype,
+    //       enumArr: h.enumArr,
+    //       definitions: h.definitions,
+    //       tagSeparator: h.tagSeparator
+    //     }
+    //   })
+    // },
+    // mappingsForMini () {
+    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
+    //     const fieldMap = {
+    //       field: h.field,
+    //       name: h.name,
+    //       type: h.type,
+    //       subtype: h.subtype,
+    //       enumArr: h.enumArr,
+    //       definitions: h.definitions,
+    //       tagSeparator: h.tagSeparator,
+    //       ...h.mini
+    //     }
+    //     const hasTemplate = h.templating && h.templating.use_on_mini
+    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+    //     return fieldMap
+    //   })
+    // },
+    // mappingsForDetail () {
+    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
+    //     const fieldMap = {
+    //       field: h.field,
+    //       name: h.name,
+    //       type: h.type,
+    //       subtype: h.subtype,
+    //       enumArr: h.enumArr,
+    //       definitions: h.definitions,
+    //       tagSeparator: h.tagSeparator,
+    //       ...h.detail
+    //     }
+    //     const hasTemplate = h.templating && h.templating.use_on_detail
+    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+    //     return fieldMap
+    //   })
+    // }
   }
 }
 

@@ -23,6 +23,7 @@
         </span>
         <span v-if="isTag && isCategory">
           tagsValue : <code>{{ tagsValue }}</code><br>
+          tagsEnum : <code>{{ tagsEnum }}</code><br>
         </span>
         <span v-if="isTag">
           field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
@@ -32,8 +33,26 @@
       </template>
     </b-tooltip>
 
-    <!-- USER BUTTONS FOR GITRIBUTE FIELDS (CONSOLIDATION...) -->
-    <div v-if="field && isDatamiField">
+    <div v-if="debug && !isHeader && isTag && !isCategory">
+      tagsValue : <code>{{ tagsValue }}</code><br>
+      tagsEnum : <code>{{ tagsEnum }}</code><br>
+      tagsEnumEnriched : <code>{{ tagsEnumEnriched }}</code><br>
+    </div>
+
+    <div v-if="debug && !isHeader && isBoolean">
+      input : <code>{{ input }}</code><br>
+    </div>
+
+    <!-- USER BUTTONS FOR DATAMI FIELDS (CONSOLIDATION...) -->
+    <div
+      v-if="field && isOpenCardField"
+      class="has-text-centered">
+      <ButtonOpenCard
+        :row-id="rowId"
+        :locale="locale"
+        @action="SendActionToParent"/>
+    </div>
+    <div v-if="field && isConsolidation">
       <ButtonConsolidation
         v-if="isConsolidation"
         :field="field"
@@ -46,16 +65,24 @@
     <!-- VALUE INPUT -->
     <b-field
       v-if="field && !isDatamiField"
-      class="has-text-centered">
+      :class="`has-text-${isBoolean ? 'left ml-5' : 'centered'}`">
       <!--BOOLEAN -->
       <b-checkbox
         v-if="!isHeader && isBoolean"
         :custom-class="`g-cell py-0`"
-        :value="input"
+        :indeterminate="inputData === ''"
+        :value="inputBool"
         :disabled="isConsolidating"
         size="is-small"
-        :type="isDarkMode ? 'is-light' : 'is-dark'"
-        @input="emitChange"/>
+        :type="inputData === '' ? 'is-warning' : isDarkMode ? 'is-light' : 'is-dark'"
+        @input="emitChange">
+        <span v-if="inputData === ''">
+          {{ t('global.noValue', locale) }}
+        </span>
+        <span v-else>
+          {{ input }}
+        </span>
+      </b-checkbox>
 
       <!-- NUMBERS -->
       <b-numberinput
@@ -74,8 +101,10 @@
       <EditTagValue
         v-else-if="!isHeader && isCategory"
         :input="input"
+        :def-label="getValueDefinitionLabel(input)"
         :field="field"
         :tags-enum="tagsEnum"
+        :tags-enum-enriched="tagsEnumEnriched"
         :disabled="isConsolidating"
         :locale="locale"
         @addTagToEnum="emitAddToEnum"
@@ -85,24 +114,39 @@
       <b-taginput
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
-        :class="`g-cell py-0`"
         :data="tagsEnum"
+        :class="`g-cell py-0`"
         :disabled="isConsolidating"
+        :read-only="field.locked"
+        :allow-new="field.allowNew"
         size="is-small"
         open-on-focus
         ellipsis
         autocomplete
-        allow-new
         expanded
         append-to-body
         attached
         type="is-dark"
         @input="emitChange">
+        <template slot-scope="props">
+          <span :class="`${tagsValue.includes(props.option) ? 'has-text-weight-bold' : ''}`">
+            {{ props.option }}
+            <span v-if="getValueDefinitionLabel(props.option)">
+              : {{ getValueDefinitionLabel(props.option) }}
+            </span>
+          </span>
+        </template>
         <template #tag="tag">
-          <div class="test">
+          <div>
             {{ tag.tag }}
+            <span v-if="getValueDefinitionLabel(tag.tag)">
+              : {{ getValueDefinitionLabel(tag.tag) }}
+            </span>
           </div>
         </template>
+        <!-- <template #empty>
+          {{ t('global.noValue', locale) }}
+        </template> -->
       </b-taginput>
 
       <!-- ANY STRING -->
@@ -111,8 +155,8 @@
         :custom-class="`${isDarkMode ? 'g-cell-darkmode has-background-white' : 'g-cell'} py-0 ${isHeader ? 'g-header' : ''}`"
         :value="input"
         :disabled="isConsolidating"
-        :type="!isHeader && isLongText ? 'textarea' : 'text'"
-        :rows="!isHeader && isLongText ? 3 : false"
+        :type="!isHeader && (isLongText || isTimelineText) ? 'textarea' : 'text'"
+        :rows="!isHeader && (isLongText || isTimelineText) ? 3 : false"
         size="is-small"
         expanded
         @input="emitChange"/>
@@ -127,14 +171,17 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
-import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
-import EditTagValue from '@/components/edition/EditTagValue.vue'
+// import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
+// import EditTagValue from '@/components/edition/EditTagValue.vue'
 
 export default {
   name: 'EditCell',
   components: {
-    ButtonConsolidation,
-    EditTagValue
+    // ButtonConsolidation,
+    // EditTagValue
+    ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
+    ButtonConsolidation: () => import(/* webpackChunkName: "ButtonConsolidation" */ '@/components/edition/ButtonConsolidation.vue'),
+    EditTagValue: () => import(/* webpackChunkName: "EditTagValue" */ '@/components/edition/EditTagValue.vue')
   },
   mixins: [
     mixinGlobal,
@@ -185,6 +232,7 @@ export default {
   data () {
     return {
       input: undefined,
+      inputBool: false,
       tagsValue: []
     }
   },
@@ -198,14 +246,18 @@ export default {
   },
   methods: {
     adaptInput (value) {
-      let newInput
+      let newInput, newInputAsBool
       if (this.isHeader) {
         newInput = value
       } else {
         switch (this.fieldType) {
           case 'boolean':
-            // console.log('C > EditCell > adaptInput > value : ', value)
-            newInput = this.booleanFromValue(value)
+            // console.log('\nC > EditCell > adaptInput > value : ', value)
+            // console.log('C > EditCell > adaptInput > this.field.name : ', this.field.name)
+            newInputAsBool = value === '' ? undefined : this.booleanFromValue(value, this.field)
+            // console.log('C > EditCell > adaptInput > newInputAsBool : ', newInputAsBool)
+            newInput = value
+            this.inputBool = newInputAsBool
             break
           case 'number':
             newInput = parseFloat(value)
@@ -218,8 +270,21 @@ export default {
         }
         if (this.isTag && !this.isCategory) {
           // console.log('\nC > EditCell > adaptInput > value : ', value)
+          // console.log('C > EditCell > adaptInput > this.field : ', this.field)
+          // console.log('C > EditCell > adaptInput > this.tagsEnum : ', this.tagsEnum)
+          // console.log('C > EditCell > adaptInput > this.tagsValue : ', this.tagsValue)
+
+          // retrieve definition from field if any
+          // const definition = this.getValueDefinitionLabel(value, this.field)
+          // console.log('C > EditCell > adaptInput > definition : ', definition)
+
+          // console.log('C > EditCell > adaptInput > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
+
+          // update newInput
           const valStr = value && value.toString()
           newInput = valStr && [valStr]
+
+          // update tagsValue
           this.tagsValue = (valStr && valStr.split(this.tagSeparator).filter(v => v !== '')) || []
         }
       }
@@ -239,14 +304,28 @@ export default {
       this.$emit('action', payload)
     },
     emitChange (event) {
-      // console.log('C > EditCell > emitChange > event : ', event)
+      // console.log('\nC > EditCell > emitChange > event : ', event)
+      // console.log('C > EditCell > emitChange > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
+      // console.log('C > EditCell > emitChange > this.field : ', this.field)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
+        value = value.map(v => {
+          let val
+          if (typeof v === 'object') {
+            val = v.value
+          } else {
+            val = v
+          }
+          return val
+        })
         value = event.length ? value.join(this.tagSeparator) : ''
+      } else if (this.isBoolean) {
+        this.inputBool = event
+        value = event ? this.booleanOptions.true.value : this.booleanOptions.false.value
       } else {
         this.input = event
-        value = (this.isNumber || this.isBoolean) ? event.toString() : event
+        value = this.isNumber ? event.toString() : event
       }
       const payload = {
         val: value,

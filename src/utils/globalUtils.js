@@ -120,12 +120,23 @@ export const FalseBooleanStrings = [
   '0'
 ]
 
-export const booleanFromValue = (val) => {
+export const booleanFromValue = (val, field = undefined) => {
   // console.log('U > booleanFromValue > val : ', val)
+  // console.log('U > booleanFromValue > field : ', field)
+  let bool
   const valTrimmed = val && val.toString().trim().toLowerCase()
-  let bool = Boolean(valTrimmed)
-  if (FalseBooleanStrings.includes(valTrimmed)) {
-    bool = false
+
+  const booleanOptions = field && field.booleanOptions
+  if (booleanOptions) {
+    // in case there are boolean options
+    bool = val === booleanOptions.true.value
+  } else {
+    // default case
+    if (FalseBooleanStrings.includes(valTrimmed)) {
+      bool = false
+    } else {
+      bool = Boolean(valTrimmed)
+    }
   }
   return bool
 }
@@ -184,19 +195,51 @@ export const groupByField = (items, groupKey) => {
   return groups
 }
 
-export const aggregateByField = (items, aggregationKey, aggregationtype = 'countitems') => {
+export const aggregateByField = (items, field, aggregationtype = 'countitems') => {
+  // console.log('\nU > globalUtils > aggregateByField > field : ', field)
+  // console.log('U > globalUtils > aggregateByField > items : ', items)
+  const aggregationKey = field.field
+  const isTags = field.subtype === 'tags'
+  // console.log('U > globalUtils > aggregateByField > isTags : ', isTags)
+
   const aggregated = items.reduce((series, item) => {
+    // console.log('\nU > globalUtils > aggregateByField > item : ', item)
     const name = item[aggregationKey]
-    const index = series.findIndex(grp => grp.name === name)
-    if (index !== -1 && aggregationtype === 'countitems') {
-      series[index].data += 1
+    // console.log('U > globalUtils > aggregateByField > name : ', name)
+
+    let index
+
+    if (!isTags) {
+      index = series.findIndex(grp => grp.name === name)
+      // console.log('U > globalUtils > aggregateByField > name : ', name)
+      // console.log('U > globalUtils > aggregateByField > index : ', index)
+      if (index !== -1 && aggregationtype === 'countitems') {
+        series[index].data += 1
+      } else {
+        series.push({
+          name: name,
+          data: 1
+        })
+      }
     } else {
-      series.push({
-        name: name,
-        data: 1
+      const vals = name.includes(field.tagSeparator) ? name.split(field.tagSeparator) : [name]
+      // console.log('U > globalUtils > aggregateByField > vals : ', vals)
+      vals.forEach(v => {
+        const i = series.findIndex(grp => grp.name === v)
+        if (i !== -1 && aggregationtype === 'countitems') {
+          series[i].data += 1
+        } else {
+          series.push({
+            name: v,
+            data: 1
+          })
+        }
       })
     }
+
+    // console.log('U > globalUtils > aggregateByField > series : ', series)
     return series
   }, [])
+  // console.log('...U > globalUtils > aggregateByField > aggregated : ', aggregated)
   return aggregated
 }

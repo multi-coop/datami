@@ -4,18 +4,18 @@
     <div
       v-if="debug"
       class="columns is-multiline">
-      <div class="column is-3">
+      <!-- <div class="column is-3">
         cardsSettings.originalHeaders: <br><pre><code>{{ cardsSettings.originalHeaders }}</code></pre>
-      </div>
+      </div> -->
       <!-- <div class="column is-3">
         cardsSettings.editedHeaders: <br><pre><code>{{ cardsSettings.editedHeaders }}</code></pre>
       </div> -->
-      <div class="column is-3">
+      <!-- <div class="column is-3">
         cardsSettings.settings: <br><pre><code>{{ cardsSettings.settings }}</code></pre>
-      </div>
-      <div class="column is-3">
+      </div> -->
+      <!-- <div class="column is-3">
         cardsSettings.mapping: <br><pre><code>{{ cardsSettings.mapping }}</code></pre>
-      </div>
+      </div> -->
     </div>
 
     <!-- DISPLAY CARDS GRID -->
@@ -65,16 +65,23 @@
 
 <script>
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import {
+  mixinGlobal
+  // mixinsCards
+} from '@/utils/mixins.js'
 
-import DatamiCard from '@/components/previews/cards/DatamiCard'
+// import DatamiCard from '@/components/previews/cards/DatamiCard'
 
 export default {
   name: 'DatamiCardsGrid',
   components: {
-    DatamiCard
+    // DatamiCard
+    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue')
   },
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinGlobal
+    // mixinsCards
+  ],
   model: {
     prop: 'hidden',
     event: 'blur'
@@ -91,6 +98,14 @@ export default {
     cardsSettings: {
       default: undefined,
       type: Object
+    },
+    mappingsForMini: {
+      default: undefined,
+      type: Array
+    },
+    mappingsForDetail: {
+      default: undefined,
+      type: Array
     },
     items: {
       default: null,
@@ -120,40 +135,6 @@ export default {
     }
   },
   computed: {
-    mappingsForMini () {
-      return this.cardsSettings.mapping.map(h => {
-        const fieldMap = {
-          field: h.field,
-          name: h.name,
-          type: h.type,
-          subtype: h.subtype,
-          enumArr: h.enumArr,
-          definitions: h.definitions,
-          tagSeparator: h.tagSeparator,
-          ...h.mini
-        }
-        const hasTemplate = h.templating && h.templating.use_on_mini
-        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
-        return fieldMap
-      })
-    },
-    mappingsForDetail () {
-      return this.cardsSettings.mapping.map(h => {
-        const fieldMap = {
-          field: h.field,
-          name: h.name,
-          type: h.type,
-          subtype: h.subtype,
-          enumArr: h.enumArr,
-          definitions: h.definitions,
-          tagSeparator: h.tagSeparator,
-          ...h.detail
-        }
-        const hasTemplate = h.templating && h.templating.use_on_detail
-        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
-        return fieldMap
-      })
-    },
     getDetailItem () {
       return this.items.find(item => item.id === this.activeCardId)
     }

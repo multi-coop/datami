@@ -24,6 +24,10 @@ export const data = {
     table: [],
     dataviz: [],
     map: [],
+    md: [],
+    text: [],
+    json: [],
+    loading: [],
 
     // SORTING
     sorting: [],
@@ -138,10 +142,14 @@ export const data = {
       if (state.edit.includes(fileId)) return 'edit'
     },
     getViewMode: (state) => (fileId) => {
+      if (state.loading.includes(fileId)) return 'loading'
       if (state.cards.includes(fileId)) return 'cards'
       if (state.table.includes(fileId)) return 'table'
       if (state.dataviz.includes(fileId)) return 'dataviz'
       if (state.map.includes(fileId)) return 'map'
+      if (state.text.includes(fileId)) return 'text'
+      if (state.md.includes(fileId)) return 'md'
+      if (state.json.includes(fileId)) return 'json'
     },
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)

@@ -22,24 +22,39 @@
           <!-- NEW ROW VALUES -->
           <div class="card-content">
             <div class="content">
+              <!-- DEBUG -->
+              <div v-if="debug">
+                headers : <pre><code>{{ headers }}</code></pre><br>
+                <!-- temp : <pre><code>{{ temp }}</code></pre> -->
+              </div>
               <div class="columns is-centered is-multiline mt-3">
-                <!-- HEADER FIELD -->
+                <!-- HEADER AND INPUT FIELDS -->
                 <div
                   v-for="header in headers"
                   :key="header.field"
-                  class="column is-12 py-0">
-                  <b-field horizontal>
-                    <template #label>
-                      {{ header.label }}
-                    </template>
-                    <b-input
-                      v-model="temp[header.field]"
-                      maxlength="50"
-                      :placeholder="t('global.enterValue', locale)"
-                      icon-right="close-circle"
-                      icon-right-clickable
-                      @icon-right-click="clearFieldValue(header.field)"/>
-                  </b-field>
+                  class="column is-12 pb-3">
+                  <div class="columns">
+                    <!-- HEADER -->
+                    <div class="column is-5 has-text-weight-bold">
+                      <PreviewField
+                        :file-id="fileId"
+                        :field="header"
+                        :lock-headers="true"
+                        :locale="locale"/>
+                    </div>
+
+                    <!-- INPUT -->
+                    <div class="column is-7">
+                      <EditCell
+                        :file-id="fileId"
+                        :field="header"
+                        :is-added="true"
+                        :input-data="temp[header.field] || ''"
+                        :locale="locale"
+                        :is-card-view="false"
+                        @updateCellValue="updateTemp"/>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -71,8 +86,17 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
+// import PreviewField from '@/components/previews/PreviewField'
+// import EditCell from '@/components/edition/csv/EditCell'
+
 export default {
   name: 'DialogAddRow',
+  components: {
+    // PreviewField,
+    // EditCell
+    PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
+  },
   mixins: [mixinGlobal],
   model: {
     prop: 'hidden',
@@ -131,6 +155,11 @@ export default {
 
       // track with matomo
       this.trackEvent('closeDialog')
+    },
+    updateTemp (event) {
+      // console.log('\nC > DialogAddRow > updateTemp > event :', event)
+      // console.log('C > DialogAddRow > updateTemp > this.temp :', this.temp)
+      this.temp[event.colField] = event.val
     },
     sendNewRowToParent () {
       console.log('\nC > DialogAddRow > sendNewRowToParent > this.temp :', this.temp)

@@ -1,5 +1,6 @@
 <template>
-  <div class="ViewModeBtns datami-component is-flex is-align-items-center">
+  <div
+    class="ViewModeBtns datami-component is-flex is-align-items-center">
     <!-- BUTTONS -->
     <div class="dropdown is-hoverable is-left">
       <div class="dropdown-trigger">
@@ -11,7 +12,11 @@
           :icon-left="getIcon(currentViewMode)"
           aria-haspopup="true"
           :disabled="btnsEdit.length < 2"
-          aria-controls="dropdown-views"/>
+          aria-controls="dropdown-views">
+          <span class="has-text-grey is-size-7 is-italic">
+            {{ t(`views.${currentViewMode}`, locale) }}
+          </span>
+        </b-button>
         <div
           v-if="btnsEdit.length > 1"
           id="dropdown-views"
@@ -83,51 +88,108 @@ export default {
   },
   computed: {
     btnsEdit () {
-      const views = {
-        table: true,
-        cards: this.cardsViewIsActive,
-        dataviz: this.datavizViewIsActive,
-        map: this.mapViewIsActive
+      // console.log('\nC > ViewModeBtns > btnsEdit > this.buttonsView : ', this.buttonsView)
+      if (this.fileOptions) {
+        let views
+        // console.log('C > ViewModeBtns > btnsEdit > this.fileOptions : ', this.fileOptions)
+        switch (this.gitObj.filefamily) {
+          case 'table':
+            views = {
+              table: true,
+              cards: this.cardsViewIsActive,
+              dataviz: this.datavizViewIsActive,
+              map: this.mapViewIsActive
+            }
+            break
+          case 'text':
+            views = {
+              text: this.hasTxtView,
+              md: this.hasMdView
+            }
+            break
+          case 'json':
+            views = {
+              json: true
+            }
+            break
+        }
+        // console.log('C > ViewModeBtns > btnsEdit > views : ', views)
+        return this.buttonsView.filter(v => views[v.code])
+      } else {
+        return []
       }
-      return this.buttonsView.filter(v => views[v.code])
     }
   },
   watch: {
     fileOptions (next) {
-      // console.log('C > ViewModeBtns > watch > fileOptions > next : ', next)
+      // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
-        const defaultViews = [
-          {
-            view: 'cards',
-            activate: this.cardsViewIsActive,
-            isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
-          },
-          {
-            view: 'dataviz',
-            activate: this.datavizViewIsActive,
-            isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
-          },
-          {
-            view: 'map',
-            activate: this.mapViewIsActive,
-            isDefault: this.mapViewIsActive && this.mapViewIsDefault
-          },
-          {
-            view: 'table',
-            activate: true,
-            isDefault: true
-          }
-        ]
+        let defaultViews
+        switch (this.fileTypeFamily) {
+          case 'table':
+            defaultViews = [
+              {
+                view: 'cards',
+                activate: this.cardsViewIsActive,
+                isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
+              },
+              {
+                view: 'dataviz',
+                activate: this.datavizViewIsActive,
+                isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
+              },
+              {
+                view: 'map',
+                activate: this.mapViewIsActive,
+                isDefault: this.mapViewIsActive && this.mapViewIsDefault
+              },
+              {
+                view: 'table',
+                activate: true,
+                isDefault: true
+              }
+            ]
+            break
+          case 'text':
+            defaultViews = [
+              {
+                view: 'md',
+                activate: this.hasMdView,
+                isDefault: true
+              },
+              {
+                view: 'text',
+                activate: this.hasTxtView,
+                isDefault: true
+              }
+            ]
+            break
+          case 'json':
+            defaultViews = [
+              {
+                view: 'json',
+                activate: this.hasJsonView,
+                isDefault: true
+              }
+            ]
+            break
+        }
         const defaultView = defaultViews.find(v => v.isDefault)
         // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
         this.changeView(defaultView.view)
+      } else {
+        this.changeView('loading')
       }
     }
   },
   beforeMount () {
     // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
+    // console.log('C > ViewModeBtns > beforeMount > this.gitObj : ', this.gitObj)
+    // console.log('C > ViewModeBtns > beforeMount > this.gitObj.filetype : ', this.gitObj.filetype)
+    // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
-    this.changeView('table')
+    // this.changeView('table')
+    this.changeView(this.fileTypeFamily || 'loading')
   },
   methods: {
     ...mapActions({
