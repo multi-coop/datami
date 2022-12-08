@@ -206,20 +206,24 @@ import {
   mixinNodeToJson
 } from '@/utils/mixins.js'
 
-import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderJSON from '@/components/loaders/LoaderJSON'
+// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
+// import LoaderJSON from '@/components/loaders/LoaderJSON'
 
-import PreviewHelpers from '@/components/previews/PreviewHelpers'
+// import PreviewHelpers from '@/components/previews/PreviewHelpers'
 
-import JsonTree from '@/components/previews/JsonTree'
+// import JsonTree from '@/components/previews/JsonTree'
 
 export default {
   name: 'PreviewJson',
   components: {
-    LoaderEditNavbar,
-    LoaderJSON,
-    PreviewHelpers,
-    JsonTree
+    // LoaderEditNavbar,
+    // LoaderJSON,
+    // PreviewHelpers,
+    // JsonTree
+    LoaderEditNavbar: () => import(/* webpackChunkName: "LoaderEditNavbar" */ '@/components/loaders/LoaderEditNavbar.vue'),
+    LoaderJSON: () => import(/* webpackChunkName: "LoaderJSON" */ '@/components/loaders/LoaderJSON.vue'),
+    PreviewHelpers: () => import(/* webpackChunkName: "PreviewHelpers" */ '@/components/previews/PreviewHelpers.vue'),
+    JsonTree: () => import(/* webpackChunkName: "JsonTree" */ '@/components/previews/JsonTree.vue')
   },
   mixins: [
     mixinGlobal,
@@ -273,11 +277,18 @@ export default {
     },
     getPreviewJson () {
       let dataForEditView
+      // console.log('C > PreviewJson > getPreviewJson > this.currentEditViewMode :', this.currentEditViewMode)
       switch (this.currentEditViewMode) {
+        // case 'edit':
+        //   dataForEditView = this.edited
+        //   break
         case 'diff':
           dataForEditView = this.data
           break
         case 'preview':
+          dataForEditView = this.edited
+          break
+        default:
           dataForEditView = this.edited
           break
       }
@@ -351,15 +362,15 @@ export default {
       this.updateBuffer({ ...commitData, addToBuffer: true })
     },
     setChanges (changeObj) {
-      console.log('\nC > PreviewJson > setChanges > changeObj : ', changeObj)
+      // console.log('\nC > PreviewJson > setChanges > changeObj : ', changeObj)
       const changeId = changeObj.nodeId
       const changeIsLabel = changeObj.isLabel
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      console.log('C > PreviewJson > setChanges > changeId : ', changeId)
+      // console.log('C > PreviewJson > setChanges > changeId : ', changeId)
       let copyChanges = [...this.changesNodes]
       // copyChanges = copyChanges.filter(ch => ch.field !== changeId)
-      console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
+      // console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
       if (action === 'diff') {
         copyChanges = copyChanges.filter(ch => {
           const sameNode = ch.nodeId === changeId
@@ -379,7 +390,7 @@ export default {
       const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
-      console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
+      // console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
       // set in local store
       this.changesNodes = copyChanges
 
@@ -392,7 +403,7 @@ export default {
       // this.updateFileChanges(changesPayload)
     },
     UpdateEditedJson (event) {
-      console.log('\nC > PreviewJson > UpdateEditedJson > event : ', event)
+      // console.log('\nC > PreviewJson > UpdateEditedJson > event : ', event)
       this.setChanges(event)
       const edited = this.setEditInNode(this.edited, event)
       this.edited = edited

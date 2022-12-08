@@ -10,10 +10,11 @@
             :label="t(`map.legendBtn`, locale)"
             append-to-body
             position="is-left"
-            type="is-dark"
+            :type="isDarkMode ? 'is-white': 'is-dark'"
             style="width: 100%">
             <b-button
-              type="is-dark"
+              :type="isDarkMode ? 'is-white': 'is-dark'"
+              :class="`${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
               size="is-small"
               :disabled="!currentChoroSource"
               expanded

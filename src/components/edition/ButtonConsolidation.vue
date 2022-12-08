@@ -4,7 +4,7 @@
       :label="t('actions.consolidate', locale)"
       append-to-body
       position="is-right"
-      type="is-dark">
+      :type="isDarkMode ? 'is-white' : 'is-dark'">
       <!-- <code>{{ isConsolidating }}</code> -->
       <b-dropdown
         aria-role="list"
@@ -14,7 +14,7 @@
             icon-left="wrench"
             class="mt-1"
             size="is-small"
-            type="is-dark"
+            :type="isDarkMode ? 'is-white' : 'is-dark'"
             :loading="isConsolidating"
             expanded
             outlined/>

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'LoaderCards',
@@ -45,6 +46,11 @@ export default {
       items: 6,
       contentLines: 5
     }
+  },
+  computed: {
+    ...mapGetters({
+      isDarkMode: 'git-storage/isDarkMode'
+    })
   }
 }
 </script>

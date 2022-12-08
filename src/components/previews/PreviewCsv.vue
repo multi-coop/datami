@@ -159,12 +159,12 @@ import {
 } from '@/utils/mixins.js'
 
 // import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
-import LoaderCSV from '@/components/loaders/LoaderCSV'
-import LoaderCards from '@/components/loaders/LoaderCards'
+// import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
+// import LoaderCSV from '@/components/loaders/LoaderCSV'
+// import LoaderCards from '@/components/loaders/LoaderCards'
 
-import PreviewHelpers from '@/components/previews/PreviewHelpers'
-import DatamiTable from '@/components/previews/DatamiTable'
+// import PreviewHelpers from '@/components/previews/PreviewHelpers'
+// import DatamiTable from '@/components/previews/DatamiTable'
 
 import { defaultTagsSeparator } from '@/utils/globalUtils'
 
@@ -172,11 +172,17 @@ export default {
   name: 'PreviewCsv',
   components: {
     // LoaderEditNavbar,
-    LoaderSortFilters,
-    LoaderCSV,
-    LoaderCards,
-    PreviewHelpers,
-    DatamiTable
+    // LoaderSortFilters,
+    // LoaderCSV,
+    // LoaderCards,
+    // PreviewHelpers,
+    // DatamiTable
+    LoaderSortFilters: () => import(/* webpackChunkName: "LoaderSortFilters" */ '@/components/loaders/LoaderSortFilters.vue'),
+    LoaderCSV: () => import(/* webpackChunkName: "LoaderCSV" */ '@/components/loaders/LoaderCSV.vue'),
+    LoaderCards: () => import(/* webpackChunkName: "LoaderCards" */ '@/components/loaders/LoaderCards.vue'),
+    PreviewHelpers: () => import(/* webpackChunkName: "PreviewHelpers" */ '@/components/previews/PreviewHelpers.vue'),
+    DatamiTable: () => import(/* webpackChunkName: "DatamiTable" */ '@/components/previews/DatamiTable.vue')
+
   },
   mixins: [
     mixinGlobal,
@@ -254,6 +260,7 @@ export default {
         // console.log('C > PreviewCsv > watch > fileRaw > next : \n', next)
         // console.log('C > PreviewCsv > watch > fileRaw > this.fileOptions : ', this.fileOptions)
         const dataObj = this.csvToObject(next, this.fileOptions)
+        // console.log('C > PreviewCsv > watch > fileRaw > dataObj : ', dataObj)
         this.dataRaw = dataObj
         if (!this.dataIsSet) { this.dataIsSet = true }
       }
@@ -484,10 +491,15 @@ export default {
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
             ...fieldCustomProps && fieldCustomProps.bgColor && { bgColor: fieldCustomProps.bgColor },
             ...fieldCustomProps && fieldCustomProps.primaryKey && { primaryKey: fieldCustomProps.primaryKey },
+            ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
             ...fieldCustomProps && fieldCustomProps.round && { round: fieldCustomProps.round },
             ...fieldCustomProps && fieldCustomProps.transform && { transform: fieldCustomProps.transform },
+            ...fieldCustomProps && fieldCustomProps.longtextOptions && { longtextOptions: fieldCustomProps.longtextOptions },
+            ...fieldCustomProps && fieldCustomProps.booleanOptions && { booleanOptions: fieldCustomProps.booleanOptions },
+            ...fieldCustomProps && fieldCustomProps.stepSeparator && { stepSeparator: fieldCustomProps.stepSeparator },
+            ...fieldCustomProps && fieldCustomProps.stepOptions && { stepOptions: fieldCustomProps.stepOptions },
             ...defaultEnumArr && { enumArr: defaultEnumArr }
           }
           // console.log('C > PreviewCsv > buildColumns > fieldData : ', fieldData)
@@ -627,11 +639,17 @@ export default {
       // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
       // update edited
       const newRowId = this.uuidv4()
-      const newRow = { ...event.row, id: newRowId, added: true }
+      const newRowPosition = `${this.itemsTotal || this.edited.length}`
+      const newRow = {
+        ...event.row,
+        id: newRowId,
+        position: newRowPosition,
+        added: true
+      }
       // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
-      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
 
       // update changesData
       const changeObj = {

@@ -14,10 +14,14 @@ export default {
     thanks: 'Thanks for using {{datamiRepo}} !',
     understood: 'Understood',
     documentation: 'Documentation',
-    docsWebsite: 'Documentation website'
+    docsWebsite: 'Documentation website',
+    reportIssue: 'Report a bug',
+    reportIssueWebsite: 'Add a bug report'
   },
   tabs: {
-    switchPosition: 'Change tabs position'
+    switchPosition: 'Change tabs position',
+    vertical: 'vertical',
+    horizontal: 'horizontal'
   },
   git: {
     provider: 'Provider',
@@ -52,6 +56,16 @@ export default {
     fileDataviz: "Settings file for file's data-visualizations",
     fileMaps: "Settings file for file's cartographies"
   },
+  views: {
+    loading: '...',
+    cards: 'Cards',
+    table: 'Table',
+    dataviz: 'Dataviz',
+    map: 'Map',
+    text: 'Text',
+    md: 'Markdown',
+    json: 'Json'
+  },
   preview: {
     edition: 'Edition',
     editView: 'Edit',
@@ -61,6 +75,9 @@ export default {
     tableView: 'Table',
     datavizView: 'Datavisualisation',
     mapView: 'Cartography',
+    textView: 'Text',
+    mdView: 'Markdown',
+    jsonView: 'Json',
     showCardDetails: 'Show details',
     closeCard: 'Close card',
     closeCardDetails: 'Close detailed card',
@@ -82,11 +99,14 @@ export default {
   actions: {
     changeViewMode: 'Change the view mode',
     edit: 'Edit',
-    enterEdit: 'Enter the edition mode',
-    quitEdit: 'Exit the edit mode',
+    contribute: 'Contribute',
+    enterEdit: 'Enter the edition / contribution mode',
+    quitEdit: 'Exit the contribution mode',
     change: 'Change',
     save: 'Save',
     send: 'Send',
+    sendContrib: 'Send your contribution',
+    sendContribHelp: "Your modifications will be sent to the dataset's owners. The owners will moderate your contribution before merging them into the dataset.",
     cancel: 'Cancel',
     search: 'Search',
     expandCell: 'Expand cell content',
@@ -112,7 +132,11 @@ export default {
     clearTag: 'Remove the tag',
     clickForMoreTags: 'Click to see more tags',
     fullscreenOn: 'See this widget on fullscreen',
-    fullscreenOff: 'Close the fullscreen mode'
+    fullscreenOff: 'Close the fullscreen mode',
+    setLightMode: 'Switch to light mode',
+    lightMode: 'Light mode',
+    setDarkMode: 'Switch to dark mode (experimental)',
+    darkMode: 'Dark mode'
     // nest: {
     //   test: 'test nested actions'
     // }
@@ -155,6 +179,7 @@ export default {
     category: 'Category',
     string: 'String',
     longtext: 'Long text',
+    timelinetext: 'Text with steps',
     image: 'Image`',
     link: 'Link',
     email: 'Email',
@@ -171,6 +196,7 @@ export default {
     ressourceValues: 'Ressource values',
     definition: 'Definition',
     datami: 'Special field',
+    openDatamiCard: 'Open card',
     consolidation: 'Consolidation'
   },
   edit: {
@@ -233,8 +259,12 @@ export default {
     userIntro: "You can add a personalized message to the file's owner",
     userName: 'Name',
     userSurname: 'Surname',
+    userAnyName: 'Surname / Name / Pseudo',
     userEmail: 'Email',
-    userMessage: 'Message'
+    userMessage: 'Message',
+    userRgpd: "I have read and I accept Datami's CGU",
+    showOptions: 'Show the options',
+    hideOptions: 'Hide the options'
   },
   notifications: {
     notif: 'Notification',

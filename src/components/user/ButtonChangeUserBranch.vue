@@ -5,11 +5,12 @@
       <div class="dropdown-trigger">
         <b-tooltip
           :label="t('actions.changeActiveBranch', locale)"
-          type="is-dark"
+          :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
           position="is-top">
           <b-button
             size="is-small"
-            class="ml-1"
+            :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+            :outlined="isDarkMode"
             :type="showContent ? 'is-dark' : ''"
             :disabled="!userActiveBranch"
             icon-left="source-branch"

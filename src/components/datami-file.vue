@@ -1,7 +1,8 @@
 <template>
   <div
+    v-if="gitfile"
     :id="fileId"
-    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
     <!-- MATOMO -->
@@ -22,7 +23,7 @@
           style="z-index: 2">
           <div class="columns is-centered mb-0">
             <!-- FILE TITLE -->
-            <div class="filetitle-and-viewmodes column is-12-mobile is-7-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
+            <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row">
               <ViewModeBtns
                 :file-id="fileId"
                 :locale="locale"/>
@@ -35,7 +36,7 @@
             </div>
 
             <!-- USER NAVBAR -->
-            <div class="usernavbar column is-12-mobile is-5-tablet is-3-desktop is-flex is-direction-row is-align-items-center">
+            <div class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-align-items-center">
               <UserOptions
                 v-if="gitObj"
                 :file-id="fileId"
@@ -240,43 +241,57 @@ import { mapActions } from 'vuex'
 import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
-import MatomoScript from '@/components/matomo/MatomoScript'
+// import MatomoScript from '@/components/matomo/MatomoScript'
 
-import FileTitle from '@/components/navbar/FileTitle'
-import ViewModeBtns from '@/components/previews/ViewModeBtns'
-import UserOptions from '@/components/user/UserOptions'
+// import FileTitle from '@/components/navbar/FileTitle'
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
+// import UserOptions from '@/components/user/UserOptions'
 
-import NotificationInfos from '@/components/notifications/NotificationInfos'
-import NotificationErrors from '@/components/notifications/NotificationErrors'
+// import NotificationInfos from '@/components/notifications/NotificationInfos'
+// import NotificationErrors from '@/components/notifications/NotificationErrors'
 
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-import DialogFileInfos from '@/components/previews/DialogFileInfos'
-import DialogUploadFile from '@/components/edition/DialogUploadFile'
-import ConfirmCommit from '@/components/edition/ConfirmCommit'
+// import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+// import DialogFileInfos from '@/components/previews/DialogFileInfos'
+// import DialogUploadFile from '@/components/edition/DialogUploadFile'
+// import ConfirmCommit from '@/components/edition/ConfirmCommit'
 
-import PreviewCsv from '@/components/previews/PreviewCsv'
-import PreviewMd from '@/components/previews/PreviewMd'
-import PreviewJson from '@/components/previews/PreviewJson'
+// import PreviewCsv from '@/components/previews/PreviewCsv'
+// import PreviewMd from '@/components/previews/PreviewMd'
+// import PreviewJson from '@/components/previews/PreviewJson'
 
-import DatamiCredits from '@/components/credits/DatamiCredits'
+// import DatamiCredits from '@/components/credits/DatamiCredits'
 
 export default {
   name: 'DatamiFile',
   components: {
-    MatomoScript,
-    FileTitle,
-    ViewModeBtns,
-    UserOptions,
-    NotificationInfos,
-    NotificationErrors,
-    EditNavbarSkeleton,
-    DialogFileInfos,
-    DialogUploadFile,
-    ConfirmCommit,
-    PreviewCsv,
-    PreviewMd,
-    PreviewJson,
-    DatamiCredits
+    // MatomoScript,
+    // FileTitle,
+    // ViewModeBtns,
+    // UserOptions,
+    // NotificationInfos,
+    // NotificationErrors,
+    // EditNavbarSkeleton,
+    // DialogFileInfos,
+    // DialogUploadFile,
+    // ConfirmCommit,
+    // PreviewCsv,
+    // PreviewMd,
+    // PreviewJson,
+    // DatamiCredits
+    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
+    ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
+    UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
+    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
+    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
+    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
+    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
+    PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
+    PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
+    PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
+    DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
     mixinGlobal,
@@ -288,7 +303,15 @@ export default {
       default: 'datami',
       type: String
     },
+    localdev: {
+      default: false,
+      type: Boolean
+    },
     gitfile: {
+      default: '',
+      type: String
+    },
+    gitfilelocal: {
       default: '',
       type: String
     },
@@ -323,11 +346,16 @@ export default {
     fromMultiFilesVertical: {
       default: false,
       type: Boolean
+    },
+    theme: {
+      default: '',
+      type: String
     }
   },
   data () {
     return {
       // file infos
+      gitfileDatami: undefined,
       fileId: undefined,
       fileType: undefined,
       fileInfos: undefined,
@@ -338,6 +366,14 @@ export default {
     }
   },
   watch: {
+    async gitfileDatami (next) {
+      // console.log('\nC > DatamiFile > watch > gitfileDatami > next : ', next)
+      await this.initWidget()
+      const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
+      this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
+      // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
+      await this.reloadFile()
+    },
     showFileInfos (next) {
       if (next) {
         // track with matomo
@@ -348,9 +384,10 @@ export default {
       if (next) { this.reloadFile() }
     },
     shareableFiles (next) {
+      // console.log('\nC >>> DatamiFile > watch > shareableFiles > next : ', next)
       const goNoGo = next && next.length && next.map(i => i.isSet)
       // next && next.length && console.log('\nC >>> DatamiFile > watch > shareableFiles > next.map : ', next.map(i => `${i.gitfile}-${i.isSet}`))
-      if (goNoGo && goNoGo.every(b => b)) {
+      if (next && goNoGo && goNoGo.every(b => b)) {
         // console.log('C >>> DatamiFile > watch > shareableFiles > this.gitObj.id : ', this.gitObj.id)
         // console.log('C >>> DatamiFile > watch > shareableFiles > goNoGo : ', goNoGo)
         // console.log('C >>> DatamiFile > watch > shareableFiles > this.shareableFiles.map(i => i.isSet) : ', this.shareableFiles.map(i => i.isSet))
@@ -360,134 +397,19 @@ export default {
     },
     async loadingExtRessources (next) {
       // console.log('C >>> DatamiFile > watch > loadingExtRessources > next : ', next)
-      if (next.loadState === 'loading' && next.initiator === this.fileId && this.readyToLoadExtRessources) {
+      if (next && next.loadState === 'loading' && next.initiator === this.fileId && this.readyToLoadExtRessources) {
         await this.loadExtRessources()
       }
     }
   },
   async beforeMount () {
+    // INITIALIZING LOCAL STORAGE
+    this.initializeStorage()
     // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
-
-    const fileUuid = this.uuidv4()
-
-    // console.log('\nC > DatamiFile > beforeMount > this.trackalloutlinks : ', this.trackalloutlinks)
-    this.activateTrackAllOutlinks({ uuid: fileUuid, val: this.trackalloutlinks })
-
-    if (!this.fromMultiFiles) {
-      this.setWidgetCopy()
-    }
-
-    const gitInfosObject = this.extractGitInfos(this.gitfile)
-    // console.log('C > DatamiFile > beforeMount > gitInfosObject : ', gitInfosObject)
-    this.updateShareableFiles({ gitfile: this.gitfile, fileId: fileUuid, isSet: false })
-    gitInfosObject.uuid = fileUuid
-    gitInfosObject.title = this.title
-    gitInfosObject.onlyPreview = this.onlypreview
-    // console.log('C > DatamiFile > beforeMount > gitInfosObject : ', gitInfosObject)
-    this.fileId = gitInfosObject.uuid
-    this.fileType = gitInfosObject.filetype
-    if (!this.getGitInfosObj[this.fileId]) {
-      // load token
-      let token = this.usertoken && this.usertoken !== '' && this.usertoken
-      // console.log('C > DatamiFile > beforeMount > process.env : ', process.env)
-      if (!token) {
-        switch (gitInfosObject.provider) {
-          case 'gitlab':
-            token = process.env.VUE_APP_DEFAULT_GITLAB_TOKEN
-            break
-          case 'github':
-            token = process.env.VUE_APP_DEFAULT_GITHUB_TOKEN
-            break
-          case 'localhost':
-            token = 'NO-TOKEN-FOR-LOCAL-DEV'
-            break
-        }
-      }
-      this.updateToken({ fileId: this.fileId, token: token })
-      this.addGitInfos(gitInfosObject)
-    }
-    // console.log('\nC > DatamiFile > beforeMount > this.gitObj : ', this.gitObj)
-
-    // console.log('C > DatamiFile > beforeMount > this.options : ', this.options)
-    // build options object
-    let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
-    // console.log('C > DatamiFile > beforeMount > fileOptions : ', fileOptions)
-    let fileSchema = fileOptions.schema
-    // console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
-    if (fileSchema && fileSchema.file) {
-      const schemaGitObj = this.extractGitInfos(fileSchema.file)
-      // console.log('C > DatamiFile > beforeMount > schemaGitObj : ', schemaGitObj)
-      const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
-      // console.log('C > DatamiFile > beforeMount > schemaRaw : ', schemaRaw)
-      const schemaData = schemaRaw && schemaRaw.data
-      // console.log('C > DatamiFile > beforeMount > schemaData : ', schemaData)
-      const schema = JSON.parse(schemaData)
-      // console.log('C > DatamiFile > beforeMount > schema : ', schema)
-      fileSchema = { ...schema, file: fileSchema.file }
-    }
-    // fileSchema && console.log('C > DatamiFile > beforeMount > fileSchema : ', fileSchema)
-
-    // get custom props if any
-    let fileCustomProps = fileOptions['fields-custom-properties']
-    if (fileCustomProps && fileCustomProps.file) {
-      const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
-      // console.log('C > DatamiFile > beforeMount > customPropsGitObj : ', customPropsGitObj)
-      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
-      // console.log('C > DatamiFile > beforeMount > customPropsRaw : ', customPropsRaw)
-      const customPropsData = customPropsRaw && customPropsRaw.data
-      // console.log('C > DatamiFile > beforeMount > customPropsData : ', customPropsData)
-      const customProps = JSON.parse(customPropsData)
-      // console.log('C > DatamiFile > beforeMount > customProps : ', customProps)
-      fileCustomProps = { ...customProps, file: fileCustomProps.file }
-    }
-    // fileCustomProps && console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
-    // fileCustomProps && console.log('C > DatamiFile > beforeMount > fileCustomProps : ', fileCustomProps)
-
-    // get dataviz props if any
-    let fileDataviz = fileOptions.datavizview
-    if (fileDataviz && fileDataviz.file) {
-      const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
-      const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
-      const datavizPropsData = datavizPropsRaw && datavizPropsRaw.data
-      const datavizProps = JSON.parse(datavizPropsData)
-      fileDataviz = { ...fileDataviz, ...datavizProps }
-    }
-    // fileDataviz && console.log('C > DatamiFile > beforeMount > fileDataviz : ', fileDataviz)
-
-    // get maps props if any
-    const fileMaps = fileOptions.mapview
-    if (fileMaps && fileMaps.maps) {
-      const maps = []
-      for (const map of fileMaps.maps) {
-        let mapSettings = { ...map }
-        if (map.file) {
-          const mapPropsGitObj = this.extractGitInfos(map.file)
-          const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
-          const mapPropsData = mapPropsRaw && mapPropsRaw.data
-          const mapProps = JSON.parse(mapPropsData)
-          mapSettings = { ...map, ...mapProps }
-        }
-        maps.push(mapSettings)
-      }
-      fileMaps.maps = maps
-    }
-    // fileMaps && console.log('C > DatamiFile > beforeMount > fileMaps : ', fileMaps)
-
-    // parse fields to look for foreign keys
-    this.processForeignKeys(fileCustomProps)
-
-    // update fileOptions with settings for : schema, consolidation, dataviz, maps
-    fileOptions = {
-      ...fileOptions,
-      ...fileSchema && { schema: fileSchema },
-      ...fileCustomProps && { customProps: fileCustomProps },
-      ...fileDataviz && { datavizview: fileDataviz },
-      ...fileMaps && { mapview: fileMaps }
-    }
-    // console.log('C > DatamiFile > beforeMount > fileOptions : ', fileOptions)
-
-    // add fileOptions in store
-    this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
+    // console.log('C > DatamiFile > beforeMount > this.localdev : ', this.localdev)
+    // console.log('C > DatamiFile > beforeMount > this.gitfilelocal : ', this.gitfilelocal)
+    this.gitfileDatami = this.localdev ? this.gitfilelocal : this.gitfile
+    await this.initWidget()
   },
   async mounted () {
     // console.log('\nC > DatamiFile > mounted > this.gitInfos : ', this.gitInfos)
@@ -500,6 +422,9 @@ export default {
     // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
     await this.reloadFile()
   },
+  beforeDestroy () {
+    // console.log('\nC > DatamiFile > beforeDestroy > this.gitfile : ', this.gitfile)
+  },
   methods: {
     ...mapActions({
       addGitInfos: 'addGitInfos',
@@ -508,8 +433,146 @@ export default {
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors',
-      activateTrackAllOutlinks: 'activateTrackAllOutlinks'
+      activateTrackAllOutlinks: 'activateTrackAllOutlinks',
+      initializeStorage: 'git-storage/initializeStorage'
     }),
+    async initWidget () {
+      const fileUuid = this.uuidv4()
+
+      // console.log('\nC > DatamiFile > initWidget > this.trackalloutlinks : ', this.trackalloutlinks)
+      this.activateTrackAllOutlinks({ uuid: fileUuid, val: this.trackalloutlinks })
+
+      if (!this.fromMultiFiles) {
+        this.setWidgetCopy()
+      }
+      const gitInfosObject = this.extractGitInfos(this.gitfileDatami)
+      // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
+
+      this.updateShareableFiles({ gitfile: this.gitfileDatami, fileId: fileUuid, isSet: false })
+      gitInfosObject.uuid = fileUuid
+      gitInfosObject.title = this.title
+      gitInfosObject.onlyPreview = this.onlypreview
+      // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
+      this.fileId = gitInfosObject.uuid
+      this.fileType = gitInfosObject.filetype
+      if (!this.getGitInfosObj[this.fileId]) {
+        // load token
+        let token = this.usertoken && this.usertoken !== '' && this.usertoken
+        // console.log('C > DatamiFile > initWidget > process.env : ', process.env)
+        if (!token) {
+          switch (gitInfosObject.provider) {
+            case 'gitlab':
+              token = process.env.VUE_APP_DEFAULT_GITLAB_TOKEN
+              break
+            case 'github':
+              token = process.env.VUE_APP_DEFAULT_GITHUB_TOKEN
+              break
+            case 'localhost':
+              token = 'NO-TOKEN-FOR-LOCAL-DEV'
+              break
+          }
+        }
+        this.updateToken({ fileId: this.fileId, token: token })
+        this.addGitInfos(gitInfosObject)
+      }
+      // console.log('\nC > DatamiFile > initWidget > this.gitObj : ', this.gitObj)
+
+      // console.log('C > DatamiFile > initWidget > this.options : ', this.options)
+      // build options object
+      let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+      // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
+
+      let fileSchema = fileOptions.schema
+      // console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
+      const fileSchemaLocal = fileSchema && fileSchema.localdev
+      // console.log('C > DatamiFile > initWidget > fileSchemaLocal : ', fileSchemaLocal)
+      if (fileSchema) { fileSchema.file = fileSchemaLocal ? fileSchema.filelocal : fileSchema && fileSchema.file }
+      if (fileSchema && fileSchema.file) {
+        const schemaGitObj = this.extractGitInfos(fileSchema.file)
+        // console.log('C > DatamiFile > initWidget > schemaGitObj : ', schemaGitObj)
+        const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
+        // console.log('C > DatamiFile > initWidget > schemaRaw : ', schemaRaw)
+        const schemaData = schemaRaw && schemaRaw.data
+        // console.log('C > DatamiFile > initWidget > schemaData : ', schemaData)
+        const schema = JSON.parse(schemaData)
+        // console.log('C > DatamiFile > initWidget > schema : ', schema)
+        fileSchema = { ...schema, file: fileSchema.file }
+      }
+      // fileSchema && console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
+
+      // get custom props if any
+      let fileCustomProps = fileOptions['fields-custom-properties']
+      // console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
+      const fileCustomPropsLocal = fileCustomProps && fileCustomProps.localdev
+      // console.log('C > DatamiFile > initWidget > fileCustomPropsLocal : ', fileCustomPropsLocal)
+      if (fileCustomProps) { fileCustomProps.file = fileCustomPropsLocal ? fileCustomProps.filelocal : fileCustomProps && fileCustomProps.file }
+      if (fileCustomProps && fileCustomProps.file) {
+        const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
+        // console.log('C > DatamiFile > initWidget > customPropsGitObj : ', customPropsGitObj)
+        const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
+        // console.log('C > DatamiFile > initWidget > customPropsRaw : ', customPropsRaw)
+        const customPropsData = customPropsRaw && customPropsRaw.data
+        // console.log('C > DatamiFile > initWidget > customPropsData : ', customPropsData)
+        const customProps = JSON.parse(customPropsData)
+        // console.log('C > DatamiFile > initWidget > customProps : ', customProps)
+        fileCustomProps = { ...customProps, file: fileCustomProps.file }
+      }
+      // fileCustomProps && console.log('\nC > DatamiFile > initWidget > this.gitfileDatami : ', this.gitfileDatami)
+      // fileCustomProps && console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
+
+      // get dataviz props if any
+      let fileDataviz = fileOptions.datavizview
+      // console.log('C > DatamiFile > initWidget > fileDataviz : ', fileDataviz)
+      const fileDatavizLocal = fileDataviz && fileDataviz.localdev
+      // console.log('C > DatamiFile > initWidget > fileDatavizLocal : ', fileDatavizLocal)
+      if (fileDataviz) { fileDataviz.file = fileDatavizLocal ? fileDataviz.filelocal : fileDataviz && fileDataviz.file }
+      if (fileDataviz && fileDataviz.file) {
+        const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
+        const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
+        const datavizPropsData = datavizPropsRaw && datavizPropsRaw.data
+        const datavizProps = JSON.parse(datavizPropsData)
+        fileDataviz = { ...fileDataviz, ...datavizProps }
+      }
+      // fileDataviz && console.log('C > DatamiFile > initWidget > fileDataviz : ', fileDataviz)
+
+      // get maps props if any
+      const fileMaps = fileOptions.mapview
+      if (fileMaps && fileMaps.maps) {
+        const maps = []
+        for (const map of fileMaps.maps) {
+          let mapSettings = { ...map }
+          const mapSettingsLocal = mapSettings.localdev
+          // console.log('C > DatamiFile > initWidget > mapSettingsLocal : ', mapSettingsLocal)
+          map.file = mapSettingsLocal ? map.filelocal : map.file
+          if (map.file) {
+            const mapPropsGitObj = this.extractGitInfos(map.file)
+            const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
+            const mapPropsData = mapPropsRaw && mapPropsRaw.data
+            const mapProps = JSON.parse(mapPropsData)
+            mapSettings = { ...map, ...mapProps }
+          }
+          maps.push(mapSettings)
+        }
+        fileMaps.maps = maps
+      }
+      // fileMaps && console.log('C > DatamiFile > initWidget > fileMaps : ', fileMaps)
+
+      // parse fields to look for foreign keys
+      this.processForeignKeys(fileCustomProps)
+
+      // update fileOptions with settings for : schema, consolidation, dataviz, maps
+      fileOptions = {
+        ...fileOptions,
+        ...fileSchema && { schema: fileSchema },
+        ...fileCustomProps && { customProps: fileCustomProps },
+        ...fileDataviz && { datavizview: fileDataviz },
+        ...fileMaps && { mapview: fileMaps }
+      }
+      // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
+
+      // add fileOptions in store
+      this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
+    },
     async reloadFile () {
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
@@ -550,13 +613,13 @@ export default {
     processForeignKeys (fileCustomProps) {
       const foreignKeysFields = fileCustomProps && fileCustomProps.fields && fileCustomProps.fields.filter(field => field.foreignKey && field.foreignKey.activate)
       if (foreignKeysFields && foreignKeysFields.length) {
-        // console.log('\nC > DatamiFile > processForeignKeys > this.gitfile : ', this.gitfile)
+        // console.log('\nC > DatamiFile > processForeignKeys > this.gitfileDatami : ', this.gitfileDatami)
         // console.log('C > DatamiFile > processForeignKeys > foreignKeysFields : ', foreignKeysFields)
         foreignKeysFields.forEach(field => {
           const payload = {
             ressource: field.foreignKey.ressource,
             fromFileId: this.gitObj.uuid,
-            fromGitfile: this.gitfile,
+            fromGitfile: this.gitfileDatami,
             field: {
               name: field.name
             },
@@ -640,7 +703,12 @@ export default {
 .no-text-transform{
   text-transform: none!important;
 }
-
+.datami-darkmode-white-text{
+  color: white !important;
+}
+.datami-darkmode{
+  background-color: #2d2d30 !important;
+}
 @media(max-width:768px) {
   .filetitle-and-viewmodes{
     justify-content: center;

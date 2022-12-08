@@ -1,4 +1,5 @@
 import Vue from 'vue'
+// import { Vue } from '.'
 import { editModes, viewModes, isTableExt } from '@/utils/fileTypesUtils.js'
 
 export const data = {
@@ -23,6 +24,10 @@ export const data = {
     table: [],
     dataviz: [],
     map: [],
+    md: [],
+    text: [],
+    json: [],
+    loading: [],
 
     // SORTING
     sorting: [],
@@ -44,10 +49,6 @@ export const data = {
     changesData: []
   },
   getters: {
-    // shareableFiles
-    getShareableFiles: (state) => {
-      return state.shareableFiles
-    },
     getSetSharedFiles: (state, getters) => {
       const shareableSetFiles = state.shareableFiles.filter(sh => sh.isSet)
       return shareableSetFiles
@@ -61,11 +62,6 @@ export const data = {
     isInShareableAndLoaded: (state, getters) => (ressource) => {
       const shareableSet = getters.isInShareableAndSet(ressource)
       return shareableSet.filter(file => file.isLoaded)
-    },
-
-    // sharedData and ressources
-    getSharedData: (state) => {
-      return state.sharedData
     },
     getSharedDatasetByRessource: (state) => (ressource) => {
       return state.sharedData.filter(item => item.ressource === ressource)
@@ -146,10 +142,14 @@ export const data = {
       if (state.edit.includes(fileId)) return 'edit'
     },
     getViewMode: (state) => (fileId) => {
+      if (state.loading.includes(fileId)) return 'loading'
       if (state.cards.includes(fileId)) return 'cards'
       if (state.table.includes(fileId)) return 'table'
       if (state.dataviz.includes(fileId)) return 'dataviz'
       if (state.map.includes(fileId)) return 'map'
+      if (state.text.includes(fileId)) return 'text'
+      if (state.md.includes(fileId)) return 'md'
+      if (state.json.includes(fileId)) return 'json'
     },
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)

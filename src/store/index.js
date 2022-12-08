@@ -1,22 +1,28 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
-import { user } from '@/store/user.js'
-import { data } from '@/store/data.js'
-import { filters } from '@/store/filters.js'
-import { sortings } from '@/store/sortings.js'
-import { translations } from '@/store/translations.js'
+// import { Vue } from '.'
+// import Vuex from 'vuex'
+// import { user } from '@/store/user.js'
+// import { data } from '@/store/data.js'
+// import { filters } from '@/store/filters.js'
+// import { sortings } from '@/store/sortings.js'
+// import { translations } from '@/store/translations.js'
+// import { storage } from '@/store/storage.js'
 
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 
-Vue.use(Vuex)
+// Vue.use(Vuex)
 
-const defaultStore = {
+export const defaultStore = {
   state: {
     gitInfos: [],
     fileOptions: [],
     fileReqInfos: [],
     fileEditNavbar: [],
-    trackAllOutlinks: []
+    trackAllOutlinks: [],
+    urlMulti: 'https://multi.coop',
+    urlDocumentation: 'https://datami-docs.multi.coop',
+    urlSourceCode: 'https://gitlab.com/multi-coop/datami-project/datami',
+    urlReportIssue: 'https://gitlab.com/multi-coop/datami-project/datami/-/issues/new'
   },
   getters: {
     getGitObj: (state) => {
@@ -88,13 +94,14 @@ const defaultStore = {
   }
 }
 
-export const store = new Vuex.Store({
-  ...defaultStore,
-  modules: {
-    'git-translations': translations,
-    'git-user': user,
-    'git-filters': filters,
-    'git-sortings': sortings,
-    'git-data': data
-  }
-})
+// export const store = new Vuex.Store({
+//   ...defaultStore,
+//   modules: {
+//     'git-translations': translations,
+//     'git-user': user,
+//     'git-filters': filters,
+//     'git-sortings': sortings,
+//     'git-data': data,
+//     'git-storage': theme
+//   }
+// })

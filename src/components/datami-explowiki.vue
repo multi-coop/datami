@@ -19,7 +19,7 @@
         class="columns is-centered mb-4"
         style="z-index: 2;">
         <!-- FILE TITLE -->
-        <div class="filetitle-and-viewmodes column is-12-mobile is-7-tablet is-9-desktop is-flex is-direction-row is-align-items-top is-justify-content-left-desktop has-text-centered-mobile has-text-left-tablet">
+        <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="usernavbar column is-12-mobile is-5-tablet is-3-desktop is-flex is-direction-row is-align-items-center">
+        <div class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-direction-row is-align-items-center">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -173,7 +173,7 @@
 
     <!-- PROGRESS LOADER -->
     <!-- v-if="wikiItems && wikiItems.length" -->
-    <LoaderWiki
+    <LoaderWikimedia
       v-if="wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length)"
       :file-id="fileId"
       :items-loaded="wikiPages.length"
@@ -195,38 +195,49 @@ import { mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
 import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 import { getFileDataRaw } from '@/utils/gitProvidersAPI.js'
 
-import MatomoScript from '@/components/matomo/MatomoScript'
+// import MatomoScript from '@/components/matomo/MatomoScript'
 
-import FileTitle from '@/components/navbar/FileTitle'
-import ViewModeBtns from '@/components/previews/ViewModeBtns'
-import UserOptions from '@/components/user/UserOptions'
+// import FileTitle from '@/components/navbar/FileTitle'
+// import ViewModeBtns from '@/components/previews/ViewModeBtns'
+// import UserOptions from '@/components/user/UserOptions'
 
-import NotificationInfos from '@/components/notifications/NotificationInfos'
-import NotificationErrors from '@/components/notifications/NotificationErrors'
+// import NotificationInfos from '@/components/notifications/NotificationInfos'
+// import NotificationErrors from '@/components/notifications/NotificationErrors'
 
-import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-import DialogFileInfos from '@/components/previews/DialogFileInfos'
+// import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
+// import DialogFileInfos from '@/components/previews/DialogFileInfos'
 
-import LoaderWiki from '@/components/loaders/LoaderWIKI'
+// import LoaderWiki from '@/components/loaders/LoaderWIKI'
 
-import PreviewCsv from '@/components/previews/PreviewCsv'
+// import PreviewCsv from '@/components/previews/PreviewCsv'
 
-import DatamiCredits from '@/components/credits/DatamiCredits'
+// import DatamiCredits from '@/components/credits/DatamiCredits'
 
 export default {
   name: 'DatamiExploWiki',
   components: {
-    MatomoScript,
-    FileTitle,
-    ViewModeBtns,
-    UserOptions,
-    NotificationInfos,
-    NotificationErrors,
-    EditNavbarSkeleton,
-    DialogFileInfos,
-    LoaderWiki,
-    PreviewCsv,
-    DatamiCredits
+    // MatomoScript,
+    // FileTitle,
+    // ViewModeBtns,
+    // UserOptions,
+    // NotificationInfos,
+    // NotificationErrors,
+    // EditNavbarSkeleton,
+    // DialogFileInfos,
+    // LoaderWiki,
+    // PreviewCsv,
+    // DatamiCredits
+    MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
+    ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
+    UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
+    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
+    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
+    LoaderWikimedia: () => import(/* webpackChunkName: "LoaderWikimedia" */ '@/components/loaders/LoaderWikimedia.vue'),
+    PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
+    DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
     mixinGlobal,
@@ -321,6 +332,9 @@ export default {
     }
   },
   async beforeMount () {
+    // INITIALIZING LOCAL STORAGE
+    this.initializeStorage()
+
     // console.log('\nC > DatamiExploWiki > beforeMount > this.wikifile : ', this.wikifile)
     // console.log('C > DatamiExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > DatamiExploWiki > beforeMount > this.options : ', this.options)
@@ -399,6 +413,7 @@ export default {
       addFileReqInfos: 'addFileReqInfos',
       updateReloading: 'git-data/updateReloading',
       updateReqErrors: 'git-data/updateReqErrors',
+      initializeStorage: 'git-storage/initializeStorage',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     async reloadMediawikiRessources () {

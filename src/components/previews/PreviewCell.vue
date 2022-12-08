@@ -5,6 +5,16 @@
     @mouseleave="showExpand = false">
     <!-- {{ value }} <br> {{ field }} -->
 
+    <!-- BTN OPEN CARD -->
+    <div
+      v-if="isOpenCardField"
+      class="has-text-centered">
+      <ButtonOpenCard
+        :row-id="rowId"
+        :locale="locale"
+        @action="SendActionToParent"/>
+    </div>
+
     <!-- SIMPLE STRING -->
     <div
       v-if="isString && !field.subtype"
@@ -44,17 +54,64 @@
       <div
         class="has-wrap-btn"
         @click="nowrap = !nowrap">
-        {{ trimmedText }}
+        <!-- <pre><code>{{ field }}</code></pre> -->
+        <div v-if="field.longtextOptions">
+          <PreviewLongText
+            :raw-text="value"
+            :from-table="true"
+            :file-id="fileId"
+            :field="field"
+            :field-id="field.field"
+            :longtext-options="field.longtextOptions"
+            :max-text-length="maxTextLength"
+            :nowrap="nowrap"
+            :locale="locale"/>
+        </div>
+        <span v-else>
+          {{ trimmedText }}
+        </span>
+      </div>
+    </div>
+
+    <!-- TIMELINE TEXT STRING -->
+    <div
+      v-if="isString && isTimelineText"
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      <ButtonWrapCell
+        v-if="!isCardView"
+        v-model="nowrap"
+        :show-expand="showExpand"
+        :locale="locale"/>
+      <div
+        class="has-wrap-btn"
+        @click="nowrap = !nowrap">
+        <!-- {{ value }} -->
+        <PreviewTimelineText
+          :raw-text="value"
+          :from-table="true"
+          :file-id="fileId"
+          :field="field"
+          :field-id="field.field"
+          :step-options="field.stepOptions"
+          :nowrap="nowrap"
+          :locale="locale"/>
       </div>
     </div>
 
     <!-- BOOLEAN -->
     <div
       v-if="isBoolean"
-      :class="`has-text-centered`">
-      <!-- {{ value }} -->
+      :class="`has-text-left is-flex is-align-content-center ml-4`">
       <b-icon
-        :icon="`checkbox-${booleanFromValue(value) ? 'marked' : 'blank-outline'}`"/>
+        :icon="`checkbox-${booleanFromValue(value, field) ? 'marked' : 'blank-outline'}`"/>
+      <span class="ml-2">
+        <span v-if="value === ''">
+          {{ t('global.noValue', locale) }}
+        </span>
+        <span v-else>
+          {{ value }}
+        </span>
+      </span>
     </div>
 
     <!-- TAG / TAGS -->
@@ -165,14 +222,19 @@
 
 import { mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
 
-import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
-import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
+// import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
+// import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
 
 export default {
   name: 'PreviewCell',
   components: {
-    ButtonWrapCell,
-    PreviewTagValue
+    // ButtonWrapCell,
+    // PreviewTagValue
+    ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
+    ButtonWrapCell: () => import(/* webpackChunkName: "ButtonWrapCell" */ '@/components/previews/ButtonWrapCell.vue'),
+    PreviewTagValue: () => import(/* webpackChunkName: "PreviewTagValue" */ '@/components/previews/PreviewTagValue.vue'),
+    PreviewLongText: () => import(/* webpackChunkName: "PreviewLongText" */ '@/components/previews/PreviewLongText.vue'),
+    PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue')
   },
   mixins: [
     mixinGlobal,
@@ -181,6 +243,10 @@ export default {
   ],
   props: {
     fileId: {
+      default: null,
+      type: String
+    },
+    rowId: {
       default: null,
       type: String
     },
@@ -223,15 +289,21 @@ export default {
     }
   },
   computed: {
+    maxTextLength () {
+      return this.field.maxLength || this.defaultMaxTextLength
+    },
     trimmedText () {
       // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
       const textToTrim = this.value ?? ''
-      const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
+      // const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
       // console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
-      const exceed = this.nowrap && (textToTrim.length > maxTextLength)
+      const exceed = this.nowrap && (textToTrim.length > this.maxTextLength)
       // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
-      const trimmed = exceed ? `${textToTrim.slice(0, maxTextLength)} [...]` : textToTrim
+      const trimmed = exceed ? `${textToTrim.slice(0, this.maxTextLength)} [...]` : textToTrim
       return trimmed || ''
+    },
+    trimmedLongText () {
+      return true
     },
     tagsArray () {
       // console.log('\nC > PreviewCell > tagsArray > this.value : ', this.value)
@@ -276,6 +348,9 @@ export default {
       }
       // console.log('C > PreviewCell > linkDomain > urlObj : ', urlObj)
       return urlObj.hostname || this.t('global.link', this.locale)
+    },
+    SendActionToParent (event) {
+      this.$emit('action', event)
     }
   }
   // beforeMount () {

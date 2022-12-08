@@ -13,7 +13,7 @@
       :animated="false"
       style="z-index: 1"
       size="is-large"
-      type="is-dark">
+      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
       <template #content>
         <div
           v-if="val !== '...' && (field.foreignKey || field.definitions)"
@@ -138,6 +138,9 @@
         </span>
         <span v-else>
           {{ val }}
+        </span>
+        <span v-if="getValueDefinitionLabel(val)">
+          : {{ trimText(getValueDefinitionLabel(val), 7) }}
         </span>
         <b-icon
           v-if="val !== '...' && (field.foreignKey || field.definitions)"

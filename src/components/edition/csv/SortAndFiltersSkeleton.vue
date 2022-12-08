@@ -21,6 +21,7 @@
         <CustomFilterDropdown
           v-for="filter in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}`"
+          :class="isDarkMode ? 'is-dark' : 'is-white'"
           :filter="filter"
           :file-id="fileId"
           :field-active-tags="fieldActiveTags(filter.field)"
@@ -64,14 +65,16 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-import SearchFullText from '@/components/filters/SearchFullText'
-import CustomFilterDropdown from '@/components/filters/CustomFilterDropdown'
+// import SearchFullText from '@/components/filters/SearchFullText'
+// import CustomFilterDropdown from '@/components/filters/CustomFilterDropdown'
 
 export default {
   name: 'SortAndFiltersSkeleton',
   components: {
-    SearchFullText,
-    CustomFilterDropdown
+    // SearchFullText,
+    // CustomFilterDropdown
+    SearchFullText: () => import(/* webpackChunkName: "SearchFullText" */ '@/components/filters/SearchFullText.vue'),
+    CustomFilterDropdown: () => import(/* webpackChunkName: "CustomFilterDropdown" */ '@/components/filters/CustomFilterDropdown.vue')
   },
   mixins: [
     mixinGlobal,
@@ -118,6 +121,7 @@ export default {
             enumArr: enumArr,
             bgColor: filter.bgColor,
             foreignKey: filter.foreignKey,
+            filtering: filter.filtering,
             definitions: filter.definitions
           }
         })

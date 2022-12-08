@@ -25,7 +25,9 @@
       </p> -->
     </figure>
 
-    <div v-if="currentEditViewMode === 'edit'">
+    <div
+      v-if="currentEditViewMode === 'edit'"
+      class="px-4">
       <EditCell
         :file-id="fileId"
         :field="field"
@@ -61,13 +63,14 @@
 import { mixinGlobal, mixinValue, mixinIcons } from '@/utils/mixins.js'
 
 // import PreviewCell from '@/components/previews/PreviewCell'
-import EditCell from '@/components/edition/csv/EditCell'
+// import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'DatamiCardBlockImage',
   components: {
     // PreviewCell,
-    EditCell
+    // EditCell
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
   },
   mixins: [
     mixinGlobal,
@@ -99,6 +102,10 @@ export default {
       default: null,
       type: [String, Number, Object, Array]
     },
+    itemAdded: {
+      default: false,
+      type: Boolean
+    },
     isMini: {
       default: false,
       type: Boolean
@@ -115,11 +122,16 @@ export default {
       default: false,
       type: Boolean
     }
-  }
+  },
   // beforeMount () {
   //   console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemId :', this.itemId)
   //   console.log('C > DatamiCardBlockImage > beforeMount > this.field :', this.field)
   //   console.log('C > DatamiCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
   // }
+  methods: {
+    emitUpdate (event) {
+      this.$emit('updateCellValue', event)
+    }
+  }
 }
 </script>

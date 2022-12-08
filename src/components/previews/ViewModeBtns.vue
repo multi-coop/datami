@@ -1,69 +1,26 @@
 <template>
-  <div class="ViewModeBtns datami-component is-flex is-align-items-center">
+  <div
+    class="ViewModeBtns datami-component is-flex is-align-items-center">
     <!-- BUTTONS -->
-    <!-- <b-field
-      v-if="fileTypeFamily === 'table' && hasCardsView"
-      class="mr-4"
-      custom-class="is-small edit-mode-btns">
-      <b-tooltip
-        v-for="btn in buttonsView"
-        :key="btn.code"
-        :label="`${t(btn.textCode, locale)}`"
-        type="is-dark"
-        position="is-top">
-        <b-button
-          :icon-left="btn.icon"
-          :type="currentViewMode === btn.code ? 'is-dark' : ''"
-          :active="currentViewMode === btn.code"
-          size="is-small"
-          @click="changeView(btn.code)"/>
-      </b-tooltip>
-    </b-field> -->
-
-    <!-- <b-dropdown
-      v-model="viewMode"
-      class="g-view-mode-dropdown"
-      :triggers="['hover']"
-      aria-role="list">
-      <template #trigger>
-        <b-tooltip
-          :label="t('preview.changeViewMode', locale)"
-          type="is-dark"
-          position="is-top">
-          <b-button
-            :icon-left="getIcon(viewMode)"/>
-        </b-tooltip>
-      </template>
-
-      <b-dropdown-item
-        v-for="btn in buttonsView"
-        :key="btn.code"
-        :value="btn.code"
-        aria-role="listitem"
-        @click="changeView(btn.code)">
-        <div class="media">
-          <b-icon
-            class="media-left"
-            :icon="btn.icon"/>
-          <div class="media-content">
-            <h3>{{ t(btn.textCode, locale) }}</h3>
-          </div>
-        </div>
-      </b-dropdown-item>
-    </b-dropdown> -->
-
     <div class="dropdown is-hoverable is-left">
       <div class="dropdown-trigger">
         <b-button
           size="is-small"
-          class="ml-1 mr-2"
+          :class="`ml-1 mr-2 ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+          :type="isDarkMode ? 'is-white' : ''"
+          :outlined="isDarkMode"
           :icon-left="getIcon(currentViewMode)"
           aria-haspopup="true"
-          :disabled="btnsEdit.length === 1"
-          aria-controls="dropdown-views"/>
+          :disabled="btnsEdit.length < 2"
+          aria-controls="dropdown-views">
+          <span class="has-text-grey is-size-7 is-italic">
+            {{ t(`views.${currentViewMode}`, locale) }}
+          </span>
+        </b-button>
         <div
+          v-if="btnsEdit.length > 1"
           id="dropdown-views"
-          class="dropdown-menu"
+          :class="`dropdown-menu datami-dropdown-viewmode-${isDarkMode ? 'darkmode' : 'clearmode'}`"
           role="menu"
           style="z-index: 90;">
           <div class="dropdown-content">
@@ -76,7 +33,7 @@
             <a
               v-for="btn in btnsEdit"
               :key="btn.code"
-              :class="`dropdown-item ${ btn.code === currentViewMode ? 'is-active is-dark' : ''}`"
+              :class="`dropdown-item ${ btn.code === currentViewMode ? 'is-active' : ''}`"
               @click="changeView(btn.code)">
               <b-icon
                 class="media-left"
@@ -131,51 +88,108 @@ export default {
   },
   computed: {
     btnsEdit () {
-      const views = {
-        table: true,
-        cards: this.cardsViewIsActive,
-        dataviz: this.datavizViewIsActive,
-        map: this.mapViewIsActive
+      // console.log('\nC > ViewModeBtns > btnsEdit > this.buttonsView : ', this.buttonsView)
+      if (this.fileOptions) {
+        let views
+        // console.log('C > ViewModeBtns > btnsEdit > this.fileOptions : ', this.fileOptions)
+        switch (this.gitObj.filefamily) {
+          case 'table':
+            views = {
+              table: true,
+              cards: this.cardsViewIsActive,
+              dataviz: this.datavizViewIsActive,
+              map: this.mapViewIsActive
+            }
+            break
+          case 'text':
+            views = {
+              text: this.hasTxtView,
+              md: this.hasMdView
+            }
+            break
+          case 'json':
+            views = {
+              json: true
+            }
+            break
+        }
+        // console.log('C > ViewModeBtns > btnsEdit > views : ', views)
+        return this.buttonsView.filter(v => views[v.code])
+      } else {
+        return []
       }
-      return this.buttonsView.filter(v => views[v.code])
     }
   },
   watch: {
     fileOptions (next) {
-      // console.log('C > ViewModeBtns > watch > fileOptions > next : ', next)
+      // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
-        const defaultViews = [
-          {
-            view: 'cards',
-            activate: this.cardsViewIsActive,
-            isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
-          },
-          {
-            view: 'dataviz',
-            activate: this.datavizViewIsActive,
-            isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
-          },
-          {
-            view: 'map',
-            activate: this.mapViewIsActive,
-            isDefault: this.mapViewIsActive && this.mapViewIsDefault
-          },
-          {
-            view: 'table',
-            activate: true,
-            isDefault: true
-          }
-        ]
+        let defaultViews
+        switch (this.fileTypeFamily) {
+          case 'table':
+            defaultViews = [
+              {
+                view: 'cards',
+                activate: this.cardsViewIsActive,
+                isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
+              },
+              {
+                view: 'dataviz',
+                activate: this.datavizViewIsActive,
+                isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
+              },
+              {
+                view: 'map',
+                activate: this.mapViewIsActive,
+                isDefault: this.mapViewIsActive && this.mapViewIsDefault
+              },
+              {
+                view: 'table',
+                activate: true,
+                isDefault: true
+              }
+            ]
+            break
+          case 'text':
+            defaultViews = [
+              {
+                view: 'md',
+                activate: this.hasMdView,
+                isDefault: true
+              },
+              {
+                view: 'text',
+                activate: this.hasTxtView,
+                isDefault: true
+              }
+            ]
+            break
+          case 'json':
+            defaultViews = [
+              {
+                view: 'json',
+                activate: this.hasJsonView,
+                isDefault: true
+              }
+            ]
+            break
+        }
         const defaultView = defaultViews.find(v => v.isDefault)
         // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
         this.changeView(defaultView.view)
+      } else {
+        this.changeView('loading')
       }
     }
   },
   beforeMount () {
     // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
+    // console.log('C > ViewModeBtns > beforeMount > this.gitObj : ', this.gitObj)
+    // console.log('C > ViewModeBtns > beforeMount > this.gitObj.filetype : ', this.gitObj.filetype)
+    // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
-    this.changeView('table')
+    // this.changeView('table')
+    this.changeView(this.fileTypeFamily || 'loading')
   },
   methods: {
     ...mapActions({
@@ -197,7 +211,31 @@ export default {
   .is-active {
     background-color: #000000 !important;
   }
-  /* .EditModeBtns > .field > .field-body > .field.has-addons {
-    justify-content: center !important;
-  } */
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content {
+    color: white !important;
+    background-color: black !important;
+  }
+  .datami-dropdown-viewmode-clearmode > .dropdown-content {
+    color: black !important;
+    background-color: white !important;
+  }
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item {
+    color: white !important;
+  }
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item.is-active {
+    color: black !important;
+    background-color: white !important;
+  }
+  .datami-dropdown-viewmode-clearmode > .dropdown-content > .dropdown-item.is-active {
+    color: white !important;
+    background-color: black !important;
+  }
+
+  .datami-dropdown-viewmode-darkmode > .dropdown-content > a.dropdown-item:hover:not(.is-active) {
+    color: black !important;
+  }
+
 </style>

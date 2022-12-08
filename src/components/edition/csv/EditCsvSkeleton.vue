@@ -5,7 +5,7 @@
       <div
         class="column is-3 has-text-left"
         style="z-index: 1;">
-        <p class="has-text-weight-bold is-size-6 ml-1 text-shadow">
+        <p :class="`has-text-weight-bold is-size-6 ml-1 ${currentViewMode === 'map' ? 'text-shadow' : ''} ${isDarkMode && currentViewMode !== 'map' ? 'datami-darkmode-white-text' : 'has-text-dark'}`">
           <span>
             {{ (dataEditedFiltered && dataEditedFiltered.length)|| 0 }}
           </span>
@@ -53,16 +53,19 @@
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-import FilterTags from '@/components/filters/FilterTags'
-import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
-import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
+// import FilterTags from '@/components/filters/FilterTags'
+// import ButtonAddRow from '@/components/edition/csv/ButtonAddRow'
+// import ButtonDeleteRows from '@/components/edition/csv/ButtonDeleteRows'
 
 export default {
   name: 'EditCsvSkeleton',
   components: {
-    FilterTags,
-    ButtonAddRow,
-    ButtonDeleteRows
+    // FilterTags,
+    // ButtonAddRow,
+    // ButtonDeleteRows
+    FilterTags: () => import(/* webpackChunkName: "FilterTags" */ '@/components/filters/FilterTags.vue'),
+    ButtonAddRow: () => import(/* webpackChunkName: "ButtonAddRow" */ '@/components/edition/csv/ButtonAddRow.vue'),
+    ButtonDeleteRows: () => import(/* webpackChunkName: "ButtonDeleteRows" */ '@/components/edition/csv/ButtonDeleteRows.vue')
   },
   mixins: [
     mixinGlobal,
@@ -118,5 +121,8 @@ export default {
 <style scoped>
 .text-shadow {
   text-shadow: 0 0 10px white, 0 0 10px white;
+}
+.datami-darkmode-white-text{
+  color: white !important;
 }
 </style>

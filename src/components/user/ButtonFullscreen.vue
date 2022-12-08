@@ -2,11 +2,13 @@ element.mozRequestFullScreen<template>
   <div class="ButtonFullscreen datami-component">
     <b-tooltip
       :label="t(`actions.fullscreen${isFullscreen ? 'Off' : 'On'}`, locale)"
-      type="is-dark"
-      position="is-left">
+      :type="`${isDarkMode ? 'is-white': 'is-dark'}`"
+      position="is-top">
       <b-button
         size="is-small"
-        class="ml-1"
+        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+        :type="isDarkMode ? 'is-white' : ''"
+        :outlined="isDarkMode"
         icon-left="fullscreen"
         @click="toggleFullsceen"/>
     </b-tooltip>
@@ -71,6 +73,7 @@ export default {
       if (event.keyCode === 27) {
         this.isFullscreen = false
         this.updateFullscreen({ fileId: this.fileId, isFullscreen: false })
+        this.map.redraw()
       }
     },
     getZoomLevel () {

@@ -33,7 +33,7 @@ export const providerIcons = [
     providers: ['mediawiki']
   },
   {
-    icon: 'laptop-user',
+    icon: 'laptop',
     providers: ['localhost']
   },
   {
@@ -74,6 +74,11 @@ export const fieldTypeIcons = [
     type: 'string',
     subtype: 'longtext',
     icon: 'text-long'
+  },
+  {
+    type: 'string',
+    subtype: 'steptext',
+    icon: 'dots-horizontal'
   },
   {
     type: 'uri',
@@ -140,7 +145,12 @@ export const fieldTypeIcons = [
     icon: 'text'
   },
 
-  // GITRIBUTE ICONS
+  // DATAMI ICONS
+  {
+    type: 'datami',
+    subtype: 'openDatamiCard',
+    icon: 'eye'
+  },
   {
     type: 'datami',
     subtype: 'consolidation',
@@ -161,6 +171,10 @@ export const viewsOptions = [
   { code: 'cards', icon: 'card-outline', textCode: 'preview.cardsView' },
   { code: 'table', icon: 'table', textCode: 'preview.tableView' },
   { code: 'dataviz', icon: 'chart-bar', textCode: 'preview.datavizView' },
-  { code: 'map', icon: 'map-outline', textCode: 'preview.mapView' }
+  { code: 'map', icon: 'map-outline', textCode: 'preview.mapView' },
+  { code: 'text', icon: 'text', textCode: 'preview.textView' },
+  { code: 'md', icon: 'language-markdown-outline', textCode: 'preview.mdView' },
+  { code: 'json', icon: 'code-json', textCode: 'preview.jsonView' },
+  { code: 'loading', icon: 'sync', textCode: '...' }
 ]
 export const viewModes = viewsOptions.map(v => v.code)

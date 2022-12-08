@@ -22,7 +22,7 @@
               v-if="getFieldForeignKey(tag.field) || getFieldDefinitions(tag.field)"
               multilined
               size="is-large"
-              type="is-dark">
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
               <template #content>
                 <!-- {{ getFieldForeignKey(tag.field) }} -->
                 <!-- <hr> -->
@@ -77,8 +77,13 @@
                   </div>
                 </div>
               </template>
+
+              <!-- TAG'S TEXT -->
               <span class="px-2 has-text-weight-bold">
                 {{ tag.value }}
+                <span v-if="getValueDefinitionLabel(tag.value, getField(tag.field))">
+                  : {{ trimText(getValueDefinitionLabel(tag.value, getField(tag.field)), 7) }}
+                </span>
                 <b-icon
                   icon="information-outline"
                   size="is-small"
@@ -94,7 +99,7 @@
             <!-- TAG REMOVER -->
             <b-tooltip
               :label="t(`filters.removeFilter`, locale)"
-              type="is-dark"
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
               position="is-top">
               <b-icon
                 size="is-small"

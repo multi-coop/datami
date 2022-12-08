@@ -21,10 +21,10 @@ export const gitProviders = {
   },
   gitlab: {
     root: 'https://gitlab.com/',
-    rootFix: '/~/blob',
+    rootFix: '/-/blob',
     raw: 'https://gitlab.com/',
     apiFix: 'api/v4',
-    fix: '/-/raw/'
+    fix: '/-/raw'
     // root: 'https://gitlab.com/jailbreak/jailbreak.paris/ -/blob/ master/package.json'
     // raw:  'https://gitlab.com/jailbreak/jailbreak.paris/ -/raw/  master/package.json',
   }
@@ -49,6 +49,7 @@ export const b64decode = (str) => {
 }
 
 export const buildApiRoots = (gitInfos) => {
+  // console.log('U > utilsGitUrl > buildApiRoots > gitInfos : ', gitInfos)
   let apiRepo, apiFile, apiFileBase, apiFileRaw
   if (gitInfos.provider === 'github') {
     // cf : https://docs.github.com/en/rest/reference/repos#contents
@@ -63,15 +64,20 @@ export const buildApiRoots = (gitInfos) => {
     apiFileBase = `${apiRepo}/${URIfilepath}`
     apiFile = `${apiFileBase}`
     apiFileRaw = `${apiFileBase}`
-  } else {
+  } else if (gitInfos.provider === 'gitlab') {
     // cf : https://docs.gitlab.com/ee/api/repository_files.html
-    const URIrepo = encodeURIComponent(`${gitInfos.orga}/${gitInfos.repo}`)
+    const URIrepo = encodeURIComponent(`${gitInfos.orga}${gitInfos.subgroupsStr ? '/' + gitInfos.subgroupsStr : ''}/${gitInfos.repo}`)
     const URIfilepath = encodeURIComponent(gitInfos.filepath)
     apiRepo = `${gitInfos.api}/projects/${URIrepo}`
     apiFileBase = `${apiRepo}/repository/files/${URIfilepath}`
     apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
     apiFileRaw = `${apiFileBase}/raw?ref=${gitInfos.branch}`
+  } else {
+    console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
   }
+  // console.log('U > utilsGitUrl > buildApiRoots > apiRepo : ', apiRepo)
+  // console.log('U > utilsGitUrl > buildApiRoots > apiFile : ', apiFile)
+  // console.log('U > utilsGitUrl > buildApiRoots > apiFileRaw : ', apiFileRaw)
   return {
     repo: apiRepo,
     file: apiFile,
@@ -82,6 +88,7 @@ export const buildApiRoots = (gitInfos) => {
 export const extractGitInfos = (str) => {
   // console.log('\nU > utilsGitUrl > extractGitInfos > str : ', str)
   let provider, orga, repo, branch, rawRoot, publicRoot, remaining, api
+  let subgroups = []
   let gitRef, trimmed, split, rawUrl
   let filefullname, filename, filetype
 
@@ -112,37 +119,54 @@ export const extractGitInfos = (str) => {
     branch = ''
     remaining = split.join('/')
     api = `http://${host}`
-  } else {
+  } else if (str.startsWith(gitProviders.gitlab.root) || str.startsWith(gitProviders.gitlab.raw)) {
     provider = 'gitlab'
     gitRef = gitProviders.gitlab
     const urlCut = str.split('//')
     const host = urlCut[1].split('/')[0]
     trimmed = str.replace(gitRef.root, '')
-    split = trimmed.split('/')
-    orga = split[0]
-    repo = split[1]
-    branch = split[4]
-    remaining = split.splice(5).join('/')
+
+    const isRaw = trimmed.includes(gitProviders.gitlab.fix)
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > isRaw : ', isRaw)
+    let gitlabSplit
+    if (isRaw) {
+      // for url as : https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/raw/main/data/csv/ODF-Observatoire-organisations.csv
+      gitlabSplit = trimmed.split('/-/raw/')
+    } else {
+      // for url as : https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/csv/ODF-Observatoire-organisations.csv
+      gitlabSplit = trimmed.split('/-/blob/')
+    }
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > gitlabSplit : ', gitlabSplit)
+    const splitLeft = gitlabSplit[0].split('/')
+    const splitRight = gitlabSplit[1].split('/')
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > splitLeft : ', splitLeft)
+    // console.log('U > utilsGitUrl > extractGitInfos > gitlab > splitRight : ', splitRight)
+
+    // split by branch to get on the left orga > group > repo ... and on the right : branch > (path) > file
+    orga = splitLeft[0]
+    repo = splitLeft.at(-1)
+    subgroups = splitLeft.length > 2 ? splitLeft.slice(1, splitLeft.length - 1) : []
+    branch = splitRight[0]
+    remaining = splitRight.slice(1, splitRight.length).join('/')
     api = `https://${host}/${gitRef.apiFix}`
+  } else {
+    console.log('U > utilsGitUrl > extractGitInfos > ERROR A > str : ', str)
   }
+  const subgroupsStr = subgroups.length ? subgroups.join('/') : undefined
 
   // console.log('U > utilsGitUrl > extractGitInfos > orga : ', orga)
+  // console.log('U > utilsGitUrl > extractGitInfos > subgroups : ', subgroups)
   // console.log('U > utilsGitUrl > extractGitInfos > api : ', api)
   // console.log('U > utilsGitUrl > extractGitInfos > repo : ', repo)
   // console.log('U > utilsGitUrl > extractGitInfos > branch : ', branch)
   // console.log('U > utilsGitUrl > extractGitInfos > remaining : ', remaining)
 
-  rawRoot = `${gitRef.raw}${orga}/${repo}`
-  let publicRootUrl = `${gitRef.root}${orga}/${repo}`
+  rawRoot = `${gitRef.raw}${orga}${subgroupsStr ? '/' + subgroupsStr : ''}/${repo}`
+  let publicRootUrl = `${gitRef.root}${orga}${subgroupsStr ? '/' + subgroupsStr : ''}/${repo}`
 
   let fileraw
 
-  if (orga === 'github') {
-    rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
-    publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
-    // https://raw.githubusercontent.com/multi-coop/datami-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
-    fileraw = `${rawRoot}${remaining}`
-  } else if (orga === 'localhost') {
+  if (orga === 'localhost') {
     rawRoot = `${api}`
     publicRoot = `${api}`
     publicRootUrl = `${api}`
@@ -150,6 +174,7 @@ export const extractGitInfos = (str) => {
   } else {
     rawRoot = `${rawRoot}${gitRef.fix}/${branch}/`
     publicRoot = `${publicRootUrl}${gitRef.rootFix}/${branch}/`
+    // https://raw.githubusercontent.com/multi-coop/datami-content-test/main/texts/markdown/jailbreak-devient-multi-fr.md
     // https://gitlab.com/multi-coop/datami-content-test/-/raw/main/texts/markdown/test-file-datami-fr.md
     fileraw = `${rawRoot}${remaining}`
   }
@@ -166,6 +191,9 @@ export const extractGitInfos = (str) => {
     filename = filenameArray.slice(0, -1).join()
     filetype = filenameArray[filenameArray.length - 1]
   }
+  // console.log('U > utilsGitUrl > extractGitInfos > filefullname : ', filefullname)
+  // console.log('U > utilsGitUrl > extractGitInfos > filename : ', filename)
+  // console.log('U > utilsGitUrl > extractGitInfos > filetype : ', filetype)
 
   const gitInfos = {
     id: str,
@@ -173,6 +201,8 @@ export const extractGitInfos = (str) => {
     provider: provider,
     api: api,
     orga: orga,
+    subgroups: subgroups,
+    subgroupsStr: subgroupsStr,
     repo: repo,
     branch: branch || 'master',
     repoUrl: publicRootUrl,
@@ -258,6 +288,9 @@ export const buildGitUserInfosUrl = (gitObj, token = undefined, method = 'GET') 
 
 export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token = undefined) {
   // console.log('\nU > utilsGitUrl > buildPostBranchUrl > ...')
+  // console.log('U > utilsGitUrl > buildPostBranchUrl > gitObj : ', gitObj)
+  // console.log('U > utilsGitUrl > buildPostBranchUrl > sourceBranch : ', sourceBranch)
+  // console.log('U > utilsGitUrl > buildPostBranchUrl > newBranch : ', newBranch)
 
   const errors = []
   let newBranchAlreadyExists = false
@@ -265,7 +298,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
 
   // specific to gitlab
   let prePostCheckSourceBranch, prePostCheckSourceBranchResp, prePostCheckSourceBranchData
-  let prePostCheckTargetBranch, prePostCheckTargetBranchResp
+  let prePostCheckTargetBranch, prePostCheckTargetBranchResp, prePostCheckTargetBranchData
 
   // specific to github
   let prePostRequestUrl, prePostResponse, prePostResponseData, revisionHash
@@ -287,6 +320,7 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
           code: prePostCheckSourceBranchResp.status,
           message: prePostCheckSourceBranchData.message
         }
+        // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckSourceBranchResp > err : ', err)
         errors.push(err)
       }
 
@@ -295,8 +329,17 @@ export async function buildPostBranchUrl (gitObj, sourceBranch, newBranch, token
       // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranch : ', prePostCheckTargetBranch)
       prePostCheckTargetBranchResp = await fetch(prePostCheckTargetBranch)
       // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp : ', prePostCheckTargetBranchResp)
-      // prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
+      prePostCheckTargetBranchData = await prePostCheckTargetBranchResp.json()
       // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchData : ', prePostCheckTargetBranchData)
+      if (!prePostCheckTargetBranchResp.ok) {
+        const err = {
+          function: 'postNewBranch',
+          code: prePostCheckTargetBranchResp.status,
+          message: prePostCheckTargetBranchData.message
+        }
+        // console.log('U > utilsGitUrl > buildPostBranchUrl > gitlab > prePostCheckTargetBranchResp > err : ', err)
+        errors.push(err)
+      }
 
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
       if (prePostCheckTargetBranchResp.ok) { newBranchAlreadyExists = true }
@@ -365,23 +408,23 @@ export async function buildPutCommitReqData (gitObj, branch, edited, message, au
 
       // build url for prePostRequest
       prePostRequestUrl = `${gitObj.apiFile}`
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostRequestUrl : ', prePostRequestUrl)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostRequestUrl : ', prePostRequestUrl)
 
       // TO DO - CATCH IF BRANCH ALREADY EXISTS
       // if () { newBranchAlreadyExists = true }
 
       prePostResponse = await fetch(prePostRequestUrl)
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponse : ', prePostResponse)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponse : ', prePostResponse)
       prePostResponseData = await prePostResponse.json()
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponseData : ', prePostResponseData)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > prePostResponseData : ', prePostResponseData)
 
       // Copy sha
       revisionHash = prePostResponseData.sha
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > revisionHash : ', revisionHash)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > revisionHash : ', revisionHash)
 
       // encode content / edited
       base64Content = b64encode(edited)
-      console.log('U > utilsGitUrl > buildPutCommitReqData > github > base64Content : ', base64Content)
+      // console.log('U > utilsGitUrl > buildPutCommitReqData > github > base64Content : ', base64Content)
 
       bodyObj = {
         branch: branch,

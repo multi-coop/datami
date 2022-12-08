@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`DatamiCardBlockContent-${position} datami-component ${classes[position].content}`">
+    :class="`DatamiCardBlockContent-${position} datami-component ${classes[position] ? classes[position].content : ''}`">
     <!-- LABEL IF EDIT MODE -->
     <p
       v-if="currentEditViewMode === 'edit'"
@@ -17,7 +17,7 @@
 
     <!-- BLOCK TITLE IF ANY -->
     <p
-      v-if="field.block_title"
+      v-show="currentEditViewMode !== 'edit' && field.block_title"
       class="is-size-7 mb-1">
       <span
         class="has-text-weight-bold is-uppercase">
@@ -29,7 +29,7 @@
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
       class="is-flex is-flex-direction-row is-align-items-center">
-      <slot name="logo"></slot>
+      <slot name="logo"/>
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"
@@ -39,9 +39,27 @@
         class="mr-1 has-text-weight-bold">
         {{ field.prefix }}
       </span>
-      <span v-if="isMini && position !== 'subtitle'">
+      <PreviewLongText
+        v-if="field.subtype === 'longtext' && field.longtextOptions"
+        :raw-text="itemValue"
+        :file-id="fileId"
+        :field-id="field.field"
+        :field="field"
+        :longtext-options="field.longtextOptions"
+        :nowrap="isMini"
+        :max-text-length="field.maxLength"
+        :locale="locale"/>
+      <span v-else-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
+      <PreviewTimelineText
+        v-else-if="position === 'timeline'"
+        :raw-text="itemValue"
+        :file-id="fileId"
+        :field-id="field.field"
+        :field="field"
+        :step-options="field.stepOptions"
+        :locale="locale"/>
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
@@ -98,13 +116,16 @@
 import { mixinGlobal, mixinValue, mixinDiff, mixinIcons } from '@/utils/mixins.js'
 
 // import PreviewCell from '@/components/previews/PreviewCell'
-import EditCell from '@/components/edition/csv/EditCell'
+// import EditCell from '@/components/edition/csv/EditCell'
 
 export default {
   name: 'DatamiCardBlockContent',
   components: {
     // PreviewCell,
-    EditCell
+    // EditCell
+    PreviewLongText: () => import(/* webpackChunkName: "PreviewLongText" */ '@/components/previews/PreviewLongText.vue'),
+    PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue'),
+    EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
   },
   mixins: [
     mixinGlobal,
@@ -182,10 +203,14 @@ export default {
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         description: {
-          content: 'mb-3',
+          content: 'mb-4',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         infos: {
+          content: 'mb-3',
+          label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
+        },
+        steps: {
           content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         }
