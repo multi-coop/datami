@@ -3,7 +3,7 @@
     class="DatamiMapLegend datami-component">
     <div
       class="card map-legend"
-      style="">
+      :style="cssMapLegend.join()">
       <div class="card-content px-2 py-2">
         <div class="content">
           <b-tooltip
@@ -61,7 +61,7 @@
                 class="legend-scale">
                 <span
                   class="g-map-scale-circle"
-                  :style="`background-color: ${ scale.color }`"/>
+                  :style="`background-color: ${ scale.color }; ${ cssLegendScale.join() }`"/>
                 {{ scale.value }}
               </div>
             </div>
@@ -80,7 +80,7 @@
                   class="legend-scale">
                   <span
                     class="g-map-scale-circle"
-                    :style="`background-color: ${ scale.color }`"/>
+                    :style="`background-color: ${ scale.color }; ${ cssLegendScale.join() }`"/>
                   {{ scale.value }}
                 </div>
               </div>
@@ -132,7 +132,15 @@ export default {
   },
   data () {
     return {
-      isDrawerOpen: true
+      isDrawerOpen: true,
+      cssMapLegend: ['margin-bottom: 5px;'],
+      cssLegendScale: [
+        'border-radius: 50% !important;',
+        'display: inline-block !important;',
+        'height: 10px !important;',
+        'margin-right: 5px !important;',
+        'width: 10px !important;'
+      ]
     }
   },
   computed: {
@@ -154,19 +162,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-.map-legend {
-  margin-bottom: 5px;
-}
-
-.legend-scale span.g-map-scale-circle {
-  border-radius: 50% !important;
-  display: inline-block !important;
-  height: 10px !important;
-  margin-right: 5px !important;
-  width: 10px !important;
-}
-
-</style>
