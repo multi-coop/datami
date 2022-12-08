@@ -26,11 +26,17 @@
         <div
           v-if="debug"
           class="columns is-multiline">
-          <!-- isDrawerOpen: <code>{{ isDrawerOpen }}</code><br> -->
-          layersSwitches: <br><pre><code>{{ layersSwitches }}</code></pre>
+          <div class="column is-12">
+            <!-- isDrawerOpen: <code>{{ isDrawerOpen }}</code><br> -->
+            <!-- layersSwitches: <br><pre><code>{{ layersSwitches }}</code></pre> -->
+            radioChoice: <code>{{ radioChoice }}</code><br>
+          </div>
+          <div class="column is-12">
+            visibleLayers: <br><pre><code>{{ visibleLayers }}</code></pre>
+          </div>
         </div>
 
-        <!-- LAYERS CHECKBOXES -->
+        <!-- LAYERS CHECKBOXES / RADIO -->
         <p
           v-show="isDrawerOpen"
           class="legend-content px-3 pt-3">
@@ -39,6 +45,7 @@
             :key="`g-map-layer-${mapId}-${index}`"
             class="mb-1">
             <b-checkbox
+              v-if="switchesType === 'checkbox'"
               v-model="layer.visible"
               type="is-dark"
               @input="switchLayerVisibility(layer)">
@@ -46,6 +53,15 @@
                 {{ layer.label }}
               </span>
             </b-checkbox>
+            <b-radio
+              v-if="switchesType === 'radio'"
+              v-model="radioChoice"
+              :native-value="layer.index"
+              type="is-dark">
+              <span :class="`${ layer.visible ? 'has-text-weight-bold' : ''}`">
+                {{ layer.label }}
+              </span>
+            </b-radio>
           </b-field>
         </p>
       </div>
@@ -72,6 +88,10 @@ export default {
       default: null,
       type: Array
     },
+    switchesType: {
+      default: 'checkbox',
+      type: String
+    },
     isDefaultOpen: {
       default: false,
       type: Boolean
@@ -88,19 +108,34 @@ export default {
   data () {
     return {
       isDrawerOpen: false,
-      visibleLayers: []
+      visibleLayers: [],
+      radioChoice: undefined,
+      switchesAreSet: false
+    }
+  },
+  watch: {
+    radioChoice (next) {
+      if (this.switchesAreSet && next) {
+        const layer = this.visibleLayers.find(l => l.index === next)
+        this.switchLayerVisibility(layer)
+      }
     }
   },
   beforeMount () {
-    // console.log('\nC > DatamiMap > beforeMount > this.layersSwitches : ', this.layersSwitches)
+    // console.log('\nC > DatamiMapLayers > beforeMount > this.layersSwitches : ', this.layersSwitches)
     this.isDrawerOpen = this.isDefaultOpen
-    this.visibleLayers = this.layersSwitches.map(layer => {
+    this.visibleLayers = this.layersSwitches.map((layer, i) => {
       return {
+        index: `${this.mapId}-layer-switch-${i}`,
         label: layer.label,
         layers: layer.layers,
         visible: layer.default_visible
       }
     })
+    if (this.switchesType === 'radio') {
+      this.radioChoice = this.visibleLayers.find(l => l.visible).index
+    }
+    this.switchesAreSet = true
   },
   methods: {
     toggleBtn () {
@@ -110,7 +145,7 @@ export default {
       this.trackEvent(`click-${this.isDrawerOpen ? 'on' : 'off'}`)
     },
     switchLayerVisibility (layer) {
-      // console.log('\nC > DatamiMap > switchLayerVisibility > layer : ', layer)
+      // console.log('\nC > DatamiMapLayers > switchLayerVisibility > layer : ', layer)
       this.$emit('switchLayer', layer)
 
       // track with matomo
