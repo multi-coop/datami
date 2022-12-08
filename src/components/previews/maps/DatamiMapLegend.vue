@@ -59,7 +59,9 @@
                 v-for="(scale, index) in currentChoroSource.legend.scales"
                 :key="`g-map-scale-${mapId}-${index}`"
                 class="legend-scale">
-                <span :style="`background-color: ${ scale.color }`"/>
+                <span
+                  class="g-map-scale-circle"
+                  :style="`background-color: ${ scale.color }`"/>
                 {{ scale.value }}
               </div>
             </div>
@@ -76,7 +78,9 @@
                   v-for="(scale, i) in legendObj.legend.scales"
                   :key="`g-map-scale-${mapId}-sublegend-${index}-${i}`"
                   class="legend-scale">
-                  <span :style="`background-color: ${ scale.color }`"/>
+                  <span
+                    class="g-map-scale-circle"
+                    :style="`background-color: ${ scale.color }`"/>
                   {{ scale.value }}
                 </div>
               </div>
@@ -157,7 +161,7 @@ export default {
   margin-bottom: 5px;
 }
 
-.legend-scale span {
+.legend-scale span.g-map-scale-circle {
   border-radius: 50% !important;
   display: inline-block !important;
   height: 10px !important;
