@@ -313,7 +313,7 @@ export default {
       // console.log('C > PreviewCell > tagsArray > valType : ', valType)
       let tags
       const tagsStr = (!!this.value && this.value.toString()) || ''
-      let allTags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
+      let allTags = (tagsStr && this.fieldSubtype === 'tags' && tagsStr.split(this.tagSeparator)) || [tagsStr]
       allTags = allTags.filter(v => v !== '')
       if (this.nowrap) {
         tags = allTags.slice(0, this.defaultMaxTags)

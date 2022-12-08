@@ -158,11 +158,11 @@ export default {
 }
 
 .legend-scale span {
-  border-radius: 50%;
-  display: inline-block;
-  height: 10px;
-  margin-right: 5px;
-  width: 10px;
+  border-radius: 50% !important;
+  display: inline-block !important;
+  height: 10px !important;
+  margin-right: 5px !important;
+  width: 10px !important;
 }
 
 </style>
