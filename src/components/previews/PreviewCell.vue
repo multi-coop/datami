@@ -326,17 +326,18 @@ export default {
   },
   methods: {
     getNumber (value) {
-      let computed = value
-      const round = this.field.round
-      const transform = this.field.transform
-      if (round && round.digits) {
-        const digits = round.digits || 1
-        computed = this.roundOff(computed, digits)
-      }
-      if (transform && transform.multiplyBy) {
-        computed = computed * transform.multiplyBy
-      }
-      return computed
+      // let computed = value
+      // const round = this.field.round
+      // const transform = this.field.transform
+      // if (round && round.digits) {
+      //   const digits = round.digits || 1
+      //   computed = this.roundOff(computed, digits)
+      // }
+      // if (transform && transform.multiplyBy) {
+      //   computed = computed * transform.multiplyBy
+      // }
+      // return computed
+      return this.getNumberByField(value, this.field)
     },
     linkDomain (value) {
       // console.log('\nC > PreviewCell > linkDomain > value : ', value)

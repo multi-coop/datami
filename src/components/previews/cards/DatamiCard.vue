@@ -706,7 +706,7 @@ export default {
           const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
           // console.log('C > DatamiCard > applyTemplate > fieldName :', fieldName)
           const fieldObj = this.fields.find(f => f.name === fieldName)
-          // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
+          console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
           const itemValue = this.item[fieldObj.field]
           // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
           strClean = itemValue || this.t('global.noValue', this.locale)
@@ -714,6 +714,9 @@ export default {
           if (itemValue && !ignoreDefinitions && fieldObj.definitions) {
             const definition = fieldObj.definitions.find(def => def.value === strClean)
             strClean = (definition && definition.label) || strClean
+          }
+          if (itemValue && fieldObj.type === 'number') {
+            strClean = this.getNumberByField(strClean, fieldObj)
           }
         } else {
           strClean = str

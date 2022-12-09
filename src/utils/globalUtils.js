@@ -181,6 +181,20 @@ export const roundOff = (value, decimals) => {
   return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals)
 }
 
+export const getNumberByField = (value, field) => {
+  let computed = value
+  const round = field.round
+  const transform = field.transform
+  if (transform && transform.multiplyBy) {
+    computed = computed * transform.multiplyBy
+  }
+  if (round && round.digits) {
+    const digits = round.digits || 1
+    computed = roundOff(computed, digits)
+  }
+  return computed
+}
+
 // AGGREGATION UTILS
 export const groupByField = (items, groupKey) => {
   const groups = items.reduce((group, item) => {
