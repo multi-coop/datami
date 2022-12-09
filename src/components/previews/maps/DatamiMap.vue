@@ -1690,12 +1690,12 @@ export default {
       // console.log('C > DatamiMap > joinItemsToPolygon > jointureFieldItem : ', jointureFieldItem)
 
       // looping each choropleth source geojson feature
-      dataFeatures.forEach(i => {
+      dataFeatures.forEach(feat => {
         // count joined items for this feature
         const itemsCountResult = this.items.reduce((sum, item) =>
-          (String(item[jointureFieldItem]) === String(i.properties[jointureFieldPolygon]) ? sum + 1 : sum), 0
+          (String(item[jointureFieldItem]) === String(feat.properties[jointureFieldPolygon]) ? sum + 1 : sum), 0
         )
-        i.properties[source.agregated_data_field] = itemsCountResult
+        feat.properties[source.agregated_data_field] = itemsCountResult
 
         // added props if any
         if (source.joined_props) {
@@ -1707,14 +1707,20 @@ export default {
                 result = this.items.reduce((sum, item) => {
                   // console.log('\n...C > DatamiMap > joinItemsToPolygon > item : ', item)
                   const itemJoinField = String(item[jointureFieldItem])
-                  const polygonJoinField = String(i.properties[jointureFieldPolygon])
+                  const polygonJoinField = String(feat.properties[jointureFieldPolygon])
                   const itemField = this.getItemField(f.field)
                   // console.log('...C > DatamiMap > joinItemsToPolygon > itemField : ', itemField)
+                  // console.log('...C > DatamiMap > joinItemsToPolygon > item[itemField] : ', item[itemField])
                   return itemJoinField === polygonJoinField ? sum + item[itemField] : sum
                 }, 0)
+                // console.log('...C > DatamiMap > joinItemsToPolygon > result : ', result)
+                result = result === 0 ? null : result
+                break
+              case 'copy':
+                result = 'test'
                 break
             }
-            i.properties[f.field] = result
+            feat.properties[f.field] = result
           })
         }
       })
