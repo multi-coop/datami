@@ -72,6 +72,7 @@
 
     <!-- APPLY TEMPLATE IF ANY -->
     <div v-if="currentEditViewMode === 'preview' && field.templating">
+      <!-- <code>{{ templatedValues }}</code> -->
       <p
         v-for="(paragraph, idx) in templatedValues"
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">

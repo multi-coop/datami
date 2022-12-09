@@ -696,7 +696,10 @@ export default {
             detail: detailSettings[h.name]
           }
           const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
-          if (hasTemplate) { fieldMap.templating = hasTemplate }
+          if (hasTemplate) {
+            // console.log('\nC > DatamiTable > cardsSettingsFromFileOptions > hasTemplate : ', hasTemplate)
+            fieldMap.templating = hasTemplate
+          }
           return fieldMap
         })
         cardsSettings = {
@@ -728,7 +731,10 @@ export default {
           ...h.mini
         }
         const hasTemplate = h.templating && h.templating.use_on_mini
-        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        if (hasTemplate) {
+          fieldMap.templating = h.templating.paragraphs
+          fieldMap.ignoreDefinitions = h.templating.ignore_definitions
+        }
         return fieldMap
       })
     },
@@ -748,7 +754,12 @@ export default {
           ...h.detail
         }
         const hasTemplate = h.templating && h.templating.use_on_detail
-        if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
+        if (hasTemplate) {
+          // console.log('C > DatamiTable > mappingsForDetail > h : ', h)
+          fieldMap.templating = h.templating.paragraphs
+          fieldMap.ignoreDefinitions = h.templating.ignore_definitions
+          // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)
+        }
         return fieldMap
       })
     },
