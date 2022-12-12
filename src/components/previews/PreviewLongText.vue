@@ -2,7 +2,7 @@
   <div class="PreviewLongText">
     <!-- DEBUGGING -->
     <div
-      v-if="debug"
+      v-if="true"
       class="content">
       field.name : <code>{{ field.name }}</code><br>
       <!-- field : <code>{{ field }}</code><br> -->

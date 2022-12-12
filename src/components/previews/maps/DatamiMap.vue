@@ -297,9 +297,15 @@ export default {
           name: f.name,
           type: f.type,
           subtype: f.subtype,
+          bgColor: f.bgColor,
+          round: f.round,
+          transform: f.transform,
           enumArr: f.enumArr,
           definitions: f.definitions,
           tagSeparator: f.tagSeparator,
+          maxLength: f.maxLength,
+          longtextOptions: f.longtextOptions,
+          stepOptions: f.stepOptions,
           ...this.mapCardsSettings.mini[f.name]
         }
         const templates = this.cardsSettingsTemplates
