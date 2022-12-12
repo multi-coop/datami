@@ -80,7 +80,8 @@ export const mixinGlobal = {
       getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors',
       getUserFullscreen: 'git-user/getUserFullscreen',
-      isDarkMode: 'git-storage/isDarkMode'
+      isDarkMode: 'git-storage/isDarkMode',
+      getDialogsById: 'git-dialogs/getDialogsById'
     }),
     fileToken () {
       return this.getFileToken(this.fileId)
@@ -243,13 +244,25 @@ export const mixinGlobal = {
       return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
     },
 
+    // UX
     userFullscreen () {
       return this.getUserFullscreen(this.fileId)
+    },
+    fileDialogs () {
+      return this.getDialogsById(this.fileId)
     }
   },
   methods: {
     uuidv4,
     findFromPath,
+    ...mapActions({
+      updateDialogs: 'git-dialogs/updateFileDialog'
+    }),
+    updateFileDialogs (event) {
+      console.log('\nM > mixinGlobal > updateFileDialogs > event : ', event)
+      console.log('M > mixinGlobal > updateFileDialogs > this.fileId : ', this.fileId)
+      this.updateDialogs({ ...event, fileId: this.fileId })
+    },
     trimField (field) {
       return {
         field: field.field,

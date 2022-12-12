@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     toggleDialog () {
+      this.updateFileDialogs({ action: 'toggleFileInfos' })
       this.$emit('toggleInfos')
     }
   }

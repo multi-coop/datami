@@ -9,6 +9,15 @@
     <MatomoScript
       :file-id="fileId"/>
 
+    <!-- DEBUG DIALOGS -->
+    <div
+      v-if="true"
+      class="columns">
+      <div class="column is-12">
+        fileDialogs : <br><pre><code>{{ fileDialogs }}</code></pre>
+      </div>
+    </div>
+
     <!-- WIDGET -->
     <div
       :id="`datami-widget-${fileId}`"
@@ -42,6 +51,11 @@
                 :file-id="fileId"
                 :only-preview="onlypreview"
                 :locale="locale"/>
+              <b-button
+                label="modal"
+                type="is-primary"
+                size="is-small"
+                @click="isCardModalActive = true"/>
             </div>
           </div>
         </div>
@@ -232,6 +246,15 @@
     <DatamiCredits
       :file-id="fileId"
       :locale="locale"/>
+
+    <!-- TEST MODAL -->
+    <b-modal
+      v-model="isCardModalActive"
+      :width="'80%'">
+      <DialogSkeleton
+        :file-id="fileId"
+        :locale="locale"/>
+    </b-modal>
   </div>
 </template>
 
@@ -279,6 +302,7 @@ export default {
     // PreviewJson,
     // DatamiCredits
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
     UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
@@ -355,6 +379,7 @@ export default {
   data () {
     return {
       // file infos
+      isCardModalActive: false,
       gitfileDatami: undefined,
       fileId: undefined,
       fileType: undefined,

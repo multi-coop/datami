@@ -15,34 +15,36 @@
       </div>
 
       <!-- DEBUGGING -->
-      <div
-        v-if="debug"
-        class="column is-3">
-        <!-- fileFilters: <br><pre><code>{{ fileFilters }}</code></pre> -->
-        consolidating: <br><pre><code>{{ consolidating }}</code></pre><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-9">
-        consolidationData: <br><pre><code>{{ consolidationData }}</code></pre><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-9">
-        columnsForView: <br>
-        <pre><code>{{ columnsForView }}</code></pre><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-9">
-        filterTags: <br>
-        <pre><code>{{ filterTags }}</code></pre><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-9">
-        searchText: <br>
-        <pre><code>{{ searchText }}</code></pre><br>
+      <div v-if="debug">
+        <div
+          v-if="debug"
+          class="column is-3">
+          <!-- fileFilters: <br><pre><code>{{ fileFilters }}</code></pre> -->
+          consolidating: <br><pre><code>{{ consolidating }}</code></pre><br>
+        </div>
+        <div
+          v-if="debug"
+          class="column is-9">
+          consolidationData: <br><pre><code>{{ consolidationData }}</code></pre><br>
+        </div>
+        <div
+          v-if="debug"
+          class="column is-9">
+          columnsForView: <br>
+          <pre><code>{{ columnsForView }}</code></pre><br>
+        </div>
+        <div
+          v-if="debug"
+          class="column is-9">
+          filterTags: <br>
+          <pre><code>{{ filterTags }}</code></pre><br>
+        </div>
+        <div
+          v-if="debug"
+          class="column is-9">
+          searchText: <br>
+          <pre><code>{{ searchText }}</code></pre><br>
+        </div>
       </div>
 
       <!-- COUNTS & EDIT CSV NAVABAR -->
@@ -1135,7 +1137,6 @@ export default {
         const boolFilters = boolAndOrFilters
           .map(b => b.bool)
           .every(b => b) // HORIZONTAL "AND" CONDITION
-
         // console.log('C > DatamiTable > dataEditedFiltered > boolSearch : ', boolSearch)
         // console.log('C > DatamiTable > dataEditedFiltered > boolFilters : ', boolFilters)
 
@@ -1150,30 +1151,36 @@ export default {
         case 'openCard':
           // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.activeTableCardId = event.rowId
+          this.updateFileDialogs(event)
           break
 
         // ADD TAG TO ENUM
         case 'addTagToEnum':
           // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.$emit('addTagToEnum', event.value)
+          this.updateFileDialogs(event)
           break
 
         // ADD ROW
         case 'openAddRowDialog':
           this.showAddRowDialog = true
+          this.updateFileDialogs(event)
           break
         case 'addNewRow':
           this.$emit('addRow', event)
+          this.updateFileDialogs(event)
           break
 
         // IMPORT DATA
         case 'openUploadFileDialog':
           this.showUploadFileDialog = true
+          this.updateFileDialogs(event)
           break
 
         // DELETE ROWS
         case 'openDeleteRowsDialog':
           this.showDeleteRowsDialog = true
+          this.updateFileDialogs(event)
           break
         case 'deleteRows':
           this.$emit('deleteRows', event)
@@ -1335,6 +1342,7 @@ export default {
       // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
       // console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
       // this.showCardDetails = !event.showDetail
+      this.updateFileDialogs(event)
       if (event.showDetail) {
         this.showCardDetails = false
       } else {

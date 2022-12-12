@@ -326,17 +326,6 @@ export default {
   },
   methods: {
     getNumber (value) {
-      // let computed = value
-      // const round = this.field.round
-      // const transform = this.field.transform
-      // if (round && round.digits) {
-      //   const digits = round.digits || 1
-      //   computed = this.roundOff(computed, digits)
-      // }
-      // if (transform && transform.multiplyBy) {
-      //   computed = computed * transform.multiplyBy
-      // }
-      // return computed
       return this.getNumberByField(value, this.field)
     },
     linkDomain (value) {
@@ -354,13 +343,6 @@ export default {
       this.$emit('action', event)
     }
   }
-  // beforeMount () {
-  //   console.log('\nC > PreviewCell > beforeMount > this.value : ', this.value)
-  //   console.log('C > PreviewCell > beforeMount > this.field.label : ', this.field.label)
-  //   console.log('C > PreviewCell > beforeMount > this.field : ', this.field)
-  //   console.log('C > PreviewCell > beforeMount > this.tagSeparator : ', this.tagSeparator)
-  // }
-
 }
 </script>
 
