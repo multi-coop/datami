@@ -33,6 +33,7 @@
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"
+        class="mr-2"
         size="is-small"/>
       <span
         v-if="field.prefix"
