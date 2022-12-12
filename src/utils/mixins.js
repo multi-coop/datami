@@ -250,6 +250,23 @@ export const mixinGlobal = {
   methods: {
     uuidv4,
     findFromPath,
+    trimField (field) {
+      return {
+        field: field.field,
+        name: field.name,
+        type: field.type,
+        subtype: field.subtype,
+        bgColor: field.bgColor,
+        round: field.round,
+        transform: field.transform,
+        enumArr: field.enumArr,
+        definitions: field.definitions,
+        tagSeparator: field.tagSeparator,
+        maxLength: field.maxLength,
+        longtextOptions: field.longtextOptions,
+        stepOptions: field.stepOptions
+      }
+    },
     setWidgetCopy () {
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
       const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'

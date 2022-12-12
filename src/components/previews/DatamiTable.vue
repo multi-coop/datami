@@ -718,19 +718,7 @@ export default {
     mappingsForMini () {
       return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
         const fieldMap = {
-          field: h.field,
-          name: h.name,
-          type: h.type,
-          subtype: h.subtype,
-          bgColor: h.bgColor,
-          round: h.round,
-          transform: h.transform,
-          enumArr: h.enumArr,
-          definitions: h.definitions,
-          tagSeparator: h.tagSeparator,
-          maxLength: h.maxLength,
-          longtextOptions: h.longtextOptions,
-          stepOptions: h.stepOptions,
+          ...this.trimField(h),
           ...h.mini
         }
         const hasTemplate = h.templating && h.templating.use_on_mini
@@ -744,19 +732,7 @@ export default {
     mappingsForDetail () {
       return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
         const fieldMap = {
-          field: h.field,
-          name: h.name,
-          type: h.type,
-          subtype: h.subtype,
-          bgColor: h.bgColor,
-          round: h.round,
-          transform: h.transform,
-          enumArr: h.enumArr,
-          definitions: h.definitions,
-          tagSeparator: h.tagSeparator,
-          maxLength: h.maxLength,
-          longtextOptions: h.longtextOptions,
-          stepOptions: h.stepOptions,
+          ...this.trimField(h),
           ...h.detail
         }
         const hasTemplate = h.templating && h.templating.use_on_detail

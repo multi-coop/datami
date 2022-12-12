@@ -40,6 +40,10 @@
         class="mr-1 has-text-weight-bold">
         {{ field.prefix }}
       </span>
+      <!-- DEBUGGING -->
+      <!-- <div v-if="field.subtype === 'longtext'">
+        field : <code>{{ field }}</code>
+      </div> -->
       <PreviewLongText
         v-if="field.subtype === 'longtext' && field.longtextOptions"
         :raw-text="itemValue"
@@ -61,6 +65,7 @@
         :field="field"
         :step-options="field.stepOptions"
         :locale="locale"/>
+      <!-- NUMBERS -->
       <span v-else-if="field.type === 'number'">
         {{ getNumber(itemValue) || t('global.noValue', locale) }}
         <!-- {{ field }} -->
@@ -80,7 +85,7 @@
 
     <!-- APPLY TEMPLATE IF ANY -->
     <div v-if="currentEditViewMode === 'preview' && field.templating">
-      <!-- <code>{{ templatedValues }}</code> -->
+      <code>{{ templatedValues }}</code>
       <p
         v-for="(paragraph, idx) in templatedValues"
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">

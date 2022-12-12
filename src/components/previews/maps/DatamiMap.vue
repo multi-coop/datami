@@ -293,19 +293,7 @@ export default {
     mapCardsSettingsMini () {
       return this.fields.map(f => {
         const fieldMap = {
-          field: f.field,
-          name: f.name,
-          type: f.type,
-          subtype: f.subtype,
-          bgColor: f.bgColor,
-          round: f.round,
-          transform: f.transform,
-          enumArr: f.enumArr,
-          definitions: f.definitions,
-          tagSeparator: f.tagSeparator,
-          maxLength: f.maxLength,
-          longtextOptions: f.longtextOptions,
-          stepOptions: f.stepOptions,
+          ...this.trimField(f),
           ...this.mapCardsSettings.mini[f.name]
         }
         const templates = this.cardsSettingsTemplates
@@ -317,13 +305,7 @@ export default {
     mapCardsSettingsDetail () {
       return this.fields.map(f => {
         const fieldMap = {
-          field: f.field,
-          name: f.name,
-          type: f.type,
-          subtype: f.subtype,
-          enumArr: f.enumArr,
-          definitions: f.definitions,
-          tagSeparator: f.tagSeparator,
+          ...this.trimField(f),
           ...this.mapCardsSettings.detail[f.name]
         }
         const templates = this.cardsSettingsTemplates
