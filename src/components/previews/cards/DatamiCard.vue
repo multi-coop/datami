@@ -718,8 +718,6 @@ export default {
           if (itemValue && fieldObj.type === 'number') {
             strClean = this.getNumberByField(strClean, fieldObj)
           }
-        } else {
-          strClean = str
         }
         return strClean
       })
