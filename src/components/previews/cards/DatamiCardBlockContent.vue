@@ -60,6 +60,13 @@
         :field="field"
         :step-options="field.stepOptions"
         :locale="locale"/>
+      <span v-else-if="field.type === 'number'">
+        {{ getNumber(itemValue) || t('global.noValue', locale) }}
+        <!-- {{ field }} -->
+        <span v-if="field.subtype === 'percent'">
+          &nbsp;%
+        </span>
+      </span>
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
@@ -70,8 +77,9 @@
       </span>
     </p>
 
-    <!-- DEBUGGING - APPLY TEMPLATE IF ANY -->
+    <!-- APPLY TEMPLATE IF ANY -->
     <div v-if="currentEditViewMode === 'preview' && field.templating">
+      <!-- <code>{{ templatedValues }}</code> -->
       <p
         v-for="(paragraph, idx) in templatedValues"
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">
@@ -225,6 +233,9 @@ export default {
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.itemValue :', this.itemValue)
   // },
   methods: {
+    getNumber (value) {
+      return this.getNumberByField(value, this.field)
+    },
     // applyTemplate (text) {
     //   // prepare regex
     //   const fieldStart = '{{'
