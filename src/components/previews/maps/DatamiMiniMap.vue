@@ -91,6 +91,7 @@ export default {
   watch: {
     item (next) {
       // console.log('\nC > DatamiMiniMap > watch > item > next : ', next)
+      // console.log('C > DatamiMiniMap > watch > item > this.fields : ', this.fields)
       const newCenter = [next[this.fieldLong], next[this.fieldLat]]
       this.marker.setLngLat(newCenter)
       this.map.easeTo({
@@ -112,6 +113,7 @@ export default {
   beforeMount () {
     // console.log('\nC > DatamiMiniMap > beforeMount > this.item : ', this.item)
     const mapOptions = this.mapOptions
+    // console.log('\nC > DatamiMiniMap > beforeMount > mapOptions : ', mapOptions)
 
     // set up map's basic parameters
     this.minimapHeight = mapOptions.height ?? this.minimapHeight

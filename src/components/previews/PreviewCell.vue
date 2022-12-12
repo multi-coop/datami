@@ -177,7 +177,7 @@
     <div
       v-if="isNumber"
       :class="`has-text-right has-text-weight-bold is-size-6`">
-      {{ value }}
+      {{ getNumber(value) }}
       <span
         v-if="isPercent"
         class="ml-2">
@@ -313,7 +313,7 @@ export default {
       // console.log('C > PreviewCell > tagsArray > valType : ', valType)
       let tags
       const tagsStr = (!!this.value && this.value.toString()) || ''
-      let allTags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
+      let allTags = (tagsStr && this.fieldSubtype === 'tags' && tagsStr.split(this.tagSeparator)) || [tagsStr]
       allTags = allTags.filter(v => v !== '')
       if (this.nowrap) {
         tags = allTags.slice(0, this.defaultMaxTags)
@@ -325,6 +325,20 @@ export default {
     }
   },
   methods: {
+    getNumber (value) {
+      // let computed = value
+      // const round = this.field.round
+      // const transform = this.field.transform
+      // if (round && round.digits) {
+      //   const digits = round.digits || 1
+      //   computed = this.roundOff(computed, digits)
+      // }
+      // if (transform && transform.multiplyBy) {
+      //   computed = computed * transform.multiplyBy
+      // }
+      // return computed
+      return this.getNumberByField(value, this.field)
+    },
     linkDomain (value) {
       // console.log('\nC > PreviewCell > linkDomain > value : ', value)
       let urlObj

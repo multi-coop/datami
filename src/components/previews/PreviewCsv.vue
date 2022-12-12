@@ -414,17 +414,18 @@ export default {
     ...mapActions({
       updateBuffer: 'git-data/updateBuffer'
     }),
-    buildEnumArr (data, separator) {
+    buildEnumArr (data, separator, fieldSubtype) {
       const dataCopy = data.filter(d => !!d)
       // console.log('C > PreviewCsv > buildEnumArr > dataCopy : ', dataCopy)
       // console.log('C > PreviewCsv > buildEnumArr > separator : ', separator)
+      // console.log('C > PreviewCsv > buildEnumArr > fieldSubtype : ', fieldSubtype)
       // make a set from dataParsed instead of simple array
       const dataParsedSet = new Set()
       dataCopy && dataCopy.forEach(tag => {
         // console.log('...C > PreviewCsv > buildEnumArr > tag : ', tag)
         const tagStr = tag && tag.toString()
         // console.log('...C > PreviewCsv > buildEnumArr > tagStr : ', tagStr)
-        if (tagStr && tagStr.includes(separator)) {
+        if (tagStr && fieldSubtype === 'tags' && tagStr.includes(separator)) {
           const subArr = tag.split(separator).map(t => t.trim())
           subArr.forEach(item => dataParsedSet.add(item))
         } else if (tagStr) {
@@ -494,6 +495,8 @@ export default {
             ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
+            ...fieldCustomProps && fieldCustomProps.round && { round: fieldCustomProps.round },
+            ...fieldCustomProps && fieldCustomProps.transform && { transform: fieldCustomProps.transform },
             ...fieldCustomProps && fieldCustomProps.longtextOptions && { longtextOptions: fieldCustomProps.longtextOptions },
             ...fieldCustomProps && fieldCustomProps.booleanOptions && { booleanOptions: fieldCustomProps.booleanOptions },
             ...fieldCustomProps && fieldCustomProps.stepSeparator && { stepSeparator: fieldCustomProps.stepSeparator },
@@ -505,8 +508,10 @@ export default {
           if (!defaultEnumArr && needEnumArr) {
             const enumArr = this.buildEnumArr(
               dataRaw.data.map(item => item[fieldId]),
-              fieldCustomProps.tagSeparator || defaultTagsSeparator
+              fieldCustomProps.tagSeparator || defaultTagsSeparator,
+              fieldSubtype
             )
+            // console.log('C > PreviewCsv > buildColumns > enumArr : ', enumArr)
             fieldData.enumArr = enumArr
           }
 

@@ -256,7 +256,7 @@
                 v-if="hasAnyContentByPosition([pos])"
                 :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <div v-if="!norTagsNorLinks.includes(pos)  && hasContentByPosition(pos) ">
+                <div v-if="!norTagsNorLinks.includes(pos) && hasContentByPosition(pos) ">
                   <DatamiCardBlockContent
                     v-for="(fieldObj, i) in getFieldsByPosition(pos)"
                     :key="`${pos}-${i}-${fieldObj.field}`"
@@ -680,39 +680,47 @@ export default {
     },
     getTemplatedValues (field) {
       // console.log('\nC > DatamiCard > applyTemplate > field :', field)
+      const ignoreDefinitions = field.ignoreDefinitions
       const templatedArray = field.templating.map(paragraph => {
         const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
-        return this.applyTemplate(text)
+        return this.applyTemplate(text, ignoreDefinitions)
       })
       return templatedArray
     },
-    applyTemplate (text) {
+    applyTemplate (text, ignoreDefinitions = false) {
       // replace value fields
+      // console.log('\nC > DatamiCard > applyTemplate > text :', text)
+      // console.log('C > DatamiCard > applyTemplate > ignoreDefinitions :', ignoreDefinitions)
       const fieldStart = '{{'
       const fieldEnd = '}}'
       const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
+      // const fieldRegex = /\s*(\{{.}})\s*
+      // console.log('C > DatamiCard > applyTemplate > fieldRegex :', fieldRegex)
 
-      let textArr = text
-        .split(fieldRegex)
-        .map(str => {
-          let strClean
-          if (str.startsWith(fieldStart)) {
-            const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
-            // console.log('\nC > DatamiCard > applyTemplate > fieldName :', fieldName)
-            const fieldObj = this.fields.find(f => f.name === fieldName)
-            // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
-            const itemValue = this.item[fieldObj.field]
-            strClean = itemValue || this.t('global.noValue', this.locale)
-            // replace by value defintion if any in fieldObj
-            if (itemValue && fieldObj.definitions) {
-              const definition = fieldObj.definitions.find(def => def.value === strClean)
-              strClean = (definition && definition.label) || strClean
-            }
-          } else {
-            strClean = str
+      let textArr = text.split(fieldRegex).filter(s => !!s)
+      // console.log('C > DatamiCard > applyTemplate > textArr :', textArr)
+      textArr = textArr.map(str => {
+        // console.log('C > DatamiCard > applyTemplate > str :', str)
+        let strClean = str
+        if (str.startsWith(fieldStart)) {
+          const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
+          // console.log('C > DatamiCard > applyTemplate > fieldName :', fieldName)
+          const fieldObj = this.fields.find(f => f.name === fieldName)
+          // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
+          const itemValue = this.item[fieldObj.field]
+          // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
+          strClean = itemValue || this.t('global.noValue', this.locale)
+          // replace by value defintion if any in fieldObj
+          if (itemValue && !ignoreDefinitions && fieldObj.definitions) {
+            const definition = fieldObj.definitions.find(def => def.value === strClean)
+            strClean = (definition && definition.label) || strClean
           }
-          return strClean
-        })
+          if (itemValue && fieldObj.type === 'number') {
+            strClean = this.getNumberByField(strClean, fieldObj)
+          }
+        }
+        return strClean
+      })
 
       // replace links fields
       const linksStart = '~~'
