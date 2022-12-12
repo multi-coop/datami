@@ -701,12 +701,12 @@ export default {
       // console.log('C > DatamiCard > applyTemplate > textArr :', textArr)
       textArr = textArr.map(str => {
         // console.log('C > DatamiCard > applyTemplate > str :', str)
-        let strClean
+        let strClean = str
         if (str.startsWith(fieldStart)) {
           const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
           // console.log('C > DatamiCard > applyTemplate > fieldName :', fieldName)
           const fieldObj = this.fields.find(f => f.name === fieldName)
-          console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
+          // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
           const itemValue = this.item[fieldObj.field]
           // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
           strClean = itemValue || this.t('global.noValue', this.locale)
