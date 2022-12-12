@@ -140,7 +140,7 @@
           {{ val }}
         </span>
         <span v-if="getValueDefinitionLabel(val)">
-          : {{ trimText(getValueDefinitionLabel(val), 7) }}
+          : {{ trimText(getValueDefinitionLabel(val), isMini ? 7 : 25) }}
         </span>
         <b-icon
           v-if="val !== '...' && (field.foreignKey || field.definitions)"
