@@ -250,6 +250,9 @@ export const mixinGlobal = {
     },
     fileDialogs () {
       return this.getDialogsById(this.fileId)
+    },
+    hasFileDialogs () {
+      return this.fileDialogs.length
     }
   },
   methods: {
@@ -258,10 +261,16 @@ export const mixinGlobal = {
     ...mapActions({
       updateDialogs: 'git-dialogs/updateFileDialog'
     }),
-    updateFileDialogs (event) {
-      console.log('\nM > mixinGlobal > updateFileDialogs > event : ', event)
+    updateFileDialogs (component, event, show = true) {
+      console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
+      console.log('M > mixinGlobal > updateFileDialogs > show : ', show)
+      console.log('M > mixinGlobal > updateFileDialogs > event : ', event)
       console.log('M > mixinGlobal > updateFileDialogs > this.fileId : ', this.fileId)
-      this.updateDialogs({ ...event, fileId: this.fileId })
+      this.updateDialogs({ fileId: this.fileId, component: component, show: show, event: event })
+    },
+    resetFileDialog () {
+      console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.fileId, reset: true })
     },
     trimField (field) {
       return {

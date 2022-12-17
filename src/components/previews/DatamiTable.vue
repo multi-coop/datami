@@ -278,7 +278,7 @@
         </div>
 
         <!-- DISPLAY DETAILLED CARD FOR TABLE VIEW -->
-        <div
+        <!-- <div
           v-show="currentViewMode === 'table' && activeTableCardId"
           class="columns is-centered">
           <div
@@ -296,7 +296,7 @@
               @updateCellValue="emitUpdate"
               @toggleDetail="activeTableCardId = undefined"/>
           </div>
-        </div>
+        </div> -->
 
         <!-- CARDS -->
         <div
@@ -505,24 +505,6 @@ import {
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
 import { mapActions, mapGetters } from 'vuex'
 
-// import SortAndFiltersSkeleton from '@/components/edition/csv/SortAndFiltersSkeleton'
-// import ButtonSortByField from '@/components/sorting/ButtonSortByField'
-// import EditCsvSkeleton from '@/components/edition/csv/EditCsvSkeleton'
-// import DialogAddRow from '@/components/edition/csv/DialogAddRow'
-// import DialogDeleteRows from '@/components/edition/csv/DialogDeleteRows'
-
-// import PreviewField from '@/components/previews/PreviewField'
-// import PreviewCell from '@/components/previews/PreviewCell'
-// import EditCell from '@/components/edition/csv/EditCell'
-// import PreviewConsolidation from '@/components/edition/PreviewConsolidation'
-
-// import DatamiCardsGrid from '@/components/previews/cards/DatamiCardsGrid'
-// import DatamiCard from '@/components/previews/cards/DatamiCard'
-// import DatamiDatavizGrid from '@/components/previews/dataviz/DatamiDatavizGrid'
-// import DatamiMapGrid from '@/components/previews/maps/DatamiMapGrid'
-
-// import PagesNavigation from '@/components/pagination/PagesNavigation'
-
 export default {
   name: 'DatamiTable',
   components: {
@@ -552,7 +534,7 @@ export default {
     PreviewConsolidation: () => import(/* webpackChunkName: "PreviewConsolidation" */ '@/components/edition/PreviewConsolidation.vue'),
 
     DatamiCardsGrid: () => import(/* webpackChunkName: "DatamiCardsGrid" */ '@/components/previews/cards/DatamiCardsGrid.vue'),
-    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
+    // DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DatamiDatavizGrid: () => import(/* webpackChunkName: "DatamiDatavizGrid" */ '@/components/previews/dataviz/DatamiDatavizGrid.vue'),
     DatamiMapGrid: () => import(/* webpackChunkName: "DatamiMapGrid" */ '@/components/previews/maps/DatamiMapGrid.vue'),
 
@@ -1145,42 +1127,45 @@ export default {
       return data
     },
     async processAction (event) {
-      // console.log('\nC > DatamiTable > processAction > event : ', event)
+      console.log('\nC > DatamiTable > processAction > event : ', event)
       switch (event.action) {
         // OPEN CARD
         case 'openCard':
-          // console.log('\nC > DatamiTable > processAction > event : ', event)
-          this.activeTableCardId = event.rowId
-          this.updateFileDialogs(event)
+          // this.activeTableCardId = event.rowId
+          this.updateFileDialogs('CardDetail', {
+            ...event,
+            fromTable: true,
+            fields: this.columns,
+            fieldMapping: this.mappingsForDetail,
+            item: this.getDetailItem(event.rowId)
+          })
           break
 
         // ADD TAG TO ENUM
         case 'addTagToEnum':
           // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.$emit('addTagToEnum', event.value)
-          this.updateFileDialogs(event)
           break
 
         // ADD ROW
         case 'openAddRowDialog':
           this.showAddRowDialog = true
-          this.updateFileDialogs(event)
+          this.updateFileDialogs('AddRow', event)
           break
         case 'addNewRow':
           this.$emit('addRow', event)
-          this.updateFileDialogs(event)
           break
 
         // IMPORT DATA
         case 'openUploadFileDialog':
           this.showUploadFileDialog = true
-          this.updateFileDialogs(event)
+          this.updateFileDialogs('UploadFile', event)
           break
 
         // DELETE ROWS
         case 'openDeleteRowsDialog':
           this.showDeleteRowsDialog = true
-          this.updateFileDialogs(event)
+          this.updateFileDialogs('DeleteRow', event)
           break
         case 'deleteRows':
           this.$emit('deleteRows', event)
@@ -1339,15 +1324,22 @@ export default {
       this.closeConsolidationDetail(event.rowId)
     },
     toggleDetail (event) {
-      // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
-      // console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
+      console.log('\nC > DatamiTable > toggleDetail > event : ', event)
+      console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
       // this.showCardDetails = !event.showDetail
-      this.updateFileDialogs(event)
-      if (event.showDetail) {
-        this.showCardDetails = false
-      } else {
-        this.showCardDetails = true
+      const dialogPayload = {
+        fromTable: false,
+        item: this.getDetailItem(event.itemId),
+        fields: this.columns,
+        fieldMapping: this.mappingsForDetail
       }
+      this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
+
+      // if (event.showDetail) {
+      //   this.showCardDetails = false
+      // } else {
+      //   this.showCardDetails = true
+      // }
     }
   }
 }

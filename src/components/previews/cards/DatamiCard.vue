@@ -112,7 +112,7 @@
     </div>
 
     <!-- CONTENT -->
-    <div :class="`card-content pt-0 ${showDetail ? 'detail-padding' : ''}`">
+    <div :class="`card-content pt-3 ${showDetail ? 'detail-padding' : ''}`">
       <!-- DEBUG -->
       <div v-if="debug">
         <!-- <pre><code>{{ item }}</code></pre> -->
@@ -749,9 +749,9 @@ export default {
     //   this.$emit('toggleDetail', this.item.id)
     // },
     toggleDetail (event) {
-      // console.log('\nC > DatamiCard > toggleDetail > event :', event)
+      console.log('\nC > DatamiCard > toggleDetail > event :', event)
       // console.log('C > DatamiCard > toggleDetail > this.fieldMapping :', this.fieldMapping)
-      // console.log('C > DatamiCard > toggleDetail > this.showDetail :', this.showDetail)
+      console.log('C > DatamiCard > toggleDetail > this.showDetail :', this.showDetail)
       const payload = {
         isMini: this.isMini,
         showDetail: this.showDetail,

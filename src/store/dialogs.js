@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 
 export const dialogs = {
   namespaced: true,
@@ -12,39 +12,37 @@ export const dialogs = {
     }
   },
   mutations: {
-    setState (state, { key, data }) {
-      console.log('S-dialogs > M > setState > key : ', key)
-      console.log('S-dialogs > M > setState > data : ', data)
-      const index = state[key].findIndex(item => item.fileId === data.fileId)
-      if (index !== -1) {
-        Vue.set(state[key], index, data)
-      } else {
-        state[key].push(data)
-      }
+    addToDialogs (state, { fileId, component, event }) {
+      console.log('S-dialogs > M > addToDialogs > fileId : ', fileId)
+      state.fileDialogs.push({ fileId: fileId, component: component, event: event })
     },
-    addToDialogs (state, event) {
-      console.log('S-dialogs > M > addToErrors > event : ', event)
-      const index = state.fileDialogs.findIndex(dialog => dialog.fileId === event.fileId)
-      if (index !== -1) {
-        Vue.set(state.fileDialogs, index, event)
-      } else {
-        state.fileDialogs.push(event)
-      }
-      // console.log('S-dialogs > M > addToErrors > state.fileDialogs : ', state.fileDialogs)
+    removeFromDialogsByComponent (state, { fileId, component, event }) {
+      console.log('S-dialogs > M > removeFromDialogs > component : ', component)
+      console.log('S-dialogs > M > removeFromDialogs > event : ', event)
+      // console.log('S-dialogs > M > removeFromDialogs > state.fileDialogs : ', state.fileDialogs)
+      state.fileDialogs = state.fileDialogs.filter(dialog => dialog.fileId !== fileId && dialog.component !== component)
     },
-    removeFromDialogs (state, event) {
-      // console.log('S-dialogs > M > removeFromDialogs > state.fileDialogs : ', state.fileDialogs)
-      state.fileDialogs = state.fileDialogs.filter(dialog => dialog.fileId !== event.fileId)
-      // console.log('S-dialogs > M > removeFromDialogs > state.fileDialogs : ', state.fileDialogs)
+    resetFileDialog (state, { fileId }) {
+      console.log('S-dialogs > M > removeFromDialogs > fileId : ', fileId)
+      state.fileDialogs = state.fileDialogs.filter(dialog => dialog.fileId !== fileId)
     }
   },
   actions: {
-    updateFileDialog ({ commit }, event) {
-      console.log('\nS-dialogs > M > updateFileDialog > event : ', event)
-      // console.log('S-dialogs > M > updateFileDialog > fileId : ', fileId)
-      // console.log('S-dialogs > M > updateFileDialog > data : ', data)
-      // commit('setState', { key: 'fileDialogs', fileId: fileId, data: data })
-      commit('setState', { key: 'fileDialogs', data: event })
+    updateFileDialog ({ commit }, { fileId, component, event, show, reset = false }) {
+      console.log('\nS-dialogs > M > updateFileDialog > fileId : ', fileId)
+      console.log('S-dialogs > M > updateFileDialog > component : ', component)
+      console.log('S-dialogs > M > updateFileDialog > show : ', show)
+      console.log('S-dialogs > M > updateFileDialog > event : ', event)
+      console.log('S-dialogs > M > updateFileDialog > reset : ', reset)
+      if (reset) {
+        commit('resetFileDialog', { fileId: fileId })
+      } else {
+        if (show) {
+          commit('addToDialogs', { fileId: fileId, component: component, event: event })
+        } else {
+          commit('removeFromDialogs', { fileId: fileId, component: component, event: event })
+        }
+      }
     }
   }
 }

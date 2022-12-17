@@ -11,7 +11,7 @@
         <b-icon
           icon="information-outline"
           size="is-small"
-          :class="`ml-1 mr-6 has-text-${showFileInfos ? 'black' : 'grey-light'}`"
+          class="ml-1 mr-6 has-text-grey-light"
           @click.native="toggleDialog"/>
       </b-tooltip>
     </div>
@@ -37,12 +37,17 @@ export default {
     locale: {
       default: 'en',
       type: String
-    },
-    showFileInfos: {
-      default: false,
-      type: Boolean
     }
+    // showFileInfos: {
+    //   default: false,
+    //   type: Boolean
+    // }
   },
+  // data () {
+  //   return {
+  //     show: false
+  //   }
+  // },
   computed: {
     ...mapGetters({
       isDarkMode: 'git-storage/isDarkMode'
@@ -50,7 +55,8 @@ export default {
   },
   methods: {
     toggleDialog () {
-      this.updateFileDialogs({ action: 'toggleFileInfos' })
+      // this.show = !this.show
+      this.updateFileDialogs('FileInfos', { action: 'toggleFileInfos' })
       this.$emit('toggleInfos')
     }
   }

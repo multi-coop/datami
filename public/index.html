@@ -452,7 +452,7 @@
        {
          "title": "Données Décider ensemble",
          "activate": true,
-         "localdev": true,
+         "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/csv/geocoding/decider-ensemble-ressources-geocoded.csv",
          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/csv/geocoding/decider-ensemble-ressources-geocoded.csv",
          "default-tab": true,
@@ -478,12 +478,12 @@
              ]
            },
            "schema": {
-             "localdev": true,
+             "localdev": false,
              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json"
            },
            "fields-custom-properties": {
-             "localdev": true,
+             "localdev": false,
              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-fields-custom-props.json",
              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-fields-custom-props.json"
            },
@@ -515,7 +515,8 @@
                  "position": "title"
                },
                "LOGO URL": {
-                 "position": "imge"
+                 "position": "image",
+                 "right": true
                },
                "adresse_postale": {
                  "position": "adress"
@@ -545,8 +546,13 @@
                "SITE WEB": {
                  "position": "links",
                  "block_title": "Lien vers le site du projet",
-                 "right": true
+                 "right": false
                },
+               "LIEN PDF PROTEGE": {
+                "position": "links",
+                "block_title": "Lien vers fichier pdf",
+                "right": false
+              },
                "ÉTAPES": {
                  "position": "timeline",
                  "block_title": "Déroulé",
@@ -593,7 +599,7 @@
            "datavizview": {
              "activate": true,
              "default": false,
-             "localdev": true,
+             "localdev": false,
              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-dataviz-settings.json",
              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-dataviz-settings.json"
            },
@@ -607,7 +613,7 @@
                  },
                  "height": 800,
                  "cols": 12,
-                 "localdev": true,
+                 "localdev": false,
                  "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-map-settings.json",
                  "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-map-settings.json"
                }
@@ -620,7 +626,7 @@
          "title": "Introduction",
          "activate": true,
          "default-tab": false,
-         "localdev": true,
+         "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/markdown/decider-ensemble-intro.md",
          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/markdown/decider-ensemble-intro.md",
          "onlypreview": true,
@@ -630,7 +636,7 @@
          "title": "Schéma des données",
          "activate": false,
          "default-tab": false,
-         "localdev": true,
+         "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json",
          "options": {

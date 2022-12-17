@@ -8,7 +8,7 @@
       class="loader big-loader"/>
 
     <!-- DETAIL CARD FOR DISPLAYED ITEM -->
-    <div
+    <!-- <div
       v-show="showCard && displayedItemId && showDetail"
       class="map-card map-detail-card-item"
       :style="`width: ${cardDetailWidth}; transform: translate(-50%, ${mapHeightTop}px); -webkit-transform: translate(-50%, ${mapHeightTop}px)`">
@@ -25,7 +25,7 @@
         @toggleDetail="toggleItemCard"
         @action="SendActionToParent"
         @updateCellValue="emitUpdate"/>
-    </div>
+    </div> -->
 
     <!-- DISPLAY MAP -->
     <div
@@ -1573,9 +1573,9 @@ export default {
         }
       }
     },
-    goToDetailPage (itemId) {
-      console.log('C > DatamiMap > goToDetailPage > itemId : ', itemId)
-    },
+    // goToDetailPage (itemId) {
+    //   console.log('C > DatamiMap > goToDetailPage > itemId : ', itemId)
+    // },
 
     // - - - - - - - - - - - - - - - - - - //
     // ITEM MATCHING
@@ -1633,7 +1633,7 @@ export default {
     //   }
     // },
     toggleItemCard (event) {
-      // console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
+      console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
       if (event.btn === 'closeButton') {
         this.showCard = false
         this.showDetail = false
@@ -1642,7 +1642,27 @@ export default {
       } else {
         this.showCard = true
         if (event.btn === 'showDetailButton') {
-          this.showDetail = true
+          // this.showDetail = true
+
+          // :file-id="fileId"
+          // :fields="fields"
+          // :field-mapping="mapCardsSettingsDetail"
+          // :item="displayedItem"
+          // :show-detail="true"
+          // :show-detail-card="showDetail"
+          // :is-mini="false"
+          // :from-map="true"
+          // :locale="locale"
+          // @toggleDetail="toggleItemCard"
+          // @action="SendActionToParent"
+          // @updateCellValue="emitUpdate"/>
+
+          const dialogPayload = {
+            item: this.displayedItem,
+            fields: this.fields,
+            fieldMapping: this.mapCardsSettingsDetail
+          }
+          this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
         }
       }
     },

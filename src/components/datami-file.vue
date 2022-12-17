@@ -13,8 +13,15 @@
     <div
       v-if="true"
       class="columns">
-      <div class="column is-12">
+      <div class="column is-4">
+        hasFileDialogs: <code>{{ hasFileDialogs }}</code><br>
         fileDialogs : <br><pre><code>{{ fileDialogs }}</code></pre>
+      </div>
+      <div class="column is-4">
+        errors : <br><pre><code>{{ errors }}</code></pre>
+      </div>
+      <div class="column is-4">
+        notifications : <br><pre><code>{{ notifications }}</code></pre>
       </div>
     </div>
 
@@ -37,11 +44,11 @@
                 :file-id="fileId"
                 :locale="locale"/>
               <FileTitle
-                :show-file-infos="showFileInfos"
                 :title="title"
                 :file-id="fileId"
-                :locale="locale"
-                @toggleInfos="showFileInfos = !showFileInfos"/>
+                :locale="locale"/>
+                <!-- :show-file-infos="showFileInfos" -->
+                <!-- @toggleInfos="showFileInfos = !showFileInfos"/> -->
             </div>
 
             <!-- USER NAVBAR -->
@@ -51,23 +58,24 @@
                 :file-id="fileId"
                 :only-preview="onlypreview"
                 :locale="locale"/>
+              <!-- DEBUGGING BUTTON -->
               <b-button
                 label="modal"
                 type="is-primary"
                 size="is-small"
-                @click="isCardModalActive = true"/>
+                @click="isModalActive = true"/>
             </div>
           </div>
         </div>
 
         <!-- FILE INFOS -->
-        <DialogFileInfos
+        <!-- <DialogFileInfos
           v-show="showFileInfos"
           v-model="showFileInfos"
           :file-id="fileId"
           :locale="locale"
           :debug="debug"
-          @closeDialogFileInfos="showFileInfos = false"/>
+          @closeDialogFileInfos="showFileInfos = false"/> -->
 
         <!-- NOTIFICATIONS -->
         <!-- <pre><code>{{ notifications }}</code></pre> -->
@@ -196,7 +204,7 @@
 
       <!-- PREVIEWS - SWITCH BY FILE TYPE -->
       <div
-        v-show="!fileIsSaving && !showFileInfos"
+        v-show="!fileIsSaving"
         class="datami-file-previews">
         <!-- PREVIEWS CSV -->
         <div
@@ -247,10 +255,11 @@
       :file-id="fileId"
       :locale="locale"/>
 
-    <!-- TEST MODAL -->
+    <!-- DEV - TEST MODAL -->
     <b-modal
-      v-model="isCardModalActive"
-      :width="'80%'">
+      v-model="isModalActive"
+      :width="'80%'"
+      @close="resetFileDialog">
       <DialogSkeleton
         :file-id="fileId"
         :locale="locale"/>
@@ -264,43 +273,9 @@ import { mapActions } from 'vuex'
 import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
-// import MatomoScript from '@/components/matomo/MatomoScript'
-
-// import FileTitle from '@/components/navbar/FileTitle'
-// import ViewModeBtns from '@/components/previews/ViewModeBtns'
-// import UserOptions from '@/components/user/UserOptions'
-
-// import NotificationInfos from '@/components/notifications/NotificationInfos'
-// import NotificationErrors from '@/components/notifications/NotificationErrors'
-
-// import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-// import DialogFileInfos from '@/components/previews/DialogFileInfos'
-// import DialogUploadFile from '@/components/edition/DialogUploadFile'
-// import ConfirmCommit from '@/components/edition/ConfirmCommit'
-
-// import PreviewCsv from '@/components/previews/PreviewCsv'
-// import PreviewMd from '@/components/previews/PreviewMd'
-// import PreviewJson from '@/components/previews/PreviewJson'
-
-// import DatamiCredits from '@/components/credits/DatamiCredits'
-
 export default {
   name: 'DatamiFile',
   components: {
-    // MatomoScript,
-    // FileTitle,
-    // ViewModeBtns,
-    // UserOptions,
-    // NotificationInfos,
-    // NotificationErrors,
-    // EditNavbarSkeleton,
-    // DialogFileInfos,
-    // DialogUploadFile,
-    // ConfirmCommit,
-    // PreviewCsv,
-    // PreviewMd,
-    // PreviewJson,
-    // DatamiCredits
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
     DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
@@ -309,7 +284,7 @@ export default {
     NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
     NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
     EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
-    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
+    // DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
     DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
     ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
     PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
@@ -379,14 +354,14 @@ export default {
   data () {
     return {
       // file infos
-      isCardModalActive: false,
+      isModalActive: false,
       gitfileDatami: undefined,
       fileId: undefined,
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
       fileClientRaw: undefined,
-      showFileInfos: false,
+      // showFileInfos: false,
       showUploadFileDialog: false
     }
   },
@@ -399,12 +374,20 @@ export default {
       // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
       await this.reloadFile()
     },
-    showFileInfos (next) {
+    hasFileDialogs (next) {
+      console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
       if (next) {
-        // track with matomo
-        this.trackEvent('openFileInfos', 'FileTitle')
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
       }
     },
+    // showFileInfos (next) {
+    //   if (next) {
+    //     // track with matomo
+    //     this.trackEvent('openFileInfos', 'FileTitle')
+    //   }
+    // },
     fileIsLoading (next) {
       if (next) { this.reloadFile() }
     },
@@ -625,6 +608,7 @@ export default {
       // update errors if any
       if (fileInfosErrors.length || fileRawErrors.length) {
         const errors = [...fileInfosErrors, ...fileRawErrors]
+        console.log('C > DatamiFile > reloadFile > errors : ', errors)
         this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
       }
 
