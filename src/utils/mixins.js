@@ -63,6 +63,18 @@ import {
 import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixinGlobal = {
+  watch: {
+    notifications (next) {
+      if (next && next.length) {
+        this.updateFileDialogs('NotificationInfos', {})
+      }
+    },
+    errors (next) {
+      if (next && next.length) {
+        this.updateFileDialogs('NotificationErrors', {})
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',

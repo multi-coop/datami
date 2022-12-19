@@ -68,15 +68,6 @@
           </div>
         </div>
 
-        <!-- FILE INFOS -->
-        <!-- <DialogFileInfos
-          v-show="showFileInfos"
-          v-model="showFileInfos"
-          :file-id="fileId"
-          :locale="locale"
-          :debug="debug"
-          @closeDialogFileInfos="showFileInfos = false"/> -->
-
         <!-- NOTIFICATIONS -->
         <!-- <pre><code>{{ notifications }}</code></pre> -->
         <!-- <div
@@ -115,19 +106,6 @@
           @action="processAction"/>
           <!-- :show-upload-file-dialog="showUploadFileDialog" -->
       </div>
-
-      <!-- CONFIRM COMMIT MODAL -->
-      <!-- <ConfirmCommit
-        v-show="fileIsSaving && !fileIsLoading"
-        :file-id="fileId"
-        :locale="locale"
-        :debug="debug"/> -->
-      <!-- <DialogUploadFile
-        v-show="showUploadFileDialog"
-        v-model="showUploadFileDialog"
-        :file-id="fileId"
-        :locale="locale"
-        @action="processAction"/> -->
 
       <!-- DEBUGGING FOREIGN KEYS-->
       <div
@@ -366,16 +344,16 @@ export default {
     }
   },
   watch: {
-    notifications (next) {
-      if (next && next.length) {
-        this.updateFileDialogs('NotificationInfos', {})
-      }
-    },
-    errors (next) {
-      if (next && next.length) {
-        this.updateFileDialogs('NotificationErrors', {})
-      }
-    },
+    // notifications (next) {
+    //   if (next && next.length) {
+    //     this.updateFileDialogs('NotificationInfos', {})
+    //   }
+    // },
+    // errors (next) {
+    //   if (next && next.length) {
+    //     this.updateFileDialogs('NotificationErrors', {})
+    //   }
+    // },
     async gitfileDatami (next) {
       // console.log('\nC > DatamiFile > watch > gitfileDatami > next : ', next)
       await this.initWidget()
@@ -384,14 +362,14 @@ export default {
       // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
       await this.reloadFile()
     },
-    hasFileDialogs (next) {
-      console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
-      if (next) {
-        this.isModalActive = true
-      } else {
-        this.isModalActive = false
-      }
-    },
+    // hasFileDialogs (next) {
+    //   console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
+    //   if (next) {
+    //     this.isModalActive = true
+    //   } else {
+    //     this.isModalActive = false
+    //   }
+    // },
     // showFileInfos (next) {
     //   if (next) {
     //     // track with matomo
