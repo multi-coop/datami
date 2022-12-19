@@ -65,21 +65,21 @@
       </div>
 
       <!-- DIALOGS -->
-      <DialogAddRow
+      <!-- <DialogAddRow
         v-show="showAddRowDialog"
         v-model="showAddRowDialog"
         :file-id="fileId"
         :headers="columnsEdited"
         :locale="locale"
-        @action="processAction"/>
-      <DialogDeleteRows
+        @action="processAction"/> -->
+      <!-- <DialogDeleteRows
         v-show="showDeleteRowsDialog"
         v-model="showDeleteRowsDialog"
         :file-id="fileId"
         :headers="columnsEdited"
         :checked-rows="checkedRows"
         :locale="locale"
-        @action="processAction"/>
+        @action="processAction"/> -->
 
       <!-- DEBUGGING -->
       <div v-if="debug">
@@ -525,8 +525,8 @@ export default {
     SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/edition/csv/SortAndFiltersSkeleton.vue'),
     ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
     EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
-    DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/edition/csv/DialogAddRow.vue'),
-    DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/edition/csv/DialogDeleteRows.vue'),
+    // DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/edition/csv/DialogAddRow.vue'),
+    // DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/edition/csv/DialogDeleteRows.vue'),
 
     PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
     PreviewCell: () => import(/* webpackChunkName: "PreviewCell" */ '@/components/previews/PreviewCell.vue'),
@@ -592,8 +592,8 @@ export default {
       viewsWithPagination: ['table', 'cards'],
 
       // DIALOGS
-      showAddRowDialog: false,
-      showDeleteRowsDialog: false,
+      // showAddRowDialog: false,
+      // showDeleteRowsDialog: false,
       showUploadFileDialog: false,
 
       // CARDS FOR TABLE VIEW
@@ -932,7 +932,8 @@ export default {
       }
     },
     isAnyDialogOpen () {
-      return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog || this.activeTableCardId
+      // return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog || this.activeTableCardId
+      return this.showUploadFileDialog || this.activeTableCardId
     },
     isCardDetailsOpen () {
       return this.showCardDetails && this.currentViewMode === 'cards'
@@ -1149,8 +1150,11 @@ export default {
 
         // ADD ROW
         case 'openAddRowDialog':
-          this.showAddRowDialog = true
-          this.updateFileDialogs('AddRow', event)
+          // this.showAddRowDialog = true
+          this.updateFileDialogs('AddRow', {
+            ...event,
+            fields: this.columns
+          })
           break
         case 'addNewRow':
           this.$emit('addRow', event)
@@ -1159,13 +1163,21 @@ export default {
         // IMPORT DATA
         case 'openUploadFileDialog':
           this.showUploadFileDialog = true
-          this.updateFileDialogs('UploadFile', event)
+          this.updateFileDialogs('UploadFile', {
+            ...event,
+            fields: this.columns
+          })
           break
 
         // DELETE ROWS
         case 'openDeleteRowsDialog':
-          this.showDeleteRowsDialog = true
-          this.updateFileDialogs('DeleteRow', event)
+          // this.showDeleteRowsDialog = true
+          // this.updateFileDialogs('DeleteRow', event)
+          this.updateFileDialogs('DeleteRow', {
+            ...event,
+            fields: this.columnsEdited,
+            checkedRows: this.checkedRows
+          })
           break
         case 'deleteRows':
           this.$emit('deleteRows', event)

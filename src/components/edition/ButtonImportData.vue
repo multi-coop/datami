@@ -7,7 +7,6 @@
       <b-button
         size="is-small"
         class="ml-1"
-        :type="showUploadFileDialog ? 'is-dark' : ''"
         :icon-left="'upload'"
         @click="SendActionToParent"/>
     </b-tooltip>
@@ -21,10 +20,14 @@ export default {
   name: 'ButtonImportData',
   mixins: [mixinGlobal],
   props: {
-    showUploadFileDialog: {
-      default: false,
-      type: Boolean
+    fileId: {
+      default: undefined,
+      type: String
     },
+    // showUploadFileDialog: {
+    //   default: false,
+    //   type: Boolean
+    // },
     locale: {
       default: 'en',
       type: String
@@ -35,14 +38,15 @@ export default {
   },
   methods: {
     SendActionToParent () {
-      // console.log('\nC > ButtonImportData > SendActions > this.headers : ', this.headers)
-      const payload = {
-        action: 'toggleUploadFileDialog'
-      }
-      this.$emit('action', payload)
+      console.log('\nC > ButtonImportData > SendActionToParent ...')
+      // const payload = {
+      //   action: 'toggleUploadFileDialog'
+      // }
+      // this.$emit('action', payload)
+      this.updateFileDialogs('UploadFile', {})
 
       // track with matomo
-      this.trackEvent('click')
+      // this.trackEvent('click')
     }
   }
 }

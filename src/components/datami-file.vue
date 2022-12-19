@@ -10,7 +10,7 @@
       :file-id="fileId"/>
 
     <!-- DEBUG DIALOGS -->
-    <div
+    <!-- <div
       v-if="true"
       class="columns">
       <div class="column is-4">
@@ -23,7 +23,7 @@
       <div class="column is-4">
         notifications : <br><pre><code>{{ notifications }}</code></pre>
       </div>
-    </div>
+    </div> -->
 
     <!-- WIDGET -->
     <div
@@ -40,6 +40,12 @@
           <div class="columns is-centered mb-0">
             <!-- FILE TITLE -->
             <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row">
+              <!-- MODAL DEBUGGING BUTTON -->
+              <b-button
+                label="Debug modal"
+                type="is-danger"
+                size="is-small"
+                @click="isModalActive = true"/>
               <ViewModeBtns
                 :file-id="fileId"
                 :locale="locale"/>
@@ -58,12 +64,6 @@
                 :file-id="fileId"
                 :only-preview="onlypreview"
                 :locale="locale"/>
-              <!-- DEBUGGING BUTTON -->
-              <b-button
-                label="modal"
-                type="is-primary"
-                size="is-small"
-                @click="isModalActive = true"/>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
 
         <!-- NOTIFICATIONS -->
         <!-- <pre><code>{{ notifications }}</code></pre> -->
-        <div
+        <!-- <div
           v-if="notifications && notifications.length"
           class="mb-6">
           <NotificationInfos
@@ -88,11 +88,11 @@
             :file-id="fileId"
             :notif="notif"
             :locale="locale"/>
-        </div>
+        </div> -->
 
         <!-- ERRORS -->
         <!-- <pre><code>{{ errors }}</code></pre> -->
-        <div
+        <!-- <div
           v-if="errors && errors.length"
           class="mb-6">
           <NotificationErrors
@@ -101,33 +101,33 @@
             :file-id="fileId"
             :error="error"
             :locale="locale"/>
-        </div>
+        </div> -->
 
         <!-- FILE NAVBAR BUTTONS -->
         <!-- {{ fileOptions }} -->
         <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
         <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
         <EditNavbarSkeleton
-          v-if="fileOptions && !fileIsLoading && !fileIsSaving && !showUploadFileDialog"
+          v-if="fileOptions && !fileIsLoading && !fileIsSaving"
           :file-id="fileId"
-          :show-upload-file-dialog="showUploadFileDialog"
           :only-preview="onlypreview"
           :locale="locale"
           @action="processAction"/>
+          <!-- :show-upload-file-dialog="showUploadFileDialog" -->
       </div>
 
       <!-- CONFIRM COMMIT MODAL -->
-      <ConfirmCommit
+      <!-- <ConfirmCommit
         v-show="fileIsSaving && !fileIsLoading"
         :file-id="fileId"
         :locale="locale"
-        :debug="debug"/>
-      <DialogUploadFile
+        :debug="debug"/> -->
+      <!-- <DialogUploadFile
         v-show="showUploadFileDialog"
         v-model="showUploadFileDialog"
         :file-id="fileId"
         :locale="locale"
-        @action="processAction"/>
+        @action="processAction"/> -->
 
       <!-- DEBUGGING FOREIGN KEYS-->
       <div
@@ -281,12 +281,12 @@ export default {
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
     UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
-    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    // NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    // NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
     EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
     // DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
-    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
-    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
+    // DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
+    // ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
     PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
     PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
     PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
@@ -360,12 +360,22 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
-      fileClientRaw: undefined,
+      fileClientRaw: undefined
       // showFileInfos: false,
-      showUploadFileDialog: false
+      // showUploadFileDialog: false
     }
   },
   watch: {
+    notifications (next) {
+      if (next && next.length) {
+        this.updateFileDialogs('NotificationInfos', {})
+      }
+    },
+    errors (next) {
+      if (next && next.length) {
+        this.updateFileDialogs('NotificationErrors', {})
+      }
+    },
     async gitfileDatami (next) {
       // console.log('\nC > DatamiFile > watch > gitfileDatami > next : ', next)
       await this.initWidget()
@@ -691,9 +701,9 @@ export default {
     processAction (event) {
       // console.log('\nC > DatamiFile > processAction > event : ', event)
       switch (event.action) {
-        case 'toggleUploadFileDialog':
-          this.showUploadFileDialog = !this.showUploadFileDialog
-          break
+        // case 'toggleUploadFileDialog':
+        //   // this.showUploadFileDialog = !this.showUploadFileDialog
+        //   break
         case 'uploadFileData':
           this.fileClientRaw = event.data
           break

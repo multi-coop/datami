@@ -19,7 +19,7 @@
             size="is-small"
             expanded
             icon-left="pencil"
-            @click="commitChanges"/>
+            @click="ConfirmCommit"/>
         </b-tooltip>
       </p>
       <p class="control">
@@ -99,7 +99,9 @@ export default {
       this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
       this.toggleEditNavbar({ uuid: this.fileId, status: false })
     },
-    commitChanges () {
+    ConfirmCommit () {
+      console.log('\nC > ButtonEditFile > ConfirmCommit ...')
+      this.updateFileDialogs('ConfirmCommit', {})
       this.updateSaving({ fileId: this.fileId, isSaving: true })
     }
   }

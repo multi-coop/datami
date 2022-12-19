@@ -11,14 +11,28 @@
         :debug="debug"/>
 
       <!-- ERRORS -->
-      <!-- errors : <pre><code>{{ errors }}</code></pre> -->
+      <div
+        v-else-if="dialog.component === 'NotificationErrors'"
+        class="card">
+        <NotificationErrors
+          v-for="(error, index) in errors"
+          :key="`notif-error-${fileId}-${index}-${error.code}`"
+          :file-id="fileId"
+          :error="error"
+          :locale="locale"/>
+      </div>
 
       <!-- NOTIFICATIONS -->
-      <!-- notifications : <pre><code>{{ notifications }}</code></pre> -->
-
-      <!-- NEW LINE -->
-
-      <!-- CONTRIBUTION DIALOG -->
+      <div
+        v-else-if="dialog.component === 'NotificationInfos'"
+        class="card">
+        <NotificationInfos
+          v-for="(notif, index) in notifications"
+          :key="`notif-info-${fileId}-${index}-${notif.code}`"
+          :file-id="fileId"
+          :notif="notif"
+          :locale="locale"/>
+      </div>
 
       <!-- CARDS DETAIL -->
       <DatamiCard
@@ -32,7 +46,33 @@
         :locale="locale"
         :from-table="dialog.event.fromTable"/>
 
-      <!-- DELETE DIALOG -->
+      <!-- ADD ROW -->
+      <DialogAddRow
+        v-else-if="dialog.component === 'AddRow'"
+        :file-id="fileId"
+        :fields="dialog.event.fields"
+        :locale="locale"/>
+
+      <!-- DELETE ROW -->
+      <DialogDeleteRows
+        v-else-if="dialog.component === 'DeleteRow'"
+        :file-id="fileId"
+        :fields="dialog.event.columnsEdited"
+        :checked-rows="dialog.event.checkedRows"
+        :locale="locale"/>
+
+      <!-- UPLOAD FILE -->
+      <DialogUploadFile
+        v-else-if="dialog.component === 'UploadFile'"
+        :file-id="fileId"
+        :locale="locale"/>
+
+      <!-- CONFIRM COMMIT -->
+      <ConfirmCommit
+        v-else-if="dialog.component === 'ConfirmCommit'"
+        :file-id="fileId"
+        :locale="locale"
+        :debug="debug"/>
 
       <div
         v-else
@@ -62,8 +102,14 @@
         <p class="card-header-title">
           DEBUGGING
         </p>
+        <b-switch
+          v-model="showDebugDetails"
+          class="card-header-icon">
+        </b-switch>
       </div>
-      <div class="card-content">
+      <div
+        v-show="showDebugDetails"
+        class="card-content">
         <div class="content">
           <div class="columns is-multiline">
             <div class="column is-4">
@@ -88,11 +134,14 @@ import { mixinGlobal } from '@/utils/mixins.js'
 export default {
   name: 'DialogSkeleton',
   components: {
-    // DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue')
+    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/dialogs/DialogFileInfos.vue'),
-    // NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    // NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
-    DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue')
+    DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/dialogs/DialogAddRow.vue'),
+    DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/dialogs/DialogDeleteRows.vue'),
+    DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/dialogs/DialogUploadFile.vue'),
+    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/dialogs/ConfirmCommit.vue')
   },
   mixins: [
     mixinGlobal
@@ -109,6 +158,11 @@ export default {
     debug: {
       default: false,
       type: Boolean
+    }
+  },
+  data () {
+    return {
+      showDebugDetails: false
     }
   }
 }

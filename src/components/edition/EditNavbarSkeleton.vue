@@ -19,9 +19,10 @@
         v-if="!onlyPreview"
         class="column py-0 is-4 is-5-mobile is-1-tablet has-text-right">
         <ButtonImportData
+          :file-id="fileId"
           :locale="locale"
-          :show-upload-file-dialog="showUploadFileDialog"
           @action="SendActionToParent"/>
+          <!-- :show-upload-file-dialog="showUploadFileDialog" -->
       </div>
     </div>
   </div>
@@ -51,10 +52,10 @@ export default {
       default: false,
       type: Boolean
     },
-    showUploadFileDialog: {
-      default: false,
-      type: Boolean
-    },
+    // showUploadFileDialog: {
+    //   default: false,
+    //   type: Boolean
+    // },
     locale: {
       default: 'en',
       type: String

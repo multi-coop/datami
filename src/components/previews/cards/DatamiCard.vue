@@ -79,6 +79,7 @@
       </div>
 
       <button
+        v-if="fromMap && !showDetail"
         class="card-header-icon"
         @click="toggleDetail('closeButton')">
         <b-tooltip
