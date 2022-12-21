@@ -22,6 +22,11 @@
       </span>
     </p>
     <div v-if="currentEditViewMode === 'preview'">
+      <span
+        v-if="field.prefix"
+        class="mr-1 has-text-weight-bold">
+        {{ field.prefix }}
+      </span>
       <PreviewCell
         v-if="itemValue"
         :file-id="fileId"
