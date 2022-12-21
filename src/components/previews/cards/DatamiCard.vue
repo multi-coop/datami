@@ -610,6 +610,12 @@ export default {
     return {
       showRawContent: false,
       isHovered: false,
+      fixedPositions: [
+        'title',
+        'subtitle',
+        'adress',
+        'logo'
+      ],
       positions: [
         'resume',
         'infos',

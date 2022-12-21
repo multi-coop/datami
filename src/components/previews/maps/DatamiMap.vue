@@ -7,6 +7,14 @@
       v-if="!fileIsLoading && (!itemsForMap || showLoader)"
       class="loader big-loader"/>
 
+    <!-- DEBUGGING -->
+    <div
+      v-if="debug"
+      class="debug">
+      getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
+      getZoom : <code>{{ getZoom }}</code><br>
+    </div>
+
     <!-- DETAIL CARD FOR DISPLAYED ITEM -->
     <div
       v-show="showCard && displayedItemId && showDetail"
