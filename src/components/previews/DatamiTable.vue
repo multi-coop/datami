@@ -64,23 +64,6 @@
           @action="processAction"/>
       </div>
 
-      <!-- DIALOGS -->
-      <!-- <DialogAddRow
-        v-show="showAddRowDialog"
-        v-model="showAddRowDialog"
-        :file-id="fileId"
-        :headers="columnsEdited"
-        :locale="locale"
-        @action="processAction"/> -->
-      <!-- <DialogDeleteRows
-        v-show="showDeleteRowsDialog"
-        v-model="showDeleteRowsDialog"
-        :file-id="fileId"
-        :headers="columnsEdited"
-        :checked-rows="checkedRows"
-        :locale="locale"
-        @action="processAction"/> -->
-
       <!-- DEBUGGING -->
       <div v-if="debug">
         lockHeaders : <code>{{ lockHeaders }}</code>
@@ -97,8 +80,30 @@
       <div v-if="debug">
         dataForView: <code>{{ dataForView }}</code>
       </div>
-      <div v-if="debug">
-        currentViewMode: <code>{{ currentViewMode }}</code>
+
+      <div
+        v-if="debug"
+        class="column is-12">
+        currentViewMode: <code>{{ currentViewMode }}</code><br>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-4">
+        currentPage: <code>{{ currentPage }}</code><br>
+        itemsPerPage: <code>{{ itemsPerPage }}</code><br>
+        itemsPerPageChoices: <code>{{ itemsPerPageChoices }}</code><br>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-4">
+        currentPageTable: <code>{{ currentPageTable }}</code><br>
+        itemsPerPageTable: <code>{{ itemsPerPageTable }}</code><br>
+      </div>
+      <div
+        v-if="debug"
+        class="column is-4">
+        currentPageCards: <code>{{ currentPageCards }}</code><br>
+        itemsPerPageCards: <code>{{ itemsPerPageCards }}</code><br>
       </div>
 
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
@@ -148,8 +153,8 @@
                         :file-id="fileId"
                         :is-header="true"
                         :field="col"
-                        :input-data="column.label"
-                        @updateCellValue="emitUpdate"/>
+                        :input-data="column.label"/>
+                        <!-- @updateCellValue="emitUpdate"/> -->
                     </b-field>
                     <PreviewField
                       v-else
@@ -227,8 +232,8 @@
                     :input-data="props.row[col.field]"
                     :is-consolidating="isConsolidating(props.row.id)"
                     :locale="locale"
-                    @updateCellValue="emitUpdate"
                     @action="processAction"/>
+                    <!-- @updateCellValue="emitUpdate" -->
                 </div>
 
                 <!-- DIFF -->
@@ -313,8 +318,8 @@
             :items="dataEditedPaginated"
             :locale="locale"
             @toggleDetail="toggleDetail"
-            @action="processAction"
-            @updateCellValue="emitUpdate"/>
+            @action="processAction"/>
+            <!-- @updateCellValue="emitUpdate"/> -->
         </div>
 
         <!-- DATAVIZ & MAP DEBUGGING-->
@@ -349,8 +354,8 @@
             :items="dataForView"
             :fields="columns"
             :locale="locale"
-            @action="processAction"
-            @updateCellValue="emitUpdate"/>
+            @action="processAction"/>
+            <!-- @updateCellValue="emitUpdate" -->
         </div>
       </div>
 
@@ -379,13 +384,14 @@
         <PagesNavigation
           :file-id="fileId"
           :total-items="totalItemsDataEdited"
-          :items-per-page="itemsPerPage"
+          :items-per-page-table="itemsPerPageTable"
+          :items-per-page-cards="itemsPerPageCards"
           :items-per-page-choices="itemsPerPageChoices"
-          :default-current="currentPage"
           :debug="false"
-          :locale="locale"
-          @action="processAction"
-          @updateCellValue="emitUpdate"/>
+          :locale="locale"/>
+          <!-- :items-per-page="itemsPerPage" -->
+          <!-- @action="processAction"/> -->
+          <!-- @updateCellValue="emitUpdate"/> -->
       </div>
 
       <!-- DEBUG -->
@@ -610,7 +616,8 @@ export default {
       filterTags: [],
 
       // PAGINATION
-      currentPage: 1,
+      currentPageTable: 1,
+      currentPageCards: 1,
       itemsPerPage: undefined,
       // ... FOR TABLE
       itemsPerPageTable: undefined,
@@ -809,14 +816,16 @@ export default {
       return data
     },
     dataEditedFiltered () {
+      // console.log('\nC > DatamiTable > dataEditedFiltered > this.dataEdited : ', this.dataEdited)
       const data = this.filterData(this.dataEdited)
+      // console.log('C > DatamiTable > dataEditedFiltered > data : ', data)
       return data
     },
     dataEditedSorted () {
+      // console.log('\nC > DatamiTable > dataEditedSorted > this.fileSorting : ', this.fileSorting)
       let data = [...this.dataEditedFiltered]
-      // console.log('\nC > DatamiTable > dataEditedSorted > data : ', data)
+      // console.log('C > DatamiTable > dataEditedSorted > data : ', data)
       if (this.fileSorting && this.fileSorting.length) {
-        // console.log('\nC > DatamiTable > dataEditedSorted > this.fileSorting : ', this.fileSorting)
         this.fileSorting.forEach(sorting => {
           const sortingField = sorting.field
           const sortIsAscending = sorting.ascending
@@ -830,7 +839,7 @@ export default {
         data = data.sort((a, b) => {
           const idA = a.added ? a.position : a.id
           const idB = b.added ? b.position : b.id
-          const sorter = idA > idB ? 1 : -1
+          const sorter = parseInt(idA) > parseInt(idB) ? 1 : -1
           return sorter
         })
       }
@@ -937,20 +946,38 @@ export default {
     },
     isCardDetailsOpen () {
       return this.showCardDetails && this.currentViewMode === 'cards'
+    },
+    currentPage () {
+      let page = 1
+      switch (this.currentViewMode) {
+        case 'table':
+          page = this.currentPageTable
+          break
+        case 'cards':
+          page = this.currentPageCards
+          break
+      }
+      return page
     }
   },
   watch: {
-    // edited (next) {
-    //   console.log('\nC > DatamiTable > watch > edited > next : ', next)
-    // },
-    currentViewMode (next) {
-      // console.log('\nC > DatamiTable > watch > currentViewMode > next : ', next)
-      this.itemsPerPage = next === 'cards' ? this.itemsPerPageCards : this.itemsPerPageTable
-    },
     filterTags (next) {
       if (next.length) {
         // console.log('\nC > DatamiTable > watch > filterTags > next : ', next)
         this.updateFilterTags({ fileId: this.fileId, tags: this.filterTags })
+      }
+    },
+    fileSignals (next) {
+      if (next && next.length) {
+        next.forEach(signal => {
+          switch (signal.action) {
+            case 'changePage':
+              // console.log('\nC > DatamiTable > watch > changePage > signal : ', signal)
+              this.changePage(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+          }
+        })
       }
     }
   },
@@ -1129,6 +1156,38 @@ export default {
     },
     async processAction (event) {
       console.log('\nC > DatamiTable > processAction > event : ', event)
+      /*
+        // ADD TAG TO ENUM
+        case 'addTagToEnum':
+          // console.log('\nC > DatamiTable > processAction > event : ', event)
+          this.$emit('addTagToEnum', event.value)
+          break
+
+        // DELETE ROWS
+        case 'deleteRows':
+          this.$emit('deleteRows', event)
+          this.checkedRows = []
+          break
+
+        // ADD ROW
+        case 'addNewRow':
+          this.$emit('addRow', event)
+          break
+
+        // PAGINATION
+        case 'changePage':
+          this.currentPage = event.value.currentPage
+          this.itemsPerPage = event.value.itemsPerPage
+          switch (this.currentViewMode) {
+            case 'table':
+              this.itemsPerPageTable = event.value.itemsPerPage
+              break
+            case 'cards':
+              this.itemsPerPageCards = event.value.itemsPerPage
+              break
+          }
+          break
+      */
       switch (event.action) {
         // OPEN CARD
         case 'openCard':
@@ -1142,28 +1201,19 @@ export default {
           })
           break
 
-        // ADD TAG TO ENUM
-        case 'addTagToEnum':
-          // console.log('\nC > DatamiTable > processAction > event : ', event)
-          this.$emit('addTagToEnum', event.value)
+        // IMPORT DATA
+        case 'openUploadFileDialog':
+          this.showUploadFileDialog = true
+          this.updateFileDialogs('UploadFile', {
+            ...event,
+            fields: this.columns
+          })
           break
 
         // ADD ROW
         case 'openAddRowDialog':
           // this.showAddRowDialog = true
           this.updateFileDialogs('AddRow', {
-            ...event,
-            fields: this.columns
-          })
-          break
-        case 'addNewRow':
-          this.$emit('addRow', event)
-          break
-
-        // IMPORT DATA
-        case 'openUploadFileDialog':
-          this.showUploadFileDialog = true
-          this.updateFileDialogs('UploadFile', {
             ...event,
             fields: this.columns
           })
@@ -1179,17 +1229,14 @@ export default {
             checkedRows: this.checkedRows
           })
           break
-        case 'deleteRows':
-          this.$emit('deleteRows', event)
-          this.checkedRows = []
-          break
 
         // SORTING
         case 'sortBy':
           // console.log('\nC > DatamiTable > processAction > event : ', event)
           this.sortingByField = event.value.header
           this.sortingAscending = event.value.ascending
-          this.$emit('sortRows', event)
+          this.addFileSignal('sortRows', event)
+          // this.$emit('sortRows', event)
           break
 
         // FILTERING
@@ -1202,20 +1249,6 @@ export default {
           break
         case 'removeTag':
           this.removeTag(event.value)
-          break
-
-        // PAGINATION
-        case 'changePage':
-          this.currentPage = event.value.currentPage
-          this.itemsPerPage = event.value.itemsPerPage
-          switch (this.currentViewMode) {
-            case 'table':
-              this.itemsPerPageTable = event.value.itemsPerPage
-              break
-            case 'cards':
-              this.itemsPerPageCards = event.value.itemsPerPage
-              break
-          }
           break
 
         // CONSOLIDATION
@@ -1233,10 +1266,6 @@ export default {
           this.updateConsolidatedValues(event)
           break
       }
-    },
-    emitUpdate (event) {
-      // console.log('C > DatamiTable > emitUpdate > event : ', event)
-      this.$emit('updateEdited', event)
     },
     processSearch (search) {
       // console.log('C > DatamiTable > processSearch > search : ', search)
@@ -1328,9 +1357,9 @@ export default {
       this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
     },
     updateConsolidatedValues (event) {
-      // console.log('\nC > DatamiTable > updateConsolidatedValues > event : ', event)
+      console.log('\nC > DatamiTable > updateConsolidatedValues > event : ', event)
       event.newValues.forEach(e => {
-        // console.log('C > DatamiTable > updateConsolidatedValues > e : ', e)
+        console.log('C > DatamiTable > updateConsolidatedValues > e : ', e)
         this.$emit('updateEdited', e)
       })
       this.closeConsolidationDetail(event.rowId)
@@ -1352,6 +1381,27 @@ export default {
       // } else {
       //   this.showCardDetails = true
       // }
+    },
+    changePage (event) {
+      // console.log('\nC > DatamiTable > changePage > event : ', event)
+      // console.log('C > DatamiTable > changePage > event.value.currentPage : ', event.value.currentPage)
+      // console.log('C > DatamiTable > changePage > event.value.itemsPerPage : ', event.value.itemsPerPage)
+      // console.log('C > DatamiTable > changePage > event.value.itemsPerPageTable : ', event.value.itemsPerPageTable)
+      // console.log('C > DatamiTable > changePage > event.value.itemsPerPageCards : ', event.value.itemsPerPageCards)
+      // this.currentPage = event.value.currentPage
+      // this.itemsPerPage = event.value.itemsPerPage
+      switch (this.currentViewMode) {
+        case 'table':
+          this.currentPageTable = event.value.currentPage
+          this.itemsPerPageTable = event.value.itemsPerPageTable
+          this.itemsPerPage = event.value.itemsPerPageTable
+          break
+        case 'cards':
+          this.currentPageCards = event.value.currentPage
+          this.itemsPerPageCards = event.value.itemsPerPageCards
+          this.itemsPerPage = event.value.itemsPerPageCards
+          break
+      }
     }
   }
 }

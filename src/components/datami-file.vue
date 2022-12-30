@@ -102,8 +102,8 @@
           v-if="fileOptions && !fileIsLoading && !fileIsSaving"
           :file-id="fileId"
           :only-preview="onlypreview"
-          :locale="locale"
-          @action="processAction"/>
+          :locale="locale"/>
+          <!-- @action="processAction"/> -->
           <!-- :show-upload-file-dialog="showUploadFileDialog" -->
       </div>
 
@@ -233,7 +233,7 @@
       :file-id="fileId"
       :locale="locale"/>
 
-    <!-- DEV - TEST MODAL -->
+    <!-- DEV - TEST DIALOG MODAL -->
     <b-modal
       v-model="isModalActive"
       :width="'80%'"
@@ -362,20 +362,6 @@ export default {
       // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
       await this.reloadFile()
     },
-    // hasFileDialogs (next) {
-    //   console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
-    //   if (next) {
-    //     this.isModalActive = true
-    //   } else {
-    //     this.isModalActive = false
-    //   }
-    // },
-    // showFileInfos (next) {
-    //   if (next) {
-    //     // track with matomo
-    //     this.trackEvent('openFileInfos', 'FileTitle')
-    //   }
-    // },
     fileIsLoading (next) {
       if (next) { this.reloadFile() }
     },
@@ -395,6 +381,19 @@ export default {
       // console.log('C >>> DatamiFile > watch > loadingExtRessources > next : ', next)
       if (next && next.loadState === 'loading' && next.initiator === this.fileId && this.readyToLoadExtRessources) {
         await this.loadExtRessources()
+      }
+    },
+    fileSignals (next) {
+      if (next && next.length) {
+        next.forEach(signal => {
+          // console.log('\nC >>> DatamiFile > watch > fileSignals > signal : ', signal)
+          switch (signal.action) {
+            case 'uploadFileData':
+              this.fileClientRaw = signal.event.data
+              this.removeFileSignal(signal.signalId)
+              break
+          }
+        })
       }
     }
   },
@@ -675,18 +674,18 @@ export default {
         }
         this.updateSharedData(payload)
       }
-    },
-    processAction (event) {
-      // console.log('\nC > DatamiFile > processAction > event : ', event)
-      switch (event.action) {
-        // case 'toggleUploadFileDialog':
-        //   // this.showUploadFileDialog = !this.showUploadFileDialog
-        //   break
-        case 'uploadFileData':
-          this.fileClientRaw = event.data
-          break
-      }
     }
+    // processAction (event) {
+    //   // console.log('\nC > DatamiFile > processAction > event : ', event)
+    //   switch (event.action) {
+    //     // case 'toggleUploadFileDialog':
+    //     //   // this.showUploadFileDialog = !this.showUploadFileDialog
+    //     //   break
+    //     case 'uploadFileData':
+    //       this.fileClientRaw = event.data
+    //       break
+    //   }
+    // }
   }
 }
 </script>

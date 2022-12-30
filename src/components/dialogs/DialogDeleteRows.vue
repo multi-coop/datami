@@ -125,7 +125,8 @@ export default {
         action: 'deleteRows',
         rows: this.checkedRows
       }
-      this.$emit('action', payload)
+      this.addFileSignal('deleteRows', payload)
+      // this.$emit('action', payload)
       this.closeDialog()
 
       // track with matomo

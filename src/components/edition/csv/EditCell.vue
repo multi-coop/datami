@@ -171,6 +171,8 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
+import { debounce } from '@/utils/globalUtils'
+
 // import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
 // import EditTagValue from '@/components/edition/EditTagValue.vue'
 
@@ -205,6 +207,10 @@ export default {
       type: [String, Number, Boolean]
     },
     isAdded: {
+      default: false,
+      type: Boolean
+    },
+    fromDialog: {
       default: false,
       type: Boolean
     },
@@ -301,12 +307,18 @@ export default {
           field: updatedField
         }
       }
-      this.$emit('action', payload)
+      // this.$emit('action', payload)
+      this.addFileSignal('addTagToEnum', payload)
     },
-    emitChange (event) {
-      // console.log('\nC > EditCell > emitChange > event : ', event)
-      // console.log('C > EditCell > emitChange > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
-      // console.log('C > EditCell > emitChange > this.field : ', this.field)
+    emitChange: debounce(function (event) {
+      console.log('\nC > EditCell > emitChange > event : ', event)
+      console.log('\nC > EditCell > emitChange > event > debounce : ', event)
+      this.emitChangeDebounced(event)
+    }, 750),
+    emitChangeDebounced (event) {
+      console.log('\nC > EditCell > emitChangeDebounced > event : ', event)
+      console.log('C > EditCell > emitChangeDebounced > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
+      console.log('C > EditCell > emitChangeDebounced > this.field : ', this.field)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
@@ -337,8 +349,15 @@ export default {
       } else {
         payload.isHeader = true
       }
-      // console.log('C > EditCell > emitChange > payload : ', payload)
-      this.$emit('updateCellValue', payload)
+      console.log('C > EditCell > emitChangeDebounced > payload : ', payload)
+
+      // Update cell value using store git-data
+      // this.$emit('updateCellValue', payload)
+      if (this.fromDialog) {
+        this.$emit('updateTempValue', payload)
+      } else {
+        this.addFileSignal('updateCellValue', payload)
+      }
 
       // track with matomo
       this.trackEvent('updateCellValue')

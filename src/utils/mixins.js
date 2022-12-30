@@ -73,6 +73,14 @@ export const mixinGlobal = {
       if (next && next.length) {
         this.updateFileDialogs('NotificationErrors', {})
       }
+    },
+    hasFileDialogs (next) {
+      // console.log('\nM > mixinGlobal > watch > hasFileDialogs > next : ', next)
+      if (next) {
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
+      }
     }
   },
   computed: {
@@ -93,7 +101,8 @@ export const mixinGlobal = {
       getReqErrors: 'git-data/getReqErrors',
       getUserFullscreen: 'git-user/getUserFullscreen',
       isDarkMode: 'git-storage/isDarkMode',
-      getDialogsById: 'git-dialogs/getDialogsById'
+      getDialogsById: 'git-dialogs/getDialogsById',
+      getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
     fileToken () {
       return this.getFileToken(this.fileId)
@@ -265,24 +274,41 @@ export const mixinGlobal = {
     },
     hasFileDialogs () {
       return this.fileDialogs.length
+    },
+
+    // SIGNALS
+    fileSignals () {
+      return this.getSignalsByFileId(this.fileId)
     }
   },
   methods: {
     uuidv4,
     findFromPath,
     ...mapActions({
-      updateDialogs: 'git-dialogs/updateFileDialog'
+      updateDialogs: 'git-dialogs/updateFileDialog',
+      addSignal: 'git-signals/addSignal',
+      removeSignal: 'git-signals/removeSignal'
     }),
     updateFileDialogs (component, event, show = true) {
-      console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
-      console.log('M > mixinGlobal > updateFileDialogs > show : ', show)
-      console.log('M > mixinGlobal > updateFileDialogs > event : ', event)
-      console.log('M > mixinGlobal > updateFileDialogs > this.fileId : ', this.fileId)
+      // console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
+      // console.log('M > mixinGlobal > updateFileDialogs > show : ', show)
+      // console.log('M > mixinGlobal > updateFileDialogs > event : ', event)
+      // console.log('M > mixinGlobal > updateFileDialogs > this.fileId : ', this.fileId)
       this.updateDialogs({ fileId: this.fileId, component: component, show: show, event: event })
     },
     resetFileDialog () {
-      console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
+      // console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
       this.updateDialogs({ fileId: this.fileId, reset: true })
+    },
+    addFileSignal (action, event) {
+      // console.log('\nM > mixinGlobal > addFileSignal > component : ', component)
+      // console.log('M > mixinGlobal > addFileSignal > event : ', event)
+      // console.log('M > mixinGlobal > addFileSignal > this.fileId : ', this.fileId)
+      const signalId = uuidv4()
+      this.addSignal({ fileId: this.fileId, signalId: signalId, action: action, event: event })
+    },
+    removeFileSignal (signalId) {
+      this.removeSignal({ signalId: signalId })
     },
     trimField (field) {
       return {

@@ -46,10 +46,11 @@
                   :file-id="fileId"
                   :field="f"
                   :is-added="true"
+                  :from-dialog="true"
                   :input-data="temp[f.field] || ''"
                   :locale="locale"
                   :is-card-view="false"
-                  @updateCellValue="updateTemp"/>
+                  @updateTempValue="updateTemp"/>
               </div>
             </div>
           </div>
@@ -70,7 +71,7 @@
         class="card-footer-item mx-3"
         icon-left="plus-thick"
         type="is-dark"
-        @click="sendNewRowToParent">
+        @click="confirmAddRow">
         {{ t('editCsv.addTheNewRow', locale) }}
       </b-button>
     </footer>
@@ -151,13 +152,14 @@ export default {
       // console.log('C > DialogAddRow > updateTemp > this.temp :', this.temp)
       this.temp[event.colField] = event.val
     },
-    sendNewRowToParent () {
-      console.log('\nC > DialogAddRow > sendNewRowToParent > this.temp :', this.temp)
+    confirmAddRow () {
+      console.log('\nC > DialogAddRow > confirmAddRow > this.temp :', this.temp)
       const payload = {
         action: 'addNewRow',
         row: this.temp
       }
-      this.$emit('action', payload)
+      // this.$emit('action', payload)
+      this.addFileSignal('addNewRow', payload)
       this.closeDialog()
       this.temp = {}
 

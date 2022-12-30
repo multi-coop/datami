@@ -120,8 +120,8 @@
         :is-added="itemAdded"
         :input-data="itemValue"
         :locale="locale"
-        :is-card-view="true"
-        @updateCellValue="emitUpdate"/>
+        :is-card-view="true"/>
+        <!-- @updateCellValue="emitUpdate"/> -->
     </div>
   </div>
 </template>
@@ -241,7 +241,7 @@ export default {
   methods: {
     getNumber (value) {
       return this.getNumberByField(value, this.field)
-    },
+    }
     // applyTemplate (text) {
     //   // prepare regex
     //   const fieldStart = '{{'
@@ -263,9 +263,9 @@ export default {
     //   const textClean = textArr.join('')
     //   return textClean
     // },
-    emitUpdate (event) {
-      this.$emit('updateCellValue', event)
-    }
+    // emitUpdate (event) {
+    //   this.$emit('updateCellValue', event)
+    // }
     // toggleDetail () {
     //   console.log('C > DatamiCardBlockContent > toggleDetail > this.position :', this.position)
     //   this.$emit('toggleDetail', this.position)

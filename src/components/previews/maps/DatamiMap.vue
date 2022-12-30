@@ -49,8 +49,8 @@
             :from-map="true"
             :locale="locale"
             @toggleDetail="toggleItemCard"
-            @action="SendActionToParent"
-            @updateCellValue="emitUpdate"/>
+            @action="SendActionToParent"/>
+            <!-- @updateCellValue="emitUpdate"/> -->
         </div>
 
         <!-- LEGEND & LAYERS -->
@@ -1666,10 +1666,10 @@ export default {
         }
       }
     },
-    emitUpdate (event) {
-      // console.log('\nC > DatamiMap > emitUpdate > event : ', event)
-      this.$emit('updateCellValue', event)
-    },
+    // emitUpdate (event) {
+    //   // console.log('\nC > DatamiMap > emitUpdate > event : ', event)
+    //   this.$emit('updateCellValue', event)
+    // },
     SendActionToParent (event) {
       this.$emit('action', event)
     },

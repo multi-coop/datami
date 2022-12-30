@@ -210,7 +210,8 @@ export default {
         file: this.file,
         data: this.uploaded
       }
-      this.$emit('action', payload)
+      // this.$emit('action', payload)
+      this.addFileSignal('uploadFileData', payload)
       this.closeDialog()
       this.file = undefined
       this.uploaded = undefined

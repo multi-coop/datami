@@ -59,6 +59,19 @@
       </div>
     </div>
 
+    <!-- DEBUGGING SIGNALS -->
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-12">
+        <p>
+          fileSignals:
+          <br>
+          <pre><code>{{ fileSignals }}</code></pre>
+        </p>
+      </div>
+    </div>
+
     <!-- LOADERS -->
     <div
       v-if="fileIsLoading || !fileOptions"
@@ -134,12 +147,12 @@
           :columns-edited="editedColumns"
           :items-total="itemsTotal || edited.length"
           :locale="locale"
-          :debug="debug"
-          @updateEdited="updateEdited"
-          @addTagToEnum="addTagToEnum"
-          @deleteRows="deleteRowsEvent"
-          @addRow="addRowEvent"
-          @sortRows="sortEdited"/>
+          :debug="debug"/>
+          <!-- @sortRows="sortEdited" -->
+          <!-- @addRow="addRowEvent" -->
+          <!-- @deleteRows="deleteRowsEvent" -->
+          <!-- @addTagToEnum="addTagToEnum" -->
+          <!-- @updateEdited="updateEdited" -->
       </div>
     </div>
   </div>
@@ -408,6 +421,34 @@ export default {
           this.updateShareableFiles(updatedShareableFile)
         }
       }
+    },
+    fileSignals (next) {
+      if (next && next.length) {
+        next.forEach(signal => {
+          switch (signal.action) {
+            case 'updateCellValue':
+              this.updateEdited(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'addTagToEnum':
+              this.addTagToEnum(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'deleteRows':
+              this.deleteRowsEvent(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'addNewRow':
+              this.addRowEvent(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'sortRows':
+              this.sortEdited(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+          }
+        })
+      }
     }
   },
   methods: {
@@ -639,7 +680,7 @@ export default {
       this.updateFileChanges(changesPayload)
     },
     addRowEvent (event) {
-      // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
+      console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
       // update edited
       const newRowId = this.uuidv4()
       const newRowPosition = `${this.itemsTotal || this.edited.length}`
@@ -649,10 +690,13 @@ export default {
         position: newRowPosition,
         added: true
       }
-      // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
       console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+
+      // Send signal to switch to last page
+      this.addFileSignal('goToLastPage', {})
 
       // update changesData
       const changeObj = {

@@ -104,8 +104,8 @@
         </p>
         <b-switch
           v-model="showDebugDetails"
-          class="card-header-icon">
-        </b-switch>
+          type="is-danger"
+          class="card-header-icon"/>
       </div>
       <div
         v-show="showDebugDetails"

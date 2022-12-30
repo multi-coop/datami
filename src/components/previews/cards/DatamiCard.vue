@@ -10,7 +10,7 @@
     <header class="card-header no-shadow">
       <div
         class="card-header-title"
-        @click="toggleDetail('showDetailButton')">
+        @click="toggleDetail">
         <div
           v-if="!showDetail"
           class="columns is-multiline my-0 pl-3">
@@ -29,8 +29,8 @@
               :item-value="item[fieldObj.field]"
               :is-mini="isMini"
               :locale="locale"
-              @updateCellValue="emitUpdate"
               @toggleDetail="toggleDetail">
+              <!-- @updateCellValue="emitUpdate" -->
               <template #logo>
                 <div v-if="hasContentByPosition('logo')">
                   <!-- LOGO BLOCK : 'logo' -->
@@ -50,6 +50,7 @@
                       :item-added="item.added"
                       :is-mini="isMini"
                       :locale="locale"/>
+                      <!-- @updateCellValue="emitUpdate"/> -->
                   </div>
                 </div>
               </template>
@@ -71,8 +72,8 @@
                 :item-added="item.added"
                 :item-value="item[fieldObj.field]"
                 :is-mini="isMini"
-                :locale="locale"
-                @updateCellValue="emitUpdate"/>
+                :locale="locale"/>
+                <!-- @updateCellValue="emitUpdate"/> -->
             </div>
           </div>
         </div>
@@ -110,6 +111,7 @@
         :item-added="item.added"
         :is-mini="isMini"
         :locale="locale"/>
+        <!-- @updateCellValue="emitUpdate"/> -->
     </div>
 
     <!-- CONTENT -->
@@ -165,8 +167,8 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"
-                    @updateCellValue="emitUpdate"
                     @toggleDetail="toggleDetail">
+                    <!-- @updateCellValue="emitUpdate" -->
                     <template #logo>
                       <!-- LOGO BLOCK : 'logo' -->
                       <div
@@ -203,8 +205,8 @@
                       :item-added="item.added"
                       :item-value="item[fieldObj.field]"
                       :is-mini="isMini"
-                      :locale="locale"
-                      @updateCellValue="emitUpdate"/>
+                      :locale="locale"/>
+                      <!-- @updateCellValue="emitUpdate"/> -->
                   </div>
                 </div>
 
@@ -222,8 +224,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
               </div>
             </div>
@@ -245,6 +247,7 @@
                   :item-added="item.added"
                   :is-mini="isMini"
                   :locale="locale"/>
+                  <!-- @updateCellValue="emitUpdate"/> -->
               </div>
             </div>
 
@@ -270,8 +273,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="pos === 'tags' && hasContentByPosition('tags')">
                   <DatamiCardBlockTags
@@ -285,8 +288,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="pos === 'links' && hasContentByPosition('links')">
                   <DatamiCardBlockLinks
@@ -300,8 +303,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
               </div>
               <div
@@ -358,6 +361,7 @@
                   :item-added="item.added"
                   :is-mini="isMini"
                   :locale="locale"/>
+                  <!-- @updateCellValue="emitUpdate"/> -->
               </div>
             </div>
 
@@ -383,8 +387,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="tagsPositions.includes(pos) && hasContentByPosition(pos, true)">
                   <DatamiCardBlockTags
@@ -398,8 +402,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="linksPositions.includes(pos) && hasContentByPosition(pos, true)">
                   <DatamiCardBlockLinks
@@ -413,8 +417,8 @@
                     :item-added="item.added"
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
-                    :locale="locale"
-                    @updateCellValue="emitUpdate"/>
+                    :locale="locale"/>
+                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
               </div>
               <div
@@ -437,23 +441,6 @@
                 <br> cardsSettingsMiniMap.right_side : <code>{{ cardsSettingsMiniMap.right_side }}</code>
               </div> -->
             </div>
-
-            <!-- RIGHT - MINIMAP -->
-            <!-- <div
-              v-if="showDetail && cardHasMiniMap && cardsSettingsMiniMap.right_side"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <DatamiMiniMap
-                  :file-id="fileId"
-                  :map-id="`${fileId}-minimap-${item.id}`"
-                  :fields="fields"
-                  :item="item"
-                  :show-detail-card="showDetailCard"
-                  :locale="locale"/>
-              </div>
-            </div> -->
 
             <!-- DATAVIZ / TO DO -->
             <!-- <div
@@ -750,29 +737,32 @@ export default {
     //   this.$emit('toggleDetail', this.item.id)
     // },
     toggleDetail (event) {
-      console.log('\nC > DatamiCard > toggleDetail > event :', event)
-      // console.log('C > DatamiCard > toggleDetail > this.fieldMapping :', this.fieldMapping)
-      console.log('C > DatamiCard > toggleDetail > this.showDetail :', this.showDetail)
-      const payload = {
-        isMini: this.isMini,
-        showDetail: this.showDetail,
-        btn: event,
-        itemId: this.item.id
-      }
-      // this.$emit('toggleDetail', this.item.id)
-      this.$emit('toggleDetail', payload)
+      if (event === 'showDetailButton' || this.currentEditViewMode !== 'edit') {
+        console.log('\nC > DatamiCard > toggleDetail > event :', event)
+        console.log('C > DatamiCard > toggleDetail > this.currentEditViewMode :', this.currentEditViewMode)
+        // console.log('C > DatamiCard > toggleDetail > this.fieldMapping :', this.fieldMapping)
+        console.log('C > DatamiCard > toggleDetail > this.showDetail :', this.showDetail)
+        const payload = {
+          isMini: this.isMini,
+          showDetail: this.showDetail,
+          btn: event,
+          itemId: this.item.id
+        }
+        // this.$emit('toggleDetail', this.item.id)
+        this.$emit('toggleDetail', payload)
 
-      if (this.showDetail) {
-        // track with matomo
-        this.trackEvent('toggleDetail')
+        if (this.showDetail) {
+          // track with matomo
+          this.trackEvent('toggleDetail')
+        }
       }
-    },
-    emitUpdate (event) {
-      this.$emit('updateCellValue', event)
-    },
-    SendActionToParent (event) {
-      this.$emit('action', event)
     }
+    // emitUpdate (event) {
+    //   this.$emit('updateCellValue', event)
+    // },
+    // SendActionToParent (event) {
+    //   this.$emit('action', event)
+    // }
   }
 }
 
