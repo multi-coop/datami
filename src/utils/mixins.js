@@ -64,14 +64,9 @@ import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixinGlobal = {
   watch: {
-    notifications (next) {
-      if (next && next.length) {
+    notifications (next, prev) {
+      if (next && next.length && prev.length !== next.length) {
         this.updateFileDialogs('NotificationInfos', {})
-      }
-    },
-    errors (next) {
-      if (next && next.length) {
-        this.updateFileDialogs('NotificationErrors', {})
       }
     },
     hasFileDialogs (next) {
@@ -286,6 +281,7 @@ export const mixinGlobal = {
     findFromPath,
     ...mapActions({
       updateDialogs: 'git-dialogs/updateFileDialog',
+      removeFileDialog: 'git-dialogs/removeFileDialog',
       addSignal: 'git-signals/addSignal',
       removeSignal: 'git-signals/removeSignal'
     }),
@@ -538,7 +534,8 @@ export const mixinGit = {
       getRefBranch: 'git-user/getRefBranch',
       getUserBranchesNotRef: 'git-user/getUserBranchesNotRef',
       getUserActiveBranch: 'git-user/getUserActiveBranch',
-      userBranch: 'git-user/getUserBranch'
+      userBranch: 'git-user/getUserBranch',
+      checkIfErrorExists: 'git-data/checkIfErrorExists'
     }),
     userGit () {
       return this.getUserGit(this.fileId)
@@ -562,9 +559,40 @@ export const mixinGit = {
     getFileDataRaw,
     getUserInfosFromToken,
     ...mapActions({
+      resetReqErrors: 'git-data/resetReqErrors',
+      updateReqErrors: 'git-data/updateReqErrors',
       updateUserBranches: 'git-user/updateUserBranches',
       changeActiveUserBranch: 'git-user/changeActiveUserBranch'
-    })
+    }),
+    async getFileDataAndErrors (gitObj, token, raw = false) {
+      // this.updateReloading({ fileId: this.fileId, isLoading: true })
+      // console.log('\nM > MixinGit > getFileDataAndErrors > gitObj.filefullname : ', gitObj.filefullname)
+
+      // fetch data
+      let resp
+      if (raw) {
+        resp = await this.getFileDataRaw(gitObj, token)
+      } else {
+        resp = await this.getFileData(gitObj, token)
+      }
+      // console.log('\nM > MixinGit > getFileDataAndErrors > resp : ', resp)
+
+      // process errors if any
+      const errors = resp.errors
+      if (errors.length) {
+        const reqErrors = errors.map(err => { return { ...err, fileId: this.fileId, errorId: this.uuidv4() } })
+        // console.log('M > MixinGit > getFileDataAndErrors > reqErrors : ', reqErrors)
+        reqErrors.forEach(err => {
+          if (!this.checkIfErrorExists(err)) {
+            this.updateReqErrors({ error: err, addToErrors: true })
+            this.updateFileDialogs('NotificationErrors', { error: err })
+          }
+        })
+      }
+
+      // this.updateReloading({ fileId: this.fileId, isLoading: false })
+      return resp
+    }
   }
 }
 

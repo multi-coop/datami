@@ -1,5 +1,5 @@
 <template>
-  <div class="EditModeBtns datami-component content is-flex is-justify-content-center">
+  <div class="EditModeBtns datami-component px-2 content mb-0 is-flex is-align-items-center is-justify-content-center">
     <!-- DEBUG -->
     <div
       v-if="debug"
@@ -79,11 +79,10 @@ export default {
       buttonsEdit: editViewsOptions
     }
   },
-  beforeMount () {
-    // console.log('\nC > EditModeBtns > beforeMount ... : ')
-    this.changeEdit('preview')
-    // this.changeView('table')
-  },
+  // beforeMount () {
+  //   // console.log('\nC > EditModeBtns > beforeMount ... : ')
+  //   this.changeEdit('preview')
+  // },
   methods: {
     getBtnType (btnCode) {
       const isCurrentEditMode = this.currentEditViewMode === btnCode

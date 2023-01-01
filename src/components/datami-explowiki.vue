@@ -11,7 +11,7 @@
     <!-- WIDGET -->
     <div
       :id="`datami-widget-${fileId}`"
-      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
+      :class="`mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
       :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
       <!-- NAVBAR FILE TITLE / USER BTNS -->
       <div
@@ -19,7 +19,7 @@
         class="columns is-centered mb-4"
         style="z-index: 2;">
         <!-- FILE TITLE -->
-        <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row">
+        <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-6-desktop is-flex is-flex-direction-row">
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-direction-row is-align-items-center">
+        <div class="usernavbar column is-12-mobile is-6-tablet is-6-desktop is-flex is-direction-row is-align-items-center">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -202,9 +202,6 @@ import { mapActions } from 'vuex'
 
 import { mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
 
-import { extractGitInfos } from '@/utils/utilsGitUrl.js'
-import { getFileDataRaw } from '@/utils/gitProvidersAPI.js'
-
 export default {
   name: 'DatamiExploWiki',
   components: {
@@ -354,9 +351,9 @@ export default {
     let mediawikiSchema = mediawikiOptions.schema
     // console.log('C > DatamiExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
     if (mediawikiSchema && mediawikiSchema.file) {
-      const schemaGitObj = extractGitInfos(mediawikiSchema.file)
+      const schemaGitObj = this.extractGitInfos(mediawikiSchema.file)
       // console.log('C > DatamiExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
-      const schemaRaw = await getFileDataRaw(schemaGitObj)
+      const schemaRaw = await this.getFileDataRaw(schemaGitObj)
       // console.log('C > DatamiExploWiki > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
       // console.log('C > DatamiExploWiki > beforeMount > schemaData : ', schemaData)
@@ -395,7 +392,7 @@ export default {
       addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
       updateReloading: 'git-data/updateReloading',
-      updateReqErrors: 'git-data/updateReqErrors',
+      // updateReqErrors: 'git-data/updateReqErrors',
       initializeStorage: 'git-storage/initializeStorage',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),

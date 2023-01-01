@@ -312,7 +312,7 @@ export default {
     },
     emitChange: debounce(function (event) {
       console.log('\nC > EditCell > emitChange > event : ', event)
-      console.log('\nC > EditCell > emitChange > event > debounce : ', event)
+      console.log('C > EditCell > emitChange > event > debounce : ', event)
       this.emitChangeDebounced(event)
     }, 750),
     emitChangeDebounced (event) {

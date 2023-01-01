@@ -294,9 +294,7 @@ export default {
     },
     trimmedText () {
       // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
-      const textToTrim = this.value ?? ''
-      // const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
-      // console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
+      const textToTrim = this.value || ''
       const exceed = this.nowrap && (textToTrim.length > this.maxTextLength)
       // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
       const trimmed = exceed ? `${textToTrim.slice(0, this.maxTextLength)} [...]` : textToTrim

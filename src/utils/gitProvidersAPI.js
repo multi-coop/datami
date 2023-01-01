@@ -10,7 +10,7 @@ import {
 // see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
-export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined) {
+export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined, filefullname = undefined) {
   // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
   // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
   // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
@@ -44,7 +44,9 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 
   if (!req.ok) {
     const err = {
+      url: url,
       function: funcName,
+      filefullname: filefullname,
       code: req.status,
       resp: resp
     }
@@ -53,6 +55,10 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 
   // return data
   return {
+    url: url,
+    filefullname: filefullname,
+    ok: req.ok,
+    status: req.status,
     data: resp,
     errors: errors
   }
@@ -61,20 +67,16 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 export async function getFileData (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFile
-  // const getRaw = gitObj.provider === 'localhost'
   const provider = gitObj.provider
-  // const fetched = await getData(url, 'getFileData', token)
-  const fetched = await getData(url, 'getFileData', token, false, provider)
+  const fetched = await getData(url, 'getFileData', token, false, provider, gitObj.filefullname)
   return fetched
 }
 
 export async function getFileDataRaw (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFileRaw
-  // const getRaw = gitObj.provider === 'localhost'
   const provider = gitObj.provider
-  // const fetched = await getData(url, 'getFileDataRaw', token, true)
-  const fetched = await getData(url, 'getFileDataRaw', token, true, provider)
+  const fetched = await getData(url, 'getFileDataRaw', token, true, provider, gitObj.filefullname)
   return fetched
 }
 

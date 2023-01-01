@@ -299,8 +299,8 @@ export default {
   methods: {
     ...mapActions({
       updateSaving: 'git-data/updateSaving',
-      updateCommitting: 'git-data/updateCommitting',
-      updateReqErrors: 'git-data/updateReqErrors'
+      updateCommitting: 'git-data/updateCommitting'
+      // updateReqErrors: 'git-data/updateReqErrors'
     }),
     clearName () {
       this.userName = undefined

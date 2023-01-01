@@ -1,5 +1,5 @@
 <template>
-  <div class="SortAndFiltersSkeleton datami-component container">
+  <div class="SortAndFiltersSkeleton datami-component">
     <b-navbar
       type="is-white"
       class="is-align-items-center"
@@ -8,7 +8,7 @@
       <template #start>
         <b-navbar-item
           tag="div"
-          class="py-0">
+          class="py-0 pl-0">
           <SearchFullText
             :file-id="fileId"
             :locale="locale"
@@ -21,7 +21,7 @@
         <CustomFilterDropdown
           v-for="filter in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}`"
-          :class="isDarkMode ? 'is-dark' : 'is-white'"
+          :class="`${isDarkMode ? 'is-dark' : 'is-white'}`"
           :filter="filter"
           :file-id="fileId"
           :field-active-tags="fieldActiveTags(filter.field)"
@@ -148,6 +148,6 @@ export default {
 
 <style>
 .SortAndFiltersSkeleton > .navbar > .navbar-menu > .navbar-end {
-  margin-right: .75rem;
+  margin-right: 0em;
 }
 </style>

@@ -5,6 +5,18 @@
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-12">
+        - fileIsLoading : <code>{{ fileIsLoading }}</code><br>
+        - !!fileRaw : <code>{{ !!fileRaw }}</code><br>
+        - !!dataRaw : <code>{{ !!dataRaw }}</code><br>
+        - !!data : <code>{{ !!data }}</code><br>
+        - !!fileOptions : <code>{{ !!fileOptions }}</code><br>
+      </div>
+    </div>
+    <!-- DEBUGGING -->
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-12">
         <p>
           currentEditViewMode:
           <code>{{ currentEditViewMode }}</code>
@@ -21,7 +33,16 @@
 
       <!-- DEBUG RAW CONTENT OBJECTS -->
       <div
-        v-if="debug"
+        v-if="true"
+        class="column is-6">
+        <p>
+          fileOptions:
+          <br>
+          <pre><code>{{ fileOptions }}</code></pre>
+        </p>
+      </div>
+      <div
+        v-if="true"
         class="column is-6">
         <p>
           dataRaw:
@@ -60,7 +81,7 @@
     </div>
 
     <!-- DEBUGGING SIGNALS -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-12">
@@ -70,7 +91,7 @@
           <pre><code>{{ fileSignals }}</code></pre>
         </p>
       </div>
-    </div>
+    </div> -->
 
     <!-- LOADERS -->
     <div
@@ -297,8 +318,11 @@ export default {
         const currentFile = this.gitObj.id
         // console.log('\nC > PreviewCsv > watch > dataIsSet > currentFile : ', currentFile)
 
+        // console.log('\nC > PreviewCsv > watch > dataIsSet > this.dataRaw : ', this.dataRaw)
         const data = this.dataRaw.data
+        // console.log('C > PreviewCsv > watch > dataIsSet > data : ', data)
         const dataColumns = this.buildColumns(this.dataRaw)
+        // console.log('C > PreviewCsv > watch > dataIsSet > dataColumns : ', dataColumns)
         this.data = data
         this.dataColumns = dataColumns
         // console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)

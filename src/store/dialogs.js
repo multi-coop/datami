@@ -1,4 +1,5 @@
 // import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 
 export const dialogs = {
   namespaced: true,
@@ -14,7 +15,7 @@ export const dialogs = {
   mutations: {
     addToDialogs (state, { fileId, component, event }) {
       // console.log('S-dialogs > M > addToDialogs > fileId : ', fileId)
-      state.fileDialogs.push({ fileId: fileId, component: component, event: event })
+      state.fileDialogs.push({ fileId: fileId, component: component, event: event, dialogId: uuidv4() })
     },
     removeFromDialogsByComponent (state, { fileId, component, event }) {
       // console.log('S-dialogs > M > removeFromDialogs > component : ', component)
@@ -22,7 +23,10 @@ export const dialogs = {
       // console.log('S-dialogs > M > removeFromDialogs > state.fileDialogs : ', state.fileDialogs)
       state.fileDialogs = state.fileDialogs.filter(dialog => dialog.fileId !== fileId && dialog.component !== component)
     },
-    resetFileDialog (state, { fileId }) {
+    removeFromDialogsByDialogId (state, dialogId) {
+      state.fileDialogs = state.fileDialogs.filter(dial => dial.dialogId !== dialogId)
+    },
+    resetFileDialogs (state, { fileId }) {
       // console.log('S-dialogs > M > removeFromDialogs > fileId : ', fileId)
       state.fileDialogs = state.fileDialogs.filter(dialog => dialog.fileId !== fileId)
     }
@@ -35,7 +39,7 @@ export const dialogs = {
       // console.log('S-dialogs > M > updateFileDialog > event : ', event)
       // console.log('S-dialogs > M > updateFileDialog > reset : ', reset)
       if (reset) {
-        commit('resetFileDialog', { fileId: fileId })
+        commit('resetFileDialogs', { fileId: fileId })
       } else {
         if (show) {
           commit('addToDialogs', { fileId: fileId, component: component, event: event })
@@ -43,6 +47,10 @@ export const dialogs = {
           commit('removeFromDialogs', { fileId: fileId, component: component, event: event })
         }
       }
+    },
+    removeFileDialog ({ commit }, dialogId) {
+      // console.log('\nS-dialogs > M > removeFileDialog > dialogId : ', dialogId)
+      commit('removeFromDialogsByDialogId', dialogId)
     }
   }
 }

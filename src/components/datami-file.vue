@@ -9,6 +9,22 @@
     <MatomoScript
       :file-id="fileId"/>
 
+    <!-- DEBUG ERRORS -->
+    <!-- <div
+      v-if="debug"
+      class="columns">
+      <div class="column is-4">
+        errors : <br><pre><code>{{ errors }}</code></pre>
+      </div>
+      <div class="column is-4">
+        fileDialogs : <br><pre><code>{{ fileDialogs }}</code></pre>
+      </div>
+      <div class="column is-4">
+        fileIsLoading : <pre><code>{{ fileIsLoading }}</code></pre><br>
+        fileIsSaving : <pre><code>{{ fileIsSaving }}</code></pre><br>
+      </div>
+    </div> -->
+
     <!-- DEBUG DIALOGS -->
     <!-- <div
       v-if="true"
@@ -25,6 +41,22 @@
       </div>
     </div> -->
 
+    <!-- DEBUG EDIT MODE BUTTONS -->
+    <!-- <div
+      v-if="debug"
+      class="columns">
+      <div class="column is-4">
+        fileIsLoading : <pre><code>{{ fileIsLoading }}</code></pre><br>
+        fileIsSaving : <pre><code>{{ fileIsSaving }}</code></pre><br>
+      </div>
+      <div class="column is-4">
+        onlypreview : <code>{{ onlypreview }}</code>
+      </div>
+      <div class="column is-4">
+        showEditNavbar : <code>{{ showEditNavbar }}</code>
+      </div>
+    </div> -->
+
     <!-- WIDGET -->
     <div
       :id="`datami-widget-${fileId}`"
@@ -35,30 +67,40 @@
         style="z-index: 1;">
         <!-- NAVBAR FILE TITLE / USER BTNS -->
         <div
-          :class="`container mb-0 ${currentViewMode === 'map' || userFullscreen ? 'pt-6' : ''} ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
+          :class="`mb-0 ${userFullscreen ? 'pt-6' : ''} ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
           style="z-index: 2">
-          <div class="columns is-centered mb-0">
+          <div
+            class="columns is-centered mb-0"
+            style="z-index: 2">
             <!-- FILE TITLE -->
-            <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row">
+            <div
+              class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row"
+              style="z-index: 2">
               <!-- MODAL DEBUGGING BUTTON -->
-              <b-button
-                label="Debug modal"
-                type="is-danger"
-                size="is-small"
-                @click="isModalActive = true"/>
               <ViewModeBtns
+                :file-id="fileId"
+                :locale="locale"/>
+              <EditModeBtns
+                v-if="!onlypreview && showEditNavbar"
+                :only-preview="onlypreview"
                 :file-id="fileId"
                 :locale="locale"/>
               <FileTitle
                 :title="title"
                 :file-id="fileId"
                 :locale="locale"/>
-                <!-- :show-file-infos="showFileInfos" -->
-                <!-- @toggleInfos="showFileInfos = !showFileInfos"/> -->
+              <!-- DEUG OUTTER MODAL -->
+              <b-button
+                icon-left="bug"
+                type="is-danger"
+                size="is-small"
+                @click="isModalActive = true"/>
             </div>
 
             <!-- USER NAVBAR -->
-            <div class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-align-items-center">
+            <div
+              class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-align-items-center"
+              style="z-index: 2">
               <UserOptions
                 v-if="gitObj"
                 :file-id="fileId"
@@ -93,22 +135,10 @@
             :error="error"
             :locale="locale"/>
         </div> -->
-
-        <!-- FILE NAVBAR BUTTONS -->
-        <!-- {{ fileOptions }} -->
-        <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
-        <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
-        <EditNavbarSkeleton
-          v-if="fileOptions && !fileIsLoading && !fileIsSaving"
-          :file-id="fileId"
-          :only-preview="onlypreview"
-          :locale="locale"/>
-          <!-- @action="processAction"/> -->
-          <!-- :show-upload-file-dialog="showUploadFileDialog" -->
       </div>
 
       <!-- DEBUGGING FOREIGN KEYS-->
-      <div
+      <!-- <div
         v-if="debug && sharedData"
         class="columns is-multiline mb-4">
         <div class="column is-full">
@@ -156,10 +186,10 @@
           loadedSharedData<code>[{{ idx }}]</code> :<br>
           <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
         </div>
-      </div>
+      </div> -->
 
       <!-- DEBUGGING -->
-      <div
+      <!-- <div
         v-if="debug"
         class="columns is-multiline mt-4">
         <div
@@ -173,12 +203,12 @@
           fileOptionsReady : <code>{{ fileOptionsReady }}</code>
         </div>
         <div
-          v-if="false"
+          v-if="true"
           class="column is-8">
           fileOptions :<br>
           <pre><code>{{ fileOptions }}</code></pre>
         </div>
-      </div>
+      </div> -->
 
       <!-- PREVIEWS - SWITCH BY FILE TYPE -->
       <div
@@ -228,6 +258,15 @@
       </div>
     </div>
 
+    <!-- DEBUG FILE RAW -->
+    <!-- <div
+      v-if="debug"
+      class="columns">
+      <div class="column is-4">
+        fileRaw : <br><pre><code>{{ fileRaw }}</code></pre>
+      </div>
+    </div> -->
+
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
@@ -256,12 +295,13 @@ export default {
   components: {
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
     DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
+    EditModeBtns: () => import(/* webpackChunkName: "EditModeBtns" */ '@/components/edition/EditModeBtns.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
     UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
     // NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
     // NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
-    EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
+    // EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
     // DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
     // DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
     // ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
@@ -344,16 +384,6 @@ export default {
     }
   },
   watch: {
-    // notifications (next) {
-    //   if (next && next.length) {
-    //     this.updateFileDialogs('NotificationInfos', {})
-    //   }
-    // },
-    // errors (next) {
-    //   if (next && next.length) {
-    //     this.updateFileDialogs('NotificationErrors', {})
-    //   }
-    // },
     async gitfileDatami (next) {
       // console.log('\nC > DatamiFile > watch > gitfileDatami > next : ', next)
       await this.initWidget()
@@ -398,6 +428,13 @@ export default {
     }
   },
   async beforeMount () {
+    this.fileId = this.uuidv4()
+    this.toggleEditNavbar({ uuid: this.fileId, status: false })
+    this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+    this.resetReqErrors(this.fileId)
+    // this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
+    this.updateReloading({ fileId: this.fileId, isLoading: true })
+
     // INITIALIZING LOCAL STORAGE
     this.initializeStorage()
     // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
@@ -415,27 +452,29 @@ export default {
     const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
     this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
     // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
-    await this.reloadFile()
+    await this.reloadFile(true)
   },
   beforeDestroy () {
     // console.log('\nC > DatamiFile > beforeDestroy > this.gitfile : ', this.gitfile)
   },
   methods: {
     ...mapActions({
+      changeEditViewMode: 'git-data/changeEditViewMode',
+      toggleEditNavbar: 'toggleEditNavbar',
       addGitInfos: 'addGitInfos',
       addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',
-      updateReqErrors: 'git-data/updateReqErrors',
+      // updateReqErrors: 'git-data/updateReqErrors',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks',
       initializeStorage: 'git-storage/initializeStorage'
     }),
     async initWidget () {
-      const fileUuid = this.uuidv4()
+      // const fileUuid = this.uuidv4()
 
       // console.log('\nC > DatamiFile > initWidget > this.trackalloutlinks : ', this.trackalloutlinks)
-      this.activateTrackAllOutlinks({ uuid: fileUuid, val: this.trackalloutlinks })
+      this.activateTrackAllOutlinks({ uuid: this.fileId, val: this.trackalloutlinks })
 
       if (!this.fromMultiFiles) {
         this.setWidgetCopy()
@@ -443,12 +482,12 @@ export default {
       const gitInfosObject = this.extractGitInfos(this.gitfileDatami)
       // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
 
-      this.updateShareableFiles({ gitfile: this.gitfileDatami, fileId: fileUuid, isSet: false })
-      gitInfosObject.uuid = fileUuid
+      this.updateShareableFiles({ gitfile: this.gitfileDatami, fileId: this.fileId, isSet: false })
+      gitInfosObject.uuid = this.fileId
       gitInfosObject.title = this.title
       gitInfosObject.onlyPreview = this.onlypreview
       // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
-      this.fileId = gitInfosObject.uuid
+      // this.fileId = gitInfosObject.uuid
       this.fileType = gitInfosObject.filetype
       if (!this.getGitInfosObj[this.fileId]) {
         // load token
@@ -485,13 +524,14 @@ export default {
       if (fileSchema && fileSchema.file) {
         const schemaGitObj = this.extractGitInfos(fileSchema.file)
         // console.log('C > DatamiFile > initWidget > schemaGitObj : ', schemaGitObj)
-        const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
+        // const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
+        const schemaRaw = await this.getFileDataAndErrors(schemaGitObj, this.fileToken, true)
         // console.log('C > DatamiFile > initWidget > schemaRaw : ', schemaRaw)
         const schemaData = schemaRaw && schemaRaw.data
         // console.log('C > DatamiFile > initWidget > schemaData : ', schemaData)
-        const schema = JSON.parse(schemaData)
+        const schema = schemaRaw.ok && JSON.parse(schemaData)
         // console.log('C > DatamiFile > initWidget > schema : ', schema)
-        fileSchema = { ...schema, file: fileSchema.file }
+        fileSchema = schema && { ...schema, file: fileSchema.file }
       }
       // fileSchema && console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
 
@@ -504,13 +544,14 @@ export default {
       if (fileCustomProps && fileCustomProps.file) {
         const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
         // console.log('C > DatamiFile > initWidget > customPropsGitObj : ', customPropsGitObj)
-        const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
+        // const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
+        const customPropsRaw = await this.getFileDataAndErrors(customPropsGitObj, this.fileToken, true)
         // console.log('C > DatamiFile > initWidget > customPropsRaw : ', customPropsRaw)
         const customPropsData = customPropsRaw && customPropsRaw.data
         // console.log('C > DatamiFile > initWidget > customPropsData : ', customPropsData)
-        const customProps = JSON.parse(customPropsData)
+        const customProps = customPropsRaw.ok && JSON.parse(customPropsData)
         // console.log('C > DatamiFile > initWidget > customProps : ', customProps)
-        fileCustomProps = { ...customProps, file: fileCustomProps.file }
+        fileCustomProps = customProps && { ...customProps, file: fileCustomProps.file }
       }
       // fileCustomProps && console.log('\nC > DatamiFile > initWidget > this.gitfileDatami : ', this.gitfileDatami)
       // fileCustomProps && console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
@@ -523,10 +564,11 @@ export default {
       if (fileDataviz) { fileDataviz.file = fileDatavizLocal ? fileDataviz.filelocal : fileDataviz && fileDataviz.file }
       if (fileDataviz && fileDataviz.file) {
         const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
-        const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
+        // const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
+        const datavizPropsRaw = await this.getFileDataAndErrors(datavizPropsGitObj, this.fileToken, true)
         const datavizPropsData = datavizPropsRaw && datavizPropsRaw.data
-        const datavizProps = JSON.parse(datavizPropsData)
-        fileDataviz = { ...fileDataviz, ...datavizProps }
+        const datavizProps = datavizPropsRaw.ok && JSON.parse(datavizPropsData)
+        fileDataviz = datavizProps && { ...fileDataviz, ...datavizProps }
       }
       // fileDataviz && console.log('C > DatamiFile > initWidget > fileDataviz : ', fileDataviz)
 
@@ -541,12 +583,13 @@ export default {
           map.file = mapSettingsLocal ? map.filelocal : map.file
           if (map.file) {
             const mapPropsGitObj = this.extractGitInfos(map.file)
-            const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
+            // const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
+            const mapPropsRaw = await this.getFileDataAndErrors(mapPropsGitObj, this.fileToken, true)
             const mapPropsData = mapPropsRaw && mapPropsRaw.data
-            const mapProps = JSON.parse(mapPropsData)
-            mapSettings = { ...map, ...mapProps }
+            const mapProps = mapPropsRaw.ok && JSON.parse(mapPropsData)
+            mapSettings = mapProps && { ...map, ...mapProps }
           }
-          maps.push(mapSettings)
+          mapSettings && maps.push(mapSettings)
         }
         fileMaps.maps = maps
       }
@@ -568,17 +611,18 @@ export default {
       // add fileOptions in store
       this.addFileOptions({ ...fileOptions, uuid: gitInfosObject.uuid })
     },
-    async reloadFile () {
+    async reloadFile (firstLoading = false) {
       // Update reloading in store - true
-      this.updateReloading({ fileId: this.fileId, isLoading: true })
-      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
+      if (!firstLoading) { this.updateReloading({ fileId: this.fileId, isLoading: true }) }
+      // this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // Request API for file infos
       // console.log('\nC > DatamiFile > reloadFile > respData > ... ')
-      const respData = await this.getFileData(this.gitObj, this.fileToken)
+      // const respData = await this.getFileData(this.gitObj, this.fileToken)
+      const respData = await this.getFileDataAndErrors(this.gitObj, this.fileToken)
       // console.log('\nC > DatamiFile > reloadFile > respData : ', respData)
       const fileInfos = respData.data
-      const fileInfosErrors = respData.errors
+      // const fileInfosErrors = respData.errors
       fileInfos.uuid = this.fileId
       this.addFileReqInfos(fileInfos)
       this.fileInfos = fileInfos
@@ -586,18 +630,11 @@ export default {
 
       // Request API for file content
       // console.log('\nC > DatamiFile > reloadFile > respDataRaw > ... ')
-      const respDataRaw = await this.getFileDataRaw(this.gitObj, this.fileToken)
-      // console.log('C > DatamiFile > reloadFile > respDataRaw : ', respDataRaw)
+      // const respDataRaw = await this.getFileDataRaw(this.gitObj, this.fileToken)
+      const respDataRaw = await this.getFileDataAndErrors(this.gitObj, this.fileToken, true)
+      // console.log('\nC > DatamiFile > reloadFile > respDataRaw : ', respDataRaw)
       const fileRaw = respDataRaw.data
-      const fileRawErrors = respDataRaw.errors
-      this.fileRaw = fileRaw
-
-      // update errors if any
-      if (fileInfosErrors.length || fileRawErrors.length) {
-        const errors = [...fileInfosErrors, ...fileRawErrors]
-        console.log('C > DatamiFile > reloadFile > errors : ', errors)
-        this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
-      }
+      this.fileRaw = respDataRaw.ok && fileRaw
 
       // Update reloading in store - false
       this.updateReloading({ fileId: this.fileId, isLoading: false })
@@ -638,13 +675,14 @@ export default {
         const fileUrl = resrc.ressource
         // console.log('... C >>> DatamiFile > loadExtRessources > fileUrl : ', fileUrl)
         const ressourceGitObj = this.extractGitInfos(fileUrl)
-        const ressourceRaw = await this.getFileDataRaw(ressourceGitObj, this.fileToken)
+        // const ressourceRaw = await this.getFileDataRaw(ressourceGitObj, this.fileToken)
+        const ressourceRaw = await this.getFileDataAndErrors(ressourceGitObj, this.fileToken, true)
         // console.log('C >>> DatamiFile > loadExtRessources > ressourceRaw : ', ressourceRaw)
-        const dataObj = csvToObject(ressourceRaw.data, resrc.options)
+        const dataObj = ressourceRaw.ok && csvToObject(ressourceRaw.data, resrc.options)
         // console.log('C >>> DatamiFile > loadExtRessources > dataObj : ', dataObj)
 
         // save data in loadedSharedData
-        const fields = Object.entries(dataObj.headers)
+        const fields = dataObj && Object.entries(dataObj.headers)
           .map((entry, idx) => {
             const fieldId = entry[0]
             const fieldLabel = entry[1].trim()
@@ -660,7 +698,7 @@ export default {
           ressource: resrc.ressource,
           ressourceId: resrc.ressourceId,
           data: {
-            headers: fields,
+            headers: fields || [],
             data: dataObj.data
           }
         }
@@ -675,17 +713,6 @@ export default {
         this.updateSharedData(payload)
       }
     }
-    // processAction (event) {
-    //   // console.log('\nC > DatamiFile > processAction > event : ', event)
-    //   switch (event.action) {
-    //     // case 'toggleUploadFileDialog':
-    //     //   // this.showUploadFileDialog = !this.showUploadFileDialog
-    //     //   break
-    //     case 'uploadFileData':
-    //       this.fileClientRaw = event.data
-    //       break
-    //   }
-    // }
   }
 }
 </script>

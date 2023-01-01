@@ -14,11 +14,10 @@
       <div
         v-else-if="dialog.component === 'NotificationErrors'"
         class="card">
-        <NotificationErrors
-          v-for="(error, index) in errors"
-          :key="`notif-error-${fileId}-${index}-${error.code}`"
+        <NotificationError
           :file-id="fileId"
-          :error="error"
+          :dialog-id="dialog.dialogId"
+          :error="dialog.event.error"
           :locale="locale"/>
       </div>
 
@@ -27,7 +26,7 @@
         v-else-if="dialog.component === 'NotificationInfos'"
         class="card">
         <NotificationInfos
-          v-for="(notif, index) in notifications"
+          v-for="(notif, index) in dialog.event.notifications"
           :key="`notif-info-${fileId}-${index}-${notif.code}`"
           :file-id="fileId"
           :notif="notif"
@@ -69,7 +68,7 @@
 
       <!-- CONFIRM COMMIT -->
       <ConfirmCommit
-        v-else-if="dialog.component === 'ConfirmCommit'"
+        v-else-if="dialog.component === 'OpenCommitDialog'"
         :file-id="fileId"
         :locale="locale"
         :debug="debug"/>
@@ -135,7 +134,7 @@ export default {
   name: 'DialogSkeleton',
   components: {
     NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
+    NotificationError: () => import(/* webpackChunkName: "NotificationError" */ '@/components/notifications/NotificationError.vue'),
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/dialogs/DialogFileInfos.vue'),
     DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/dialogs/DialogAddRow.vue'),

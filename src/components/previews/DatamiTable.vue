@@ -15,11 +15,11 @@
       </div>
 
       <!-- DEBUGGING -->
-      <div v-if="debug">
+      <!-- <div v-if="debug">
         <div
           v-if="debug"
           class="column is-3">
-          <!-- fileFilters: <br><pre><code>{{ fileFilters }}</code></pre> -->
+          fileFilters: <br><pre><code>{{ fileFilters }}</code></pre>
           consolidating: <br><pre><code>{{ consolidating }}</code></pre><br>
         </div>
         <div
@@ -45,7 +45,7 @@
           searchText: <br>
           <pre><code>{{ searchText }}</code></pre><br>
         </div>
-      </div>
+      </div> -->
 
       <!-- COUNTS & EDIT CSV NAVABAR -->
       <div
@@ -65,7 +65,7 @@
       </div>
 
       <!-- DEBUGGING -->
-      <div v-if="debug">
+      <!-- <div v-if="debug">
         lockHeaders : <code>{{ lockHeaders }}</code>
       </div>
       <div v-if="debug">
@@ -79,9 +79,9 @@
       </div>
       <div v-if="debug">
         dataForView: <code>{{ dataForView }}</code>
-      </div>
+      </div> -->
 
-      <div
+      <!-- <div
         v-if="debug"
         class="column is-12">
         currentViewMode: <code>{{ currentViewMode }}</code><br>
@@ -104,7 +104,7 @@
         class="column is-4">
         currentPageCards: <code>{{ currentPageCards }}</code><br>
         itemsPerPageCards: <code>{{ itemsPerPageCards }}</code><br>
-      </div>
+      </div> -->
 
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
@@ -130,7 +130,6 @@
             sticky-header
             checkbox-type="is-dark">
             <!-- LOOP COLUMNS -->
-            <!-- :width="colWidth(col)" -->
             <b-table-column
               v-for="(col, idx) in columnsForView"
               :key="col.field"
@@ -154,7 +153,6 @@
                         :is-header="true"
                         :field="col"
                         :input-data="column.label"/>
-                        <!-- @updateCellValue="emitUpdate"/> -->
                     </b-field>
                     <PreviewField
                       v-else
@@ -171,7 +169,6 @@
                       <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
                     </div>
                     <span v-else>
-                      <!-- {{ column.label }} -->
                       <PreviewField
                         :file-id="fileId"
                         :field="col"
@@ -282,27 +279,6 @@
           </b-table>
         </div>
 
-        <!-- DISPLAY DETAILLED CARD FOR TABLE VIEW -->
-        <!-- <div
-          v-show="currentViewMode === 'table' && activeTableCardId"
-          class="columns is-centered">
-          <div
-            :class="`column is-10`">
-            <DatamiCard
-              :file-id="fileId"
-              :fields="columns"
-              :field-mapping="mappingsForDetail"
-              :item="getDetailItem(activeTableCardId)"
-              :show-detail="true"
-              :show-detail-card="false"
-              :locale="locale"
-              :from-table="true"
-              @action="processAction"
-              @updateCellValue="emitUpdate"
-              @toggleDetail="activeTableCardId = undefined"/>
-          </div>
-        </div> -->
-
         <!-- CARDS -->
         <div
           v-if="hasCardsView && cardsViewIsActive"
@@ -323,10 +299,10 @@
         </div>
 
         <!-- DATAVIZ & MAP DEBUGGING-->
-        <p v-if="debug">
+        <!-- <p v-if="debug">
           hasDatavizView: <code>{{ hasDatavizView }}</code><br>
           currentViewMode: <code>{{ currentViewMode }}</code>
-        </p>
+        </p> -->
 
         <!-- DATAVIZ -->
         <div
@@ -509,7 +485,7 @@ import {
 } from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DatamiTable',
@@ -1027,9 +1003,6 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      updateReqErrors: 'git-data/updateReqErrors'
-    }),
     columnThAttrs (column) {
       // console.log('\nC > DatamiTable > columnThAttrs > column : ', column)
       return {
@@ -1439,7 +1412,7 @@ export default {
   display: none;
 }
 .datami-table-td {
-  /* padding: .2em .25em !important; */
+  padding: .1em .1em !important;
   min-width: 100px;
 }
 .datami-table-td.is-sticky {

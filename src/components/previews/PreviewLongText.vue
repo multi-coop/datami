@@ -94,7 +94,7 @@ export default {
       let paragraphs = []
 
       // all paragraphs
-      if (this.paragraphSeparator) {
+      if (this.rawText && this.paragraphSeparator) {
         this.rawText
           .split(this.paragraphSeparator)
           .forEach(txt => {

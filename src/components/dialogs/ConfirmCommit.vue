@@ -293,8 +293,8 @@ export default {
   methods: {
     ...mapActions({
       updateSaving: 'git-data/updateSaving',
-      updateCommitting: 'git-data/updateCommitting',
-      updateReqErrors: 'git-data/updateReqErrors'
+      updateCommitting: 'git-data/updateCommitting'
+      // updateReqErrors: 'git-data/updateReqErrors'
     }),
     clearName () {
       this.userName = undefined
@@ -312,7 +312,7 @@ export default {
       this.resetFileDialog()
       this.updateSaving({ fileId: this.fileId, isSaving: false })
       // track with matomo
-      this.trackEvent('cancelCommit')
+      // this.trackEvent('cancelCommit')
     },
     validateRefs () {
       // console.log('\nC > ConfirmCommit > confirmCommit > this.userName :', this.userName)

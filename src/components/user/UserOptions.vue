@@ -10,7 +10,7 @@
     </div>
     <div
       v-if="showOptions"
-      class="column is-10 is-10-mobile is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
+      :class="`column is-10 is-10-mobile is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between`">
       <ButtonCopyWidgetHtml
         :file-id="fileId"
         :locale="locale"/>
@@ -37,6 +37,8 @@
         :file-id="fileId"
         :locale="locale"/>
     </div>
+
+    <!-- OPTIONS SWITCHER -->
     <div
       :class="`column ${onlyPreview && !showOptions ? 'is-offset-10' : ''} is-2 is-2-mobile has-text-right`">
       <b-tooltip
@@ -58,6 +60,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
+// import { mixinGlobal } from '@/utils/mixins.js'
 
 // import ButtonEditFile from '@/components/user/ButtonEditFile'
 // import ButtonReloadFile from '@/components/user/ButtonReloadFile'
@@ -91,6 +95,7 @@ export default {
     ButtonFullscreen: () => import(/* webpackChunkName: "ButtonFullscreen" */ '@/components/user/ButtonFullscreen.vue'),
     ButtonDarkMode: () => import(/* webpackChunkName: "ButtonDarkMode" */ '@/components/user/ButtonDarkMode.vue')
   },
+  // mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,

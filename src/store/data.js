@@ -163,10 +163,21 @@ export const data = {
       const fielNotifs = state.notifications.find(notif => notif.uuid === fileId)
       return fielNotifs && fielNotifs.data
     },
+    checkIfErrorExists: (state) => (error) => {
+      const errExists = state.errors.find(err => {
+        const sameFile = err.fileId === error.fileId
+        const sameCode = err.code === error.code
+        const sameUrl = err.url === error.url
+        const sameFunc = err.function === error.function
+        const allSame = sameFile && sameUrl && sameCode && sameFunc
+        return allSame
+      })
+      return !!errExists
+    },
     getReqErrors: (state) => (fileId) => {
       // console.log('\nS-data > G > getErrors > state.errors : ', state.errors)
-      const fileErrors = state.errors.find(err => err.uuid === fileId)
-      return fileErrors && fileErrors.errors
+      const fileErrors = state.errors.filter(err => err.fileId === fileId)
+      return fileErrors
     },
     getChangesFields: (state) => (fileId) => {
       const fileChanges = state.changesFields.find(changes => changes.fileId === fileId)
@@ -259,19 +270,14 @@ export const data = {
       state.errors = state.notifications.filter(notifs => notifs.uuid !== reqNotifs.uuid)
       // console.log('S-data > M > removeFromNotifications > state.notifications : ', state.notifications)
     },
-    addToErrors (state, reqErrors) {
-      const index = state.errors.findIndex(err => err.uuid === reqErrors.uuid)
-      if (index !== -1) {
-        Vue.set(state.errors, index, reqErrors)
-      } else {
-        state.errors.push(reqErrors)
-      }
-      // console.log('S-data > M > addToErrors > state.errors : ', state.errors)
+    addToErrors (state, reqError) {
+      state.errors.push(reqError)
     },
-    removeFromErrors (state, reqErrors) {
-      // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
-      state.errors = state.errors.filter(err => err.uuid !== reqErrors.uuid)
-      // console.log('S-data > M > removeFromErrors > state.errors : ', state.errors)
+    removeFromErrors (state, reqError) {
+      state.errors = state.errors.filter(err => err.errorId !== reqError.errorId)
+    },
+    resetFileErrors (state, fileId) {
+      state.errors = state.errors.filter(err => err.fileId !== fileId)
     },
     addToChanges (state, fileChanges) {
       const storeChanges = fileChanges.isFields ? state.changesFields : state.changesData
@@ -421,18 +427,14 @@ export const data = {
         commit('removeFromBuffer', commitData)
       }
     },
-    updateReqErrors ({ commit }, { fileId, errors, addToErrors }) {
-      // console.log('\nS-data > A > updateReqErrors > fileId : ', fileId)
-      // console.log('S-data > A > updateReqErrors > errors : ', errors)
-      // console.log('S-data > A > updateReqErrors > addToErrors : ', addToErrors)
-      const reqErrorData = {
-        uuid: fileId,
-        errors: errors
-      }
+    resetReqErrors ({ commit }, fileId) {
+      commit('resetFileErrors', fileId)
+    },
+    updateReqErrors ({ commit }, { error, addToErrors }) {
       if (addToErrors) {
-        commit('addToErrors', reqErrorData)
+        commit('addToErrors', error)
       } else {
-        commit('removeFromErrors', reqErrorData)
+        commit('removeFromErrors', error)
       }
     },
     updateFileChanges ({ commit }, fileChanges) {
