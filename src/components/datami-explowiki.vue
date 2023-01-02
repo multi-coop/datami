@@ -268,8 +268,8 @@ export default {
   },
   data () {
     return {
-      // file infos
       isModalActive: false,
+      // file infos
       fileId: undefined,
       fileType: undefined,
       fileInfos: undefined,
@@ -300,6 +300,14 @@ export default {
     }
   },
   watch: {
+    hasFileDialogs (next) {
+      console.log('\nC > DatamiExploWiki > watch > hasFileDialogs > next : ', next)
+      if (next) {
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
+      }
+    },
     showFileInfos (next) {
       if (next) {
         // track with matomo

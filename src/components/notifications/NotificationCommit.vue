@@ -1,38 +1,45 @@
 <template>
-  <div class="NotificationInfos datami-component container px-6 mb-2">
+  <div class="NotificationCommit datami-component container px-3 py-3 mb-2">
     <b-notification
       v-model="isActive"
-      aria-close-label="Close notification">
-      <div class="class columns is-vcentered is-mobile">
+      aria-close-label="Close notification"
+      @close="closeDialog">
+      <div class="columns is-multiline is-vcentered is-mobile">
+        <div class="column is-12 has-text-centered">
+          <b-icon
+            class="mr-1"
+            size="is-small"
+            icon="check-bold"/>
+          <span class="has-text-weight-bold">
+            {{ t('git.commitSuccess', locale) }}
+          </span>
+        </div>
+
+        <!-- INFO ICON -->
         <div class="column is-1 has-text-centered">
           <b-icon
             type="is-dark"
             icon="information-outline"/>
         </div>
-        <!-- DEBUGGING -->
-        <!-- <div class="column is-12 has-text-left">
-          <h4 class="has-text-weight-bold mb-2">
-            {{ t('notifications.notifFunction', locale) }}
-          </h4>
-          <p>
-            <pre><code>
-              {{ notif }}
-            </code></pre>
-          </p>
-        </div> -->
-        <!-- REMINDER TO BRANCH -->
+
+        <!-- REMINDERS -->
         <div class="column is-10 has-text-left">
-          <!-- REMINDER TO BRANCH -->
-          <div class="columns is-vcentered is-multiline">
-            <div class="column is-12 has-text-centered">
+          <div class="columns is-multiline">
+            <!-- REMINDER TO FILE -->
+            <div class="column is-4">
               <b-icon
                 class="mr-1"
                 size="is-small"
-                icon="check-bold"/>
+                icon="source-branch"/>
               <span class="has-text-weight-bold">
-                {{ t('git.commitSuccess', locale) }}
+                {{ t('file.fileName', locale) }} :
               </span>
             </div>
+            <div class="column is-8">
+              <code>{{ notif.filefullname }}</code>
+            </div>
+
+            <!-- REMINDER TO BRANCH -->
             <div class="column is-4">
               <b-icon
                 class="mr-1"
@@ -96,6 +103,23 @@
           </div>
         </div>
       </div>
+
+      <!-- DEBUGGING -->
+      <div
+        v-if="debug"
+        class="columns is-mobile">
+        <div class="column is-12 has-text-left">
+          <h4 class="has-text-weight-bold mb-2">
+            {{ t('notifications.notifFunction', locale) }}
+          </h4>
+          <p>
+            dialogId : <code>{{ dialogId }}</code>
+          </p>
+          <p>
+            notif : <br><pre><code>{{ notif }}</code></pre>
+          </p>
+        </div>
+      </div>
     </b-notification>
   </div>
 </template>
@@ -104,10 +128,14 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'NotificationInfos',
+  name: 'NotificationCommit',
   mixins: [mixinGlobal],
   props: {
     fileId: {
+      default: null,
+      type: String
+    },
+    dialogId: {
       default: null,
       type: String
     },
@@ -118,11 +146,23 @@ export default {
     locale: {
       default: 'en',
       type: String
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
     return {
       isActive: true
+    }
+  },
+  methods: {
+    closeDialog (event) {
+      // console.log('\nC > NotificationCommit > closeDialog > event : ', event)
+      // console.log('C > NotificationCommit > closeDialog > this.dialogId : ', this.dialogId)
+      // console.log('C > NotificationCommit > closeDialog > this.notif : ', this.notif)
+      this.removeFileDialog(this.dialogId)
     }
   }
 }

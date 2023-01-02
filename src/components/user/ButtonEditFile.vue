@@ -102,7 +102,6 @@ export default {
     OpenCommitDialog () {
       console.log('\nC > ButtonEditFile > OpenCommitDialog ...')
       this.updateFileDialogs('OpenCommitDialog', {})
-      // this.updateSaving({ fileId: this.fileId, isSaving: true })
     }
   }
 }

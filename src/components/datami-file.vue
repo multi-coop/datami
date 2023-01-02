@@ -74,8 +74,15 @@
             style="z-index: 2">
             <!-- FILE TITLE -->
             <div
-              class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row"
+              class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row is-align-items-center"
               style="z-index: 2">
+              <!-- DEBUG OUTTER MODAL -->
+              <b-button
+                v-if="debug"
+                icon-left="bug"
+                type="is-danger"
+                size="is-small"
+                @click="isModalActive = true"/>
               <!-- MODAL DEBUGGING BUTTON -->
               <ViewModeBtns
                 :file-id="fileId"
@@ -89,12 +96,6 @@
                 :title="title"
                 :file-id="fileId"
                 :locale="locale"/>
-              <!-- DEUG OUTTER MODAL -->
-              <b-button
-                icon-left="bug"
-                type="is-danger"
-                size="is-small"
-                @click="isModalActive = true"/>
             </div>
 
             <!-- USER NAVBAR -->
@@ -109,32 +110,6 @@
             </div>
           </div>
         </div>
-
-        <!-- NOTIFICATIONS -->
-        <!-- <pre><code>{{ notifications }}</code></pre> -->
-        <!-- <div
-          v-if="notifications && notifications.length"
-          class="mb-6">
-          <NotificationInfos
-            v-for="(notif, index) in notifications"
-            :key="`notif-${fileId}-${index}-${notif.code}`"
-            :file-id="fileId"
-            :notif="notif"
-            :locale="locale"/>
-        </div> -->
-
-        <!-- ERRORS -->
-        <!-- <pre><code>{{ errors }}</code></pre> -->
-        <!-- <div
-          v-if="errors && errors.length"
-          class="mb-6">
-          <NotificationErrors
-            v-for="(error, index) in errors"
-            :key="`error-${fileId}-${index}-${error.code}`"
-            :file-id="fileId"
-            :error="error"
-            :locale="locale"/>
-        </div> -->
       </div>
 
       <!-- DEBUGGING FOREIGN KEYS-->
@@ -258,15 +233,6 @@
       </div>
     </div>
 
-    <!-- DEBUG FILE RAW -->
-    <!-- <div
-      v-if="debug"
-      class="columns">
-      <div class="column is-4">
-        fileRaw : <br><pre><code>{{ fileRaw }}</code></pre>
-      </div>
-    </div> -->
-
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
@@ -371,8 +337,8 @@ export default {
   },
   data () {
     return {
-      // file infos
       isModalActive: false,
+      // file infos
       gitfileDatami: undefined,
       fileId: undefined,
       fileType: undefined,
@@ -384,6 +350,14 @@ export default {
     }
   },
   watch: {
+    hasFileDialogs (next) {
+      console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
+      if (next) {
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
+      }
+    },
     async gitfileDatami (next) {
       // console.log('\nC > DatamiFile > watch > gitfileDatami > next : ', next)
       await this.initWidget()

@@ -132,10 +132,12 @@ export const data = {
       return state.downloading.includes(fileId)
     },
 
-    // utils
+    // token
     getFileToken: (state) => (fileId) => {
       return state.tokens[fileId]
     },
+
+    // edit and view modes
     getEditViewMode: (state) => (fileId) => {
       if (state.preview.includes(fileId)) return 'preview'
       if (state.diff.includes(fileId)) return 'diff'
@@ -151,6 +153,8 @@ export const data = {
       if (state.md.includes(fileId)) return 'md'
       if (state.json.includes(fileId)) return 'json'
     },
+
+    // commits
     fileIsCommitting: (state) => (fileId) => {
       return state.committing.includes(fileId)
     },
@@ -158,11 +162,15 @@ export const data = {
       // console.log('\nS-data > G > getCommitData > state.buffer : ', state.buffer)
       return state.buffer.find(commitData => commitData.uuid === fileId)
     },
+
+    // notifs
     getReqNotifications: (state) => (fileId) => {
       // console.log('\nS-data > G > getReqNotifications > state.notifications : ', state.notifications)
       const fielNotifs = state.notifications.find(notif => notif.uuid === fileId)
       return fielNotifs && fielNotifs.data
     },
+
+    // errors
     checkIfErrorExists: (state) => (error) => {
       const errExists = state.errors.find(err => {
         const sameFile = err.fileId === error.fileId
@@ -179,6 +187,8 @@ export const data = {
       const fileErrors = state.errors.filter(err => err.fileId === fileId)
       return fileErrors
     },
+
+    // changes
     getChangesFields: (state) => (fileId) => {
       const fileChanges = state.changesFields.find(changes => changes.fileId === fileId)
       return (fileChanges && fileChanges.changes) || []
@@ -240,8 +250,11 @@ export const data = {
     addToState (state, { key, fileId }) {
       state[key].push(fileId)
     },
-    removeFromState (state, { key, fileId }) {
+    removeFromState (state, { key, fileId, debug }) {
+      debug && console.log('S-data > A > removeFromState > key : ', key)
+      debug && console.log('S-data > A > removeFromState > 1 > state[key] : ', state[key])
       state[key] = state[key].filter(uuid => uuid !== fileId)
+      debug && console.log('S-data > A > removeFromState > 2 > state[key] : ', state[key])
     },
     addToBuffer (state, commitData) {
       const index = state.buffer.findIndex(item => item.uuid === commitData.uuid)
@@ -349,7 +362,7 @@ export const data = {
       }
     },
     updateDownloading ({ commit }, { fileId, isDownloading }) {
-      console.log('\nS-data > A > updateDownloading > fileId : ', fileId)
+      // console.log('\nS-data > A > updateDownloading > fileId : ', fileId)
       if (isDownloading) {
         commit('addToState', { key: 'downloading', fileId: fileId })
       } else {
@@ -363,31 +376,13 @@ export const data = {
       const reqNotifsData = { uuid: fileId }
 
       if (isCommitting) {
-        commit('addToState', { key: 'committing', fileId: fileId })
-        commit('removeFromNotifications', reqNotifsData)
+        // commit('addToState', { key: 'committing', fileId: fileId })
+        // commit('removeFromNotifications', reqNotifsData)
       } else {
-        // spread data into notifs
-        // const notifBranch = {
-        //   action: 'addBranch',
-        //   data: data.respPostBranch
-        // }
-        // const notifCommit = {
-        //   action: 'addCommit',
-        //   data: data.respPutCommit
-        // }
-        // const notifMergeRequest = {
-        //   action: 'addMergeRequest',
-        //   data: data.respPostMergeRequest
-        // }
-        // const notifs = [
-        //   notifBranch,
-        //   notifCommit,
-        //   notifMergeRequest
-        // ]
         reqNotifsData.data = [data]
-
         // console.log('S-data > A > updateCommitting > reqNotifsData : ', reqNotifsData)
-        commit('removeFromState', { key: 'committing', fileId: fileId })
+
+        commit('removeFromState', { key: 'committing', fileId: fileId, debug: true })
         commit('addToNotifications', reqNotifsData)
       }
     },

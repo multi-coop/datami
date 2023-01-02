@@ -86,7 +86,8 @@ export const user = {
       commit('setUserGit', userGit)
     },
     updateUserBranches ({ commit }, { fileId, branches }) {
-      // console.log('\nS-user > G > getUserBranches > branches : ', branches)
+      // console.log('\nS-user > G > getUserBranches > fileId : ', fileId)
+      // console.log('S-user > G > getUserBranches > branches : ', branches)
       const userBranches = {
         uuid: fileId,
         branches: branches

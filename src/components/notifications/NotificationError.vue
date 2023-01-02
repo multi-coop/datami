@@ -3,8 +3,8 @@
     <b-notification
       v-model="isActive"
       aria-close-label="Close notification"
-      @close="closeError">
-      <div class="class columns is-mobile is-multiline">
+      @close="closeDialog">
+      <div class="columns is-mobile is-multiline">
         <!-- ERROR URL -->
         <div class="column is-11 is-offset-1 has-text-centered">
           <p>
@@ -83,6 +83,10 @@ export default {
     locale: {
       default: 'en',
       type: String
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
@@ -94,10 +98,10 @@ export default {
     getErrorMessage (errResp) {
       return errResp.message || errResp.statusText || errResp
     },
-    closeError (event) {
-      // console.log('\nC > NotificationError > closeError > event : ', event)
-      // console.log('C > NotificationError > closeError > this.dialogId : ', this.dialogId)
-      // console.log('C > NotificationError > closeError > this.error : ', this.error)
+    closeDialog (event) {
+      // console.log('\nC > NotificationError > closeDialog > event : ', event)
+      // console.log('C > NotificationError > closeDialog > this.dialogId : ', this.dialogId)
+      // console.log('C > NotificationError > closeDialog > this.error : ', this.error)
       this.removeFileDialog(this.dialogId)
     }
   }

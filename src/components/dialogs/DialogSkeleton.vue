@@ -7,6 +7,7 @@
       <DialogFileInfos
         v-if="dialog.component === 'FileInfos'"
         :file-id="fileId"
+        :dialog-id="dialog.dialogId"
         :locale="locale"
         :debug="debug"/>
 
@@ -23,13 +24,12 @@
 
       <!-- NOTIFICATIONS -->
       <div
-        v-else-if="dialog.component === 'NotificationInfos'"
+        v-else-if="dialog.component === 'NotificationCommit'"
         class="card">
-        <NotificationInfos
-          v-for="(notif, index) in dialog.event.notifications"
-          :key="`notif-info-${fileId}-${index}-${notif.code}`"
+        <NotificationCommit
           :file-id="fileId"
-          :notif="notif"
+          :dialog-id="dialog.dialogId"
+          :notif="dialog.event.notif"
           :locale="locale"/>
       </div>
 
@@ -37,6 +37,7 @@
       <DatamiCard
         v-else-if="dialog.component === 'CardDetail'"
         :file-id="fileId"
+        :dialog-id="dialog.dialogId"
         :fields="dialog.event.fields"
         :field-mapping="dialog.event.fieldMapping"
         :item="dialog.event.item"
@@ -49,6 +50,7 @@
       <DialogAddRow
         v-else-if="dialog.component === 'AddRow'"
         :file-id="fileId"
+        :dialog-id="dialog.dialogId"
         :fields="dialog.event.fields"
         :locale="locale"/>
 
@@ -56,6 +58,7 @@
       <DialogDeleteRows
         v-else-if="dialog.component === 'DeleteRow'"
         :file-id="fileId"
+        :dialog-id="dialog.dialogId"
         :fields="dialog.event.columnsEdited"
         :checked-rows="dialog.event.checkedRows"
         :locale="locale"/>
@@ -64,15 +67,18 @@
       <DialogUploadFile
         v-else-if="dialog.component === 'UploadFile'"
         :file-id="fileId"
+        :dialog-id="dialog.dialogId"
         :locale="locale"/>
 
       <!-- CONFIRM COMMIT -->
       <ConfirmCommit
         v-else-if="dialog.component === 'OpenCommitDialog'"
         :file-id="fileId"
+        :dialog-id="dialog.dialogId"
         :locale="locale"
         :debug="debug"/>
 
+      <!-- DEBUGGING -->
       <div
         v-else
         class="card my-3">
@@ -133,7 +139,7 @@ import { mixinGlobal } from '@/utils/mixins.js'
 export default {
   name: 'DialogSkeleton',
   components: {
-    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
+    NotificationCommit: () => import(/* webpackChunkName: "NotificationCommit" */ '@/components/notifications/NotificationCommit.vue'),
     NotificationError: () => import(/* webpackChunkName: "NotificationError" */ '@/components/notifications/NotificationError.vue'),
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/dialogs/DialogFileInfos.vue'),

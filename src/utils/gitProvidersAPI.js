@@ -129,6 +129,7 @@ export async function postNewBranch (commitData) {
 
   // build correct API url
   const newBranch = commitData.newBranch
+  const filefullname = commitData.gitObj.filefullname
   const sourceBranch = commitData.gitObj.branch
   const urlData = await buildPostBranchUrl(commitData.gitObj, sourceBranch, newBranch)
   // console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
@@ -146,6 +147,8 @@ export async function postNewBranch (commitData) {
   // console.log('U > gitProvidersAPI > postNewBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
+      url: urlData.url,
+      filefullname: filefullname,
       function: 'postNewBranch',
       code: req.status,
       resp: resp
@@ -182,6 +185,7 @@ export async function putCommitToBranch (commitData) {
   const message = commitData.message
   const edited = commitData.edited
   const provider = commitData.gitObj.provider
+  const filefullname = commitData.gitObj.filefullname
 
   // build body and data
   const reqData = await buildPutCommitReqData(commitData.gitObj, branch, edited, message, author)
@@ -200,6 +204,8 @@ export async function putCommitToBranch (commitData) {
   // console.log('U > gitProvidersAPI > putCommitToBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
+      url: reqData.url,
+      filefullname: filefullname,
       function: 'putCommitToBranch',
       code: req.status,
       resp: resp
@@ -236,6 +242,7 @@ export async function postMergeRequest (commitData) {
   const token = commitData.token
   const provider = commitData.gitObj.provider
   const userGit = commitData.userGit
+  const filefullname = commitData.gitObj.filefullname
   // console.log('U > gitProvidersAPI > postMergeRequest > method : ', method)
   // console.log('U > gitProvidersAPI > postMergeRequest > newBranch : ', newBranch)
   // console.log('U > gitProvidersAPI > postMergeRequest > token : ', token)
@@ -259,6 +266,8 @@ export async function postMergeRequest (commitData) {
   // console.log('U > gitProvidersAPI > postMergeRequest > resp : ', resp)
   if (!req.ok) {
     const err = {
+      url: urlData.url,
+      filefullname: filefullname,
       function: 'postMergeRequest',
       code: req.status,
       resp: resp
@@ -273,14 +282,19 @@ export async function postMergeRequest (commitData) {
 }
 
 export const buildContributionResume = (commitData, responsesData, onlyCommit = false) => {
+  // console.log('\nU > gitProvidersAPI > buildContributionResume > commitData : ', commitData)
+  // console.log('U > gitProvidersAPI > buildContributionResume > responsesData : ', responsesData)
+
   const gitObj = commitData.gitObj
   const provider = gitObj.provider
   const repoUrl = gitObj.repoUrl
   const filePath = gitObj.filepath
+  const filefullname = gitObj.filefullname
   const branch = commitData.newBranch
   const resumeData = {
     code: 200,
     provider: provider,
+    filefullname: filefullname,
     branch: branch
   }
   if (onlyCommit) {
@@ -290,14 +304,11 @@ export const buildContributionResume = (commitData, responsesData, onlyCommit = 
   } else {
     switch (provider) {
       case 'gitlab':
-        // resumeData.branchUrl = responsesData.respPostBranch.data.web_url
         resumeData.branchUrl = `${repoUrl}/-/blob/${branch}/${filePath}`
-        // resumeData.commitUrl = responsesData.respPutCommit.data
         resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.web_url
         break
       case 'github':
         resumeData.branchUrl = `${repoUrl}/blob/${branch}/${filePath}`
-        // resumeData.commitUrl = responsesData.respPutCommit.data.commit.html_url
         resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.html_url
         break
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="ConfirmCommit datami-component container card">
+  <div class="ConfirmCommit datami-component container card mb-2">
     <!-- HEADER -->
     <header class="card-header">
       <p class="card-header-title">
@@ -7,13 +7,10 @@
           class="mr-3"
           icon="content-save-outline"/>
         {{ t('actions.commitChanges', locale) }}
+        <!-- DEBUGGING -->
+        <!-- - isCommitting : <code>{{ isCommitting }}</code>
+        - fileIsSaving : <code>{{ fileIsSaving }}</code> -->
       </p>
-      <!-- <button
-        class="card-header-icon"
-        @click="cancelCommit()">
-        <b-icon
-          icon="close"/>
-      </button> -->
     </header>
 
     <!-- COMMIT RESUME -->
@@ -198,12 +195,9 @@ import { mixinGlobal, mixinCommit } from '@/utils/mixins.js'
 
 import { sendContribution } from '@/utils/gitProvidersAPI.js'
 
-// import GitObjInfos from '@/components/previews/GitObjInfos'
-
 export default {
   name: 'ConfirmCommit',
   components: {
-    // GitObjInfos
     GitObjInfos: () => import(/* webpackChunkName: "GitObjInfos" */ '@/components/previews/GitObjInfos.vue')
   },
   mixins: [
@@ -212,6 +206,10 @@ export default {
   ],
   props: {
     fileId: {
+      default: null,
+      type: String
+    },
+    dialogId: {
       default: null,
       type: String
     },
@@ -293,8 +291,10 @@ export default {
   methods: {
     ...mapActions({
       updateSaving: 'git-data/updateSaving',
-      updateCommitting: 'git-data/updateCommitting'
-      // updateReqErrors: 'git-data/updateReqErrors'
+      updateCommitting: 'git-data/updateCommitting',
+      resetReqErrors: 'git-data/resetReqErrors',
+      checkIfErrorExists: 'git-data/checkIfErrorExists',
+      updateReqErrors: 'git-data/updateReqErrors'
     }),
     clearName () {
       this.userName = undefined
@@ -329,26 +329,28 @@ export default {
       // return true
     },
     async confirmCommit () {
-      console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
+      // console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
+      // console.log('C > ConfirmCommit > confirmCommit > this.dialogId :', this.dialogId)
       this.loading = true
       this.updateCommitting({ fileId: this.fileId, isCommitting: true })
-      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
+      // this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
+      this.resetReqErrors(this.fileId)
 
       // get commit data
       const commitData = this.getCommitData(this.fileId)
-      console.log('C > ConfirmCommit > confirmCommit > commitData :', commitData)
+      // console.log('C > ConfirmCommit > confirmCommit > commitData :', commitData)
 
       // get file request infos
       const fileReqInfos = this.getFileReqInfosObj(this.fileId)
       commitData.fileReqInfos = fileReqInfos
-      console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
+      // console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
 
       // get token
       const token = this.fileToken // this.getFileToken(this.fileId)
       commitData.token = token
       commitData.userGit = this.userGit
       commitData.userBranches = this.userBranches
-      console.log('C > ConfirmCommit > confirmCommit > token :', token)
+      // console.log('C > ConfirmCommit > confirmCommit > token :', token)
 
       // append commit message and infos
       commitData.message = this.buildCommitMessage
@@ -364,20 +366,28 @@ export default {
 
       // Send contribution request...
       const respContribution = await sendContribution(commitData)
-      console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
+      // console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
       const respContributionErrors = respContribution.errors
       // const respContributionData = respContribution.data
       const respContributionResume = respContribution.resume
 
-      // clean store
+      // clean store from committing
+      // console.log('C > ConfirmCommit > confirmCommit > 1 > this.isCommitting : ', this.isCommitting)
       this.updateCommitting({ fileId: this.fileId, isCommitting: false, data: respContributionResume })
+      // console.log('C > ConfirmCommit > confirmCommit > 2 > this.isCommitting : ', this.isCommitting)
+      this.updateFileDialogs('NotificationCommit', { notif: respContributionResume })
 
       // update errors if any
       if (respContributionErrors && respContributionErrors.length) {
-        const errors = [...respContributionErrors]
-        this.updateReqErrors({ fileId: this.fileId, errors: errors, addToErrors: true })
+        const reqErrors = respContributionErrors.map(err => { return { ...err, fileId: this.fileId, errorId: this.uuidv4() } })
+        reqErrors.forEach(err => {
+          if (!this.checkIfErrorExists(err)) {
+            this.updateReqErrors({ error: err, addToErrors: true })
+            this.updateFileDialogs('NotificationErrors', { error: err })
+          }
+        })
       } else if (!respContributionResume.branchExists) {
-        // update user's branches for curent file
+        // update user's branches for current file
         const commitBranch = {
           branch: respContributionResume.branch,
           userBranch: true,
@@ -386,14 +396,23 @@ export default {
           branchUrl: respContributionResume.branchUrl,
           mergeRequestUrl: respContributionResume.mergeRequestUrl
         }
+        // console.log('C > ConfirmCommit > confirmCommit > commitBranch :', commitBranch)
         this.updateUserBranches({ fileId: this.fileId, branches: commitBranch })
-
-        // set isSaving as false now all is finished
-        this.updateSaving({ fileId: this.fileId, isSaving: false })
-
-        // track with matomo
-        this.trackEvent('confirmCommit')
       }
+      // set isSaving as false now all is finished
+      // console.log('C > ConfirmCommit > confirmCommit > this.updateSaving ...')
+      this.updateSaving({ fileId: this.fileId, isSaving: false })
+      // console.log('C > ConfirmCommit > confirmCommit > this.fileIsSaving : ', this.fileIsSaving)
+
+      // close/remove dialog
+      // console.log('C > ConfirmCommit > confirmCommit > this.removeFileDialog ...')
+      // console.log('C > ConfirmCommit > confirmCommit > 1 > this.fileDialogs : ', this.fileDialogs)
+      this.removeFileDialog(this.dialogId)
+      // console.log('C > ConfirmCommit > confirmCommit > 2 > this.fileDialogs : ', this.fileDialogs)
+
+      // track with matomo
+      // console.log('C > ConfirmCommit > confirmCommit > this.trackEvent ...')
+      this.trackEvent('confirmCommit')
     }
   }
 }

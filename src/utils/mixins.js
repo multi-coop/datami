@@ -63,21 +63,6 @@ import {
 import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixinGlobal = {
-  watch: {
-    notifications (next, prev) {
-      if (next && next.length && prev.length !== next.length) {
-        this.updateFileDialogs('NotificationInfos', {})
-      }
-    },
-    hasFileDialogs (next) {
-      // console.log('\nM > mixinGlobal > watch > hasFileDialogs > next : ', next)
-      if (next) {
-        this.isModalActive = true
-      } else {
-        this.isModalActive = false
-      }
-    }
-  },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',
@@ -282,6 +267,7 @@ export const mixinGlobal = {
     ...mapActions({
       updateDialogs: 'git-dialogs/updateFileDialog',
       removeFileDialog: 'git-dialogs/removeFileDialog',
+      removeFileDialogByComponent: 'git-dialogs/removeFromDialogsByComponent',
       addSignal: 'git-signals/addSignal',
       removeSignal: 'git-signals/removeSignal'
     }),
