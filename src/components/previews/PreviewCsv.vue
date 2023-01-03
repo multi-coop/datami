@@ -169,11 +169,6 @@
           :items-total="itemsTotal || edited.length"
           :locale="locale"
           :debug="debug"/>
-          <!-- @sortRows="sortEdited" -->
-          <!-- @addRow="addRowEvent" -->
-          <!-- @deleteRows="deleteRowsEvent" -->
-          <!-- @addTagToEnum="addTagToEnum" -->
-          <!-- @updateEdited="updateEdited" -->
       </div>
     </div>
   </div>
@@ -192,25 +187,11 @@ import {
   mixinDownload
 } from '@/utils/mixins.js'
 
-// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-// import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
-// import LoaderCSV from '@/components/loaders/LoaderCSV'
-// import LoaderCards from '@/components/loaders/LoaderCards'
-
-// import PreviewHelpers from '@/components/previews/PreviewHelpers'
-// import DatamiTable from '@/components/previews/DatamiTable'
-
 import { defaultTagsSeparator } from '@/utils/globalUtils'
 
 export default {
   name: 'PreviewCsv',
   components: {
-    // LoaderEditNavbar,
-    // LoaderSortFilters,
-    // LoaderCSV,
-    // LoaderCards,
-    // PreviewHelpers,
-    // DatamiTable
     LoaderSortFilters: () => import(/* webpackChunkName: "LoaderSortFilters" */ '@/components/loaders/LoaderSortFilters.vue'),
     LoaderCSV: () => import(/* webpackChunkName: "LoaderCSV" */ '@/components/loaders/LoaderCSV.vue'),
     LoaderCards: () => import(/* webpackChunkName: "LoaderCards" */ '@/components/loaders/LoaderCards.vue'),
@@ -704,7 +685,7 @@ export default {
       this.updateFileChanges(changesPayload)
     },
     addRowEvent (event) {
-      console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
+      // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
       // update edited
       const newRowId = this.uuidv4()
       const newRowPosition = `${this.itemsTotal || this.edited.length}`
@@ -714,10 +695,10 @@ export default {
         position: newRowPosition,
         added: true
       }
-      console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
+      // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
       // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
 
       // Send signal to switch to last page
       this.addFileSignal('goToLastPage', {})

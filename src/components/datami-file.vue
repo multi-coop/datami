@@ -2,7 +2,7 @@
   <div
     v-if="gitfile"
     :id="fileId"
-    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'pt-0 px-0' : ''} ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' } ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
     <!-- MATOMO -->
@@ -265,12 +265,6 @@ export default {
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
     UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
-    // NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    // NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
-    // EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
-    // DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
-    // DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/edition/DialogUploadFile.vue'),
-    // ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/edition/ConfirmCommit.vue'),
     PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
     PreviewMd: () => import(/* webpackChunkName: "PreviewMd" */ '@/components/previews/PreviewMd.vue'),
     PreviewJson: () => import(/* webpackChunkName: "PreviewJson" */ '@/components/previews/PreviewJson.vue'),
@@ -345,13 +339,11 @@ export default {
       fileInfos: undefined,
       fileRaw: undefined,
       fileClientRaw: undefined
-      // showFileInfos: false,
-      // showUploadFileDialog: false
     }
   },
   watch: {
     hasFileDialogs (next) {
-      console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
+      // console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
       if (next) {
         this.isModalActive = true
       } else {
@@ -363,7 +355,6 @@ export default {
       await this.initWidget()
       const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
       this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
-      // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
       await this.reloadFile()
     },
     fileIsLoading (next) {
@@ -425,7 +416,6 @@ export default {
 
     const sourceBranch = { branch: this.gitObj.branch, isRefBranch: true }
     this.updateUserBranches({ fileId: this.fileId, branches: [sourceBranch] })
-    // this.changeActiveUserBranch({ fileId: this.fileId, userBranch: [this.gitObj] })
     await this.reloadFile(true)
   },
   beforeDestroy () {
@@ -440,7 +430,6 @@ export default {
       addFileReqInfos: 'addFileReqInfos',
       updateToken: 'git-data/updateToken',
       updateReloading: 'git-data/updateReloading',
-      // updateReqErrors: 'git-data/updateReqErrors',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks',
       initializeStorage: 'git-storage/initializeStorage'
     }),

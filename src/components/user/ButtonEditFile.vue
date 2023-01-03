@@ -100,7 +100,7 @@ export default {
       this.toggleEditNavbar({ uuid: this.fileId, status: false })
     },
     OpenCommitDialog () {
-      console.log('\nC > ButtonEditFile > OpenCommitDialog ...')
+      // console.log('\nC > ButtonEditFile > OpenCommitDialog ...')
       this.updateFileDialogs('OpenCommitDialog', {})
     }
   }

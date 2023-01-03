@@ -133,14 +133,11 @@
         @mouseover.native="showTag = true"
         @mouseleave.native="showTag = false"
         @click.native="$emit('expand')">
-        <span v-if="isMini">
-          {{ trimText(val) }}
+        <span v-if="!getValueDefinitionLabel(val)">
+          {{ isMini ? trimText(val) : val }}
         </span>
         <span v-else>
-          {{ val }}
-        </span>
-        <span v-if="getValueDefinitionLabel(val)">
-          : {{ trimText(getValueDefinitionLabel(val), isMini ? 7 : 25) }}
+          {{ trimText(getValueDefinitionLabel(val), isMini ? 10 : 25) }}
         </span>
         <b-icon
           v-if="val !== '...' && (field.foreignKey || field.definitions)"

@@ -948,10 +948,10 @@ export const mixinCards = {
   computed: {
     cardsSettingsFromFileOptions () {
       let cardsSettings
-      console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
       if (this.hasCardsView && this.cardsViewIsActive) {
         const settings = this.cardsSettingsFromOptions
-        console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
+        // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
         const miniSettings = settings.mini
         const detailSettings = settings.detail
         const mapping = this.columns.map(h => {
@@ -971,7 +971,7 @@ export const mixinCards = {
           mapping: mapping
         }
       }
-      console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
     }
     // mappingForAll () {

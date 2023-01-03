@@ -195,10 +195,6 @@ export default {
         this.ChangePage()
       }
     },
-    // itemsPerPage (next) {
-    //   console.log('C > PagesNavigation > watch > itemsPerPage > next :', next)
-    //   this.itemsPerPageSelected = next
-    // },
     fileSignals (next) {
       // console.log('\nC > PagesNavigation > watch > fileSignals > next : ', next)
       // console.log('C > PagesNavigation > watch > fileSignals > this.totalPages : ', this.totalPages)

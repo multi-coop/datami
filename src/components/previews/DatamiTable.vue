@@ -2,8 +2,8 @@
   <div class="DatamiTable content">
     <div class="columns is-multiline is-mobile is-centered">
       <!-- SORT & FILTERS CSV NAVABAR -->
+      <!-- v-show="!isAnyDialogOpen" -->
       <div
-        v-show="!isAnyDialogOpen"
         :id="`sort-and-filters-skeleton-${fileId}`"
         :class="`column is-12 py-0 ${currentViewMode === 'map' ? 'px-5' : '' } mt-2`">
         <SortAndFiltersSkeleton
@@ -48,8 +48,8 @@
       </div> -->
 
       <!-- COUNTS & EDIT CSV NAVABAR -->
+      <!-- v-show="!isAnyDialogOpen" -->
       <div
-        v-show="!isAnyDialogOpen"
         :id="`edit-csv-skeleton-${fileId}`"
         class="column is-12 pt-0">
         <EditCsvSkeleton
@@ -112,7 +112,7 @@
         :class="`datami-table-container column is-${ currentViewMode === 'cards' ? 10 : 12} ${ currentViewMode === 'map' ? 'pt-0' : ''} ${isDarkMode ? 'datami-darkmode' : ''}`">
         <!-- :sticky-checkbox="currentEditViewMode === 'edit'" -->
         <div
-          v-show="!isAnyDialogOpen && currentViewMode === 'table'"
+          v-show="currentViewMode === 'table'"
           class="datami-table-view-table">
           <b-table
             :data="dataEditedPaginated"
@@ -230,7 +230,6 @@
                     :is-consolidating="isConsolidating(props.row.id)"
                     :locale="locale"
                     @action="processAction"/>
-                    <!-- @updateCellValue="emitUpdate" -->
                 </div>
 
                 <!-- DIFF -->
@@ -282,7 +281,7 @@
         <!-- CARDS -->
         <div
           v-if="hasCardsView && cardsViewIsActive"
-          v-show="!isAnyDialogOpen && currentViewMode === 'cards'"
+          v-show="currentViewMode === 'cards'"
           class="datami-table-view-cards">
           <!-- v-model="showCardDetails" -->
           <DatamiCardsGrid
@@ -295,7 +294,6 @@
             :locale="locale"
             @toggleDetail="toggleDetail"
             @action="processAction"/>
-            <!-- @updateCellValue="emitUpdate"/> -->
         </div>
 
         <!-- DATAVIZ & MAP DEBUGGING-->
@@ -307,7 +305,7 @@
         <!-- DATAVIZ -->
         <div
           v-if="fileOptions && hasDatavizView && datavizViewIsActive"
-          v-show="!isAnyDialogOpen && currentViewMode === 'dataviz'"
+          v-show="currentViewMode === 'dataviz'"
           class="datami-table-view-dataviz"
           :style="`${ userFullscreen ? 'height: 90%;' : '' }`">
           <DatamiDatavizGrid
@@ -322,7 +320,7 @@
         <!-- MAPS -->
         <!-- v-show="!isAnyDialogOpen && currentViewMode === 'map'" -->
         <div
-          v-if="fileOptions && hasMapView && mapViewIsActive && !isAnyDialogOpen && currentViewMode === 'map'"
+          v-if="fileOptions && hasMapView && mapViewIsActive && currentViewMode === 'map'"
           class="datami-table-view-map">
           <!-- v-model="showCardDetails" -->
           <DatamiMapGrid
@@ -331,7 +329,6 @@
             :fields="columns"
             :locale="locale"
             @action="processAction"/>
-            <!-- @updateCellValue="emitUpdate" -->
         </div>
       </div>
 
@@ -355,7 +352,7 @@
 
       <!-- PAGINATION -->
       <div
-        v-show="!isAnyDialogOpen && !isCardDetailsOpen && viewsWithPagination.includes(currentViewMode)"
+        v-show="viewsWithPagination.includes(currentViewMode)"
         class="column is-12">
         <PagesNavigation
           :file-id="fileId"
@@ -365,9 +362,6 @@
           :items-per-page-choices="itemsPerPageChoices"
           :debug="false"
           :locale="locale"/>
-          <!-- :items-per-page="itemsPerPage" -->
-          <!-- @action="processAction"/> -->
-          <!-- @updateCellValue="emitUpdate"/> -->
       </div>
 
       <!-- DEBUG -->
@@ -490,25 +484,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'DatamiTable',
   components: {
-    // SortAndFiltersSkeleton,
-    // ButtonSortByField,
-    // EditCsvSkeleton,
-    // DialogAddRow,
-    // DialogDeleteRows,
-    // PreviewField,
-    // PreviewCell,
-    // EditCell,
-    // PreviewConsolidation,
-    // DatamiCardsGrid,
-    // DatamiCard,
-    // DatamiDatavizGrid,
-    // DatamiMapGrid,
-    // PagesNavigation
     SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/edition/csv/SortAndFiltersSkeleton.vue'),
     ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
     EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
-    // DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/edition/csv/DialogAddRow.vue'),
-    // DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/edition/csv/DialogDeleteRows.vue'),
 
     PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
     PreviewCell: () => import(/* webpackChunkName: "PreviewCell" */ '@/components/previews/PreviewCell.vue'),
@@ -516,7 +494,6 @@ export default {
     PreviewConsolidation: () => import(/* webpackChunkName: "PreviewConsolidation" */ '@/components/edition/PreviewConsolidation.vue'),
 
     DatamiCardsGrid: () => import(/* webpackChunkName: "DatamiCardsGrid" */ '@/components/previews/cards/DatamiCardsGrid.vue'),
-    // DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DatamiDatavizGrid: () => import(/* webpackChunkName: "DatamiDatavizGrid" */ '@/components/previews/dataviz/DatamiDatavizGrid.vue'),
     DatamiMapGrid: () => import(/* webpackChunkName: "DatamiMapGrid" */ '@/components/previews/maps/DatamiMapGrid.vue'),
 
@@ -572,14 +549,6 @@ export default {
 
       // VIEWS SETTINGS
       viewsWithPagination: ['table', 'cards'],
-
-      // DIALOGS
-      // showAddRowDialog: false,
-      // showDeleteRowsDialog: false,
-      showUploadFileDialog: false,
-
-      // CARDS FOR TABLE VIEW
-      activeTableCardId: undefined,
 
       // SORTING
       noSortingFields: ['tags'],
@@ -916,13 +885,6 @@ export default {
         return columns
       }
     },
-    isAnyDialogOpen () {
-      // return this.showAddRowDialog || this.showUploadFileDialog || this.showDeleteRowsDialog || this.activeTableCardId
-      return this.showUploadFileDialog || this.activeTableCardId
-    },
-    isCardDetailsOpen () {
-      return this.showCardDetails && this.currentViewMode === 'cards'
-    },
     currentPage () {
       let page = 1
       switch (this.currentViewMode) {
@@ -1128,43 +1090,10 @@ export default {
       return data
     },
     async processAction (event) {
-      console.log('\nC > DatamiTable > processAction > event : ', event)
-      /*
-        // ADD TAG TO ENUM
-        case 'addTagToEnum':
-          // console.log('\nC > DatamiTable > processAction > event : ', event)
-          this.$emit('addTagToEnum', event.value)
-          break
-
-        // DELETE ROWS
-        case 'deleteRows':
-          this.$emit('deleteRows', event)
-          this.checkedRows = []
-          break
-
-        // ADD ROW
-        case 'addNewRow':
-          this.$emit('addRow', event)
-          break
-
-        // PAGINATION
-        case 'changePage':
-          this.currentPage = event.value.currentPage
-          this.itemsPerPage = event.value.itemsPerPage
-          switch (this.currentViewMode) {
-            case 'table':
-              this.itemsPerPageTable = event.value.itemsPerPage
-              break
-            case 'cards':
-              this.itemsPerPageCards = event.value.itemsPerPage
-              break
-          }
-          break
-      */
+      // console.log('\nC > DatamiTable > processAction > event : ', event)
       switch (event.action) {
         // OPEN CARD
         case 'openCard':
-          // this.activeTableCardId = event.rowId
           this.updateFileDialogs('CardDetail', {
             ...event,
             fromTable: true,
@@ -1176,7 +1105,6 @@ export default {
 
         // IMPORT DATA
         case 'openUploadFileDialog':
-          this.showUploadFileDialog = true
           this.updateFileDialogs('UploadFile', {
             ...event,
             fields: this.columns
@@ -1185,7 +1113,6 @@ export default {
 
         // ADD ROW
         case 'openAddRowDialog':
-          // this.showAddRowDialog = true
           this.updateFileDialogs('AddRow', {
             ...event,
             fields: this.columns
@@ -1194,8 +1121,6 @@ export default {
 
         // DELETE ROWS
         case 'openDeleteRowsDialog':
-          // this.showDeleteRowsDialog = true
-          // this.updateFileDialogs('DeleteRow', event)
           this.updateFileDialogs('DeleteRow', {
             ...event,
             fields: this.columnsEdited,
@@ -1330,16 +1255,16 @@ export default {
       this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
     },
     updateConsolidatedValues (event) {
-      console.log('\nC > DatamiTable > updateConsolidatedValues > event : ', event)
+      // console.log('\nC > DatamiTable > updateConsolidatedValues > event : ', event)
       event.newValues.forEach(e => {
-        console.log('C > DatamiTable > updateConsolidatedValues > e : ', e)
+        // console.log('C > DatamiTable > updateConsolidatedValues > e : ', e)
         this.$emit('updateEdited', e)
       })
       this.closeConsolidationDetail(event.rowId)
     },
     toggleDetail (event) {
-      console.log('\nC > DatamiTable > toggleDetail > event : ', event)
-      console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
+      // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
+      // console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
       // this.showCardDetails = !event.showDetail
       const dialogPayload = {
         fromTable: false,
@@ -1348,12 +1273,6 @@ export default {
         fieldMapping: this.mappingsForDetail
       }
       this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
-
-      // if (event.showDetail) {
-      //   this.showCardDetails = false
-      // } else {
-      //   this.showCardDetails = true
-      // }
     },
     changePage (event) {
       // console.log('\nC > DatamiTable > changePage > event : ', event)

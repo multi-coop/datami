@@ -435,7 +435,7 @@ export default {
         parentId: this.nodeId,
         newNode: newNode
       }
-      console.log('\nC > JsonTree > addNode > payload : ', payload)
+      // console.log('\nC > JsonTree > addNode > payload : ', payload)
       this.$emit('updateJson', payload)
     },
     removeNode () {

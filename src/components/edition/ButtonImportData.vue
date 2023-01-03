@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     SendActionToParent () {
-      console.log('\nC > ButtonImportData > SendActionToParent ...')
+      // console.log('\nC > ButtonImportData > SendActionToParent ...')
       // const payload = {
       //   action: 'toggleUploadFileDialog'
       // }

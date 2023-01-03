@@ -1,7 +1,7 @@
 <template>
   <div
     :id="fileId"
-    :class="`DatamiExplowiki datami-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :class="`DatamiExplowiki datami-widget section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; max-width: 100%; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0; max-width: 100%"> -->
     <!-- MATOMO -->
@@ -112,39 +112,6 @@
       </div> -->
     </div>
 
-    <!-- FILE INFOS -->
-    <!-- <DialogFileInfos
-      v-show="showFileInfos"
-      v-model="showFileInfos"
-      :file-id="fileId"
-      :locale="locale"
-      :debug="debug"
-      @closeDialogFileInfos="showFileInfos = false"/> -->
-
-    <!-- NOTIFICATIONS -->
-    <!-- <div
-      v-if="notifications && notifications.length"
-      class="mb-6">
-      <NotificationInfos
-        v-for="(notif, index) in notifications"
-        :key="`notif-${fileId}-${index}-${notif.code}`"
-        :file-id="fileId"
-        :notif="notif"
-        :locale="locale"/>
-    </div> -->
-
-    <!-- ERRORS -->
-    <!-- <div
-      v-if="errors && errors.length"
-      class="mb-6">
-      <NotificationErrors
-        v-for="(error, index) in errors"
-        :key="`error-${fileId}-${index}-${error.code}`"
-        :file-id="fileId"
-        :error="error"
-        :locale="locale"/>
-    </div> -->
-
     <!-- FILE NAVBAR BUTTONS -->
     <!-- {{ fileOptions }} -->
     <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
@@ -210,10 +177,7 @@ export default {
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
     UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
-    // NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    // NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
     EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
-    // DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
     LoaderWikimedia: () => import(/* webpackChunkName: "LoaderWikimedia" */ '@/components/loaders/LoaderWikimedia.vue'),
     PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
     DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
@@ -301,7 +265,7 @@ export default {
   },
   watch: {
     hasFileDialogs (next) {
-      console.log('\nC > DatamiExploWiki > watch > hasFileDialogs > next : ', next)
+      // console.log('\nC > DatamiExploWiki > watch > hasFileDialogs > next : ', next)
       if (next) {
         this.isModalActive = true
       } else {
@@ -320,15 +284,18 @@ export default {
     }
   },
   async beforeMount () {
+    const wikiUuid = this.uuidv4()
+    this.fileId = wikiUuid
+
     // INITIALIZING LOCAL STORAGE
     this.initializeStorage()
+    this.resetReqErrors(this.fileId)
 
     // console.log('\nC > DatamiExploWiki > beforeMount > this.wikifile : ', this.wikifile)
     // console.log('C > DatamiExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > DatamiExploWiki > beforeMount > this.options : ', this.options)
     this.setWidgetCopy()
 
-    const wikiUuid = this.uuidv4()
     this.activateTrackAllOutlinks({ uuid: wikiUuid, val: this.trackalloutlinks })
 
     // build options object
@@ -349,7 +316,7 @@ export default {
     wikiInfosObject.wikipages = this.wikipages && JSON.parse(this.wikipages)
     wikiInfosObject.onlyPreview = this.onlypreview
     this.wikiObj = wikiInfosObject
-    this.fileId = wikiInfosObject.uuid
+    // this.fileId = wikiInfosObject.uuid
     this.fileType = wikiInfosObject.filetype
     // console.log('C > DatamiExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
     if (!this.getGitInfosObj[wikiUuid]) {
@@ -361,12 +328,13 @@ export default {
     if (mediawikiSchema && mediawikiSchema.file) {
       const schemaGitObj = this.extractGitInfos(mediawikiSchema.file)
       // console.log('C > DatamiExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
-      const schemaRaw = await this.getFileDataRaw(schemaGitObj)
+      // const schemaRaw = await this.getFileDataRaw(schemaGitObj)
+      const schemaRaw = await this.getFileDataAndErrors(schemaGitObj, undefined, true)
       // console.log('C > DatamiExploWiki > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
       // console.log('C > DatamiExploWiki > beforeMount > schemaData : ', schemaData)
-      const schema = JSON.parse(schemaData)
-      mediawikiSchema = { ...schema, file: mediawikiSchema.file }
+      const schema = schemaRaw.ok && JSON.parse(schemaData)
+      mediawikiSchema = schema && { ...schema, file: mediawikiSchema.file }
       // mediawikiOptions.schema = schema
       // console.log('C > DatamiExploWiki > beforeMount > schema : ', schema)
     }
@@ -375,10 +343,11 @@ export default {
     let mediawikiCustomProps = mediawikiOptions['fields-custom-properties']
     if (mediawikiCustomProps && mediawikiCustomProps.file) {
       const customPropsGitObj = this.extractGitInfos(mediawikiCustomProps.file)
-      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      // const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      const customPropsRaw = await this.getFileDataAndErrors(customPropsGitObj, undefined, true)
       const customPropsData = customPropsRaw && customPropsRaw.data
-      const customProps = JSON.parse(customPropsData)
-      mediawikiCustomProps = { ...customProps, file: mediawikiCustomProps.file }
+      const customProps = customPropsRaw.ok && JSON.parse(customPropsData)
+      mediawikiCustomProps = customProps && { ...customProps, file: mediawikiCustomProps.file }
     }
 
     // update fileOptions with schema and consolidation settings
@@ -407,7 +376,7 @@ export default {
     async reloadMediawikiRessources () {
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
-      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
+      // this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // reset local data
       let wikiItems = []

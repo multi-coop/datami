@@ -38,16 +38,7 @@ export default {
       default: 'en',
       type: String
     }
-    // showFileInfos: {
-    //   default: false,
-    //   type: Boolean
-    // }
   },
-  // data () {
-  //   return {
-  //     show: false
-  //   }
-  // },
   computed: {
     ...mapGetters({
       isDarkMode: 'git-storage/isDarkMode'
@@ -55,7 +46,6 @@ export default {
   },
   methods: {
     toggleDialog () {
-      // this.show = !this.show
       this.updateFileDialogs('FileInfos', { action: 'toggleFileInfos' })
       this.$emit('toggleInfos')
     }

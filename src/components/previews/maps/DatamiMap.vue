@@ -7,26 +7,6 @@
       v-if="!fileIsLoading && (!itemsForMap || showLoader)"
       class="loader big-loader"/>
 
-    <!-- DETAIL CARD FOR DISPLAYED ITEM -->
-    <!-- <div
-      v-show="showCard && displayedItemId && showDetail"
-      class="map-card map-detail-card-item"
-      :style="`width: ${cardDetailWidth}; transform: translate(-50%, ${mapHeightTop}px); -webkit-transform: translate(-50%, ${mapHeightTop}px)`">
-      <DatamiCard
-        :file-id="fileId"
-        :fields="fields"
-        :field-mapping="mapCardsSettingsDetail"
-        :item="displayedItem"
-        :show-detail="true"
-        :show-detail-card="showDetail"
-        :is-mini="false"
-        :from-map="true"
-        :locale="locale"
-        @toggleDetail="toggleItemCard"
-        @action="SendActionToParent"
-        @updateCellValue="emitUpdate"/>
-    </div> -->
-
     <!-- DISPLAY MAP -->
     <div
       :id="mapId"
@@ -50,7 +30,6 @@
             :locale="locale"
             @toggleDetail="toggleItemCard"
             @action="SendActionToParent"/>
-            <!-- @updateCellValue="emitUpdate"/> -->
         </div>
 
         <!-- LEGEND & LAYERS -->
@@ -78,13 +57,13 @@
         </div>
 
         <!-- DEBUG -->
-        <div
+        <!-- <div
           v-if="debug"
           class="columns is-multiline">
           <div class="column is-6">
             mapSettings: <br><pre><code>{{ mapSettings }}</code></pre>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -128,19 +107,12 @@ import {
 } from '@/utils/geoJson.js'
 // import { LoaderTargetPlugin } from 'webpack'
 
-// import DatamiCard from '@/components/previews/cards/DatamiCard'
-// import DatamiMapLayers from '@/components/previews/maps/DatamiMapLayers'
-// import DatamiMapLegend from '@/components/previews/maps/DatamiMapLegend'
-
 import PopupContent from '@/components/previews/maps/DatamiMapPopup'
 const PopupClass = Vue.extend(PopupContent)
 
 export default {
   name: 'DatamiMap',
   components: {
-    // DatamiCard,
-    // DatamiMapLayers,
-    // DatamiMapLegend
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DatamiMapLayers: () => import(/* webpackChunkName: "DatamiMapLayers" */ '@/components/previews/maps/DatamiMapLayers.vue'),
     DatamiMapLegend: () => import(/* webpackChunkName: "DatamiMapLegend" */ '@/components/previews/maps/DatamiMapLegend.vue')
@@ -252,7 +224,7 @@ export default {
 
       // MAP SETUP
       mapHeight: 600,
-      mapHeightTop: 240,
+      mapHeightTop: 140,
       preferCanvas: true,
 
       zoom: 13, // GeoCenters.FRANCE.zoom,
@@ -570,8 +542,8 @@ export default {
           // console.log('C > DatamiMap > mapHeightTop > editCsvElem : ', editCsvElem)
           // console.log('C > DatamiMap > mapHeightTop > h3 : ', h3)
           // const adjusting = (this.activeFilterTags && this.activeFilterTags.length) ? 12 : 5
-          const adjusting = 4
-          height = h1 + h2 + h3 + adjusting
+          // const adjusting = 0
+          height = h1 + h2 + h3 // + adjusting
         }
         // console.log('C > DatamiMap > mapHeightTop > height : ', height)
       }
@@ -1633,7 +1605,7 @@ export default {
     //   }
     // },
     toggleItemCard (event) {
-      console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
+      // console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
       if (event.btn === 'closeButton') {
         this.showCard = false
         this.showDetail = false

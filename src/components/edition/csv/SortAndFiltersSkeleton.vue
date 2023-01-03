@@ -31,16 +31,16 @@
     </b-navbar>
 
     <!-- DEBUGGING -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns is-multiline is-centered">
       <div class="column is-4">
         activeTags : <pre><code>{{ activeTags }}</code></pre>
       </div>
-    </div>
+    </div> -->
 
     <!-- DEBUG -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-6">
@@ -52,27 +52,22 @@
           <pre>{{ columns }}</pre>
         </code>
       </div>
-      <!-- <div class="column is-6">
+      <div class="column is-6">
         checkedRows :
         <code>
           <pre>{{ checkedRows }}</pre>
         </code>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-// import SearchFullText from '@/components/filters/SearchFullText'
-// import CustomFilterDropdown from '@/components/filters/CustomFilterDropdown'
-
 export default {
   name: 'SortAndFiltersSkeleton',
   components: {
-    // SearchFullText,
-    // CustomFilterDropdown
     SearchFullText: () => import(/* webpackChunkName: "SearchFullText" */ '@/components/filters/SearchFullText.vue'),
     CustomFilterDropdown: () => import(/* webpackChunkName: "CustomFilterDropdown" */ '@/components/filters/CustomFilterDropdown.vue')
   },

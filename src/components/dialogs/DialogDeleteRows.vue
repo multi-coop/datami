@@ -120,7 +120,7 @@ export default {
       this.trackEvent('closeDialog')
     },
     sendRowToDeleteToParent () {
-      console.log('\nC > DialogDeleteRow > sendRowToDeleteToParent > this.temp :', this.temp)
+      // console.log('\nC > DialogDeleteRow > sendRowToDeleteToParent > this.temp :', this.temp)
       const payload = {
         action: 'deleteRows',
         rows: this.checkedRows

@@ -251,10 +251,10 @@ export const data = {
       state[key].push(fileId)
     },
     removeFromState (state, { key, fileId, debug }) {
-      debug && console.log('S-data > A > removeFromState > key : ', key)
-      debug && console.log('S-data > A > removeFromState > 1 > state[key] : ', state[key])
+      // debug && console.log('S-data > A > removeFromState > key : ', key)
+      // debug && console.log('S-data > A > removeFromState > 1 > state[key] : ', state[key])
       state[key] = state[key].filter(uuid => uuid !== fileId)
-      debug && console.log('S-data > A > removeFromState > 2 > state[key] : ', state[key])
+      // debug && console.log('S-data > A > removeFromState > 2 > state[key] : ', state[key])
     },
     addToBuffer (state, commitData) {
       const index = state.buffer.findIndex(item => item.uuid === commitData.uuid)
@@ -382,7 +382,7 @@ export const data = {
         reqNotifsData.data = [data]
         // console.log('S-data > A > updateCommitting > reqNotifsData : ', reqNotifsData)
 
-        commit('removeFromState', { key: 'committing', fileId: fileId, debug: true })
+        commit('removeFromState', { key: 'committing', fileId: fileId })
         commit('addToNotifications', reqNotifsData)
       }
     },

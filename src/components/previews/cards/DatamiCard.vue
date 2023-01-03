@@ -30,7 +30,6 @@
               :is-mini="isMini"
               :locale="locale"
               @toggleDetail="toggleDetail">
-              <!-- @updateCellValue="emitUpdate" -->
               <template #logo>
                 <div v-if="hasContentByPosition('logo')">
                   <!-- LOGO BLOCK : 'logo' -->
@@ -50,7 +49,6 @@
                       :item-added="item.added"
                       :is-mini="isMini"
                       :locale="locale"/>
-                      <!-- @updateCellValue="emitUpdate"/> -->
                   </div>
                 </div>
               </template>
@@ -73,7 +71,6 @@
                 :item-value="item[fieldObj.field]"
                 :is-mini="isMini"
                 :locale="locale"/>
-                <!-- @updateCellValue="emitUpdate"/> -->
             </div>
           </div>
         </div>
@@ -111,7 +108,6 @@
         :item-added="item.added"
         :is-mini="isMini"
         :locale="locale"/>
-        <!-- @updateCellValue="emitUpdate"/> -->
     </div>
 
     <!-- CONTENT -->
@@ -168,7 +164,6 @@
                     :is-mini="isMini"
                     :locale="locale"
                     @toggleDetail="toggleDetail">
-                    <!-- @updateCellValue="emitUpdate" -->
                     <template #logo>
                       <!-- LOGO BLOCK : 'logo' -->
                       <div
@@ -206,7 +201,6 @@
                       :item-value="item[fieldObj.field]"
                       :is-mini="isMini"
                       :locale="locale"/>
-                      <!-- @updateCellValue="emitUpdate"/> -->
                   </div>
                 </div>
 
@@ -225,7 +219,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
               </div>
             </div>
@@ -247,7 +240,6 @@
                   :item-added="item.added"
                   :is-mini="isMini"
                   :locale="locale"/>
-                  <!-- @updateCellValue="emitUpdate"/> -->
               </div>
             </div>
 
@@ -274,7 +266,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="pos === 'tags' && hasContentByPosition('tags')">
                   <DatamiCardBlockTags
@@ -289,7 +280,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="pos === 'links' && hasContentByPosition('links')">
                   <DatamiCardBlockLinks
@@ -304,7 +294,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
               </div>
               <div
@@ -320,23 +309,6 @@
                   :locale="locale"/>
               </div>
             </div>
-
-            <!-- LEFT - MINIMAP -->
-            <!-- <div
-              v-if="showDetail && cardHasMiniMap && !cardsSettingsMiniMap.right_side"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                <DatamiMiniMap
-                  :file-id="fileId"
-                  :map-id="`${fileId}-minimap-${item.id}`"
-                  :fields="fields"
-                  :item="item"
-                  :show-detail-card="showDetailCard"
-                  :locale="locale"/>
-              </div>
-            </div> -->
           </div>
         </div>
 
@@ -361,7 +333,6 @@
                   :item-added="item.added"
                   :is-mini="isMini"
                   :locale="locale"/>
-                  <!-- @updateCellValue="emitUpdate"/> -->
               </div>
             </div>
 
@@ -388,7 +359,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="tagsPositions.includes(pos) && hasContentByPosition(pos, true)">
                   <DatamiCardBlockTags
@@ -403,7 +373,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
                 <div v-if="linksPositions.includes(pos) && hasContentByPosition(pos, true)">
                   <DatamiCardBlockLinks
@@ -418,7 +387,6 @@
                     :item-value="item[fieldObj.field]"
                     :is-mini="isMini"
                     :locale="locale"/>
-                    <!-- @updateCellValue="emitUpdate"/> -->
                 </div>
               </div>
               <div
@@ -513,26 +481,9 @@
 
 import { mixinGlobal, mixinValue, mixinDiff } from '@/utils/mixins.js'
 
-// import DatamiCardBlockImage from '@/components/previews/cards/DatamiCardBlockImage'
-// import DatamiCardBlockContent from '@/components/previews/cards/DatamiCardBlockContent'
-// import DatamiCardBlockTags from '@/components/previews/cards/DatamiCardBlockTags'
-// import DatamiCardBlockLinks from '@/components/previews/cards/DatamiCardBlockLinks'
-
-// import DatamiMiniMap from '@/components/previews/maps/DatamiMiniMap'
-
-// import PreviewCell from '@/components/previews/PreviewCell'
-// import EditCell from '@/components/edition/csv/EditCell'
-
 export default {
   name: 'DatamiCard',
   components: {
-    // DatamiCardBlockImage,
-    // DatamiCardBlockContent,
-    // DatamiCardBlockTags,
-    // DatamiCardBlockLinks,
-    // DatamiMiniMap
-    // PreviewCell,
-    // EditCell
     DatamiCardBlockImage: () => import(/* webpackChunkName: "DatamiCardBlockImage" */ '@/components/previews/cards/DatamiCardBlockImage.vue'),
     DatamiCardBlockContent: () => import(/* webpackChunkName: "DatamiCardBlockContent" */ '@/components/previews/cards/DatamiCardBlockContent.vue'),
     DatamiCardBlockTags: () => import(/* webpackChunkName: "DatamiCardBlockTags" */ '@/components/previews/cards/DatamiCardBlockTags.vue'),
@@ -738,10 +689,10 @@ export default {
     // },
     toggleDetail (event) {
       if (event === 'showDetailButton' || this.currentEditViewMode !== 'edit') {
-        console.log('\nC > DatamiCard > toggleDetail > event :', event)
-        console.log('C > DatamiCard > toggleDetail > this.currentEditViewMode :', this.currentEditViewMode)
+        // console.log('\nC > DatamiCard > toggleDetail > event :', event)
+        // console.log('C > DatamiCard > toggleDetail > this.currentEditViewMode :', this.currentEditViewMode)
         // console.log('C > DatamiCard > toggleDetail > this.fieldMapping :', this.fieldMapping)
-        console.log('C > DatamiCard > toggleDetail > this.showDetail :', this.showDetail)
+        // console.log('C > DatamiCard > toggleDetail > this.showDetail :', this.showDetail)
         const payload = {
           isMini: this.isMini,
           showDetail: this.showDetail,
