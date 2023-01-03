@@ -18,11 +18,17 @@
     <!-- BLOCK TITLE IF ANY -->
     <p
       v-show="currentEditViewMode !== 'edit' && field.block_title"
-      class="is-size-7 mb-1">
+      class="is-size-7 mb-1"
+      @click="showCollapse = !showCollapse">
       <span
         class="has-text-weight-bold is-uppercase">
         {{ field.block_title }}
       </span>
+      <b-icon
+        v-if="field.longtextOptions && field.longtextOptions.canCollapse"
+        :icon="`chevron-${showCollapse ? 'down' : 'up'}`"
+        class="ml-4"
+        size="is-small"/>
     </p>
 
     <!-- ITEM VALUE IF PREVIEW MODE -->
@@ -40,20 +46,23 @@
         class="mr-1 has-text-weight-bold">
         {{ field.prefix }}
       </span>
-      <!-- DEBUGGING -->
-      <!-- <div v-if="field.subtype === 'longtext'">
-        field : <code>{{ field }}</code>
-      </div> -->
-      <PreviewLongText
-        v-if="field.subtype === 'longtext' && field.longtextOptions"
-        :raw-text="itemValue"
-        :file-id="fileId"
-        :field-id="field.field"
-        :field="field"
-        :longtext-options="field.longtextOptions"
-        :nowrap="isMini"
-        :max-text-length="field.maxLength"
-        :locale="locale"/>
+      <span v-if="field.subtype === 'longtext' && field.longtextOptions">
+        <!-- DEBUGGING -->
+        <!-- <div v-if="field.subtype === 'longtext'">
+              field : <code>{{ field }}</code>
+            </div> -->
+        <span v-show="showCollapse">
+          <PreviewLongText
+            :raw-text="itemValue"
+            :file-id="fileId"
+            :field-id="field.field"
+            :field="field"
+            :longtext-options="field.longtextOptions"
+            :nowrap="isMini"
+            :max-text-length="field.maxLength"
+            :locale="locale"/>
+        </span>
+      </span>
       <span v-else-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
@@ -65,6 +74,7 @@
         :field="field"
         :step-options="field.stepOptions"
         :locale="locale"/>
+
       <!-- NUMBERS -->
       <span v-else-if="field.type === 'number'">
         {{ getNumber(itemValue) || t('global.noValue', locale) }}
@@ -85,7 +95,7 @@
 
     <!-- APPLY TEMPLATE IF ANY -->
     <div v-if="currentEditViewMode === 'preview' && field.templating">
-      <code>{{ templatedValues }}</code>
+      <!-- <code>{{ templatedValues }}</code> -->
       <p
         v-for="(paragraph, idx) in templatedValues"
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">
@@ -194,6 +204,7 @@ export default {
   },
   data () {
     return {
+      showCollapse: true,
       classes: {
         title: {
           content: 'is-size-4 mb-0 has-text-weight-bold title-line-height',
@@ -226,13 +237,16 @@ export default {
       }
     }
   },
-  // beforeMount () {
+  beforeMount () {
+    if (this.field.subtype === 'longtext' && this.field.longtextOptions && this.field.longtextOptions.canCollapse) {
+      this.showCollapse = this.field.longtextOptions.isOpen
+    }
   //   console.log('\nC > DatamiCardBlockContent > beforeMount > this.itemId :', this.itemId)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.position :', this.position)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.fieldLabel :', this.fieldLabel)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.field :', this.field)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.itemValue :', this.itemValue)
-  // },
+  },
   methods: {
     getNumber (value) {
       return this.getNumberByField(value, this.field)
