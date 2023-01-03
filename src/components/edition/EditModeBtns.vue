@@ -1,5 +1,7 @@
 <template>
-  <div class="EditModeBtns datami-component px-2 content mb-0 is-flex is-align-items-center is-justify-content-center">
+  <div
+    class="EditModeBtns datami-component px-2 content mb-0 is-flex is-align-items-center is-justify-content-center"
+    style="z-index: 2">
     <!-- DEBUG -->
     <div
       v-if="debug"

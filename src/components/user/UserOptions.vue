@@ -1,5 +1,7 @@
 <template>
-  <div class="UserOptions datami-component columns is-gapless is-mobile is-flex is-flex-grow-1">
+  <div
+    class="UserOptions datami-component columns is-gapless is-mobile is-flex is-flex-grow-1"
+    style="z-index: 2">
     <div
       v-if="!onlyPreview && !showOptions"
       :class="`column is-10 is-10-mobile`">

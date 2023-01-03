@@ -82,6 +82,7 @@
                 icon-left="bug"
                 type="is-danger"
                 size="is-small"
+                style="z-index: 2"
                 @click="isModalActive = true"/> -->
               <!-- USER OPTIONS -->
               <ViewModeBtns
