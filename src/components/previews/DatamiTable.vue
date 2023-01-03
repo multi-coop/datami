@@ -479,7 +479,7 @@ import {
 } from '@/utils/mixins.js'
 
 // import { fieldTypeIcons } from '@/utils/fileTypesUtils'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'DatamiTable',
@@ -589,12 +589,17 @@ export default {
       transitionName: 'fade'
     }
   },
-  getters: {
-    ...mapGetters({
-      isDarkMode: 'git-storage/isDarkMode'
-    })
-  },
+  // getters: {
+  //   ...mapGetters({
+  //     checkIfErrorExists: 'git-data/checkIfErrorExists',
+  //     isDarkMode: 'git-storage/isDarkMode'
+  //   })
+  // },
   computed: {
+    ...mapGetters({
+      checkIfErrorExists: 'git-data/checkIfErrorExists',
+      isDarkMode: 'git-storage/isDarkMode'
+    }),
     filterFields () {
       const settingsFields = this.customFiltersConfig.filterfields.map(filterField => filterField.name || filterField)
       // console.log('\nC > DatamiTable > filterFields > settingsFields : ', settingsFields)
@@ -965,6 +970,9 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      updateReqErrors: 'git-data/updateReqErrors'
+    }),
     columnThAttrs (column) {
       // console.log('\nC > DatamiTable > columnThAttrs > column : ', column)
       return {
@@ -1203,12 +1211,9 @@ export default {
     },
     async consolidateRow (consolidationSettings) {
       // console.log('\nC > DatamiTable > consolidateRow > consolidationSettings : ', consolidationSettings)
-      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
       const rowId = consolidationSettings.rowId
       this.consolidating.push(rowId)
       this.closeConsolidationDetail(rowId)
-      // this.consolidationData = this.consolidationData.filter(item => item.rowId !== rowId)
-      // this.openedDetails = this.openedDetails.filter(id => id !== rowId)
 
       // console.log('\nC > DatamiTable > consolidateRow > this.consolidationData : ', this.consolidationData)
       // console.log('C > DatamiTable > consolidateRow > this.columns : ', this.columns)
@@ -1232,13 +1237,20 @@ export default {
       respConsolidation.apiName = consolidationSettings.api.api_name
       respConsolidation.sourceFields = sourceFields
       respConsolidation.api = consolidationSettings.api.api
-      // respConsolidation.rowData = rowData
       // console.log('C > DatamiTable > consolidateRow > respConsolidation : ', respConsolidation)
 
       // update loaders & errors
       this.consolidating = this.consolidating.filter(id => id !== rowId)
       if (!respConsolidation.consolidation) {
-        this.updateReqErrors({ fileId: this.fileId, errors: respConsolidation.errors, addToErrors: true })
+        const reqErrors = respConsolidation.errors.map(err => { return { ...err, fileId: this.fileId, errorId: this.uuidv4() } })
+        // console.log('C > DatamiTable > consolidateRow > reqErrors : ', reqErrors)
+        reqErrors.forEach(err => {
+          // console.log('C > DatamiTable > consolidateRow > err : ', err)
+          if (!this.checkIfErrorExists(err)) {
+            this.updateReqErrors({ error: err, addToErrors: true })
+            this.updateFileDialogs('NotificationErrors', { error: err })
+          }
+        })
       } else {
         this.consolidationData.push(respConsolidation)
         this.openedDetails.push(rowId)
@@ -1249,6 +1261,7 @@ export default {
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)
+      // return consolidationSettings && { ...consolidationSettings, fileId: this.fileId }
     },
     closeConsolidationDetail (rowId) {
       this.openedDetails = this.openedDetails.filter(id => id !== rowId)

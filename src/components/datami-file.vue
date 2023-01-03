@@ -78,7 +78,7 @@
               style="z-index: 2">
               <!-- DEBUG OUTTER MODAL -->
               <b-button
-                v-if="debug"
+                v-if="true"
                 icon-left="bug"
                 type="is-danger"
                 size="is-small"

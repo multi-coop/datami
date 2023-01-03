@@ -238,7 +238,8 @@ export default {
     ...mapGetters({
       getCommitData: 'git-data/getCommitData',
       // getFileToken: 'git-data/getFileToken',
-      getFileReqInfosObj: 'getFileReqInfosObj'
+      getFileReqInfosObj: 'getFileReqInfosObj',
+      checkIfErrorExists: 'git-data/checkIfErrorExists'
     }),
     canCommit () {
       let basicValidation = false
@@ -293,7 +294,6 @@ export default {
       updateSaving: 'git-data/updateSaving',
       updateCommitting: 'git-data/updateCommitting',
       resetReqErrors: 'git-data/resetReqErrors',
-      checkIfErrorExists: 'git-data/checkIfErrorExists',
       updateReqErrors: 'git-data/updateReqErrors'
     }),
     clearName () {
@@ -333,7 +333,6 @@ export default {
       // console.log('C > ConfirmCommit > confirmCommit > this.dialogId :', this.dialogId)
       this.loading = true
       this.updateCommitting({ fileId: this.fileId, isCommitting: true })
-      // this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
       this.resetReqErrors(this.fileId)
 
       // get commit data

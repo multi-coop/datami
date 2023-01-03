@@ -369,14 +369,12 @@ export default {
       addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
       updateReloading: 'git-data/updateReloading',
-      // updateReqErrors: 'git-data/updateReqErrors',
       initializeStorage: 'git-storage/initializeStorage',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     async reloadMediawikiRessources () {
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
-      // this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // reset local data
       let wikiItems = []
