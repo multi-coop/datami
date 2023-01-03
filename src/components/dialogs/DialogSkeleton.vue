@@ -77,31 +77,31 @@
         :dialog-id="dialog.dialogId"
         :locale="locale"
         :debug="debug"/>
+    </div>
 
-      <!-- DEBUGGING -->
-      <div
-        v-else
-        class="card my-3">
-        <div class="card-header">
-          <p class="card-header-title">
-            DEBUGGING - dialog index : {{ i }}
-          </p>
-        </div>
-        <div class="card-content">
-          <div class="content">
-            <div class="columns">
-              <div class="column is-4">
-                dialog : <br><pre><code>{{ dialog }}</code></pre>
-              </div>
+    <!-- DEBUGGING -->
+    <!-- <div
+      v-if="debug"
+      class="card my-3">
+      <div class="card-header">
+        <p class="card-header-title">
+          DEBUGGING - dialog index : {{ i }}
+        </p>
+      </div>
+      <div class="card-content">
+        <div class="content">
+          <div class="columns">
+            <div class="column is-4">
+              dialog : <br><pre><code>{{ dialog }}</code></pre>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- DEBUGGING -->
     <div
-      v-if="true"
+      v-if="debug"
       class="card my-3">
       <div class="card-header">
         <p class="card-header-title">
