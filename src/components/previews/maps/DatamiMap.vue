@@ -542,8 +542,8 @@ export default {
           // console.log('C > DatamiMap > mapHeightTop > editCsvElem : ', editCsvElem)
           // console.log('C > DatamiMap > mapHeightTop > h3 : ', h3)
           // const adjusting = (this.activeFilterTags && this.activeFilterTags.length) ? 12 : 5
-          // const adjusting = 0
-          height = h1 + h2 + h3 // + adjusting
+          const adjusting = -0.5
+          height = h1 + h2 + h3 + adjusting
         }
         // console.log('C > DatamiMap > mapHeightTop > height : ', height)
       }

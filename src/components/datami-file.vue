@@ -77,13 +77,13 @@
               class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row is-align-items-center"
               style="z-index: 2">
               <!-- DEBUG OUTTER MODAL -->
-              <b-button
-                v-if="true"
+              <!-- <b-button
+                v-if="debug"
                 icon-left="bug"
                 type="is-danger"
                 size="is-small"
-                @click="isModalActive = true"/>
-              <!-- MODAL DEBUGGING BUTTON -->
+                @click="isModalActive = true"/> -->
+              <!-- USER OPTIONS -->
               <ViewModeBtns
                 :file-id="fileId"
                 :locale="locale"/>

@@ -173,11 +173,11 @@ export const data = {
     // errors
     checkIfErrorExists: (state) => (error) => {
       const errExists = state.errors.find(err => {
-        const sameFile = err.fileId === error.fileId
+        const sameFileId = err.fileId === error.fileId
         const sameCode = err.code === error.code
         const sameUrl = err.url === error.url
         const sameFunc = err.function === error.function
-        const allSame = sameFile && sameUrl && sameCode && sameFunc
+        const allSame = sameFileId && sameUrl && sameCode && sameFunc
         return allSame
       })
       return !!errExists

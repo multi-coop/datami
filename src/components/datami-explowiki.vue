@@ -19,7 +19,15 @@
         class="columns is-centered mb-4"
         style="z-index: 2;">
         <!-- FILE TITLE -->
-        <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-6-desktop is-flex is-flex-direction-row">
+        <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row is-align-items-center">
+          <!-- DEBUG OUTTER MODAL -->
+          <!-- <b-button
+            v-if="debug"
+            icon-left="bug"
+            type="is-danger"
+            size="is-small"
+            @click="isModalActive = true"/> -->
+          <!-- USER OPTIONS -->
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -32,7 +40,7 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="usernavbar column is-12-mobile is-6-tablet is-6-desktop is-flex is-direction-row is-align-items-center">
+        <div class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-direction-row is-align-items-center">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
