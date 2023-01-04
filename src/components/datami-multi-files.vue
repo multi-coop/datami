@@ -313,6 +313,15 @@ export default {
 }
 </script>
 
+<style src="../../node_modules/buefy/dist/buefy.min.css">
+</style>
+<style src="../../node_modules/@mdi/font/css/materialdesignicons.min.css">
+</style>
+<style src="../../node_modules/bulma-timeline/dist/css/bulma-timeline.min.css">
+</style>
+<style src="../../node_modules/@creativebulma/bulma-divider/dist/bulma-divider.min.css">
+</style>
+
 <style>
 
 .datami-floating-right {
