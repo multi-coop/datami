@@ -236,6 +236,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/edition/datami-edit-tag-value.css'
+      // ],
       showMenu: false,
       addedInput: undefined,
       dropdwonHeight: 225
@@ -267,7 +270,7 @@ export default {
 </script>
 
 <style>
-.dropdown-tag-wrapper {
+/* .dropdown-tag-wrapper {
   display: block;
   flex-direction: column;
 }
@@ -281,7 +284,6 @@ export default {
 .dropdown-tags > .dropdown-menu {
   z-index: 1 !important;
   position: relative;
-  /* background-color: #2f2f2f !important; */
 }
 .dropdown-item > .field > .help, .dropdown-content > .field > .help  {
   text-align: left;
@@ -299,32 +301,26 @@ export default {
   max-height: 275px;
   overflow: auto;
 
-  /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
   background:
-    /* Shadow covers */
     linear-gradient(white 30%, rgba(0, 0, 0, 0)),
     linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
 
   background:
-    /* Shadow covers */
     linear-gradient(white 30%, rgba(0, 0, 0, 0)),
     linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
 
   background-repeat: no-repeat;
   background-color: white;
   background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
 
 .add-input-btn-disabled {
   border-color: #dbdbdb !important;
-}
+} */
 
 </style>

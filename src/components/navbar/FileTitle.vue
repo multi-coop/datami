@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style scoped>
-.file-infos {
+/* .file-infos {
   min-width: 37em;
 }
 .text-shadow {
@@ -64,5 +64,5 @@ export default {
 }
 .datami-darkmode-white-text{
   color: white !important;
-}
+} */
 </style>

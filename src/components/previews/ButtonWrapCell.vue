@@ -1,5 +1,7 @@
 <template>
-  <div class="ButtonWrapCell pl-2 pr-1">
+  <div
+    class="ButtonWrapCell pl-2 pr-1"
+    style="position: relative; left: -2px; top: 0px;">
     <b-tooltip
       v-if="showExpand"
       :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
@@ -56,10 +58,10 @@ export default {
 
 <style scoped>
 
-.ButtonWrapCell {
+/* .ButtonWrapCell {
   position: relative;
   left: -2px;
   top: 0px;
-}
+} */
 
 </style>

@@ -1,0 +1,8 @@
+.gt-label-filter {
+  padding-top: 0.1em!important;
+}
+.ButtonFilterBy > .field > .field-body > .field {
+  margin-right: 0!important;
+  /* :nth-last-child(2) */
+  /* margin-right: .75em!important; */
+}

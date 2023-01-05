@@ -209,7 +209,7 @@ export default {
 </script>
 
 <style scoped>
-  .is-active {
+  /* .is-active {
     background-color: #000000 !important;
   }
 
@@ -237,6 +237,6 @@ export default {
 
   .datami-dropdown-viewmode-darkmode > .dropdown-content > a.dropdown-item:hover:not(.is-active) {
     color: black !important;
-  }
+  } */
 
 </style>

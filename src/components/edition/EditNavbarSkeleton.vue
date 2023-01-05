@@ -52,10 +52,6 @@ export default {
       default: false,
       type: Boolean
     },
-    // showUploadFileDialog: {
-    //   default: false,
-    //   type: Boolean
-    // },
     locale: {
       default: 'en',
       type: String
@@ -63,22 +59,20 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/edition/datami-edit-navbar-skeleton.css'
+      // ],
       loading: false,
       noEditNavbarViews: ['dataviz']
     }
   }
-  // methods: {
-  //   SendActionToParent (event) {
-  //     this.$emit('action', event)
-  //   }
-  // }
 }
 </script>
 
 <style scoped>
 
-.edit-save-button {
+/* .edit-save-button {
   z-index: 3;
-}
+} */
 
 </style>

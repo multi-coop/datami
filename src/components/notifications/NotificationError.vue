@@ -108,7 +108,7 @@ export default {
 }
 </script>
 <style scoped>
-.break-spaces {
+/* .break-spaces {
   white-space: break-spaces !important;
-}
+} */
 </style>

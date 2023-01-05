@@ -1,0 +1,11 @@
+/* .is-active {
+  background-color: #000000 !important;
+} */
+.branch-input {
+  width: 30em;
+  z-index: 55;
+}
+.token-input {
+  min-width: 30em;
+  z-index: 50;
+}

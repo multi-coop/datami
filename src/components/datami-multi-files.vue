@@ -1,5 +1,5 @@
 <template>
-  <div :class="`DatamiMultiFiles datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
+  <div :class="`DatamiMultiFiles datami-widget-root datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
     <!-- MATOMO -->
     <MatomoScript
       :file-id="multiFilesId"
@@ -234,6 +234,9 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/datami-multi-files.css'
+      ],
       multiFilesId: undefined,
       hideTitle: false,
       files: [],
@@ -312,15 +315,6 @@ export default {
   }
 }
 </script>
-
-<style src="../../node_modules/buefy/dist/buefy.min.css">
-</style>
-<style src="../../node_modules/@mdi/font/css/materialdesignicons.min.css">
-</style>
-<style src="../../node_modules/bulma-timeline/dist/css/bulma-timeline.min.css">
-</style>
-<style src="../../node_modules/@creativebulma/bulma-divider/dist/bulma-divider.min.css">
-</style>
 
 <style>
 

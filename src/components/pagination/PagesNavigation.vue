@@ -130,6 +130,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/pagination/datami-pages-navigation.css'
+      // ],
       // default settings
       currentPage: 1,
       currentPageTable: 1,
@@ -262,7 +265,7 @@ export default {
 </script>
 
 <style>
-.PagesNavigation.datami-darkmode > div > nav > ul.pagination-list > li > a {
+/* .PagesNavigation.datami-darkmode > div > nav > ul.pagination-list > li > a {
   color: white !important;
   border: 1px solid white !important;
 }
@@ -271,14 +274,9 @@ export default {
   color: white !important;
 }
 
-/* .pagination-link{
-  color: aliceblue !important;
-} */
-
 .datami-darkmode-white-text-dark-bg{
   color: white !important;
   background-color: #363636 !important;
-
 }
 .pagination-link.is-current {
   background-color: #363636;
@@ -294,5 +292,5 @@ export default {
 }
 .select-datami-darkmode > span > select::after {
   border-color: white !important;
-}
+} */
 </style>

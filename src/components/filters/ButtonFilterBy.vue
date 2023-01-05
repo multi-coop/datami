@@ -89,6 +89,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/filters/datami-button-filter-by.css'
+      // ],
       counter: 0,
       activeHeader: undefined,
       searchValue: undefined,
@@ -145,12 +148,10 @@ export default {
 </script>
 
 <style>
-.gt-label-filter {
+/* .gt-label-filter {
   padding-top: 0.1em!important;
 }
 .ButtonFilterBy > .field > .field-body > .field {
   margin-right: 0!important;
-  /* :nth-last-child(2) */
-  /* margin-right: .75em!important; */
-}
+} */
 </style>

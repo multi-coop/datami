@@ -123,10 +123,10 @@ export default {
 </script>
 
 <style>
-.gt-label-sort {
+/* .gt-label-sort {
   padding-top: 0.1em!important;
 }
 .ButtonSortBy > .field > .field-body > .field {
   margin-right: 0!important;
-}
+} */
 </style>

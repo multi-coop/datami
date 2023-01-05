@@ -25,7 +25,7 @@
               <a
                 target="_blank"
                 :href="gitObj[info.key]"
-                class="outlink"
+                class="outlink has-text-grey is-underlined"
                 @click="trackLink(gitObj[info.key])">
                 {{ t(info.linkTxt, locale) }}
               </a>
@@ -61,7 +61,7 @@
               <a
                 target="_blank"
                 :href="findFromPath(optionsInfos.key, fileOptions)"
-                class="outlink"
+                class="outlink has-text-grey is-underlined"
                 @click="trackLink(findFromPath(optionsInfos.key, fileOptions))">
                 <span v-if="optionsInfos.schemaLink">
                   {{ schemaFileName }}
@@ -103,7 +103,7 @@
                 <a
                   target="_blank"
                   :href="mapFile"
-                  class="outlink"
+                  class="outlink has-text-grey is-underlined"
                   @click="trackLink(mapFile)">
                   {{ trimFileName(mapFile) }}
                 </a>
@@ -135,7 +135,7 @@
               <a
                 target="_blank"
                 :href="docsUrl"
-                class="outlink"
+                class="outlink has-text-grey is-underlined"
                 @click="trackLink(docsUrl)">
                 {{ t('global.docsWebsite', locale) }}
               </a>
@@ -163,7 +163,7 @@
               <a
                 target="_blank"
                 :href="reportUrl"
-                class="outlink"
+                class="outlink has-text-grey is-underlined"
                 @click="trackLink(reportUrl)">
                 {{ t('global.reportIssueWebsite', locale) }}
               </a>
@@ -287,9 +287,9 @@ export default {
 
 <style scoped>
 
-a {
+/* a {
   color: grey;
   text-decoration: underline;
-}
+} */
 
 </style>

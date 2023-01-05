@@ -4,7 +4,6 @@ import vueCustomElement from 'vue-custom-element'
 import 'document-register-element/build/document-register-element'
 import './registerServiceWorker'
 
-// import { store } from './store'
 import { defaultStore } from './store'
 import { user } from '@/store/user.js'
 import { data } from '@/store/data.js'
@@ -15,18 +14,24 @@ import { storage } from '@/store/storage.js'
 import { dialogs } from '@/store/dialogs.js'
 import { signals } from '@/store/signals.js'
 
+// CSS raw imports
 // import buefy from '@/plugins/buefy.js'
 import Buefy from 'buefy'
+/* eslint import/no-duplicates: off */
 // import 'buefy/dist/buefy.min.css'
-// import '@mdi/font/css/materialdesignicons.min.css'
-
-// import 'bulma-timeline/dist/css/bulma-timeline.min.css'
 // import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
+// import 'bulma-timeline/dist/css/bulma-timeline.min.css'
+// import '@mdi/font/css/materialdesignicons.min.css'
+import buefyCss from '!!raw-loader!buefy/dist/buefy.min.css'
+import bulmaDividerCss from '!!raw-loader!@creativebulma/bulma-divider/dist/bulma-divider.min.css'
+import bulmaTimelineCss from '!!raw-loader!bulma-timeline/dist/css/bulma-timeline.min.css'
+import materialDesignFonts from '!!raw-loader!@mdi/font/css/materialdesignicons.min.css'
+import initCss from '!!raw-loader!./styles/initCss.css'
 
+// import ApexCharts
 import VueApexCharts from 'vue-apexcharts'
 
-// import { VueShowdown, VueShowdownPlugin } from 'vue-showdown'
-
+// import components
 import DatamiFile from './components/datami-file.vue'
 import DatamiExploWiki from './components/datami-explowiki.vue'
 import DatamiMultiFiles from './components/datami-multi-files.vue'
@@ -34,11 +39,9 @@ import DatamiMultiFiles from './components/datami-multi-files.vue'
 Vue.config.productionTip = false
 
 // install CSS framework - Buefy
-// console.log('MAIN > config Vue + Buefy > Buefy : ', Buefy)
 Vue.use(Buefy, {
   defaultIconPack: 'mdi'
 })
-// console.log('MAIN > config Vue + Buefy > Vue : ', Vue)
 
 // install ApexCharts
 Vue.use(VueApexCharts)
@@ -69,20 +72,18 @@ Vue.use(vueCustomElement)
 
 // const options = { }
 const options = {
-  // shadow: true,
-  // beforeCreateVueInstance (root) {
-  //   const rootNode = root.el.getRootNode()
-  //   if (rootNode instanceof ShadowRoot) {
-  //     root.shadowRoot = rootNode
-  //   } else {
-  //     root.shadowRoot = document.head
-  //   }
-  //   return root
-  // }
+  shadow: true,
+  shadowCss: `${buefyCss} ${bulmaDividerCss} ${bulmaTimelineCss} ${materialDesignFonts} ${initCss}`,
+  beforeCreateVueInstance (root) {
+    const rootNode = root.el.getRootNode()
+    if (rootNode instanceof ShadowRoot) {
+      root.shadowRoot = rootNode
+    } else {
+      root.shadowRoot = document.head
+    }
+    return root
+  }
 }
-// DatamiFile.buefy = buefy
-// DatamiExploWiki.buefy = buefy
-// DatamiMultiFiles.buefy = buefy
 
 Vue.customElement('datami-file', DatamiFile, options)
 Vue.customElement('datami-explowiki', DatamiExploWiki, options)

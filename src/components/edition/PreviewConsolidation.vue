@@ -250,7 +250,7 @@ export default {
 </script>
 
 <style scoped>
-.datami-selection {
+/* .datami-selection {
   min-width: 150px;
-}
+} */
 </style>

@@ -119,10 +119,10 @@ export default {
 </script>
 
 <style scoped>
-.text-shadow {
+/* .text-shadow {
   text-shadow: 0 0 10px white, 0 0 10px white;
 }
 .datami-darkmode-white-text{
   color: white !important;
-}
+} */
 </style>

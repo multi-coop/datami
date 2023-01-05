@@ -1,0 +1,91 @@
+
+.datami-darkmode-tab-header.is-active > a {
+  background-color: #2d2d30 !important;
+  border: 1px solid white !important;
+}
+
+.multi-files-tabs.is-vertical.width-80 > .tab-content {
+  width: 80%;
+}
+.multi-files-tabs.is-vertical.width-80 > .tabs {
+  width: 20%;
+}
+
+.multi-files-tabs > nav > ul {
+  border-bottom: none !important;
+}
+
+.datami-multi-files-tab-horizontal.is-active a {
+  border: #dbdbdb thin solid !important;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-bottom-color: transparent !important;
+}
+
+.datami-multi-files-tab-horizontal:not(.is-active) a:hover {
+  border: #dbdbdb thin solid !important;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  background-color: white !important;
+}
+
+.datami-multi-files-tab-vertical.is-active a {
+  border: #dbdbdb thin solid !important;
+  border-radius: 6px;
+}
+
+.datami-multi-files-tab-vertical:not(.is-active) a {
+  border: none !important;
+}
+
+.datami-multi-files-tab-vertical:not(.is-active) a:hover {
+  border: #dbdbdb thin solid !important;
+  border-radius: 6px;
+  background-color: white !important;
+}
+
+.datami-clearmode-tab-header a {
+  color: grey !important;
+}
+.datami-darkmode-tab-header a {
+  color: white !important;
+}
+
+.datami-multi-files-tab.datami-darkmode-tab-header.is-active a {
+  color: white !important;
+}
+.datami-multi-files-tab.datami-clearmode-tab-header.is-active a {
+  color: black !important;
+}
+
+.datami-multi-files-tab.datami-darkmode-tab-header.is-active a:hover {
+  color: white !important;
+}
+.datami-multi-files-tab.datami-clearmode-tab-header.is-active a:hover {
+  color: black !important;
+}
+
+.datami-multi-files-tab.datami-darkmode-tab-header:not(.is-active) a:hover {
+  color: black !important;
+}
+.datami-multi-files-tab.datami-clearmode-tab-header:not(.is-active) a:hover {
+  color: black !important;
+}
+
+.multifiles-container {
+  margin-left: -1em;
+  margin-right: -1em;
+  margin-top: -1em;
+}
+.multifiles-container-top {
+  margin-top: -1em;
+}
+.add-multifiles-border {
+  border-left: 1px solid #dbdbdb;
+  border-right: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
+  border-top: 1px solid #dbdbdb;
+}
+.add-multifiles-border-top {
+  border-top: 1px solid #dbdbdb;
+}

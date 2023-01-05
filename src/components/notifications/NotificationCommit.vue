@@ -71,7 +71,7 @@
               <a
                 target="_blank"
                 :href="notif.branchUrl"
-                class="outlink"
+                class="outlink has-text-grey"
                 @click="trackLink(notif.branchUrl)">
                 {{ t('git.branchUrlLink', locale) }}
               </a>
@@ -95,7 +95,7 @@
               <a
                 target="_blank"
                 :href="notif.mergeRequestUrl"
-                class="outlink"
+                class="outlink has-text-grey"
                 @click="trackLink(notif.mergeRequestUrl)">
                 {{ t('git.mergeRequestUrlLink', locale) }}
               </a>
@@ -169,8 +169,7 @@ export default {
 </script>
 
 <style scoped>
-
-a {
+/* a {
   color: grey !important;
-}
+} */
 </style>

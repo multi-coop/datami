@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="item"
-    :class="`DatamiCard datami-component card ${isHovered || showDetail ? 'hover-effect' : '' }`"
+    :class="`DatamiCard datami-component card datami-card ${isHovered || showDetail ? 'hover-effect' : '' }`"
     :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};`"
     @mouseover="isHovered = true"
     @mouseleave="isHovered = false">
@@ -111,7 +111,7 @@
     </div>
 
     <!-- CONTENT -->
-    <div :class="`card-content pt-3 ${showDetail ? 'detail-padding' : ''}`">
+    <div :class="`card-content datami-card-content pt-3 ${showDetail ? 'detail-padding' : ''}`">
       <!-- DEBUG -->
       <div v-if="debug">
         <!-- <pre><code>{{ item }}</code></pre> -->
@@ -726,7 +726,7 @@ export default {
 </script>
 
 <style scoped>
-  .no-shadow {
+  /* .no-shadow {
     -webkit-box-shadow: none;
     box-shadow: none;
   }
@@ -753,5 +753,5 @@ export default {
     padding-bottom: 3em;
     padding-left: 3em;
     padding-right: 3em;
-  }
+  } */
 </style>

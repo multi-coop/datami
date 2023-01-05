@@ -215,16 +215,16 @@ export default {
 </script>
 
 <style>
-.PreviewTagValue > .b-tooltip > .tooltip-trigger {
+/* .PreviewTagValue > .b-tooltip > .tooltip-trigger {
   z-index: 1 !important;
 }
 .tag-pointer {
   cursor: pointer;
-}
+} */
 </style>
 
 <style scoped>
-.divider::after, .divider::before {
+/* .divider::after, .divider::before {
   background-color: grey !important;
-}
+} */
 </style>

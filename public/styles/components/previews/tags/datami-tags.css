@@ -1,0 +1,6 @@
+.PreviewTagValue > .b-tooltip > .tooltip-trigger {
+  z-index: 1 !important;
+}
+.tag-pointer {
+  cursor: pointer;
+}

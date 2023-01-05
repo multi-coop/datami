@@ -2,7 +2,7 @@
   <div
     v-if="gitfile"
     :id="fileId"
-    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : 'datami-widget-root'} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
@@ -333,6 +333,28 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/datami-global.css',
+        'styles/datami-dark-mode.css',
+        'styles/components/edition/datami-edit-mode-buttons.css',
+        'styles/components/edition/datami-edit-navbar-skeleton.css',
+        'styles/components/edition/datami-edit-tag-value.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/json/datami-json.css',
+        'styles/components/previews/md/datami-md.css',
+        'styles/components/previews/md/datami-shodown.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css'
+      ],
       isModalActive: false,
       // file infos
       gitfileDatami: undefined,
@@ -684,7 +706,7 @@ export default {
 
 <style>
 
-.datami-container {
+/* .datami-container {
   max-width: 100% !important;
 }
 
@@ -706,6 +728,6 @@ export default {
   .usernavbar{
     justify-content: center !important;
   }
-}
+} */
 
 </style>

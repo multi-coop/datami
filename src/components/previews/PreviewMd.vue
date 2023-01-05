@@ -261,6 +261,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/md/datami-md.css'
+      // ],
       contentIsSet: false,
       beginEdit: false,
       contentData: null,
@@ -431,7 +434,7 @@ export default {
 </script>
 
 <style>
-
+/* 
 .edit-md-full-height {
   height: 100% !important;
 }
@@ -463,6 +466,6 @@ export default {
   text-decoration: line-through !important;
   background-color: #fbb6c2 !important;
   color: #555 !important;
-}
+} */
 
 </style>

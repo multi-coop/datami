@@ -232,6 +232,9 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/components/edition/csv/datami-edit-cell.css'
+      ],
       input: undefined,
       inputBool: false,
       tagsValue: []
@@ -367,8 +370,7 @@ export default {
 
 <style>
 
-.datami-cell > .field {
-  /* border: none; */
+/* .datami-cell > .field {
   width: 100%;
 }
 .g-cell {
@@ -383,5 +385,5 @@ export default {
 .g-header {
   font-size: .85em!important;
   font-weight: 600!important;
-}
+} */
 </style>

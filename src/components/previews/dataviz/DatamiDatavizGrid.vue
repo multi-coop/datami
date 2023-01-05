@@ -83,6 +83,13 @@ export default {
       type: Boolean
     }
   },
+  // data () {
+  //   return {
+  //     cssFiles: [
+  //       'styles/components/previews/dataviz/datami-dataviz.css'
+  //     ]
+  //   }
+  // },
   // beforeMount () {
   //   console.log('\nC > DatamiDatavizGrid > beforeMount > this.datavizSettings : ', this.datavizSettings)
   //   console.log('C > DatamiDatavizGrid > beforeMount > this.fields : ', this.fields)
@@ -197,9 +204,9 @@ export default {
 
 <style scoped>
 
-.dataviz-scroll {
+/* .dataviz-scroll {
   overflow-y: auto;
   height: 100%;
-}
+} */
 
 </style>

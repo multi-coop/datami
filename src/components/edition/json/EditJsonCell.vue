@@ -136,6 +136,9 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/components/edition/csv/datami-edit-cell.css'
+      ],
       originalInput: undefined,
       input: undefined,
       edit: true,
@@ -185,16 +188,14 @@ export default {
 
 <style>
 
-.g-cell {
+/* .g-cell {
   background-color: transparent;
-  /* border: none; */
 }
 .g-cell-darkmode {
   background-color: white;
-  /* border: none; */
 }
 .g-label {
   font-size: .85em!important;
   font-weight: 600!important;
-}
+} */
 </style>

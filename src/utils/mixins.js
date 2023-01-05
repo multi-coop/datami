@@ -20,7 +20,7 @@ import {
   getNumberByField,
   groupByField,
   aggregateByField
-} from '@/utils/globalUtils'
+} from '@/utils/globalUtils.js'
 import {
   extractGitInfos
 } from '@/utils/utilsGitUrl.js'
@@ -57,12 +57,18 @@ import {
 } from '@/utils/utilsWikiUrl.js'
 import {
   getConsolidationApiUrl
-} from '@/utils/consolidationUtils'
+} from '@/utils/consolidationUtils.js'
+import {
+  createStyleLink
+} from '@/utils/utilsHtml.js'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixinGlobal = {
+  mounted () {
+    this.addStyle(this.cssFiles)
+  },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',
@@ -271,6 +277,25 @@ export const mixinGlobal = {
       addSignal: 'git-signals/addSignal',
       removeSignal: 'git-signals/removeSignal'
     }),
+    getRootNode () {
+      const shadowRoot = this.$el.parentNode
+      // console.log(`mixinGlobal > getRootNode > ${this.$options.name} > shadowRoot : `, shadowRoot)
+      return shadowRoot
+    },
+    addStyle (urls) {
+      if (urls && urls.length) {
+        const shadowRoot = this.getRootNode()
+        // const componentName = this.$options.name
+        // console.log(`\nM > mixinGlobal > addStyle > ${componentName} > shadowRoot : `, shadowRoot)
+        // console.log(`M > mixinGlobal > addStyle > ${componentName} > url : `, url)
+        // console.log(`M > mixinGlobal > addStyle > ${componentName} > process.env : `, process.env)
+        urls.forEach(url => {
+          const fileUrl = `${process.env.BASE_URL}${url}`
+          // console.log(`M > mixinGlobal > addStyle > ${componentName} > fileUrl : `, fileUrl)
+          createStyleLink(shadowRoot, fileUrl)
+        })
+      }
+    }
     updateFileDialogs (component, event, show = true) {
       // console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
       // console.log('M > mixinGlobal > updateFileDialogs > show : ', show)

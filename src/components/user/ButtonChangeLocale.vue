@@ -84,7 +84,7 @@ export default {
 </script>
 
 <style scoped>
-  .is-active {
+  /* .is-active {
     background-color: #000000 !important;
-  }
+  } */
 </style>

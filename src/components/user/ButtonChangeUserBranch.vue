@@ -178,8 +178,8 @@ export default {
 </script>
 
 <style scoped>
-  .branch-input {
+  /* .branch-input {
     width: 30em;
     z-index: 55;
-  }
+  } */
 </style>

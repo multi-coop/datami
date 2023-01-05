@@ -1,0 +1,13 @@
+.edit-mode-button {
+  z-index: 3;
+}
+
+.EditModeBtns > .field > .field-body > .field.has-addons {
+  justify-content: center !important;
+}
+
+@media(max-width: 768px) {
+  .EditModeBtns{
+    justify-content: end !important;
+  }
+}

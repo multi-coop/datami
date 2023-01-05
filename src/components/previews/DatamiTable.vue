@@ -544,6 +544,10 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/table/datami-table.css',
+      //   'styles/components/previews/tags/datami-tags.css'
+      // ],
       checkedRows: [],
       showCardDetails: false,
 
@@ -1313,10 +1317,9 @@ export default {
 </script>
 
 <style>
-.datami-nowrap {
+/* .datami-nowrap {
   white-space: nowrap;
 }
-  /* SET DARKMODE */
 .datami-darkmode{
   background-color: rgb(60, 59, 59) !important;
   color: white !important;
@@ -1333,12 +1336,11 @@ export default {
 }
 
 .datami-table {
-  /* min-width: 100px; */
   max-width: 350px;
   overflow: auto;
   vertical-align: top !important;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .datami-table::-webkit-scrollbar {
   display: none;
@@ -1383,5 +1385,5 @@ export default {
   position: sticky;
   left: 10px !important;
   width: max-content;
-}
+} */
 </style>

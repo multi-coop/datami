@@ -144,6 +144,13 @@ export default {
       type: Boolean
     }
   },
+  // data () {
+  //   return {
+  //     cssFiles: [
+  //       'styles/components/filters/datami-custom-filter-dropdown.css'
+  //     ]
+  //   }
+  // },
   computed: {
     isActiveField () {
       return this.fieldActiveTags.length
@@ -188,7 +195,7 @@ export default {
 </script>
 
 <style>
-.CustomFilterDropdown.dark-background > .navbar-link {
+/* .CustomFilterDropdown.dark-background > .navbar-link {
   color: white !important;
   background-color: #2d2d30 !important;
   border: 1px solid white !important;
@@ -205,49 +212,36 @@ export default {
 
 .CustomFilterDropdown.clear-background > .navbar-dropdown {
   background-color: white !important;
-  /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
   background:
-    /* Shadow covers */
     linear-gradient(white 30%, rgba(0, 0, 0, 0)),
     linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
 
   background:
-    /* Shadow covers */
     linear-gradient(white 30%, rgba(0, 0, 0, 0)),
     linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
   background-repeat: no-repeat;
-  /* background-color: white; */
   background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
 .CustomFilterDropdown.dark-background > .navbar-dropdown {
   background-color: black !important;
   background:
-    /* Shadow covers */
     linear-gradient(black 30%, rgba(0, 0, 0, 0)),
     linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
-    /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
 
   background:
-    /* Shadow covers */
     linear-gradient(black 30%, rgba(0, 0, 0, 0)),
     linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
-    /* Shadows */
     linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
   background-repeat: no-repeat;
-  /* background-color: white; */
   background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
 .CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item {
@@ -275,6 +269,6 @@ export default {
 
 .datami-darkmode-hover-grey:hover{
   background-color: rgb(86, 83, 79) !important;
-}
+} */
 
 </style>

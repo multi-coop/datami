@@ -6,13 +6,13 @@
     <div
       :class="`column is-full is-italic has-text-centered`">
       <p class="has-text-grey is-size-7 mb-2">
-        <span :class=" ` ${isDarkMode ? 'gitribute-darkmode-white-text' : '' } ` ">
+        <span :class=" ` ${isDarkMode ? 'datami-darkmode-white-text' : '' } ` ">
           {{ t('credits.reclaim', locale) }}
         </span>
-        <span :class=" ` ${isDarkMode ? 'gitribute-darkmode-white-text' : '' } ` ">
+        <span :class=" ` ${isDarkMode ? 'datami-darkmode-white-text' : '' } ` ">
           {{ t('credits.byLove', locale) }}
         </span>
-        <span :class=" `ml-1 ${isDarkMode ? 'gitribute-darkmode-white-text' : '' }` ">
+        <span :class=" `ml-1 ${isDarkMode ? 'datami-darkmode-white-text' : '' }` ">
           {{ t('credits.byCooperative', locale) }}
         </span>
         <span
@@ -65,6 +65,13 @@ export default {
       type: String
     }
   },
+  data () {
+    return {
+      cssFiles: [
+        'styles/components/credits/datami-credits.css'
+      ],
+    }
+  }
   computed: {
     ...mapState({
       urlMulti: (state) => state.urlMulti,
@@ -75,7 +82,7 @@ export default {
 </script>
 
 <style scoped>
-.gitribute-darkmode-white-text{
+/* .datami-darkmode-white-text{
   color: white !important;
 }
 
@@ -85,5 +92,5 @@ export default {
 }
 .mini-logo {
   width: 70px !important;
-}
+} */
 </style>

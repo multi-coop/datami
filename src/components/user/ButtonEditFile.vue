@@ -118,7 +118,7 @@ export default {
 </style>
 
 <style scoped>
-  .datami-darkmode {
+  /* .datami-darkmode {
     background-color: #2d2d30 !important;
-  }
+  } */
 </style>

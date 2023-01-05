@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style scoped>
-.datami-darkmode-loader-background {
+/* .datami-darkmode-loader-background {
   background-color: #2d2d30;
-}
+} */
 </style>

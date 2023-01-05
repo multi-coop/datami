@@ -345,7 +345,7 @@ export default {
 </script>
 
 <style scoped>
-  .datami-nowrap {
+  /* .datami-nowrap {
     white-space: nowrap;
   }
   .datami-wrap {
@@ -353,5 +353,5 @@ export default {
   }
   .has-wrap-btn {
 
-  }
+  } */
 </style>

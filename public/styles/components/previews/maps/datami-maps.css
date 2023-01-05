@@ -1,0 +1,43 @@
+@import '~maplibre-gl/dist/maplibre-gl.css';
+
+/* @media screen and (min-width: 1216px)
+.controls-container:not(.is-max-desktop) {
+  max-width: 1152px;
+} */
+
+.map-card {
+  z-index: 1;
+  position: absolute;
+}
+.map-layers {
+  margin-bottom: 5px;
+}
+
+.map-bottom-right {
+  right: 50px;
+  bottom: 25px;
+}
+
+.map-mini-card-item {
+  z-index: 10;
+  left: 50px;
+}
+
+.map-detail-card-item {
+  z-index: 10;
+  width: 75%;
+  left: 50%;
+  /* -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
+}
+
+.big-loader {
+  z-index: 10;
+  position: absolute !important;
+  left: 50%;
+  top: calc(50% - 8em);
+  border-width: 10px !important;
+  /* border: 10px solid #dbdbdb !important; */
+  height: 8em !important;
+  width: 8em !important;
+}

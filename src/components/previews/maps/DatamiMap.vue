@@ -165,6 +165,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/maps/datami-maps.css'
+      // ],
 
       // MAPLIBRE MAP OBJECT
       map: undefined,
@@ -1742,12 +1745,7 @@ export default {
 </script>
 
 <style lang="css">
-@import '~maplibre-gl/dist/maplibre-gl.css';
-
-/* @media screen and (min-width: 1216px)
-.controls-container:not(.is-max-desktop) {
-  max-width: 1152px;
-} */
+/* @import '~maplibre-gl/dist/maplibre-gl.css';
 
 .map-card {
   z-index: 1;
@@ -1768,8 +1766,6 @@ export default {
   z-index: 10;
   width: 75%;
   left: 50%;
-  /* -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); */
 }
 
 .big-loader {
@@ -1778,9 +1774,8 @@ export default {
   left: 50%;
   top: calc(50% - 8em);
   border-width: 10px !important;
-  /* border: 10px solid #dbdbdb !important; */
   height: 8em !important;
   width: 8em !important;
-}
+} */
 
 </style>

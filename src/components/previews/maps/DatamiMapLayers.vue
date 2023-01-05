@@ -157,8 +157,8 @@ export default {
 
 <style scoped>
 
-.map-layers {
+/* .map-layers {
   margin-bottom: 5px;
-}
+} */
 
 </style>

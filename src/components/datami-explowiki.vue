@@ -1,7 +1,7 @@
 <template>
   <div
     :id="fileId"
-    :class="`DatamiExplowiki datami-widget section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`DatamiExplowiki datami-widget-root datami-widget section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; max-width: 100%; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0; max-width: 100%"> -->
     <!-- MATOMO -->
@@ -240,6 +240,22 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/datami-global.css',
+        'styles/datami-dark-mode.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css'
+      ],
       isModalActive: false,
       // file infos
       fileId: undefined,

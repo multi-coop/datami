@@ -77,6 +77,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/edition/datami-edit-mode-buttons.css'
+      // ],
       debug: false,
       buttonsEdit: editViewsOptions
     }
@@ -115,7 +118,7 @@ export default {
 
 <style>
 
-.edit-mode-button {
+/* .edit-mode-button {
   z-index: 3;
 }
 
@@ -134,6 +137,6 @@ export default {
   .EditModeBtns{
     justify-content: end !important;
   }
-}
+} */
 
 </style>
