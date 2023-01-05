@@ -2,7 +2,7 @@
   <div
     v-if="gitfile"
     :id="fileId"
-    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : 'datami-widget-root'} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`DatamiFile datami-widget datami-widget-root datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : 'datami-widget-root'} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
@@ -64,6 +64,7 @@
       :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
       <div
         :id="`file-navbar-${fileId}`"
+        :ref="`file-navbar-${fileId}`"
         :class="`upper-container ${currentViewMode === 'map' ? 'px-3' : ''}`"
         style="z-index: 1;">
         <!-- NAVBAR FILE TITLE / USER BTNS -->
@@ -197,6 +198,7 @@
           class="container datami-container"
           style="z-index: 1;">
           <PreviewCsv
+            ref="previewcsv"
             :only-preview="onlypreview"
             :file-id="fileId"
             :file-raw="fileRaw"
@@ -211,6 +213,7 @@
           class="container datami-container"
           style="z-index: 1;">
           <PreviewMd
+            ref="previewmd"
             :only-preview="onlypreview"
             :file-id="fileId"
             :file-raw="fileRaw"
@@ -225,6 +228,7 @@
           class="container datami-container"
           style="z-index: 1;">
           <PreviewJson
+            ref="previewjson"
             :only-preview="onlypreview"
             :file-id="fileId"
             :file-raw="fileRaw"
@@ -334,6 +338,7 @@ export default {
   data () {
     return {
       cssFiles: [
+        'styles/components/credits/datami-credits.css',
         'styles/datami-global.css',
         'styles/datami-dark-mode.css',
         'styles/components/edition/datami-edit-mode-buttons.css',

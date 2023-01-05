@@ -22,10 +22,12 @@ import Buefy from 'buefy'
 // import '@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 // import 'bulma-timeline/dist/css/bulma-timeline.min.css'
 // import '@mdi/font/css/materialdesignicons.min.css'
+/* eslint import/no-webpack-loader-syntax: off */
 import buefyCss from '!!raw-loader!buefy/dist/buefy.min.css'
 import bulmaDividerCss from '!!raw-loader!@creativebulma/bulma-divider/dist/bulma-divider.min.css'
 import bulmaTimelineCss from '!!raw-loader!bulma-timeline/dist/css/bulma-timeline.min.css'
 import materialDesignFonts from '!!raw-loader!@mdi/font/css/materialdesignicons.min.css'
+import mapLibreCss from '!!raw-loader!maplibre-gl/dist/maplibre-gl.css'
 import initCss from '!!raw-loader!./styles/initCss.css'
 
 // import ApexCharts
@@ -73,7 +75,7 @@ Vue.use(vueCustomElement)
 // const options = { }
 const options = {
   shadow: true,
-  shadowCss: `${buefyCss} ${bulmaDividerCss} ${bulmaTimelineCss} ${materialDesignFonts} ${initCss}`,
+  shadowCss: `${buefyCss} ${bulmaDividerCss} ${bulmaTimelineCss} ${materialDesignFonts} ${mapLibreCss} ${initCss}`,
   beforeCreateVueInstance (root) {
     const rootNode = root.el.getRootNode()
     if (rootNode instanceof ShadowRoot) {

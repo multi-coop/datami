@@ -277,6 +277,15 @@ export const mixinGlobal = {
       addSignal: 'git-signals/addSignal',
       removeSignal: 'git-signals/removeSignal'
     }),
+    getAncestorNodeById (id) {
+      // console.log(`\nmixinGlobal > getAncestorNodeById > ${this.$options.name} > id : `, id)
+      let parent = this.$parent
+      while (parent && parent.$el.id !== id) {
+        parent = parent.$parent
+      }
+      // console.log(`mixinGlobal > getAncestorNodeById > ${this.$options.name} > parent : `, parent)
+      return parent
+    },
     getRootNode () {
       const shadowRoot = this.$el.parentNode
       // console.log(`mixinGlobal > getRootNode > ${this.$options.name} > shadowRoot : `, shadowRoot)
@@ -295,7 +304,7 @@ export const mixinGlobal = {
           createStyleLink(shadowRoot, fileUrl)
         })
       }
-    }
+    },
     updateFileDialogs (component, event, show = true) {
       // console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
       // console.log('M > mixinGlobal > updateFileDialogs > show : ', show)

@@ -65,13 +65,13 @@ export default {
       type: String
     }
   },
-  data () {
-    return {
-      cssFiles: [
-        'styles/components/credits/datami-credits.css'
-      ],
-    }
-  }
+  // data () {
+  //   return {
+  //     cssFiles: [
+  //       'styles/components/credits/datami-credits.css'
+  //     ]
+  //   }
+  // },
   computed: {
     ...mapState({
       urlMulti: (state) => state.urlMulti,

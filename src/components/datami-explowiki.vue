@@ -241,6 +241,7 @@ export default {
   data () {
     return {
       cssFiles: [
+        'styles/components/credits/datami-credits.css',
         'styles/datami-global.css',
         'styles/datami-dark-mode.css',
         'styles/components/filters/datami-button-filter-by.css',

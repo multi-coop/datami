@@ -1,6 +1,6 @@
 
 .datami-darkmode-tab-header.is-active > a {
-  background-color: #2d2d30 !important;
+  background-color: #dbdbdb !important;
   border: 1px solid white !important;
 }
 
@@ -52,17 +52,17 @@
 }
 
 .datami-multi-files-tab.datami-darkmode-tab-header.is-active a {
-  color: white !important;
+  color: black !important;
 }
 .datami-multi-files-tab.datami-clearmode-tab-header.is-active a {
-  color: black !important;
+  color: white !important;
 }
 
 .datami-multi-files-tab.datami-darkmode-tab-header.is-active a:hover {
-  color: white !important;
+  color: black !important;
 }
 .datami-multi-files-tab.datami-clearmode-tab-header.is-active a:hover {
-  color: black !important;
+  color: white !important;
 }
 
 .datami-multi-files-tab.datami-darkmode-tab-header:not(.is-active) a:hover {

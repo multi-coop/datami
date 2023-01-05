@@ -434,8 +434,7 @@ export default {
 </script>
 
 <style>
-/* 
-.edit-md-full-height {
+/* .edit-md-full-height {
   height: 100% !important;
 }
 .edit-md {
@@ -467,5 +466,4 @@ export default {
   background-color: #fbb6c2 !important;
   color: #555 !important;
 } */
-
 </style>

@@ -235,6 +235,7 @@ export default {
   data () {
     return {
       cssFiles: [
+        'styles/datami-dark-mode.css',
         'styles/datami-multi-files.css'
       ],
       multiFilesId: undefined,

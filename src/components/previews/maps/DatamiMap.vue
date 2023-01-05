@@ -18,7 +18,7 @@
     <!-- DISPLAY MAP -->
     <div
       :id="mapId"
-      :ref="`container-map-${mapId}`"
+      ref="mapcontainer"
       :style="`height: ${mapHeight + mapHeightTop}px; width: 100%;`">
       <div class="controls-container">
         <!-- MINI CARD FOR DISPLAYED ITEM -->
@@ -170,6 +170,7 @@ export default {
       // ],
 
       // MAPLIBRE MAP OBJECT
+      // mapCanBeInitialized: false,
       map: undefined,
       // isFullscreen: false,
       showLoader: true,
@@ -263,6 +264,14 @@ export default {
     }
   },
   computed: {
+    getContainerElement () {
+      console.log('\nC > DatamiMap > getContainerElement > this.$refs :', this.$refs)
+      console.log('C > DatamiMap > getContainerElement > this.mapId :', this.mapId)
+      // const container = this.$refs[this.mapId]
+      const container = this.$refs.mapcontainer
+      console.log('C > DatamiMap > getContainerElement > container :', container)
+      return container
+    },
     mapOptions () {
       return this.mapSettings.mapOptions
     },
@@ -386,6 +395,12 @@ export default {
     }
   },
   watch: {
+    // getContainerElement (next) {
+    //   console.log('\nC > DatamiMap > watch > getContainerElement > next :', next)
+    //   if (next) {
+    //     this.initializeMap()
+    //   }
+    // },
     showCard (next) {
       if (next) {
         // track with matomo
@@ -455,7 +470,7 @@ export default {
     // console.log('\nC > DatamiMap > beforeMount > this.mapSettings : ', this.mapSettings)
     // console.log('C > DatamiMap > beforeMount > this.fields : ', this.fields)
     // set up fields mapper
-    this.getSizesScreen()
+    // this.getSizesScreen()
 
     // this.contentFields = this.mapSettings.contentFields
     // console.log('C > DatamiMap > beforeMount > this.mapCardsSettingsMini : ', this.mapCardsSettingsMini)
@@ -502,6 +517,11 @@ export default {
   },
   mounted () {
     // console.log('\nC > DatamiMap > mounted > this.mapId : ', this.mapId)
+    this.getSizesScreen()
+    console.log('\nC > DatamiMap > mounted > this.$refs : ', this.$refs)
+    console.log('C > DatamiMap > mounted > this.mapId : ', this.mapId)
+    const container = this.getContainerElement
+    console.log('C > DatamiMap > mounted > container : ', container)
     this.initializeMap()
     // console.log('\nC > DatamiMap > mounted > this.visibleLayers : ', this.visibleLayers)
   },
@@ -536,10 +556,25 @@ export default {
     getMapHeightTop () {
       let height = 0
       if (this.mapOnTop) {
-        height = 240
-        const fileNavbarElem = document.getElementById(`file-navbar-${this.fileId}`)
-        const sortFiltersElem = document.getElementById(`sort-and-filters-skeleton-${this.fileId}`)
-        const editCsvElem = document.getElementById(`edit-csv-skeleton-${this.fileId}`)
+        height = 150
+        // const docRoot = this.getRootNode()
+        console.log('\nC > DatamiMap > getMapHeightTop > this.$el : ', this.$el)
+        console.log('C > DatamiMap > getMapHeightTop > this.mapId : ', this.mapId)
+        console.log('C > DatamiMap > getMapHeightTop > this.$parent : ', this.$parent)
+        const docRoot = this.getAncestorNodeById(this.fileId)
+        console.log('C > DatamiMap > getMapHeightTop > docRoot : ', docRoot)
+        // const fileNavbarElem = docRoot.getElementById(`file-navbar-${this.fileId}`)
+        // const sortFiltersElem = docRoot.getElementById(`sort-and-filters-skeleton-${this.fileId}`)
+        // const editCsvElem = docRoot.getElementById(`edit-csv-skeleton-${this.fileId}`)
+        const fileNavbarElem = docRoot.$refs[`file-navbar-${this.fileId}`]
+        console.log('C > DatamiMap > getMapHeightTop > fileNavbarElem : ', fileNavbarElem)
+        const sortFiltersElem = docRoot.$refs.previewcsv.$refs.datamitable.$refs.sortandfiltersskeleton
+        console.log('C > DatamiMap > getMapHeightTop > sortFiltersElem : ', sortFiltersElem)
+        const editCsvElem = docRoot.$refs.previewcsv.$refs.datamitable.$refs.editcsvskeleton
+        console.log('C > DatamiMap > getMapHeightTop > editCsvElem : ', editCsvElem)
+        // const fileNavbarElem = this.getAncestorNodeById(`file-navbar-${this.fileId}`)
+        // const sortFiltersElem = this.getAncestorNodeById(`sort-and-filters-skeleton-${this.fileId}`)
+        // const editCsvElem = this.getAncestorNodeById(`edit-csv-skeleton-${this.fileId}`)
 
         if (fileNavbarElem && sortFiltersElem && editCsvElem) {
           // height = elem.clientHeight
@@ -567,8 +602,18 @@ export default {
     initializeMap () {
       // Note: MapLibre GL uses longitude, latitude coordinate order (as opposed to latitude, longitude) to match GeoJSON.
       // cf : https://maplibre.org/maplibre-gl-js-docs/api/map/#map-parameters
-      const map = new Map({
-        container: this.mapId,
+      // const docRoot = this.getAncestorNodeById(this.fileId)
+      console.log('\nC > DatamiMap > initializeMap > this.$refs : ', this.$refs)
+      console.log('C > DatamiMap > initializeMap > this.$el : ', this.$el)
+      console.log('C > DatamiMap > initializeMap > this.mapId : ', this.mapId)
+      // const mapContainerId = `container-map-${this.mapId}`
+      // console.log('C > DatamiMap > initializeMap > mapContainerId : ', mapContainerId)
+      // const container = this.getContainerElement
+      const container = this.$refs.mapcontainer
+      console.log('C > DatamiMap > initializeMap > container : ', container)
+      const map = container && new Map({
+        // container: this.mapId,
+        container: container,
         center: this.center,
         zoom: this.zoom,
         maxZoom: this.maxZoom,
@@ -1745,8 +1790,8 @@ export default {
 </script>
 
 <style lang="css">
-/* @import '~maplibre-gl/dist/maplibre-gl.css';
-
+/* @import '~maplibre-gl/dist/maplibre-gl.css'; */
+/*
 .map-card {
   z-index: 1;
   position: absolute;
