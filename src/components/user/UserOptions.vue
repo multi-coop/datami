@@ -54,7 +54,9 @@
           icon-left="cog-outline"
           size="is-small"
           expanded
-          @click="showOptions = !showOptions"/>
+          @click="showOptions = !showOptions"
+          @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale) })"
+          @mouseleave="hideGlobalTooltip"/>
       </b-tooltip>
     </div>
   </div>
@@ -63,30 +65,11 @@
 <script>
 import { mapGetters } from 'vuex'
 
-// import { mixinGlobal } from '@/utils/mixins.js'
-
-// import ButtonEditFile from '@/components/user/ButtonEditFile'
-// import ButtonReloadFile from '@/components/user/ButtonReloadFile'
-// import ButtonDownloadFile from '@/components/user/ButtonDownloadFile'
-// import ButtonChangeUserToken from '@/components/user/ButtonChangeUserToken'
-// import ButtonChangeUserBranch from '@/components/user/ButtonChangeUserBranch'
-// import ButtonChangeLocale from '@/components/user/ButtonChangeLocale'
-// import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
-// import ButtonFullscreen from '@/components/user/ButtonFullscreen'
-// import ButtonDarkMode from '@/components/user/ButtonDarkMode'
+import { mixinTooltip } from '@/utils/mixins.js'
 
 export default {
   name: 'UserOptions',
   components: {
-    // ButtonEditFile,
-    // ButtonReloadFile,
-    // ButtonDownloadFile,
-    // ButtonChangeUserToken,
-    // ButtonChangeUserBranch,
-    // ButtonChangeLocale,
-    // ButtonCopyWidgetHtml,
-    // ButtonFullscreen,
-    // ButtonDarkMode
     ButtonEditFile: () => import(/* webpackChunkName: "ButtonEditFile" */ '@/components/user/ButtonEditFile.vue'),
     ButtonReloadFile: () => import(/* webpackChunkName: "ButtonReloadFile" */ '@/components/user/ButtonReloadFile.vue'),
     ButtonDownloadFile: () => import(/* webpackChunkName: "ButtonDownloadFile" */ '@/components/user/ButtonDownloadFile.vue'),
@@ -97,7 +80,7 @@ export default {
     ButtonFullscreen: () => import(/* webpackChunkName: "ButtonFullscreen" */ '@/components/user/ButtonFullscreen.vue'),
     ButtonDarkMode: () => import(/* webpackChunkName: "ButtonDarkMode" */ '@/components/user/ButtonDarkMode.vue')
   },
-  // mixins: [mixinGlobal],
+  mixins: [mixinTooltip],
   props: {
     fileId: {
       default: null,

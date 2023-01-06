@@ -8,18 +8,23 @@
         :type="isDarkMode ? 'is-white' : ''"
         :outlined="isDarkMode"
         :icon-left="`${isDarkMode ?'white-balance-sunny' : 'weather-night' }`"
-        @click="switchContrast"/>
+        @click="switchContrast"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(isDarkMode ? 'actions.setLightMode' : 'actions.setDarkMode', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDarkMode',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     locale: {
       default: 'en',

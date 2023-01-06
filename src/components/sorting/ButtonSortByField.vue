@@ -11,23 +11,26 @@
     <b-tooltip
       :label="t(getSortTooltip, locale)"
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-      position="is-top"
-      append-to-body>
+      position="is-top">
+      <!-- append-to-body> -->
       <b-icon
         :icon="getSortIcon"
         :type="counter ? 'is-dark' : 'is-grey-light'"
         size="is-small"
-        @click.native="updateAscending"/>
+        @click.native="updateAscending"
+        @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(getSortTooltip, locale) })"
+        @mouseleave.native="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
-import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonSortByField',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinCsv
   ],

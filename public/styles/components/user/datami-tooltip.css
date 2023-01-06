@@ -1,0 +1,44 @@
+.datami-tooltip {
+  background-color: #363636;
+  color: white;
+  width: auto;
+  padding: .35rem .75rem;
+  border-radius: 6px;
+  font-size: .85rem;
+  font-weight: 400;
+  box-shadow: 0 1px 2px 1px rgba(0,1,0,.2);
+  z-index: 50;
+  /* white-space: nowrap; */
+  position: absolute;
+  max-width: 450px;
+}
+.datami-tooltip::before {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+  z-index: 50;
+}
+.datami-tooltip.is-medium {
+  max-width: 200px;
+}
+.datami-tooltip.is-large {
+  max-width: 300px;
+}
+.datami-tooltip.is-top {
+  /* top: auto;
+  right: auto;
+  left: 50%; */
+  /* bottom: calc(100% + 5px + 2px); */
+  /* transform: translateX(-50%); */
+}
+.datami-tooltip.is-top::before {
+  /* top: 100%;
+  right: auto;
+  bottom: auto;
+  */
+  /* left: 50%;
+  transform: translateX(-50%); */
+  /* border-top: 5px solid #7957d5;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent; */
+}

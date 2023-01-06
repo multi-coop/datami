@@ -5,10 +5,10 @@
       class="card map-layers"
       style="">
       <div class="card-content px-2 py-2">
-        <b-tooltip
+        <!-- <b-tooltip
           :label="t(`map.layersBtn`, locale)"
-          append-to-body
           position="is-left"
+          append-to-body
           :type="isDarkMode ? 'is-white': 'is-dark'"
           style="width: 100%">
           <b-button
@@ -17,10 +17,23 @@
             size="is-small"
             expanded
             outlined
-            @click="toggleBtn">
+            @click="toggleBtn"
+            @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`map.layersBtn`, locale) })"
+            @mouseleave="hideGlobalTooltip"/>
             {{ t('map.layers', locale) }}
           </b-button>
-        </b-tooltip>
+        </b-tooltip> -->
+        <b-button
+          :type="isDarkMode ? 'is-white': 'is-dark'"
+          :class="`${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+          size="is-small"
+          expanded
+          outlined
+          @click="toggleBtn"
+          @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`map.layersBtn`, locale) })"
+          @mouseleave="hideGlobalTooltip">
+          {{ t('map.layers', locale) }}
+        </b-button>
 
         <!-- DEBUGGING -->
         <div
@@ -70,11 +83,14 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiMapLayers',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

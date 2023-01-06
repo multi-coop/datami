@@ -124,10 +124,10 @@
         ellipsis
         autocomplete
         expanded
-        append-to-body
         attached
         type="is-dark"
         @input="emitChange">
+        <!-- append-to-body -->
         <template slot-scope="props">
           <span :class="`${tagsValue.includes(props.option) ? 'has-text-weight-bold' : ''}`">
             {{ props.option }}

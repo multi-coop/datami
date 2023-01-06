@@ -5,7 +5,9 @@
     right
     tag="div"
     :class="`CustomFilterDropdown ml-1 mr-0 ${isDarkMode ? 'dark-background' : 'clear-background'}`"
-    style="height: 2.5em;">
+    style="height: 2.5em;"
+    @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: `${ t('filters.filterByField', locale) } : ${filter.label}` })"
+    @mouseleave="hideGlobalTooltip">
     <!-- LABEL SLOT -->
     <template #label>
       <b-tooltip
@@ -110,6 +112,7 @@
 <script>
 
 import {
+  mixinTooltip,
   mixinGlobal,
   mixinValue,
   mixinForeignKeys
@@ -118,6 +121,7 @@ import {
 export default {
   name: 'CustomFilterDropdown',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinValue,
     mixinForeignKeys

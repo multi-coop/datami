@@ -11,18 +11,23 @@
         :type="isDarkMode ? 'is-white' : ''"
         :outlined="isDarkMode"
         icon-left="code-tags"
-        @click="CopyWidgetHtml()"/>
+        @click="CopyWidgetHtml()"
+        @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t('actions.copyWidget', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonCopyWidgetHtml',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

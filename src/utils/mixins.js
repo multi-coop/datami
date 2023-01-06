@@ -65,6 +65,37 @@ import {
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
 
+export const mixinTooltip = {
+  computed: {
+    ...mapState({
+      tooltip: (state) => state.showTooltip,
+      tooltipOptions: (state) => state.tooltipOptions
+    })
+  },
+  methods: {
+    ...mapActions({
+      showTooltip: 'showTooltip',
+      hideTooltip: 'hideTooltip'
+    }),
+    showGlobalTooltip (event, tooltipOptions) {
+      console.log(`\nmixinTooltip > showGlobalTooltip > ${this.$options.name} > event : `, event)
+      console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > tooltipOptions : `, tooltipOptions)
+      console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > this.$el : `, this.$el)
+      const boundingRect = this.$el.getBoundingClientRect()
+      console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > boundingRect : `, boundingRect)
+      this.showTooltip({
+        component: this.$options.name,
+        ...tooltipOptions,
+        rect: boundingRect
+      })
+    },
+    hideGlobalTooltip () {
+      console.log(`\nmixinTooltip > hideGlobalTooltip > ${this.$options.name} > ...`)
+      this.hideTooltip()
+    }
+  }
+}
+
 export const mixinGlobal = {
   mounted () {
     this.addStyle(this.cssFiles)

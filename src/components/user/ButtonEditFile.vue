@@ -19,7 +19,9 @@
             size="is-small"
             expanded
             icon-left="pencil"
-            @click="OpenCommitDialog"/>
+            @click="OpenCommitDialog"
+            @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.sendContribHelp', locale) })"
+            @mouseleave="hideGlobalTooltip"/>
         </b-tooltip>
       </p>
       <p class="control">
@@ -33,7 +35,9 @@
             :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
             size="is-small"
             icon-left="close-thick"
-            @click="closeEditMode"/>
+            @click="closeEditMode"
+            @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.quitEdit', locale) })"
+            @mouseleave="hideGlobalTooltip"/>
         </b-tooltip>
       </p>
     </b-field>
@@ -50,7 +54,9 @@
         icon-left="pencil"
         :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
         expanded
-        @click="openEditMode"/>
+        @click="openEditMode"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.enterEdit', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
@@ -59,11 +65,14 @@
 
 import { mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonEditFile',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

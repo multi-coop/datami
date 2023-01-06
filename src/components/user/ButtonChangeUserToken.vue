@@ -15,7 +15,9 @@
             icon-left="account"
             aria-haspopup="true"
             aria-controls="dropdown-user-token"
-            @click="toggleBtn"/>
+            @click="toggleBtn"
+            @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.changeToken', locale) })"
+            @mouseleave="hideGlobalTooltip"/>
         </b-tooltip>
       </div>
       <!-- INPUT -->
@@ -77,13 +79,16 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 import { getUserInfosFromToken } from '@/utils/gitProvidersAPI.js'
 
 export default {
   name: 'ButtonChangeUserToken',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

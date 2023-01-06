@@ -6,10 +6,10 @@
       :style="cssMapLegend.join(';')">
       <div class="card-content px-2 py-2">
         <div class="content">
-          <b-tooltip
+          <!-- <b-tooltip
             :label="t(`map.legendBtn`, locale)"
-            append-to-body
             position="is-left"
+            append-to-body
             :type="isDarkMode ? 'is-white': 'is-dark'"
             style="width: 100%">
             <b-button
@@ -19,10 +19,24 @@
               :disabled="!currentChoroSource"
               expanded
               outlined
-              @click="toggleBtn">
+              @click="toggleBtn"
+              @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`map.legentBtn`, locale) })"
+              @mouseleave="hideGlobalTooltip">
               {{ t('map.legend', locale) }}
             </b-button>
-          </b-tooltip>
+          </b-tooltip> -->
+          <b-button
+            :type="isDarkMode ? 'is-white': 'is-dark'"
+            :class="`${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+            size="is-small"
+            :disabled="!currentChoroSource"
+            expanded
+            outlined
+            @click="toggleBtn"
+            @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`map.legendBtn`, locale) })"
+            @mouseleave="hideGlobalTooltip">
+            {{ t('map.legend', locale) }}
+          </b-button>
 
           <!-- DEBUGGING -->
           <div
@@ -95,11 +109,14 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiMapLegend',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

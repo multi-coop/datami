@@ -1,5 +1,6 @@
 <template>
-  <div class="PreviewField">
+  <div
+    class="PreviewField">
     <!-- FIELD LABEL + INFOS -->
     <!-- :auto-close="isForeignKey ? ['outside', 'escape'] : true" -->
     <!-- :auto-close="isForeignKey ? ['inside', 'outside', 'escape'] : true" -->
@@ -9,10 +10,11 @@
     <b-tooltip
       position="is-top"
       multilined
-      append-to-body
       :animated="false"
       size="is-large"
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
+      <!-- @mouseover="showGlobalTooltip"> -->
+      <!-- append-to-body -->
       <span style="cursor: pointer;">
 
         <!-- FIELD TYPE ICON -->
@@ -20,20 +22,26 @@
           :icon="getIconFieldType(field)"
           :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
           :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
-          size="is-small"/>
+          size="is-small"
+          @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'fieldtype', data: field.type })"
+          @mouseleave.native="hideGlobalTooltip"/>
 
         <!-- FIELD LABEL FOR isDatamiField -->
         <span
-          v-if="isDatamiField"
-          class="mr-2">
-          <!-- {{ t(field.label, locale) }} -->
-        </span>
+          @mouseover="showGlobalTooltip($event, { position: 'top', type: 'field', data: field })"
+          @mouseleave="hideGlobalTooltip">
+          <span
+            v-if="isDatamiField"
+            class="mr-2">
+            <!-- {{ t(field.label, locale) }} -->
+          </span>
 
-        <!-- FIELD LABEL -->
-        <span
-          v-else
-          :class="`mr-2`">
-          {{ field.label }}
+          <!-- FIELD LABEL -->
+          <span
+            v-else
+            :class="`mr-2`">
+            {{ field.label }}
+          </span>
         </span>
 
         <!-- PRIMARY KEY -->
@@ -185,13 +193,16 @@
         class="mr-3"
         size="is-small"
         type="is-grey-light"
-        icon="lock"/>
+        icon="lock"
+        @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('edit.headerLocked', locale) })"
+        @mouseleave.native="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
 import {
+  mixinTooltip,
   mixinGlobal,
   mixinIcons,
   mixinValue,
@@ -201,6 +212,7 @@ import {
 export default {
   name: 'PreviewField',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinIcons,
     mixinValue,

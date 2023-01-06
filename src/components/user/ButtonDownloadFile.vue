@@ -11,17 +11,20 @@
         :outlined="isDarkMode"
         :icon-left="'download'"
         :loading="downloading"
-        @click="DownloadFile()"/>
+        @click="DownloadFile()"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.downloadFile', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
-import { mixinGlobal, mixinDownload } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinDownload } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDownloadFile',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinDownload
   ],

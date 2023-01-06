@@ -6,7 +6,7 @@
       <span :class="`px-2 is-size-6-mobile is-size-5-tablet is-size-4-desktop ${currentViewMode === 'map' ? 'text-shadow' : ''} ${isDarkMode && currentViewMode !== 'map' ? 'datami-darkmode-white-text' : 'has-text-dark'}`">
         {{ title }}
       </span>
-      <b-tooltip
+      <!-- <b-tooltip
         :label="t('file.fileInfos', locale)"
         :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
         position="is-top">
@@ -14,19 +14,31 @@
           icon="information-outline"
           size="is-small"
           class="ml-1 mr-6 has-text-grey-light"
-          @click.native="toggleDialog"/>
-      </b-tooltip>
+          @click.native="toggleDialog"
+          @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('file.fileInfos', locale) })"
+          @mouseleave.native="hideGlobalTooltip"/>
+      </b-tooltip> -->
+      <b-icon
+        icon="information-outline"
+        size="is-small"
+        class="ml-1 mr-6 has-text-grey-light"
+        @click.native="toggleDialog"
+        @mouseover.native="showGlobalTooltip($event, { position: 'right', type: 'info', label: t('file.fileInfos', locale) })"
+        @mouseleave.native="hideGlobalTooltip"/>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'FileTitle',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     title: {
       default: '',

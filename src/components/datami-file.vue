@@ -10,6 +10,9 @@
     <MatomoScript
       :file-id="fileId"/>
 
+    <DatamiTooltip
+      v-if="!fromMultiFiles && tooltip"/>
+
     <!-- DEBUG ERRORS -->
     <!-- <div
       v-if="debug"
@@ -259,13 +262,14 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
 export default {
   name: 'DatamiFile',
   components: {
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DatamiTooltip: () => import(/* webpackChunkName: "DatamiTooltip" */ '@/components/user/DatamiTooltip.vue'),
     DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     EditModeBtns: () => import(/* webpackChunkName: "EditModeBtns" */ '@/components/edition/EditModeBtns.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
@@ -277,6 +281,7 @@ export default {
     DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinForeignKeys,
     mixinGit
@@ -358,7 +363,8 @@ export default {
         'styles/components/previews/md/datami-shodown.css',
         'styles/components/previews/datami-view-mode-buttons.css',
         'styles/components/sorting/datami-buttons-sort-by.css',
-        'styles/components/user/datami-user-buttons.css'
+        'styles/components/user/datami-user-buttons.css',
+        'styles/components/user/datami-tooltip.css'
       ],
       isModalActive: false,
       // file infos

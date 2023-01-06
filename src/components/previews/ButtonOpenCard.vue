@@ -2,9 +2,9 @@
   <div class="ButtonOpenCard">
     <b-tooltip
       :label="t('field.openDatamiCard', locale)"
-      append-to-body
       position="is-right"
       :type="isDarkMode ? 'is-white' : 'is-dark'">
+      <!-- append-to-body -->
       <b-button
         icon-left="eye"
         class="mt-1"
@@ -12,18 +12,21 @@
         :type="isDarkMode ? 'is-white' : 'is-dark'"
         :loading="isConsolidating"
         outlined
-        @click="SendActionToParent"/>
+        @click="SendActionToParent"
+        @mouseover="showGlobalTooltip($event, { position: 'right', type: 'info', label: t('field.openDatamiCard', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
 
 <script>
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonOpenCard',
   mixins: [
+    mixinTooltip,
     mixinGlobal
   ],
   props: {

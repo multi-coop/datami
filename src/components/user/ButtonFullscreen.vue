@@ -10,7 +10,9 @@ element.mozRequestFullScreen<template>
         :type="isDarkMode ? 'is-white' : ''"
         :outlined="isDarkMode"
         icon-left="fullscreen"
-        @click="toggleFullsceen"/>
+        @click="toggleFullsceen"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(`actions.fullscreen${isFullscreen ? 'Off' : 'On'}`, locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
@@ -18,11 +20,14 @@ element.mozRequestFullScreen<template>
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonFullscreen',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

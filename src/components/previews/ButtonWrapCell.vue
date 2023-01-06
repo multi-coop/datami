@@ -5,13 +5,15 @@
     <b-tooltip
       v-if="showExpand"
       :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
-      append-to-body
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
+      <!-- append-to-body -->
       <b-icon
         :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
         :type="nowrap ? 'is-grey-light' : 'is-dark'"
         size="is-small"
-        @click.native="handleInput(!nowrap)"/>
+        @click.native="handleInput(!nowrap)"
+        @mouseover.native="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale) })"
+        @mouseleave.native="hideGlobalTooltip"/>
     </b-tooltip>
     <b-icon
       v-else
@@ -20,11 +22,14 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonWrapCell',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   model: {
     prop: 'hidden',
     event: 'blur'

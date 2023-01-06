@@ -14,6 +14,8 @@ import { extractGitInfos } from '@/utils/utilsGitUrl.js'
 
 export const defaultStore = {
   state: {
+    showTooltip: false,
+    tooltipOptions: undefined,
     gitInfos: [],
     fileOptions: [],
     fileReqInfos: [],
@@ -57,6 +59,12 @@ export const defaultStore = {
     }
   },
   mutations: {
+    setShowTooltip (state, bool) {
+      state.showTooltip = bool
+    },
+    setTooltipOptions (state, options) {
+      state.tooltipOptions = options
+    },
     setState (state, { key, data }) {
       // console.log('S-index > M > setGitInfos > gitInfosObject : ', gitInfosObject)
       const index = state[key].findIndex(item => item.uuid === data.uuid)
@@ -68,6 +76,14 @@ export const defaultStore = {
     }
   },
   actions: {
+    showTooltip ({ commit }, options) {
+      commit('setShowTooltip', true)
+      commit('setTooltipOptions', options)
+    },
+    hideTooltip ({ commit }) {
+      commit('setShowTooltip', false)
+      commit('setTooltipOptions', undefined)
+    },
     buildGitInfos ({ commit }, gitUrl) {
       // console.log('S-index > A > buildGitInfos > gitUrl : ', gitUrl)
       const gitInfosObject = extractGitInfos(gitUrl)

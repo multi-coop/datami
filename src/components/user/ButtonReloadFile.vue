@@ -11,7 +11,9 @@
         :outlined="isDarkMode"
         icon-left="reload"
         :loading="loading"
-        @click="ReloadFile()"/>
+        @click="ReloadFile()"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.reloadFile', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
     </b-tooltip>
   </div>
 </template>
@@ -19,11 +21,14 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonReloadFile',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

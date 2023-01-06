@@ -220,7 +220,7 @@
 
 <script>
 
-import { mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
 
 // import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
 // import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
@@ -237,6 +237,7 @@ export default {
     PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinValue,
     mixinForeignKeys

@@ -2,7 +2,10 @@
   <div class="ButtonChangeUserBranch datami-component">
     <div :class="`dropdown is-right ${showContent ? 'is-active' : '' }`">
       <!-- TRIGGER BUTTON -->
-      <div class="dropdown-trigger">
+      <div
+        class="dropdown-trigger"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.changeActiveBranch', locale) })"
+        @mouseleave="hideGlobalTooltip">
         <b-tooltip
           :label="t('actions.changeActiveBranch', locale)"
           :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
@@ -125,11 +128,12 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinGit } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonChangeUserBranch',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinGit
   ],
