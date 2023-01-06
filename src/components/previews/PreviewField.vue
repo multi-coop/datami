@@ -182,7 +182,7 @@
     </b-tooltip>
 
     <!-- LOCKED OR NOT -->
-    <b-tooltip
+    <!-- <b-tooltip
       v-if="lockHeaders && currentEditViewMode !== 'preview' && !isDatamiField"
       :label="t('edit.headerLocked', locale)"
       position="is-top"
@@ -196,7 +196,15 @@
         icon="lock"
         @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('edit.headerLocked', locale) })"
         @mouseleave.native="hideGlobalTooltip"/>
-    </b-tooltip>
+    </b-tooltip> -->
+    <b-icon
+      v-if="lockHeaders && currentEditViewMode !== 'preview' && !isDatamiField"
+      class="mr-3"
+      size="is-small"
+      type="is-grey-light"
+      icon="lock"
+      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('edit.headerLocked', locale) })"
+      @mouseleave.native="hideGlobalTooltip"/>
   </div>
 </template>
 
