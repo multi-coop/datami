@@ -16,6 +16,7 @@ export const defaultStore = {
   state: {
     showTooltip: false,
     tooltipOptions: undefined,
+    scrolled: { top: 0 },
     gitInfos: [],
     fileOptions: [],
     fileReqInfos: [],
@@ -65,6 +66,9 @@ export const defaultStore = {
     setTooltipOptions (state, options) {
       state.tooltipOptions = options
     },
+    setScrolled (state, scrolled) {
+      state.scrolled = scrolled
+    },
     setState (state, { key, data }) {
       // console.log('S-index > M > setGitInfos > gitInfosObject : ', gitInfosObject)
       const index = state[key].findIndex(item => item.uuid === data.uuid)
@@ -83,6 +87,9 @@ export const defaultStore = {
     hideTooltip ({ commit }) {
       commit('setShowTooltip', false)
       commit('setTooltipOptions', undefined)
+    },
+    updateScrolled ({ commit }, scrolled) {
+      commit('setScrolled', scrolled)
     },
     buildGitInfos ({ commit }, gitUrl) {
       // console.log('S-index > A > buildGitInfos > gitUrl : ', gitUrl)

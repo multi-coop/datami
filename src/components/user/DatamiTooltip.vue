@@ -21,7 +21,7 @@
     </div>
     <!-- DEBUGGING -->
     <div
-      v-if="tooltipOptions"
+      v-if="tooltipOptions.type !== 'info'"
       class="mt-3 px-2 py-2"
       style="background-color: grey;">
       <p class="mb-2 has-text-centered">
@@ -41,10 +41,14 @@
           transform : <code>{{ transform }}</code>
         </div>
         <div
-          v-if="tooltipOptions.type !== 'info'"
-          class="column is-12">
+          class="column is-4">
+          scrolled : <br>
+          <pre style="max-height: 160px;"><code>{{ scrolled }}</code></pre>
+        </div>
+        <div
+          class="column is-8">
           tooltipOptions : <br>
-          <pre><code>{{ tooltipOptions }}</code></pre>
+          <pre style="max-height: 160px;"><code>{{ tooltipOptions }}</code></pre>
         </div>
       </div>
     </div>
@@ -55,8 +59,11 @@
 
 import { mapState, mapGetters } from 'vuex'
 
+import { mixinTooltip } from '@/utils/mixins.js'
+
 export default {
   name: 'DatamiTooltip',
+  mixins: [mixinTooltip],
   props: {
     debug: {
       default: false,
@@ -75,39 +82,51 @@ export default {
       return this.tooltipOptions && this.tooltipOptions.position
     },
     positionClass () {
-      return this.position && `is-${this.position}`
+      return (this.position && `is-${this.position}`) || ''
     },
     rect () {
       return this.tooltipOptions && this.tooltipOptions.rect
     },
     left () {
-      let pos
       let left
       if (this.rect) {
         switch (this.position) {
           case 'top':
-            pos = 'left'
-            left = this.rect.left
+            left = this.rect.left + (this.rect.width / 2)
+            break
+          case 'bottom':
+            left = this.rect.left + (this.rect.width / 2)
             break
           case 'left':
-            pos = 'left'
-            left = this.rect.left - 450
+            left = this.rect.left - 5
             break
           case 'right':
-            pos = 'left'
-            left = this.rect.right
+            left = this.rect.right + 5
             break
         }
       }
-      return (left && `${pos}: ${left}px`) || `${pos}: 50%`
+      return (left && `left: ${left}px`) || 'left: 50%'
     },
     top () {
-      const pos = 'top'
-      let top = this.rect && this.rect.top
-      if (top && this.position === 'top') {
-        top -= 5
+      let top
+      if (this.rect) {
+        switch (this.position) {
+          case 'top':
+            top = this.rect.top - 5
+            break
+          case 'bottom':
+            top = this.rect.bottom + 5
+            break
+          case 'left':
+            top = this.rect.top + (this.rect.height / 2) - 5
+            break
+          case 'right':
+            top = this.rect.top + (this.rect.height / 2) - 5
+            break
+        }
+        top += this.scrolled.top
       }
-      return (top && `${pos}: ${top}px`) || `${pos}: auto`
+      return (top && `top: ${top}px`) || 'top: auto'
     },
     transform () {
       let transform
@@ -115,8 +134,11 @@ export default {
         case 'top':
           transform = 'translateX(-50%) translateY(-100%)'
           break
+        case 'bottom':
+          transform = 'translateX(-50%) translateY(100%)'
+          break
         case 'left':
-          transform = 'translateY(-50%)'
+          transform = 'translateX(-100%) translateY(-50%)'
           break
         case 'right':
           transform = 'translateY(-50%)'

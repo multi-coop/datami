@@ -2,7 +2,7 @@
   <div
     v-if="item"
     :class="`DatamiCard datami-component card datami-card ${isHovered || showDetail ? 'hover-effect' : '' }`"
-    :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};`"
+    :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};${isMini && fromMap ? 'max-height: 500px; overflow: auto;' : ''}`"
     @mouseover="isHovered = true"
     @mouseleave="isHovered = false">
     <!-- style="background-color: #f6f6f6" -->
@@ -48,6 +48,7 @@
                       :item-value="item[fieldObjLogo.field]"
                       :item-added="item.added"
                       :is-mini="isMini"
+                      :from-map="fromMap"
                       :locale="locale"/>
                   </div>
                 </div>
@@ -107,11 +108,14 @@
         :item-value="item[fieldObj.field]"
         :item-added="item.added"
         :is-mini="isMini"
+        :from-map="fromMap"
         :locale="locale"/>
     </div>
 
     <!-- CONTENT -->
-    <div :class="`card-content datami-card-content pt-3 ${showDetail ? 'detail-padding' : ''}`">
+    <div
+      :class="`card-content datami-card-content pt-3 ${showDetail ? 'detail-padding' : ''}`">
+      <!-- :style="`${isMini && fromMap ? 'max-height: 300px; overflow: auto;' : ''}`"> -->
       <!-- DEBUG -->
       <div v-if="debug">
         <!-- <pre><code>{{ item }}</code></pre> -->
@@ -181,6 +185,7 @@
                           :item-value="item[fieldObjLogo.field]"
                           :item-added="item.added"
                           :is-mini="isMini"
+                          :from-map="fromMap"
                           :locale="locale"/>
                       </div>
                     </template>
@@ -239,6 +244,7 @@
                   :item-value="item[fieldObj.field]"
                   :item-added="item.added"
                   :is-mini="isMini"
+                  :from-map="fromMap"
                   :locale="locale"/>
               </div>
             </div>
@@ -332,6 +338,7 @@
                   :item-value="item[fieldObj.field]"
                   :item-added="item.added"
                   :is-mini="isMini"
+                  :from-map="fromMap"
                   :locale="locale"/>
               </div>
             </div>

@@ -66,17 +66,35 @@ import {
 import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixinTooltip = {
+  // data () {
+  //   return {
+  //     scrolled: { top: 0 }
+  //   }
+  // },
   computed: {
     ...mapState({
       tooltip: (state) => state.showTooltip,
-      tooltipOptions: (state) => state.tooltipOptions
+      tooltipOptions: (state) => state.tooltipOptions,
+      scrolled: (state) => state.scrolled
     })
   },
   methods: {
     ...mapActions({
       showTooltip: 'showTooltip',
-      hideTooltip: 'hideTooltip'
+      hideTooltip: 'hideTooltip',
+      updateScrolled: 'updateScrolled'
     }),
+    handleScroll (event) {
+      // console.log('mixinTooltip > handleScroll > event : ', event)
+      // console.log('mixinTooltip > handleScroll > document.body : ', document.body)
+      // const scrollTop = document.body.scrollTop
+      const scrollTop = window.scrollY
+      // const windowHeight = window.innerHeight
+      // this.scrolled = { top: scrollTop }
+      this.hideGlobalTooltip()
+      this.updateScrolled({ top: scrollTop })
+      // console.log('mixinTooltip > handleScroll > this.scrolled : ', this.scrolled)
+    },
     showGlobalTooltip (event, tooltipOptions) {
       console.log(`\nmixinTooltip > showGlobalTooltip > ${this.$options.name} > event : `, event)
       console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > tooltipOptions : `, tooltipOptions)
@@ -98,7 +116,15 @@ export const mixinTooltip = {
 
 export const mixinGlobal = {
   mounted () {
-    this.addStyle(this.cssFiles)
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      window.addEventListener('scroll', this.handleScroll)
+    }
+    this.addStyles(this.cssFiles)
+  },
+  destroyed () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      window.removeEventListener('scroll', this.handleScroll)
+    }
   },
   computed: {
     ...mapGetters({
@@ -322,7 +348,7 @@ export const mixinGlobal = {
       // console.log(`mixinGlobal > getRootNode > ${this.$options.name} > shadowRoot : `, shadowRoot)
       return shadowRoot
     },
-    addStyle (urls) {
+    addStyles (urls) {
       if (urls && urls.length) {
         const shadowRoot = this.getRootNode()
         // const componentName = this.$options.name

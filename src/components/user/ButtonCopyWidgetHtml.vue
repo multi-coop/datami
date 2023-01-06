@@ -1,6 +1,6 @@
 <template>
   <div class="ButtonCopyWidgetHtml datami-component">
-    <b-tooltip
+    <!-- <b-tooltip
       :label="t('actions.copyWidget', locale)"
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       multilined
@@ -14,7 +14,16 @@
         @click="CopyWidgetHtml()"
         @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t('actions.copyWidget', locale) })"
         @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip>
+    </b-tooltip> -->
+    <b-button
+      size="is-small"
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      icon-left="code-tags"
+      @click="CopyWidgetHtml()"
+      @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t('actions.copyWidget', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 

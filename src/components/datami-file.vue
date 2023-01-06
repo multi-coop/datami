@@ -342,7 +342,9 @@ export default {
   },
   data () {
     return {
-      cssFiles: [
+      datamiRoot: true,
+      cssFiles: [],
+      cssFilesExtra: [
         'styles/components/credits/datami-credits.css',
         'styles/datami-global.css',
         'styles/datami-dark-mode.css',
@@ -380,6 +382,7 @@ export default {
     hasFileDialogs (next) {
       // console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
       if (next) {
+        this.hideGlobalTooltip()
         this.isModalActive = true
       } else {
         this.isModalActive = false
@@ -428,6 +431,10 @@ export default {
     }
   },
   async beforeMount () {
+    if (!this.fromMultiFiles) {
+      this.cssFiles = [...this.cssFilesExtra]
+    }
+    console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
     this.fileId = this.uuidv4()
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
     this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })

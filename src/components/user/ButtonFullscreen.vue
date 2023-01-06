@@ -1,6 +1,6 @@
 element.mozRequestFullScreen<template>
   <div class="ButtonFullscreen datami-component">
-    <b-tooltip
+    <!-- <b-tooltip
       :label="t(`actions.fullscreen${isFullscreen ? 'Off' : 'On'}`, locale)"
       :type="`${isDarkMode ? 'is-white': 'is-dark'}`"
       position="is-top">
@@ -13,7 +13,16 @@ element.mozRequestFullScreen<template>
         @click="toggleFullsceen"
         @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(`actions.fullscreen${isFullscreen ? 'Off' : 'On'}`, locale) })"
         @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip>
+    </b-tooltip> -->
+    <b-button
+      size="is-small"
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      icon-left="fullscreen"
+      @click="toggleFullsceen"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(`actions.fullscreen${isFullscreen ? 'Off' : 'On'}`, locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 

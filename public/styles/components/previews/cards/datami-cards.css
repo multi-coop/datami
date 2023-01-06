@@ -4,6 +4,9 @@
 .image-wrapper-table {
   height: 40px;
 }
+.image-wrapper-mini-from-map {
+  height: 60px;
+}
 .image-constrained {
   max-height: 200px;
   width: auto !important;

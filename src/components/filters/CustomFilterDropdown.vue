@@ -10,10 +10,21 @@
     @mouseleave="hideGlobalTooltip">
     <!-- LABEL SLOT -->
     <template #label>
-      <b-tooltip
-        :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
-        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-        position="is-left">
+      <div>
+        <!-- <b-tooltip
+          :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
+          :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
+          position="is-left">
+          <b-icon
+            icon="filter"
+            class="mr-2"
+            :type="isDarkMode ? 'is-white' : isActiveField ? 'is-dark' : 'is-grey'"
+            size="is-small"/>
+          <span
+            :class="`${isActiveField ? 'has-text-weight-bold' : '' }`">
+            {{ filter.title || filter.label }}
+          </span>
+        </b-tooltip> -->
         <b-icon
           icon="filter"
           class="mr-2"
@@ -24,7 +35,7 @@
           {{ filter.title || filter.label }}
           <!-- {{ filter }} -->
         </span>
-      </b-tooltip>
+      </div>
     </template>
 
     <!-- RESET FIELD FILTERS -->

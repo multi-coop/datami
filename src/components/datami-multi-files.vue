@@ -5,6 +5,11 @@
       :file-id="multiFilesId"
       :from-multifiles="true"/>
 
+    <!-- DEBUGGING -->
+    <!-- <p>
+      scrolled : <pre><code>{{ scrolled }}</code></pre>
+    </p> -->
+
     <DatamiTooltip
       v-if="tooltip"/>
 
@@ -12,7 +17,7 @@
     <div
       class="container mb-4 datami-container">
       <!-- DEBUGGING -->
-      <div
+      <!-- <div
         v-if="debug"
         class=" container columns is-multiline">
         <div class="column is-6">
@@ -26,7 +31,7 @@
           class="column is-6">
           multiFilesOptions : <code><pre>{{ multiFilesOptions }}</pre></code>
         </div>
-      </div>
+      </div> -->
 
       <!-- TITLE AND TAB OPTIONS -->
       <div
@@ -53,7 +58,7 @@
       </div>
 
       <!-- DEBUGGING FOREIGN KEYS-->
-      <div
+      <!-- <div
         v-if="debug && sharedData"
         class="columns is-multiline mb-4">
         <div class="column is-4">
@@ -94,7 +99,7 @@
           loadedSharedData<code>[{{ idx }}]</code> :<br>
           <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
         </div>
-      </div>
+      </div> -->
 
       <!-- TABS : LOOP FILES -->
       <section>
@@ -227,8 +232,30 @@ export default {
   },
   data () {
     return {
+      datamiRoot: true,
       cssFiles: [
+        'styles/components/credits/datami-credits.css',
+        'styles/datami-global.css',
         'styles/datami-dark-mode.css',
+        'styles/components/edition/datami-edit-mode-buttons.css',
+        'styles/components/edition/datami-edit-navbar-skeleton.css',
+        'styles/components/edition/datami-edit-tag-value.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/json/datami-json.css',
+        'styles/components/previews/md/datami-md.css',
+        'styles/components/previews/md/datami-shodown.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css',
+        'styles/components/user/datami-tooltip.css',
         'styles/datami-multi-files.css'
       ],
       multiFilesId: undefined,

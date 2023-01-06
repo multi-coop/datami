@@ -245,10 +245,12 @@ export default {
   },
   data () {
     return {
-      cssFiles: [
+      datamiRoot: true,
+      cssFiles: [],
+      cssFilesExtra: [
         'styles/components/credits/datami-credits.css',
-        'styles/datami-global.css',
         'styles/datami-dark-mode.css',
+        'styles/datami-global.css',
         'styles/components/filters/datami-button-filter-by.css',
         'styles/components/filters/datami-custom-filter-dropdown.css',
         'styles/components/filters/datami-filter-tags.css',
@@ -298,6 +300,7 @@ export default {
     hasFileDialogs (next) {
       // console.log('\nC > DatamiExploWiki > watch > hasFileDialogs > next : ', next)
       if (next) {
+        this.hideGlobalTooltip()
         this.isModalActive = true
       } else {
         this.isModalActive = false
@@ -315,6 +318,9 @@ export default {
     }
   },
   async beforeMount () {
+    if (!this.fromMultiFiles) {
+      this.cssFiles = [...this.cssFilesExtra]
+    }
     const wikiUuid = this.uuidv4()
     this.fileId = wikiUuid
 

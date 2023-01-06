@@ -24,21 +24,39 @@
 .datami-tooltip.is-large {
   max-width: 300px;
 }
-.datami-tooltip.is-top {
-  /* top: auto;
-  right: auto;
-  left: 50%; */
-  /* bottom: calc(100% + 5px + 2px); */
-  /* transform: translateX(-50%); */
-}
+
 .datami-tooltip.is-top::before {
-  /* top: 100%;
-  right: auto;
-  bottom: auto;
-  */
-  /* left: 50%;
-  transform: translateX(-50%); */
-  /* border-top: 5px solid #7957d5;
+  width: 0; 
+  height: 0;
+  left: 50%;
+  top: 100%;
+  border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-left: 5px solid transparent; */
+  border-top: 5px solid #363636;
+}
+.datami-tooltip.is-left::before {
+  width: 0;
+  height: 0;
+  top: 50%;
+  left: 100%;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid #363636;
+}
+.datami-tooltip.is-right::before {
+  width: 0; 
+  height: 0; 
+  top: 50%;
+  right: 100%;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid #363636;
+}
+.datami-tooltip.is-bottom::before {
+  width: 0; 
+  height: 0; 
+  left: 50%;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #363636;
 }

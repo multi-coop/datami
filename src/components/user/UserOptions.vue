@@ -43,7 +43,7 @@
     <!-- OPTIONS SWITCHER -->
     <div
       :class="`column ${onlyPreview && !showOptions ? 'is-offset-10' : ''} is-2 is-2-mobile has-text-right`">
-      <b-tooltip
+      <!-- <b-tooltip
         :label="t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale)"
         :type="isDarkMode ? 'is-white' : 'is-dark'"
         position="is-top">
@@ -57,7 +57,12 @@
           @click="showOptions = !showOptions"
           @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale) })"
           @mouseleave="hideGlobalTooltip"/>
-      </b-tooltip>
+      </b-tooltip> -->
+      <ButtomOptionsSwitch
+        :file-id="fileId"
+        :locale="locale"
+        :only-preview="onlyPreview"
+        @click="showOptions = !showOptions"/>
     </div>
   </div>
 </template>
@@ -65,7 +70,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { mixinTooltip } from '@/utils/mixins.js'
+// import { mixinTooltip } from '@/utils/mixins.js'
 
 export default {
   name: 'UserOptions',
@@ -78,9 +83,10 @@ export default {
     ButtonChangeLocale: () => import(/* webpackChunkName: "ButtonChangeLocale" */ '@/components/user/ButtonChangeLocale.vue'),
     ButtonCopyWidgetHtml: () => import(/* webpackChunkName: "ButtonCopyWidgetHtml" */ '@/components/user/ButtonCopyWidgetHtml.vue'),
     ButtonFullscreen: () => import(/* webpackChunkName: "ButtonFullscreen" */ '@/components/user/ButtonFullscreen.vue'),
-    ButtonDarkMode: () => import(/* webpackChunkName: "ButtonDarkMode" */ '@/components/user/ButtonDarkMode.vue')
+    ButtonDarkMode: () => import(/* webpackChunkName: "ButtonDarkMode" */ '@/components/user/ButtonDarkMode.vue'),
+    ButtomOptionsSwitch: () => import(/* webpackChunkName: "ButtomOptionsSwitch" */ '@/components/user/ButtomOptionsSwitch.vue')
   },
-  mixins: [mixinTooltip],
+  // mixins: [mixinTooltip],
   props: {
     fileId: {
       default: null,

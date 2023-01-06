@@ -11,14 +11,13 @@
         size="is-small"/>
       {{ fieldLabel }}
     </p>
-
     <figure
       v-if="currentEditViewMode !== 'edit' && itemValue"
-      :class="`image image-wrapper ${position === 'logo' ? 'ml-0 mr-2' : 'mx-2 my-2'} is-flex is-align-items-center is-justify-content-center`">
+      :class="`image image-wrapper${isMini && fromMap ? '-mini-from-map' : ''} ${position === 'logo' ? 'ml-0 mr-2' : 'mx-2 my-2'} is-flex is-align-items-center is-justify-content-center`">
       <img
         :src="itemValue"
         class="image-constrained"
-        :style="`${position === 'logo' ? 'max-height: 40px; max-width: 65px; width: auto; height: auto;' : 'max-height: 150px; width: auto; height: auto;'}`"
+        :style="`${position === 'logo' || (isMini && fromMap) ? 'max-height: 40px; max-width: 65px; width: auto; height: auto;' : 'max-height: 150px; width: auto; height: auto;'}`"
         :alt="`image-${itemId}`">
       <!-- <p v-if="currentEditViewMode !== 'edit' && !itemValue">
         {{ t('global.noValue', locale) }}
@@ -107,6 +106,10 @@ export default {
       type: Boolean
     },
     isMini: {
+      default: false,
+      type: Boolean
+    },
+    fromMap: {
       default: false,
       type: Boolean
     },

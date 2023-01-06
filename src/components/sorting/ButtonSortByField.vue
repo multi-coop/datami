@@ -1,18 +1,17 @@
 <template>
   <div class="ButtonSortByField datami-component px-2">
     <!-- DEBUGGING -->
-    <div v-if="debug">
+    <!-- <div v-if="debug">
       counter: {{ counter }}
       reset: {{ reset }}
       isAscending: {{ isAscending }}
-    </div>
+    </div> -->
 
     <!-- FIELD'S SORT ICON -->
-    <b-tooltip
+    <!-- <b-tooltip
       :label="t(getSortTooltip, locale)"
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-top">
-      <!-- append-to-body> -->
       <b-icon
         :icon="getSortIcon"
         :type="counter ? 'is-dark' : 'is-grey-light'"
@@ -20,7 +19,14 @@
         @click.native="updateAscending"
         @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(getSortTooltip, locale) })"
         @mouseleave.native="hideGlobalTooltip"/>
-    </b-tooltip>
+    </b-tooltip> -->
+    <b-icon
+      :icon="getSortIcon"
+      :type="counter ? 'is-dark' : 'is-grey-light'"
+      size="is-small"
+      @click.native="updateAscending"
+      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(getSortTooltip, locale) })"
+      @mouseleave.native="hideGlobalTooltip"/>
   </div>
 </template>
 

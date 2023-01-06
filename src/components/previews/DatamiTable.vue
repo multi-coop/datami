@@ -116,9 +116,9 @@
         <div
           v-show="currentViewMode === 'table'"
           class="datami-table-view-table">
+          <!-- :height="(fileOptions && fileOptions.height) || '400px'" -->
           <b-table
             :data="dataEditedPaginated"
-            :height="(fileOptions && fileOptions.height) || '400px'"
             :checkable="currentEditViewMode === 'edit'"
             :checked-rows.sync="checkedRows"
             :detailed="currentEditViewMode === 'edit'"
@@ -126,6 +126,7 @@
             :detail-transition="transitionName"
             :show-detail-icon="showDetailIcon"
             :striped="currentEditViewMode !== 'edit'"
+            height="auto"
             detail-key="id"
             narrowed
             hoverable

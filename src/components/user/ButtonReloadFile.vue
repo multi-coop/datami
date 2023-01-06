@@ -1,6 +1,6 @@
 <template>
   <div class="ButtonReloadFile datami-component">
-    <b-tooltip
+    <!-- <b-tooltip
       :label="t('actions.reloadFile', locale)"
       :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-top">
@@ -14,7 +14,17 @@
         @click="ReloadFile()"
         @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.reloadFile', locale) })"
         @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip>
+    </b-tooltip> -->
+    <b-button
+      size="is-small"
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      icon-left="reload"
+      :loading="loading"
+      @click="ReloadFile()"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.reloadFile', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 
