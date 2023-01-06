@@ -1,6 +1,9 @@
 .image-wrapper {
   min-height: 200px;
 }
+.image-wrapper-table {
+  height: 40px;
+}
 .image-constrained {
   max-height: 200px;
   width: auto !important;

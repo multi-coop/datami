@@ -193,11 +193,11 @@
       <!-- FIGURE IF ANY -->
       <figure
         v-if="value && value !== ''"
-        class="image mx-0 image-wrapper">
+        :class="`image mx-0 image-wrapper${currentViewMode === 'table' ? '-table' : ''}`">
         <img
           :src="value"
           class="image-constrained"
-          style="max-height: 75px; width: auto;"
+          style="max-height: 40px; width: auto;"
           :alt="`${value}`">
       </figure>
       <!-- NO IMAGE FOUND -->
