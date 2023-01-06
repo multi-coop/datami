@@ -43,7 +43,7 @@
     </div>
 
     <!-- HELPERS PAGINATION -->
-    <div class="mt-4 ml-5 columns is-multiline">
+    <div class="mt-4 mx-5 columns is-multiline">
       <div class="column is-12 has-text-centered py-0">
         <p class="is-size-7 is-italic mb-0">
           <span class="">
