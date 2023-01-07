@@ -115,7 +115,7 @@
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
         :data="tagsEnum"
-        :class="`g-cell py-0`"
+        :class="`editcell-tag-input g-cell py-0`"
         :disabled="isConsolidating"
         :read-only="field.locked"
         :allow-new="field.allowNew"
