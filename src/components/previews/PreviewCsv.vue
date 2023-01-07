@@ -161,6 +161,7 @@
         class="datami-table-previews">
         <!-- ORIGINAL DATA -->
         <DatamiTable
+          ref="datamitable"
           :file-id="fileId"
           :data="data"
           :columns="dataColumns"

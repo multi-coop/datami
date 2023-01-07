@@ -20,7 +20,7 @@ import {
   getNumberByField,
   groupByField,
   aggregateByField
-} from '@/utils/globalUtils'
+} from '@/utils/globalUtils.js'
 import {
   extractGitInfos
 } from '@/utils/utilsGitUrl.js'
@@ -57,12 +57,75 @@ import {
 } from '@/utils/utilsWikiUrl.js'
 import {
   getConsolidationApiUrl
-} from '@/utils/consolidationUtils'
+} from '@/utils/consolidationUtils.js'
+import {
+  createStyleLink
+} from '@/utils/utilsHtml.js'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
 
+export const mixinTooltip = {
+  // data () {
+  //   return {
+  //     scrolled: { top: 0 }
+  //   }
+  // },
+  computed: {
+    ...mapState({
+      tooltip: (state) => state.showTooltip,
+      tooltipOptions: (state) => state.tooltipOptions,
+      scrolled: (state) => state.scrolled
+    })
+  },
+  methods: {
+    ...mapActions({
+      showTooltip: 'showTooltip',
+      hideTooltip: 'hideTooltip',
+      updateScrolled: 'updateScrolled'
+    }),
+    handleScroll (event) {
+      // console.log('mixinTooltip > handleScroll > event : ', event)
+      // console.log('mixinTooltip > handleScroll > document.body : ', document.body)
+      // const scrollTop = document.body.scrollTop
+      const scrollTop = window.scrollY
+      // const windowHeight = window.innerHeight
+      // this.scrolled = { top: scrollTop }
+      this.hideGlobalTooltip()
+      this.updateScrolled({ top: scrollTop })
+      // console.log('mixinTooltip > handleScroll > this.scrolled : ', this.scrolled)
+    },
+    showGlobalTooltip (event, tooltipOptions) {
+      // console.log(`\nmixinTooltip > showGlobalTooltip > ${this.$options.name} > event : `, event)
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > tooltipOptions : `, tooltipOptions)
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > this.$el : `, this.$el)
+      const boundingRect = this.$el.getBoundingClientRect()
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > boundingRect : `, boundingRect)
+      this.showTooltip({
+        component: this.$options.name,
+        ...tooltipOptions,
+        rect: boundingRect
+      })
+    },
+    hideGlobalTooltip () {
+      // console.log(`\nmixinTooltip > hideGlobalTooltip > ${this.$options.name} > ...`)
+      this.hideTooltip()
+    }
+  }
+}
+
 export const mixinGlobal = {
+  mounted () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      window.addEventListener('scroll', this.handleScroll)
+    }
+    this.addStyles(this.cssFiles)
+  },
+  destroyed () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      window.removeEventListener('scroll', this.handleScroll)
+    }
+  },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',
@@ -249,11 +312,17 @@ export const mixinGlobal = {
     userFullscreen () {
       return this.getUserFullscreen(this.fileId)
     },
+    multifilesDialogs () {
+      return this.getDialogsById(this.multiFilesId)
+    },
     fileDialogs () {
       return this.getDialogsById(this.fileId)
     },
     hasFileDialogs () {
       return this.fileDialogs.length
+    },
+    hasMultifilesDialogs () {
+      return this.multifilesDialogs.length
     },
 
     // SIGNALS
@@ -271,6 +340,34 @@ export const mixinGlobal = {
       addSignal: 'git-signals/addSignal',
       removeSignal: 'git-signals/removeSignal'
     }),
+    getAncestorNodeById (id) {
+      // console.log(`\nmixinGlobal > getAncestorNodeById > ${this.$options.name} > id : `, id)
+      let parent = this.$parent
+      while (parent && parent.$el.id !== id) {
+        parent = parent.$parent
+      }
+      // console.log(`mixinGlobal > getAncestorNodeById > ${this.$options.name} > parent : `, parent)
+      return parent
+    },
+    getRootNode () {
+      const shadowRoot = this.$el.parentNode
+      // console.log(`mixinGlobal > getRootNode > ${this.$options.name} > shadowRoot : `, shadowRoot)
+      return shadowRoot
+    },
+    addStyles (urls) {
+      if (urls && urls.length) {
+        const shadowRoot = this.getRootNode()
+        // const componentName = this.$options.name
+        // console.log(`\nM > mixinGlobal > addStyle > ${componentName} > shadowRoot : `, shadowRoot)
+        // console.log(`M > mixinGlobal > addStyle > ${componentName} > url : `, url)
+        // console.log(`M > mixinGlobal > addStyle > ${componentName} > process.env : `, process.env)
+        urls.forEach(url => {
+          const fileUrl = `${process.env.BASE_URL}${url}`
+          // console.log(`M > mixinGlobal > addStyle > ${componentName} > fileUrl : `, fileUrl)
+          createStyleLink(shadowRoot, fileUrl)
+        })
+      }
+    },
     updateFileDialogs (component, event, show = true) {
       // console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
       // console.log('M > mixinGlobal > updateFileDialogs > show : ', show)
@@ -281,6 +378,10 @@ export const mixinGlobal = {
     resetFileDialog () {
       // console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
       this.updateDialogs({ fileId: this.fileId, reset: true })
+    },
+    resetMultiFilesDialog () {
+      // console.log('\nM > mixinGlobal > resetMultiFilesDialog > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.multiFilesId, reset: true })
     },
     addFileSignal (action, event) {
       // console.log('\nM > mixinGlobal > addFileSignal > component : ', component)
@@ -382,11 +483,11 @@ export const mixinGlobal = {
         const domain = document.domain
         // console.log('\nM > trackEvent > domain :', domain)
 
-        const eventCategory = category || this.gitObj.filefullname
-        // console.log('M > trackEvent > eventCategory :', eventCategory)
-
         const evAction = action || this.$options.name
         // console.log('M > trackEvent > evAction : ', evAction)
+
+        const eventCategory = category || (this.gitObj && this.gitObj.filefullname)
+        // console.log('M > trackEvent > eventCategory :', eventCategory)
 
         // console.log('M > trackEvent > value : ', value)
 

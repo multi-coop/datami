@@ -99,6 +99,9 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/components/edition/csv/datami-sort-and-filters-skeleton.css'
+      ],
       search: undefined
     }
   },
@@ -140,9 +143,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.SortAndFiltersSkeleton > .navbar > .navbar-menu > .navbar-end {
-  margin-right: 0em;
-}
-</style>

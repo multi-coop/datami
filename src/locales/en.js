@@ -280,7 +280,7 @@ export default {
     templateMissing: 'The template for the current language is missing'
   },
   widget: {
-    widgetCopiedMsg: 'The widget code for {{widgetName}}<br>with the title {{widgetTitle}}<br>was copied to your clipboard.',
+    widgetCopiedMsg: 'The widget code for {{widgetName}} with the title {{widgetTitle}} was copied to your clipboard.',
     widgetUse: 'You can now insert it to any html page of your choice.',
     widgetCopied: 'Widget copied'
   },

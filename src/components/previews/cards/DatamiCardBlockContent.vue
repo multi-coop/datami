@@ -254,9 +254,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .title-line-height {
-    line-height: 1.2em;
-  }
-</style>

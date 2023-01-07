@@ -193,11 +193,11 @@
       <!-- FIGURE IF ANY -->
       <figure
         v-if="value && value !== ''"
-        class="image mx-0 image-wrapper">
+        :class="`image mx-0 image-wrapper${currentViewMode === 'table' ? '-table' : ''}`">
         <img
           :src="value"
           class="image-constrained"
-          style="max-height: 75px; width: auto;"
+          style="max-height: 40px; width: auto;"
           :alt="`${value}`">
       </figure>
       <!-- NO IMAGE FOUND -->
@@ -220,7 +220,7 @@
 
 <script>
 
-import { mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
 
 // import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
 // import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
@@ -237,6 +237,7 @@ export default {
     PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinValue,
     mixinForeignKeys
@@ -343,15 +344,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .datami-nowrap {
-    white-space: nowrap;
-  }
-  .datami-wrap {
-    min-height: 2em;
-  }
-  .has-wrap-btn {
-
-  }
-</style>

@@ -51,6 +51,13 @@ export default {
       default: () => ({})
     }
   },
+  // data () {
+  //   return {
+  //     cssFiles: [
+  //       'styles/components/previews/md/datami-shodown.css'
+  //     ]
+  //   }
+  // },
   computed: {
     ...mapGetters({
       isDarkMode: 'git-storage/isDarkMode'
@@ -91,9 +98,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .datami-component-shodown div p, h1, h2, h3, h4, h6 {
-    color: var(---txtColor) !important;
-  }
-</style>

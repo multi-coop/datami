@@ -105,7 +105,7 @@ export default {
     change: 'Changer',
     save: 'Sauver',
     sendContrib: 'Envoyer votre contribution',
-    sendContribHelp: 'Vos modifications seront envoyées aux responsables du jeu de données. Les responsables modèrera votre proprosition avant de merger les modifications aux données.',
+    sendContribHelp: 'Vos modifications seront envoyées aux responsables du jeu de données. Les responsables modèreront votre proprosition avant de merger les modifications aux données.',
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
@@ -280,7 +280,7 @@ export default {
     templateMissing: 'Il manque le canevas pour le langage choisi'
   },
   widget: {
-    widgetCopiedMsg: 'Le widget {{widgetName}}<br>intitulé {{widgetTitle}}<br>est copié dans votre presse-papier.',
+    widgetCopiedMsg: 'Le widget {{widgetName}} intitulé {{widgetTitle}} est copié dans votre presse-papier.',
     widgetUse: 'Vous pouvez désormais l\'insérer dans la page html de votre choix.',
     widgetCopied: 'Widget copié'
   },

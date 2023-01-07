@@ -43,7 +43,7 @@
     </div>
 
     <!-- HELPERS PAGINATION -->
-    <div class="mt-4 ml-5 columns is-multiline">
+    <div class="mt-4 mx-5 columns is-multiline">
       <div class="column is-12 has-text-centered py-0">
         <p class="is-size-7 is-italic mb-0">
           <span class="">
@@ -130,6 +130,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/pagination/datami-pages-navigation.css'
+      // ],
       // default settings
       currentPage: 1,
       currentPageTable: 1,
@@ -260,39 +263,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.PagesNavigation.datami-darkmode > div > nav > ul.pagination-list > li > a {
-  color: white !important;
-  border: 1px solid white !important;
-}
-
-.datami-darkmode-white-text{
-  color: white !important;
-}
-
-/* .pagination-link{
-  color: aliceblue !important;
-} */
-
-.datami-darkmode-white-text-dark-bg{
-  color: white !important;
-  background-color: #363636 !important;
-
-}
-.pagination-link.is-current {
-  background-color: #363636;
-  border-color: #363636;
-}
-.select-datami-darkmode > span > select {
-  color: white !important;
-  border: 1px solid white !important;
-  background-color: #363636 !important;
-}
-.select-datami-darkmode > span > select:hover::after {
-  border-color: white !important;
-}
-.select-datami-darkmode > span > select::after {
-  border-color: white !important;
-}
-</style>

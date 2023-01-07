@@ -130,6 +130,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/cards/datami-cards.css'
+      // ],
       showDetail: false,
       activeCardId: undefined
     }

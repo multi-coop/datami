@@ -1,6 +1,6 @@
 <template>
   <div class="ButtonDarkMode datami-component">
-    <b-tooltip
+    <!-- <b-tooltip
       :label="t(isDarkMode ? 'actions.setLightMode' : 'actions.setDarkMode', locale)"
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
       <b-button
@@ -8,18 +8,31 @@
         :type="isDarkMode ? 'is-white' : ''"
         :outlined="isDarkMode"
         :icon-left="`${isDarkMode ?'white-balance-sunny' : 'weather-night' }`"
-        @click="switchContrast"/>
-    </b-tooltip>
+        @click="switchContrast"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(isDarkMode ? 'actions.setLightMode' : 'actions.setDarkMode', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
+    </b-tooltip> -->
+    <b-button
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      :icon-left="`${isDarkMode ?'white-balance-sunny' : 'weather-night' }`"
+      @click="switchContrast"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(isDarkMode ? 'actions.setLightMode' : 'actions.setDarkMode', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDarkMode',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     locale: {
       default: 'en',

@@ -22,10 +22,10 @@
             <!-- API NAME + TOOLTIP -->
             <b-tooltip
               multilined
-              append-to-body
               position="is-right"
               size="is-large"
               type="is-dark">
+              <!-- append-to-body -->
               <template #content>
                 <!-- SOURCE FIELDS -->
                 <div class="divider mt-1 mb-2 has-text-white no-text-transform">
@@ -248,9 +248,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.datami-selection {
-  min-width: 150px;
-}
-</style>

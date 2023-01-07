@@ -115,7 +115,7 @@
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
         :data="tagsEnum"
-        :class="`g-cell py-0`"
+        :class="`editcell-tag-input g-cell py-0`"
         :disabled="isConsolidating"
         :read-only="field.locked"
         :allow-new="field.allowNew"
@@ -124,10 +124,10 @@
         ellipsis
         autocomplete
         expanded
-        append-to-body
         attached
         type="is-dark"
         @input="emitChange">
+        <!-- append-to-body -->
         <template slot-scope="props">
           <span :class="`${tagsValue.includes(props.option) ? 'has-text-weight-bold' : ''}`">
             {{ props.option }}
@@ -232,6 +232,9 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/components/edition/csv/datami-edit-cell.css'
+      ],
       input: undefined,
       inputBool: false,
       tagsValue: []
@@ -364,24 +367,3 @@ export default {
 }
 
 </script>
-
-<style>
-
-.datami-cell > .field {
-  /* border: none; */
-  width: 100%;
-}
-.g-cell {
-  background-color: transparent;
-}
-.g-cell-darkmode {
-  background-color: white;
-}
-.g-cell-number-darkmode {
-  background-color: white !important;
-}
-.g-header {
-  font-size: .85em!important;
-  font-weight: 600!important;
-}
-</style>

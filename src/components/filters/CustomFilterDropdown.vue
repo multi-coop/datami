@@ -5,13 +5,26 @@
     right
     tag="div"
     :class="`CustomFilterDropdown ml-1 mr-0 ${isDarkMode ? 'dark-background' : 'clear-background'}`"
-    style="height: 2.5em;">
+    style="height: 2.5em;"
+    @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: `${ t('filters.filterByField', locale) } : ${filter.label}` })"
+    @mouseleave="hideGlobalTooltip">
     <!-- LABEL SLOT -->
     <template #label>
-      <b-tooltip
-        :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
-        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-        position="is-left">
+      <div>
+        <!-- <b-tooltip
+          :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
+          :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
+          position="is-left">
+          <b-icon
+            icon="filter"
+            class="mr-2"
+            :type="isDarkMode ? 'is-white' : isActiveField ? 'is-dark' : 'is-grey'"
+            size="is-small"/>
+          <span
+            :class="`${isActiveField ? 'has-text-weight-bold' : '' }`">
+            {{ filter.title || filter.label }}
+          </span>
+        </b-tooltip> -->
         <b-icon
           icon="filter"
           class="mr-2"
@@ -22,7 +35,7 @@
           {{ filter.title || filter.label }}
           <!-- {{ filter }} -->
         </span>
-      </b-tooltip>
+      </div>
     </template>
 
     <!-- RESET FIELD FILTERS -->
@@ -110,6 +123,7 @@
 <script>
 
 import {
+  mixinTooltip,
   mixinGlobal,
   mixinValue,
   mixinForeignKeys
@@ -118,6 +132,7 @@ import {
 export default {
   name: 'CustomFilterDropdown',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinValue,
     mixinForeignKeys
@@ -144,6 +159,13 @@ export default {
       type: Boolean
     }
   },
+  // data () {
+  //   return {
+  //     cssFiles: [
+  //       'styles/components/filters/datami-custom-filter-dropdown.css'
+  //     ]
+  //   }
+  // },
   computed: {
     isActiveField () {
       return this.fieldActiveTags.length
@@ -186,95 +208,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.CustomFilterDropdown.dark-background > .navbar-link {
-  color: white !important;
-  background-color: #2d2d30 !important;
-  border: 1px solid white !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-link:hover {
-  background-color: black !important;
-}
-
-.CustomFilterDropdown > .navbar-dropdown {
-  max-height: 275px;
-  overflow: auto;
-  padding-bottom: 1.5em;
-}
-
-.CustomFilterDropdown.clear-background > .navbar-dropdown {
-  background-color: white !important;
-  /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
-  background:
-    /* Shadow covers */
-    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
-
-  background:
-    /* Shadow covers */
-    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
-  background-repeat: no-repeat;
-  /* background-color: white; */
-  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown {
-  background-color: black !important;
-  background:
-    /* Shadow covers */
-    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
-
-  background:
-    /* Shadow covers */
-    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
-  background-repeat: no-repeat;
-  /* background-color: white; */
-  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item {
-  color: white !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > a.navbar-item:hover {
-  color: black !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item > a:hover {
-  color: black !important;
-}
-
-.CustomFilterDropdown > .navbar-link {
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: white !important;
-}
-.CustomFilterDropdown > .navbar-link:hover {
-  background-color: #f2f2f2 !important;
-}
-
-.datami-darkmode-dark-background{
-  background-color: black !important;
-}
-
-.datami-darkmode-hover-grey:hover{
-  background-color: rgb(86, 83, 79) !important;
-}
-
-</style>

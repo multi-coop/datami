@@ -5,6 +5,7 @@
       <!-- v-show="!isAnyDialogOpen" -->
       <div
         :id="`sort-and-filters-skeleton-${fileId}`"
+        ref="sortandfiltersskeleton"
         :class="`column is-12 py-0 ${currentViewMode === 'map' ? 'px-5' : '' } mt-2`">
         <SortAndFiltersSkeleton
           :file-id="fileId"
@@ -51,6 +52,7 @@
       <!-- v-show="!isAnyDialogOpen" -->
       <div
         :id="`edit-csv-skeleton-${fileId}`"
+        ref="editcsvskeleton"
         class="column is-12 pt-0">
         <EditCsvSkeleton
           :file-id="fileId"
@@ -114,9 +116,9 @@
         <div
           v-show="currentViewMode === 'table'"
           class="datami-table-view-table">
+          <!-- :height="(fileOptions && fileOptions.height) || '400px'" -->
           <b-table
             :data="dataEditedPaginated"
-            :height="(fileOptions && fileOptions.height) || '400px'"
             :checkable="currentEditViewMode === 'edit'"
             :checked-rows.sync="checkedRows"
             :detailed="currentEditViewMode === 'edit'"
@@ -124,6 +126,7 @@
             :detail-transition="transitionName"
             :show-detail-icon="showDetailIcon"
             :striped="currentEditViewMode !== 'edit'"
+            height="auto"
             detail-key="id"
             narrowed
             hoverable
@@ -544,6 +547,10 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/table/datami-table.css',
+      //   'styles/components/previews/tags/datami-tags.css'
+      // ],
       checkedRows: [],
       showCardDetails: false,
 
@@ -1311,77 +1318,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.datami-nowrap {
-  white-space: nowrap;
-}
-  /* SET DARKMODE */
-.datami-darkmode{
-  background-color: rgb(60, 59, 59) !important;
-  color: white !important;
-}
-
-.datami-darkmode-grey-shades{
-  background-color: rgb(81, 79, 79) !important;
-  color: white !important;
-  font-weight: bold !important;
-}
-
-.datami-darkmode-grey-shades:nth-child(even){
-  background-color: rgb(83, 86, 86) !important;
-}
-
-.datami-table {
-  /* min-width: 100px; */
-  max-width: 350px;
-  overflow: auto;
-  vertical-align: top !important;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-.datami-table::-webkit-scrollbar {
-  display: none;
-}
-.datami-table-td {
-  padding: .1em .1em !important;
-  min-width: 100px;
-}
-.datami-table-td.is-sticky {
-  z-index: 2 !important;
-}
-.th-wrap {
-  justify-content: center !important;
-}
-.datami-table-td-edit {
-  border: none !important;
-}
-.g-td-string {
-  min-width: 100px;
-}
-.g-td-string-longtext {
-  min-width: 350px;
-}
-.g-td-number {
-  min-width: 85px;
-}
-.g-td-integer {
-  min-width: 40px;
-}
-.g-td-boolean {
-  min-width: 30px;
-  text-align: center !important;
-}
-.g-td-string-tag {
-  min-width: 100px;
-  text-align: center !important;
-}
-.g-td-string-tags {
-  min-width: 275px;
-}
-.detail-container {
-  position: sticky;
-  left: 10px !important;
-  width: max-content;
-}
-</style>

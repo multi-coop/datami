@@ -18,7 +18,7 @@
     <!-- DISPLAY MAP -->
     <div
       :id="mapId"
-      :ref="`container-map-${mapId}`"
+      ref="mapcontainer"
       :style="`height: ${mapHeight + mapHeightTop}px; width: 100%;`">
       <div class="controls-container">
         <!-- MINI CARD FOR DISPLAYED ITEM -->
@@ -165,8 +165,12 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/maps/datami-maps.css'
+      // ],
 
       // MAPLIBRE MAP OBJECT
+      // mapCanBeInitialized: false,
       map: undefined,
       // isFullscreen: false,
       showLoader: true,
@@ -260,6 +264,14 @@ export default {
     }
   },
   computed: {
+    getContainerElement () {
+      // console.log('\nC > DatamiMap > getContainerElement > this.$refs :', this.$refs)
+      // console.log('C > DatamiMap > getContainerElement > this.mapId :', this.mapId)
+      // const container = this.$refs[this.mapId]
+      const container = this.$refs.mapcontainer
+      // console.log('C > DatamiMap > getContainerElement > container :', container)
+      return container
+    },
     mapOptions () {
       return this.mapSettings.mapOptions
     },
@@ -383,6 +395,12 @@ export default {
     }
   },
   watch: {
+    // getContainerElement (next) {
+    //   console.log('\nC > DatamiMap > watch > getContainerElement > next :', next)
+    //   if (next) {
+    //     this.initializeMap()
+    //   }
+    // },
     showCard (next) {
       if (next) {
         // track with matomo
@@ -452,7 +470,7 @@ export default {
     // console.log('\nC > DatamiMap > beforeMount > this.mapSettings : ', this.mapSettings)
     // console.log('C > DatamiMap > beforeMount > this.fields : ', this.fields)
     // set up fields mapper
-    this.getSizesScreen()
+    // this.getSizesScreen()
 
     // this.contentFields = this.mapSettings.contentFields
     // console.log('C > DatamiMap > beforeMount > this.mapCardsSettingsMini : ', this.mapCardsSettingsMini)
@@ -499,6 +517,11 @@ export default {
   },
   mounted () {
     // console.log('\nC > DatamiMap > mounted > this.mapId : ', this.mapId)
+    this.getSizesScreen()
+    // console.log('\nC > DatamiMap > mounted > this.$refs : ', this.$refs)
+    // console.log('C > DatamiMap > mounted > this.mapId : ', this.mapId)
+    // const container = this.getContainerElement
+    // console.log('C > DatamiMap > mounted > container : ', container)
     this.initializeMap()
     // console.log('\nC > DatamiMap > mounted > this.visibleLayers : ', this.visibleLayers)
   },
@@ -533,10 +556,25 @@ export default {
     getMapHeightTop () {
       let height = 0
       if (this.mapOnTop) {
-        height = 240
-        const fileNavbarElem = document.getElementById(`file-navbar-${this.fileId}`)
-        const sortFiltersElem = document.getElementById(`sort-and-filters-skeleton-${this.fileId}`)
-        const editCsvElem = document.getElementById(`edit-csv-skeleton-${this.fileId}`)
+        height = 150
+        // const docRoot = this.getRootNode()
+        // console.log('\nC > DatamiMap > getMapHeightTop > this.$el : ', this.$el)
+        // console.log('C > DatamiMap > getMapHeightTop > this.mapId : ', this.mapId)
+        // console.log('C > DatamiMap > getMapHeightTop > this.$parent : ', this.$parent)
+        const docRoot = this.getAncestorNodeById(this.fileId)
+        // console.log('C > DatamiMap > getMapHeightTop > docRoot : ', docRoot)
+        // const fileNavbarElem = docRoot.getElementById(`file-navbar-${this.fileId}`)
+        // const sortFiltersElem = docRoot.getElementById(`sort-and-filters-skeleton-${this.fileId}`)
+        // const editCsvElem = docRoot.getElementById(`edit-csv-skeleton-${this.fileId}`)
+        const fileNavbarElem = docRoot.$refs[`file-navbar-${this.fileId}`]
+        // console.log('C > DatamiMap > getMapHeightTop > fileNavbarElem : ', fileNavbarElem)
+        const sortFiltersElem = docRoot.$refs.previewcsv.$refs.datamitable.$refs.sortandfiltersskeleton
+        // console.log('C > DatamiMap > getMapHeightTop > sortFiltersElem : ', sortFiltersElem)
+        const editCsvElem = docRoot.$refs.previewcsv.$refs.datamitable.$refs.editcsvskeleton
+        // console.log('C > DatamiMap > getMapHeightTop > editCsvElem : ', editCsvElem)
+        // const fileNavbarElem = this.getAncestorNodeById(`file-navbar-${this.fileId}`)
+        // const sortFiltersElem = this.getAncestorNodeById(`sort-and-filters-skeleton-${this.fileId}`)
+        // const editCsvElem = this.getAncestorNodeById(`edit-csv-skeleton-${this.fileId}`)
 
         if (fileNavbarElem && sortFiltersElem && editCsvElem) {
           // height = elem.clientHeight
@@ -564,8 +602,18 @@ export default {
     initializeMap () {
       // Note: MapLibre GL uses longitude, latitude coordinate order (as opposed to latitude, longitude) to match GeoJSON.
       // cf : https://maplibre.org/maplibre-gl-js-docs/api/map/#map-parameters
-      const map = new Map({
-        container: this.mapId,
+      // const docRoot = this.getAncestorNodeById(this.fileId)
+      // console.log('\nC > DatamiMap > initializeMap > this.$refs : ', this.$refs)
+      // console.log('C > DatamiMap > initializeMap > this.$el : ', this.$el)
+      // console.log('C > DatamiMap > initializeMap > this.mapId : ', this.mapId)
+      // const mapContainerId = `container-map-${this.mapId}`
+      // console.log('C > DatamiMap > initializeMap > mapContainerId : ', mapContainerId)
+      // const container = this.getContainerElement
+      const container = this.$refs.mapcontainer
+      // console.log('C > DatamiMap > initializeMap > container : ', container)
+      const map = container && new Map({
+        // container: this.mapId,
+        container: container,
         center: this.center,
         zoom: this.zoom,
         maxZoom: this.maxZoom,
@@ -1060,15 +1108,6 @@ export default {
               })
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => itemProps : ', itemProps)
 
-              const pop = popup
-                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-                .setHTML(`
-                  <div id="vue-popup-marker">
-                  </div>`
-                )
-                .addTo(mapLibre)
-              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
-
               const popupConfig = allPointsConfigOptions.popup_config.fields_settings
               const config = Object.keys(popupConfig).map(k => {
                 return {
@@ -1078,13 +1117,22 @@ export default {
               })
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => config : ', config)
 
+              const PopupHtmlStr = this.buildMapPopupContent(itemProps, config)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => PopupHtmlStr : ', PopupHtmlStr)
+
+              const pop = popup
+                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+                .setHTML(PopupHtmlStr)
+                .addTo(mapLibre)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
+
               const popInstance = new PopupClass({
                 propsData: {
                   fileId: fileId,
                   mapId: mapId,
                   feature: featuresPolygon[0],
                   item: itemProps,
-                  config: config,
+                  // config: config,
                   locale: locale
                 }
               })
@@ -1235,14 +1283,14 @@ export default {
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => coordinates : ', coordinates)
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => itemProps : ', itemProps)
 
-              const pop = popup
-                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-                .setHTML(`
-                  <div id="vue-popup-marker">
-                  </div>`
-                )
-              pop.addTo(mapLibre)
-              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
+              // const pop = popup
+              //   .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+              //   .setHTML(`
+              //     <div id="vue-popup-marker">
+              //     </div>`
+              //   )
+              // pop.addTo(mapLibre)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > unclustering > hover => pop : ', pop)
 
               // const popInstance = new PopupClass({
               //   propsData: {
@@ -1252,7 +1300,7 @@ export default {
               //     locale : loc
               //   },
               // })
-              // // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => popInstance : ', popInstance)
+              // // console.log('C > DatamiMap > createAddGeoJsonLayers > unclustering > hover => popInstance : ', popInstance)
               // popInstance.$mount('#vue-popup-marker')
               // pop._update()
             }
@@ -1735,52 +1783,119 @@ export default {
       const itemLat = item[this.fieldLat]
       const itemLong = item[this.fieldLong]
       return this.checkIfStringFloat(itemLat) && this.checkIfStringFloat(itemLong)
+    },
+
+    // - - - - - - - - - - - - - - - - - - //
+    // MAP POPUP UTILS
+    // - - - - - - - - - - - - - - - - - - //
+    getPosition (config, position) {
+      const posConfig = config.find(i => i.position === position)
+      return posConfig
+    },
+    getFieldClass (config, position) {
+      const posConfig = this.getPosition(config, position)
+      return posConfig && posConfig.class
+    },
+    getFieldValue (item, config, position) {
+      // console.log('\nC-DatamiMap > getFieldValue > config : ', config)
+      // console.log('C-DatamiMap > getFieldValue > tem : ',item)
+      // console.log('C-DatamiMap > getFieldValue > position : ', position)
+
+      const posConfig = this.getPosition(config, position)
+      // console.log('C-DatamiMap > getFieldValue > posConfig : ', posConfig)
+
+      let prop = posConfig && item[posConfig.field]
+
+      if (typeof prop === 'undefined') { prop = '' }
+
+      if (posConfig && posConfig.prefix) {
+        prop = posConfig.prefix + prop
+      }
+
+      if (posConfig && posConfig.suffix) {
+        prop = prop + posConfig.suffix
+      }
+      return prop
+    },
+    buildMapPopupDiv (item, config, position) {
+      const content = {
+        position: this.getPosition(config, position),
+        class: this.getFieldClass(config, position),
+        value: this.getFieldValue(item, config, position),
+        html: undefined
+      }
+      switch (position) {
+        case 'main_title':
+          content.html = content.value && `
+            <div
+              class="${content.class} has-text-dark has-text-centered"
+              style="padding-bottom:.5em;">
+              ${content.value}
+            </div>`
+          break
+        case 'title':
+          content.html = content.value && `
+            <h3
+              class="has-text-dark has-text-centered">
+              <span
+                class="${content.class}">
+                ${content.value}
+              </span>
+            </h3>`
+          break
+        case 'title_post':
+          content.html = content.value && `
+            <h3
+              class="has-text-dark has-text-centered">
+              <span
+                class="${content.class}">
+                ${content.value}
+              </span>
+            </h3>`
+          break
+        case 'value':
+          content.html = content.value && `
+            <p
+              class="${content.class}">
+              ${content.value}
+            </p>`
+          break
+        case 'info':
+          content.html = content.value && `
+            <p
+              class="${content.class}">
+              ${content.value}
+            </p>`
+          break
+      }
+      return content
+    },
+    buildMapPopupContent (item, config) {
+      // console.log('\nC-DatamiMap > getFieldValue > item : ', item)
+      // console.log('C-DatamiMap > getFieldValue > config : ', config)
+
+      const mainTitle = this.buildMapPopupDiv(item, config, 'main_title')
+      // console.log('C-DatamiMap > getFieldValue > mainTitle : ', mainTitle)
+      const title = this.buildMapPopupDiv(item, config, 'title')
+      // console.log('C-DatamiMap > getFieldValue > title : ', title)
+      const titlePost = this.buildMapPopupDiv(item, config, 'title_post')
+      // console.log('C-DatamiMap > getFieldValue > titlePost : ', titlePost)
+      const value = this.buildMapPopupDiv(item, config, 'value')
+      // console.log('C-DatamiMap > getFieldValue > value : ', value)
+      const info = this.buildMapPopupDiv(item, config, 'info')
+      // console.log('C-DatamiMap > getFieldValue > info : ', info)
+
+      const htmlStr = `
+<div id="vue-popup-marker">
+  ${mainTitle.value && mainTitle.html}
+  ${title.value && title.html}
+  ${titlePost.value && titlePost.html}
+  ${value.value && value.html}
+  ${info.value && info.html}
+</div>`
+      return htmlStr
     }
   }
 }
 
 </script>
-
-<style lang="css">
-@import '~maplibre-gl/dist/maplibre-gl.css';
-
-/* @media screen and (min-width: 1216px)
-.controls-container:not(.is-max-desktop) {
-  max-width: 1152px;
-} */
-
-.map-card {
-  z-index: 1;
-  position: absolute;
-}
-
-.map-bottom-right {
-  right: 50px;
-  bottom: 25px;
-}
-
-.map-mini-card-item {
-  z-index: 10;
-  left: 50px;
-}
-
-.map-detail-card-item {
-  z-index: 10;
-  width: 75%;
-  left: 50%;
-  /* -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); */
-}
-
-.big-loader {
-  z-index: 10;
-  position: absolute !important;
-  left: 50%;
-  top: calc(50% - 8em);
-  border-width: 10px !important;
-  /* border: 10px solid #dbdbdb !important; */
-  height: 8em !important;
-  width: 8em !important;
-}
-
-</style>

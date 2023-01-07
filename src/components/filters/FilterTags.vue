@@ -145,6 +145,13 @@ export default {
       type: String
     }
   },
+  // data () {
+  //   return {
+  //     cssFiles: [
+  //       'styles/components/filters/datami-filter-tags.css'
+  //     ]
+  //   }
+  // },
   methods: {
     getField (field) {
       const header = this.headers.find(f => f.field === field)
@@ -177,12 +184,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.divider::after, .divider::before {
-  background-color: grey !important;
-}
-.filter-tag {
-  border: 3px solid white;
-}
-</style>

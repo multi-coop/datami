@@ -1,0 +1,57 @@
+.datami-darkmode-white-text {
+  color: white !important;
+}
+
+.datami-darkmode {
+  background-color: #2d2d30 !important;
+  /* color: white !important; */
+}
+
+.datami-darkmode-border-white {
+  border: 1px solid white !important;
+}
+
+.datami-darkmode-border-dark {
+  border: 1px solid #363636 !important;
+}
+
+.datami-darkmode-white-text-dark-bg {
+  color: white !important;
+  background-color: #363636 !important;
+}
+
+.datami-darkmode-dark-background {
+  background-color: black !important;
+}
+
+.datami-darkmode-hover-grey:hover {
+  background-color: rgb(86, 83, 79) !important;
+}
+
+.datami-darkmode-loader-background {
+  background-color: #2d2d30;
+}
+
+.select-datami-darkmode>span>select {
+  color: white !important;
+  border: 1px solid white !important;
+  background-color: #363636 !important;
+}
+
+.select-datami-darkmode>span>select:hover::after {
+  border-color: white !important;
+}
+
+.select-datami-darkmode>span>select::after {
+  border-color: white !important;
+}
+
+.datami-darkmode-grey-shades {
+  background-color: rgb(81, 79, 79) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.datami-darkmode-grey-shades:nth-child(even) {
+  background-color: rgb(83, 86, 86) !important;
+}

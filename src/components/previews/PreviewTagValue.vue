@@ -9,7 +9,6 @@
       :active="showTag"
       always
       multilined
-      append-to-body
       :animated="false"
       style="z-index: 1"
       size="is-large"
@@ -130,8 +129,8 @@
       <b-tag
         :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
         :style="`${tagStyle}; z-index: 1;`"
-        @mouseover.native="showTag = true"
-        @mouseleave.native="showTag = false"
+        @mouseover.native="showTag = true; showGlobalTooltip($event, tagTooltipData(val))"
+        @mouseleave.native="showTag = false; hideGlobalTooltip"
         @click.native="$emit('expand')">
         <span v-if="!getValueDefinitionLabel(val)">
           {{ isMini ? trimText(val) : val }}
@@ -152,6 +151,8 @@
       v-else
       :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
       :style="tagStyle"
+      @mouseover.native="showGlobalTooltip($event, tagTooltipData(val))"
+      @mouseleave.native="hideGlobalTooltip"
       @click.native="$emit('expand')">
       {{ val }}
     </b-tag>
@@ -161,6 +162,7 @@
 <script>
 
 import {
+  mixinTooltip,
   mixinGlobal,
   mixinIcons,
   mixinValue,
@@ -170,6 +172,7 @@ import {
 export default {
   name: 'PreviewTagValue',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinIcons,
     mixinValue,
@@ -210,21 +213,21 @@ export default {
     itemDirect () {
       return this.getForeignItem(this.field, this.val)
     }
+  },
+  methods: {
+    tagTooltipData (val) {
+      const data = {
+        position: 'top',
+        type: 'tag',
+        field: this.field,
+        value: val,
+        icon: this.getIconFieldType(this.field),
+        valDefLabel: this.getValueDefinitionLabel(val),
+        valDefDescription: this.getValueDefinitionDescription(val),
+        ressourceInfos: this.ressourceInfos
+      }
+      return data
+    }
   }
 }
 </script>
-
-<style>
-.PreviewTagValue > .b-tooltip > .tooltip-trigger {
-  z-index: 1 !important;
-}
-.tag-pointer {
-  cursor: pointer;
-}
-</style>
-
-<style scoped>
-.divider::after, .divider::before {
-  background-color: grey !important;
-}
-</style>

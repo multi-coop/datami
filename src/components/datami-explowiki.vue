@@ -1,12 +1,16 @@
 <template>
   <div
     :id="fileId"
-    :class="`DatamiExplowiki datami-widget section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`DatamiExplowiki datami-widget-root datami-widget section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; max-width: 100%; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0; max-width: 100%"> -->
     <!-- MATOMO -->
     <MatomoScript
       :file-id="fileId"/>
+
+    <DatamiTooltip
+      v-if="!fromMultiFiles && tooltip"
+      :locale="locale"/>
 
     <!-- WIDGET -->
     <div
@@ -160,7 +164,7 @@
       :file-id="fileId"
       :locale="locale"/>
 
-    <!-- DEV - TEST MODAL -->
+    <!-- DIALOG MODAL -->
     <b-modal
       v-model="isModalActive"
       :width="'80%'"
@@ -175,12 +179,13 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiExploWiki',
   components: {
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DatamiTooltip: () => import(/* webpackChunkName: "DatamiTooltip" */ '@/components/user/DatamiTooltip.vue'),
     DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
@@ -191,6 +196,7 @@ export default {
     DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinGit,
     mixinCsv,
@@ -240,6 +246,26 @@ export default {
   },
   data () {
     return {
+      datamiRoot: true,
+      cssFiles: [],
+      cssFilesExtra: [
+        'styles/components/credits/datami-credits.css',
+        'styles/datami-dark-mode.css',
+        'styles/datami-global.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css',
+        'styles/components/user/datami-tooltip.css'
+      ],
       isModalActive: false,
       // file infos
       fileId: undefined,
@@ -275,6 +301,7 @@ export default {
     hasFileDialogs (next) {
       // console.log('\nC > DatamiExploWiki > watch > hasFileDialogs > next : ', next)
       if (next) {
+        this.hideGlobalTooltip()
         this.isModalActive = true
       } else {
         this.isModalActive = false
@@ -292,6 +319,9 @@ export default {
     }
   },
   async beforeMount () {
+    if (!this.fromMultiFiles) {
+      this.cssFiles = [...this.cssFilesExtra]
+    }
     const wikiUuid = this.uuidv4()
     this.fileId = wikiUuid
 
@@ -454,26 +484,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-.datami-container {
-  max-width: 100% !important;
-}
-
-.no-text-transform {
-  text-transform: none!important;
-}
-
-@media (max-width: 768px) {
-  .filetitle-and-viewmodes{
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-  .usernavbar {
-    justify-content: center !important;
-  }
-}
-
-</style>

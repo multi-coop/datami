@@ -1,6 +1,6 @@
 <template>
   <div class="ButtonDownloadFile datami-component">
-    <b-tooltip
+    <!-- <b-tooltip
       :label="t('actions.downloadFile', locale)"
       :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
       position="is-top">
@@ -11,17 +11,30 @@
         :outlined="isDarkMode"
         :icon-left="'download'"
         :loading="downloading"
-        @click="DownloadFile()"/>
-    </b-tooltip>
+        @click="DownloadFile()"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.downloadFile', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
+    </b-tooltip> -->
+    <b-button
+      size="is-small"
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      :icon-left="'download'"
+      :loading="downloading"
+      @click="DownloadFile()"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.downloadFile', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 
 <script>
-import { mixinGlobal, mixinDownload } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinDownload } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDownloadFile',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinDownload
   ],

@@ -2,12 +2,17 @@
   <div
     v-if="gitfile"
     :id="fileId"
-    :class="`DatamiFile datami-widget datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`DatamiFile datami-widget datami-widget-root datami-container section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : 'datami-widget-root'} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0;"> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
     <!-- MATOMO -->
     <MatomoScript
       :file-id="fileId"/>
+
+    <DatamiTooltip
+      v-if="!fromMultiFiles && tooltip"
+      :locale="locale"/>
 
     <!-- DEBUG ERRORS -->
     <!-- <div
@@ -63,6 +68,7 @@
       :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
       <div
         :id="`file-navbar-${fileId}`"
+        :ref="`file-navbar-${fileId}`"
         :class="`upper-container ${currentViewMode === 'map' ? 'px-3' : ''}`"
         style="z-index: 1;">
         <!-- NAVBAR FILE TITLE / USER BTNS -->
@@ -196,6 +202,7 @@
           class="container datami-container"
           style="z-index: 1;">
           <PreviewCsv
+            ref="previewcsv"
             :only-preview="onlypreview"
             :file-id="fileId"
             :file-raw="fileRaw"
@@ -210,6 +217,7 @@
           class="container datami-container"
           style="z-index: 1;">
           <PreviewMd
+            ref="previewmd"
             :only-preview="onlypreview"
             :file-id="fileId"
             :file-raw="fileRaw"
@@ -224,6 +232,7 @@
           class="container datami-container"
           style="z-index: 1;">
           <PreviewJson
+            ref="previewjson"
             :only-preview="onlypreview"
             :file-id="fileId"
             :file-raw="fileRaw"
@@ -239,7 +248,7 @@
       :file-id="fileId"
       :locale="locale"/>
 
-    <!-- DEV - TEST DIALOG MODAL -->
+    <!-- DIALOG MODAL -->
     <b-modal
       v-model="isModalActive"
       :width="'80%'"
@@ -254,13 +263,14 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
 export default {
   name: 'DatamiFile',
   components: {
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DatamiTooltip: () => import(/* webpackChunkName: "DatamiTooltip" */ '@/components/user/DatamiTooltip.vue'),
     DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     EditModeBtns: () => import(/* webpackChunkName: "EditModeBtns" */ '@/components/edition/EditModeBtns.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
@@ -272,6 +282,7 @@ export default {
     DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinForeignKeys,
     mixinGit
@@ -332,6 +343,32 @@ export default {
   },
   data () {
     return {
+      datamiRoot: true,
+      cssFiles: [],
+      cssFilesExtra: [
+        'styles/components/credits/datami-credits.css',
+        'styles/datami-global.css',
+        'styles/datami-dark-mode.css',
+        'styles/components/edition/datami-edit-mode-buttons.css',
+        'styles/components/edition/datami-edit-navbar-skeleton.css',
+        'styles/components/edition/datami-edit-tag-value.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/json/datami-json.css',
+        'styles/components/previews/md/datami-md.css',
+        'styles/components/previews/md/datami-shodown.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css',
+        'styles/components/user/datami-tooltip.css'
+      ],
       isModalActive: false,
       // file infos
       gitfileDatami: undefined,
@@ -346,6 +383,7 @@ export default {
     hasFileDialogs (next) {
       // console.log('\nC > DatamiFile > watch > hasFileDialogs > next : ', next)
       if (next) {
+        this.hideGlobalTooltip()
         this.isModalActive = true
       } else {
         this.isModalActive = false
@@ -394,6 +432,10 @@ export default {
     }
   },
   async beforeMount () {
+    if (!this.fromMultiFiles) {
+      this.cssFiles = [...this.cssFilesExtra]
+    }
+    // console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
     this.fileId = this.uuidv4()
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
     this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
@@ -680,31 +722,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-.datami-container {
-  max-width: 100% !important;
-}
-
-.no-text-transform{
-  text-transform: none!important;
-}
-.datami-darkmode-white-text{
-  color: white !important;
-}
-.datami-darkmode{
-  background-color: #2d2d30 !important;
-}
-@media(max-width:768px) {
-  .filetitle-and-viewmodes{
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-  .usernavbar{
-    justify-content: center !important;
-  }
-}
-
-</style>

@@ -1,0 +1,35 @@
+.datami-cell>.field {
+  /* border: none; */
+  width: 100%;
+}
+
+.editcell-tag-input .taginput-container.is-focused .autocomplete {
+  width: 100% !important;
+  background-color: #b5b5b5;
+}
+
+.editcell-tag-input .taginput-container .autocomplete .dropdown-menu {
+  position: relative !important;
+}
+
+.g-cell {
+  background-color: transparent;
+}
+
+.g-cell-darkmode {
+  background-color: white;
+}
+
+.g-cell-number-darkmode {
+  background-color: white !important;
+}
+
+.g-header {
+  font-size: .85em !important;
+  font-weight: 600 !important;
+}
+
+.g-label {
+  font-size: .85em !important;
+  font-weight: 600 !important;
+}

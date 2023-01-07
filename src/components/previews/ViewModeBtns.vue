@@ -207,36 +207,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .is-active {
-    background-color: #000000 !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content {
-    color: white !important;
-    background-color: black !important;
-  }
-  .datami-dropdown-viewmode-clearmode > .dropdown-content {
-    color: black !important;
-    background-color: white !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item {
-    color: white !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item.is-active {
-    color: black !important;
-    background-color: white !important;
-  }
-  .datami-dropdown-viewmode-clearmode > .dropdown-content > .dropdown-item.is-active {
-    color: white !important;
-    background-color: black !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content > a.dropdown-item:hover:not(.is-active) {
-    color: black !important;
-  }
-
-</style>

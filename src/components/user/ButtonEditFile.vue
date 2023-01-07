@@ -5,7 +5,7 @@
       grouped
       class="is-flex is-flex-grow-1">
       <p class="control is-flex is-flex-grow-1">
-        <b-tooltip
+        <!-- <b-tooltip
           :label="t('actions.sendContribHelp', locale)"
           :type="isDarkMode ? 'is-white' : 'is-dark'"
           class="is-flex is-flex-grow-1"
@@ -19,11 +19,24 @@
             size="is-small"
             expanded
             icon-left="pencil"
-            @click="OpenCommitDialog"/>
-        </b-tooltip>
+            @click="OpenCommitDialog"
+            @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.sendContribHelp', locale) })"
+            @mouseleave="hideGlobalTooltip"/>
+        </b-tooltip> -->
+        <b-button
+          :label="t('actions.sendContrib', locale)"
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
+          :outlined="isDarkMode"
+          :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+          size="is-small"
+          expanded
+          icon-left="pencil"
+          @click="OpenCommitDialog"
+          @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.sendContribHelp', locale) })"
+          @mouseleave="hideGlobalTooltip"/>
       </p>
       <p class="control">
-        <b-tooltip
+        <!-- <b-tooltip
           :label="t('actions.quitEdit', locale)"
           :type="isDarkMode ? 'is-white' : 'is-dark'"
           position="is-top">
@@ -33,12 +46,23 @@
             :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
             size="is-small"
             icon-left="close-thick"
-            @click="closeEditMode"/>
-        </b-tooltip>
+            @click="closeEditMode"
+            @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.quitEdit', locale) })"
+            @mouseleave="hideGlobalTooltip"/>
+        </b-tooltip> -->
+        <b-button
+          :type="isDarkMode ? 'is-white' : 'is-dark'"
+          :outlined="isDarkMode"
+          :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+          size="is-small"
+          icon-left="close-thick"
+          @click="closeEditMode"
+          @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.quitEdit', locale) })"
+          @mouseleave="hideGlobalTooltip"/>
       </p>
     </b-field>
 
-    <b-tooltip
+    <!-- <b-tooltip
       v-if="!showEditNavbar"
       :label="t('actions.enterEdit', locale)"
       :type="isDarkMode ? 'is-white' : 'is-dark'"
@@ -50,8 +74,20 @@
         icon-left="pencil"
         :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
         expanded
-        @click="openEditMode"/>
-    </b-tooltip>
+        @click="openEditMode"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.enterEdit', locale) })"
+        @mouseleave="hideGlobalTooltip"/>
+    </b-tooltip> -->
+    <b-button
+      v-if="!showEditNavbar"
+      size="is-small"
+      :label="t('actions.contribute', locale)"
+      icon-left="pencil"
+      :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+      expanded
+      @click="openEditMode"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.enterEdit', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 
@@ -59,11 +95,14 @@
 
 import { mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonEditFile',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,
@@ -106,19 +145,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-  .ButtonEditFile > .field > .field-body {
-    -webkit-box-flex: 1!important;
-    -ms-flex-positive: 1!important;
-    flex-grow: 1!important;
-  }
-
-</style>
-
-<style scoped>
-  .datami-darkmode {
-    background-color: #2d2d30 !important;
-  }
-</style>

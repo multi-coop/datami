@@ -1,5 +1,5 @@
 <template>
-  <div class="EditCsvSkeleton datami-component container">
+  <div class="EditCsvSkeleton datami-component">
     <div :class="`columns is-mobile is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
       <!-- RESULTS -->
       <div
@@ -117,12 +117,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.text-shadow {
-  text-shadow: 0 0 10px white, 0 0 10px white;
-}
-.datami-darkmode-white-text{
-  color: white !important;
-}
-</style>
