@@ -1108,15 +1108,6 @@ export default {
               })
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => itemProps : ', itemProps)
 
-              const pop = popup
-                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-                .setHTML(`
-                  <div id="vue-popup-marker">
-                  </div>`
-                )
-                .addTo(mapLibre)
-              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
-
               const popupConfig = allPointsConfigOptions.popup_config.fields_settings
               const config = Object.keys(popupConfig).map(k => {
                 return {
@@ -1126,13 +1117,22 @@ export default {
               })
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => config : ', config)
 
+              const PopupHtmlStr = this.buildMapPopupContent(itemProps, config)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => PopupHtmlStr : ', PopupHtmlStr)
+
+              const pop = popup
+                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+                .setHTML(PopupHtmlStr)
+                .addTo(mapLibre)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
+
               const popInstance = new PopupClass({
                 propsData: {
                   fileId: fileId,
                   mapId: mapId,
                   feature: featuresPolygon[0],
                   item: itemProps,
-                  config: config,
+                  // config: config,
                   locale: locale
                 }
               })
@@ -1283,14 +1283,14 @@ export default {
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => coordinates : ', coordinates)
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => itemProps : ', itemProps)
 
-              const pop = popup
-                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-                .setHTML(`
-                  <div id="vue-popup-marker">
-                  </div>`
-                )
-              pop.addTo(mapLibre)
-              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
+              // const pop = popup
+              //   .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+              //   .setHTML(`
+              //     <div id="vue-popup-marker">
+              //     </div>`
+              //   )
+              // pop.addTo(mapLibre)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > unclustering > hover => pop : ', pop)
 
               // const popInstance = new PopupClass({
               //   propsData: {
@@ -1300,7 +1300,7 @@ export default {
               //     locale : loc
               //   },
               // })
-              // // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => popInstance : ', popInstance)
+              // // console.log('C > DatamiMap > createAddGeoJsonLayers > unclustering > hover => popInstance : ', popInstance)
               // popInstance.$mount('#vue-popup-marker')
               // pop._update()
             }
@@ -1783,6 +1783,117 @@ export default {
       const itemLat = item[this.fieldLat]
       const itemLong = item[this.fieldLong]
       return this.checkIfStringFloat(itemLat) && this.checkIfStringFloat(itemLong)
+    },
+
+    // - - - - - - - - - - - - - - - - - - //
+    // MAP POPUP UTILS
+    // - - - - - - - - - - - - - - - - - - //
+    getPosition (config, position) {
+      const posConfig = config.find(i => i.position === position)
+      return posConfig
+    },
+    getFieldClass (config, position) {
+      const posConfig = this.getPosition(config, position)
+      return posConfig && posConfig.class
+    },
+    getFieldValue (item, config, position) {
+      // console.log('\nC-DatamiMap > getFieldValue > config : ', config)
+      // console.log('C-DatamiMap > getFieldValue > tem : ',item)
+      // console.log('C-DatamiMap > getFieldValue > position : ', position)
+
+      const posConfig = this.getPosition(config, position)
+      // console.log('C-DatamiMap > getFieldValue > posConfig : ', posConfig)
+
+      let prop = posConfig && item[posConfig.field]
+
+      if (typeof prop === 'undefined') { prop = '' }
+
+      if (posConfig && posConfig.prefix) {
+        prop = posConfig.prefix + prop
+      }
+
+      if (posConfig && posConfig.suffix) {
+        prop = prop + posConfig.suffix
+      }
+      return prop
+    },
+    buildMapPopupDiv (item, config, position) {
+      const content = {
+        position: this.getPosition(config, position),
+        class: this.getFieldClass(config, position),
+        value: this.getFieldValue(item, config, position),
+        html: undefined
+      }
+      switch (position) {
+        case 'main_title':
+          content.html = content.value && `
+            <div
+              class="${content.class} has-text-dark has-text-centered"
+              style="padding-bottom:.5em;">
+              ${content.value}
+            </div>`
+          break
+        case 'title':
+          content.html = content.value && `
+            <h3
+              class="has-text-dark has-text-centered">
+              <span
+                class="${content.class}">
+                ${content.value}
+              </span>
+            </h3>`
+          break
+        case 'title_post':
+          content.html = content.value && `
+            <h3
+              class="has-text-dark has-text-centered">
+              <span
+                class="${content.class}">
+                ${content.value}
+              </span>
+            </h3>`
+          break
+        case 'value':
+          content.html = content.value && `
+            <p
+              class="${content.class}">
+              ${content.value}
+            </p>`
+          break
+        case 'info':
+          content.html = content.value && `
+            <p
+              class="${content.class}">
+              ${content.value}
+            </p>`
+          break
+      }
+      return content
+    },
+    buildMapPopupContent (item, config) {
+      // console.log('\nC-DatamiMap > getFieldValue > item : ', item)
+      // console.log('C-DatamiMap > getFieldValue > config : ', config)
+
+      const mainTitle = this.buildMapPopupDiv(item, config, 'main_title')
+      // console.log('C-DatamiMap > getFieldValue > mainTitle : ', mainTitle)
+      const title = this.buildMapPopupDiv(item, config, 'title')
+      // console.log('C-DatamiMap > getFieldValue > title : ', title)
+      const titlePost = this.buildMapPopupDiv(item, config, 'title_post')
+      // console.log('C-DatamiMap > getFieldValue > titlePost : ', titlePost)
+      const value = this.buildMapPopupDiv(item, config, 'value')
+      // console.log('C-DatamiMap > getFieldValue > value : ', value)
+      const info = this.buildMapPopupDiv(item, config, 'info')
+      // console.log('C-DatamiMap > getFieldValue > info : ', info)
+
+      const htmlStr = `
+<div id="vue-popup-marker">
+  ${mainTitle.value && mainTitle.html}
+  ${title.value && title.html}
+  ${titlePost.value && titlePost.html}
+  ${value.value && value.html}
+  ${info.value && info.html}
+</div>`
+      return htmlStr
     }
   }
 }

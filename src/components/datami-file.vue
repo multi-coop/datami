@@ -435,7 +435,7 @@ export default {
     if (!this.fromMultiFiles) {
       this.cssFiles = [...this.cssFilesExtra]
     }
-    console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
+    // console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
     this.fileId = this.uuidv4()
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
     this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
