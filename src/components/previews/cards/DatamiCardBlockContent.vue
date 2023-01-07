@@ -130,8 +130,8 @@
         :is-added="itemAdded"
         :input-data="itemValue"
         :locale="locale"
-        :is-card-view="true"
-        @updateCellValue="emitUpdate"/>
+        :is-card-view="true"/>
+        <!-- @updateCellValue="emitUpdate"/> -->
     </div>
   </div>
 </template>
@@ -139,14 +139,9 @@
 <script>
 import { mixinGlobal, mixinValue, mixinDiff, mixinIcons } from '@/utils/mixins.js'
 
-// import PreviewCell from '@/components/previews/PreviewCell'
-// import EditCell from '@/components/edition/csv/EditCell'
-
 export default {
   name: 'DatamiCardBlockContent',
   components: {
-    // PreviewCell,
-    // EditCell
     PreviewLongText: () => import(/* webpackChunkName: "PreviewLongText" */ '@/components/previews/PreviewLongText.vue'),
     PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue'),
     EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
@@ -235,7 +230,7 @@ export default {
           content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
-        steps: {
+        timeline: {
           content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         }
@@ -255,35 +250,7 @@ export default {
   methods: {
     getNumber (value) {
       return this.getNumberByField(value, this.field)
-    },
-    // applyTemplate (text) {
-    //   // prepare regex
-    //   const fieldStart = '{{'
-    //   const fieldEnd = '}}'
-    //   const quotesRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
-    //   let textArr = text.split(quotesRegex)
-    //   console.log('\nC > DatamiCardBlockContent > applyTemplate > textArr :', textArr)
-    //   textArr = textArr.map(str => {
-    //     let strClean
-    //     if (str.startsWith(fieldStart)) {
-    //       const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
-    //       console.log('C > DatamiCardBlockContent > applyTemplate > fieldName :', fieldName)
-    //       strClean = str
-    //     } else {
-    //       strClean = str
-    //     }
-    //     return strClean
-    //   })
-    //   const textClean = textArr.join('')
-    //   return textClean
-    // },
-    emitUpdate (event) {
-      this.$emit('updateCellValue', event)
     }
-    // toggleDetail () {
-    //   console.log('C > DatamiCardBlockContent > toggleDetail > this.position :', this.position)
-    //   this.$emit('toggleDetail', this.position)
-    // }
   }
 }
 </script>

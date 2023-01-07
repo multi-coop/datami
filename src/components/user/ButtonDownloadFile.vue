@@ -53,8 +53,8 @@ export default {
         const respFileRaw = await this.getFileDataRaw(this.gitObj)
         // console.log('C > ButtonDownloadFile > DownloadFile > respFileRaw.data : ', respFileRaw.data)
         const dl = this.buildFileLink(respFileRaw.data, window)
-        console.log('C > ButtonDownloadFile > DownloadFile > dl : ', dl)
-        // this.removeLink(dl)
+        // console.log('C > ButtonDownloadFile > DownloadFile > dl : ', dl)
+        this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
 

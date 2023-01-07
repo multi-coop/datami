@@ -4,7 +4,7 @@
     arrowless
     right
     tag="div"
-    :class="`CustomFilterDropdown ml-1 ${isDarkMode ? 'dark-background' : 'clear-background'}`"
+    :class="`CustomFilterDropdown ml-1 mr-0 ${isDarkMode ? 'dark-background' : 'clear-background'}`"
     style="height: 2.5em;">
     <!-- LABEL SLOT -->
     <template #label>

@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="icon" href="<%= BASE_URL %>logo-DATAMI-favicon.ico">
-  <title><%= htmlWebpackPlugin.options.title %></title>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>logo-DATAMI-favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
 
-<body style="background-color: #D7D7D7; padding: 1em 1em 20em 1em;">
-  <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+  <body style="background-color: #D7D7D7; padding: 1em 1em 20em 1em;">
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
-  </noscript>
-  <!-- <div id="app"></div> -->
+    </noscript>
+    <!-- <div id="app"></div> -->
 
-  <p class="has-text-centered"></p>
+    <p class="has-text-centered"></p>
 
-  <!-- TEST FILTERS COMPONENTS -->
-  <!-- TO DO  -->
+    <!-- TEST FILTERS COMPONENTS -->
+    <!-- TO DO  -->
 
-  <!-- TEST LOAD / EDIT REPO COMPONENTS -->
-  <!-- TO DO  -->
+    <!-- TEST LOAD / EDIT REPO COMPONENTS -->
+    <!-- TO DO  -->
 
-  <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
-  <!-- <p id="datami-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
+    <!-- <p id="datami-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-md-gitlab" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -37,7 +37,7 @@
       options="" title="datami for gitlab file - md" usertoken="" locale="fr" debug="false"></datami-file>
   </div> -->
 
-  <!-- <p id="datami-md-github" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-md-github" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-md-github" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -50,7 +50,7 @@
     </datami-file>
   </div> -->
 
-  <!-- <p id="datami-csv-gitlab" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-csv-gitlab" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-csv-gitlab" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -84,7 +84,7 @@
       }' title="datami for gitlab file - csv (semicolon separator)" usertoken="" locale="fr"></datami-file>
   </div> -->
 
-  <!-- <p id="datami-csv-github-bera" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-csv-github-bera" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#datami-csv-github-bera" style="color: white; margin-right:  0.5em;">
         #
       </a>
@@ -100,7 +100,7 @@
       </datami-file>
     </div> -->
 
-  <!-- <p id="datami-csv-github" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-csv-github" class="ml-4 pt-6 subtitle has-text-white">
       <a href="/#datami-csv-github" style="color: white; margin-right:  0.5em;">
         #
       </a>
@@ -116,7 +116,7 @@
     </datami-file>
   </div> -->
 
-  <!-- <p id="datami-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-csv-github-odf-ressources" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -175,7 +175,7 @@
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></datami-file>
   </div> -->
 
-  <!-- <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-ping" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -438,21 +438,21 @@
       ]' locale="fr" />
   </div> -->
 
-  <p id="datami-multifiles-decider-ensemble" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-multifiles-decider-ensemble" style="color: white; margin-right:  0.5em;">
+    <p id="datami-multifiles-decider-ensemble" class="ml-4 pt-6 subtitle has-text-white">
+      <a href="/#datami-multifiles-decider-ensemble" style="color: white; margin-right:  0.5em;">
       #
     </a>
     Décider ensemble
   </p>
-  <div style="background-color: white; margin: 1em;">
-    <!-- DATAMI WIDGET'S HTML BLOCK-->
-    <datami-multi-files title="Ressources Décider ensemble" options='{
+    <div style="background-color: white; margin: 1em;">
+      <!-- DATAMI WIDGET'S HTML BLOCK-->
+      <datami-multi-files title="Ressources Décider ensemble" options='{
        "display": "horizontal"
      }' gitfiles='[
        {
          "title": "Données Décider ensemble",
          "activate": true,
-         "localdev": true,
+         "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/csv/geocoding/decider-ensemble-ressources-geocoded.csv",
          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/csv/geocoding/decider-ensemble-ressources-geocoded.csv",
          "default-tab": true,
@@ -478,12 +478,13 @@
              ]
            },
            "schema": {
-             "localdev": true,
+             "localdev": false,
              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
-             "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json"
+             "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json",
+             "file_": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema-bug.json"
            },
            "fields-custom-properties": {
-             "localdev": true,
+             "localdev": false,
              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-fields-custom-props.json",
              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-fields-custom-props.json"
            },
@@ -508,14 +509,18 @@
                },
                "PRÉSENTATION DU PROJET": {
                  "position": "resume"
-               }
+               },
+              "CODE THEMATIQUE": {
+                "position": "tags"
+              }
              },
              "detail": {
                "TITRE DU PROJET": {
                  "position": "title"
                },
                "LOGO URL": {
-                 "position": "imge"
+                 "position": "image",
+                 "right": true
                },
                "adresse_postale": {
                  "position": "adress"
@@ -545,8 +550,13 @@
                "SITE WEB": {
                  "position": "links",
                  "block_title": "Lien vers le site du projet",
-                 "right": true
+                 "right": false
                },
+               "LIEN PDF PROTEGE": {
+                "position": "links",
+                "block_title": "Lien vers fichier pdf",
+                "right": false
+              },
                "ÉTAPES": {
                  "position": "timeline",
                  "block_title": "Déroulé",
@@ -593,7 +603,7 @@
            "datavizview": {
              "activate": true,
              "default": false,
-             "localdev": true,
+             "localdev": false,
              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-dataviz-settings.json",
              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-dataviz-settings.json"
            },
@@ -607,7 +617,7 @@
                  },
                  "height": 800,
                  "cols": 12,
-                 "localdev": true,
+                 "localdev": false,
                  "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-map-settings.json",
                  "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-map-settings.json"
                }
@@ -620,7 +630,7 @@
          "title": "Introduction",
          "activate": true,
          "default-tab": false,
-         "localdev": true,
+         "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/markdown/decider-ensemble-intro.md",
          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/markdown/decider-ensemble-intro.md",
          "onlypreview": true,
@@ -630,7 +640,7 @@
          "title": "Schéma des données",
          "activate": false,
          "default-tab": false,
-         "localdev": true,
+         "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json",
          "options": {
@@ -640,11 +650,10 @@
          "onlypreview": false,
          "usertoken": ""
        }
-     ]' locale="fr" />
-  </div>
+     ]' locale="fr"/>
+    </div>
 
-
-  <!-- <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-multifiles-odf-observatoire" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -833,7 +842,7 @@
       ]'></datami-multi-files>
   </div> -->
 
-  <!-- <p id="datami-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -965,7 +974,7 @@
     </datami-file>
   </div> -->
 
-  <!-- <p id="datami-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-csv-github-cooptech" style="color: white; margin-right:  0.5em;">
       #
     </a>
@@ -1026,7 +1035,7 @@
       debug="false"></datami-file>
   </div> -->
 
-  <!-- <p id="datami-json-github-odf-schema" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-json-github-odf-schema" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-json-github-odf-schema" style="color: white; margin-right: 0.5em;">
   </p>
   <div style="background-color: white; margin: 1em;">
@@ -1040,7 +1049,7 @@
     </datami-file>
   </div> -->
 
-  <!-- <p id="datami-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-wiki-communs" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -1122,7 +1131,7 @@
       }' title="datami for explowiki - communs :)" locale="fr"></datami-explowiki>
   </div> -->
 
-  <!-- <p id="datami-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-wiki-fabmob" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -1253,7 +1262,7 @@
       }' title="datami for explowiki - fabmob :)" locale="fr"></datami-explowiki>
   </div> -->
 
-  <!-- <p id="datami-json-github" class="ml-4 pt-6 subtitle has-text-white">
+    <!-- <p id="datami-json-github" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-json-github" style="color: white; margin-right: 0.5em;">
       #
     </a>
@@ -1268,22 +1277,22 @@
     </datami-file>
   </div> -->
 
-  <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
-    <a href="https://datami.multi.coop" target="_blank">
-      <img src="/logo_DATAMI_title.png" alt="logo datami" style="height: 75px !important; width: auto !important">
-    </a>
-    <!-- <span class="ml-3 pb-3">
+    <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
+      <a href="https://datami.multi.coop" target="_blank">
+        <img src="/logo_DATAMI_title.png" alt="logo datami" style="height: 75px !important; width: auto !important">
+      </a>
+      <!-- <span class="ml-3 pb-3">
       Some examples of datami widgets' integration
     </span> -->
-  </h2>
+    </h2>
 
-  <!-- built files will be auto injected -->
-  <style>
-    .datami-component {
-      /* for debugging purposes... */
-      /* border: thin green dashed; */
-    }
-  </style>
-</body>
+    <!-- built files will be auto injected -->
+    <style>
+      .datami-component {
+        /* for debugging purposes... */
+        /* border: thin green dashed; */
+      }
+    </style>
+  </body>
 
 </html>

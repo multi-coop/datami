@@ -1,5 +1,5 @@
 <template>
-  <div class="SortAndFiltersSkeleton datami-component container">
+  <div class="SortAndFiltersSkeleton datami-component">
     <b-navbar
       type="is-white"
       class="is-align-items-center"
@@ -8,7 +8,7 @@
       <template #start>
         <b-navbar-item
           tag="div"
-          class="py-0">
+          class="py-0 pl-0">
           <SearchFullText
             :file-id="fileId"
             :locale="locale"
@@ -21,7 +21,7 @@
         <CustomFilterDropdown
           v-for="filter in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}`"
-          :class="isDarkMode ? 'is-dark' : 'is-white'"
+          :class="`${isDarkMode ? 'is-dark' : 'is-white'}`"
           :filter="filter"
           :file-id="fileId"
           :field-active-tags="fieldActiveTags(filter.field)"
@@ -31,16 +31,16 @@
     </b-navbar>
 
     <!-- DEBUGGING -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns is-multiline is-centered">
       <div class="column is-4">
         activeTags : <pre><code>{{ activeTags }}</code></pre>
       </div>
-    </div>
+    </div> -->
 
     <!-- DEBUG -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-6">
@@ -52,27 +52,22 @@
           <pre>{{ columns }}</pre>
         </code>
       </div>
-      <!-- <div class="column is-6">
+      <div class="column is-6">
         checkedRows :
         <code>
           <pre>{{ checkedRows }}</pre>
         </code>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
-// import SearchFullText from '@/components/filters/SearchFullText'
-// import CustomFilterDropdown from '@/components/filters/CustomFilterDropdown'
-
 export default {
   name: 'SortAndFiltersSkeleton',
   components: {
-    // SearchFullText,
-    // CustomFilterDropdown
     SearchFullText: () => import(/* webpackChunkName: "SearchFullText" */ '@/components/filters/SearchFullText.vue'),
     CustomFilterDropdown: () => import(/* webpackChunkName: "CustomFilterDropdown" */ '@/components/filters/CustomFilterDropdown.vue')
   },
@@ -148,6 +143,6 @@ export default {
 
 <style>
 .SortAndFiltersSkeleton > .navbar > .navbar-menu > .navbar-end {
-  margin-right: .75rem;
+  margin-right: 0em;
 }
 </style>

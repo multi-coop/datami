@@ -5,6 +5,18 @@
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-12">
+        - fileIsLoading : <code>{{ fileIsLoading }}</code><br>
+        - !!fileRaw : <code>{{ !!fileRaw }}</code><br>
+        - !!dataRaw : <code>{{ !!dataRaw }}</code><br>
+        - !!data : <code>{{ !!data }}</code><br>
+        - !!fileOptions : <code>{{ !!fileOptions }}</code><br>
+      </div>
+    </div>
+    <!-- DEBUGGING -->
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-12">
         <p>
           currentEditViewMode:
           <code>{{ currentEditViewMode }}</code>
@@ -21,7 +33,16 @@
 
       <!-- DEBUG RAW CONTENT OBJECTS -->
       <div
-        v-if="debug"
+        v-if="true"
+        class="column is-6">
+        <p>
+          fileOptions:
+          <br>
+          <pre><code>{{ fileOptions }}</code></pre>
+        </p>
+      </div>
+      <div
+        v-if="true"
         class="column is-6">
         <p>
           dataRaw:
@@ -58,6 +79,19 @@
         </p>
       </div>
     </div>
+
+    <!-- DEBUGGING SIGNALS -->
+    <!-- <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-12">
+        <p>
+          fileSignals:
+          <br>
+          <pre><code>{{ fileSignals }}</code></pre>
+        </p>
+      </div>
+    </div> -->
 
     <!-- LOADERS -->
     <div
@@ -134,12 +168,7 @@
           :columns-edited="editedColumns"
           :items-total="itemsTotal || edited.length"
           :locale="locale"
-          :debug="debug"
-          @updateEdited="updateEdited"
-          @addTagToEnum="addTagToEnum"
-          @deleteRows="deleteRowsEvent"
-          @addRow="addRowEvent"
-          @sortRows="sortEdited"/>
+          :debug="debug"/>
       </div>
     </div>
   </div>
@@ -158,25 +187,11 @@ import {
   mixinDownload
 } from '@/utils/mixins.js'
 
-// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-// import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
-// import LoaderCSV from '@/components/loaders/LoaderCSV'
-// import LoaderCards from '@/components/loaders/LoaderCards'
-
-// import PreviewHelpers from '@/components/previews/PreviewHelpers'
-// import DatamiTable from '@/components/previews/DatamiTable'
-
 import { defaultTagsSeparator } from '@/utils/globalUtils'
 
 export default {
   name: 'PreviewCsv',
   components: {
-    // LoaderEditNavbar,
-    // LoaderSortFilters,
-    // LoaderCSV,
-    // LoaderCards,
-    // PreviewHelpers,
-    // DatamiTable
     LoaderSortFilters: () => import(/* webpackChunkName: "LoaderSortFilters" */ '@/components/loaders/LoaderSortFilters.vue'),
     LoaderCSV: () => import(/* webpackChunkName: "LoaderCSV" */ '@/components/loaders/LoaderCSV.vue'),
     LoaderCards: () => import(/* webpackChunkName: "LoaderCards" */ '@/components/loaders/LoaderCards.vue'),
@@ -284,8 +299,11 @@ export default {
         const currentFile = this.gitObj.id
         // console.log('\nC > PreviewCsv > watch > dataIsSet > currentFile : ', currentFile)
 
+        // console.log('\nC > PreviewCsv > watch > dataIsSet > this.dataRaw : ', this.dataRaw)
         const data = this.dataRaw.data
+        // console.log('C > PreviewCsv > watch > dataIsSet > data : ', data)
         const dataColumns = this.buildColumns(this.dataRaw)
+        // console.log('C > PreviewCsv > watch > dataIsSet > dataColumns : ', dataColumns)
         this.data = data
         this.dataColumns = dataColumns
         // console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
@@ -407,6 +425,34 @@ export default {
           // console.log('C >>> DatamiFile > loadingShared > updatedShareableFile : ', updatedShareableFile)
           this.updateShareableFiles(updatedShareableFile)
         }
+      }
+    },
+    fileSignals (next) {
+      if (next && next.length) {
+        next.forEach(signal => {
+          switch (signal.action) {
+            case 'updateCellValue':
+              this.updateEdited(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'addTagToEnum':
+              this.addTagToEnum(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'deleteRows':
+              this.deleteRowsEvent(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'addNewRow':
+              this.addRowEvent(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'sortRows':
+              this.sortEdited(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+          }
+        })
       }
     }
   },
@@ -650,9 +696,12 @@ export default {
         added: true
       }
       // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+
+      // Send signal to switch to last page
+      this.addFileSignal('goToLastPage', {})
 
       // update changesData
       const changeObj = {

@@ -4,7 +4,7 @@
       <b-pagination
         v-model="currentPage"
         :total="totalItems"
-        :per-page="itemsPerPage"
+        :per-page="itemsPerPageSelected"
         :size="size"
         :order="order"
         :simple="isSimple"
@@ -67,7 +67,7 @@
         </p>
       </div>
       <div class="column is-12 has-text-centered">
-        <!-- {{ perPageSelection }} -->
+        <!-- itemsPerPageSelected : <code>{{ itemsPerPageSelected }}</code><br> -->
         <b-field class="mb-0 mx-2">
           <b-select
             v-model="itemsPerPageSelected"
@@ -103,17 +103,21 @@ export default {
       default: 0,
       type: Number
     },
-    itemsPerPage: {
+    // itemsPerPage: {
+    //   default: 10,
+    //   type: Number
+    // },
+    itemsPerPageTable: {
       default: 10,
+      type: Number
+    },
+    itemsPerPageCards: {
+      default: 9,
       type: Number
     },
     itemsPerPageChoices: {
       default: null,
       type: Array
-    },
-    currentPageFromParent: {
-      default: 1,
-      type: Number
     },
     locale: {
       default: '',
@@ -128,6 +132,8 @@ export default {
     return {
       // default settings
       currentPage: 1,
+      currentPageTable: 1,
+      currentPageCards: 1,
       size: 'is-small',
       prevIcon: 'arrow-left',
       nextIcon: 'arrow-right',
@@ -139,53 +145,114 @@ export default {
       hasInput: false,
       position: '',
       inputDebounce: 100,
-      itemsPerPageSelected: undefined
+      itemsPerPageSelected: undefined,
+      itemsPerPageForTable: undefined,
+      itemsPerPageForCards: undefined,
+      holdOn: false
       // itemsPerPageChoices: [3, 5, 10, 15, 20, 25, 50, 100]
     }
   },
   computed: {
     countElements () {
-      const result = this.totalItems > this.itemsPerPage ? this.itemsPerPage : this.totalItems
+      const result = this.totalItems > this.itemsPerPageSelected ? this.itemsPerPageSelected : this.totalItems
       return result
     },
     totalPages () {
-      return Math.ceil(this.totalItems / this.itemsPerPage)
+      return Math.ceil(this.totalItems / this.itemsPerPageSelected)
     }
   },
   watch: {
+    currentViewMode (next) {
+      // console.log('\nC > PagesNavigation > watch > currentViewMode > next :', next)
+      this.holdOn = true
+      switch (next) {
+        case 'table':
+          this.currentPage = this.currentPageTable
+          this.itemsPerPageSelected = this.itemsPerPageForTable
+          break
+        case 'cards':
+          this.currentPage = this.currentPageCards
+          this.itemsPerPageSelected = this.itemsPerPageForCards
+      }
+      this.ChangePage()
+      this.holdOn = false
+    },
     currentPage (next, prev) {
-      // console.log('\nC > PagesNavigation > watch > currentPageFromParent > next :', next)
-      if (next !== prev) this.SendActionToParent()
+      // console.log('\nC > PagesNavigation > watch > currentPage > next :', next)
+      if (!this.holdOn && next !== prev) this.ChangePage()
     },
     itemsPerPageSelected (next, prev) {
       // console.log('\nC > PagesNavigation > watch > itemsPerPageSelected > next :', next)
-      if (next !== prev) {
-        this.SendActionToParent()
+      if (!this.holdOn && next !== prev) {
+        switch (this.currentViewMode) {
+          case 'table':
+            this.itemsPerPageForTable = next
+            break
+          case 'cards':
+            this.itemsPerPageForCards = next
+            break
+        }
+        this.ChangePage()
       }
     },
-    currentPageFromParent (next) {
-      // console.log('\nC > PagesNavigation > watch > currentPageFromParent > next :', next)
-      this.currentPage = next
-    },
-    itemsPerPage (next) {
-      this.itemsPerPageSelected = next
+    fileSignals (next) {
+      // console.log('\nC > PagesNavigation > watch > fileSignals > next : ', next)
+      // console.log('C > PagesNavigation > watch > fileSignals > this.totalPages : ', this.totalPages)
+      if (next && next.length) {
+        next.forEach(signal => {
+          switch (signal.action) {
+            case 'goToLastPage':
+              // console.log('\nC > PagesNavigation > watch > fileSignals > goToLastPage > signal : ', signal)
+              this.currentPage = this.totalPages
+              this.removeFileSignal(signal.signalId)
+              break
+          }
+        })
+      }
     }
   },
   beforeMount () {
-    this.itemsPerPageSelected = this.itemsPerPage
+    this.itemsPerPageForTable = this.itemsPerPageTable
+    this.itemsPerPageForCards = this.itemsPerPageCards
+    switch (this.currentViewMode) {
+      case 'table':
+        this.itemsPerPageSelected = this.itemsPerPageTable
+        break
+      case 'cards':
+        this.itemsPerPageSelected = this.itemsPerPageCards
+    }
   },
   methods: {
-    SendActionToParent () {
-      // console.log('\nC > PagesNavigation > SendActionToParent ... ')
+    ChangePage () {
+      // console.log('\nC > PagesNavigation > ChangePage ... ')
+      // console.log('C > PagesNavigation > ChangePage > this.currentPage : ', this.currentPage)
+      switch (this.currentViewMode) {
+        case 'table':
+          this.currentPageTable = this.currentPage
+          break
+        case 'cards':
+          this.currentPageCards = this.currentPage
+          break
+      }
+      // console.log('C > PagesNavigation > ChangePage > this.currentPageTable : ', this.currentPageTable)
+      // console.log('C > PagesNavigation > ChangePage > this.currentPageCards : ', this.currentPageCards)
+
+      // console.log('C > PagesNavigation > ChangePage > this.itemsPerPage : ', this.itemsPerPage)
+      // console.log('C > PagesNavigation > ChangePage > this.itemsPerPageSelected : ', this.itemsPerPageSelected)
+      // console.log('C > PagesNavigation > ChangePage > this.itemsPerPageForTable : ', this.itemsPerPageForTable)
+      // console.log('C > PagesNavigation > ChangePage > this.itemsPerPageForCards : ', this.itemsPerPageForCards)
       const pagination = {
         currentPage: this.currentPage,
-        itemsPerPage: this.itemsPerPageSelected
+        itemsPerPage: this.itemsPerPageSelected,
+        itemsPerPageTable: this.itemsPerPageForTable,
+        itemsPerPageCards: this.itemsPerPageForCards
       }
       const payload = {
         action: 'changePage',
         value: pagination
       }
-      this.$emit('action', payload)
+      // this.$emit('action', payload)
+      this.addFileSignal('changePage', payload)
 
       // track with matomo
       this.trackEvent('click')

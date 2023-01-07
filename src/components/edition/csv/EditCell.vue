@@ -2,7 +2,7 @@
   <div
     :class="`EditCell datami-component datami-cell is-flex is-align-items-center ${field && ['boolean', 'datami'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
     <!-- DEBUGGING -->
-    <b-tooltip
+    <!-- <b-tooltip
       v-if="debug"
       multilined
       append-to-body
@@ -29,19 +29,19 @@
           field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
         </span>
         field: <br><pre><code>{{ field }}</code></pre>
-        <!-- fileOptions: <br><pre><code>{{ fileOptions }}</code></pre> -->
+        fileOptions: <br><pre><code>{{ fileOptions }}</code></pre>
       </template>
-    </b-tooltip>
+    </b-tooltip> -->
 
-    <div v-if="debug && !isHeader && isTag && !isCategory">
+    <!-- <div v-if="debug && !isHeader && isTag && !isCategory">
       tagsValue : <code>{{ tagsValue }}</code><br>
       tagsEnum : <code>{{ tagsEnum }}</code><br>
       tagsEnumEnriched : <code>{{ tagsEnumEnriched }}</code><br>
-    </div>
+    </div> -->
 
-    <div v-if="debug && !isHeader && isBoolean">
+    <!-- <div v-if="debug && !isHeader && isBoolean">
       input : <code>{{ input }}</code><br>
-    </div>
+    </div> -->
 
     <!-- USER BUTTONS FOR DATAMI FIELDS (CONSOLIDATION...) -->
     <div
@@ -171,14 +171,11 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
-// import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
-// import EditTagValue from '@/components/edition/EditTagValue.vue'
+import { debounce } from '@/utils/globalUtils'
 
 export default {
   name: 'EditCell',
   components: {
-    // ButtonConsolidation,
-    // EditTagValue
     ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
     ButtonConsolidation: () => import(/* webpackChunkName: "ButtonConsolidation" */ '@/components/edition/ButtonConsolidation.vue'),
     EditTagValue: () => import(/* webpackChunkName: "EditTagValue" */ '@/components/edition/EditTagValue.vue')
@@ -205,6 +202,10 @@ export default {
       type: [String, Number, Boolean]
     },
     isAdded: {
+      default: false,
+      type: Boolean
+    },
+    fromDialog: {
       default: false,
       type: Boolean
     },
@@ -301,12 +302,18 @@ export default {
           field: updatedField
         }
       }
-      this.$emit('action', payload)
+      // this.$emit('action', payload)
+      this.addFileSignal('addTagToEnum', payload)
     },
-    emitChange (event) {
+    emitChange: debounce(function (event) {
       // console.log('\nC > EditCell > emitChange > event : ', event)
-      // console.log('C > EditCell > emitChange > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
-      // console.log('C > EditCell > emitChange > this.field : ', this.field)
+      // console.log('C > EditCell > emitChange > event > debounce : ', event)
+      this.emitChangeDebounced(event)
+    }, 750),
+    emitChangeDebounced (event) {
+      // console.log('\nC > EditCell > emitChangeDebounced > event : ', event)
+      // console.log('C > EditCell > emitChangeDebounced > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
+      // console.log('C > EditCell > emitChangeDebounced > this.field : ', this.field)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
@@ -337,8 +344,15 @@ export default {
       } else {
         payload.isHeader = true
       }
-      // console.log('C > EditCell > emitChange > payload : ', payload)
-      this.$emit('updateCellValue', payload)
+      // console.log('C > EditCell > emitChangeDebounced > payload : ', payload)
+
+      // Update cell value using store git-data
+      // this.$emit('updateCellValue', payload)
+      if (this.fromDialog) {
+        this.$emit('updateTempValue', payload)
+      } else {
+        this.addFileSignal('updateCellValue', payload)
+      }
 
       // track with matomo
       this.trackEvent('updateCellValue')

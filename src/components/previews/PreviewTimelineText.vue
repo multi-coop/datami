@@ -22,20 +22,22 @@
       </header>
 
       <!-- STEPS -->
-      <div
-        v-for="(step, i) in stepTexts"
-        :key="`steps-${fileId}-${fieldId}-${i}`"
-        :class="`timeline-item ${ i < (stepTexts.length - 1) ? 'pb-2' : ''}`">
-        <div class="timeline-marker is-dark"/>
-        <div class="timeline-content">
-          <p
-            v-if="step.title !== ''"
-            class="heading">
-            {{ step.title }}
-          </p>
-          <p>
-            {{ step.content }}
-          </p>
+      <div v-if="stepTexts">
+        <div
+          v-for="(step, i) in stepTexts"
+          :key="`steps-${fileId}-${fieldId}-${i}`"
+          :class="`timeline-item ${ i < (stepTexts.length - 1) ? 'pb-2' : ''}`">
+          <div class="timeline-marker is-dark"/>
+          <div class="timeline-content">
+            <p
+              v-if="step.title !== ''"
+              class="heading">
+              {{ step.title }}
+            </p>
+            <p>
+              {{ step.content }}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -135,9 +137,10 @@ export default {
       return this.stepOptions && this.stepOptions.stepTitleSeparator
     },
     stepTexts () {
-      const txtStepsArr = this.rawText.split(this.stepSeparator)
+      // console.log('\nC > PreviewTimelineText > stepTexts > this.rawText : ', this.rawText)
+      const txtStepsArr = this.rawText && this.rawText.split(this.stepSeparator)
       // return txt
-      let txtStepsObjArr = txtStepsArr.map(txt => {
+      let txtStepsObjArr = txtStepsArr && txtStepsArr.map(txt => {
         const stepObj = {
           title: undefined,
           content: ''
@@ -151,7 +154,7 @@ export default {
         }
         return stepObj
       })
-      if (this.nowrap && txtStepsObjArr.length > 2) {
+      if (txtStepsObjArr && this.nowrap && txtStepsObjArr.length > 2) {
         txtStepsObjArr = [
           ...txtStepsObjArr.slice(0, 1),
           { content: '[...]' }

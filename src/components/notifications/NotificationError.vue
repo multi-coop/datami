@@ -1,9 +1,19 @@
 <template>
-  <div class="NotificationErrors datami-component container px-6 mb-2">
+  <div class="NotificationError datami-component container px-3 py-3 mb-2">
     <b-notification
       v-model="isActive"
-      aria-close-label="Close notification">
-      <div class="class columns is-mobile is-multiline">
+      aria-close-label="Close notification"
+      @close="closeDialog">
+      <div class="columns is-mobile is-multiline">
+        <!-- ERROR URL -->
+        <div class="column is-11 is-offset-1 has-text-centered">
+          <p>
+            <code>
+              {{ error.url }}
+            </code>
+          </p>
+        </div>
+
         <!-- ERROR TITLES -->
         <div class="column is-1 pt-5 has-text-centered">
           <b-icon
@@ -27,21 +37,21 @@
         </div>
 
         <!-- ERROR VALUES -->
-        <div class="column is-3 is-offset-1 has-text-centered">
+        <div class="column is-3 pt-0 is-offset-1 has-text-centered">
           <p>
             <code>
               {{ error.function }}
             </code>
           </p>
         </div>
-        <div class="column is-3 has-text-centered">
+        <div class="column is-3 pt-0 has-text-centered">
           <p>
             <code>
               {{ error.code }}
             </code>
           </p>
         </div>
-        <div class="column is-5 has-text-centered">
+        <div class="column is-5 pt-0 has-text-centered">
           <p>
             <pre class="break-spaces"><code> {{ getErrorMessage(error.resp) }} </code></pre>
           </p>
@@ -55,10 +65,14 @@
 import { mixinGlobal } from '@/utils/mixins.js'
 
 export default {
-  name: 'NotificationErrors',
+  name: 'NotificationError',
   mixins: [mixinGlobal],
   props: {
     fileId: {
+      default: null,
+      type: String
+    },
+    dialogId: {
       default: null,
       type: String
     },
@@ -69,6 +83,10 @@ export default {
     locale: {
       default: 'en',
       type: String
+    },
+    debug: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
@@ -79,6 +97,12 @@ export default {
   methods: {
     getErrorMessage (errResp) {
       return errResp.message || errResp.statusText || errResp
+    },
+    closeDialog (event) {
+      // console.log('\nC > NotificationError > closeDialog > event : ', event)
+      // console.log('C > NotificationError > closeDialog > this.dialogId : ', this.dialogId)
+      // console.log('C > NotificationError > closeDialog > this.error : ', this.error)
+      this.removeFileDialog(this.dialogId)
     }
   }
 }

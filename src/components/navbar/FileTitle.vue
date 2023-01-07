@@ -1,5 +1,7 @@
 <template>
-  <div class="FileTitle datami-component">
+  <div
+    class="FileTitle datami-component"
+    style="z-index: 2">
     <div class="is-flex is-align-items-center">
       <span :class="`px-2 is-size-6-mobile is-size-5-tablet is-size-4-desktop ${currentViewMode === 'map' ? 'text-shadow' : ''} ${isDarkMode && currentViewMode !== 'map' ? 'datami-darkmode-white-text' : 'has-text-dark'}`">
         {{ title }}
@@ -11,7 +13,7 @@
         <b-icon
           icon="information-outline"
           size="is-small"
-          :class="`ml-1 mr-6 has-text-${showFileInfos ? 'black' : 'grey-light'}`"
+          class="ml-1 mr-6 has-text-grey-light"
           @click.native="toggleDialog"/>
       </b-tooltip>
     </div>
@@ -37,10 +39,6 @@ export default {
     locale: {
       default: 'en',
       type: String
-    },
-    showFileInfos: {
-      default: false,
-      type: Boolean
     }
   },
   computed: {
@@ -50,6 +48,7 @@ export default {
   },
   methods: {
     toggleDialog () {
+      this.updateFileDialogs('FileInfos', { action: 'toggleFileInfos' })
       this.$emit('toggleInfos')
     }
   }

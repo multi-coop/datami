@@ -10,7 +10,7 @@ import {
 // see https://blog.logrocket.com/axios-vs-fetch-best-http-requests/#:~:text=To%20send%20data%2C%20fetch(),stringify%20method
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
-export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined) {
+export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined, filefullname = undefined) {
   // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
   // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
   // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
@@ -44,7 +44,9 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 
   if (!req.ok) {
     const err = {
+      url: url,
       function: funcName,
+      filefullname: filefullname,
       code: req.status,
       resp: resp
     }
@@ -53,6 +55,10 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 
   // return data
   return {
+    url: url,
+    filefullname: filefullname,
+    ok: req.ok,
+    status: req.status,
     data: resp,
     errors: errors
   }
@@ -61,20 +67,16 @@ export async function getData (url, funcName = undefined, token = undefined, raw
 export async function getFileData (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFile
-  // const getRaw = gitObj.provider === 'localhost'
   const provider = gitObj.provider
-  // const fetched = await getData(url, 'getFileData', token)
-  const fetched = await getData(url, 'getFileData', token, false, provider)
+  const fetched = await getData(url, 'getFileData', token, false, provider, gitObj.filefullname)
   return fetched
 }
 
 export async function getFileDataRaw (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFileRaw
-  // const getRaw = gitObj.provider === 'localhost'
   const provider = gitObj.provider
-  // const fetched = await getData(url, 'getFileDataRaw', token, true)
-  const fetched = await getData(url, 'getFileDataRaw', token, true, provider)
+  const fetched = await getData(url, 'getFileDataRaw', token, true, provider, gitObj.filefullname)
   return fetched
 }
 
@@ -127,6 +129,7 @@ export async function postNewBranch (commitData) {
 
   // build correct API url
   const newBranch = commitData.newBranch
+  const filefullname = commitData.gitObj.filefullname
   const sourceBranch = commitData.gitObj.branch
   const urlData = await buildPostBranchUrl(commitData.gitObj, sourceBranch, newBranch)
   // console.log('U > gitProvidersAPI > postNewBranch > urlData : ', urlData)
@@ -144,6 +147,8 @@ export async function postNewBranch (commitData) {
   // console.log('U > gitProvidersAPI > postNewBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
+      url: urlData.url,
+      filefullname: filefullname,
       function: 'postNewBranch',
       code: req.status,
       resp: resp
@@ -180,6 +185,7 @@ export async function putCommitToBranch (commitData) {
   const message = commitData.message
   const edited = commitData.edited
   const provider = commitData.gitObj.provider
+  const filefullname = commitData.gitObj.filefullname
 
   // build body and data
   const reqData = await buildPutCommitReqData(commitData.gitObj, branch, edited, message, author)
@@ -198,6 +204,8 @@ export async function putCommitToBranch (commitData) {
   // console.log('U > gitProvidersAPI > putCommitToBranch > resp : ', resp)
   if (!req.ok) {
     const err = {
+      url: reqData.url,
+      filefullname: filefullname,
       function: 'putCommitToBranch',
       code: req.status,
       resp: resp
@@ -234,6 +242,7 @@ export async function postMergeRequest (commitData) {
   const token = commitData.token
   const provider = commitData.gitObj.provider
   const userGit = commitData.userGit
+  const filefullname = commitData.gitObj.filefullname
   // console.log('U > gitProvidersAPI > postMergeRequest > method : ', method)
   // console.log('U > gitProvidersAPI > postMergeRequest > newBranch : ', newBranch)
   // console.log('U > gitProvidersAPI > postMergeRequest > token : ', token)
@@ -257,6 +266,8 @@ export async function postMergeRequest (commitData) {
   // console.log('U > gitProvidersAPI > postMergeRequest > resp : ', resp)
   if (!req.ok) {
     const err = {
+      url: urlData.url,
+      filefullname: filefullname,
       function: 'postMergeRequest',
       code: req.status,
       resp: resp
@@ -271,14 +282,19 @@ export async function postMergeRequest (commitData) {
 }
 
 export const buildContributionResume = (commitData, responsesData, onlyCommit = false) => {
+  // console.log('\nU > gitProvidersAPI > buildContributionResume > commitData : ', commitData)
+  // console.log('U > gitProvidersAPI > buildContributionResume > responsesData : ', responsesData)
+
   const gitObj = commitData.gitObj
   const provider = gitObj.provider
   const repoUrl = gitObj.repoUrl
   const filePath = gitObj.filepath
+  const filefullname = gitObj.filefullname
   const branch = commitData.newBranch
   const resumeData = {
     code: 200,
     provider: provider,
+    filefullname: filefullname,
     branch: branch
   }
   if (onlyCommit) {
@@ -288,14 +304,11 @@ export const buildContributionResume = (commitData, responsesData, onlyCommit = 
   } else {
     switch (provider) {
       case 'gitlab':
-        // resumeData.branchUrl = responsesData.respPostBranch.data.web_url
         resumeData.branchUrl = `${repoUrl}/-/blob/${branch}/${filePath}`
-        // resumeData.commitUrl = responsesData.respPutCommit.data
         resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.web_url
         break
       case 'github':
         resumeData.branchUrl = `${repoUrl}/blob/${branch}/${filePath}`
-        // resumeData.commitUrl = responsesData.respPutCommit.data.commit.html_url
         resumeData.mergeRequestUrl = responsesData.respPostMergeRequest.data.html_url
         break
     }

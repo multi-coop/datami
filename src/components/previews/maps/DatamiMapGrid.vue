@@ -41,12 +41,9 @@
 
 import { mixinGlobal, mixinMap } from '@/utils/mixins.js'
 
-// import DatamiMap from '@/components/previews/maps/DatamiMap'
-
 export default {
   name: 'DatamiMapGrid',
   components: {
-    // DatamiMap
     DatamiMap: () => import(/* webpackChunkName: "DatamiMap" */ '@/components/previews/maps/DatamiMap.vue')
   },
   mixins: [

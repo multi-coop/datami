@@ -80,7 +80,9 @@ export const mixinGlobal = {
       getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors',
       getUserFullscreen: 'git-user/getUserFullscreen',
-      isDarkMode: 'git-storage/isDarkMode'
+      isDarkMode: 'git-storage/isDarkMode',
+      getDialogsById: 'git-dialogs/getDialogsById',
+      getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
     fileToken () {
       return this.getFileToken(this.fileId)
@@ -243,13 +245,53 @@ export const mixinGlobal = {
       return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
     },
 
+    // UX
     userFullscreen () {
       return this.getUserFullscreen(this.fileId)
+    },
+    fileDialogs () {
+      return this.getDialogsById(this.fileId)
+    },
+    hasFileDialogs () {
+      return this.fileDialogs.length
+    },
+
+    // SIGNALS
+    fileSignals () {
+      return this.getSignalsByFileId(this.fileId)
     }
   },
   methods: {
     uuidv4,
     findFromPath,
+    ...mapActions({
+      updateDialogs: 'git-dialogs/updateFileDialog',
+      removeFileDialog: 'git-dialogs/removeFileDialog',
+      removeFileDialogByComponent: 'git-dialogs/removeFromDialogsByComponent',
+      addSignal: 'git-signals/addSignal',
+      removeSignal: 'git-signals/removeSignal'
+    }),
+    updateFileDialogs (component, event, show = true) {
+      // console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
+      // console.log('M > mixinGlobal > updateFileDialogs > show : ', show)
+      // console.log('M > mixinGlobal > updateFileDialogs > event : ', event)
+      // console.log('M > mixinGlobal > updateFileDialogs > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.fileId, component: component, show: show, event: event })
+    },
+    resetFileDialog () {
+      // console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.fileId, reset: true })
+    },
+    addFileSignal (action, event) {
+      // console.log('\nM > mixinGlobal > addFileSignal > component : ', component)
+      // console.log('M > mixinGlobal > addFileSignal > event : ', event)
+      // console.log('M > mixinGlobal > addFileSignal > this.fileId : ', this.fileId)
+      const signalId = uuidv4()
+      this.addSignal({ fileId: this.fileId, signalId: signalId, action: action, event: event })
+    },
+    removeFileSignal (signalId) {
+      this.removeSignal({ signalId: signalId })
+    },
     trimField (field) {
       return {
         field: field.field,
@@ -478,7 +520,8 @@ export const mixinGit = {
       getRefBranch: 'git-user/getRefBranch',
       getUserBranchesNotRef: 'git-user/getUserBranchesNotRef',
       getUserActiveBranch: 'git-user/getUserActiveBranch',
-      userBranch: 'git-user/getUserBranch'
+      userBranch: 'git-user/getUserBranch',
+      checkIfErrorExists: 'git-data/checkIfErrorExists'
     }),
     userGit () {
       return this.getUserGit(this.fileId)
@@ -502,9 +545,40 @@ export const mixinGit = {
     getFileDataRaw,
     getUserInfosFromToken,
     ...mapActions({
+      resetReqErrors: 'git-data/resetReqErrors',
+      updateReqErrors: 'git-data/updateReqErrors',
       updateUserBranches: 'git-user/updateUserBranches',
       changeActiveUserBranch: 'git-user/changeActiveUserBranch'
-    })
+    }),
+    async getFileDataAndErrors (gitObj, token, raw = false) {
+      // this.updateReloading({ fileId: this.fileId, isLoading: true })
+      // console.log('\nM > MixinGit > getFileDataAndErrors > gitObj.filefullname : ', gitObj.filefullname)
+
+      // fetch data
+      let resp
+      if (raw) {
+        resp = await this.getFileDataRaw(gitObj, token)
+      } else {
+        resp = await this.getFileData(gitObj, token)
+      }
+      // console.log('\nM > MixinGit > getFileDataAndErrors > resp : ', resp)
+
+      // process errors if any
+      const errors = resp.errors
+      if (errors.length) {
+        const reqErrors = errors.map(err => { return { ...err, fileId: this.fileId, errorId: this.uuidv4() } })
+        // console.log('M > MixinGit > getFileDataAndErrors > reqErrors : ', reqErrors)
+        reqErrors.forEach(err => {
+          if (!this.checkIfErrorExists(err)) {
+            this.updateReqErrors({ error: err, addToErrors: true })
+            this.updateFileDialogs('NotificationErrors', { error: err })
+          }
+        })
+      }
+
+      // this.updateReloading({ fileId: this.fileId, isLoading: false })
+      return resp
+    }
   }
 }
 
@@ -874,10 +948,10 @@ export const mixinCards = {
   computed: {
     cardsSettingsFromFileOptions () {
       let cardsSettings
-      console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
       if (this.hasCardsView && this.cardsViewIsActive) {
         const settings = this.cardsSettingsFromOptions
-        console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
+        // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
         const miniSettings = settings.mini
         const detailSettings = settings.detail
         const mapping = this.columns.map(h => {
@@ -897,7 +971,7 @@ export const mixinCards = {
           mapping: mapping
         }
       }
-      console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
     }
     // mappingForAll () {

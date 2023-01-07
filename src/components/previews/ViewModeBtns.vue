@@ -1,6 +1,7 @@
 <template>
   <div
-    class="ViewModeBtns datami-component is-flex is-align-items-center">
+    class="ViewModeBtns datami-component is-flex is-align-items-center"
+    style="z-index: 2">
     <!-- BUTTONS -->
     <div class="dropdown is-hoverable is-left">
       <div class="dropdown-trigger">

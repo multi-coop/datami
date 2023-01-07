@@ -8,32 +8,12 @@
       class="loader big-loader"/>
 
     <!-- DEBUGGING -->
-    <div
+    <!-- <div
       v-if="debug"
       class="debug">
       getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
       getZoom : <code>{{ getZoom }}</code><br>
-    </div>
-
-    <!-- DETAIL CARD FOR DISPLAYED ITEM -->
-    <div
-      v-show="showCard && displayedItemId && showDetail"
-      class="map-card map-detail-card-item"
-      :style="`width: ${cardDetailWidth}; transform: translate(-50%, ${mapHeightTop}px); -webkit-transform: translate(-50%, ${mapHeightTop}px)`">
-      <DatamiCard
-        :file-id="fileId"
-        :fields="fields"
-        :field-mapping="mapCardsSettingsDetail"
-        :item="displayedItem"
-        :show-detail="true"
-        :show-detail-card="showDetail"
-        :is-mini="false"
-        :from-map="true"
-        :locale="locale"
-        @toggleDetail="toggleItemCard"
-        @action="SendActionToParent"
-        @updateCellValue="emitUpdate"/>
-    </div>
+    </div> -->
 
     <!-- DISPLAY MAP -->
     <div
@@ -57,8 +37,7 @@
             :from-map="true"
             :locale="locale"
             @toggleDetail="toggleItemCard"
-            @action="SendActionToParent"
-            @updateCellValue="emitUpdate"/>
+            @action="SendActionToParent"/>
         </div>
 
         <!-- LEGEND & LAYERS -->
@@ -86,13 +65,13 @@
         </div>
 
         <!-- DEBUG -->
-        <div
+        <!-- <div
           v-if="debug"
           class="columns is-multiline">
           <div class="column is-6">
             mapSettings: <br><pre><code>{{ mapSettings }}</code></pre>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -136,19 +115,12 @@ import {
 } from '@/utils/geoJson.js'
 // import { LoaderTargetPlugin } from 'webpack'
 
-// import DatamiCard from '@/components/previews/cards/DatamiCard'
-// import DatamiMapLayers from '@/components/previews/maps/DatamiMapLayers'
-// import DatamiMapLegend from '@/components/previews/maps/DatamiMapLegend'
-
 import PopupContent from '@/components/previews/maps/DatamiMapPopup'
 const PopupClass = Vue.extend(PopupContent)
 
 export default {
   name: 'DatamiMap',
   components: {
-    // DatamiCard,
-    // DatamiMapLayers,
-    // DatamiMapLegend
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DatamiMapLayers: () => import(/* webpackChunkName: "DatamiMapLayers" */ '@/components/previews/maps/DatamiMapLayers.vue'),
     DatamiMapLegend: () => import(/* webpackChunkName: "DatamiMapLegend" */ '@/components/previews/maps/DatamiMapLegend.vue')
@@ -260,7 +232,7 @@ export default {
 
       // MAP SETUP
       mapHeight: 600,
-      mapHeightTop: 240,
+      mapHeightTop: 140,
       preferCanvas: true,
 
       zoom: 13, // GeoCenters.FRANCE.zoom,
@@ -578,7 +550,7 @@ export default {
           // console.log('C > DatamiMap > mapHeightTop > editCsvElem : ', editCsvElem)
           // console.log('C > DatamiMap > mapHeightTop > h3 : ', h3)
           // const adjusting = (this.activeFilterTags && this.activeFilterTags.length) ? 12 : 5
-          const adjusting = 4
+          const adjusting = -0.5
           height = h1 + h2 + h3 + adjusting
         }
         // console.log('C > DatamiMap > mapHeightTop > height : ', height)
@@ -1581,9 +1553,9 @@ export default {
         }
       }
     },
-    goToDetailPage (itemId) {
-      console.log('C > DatamiMap > goToDetailPage > itemId : ', itemId)
-    },
+    // goToDetailPage (itemId) {
+    //   console.log('C > DatamiMap > goToDetailPage > itemId : ', itemId)
+    // },
 
     // - - - - - - - - - - - - - - - - - - //
     // ITEM MATCHING
@@ -1650,14 +1622,34 @@ export default {
       } else {
         this.showCard = true
         if (event.btn === 'showDetailButton') {
-          this.showDetail = true
+          // this.showDetail = true
+
+          // :file-id="fileId"
+          // :fields="fields"
+          // :field-mapping="mapCardsSettingsDetail"
+          // :item="displayedItem"
+          // :show-detail="true"
+          // :show-detail-card="showDetail"
+          // :is-mini="false"
+          // :from-map="true"
+          // :locale="locale"
+          // @toggleDetail="toggleItemCard"
+          // @action="SendActionToParent"
+          // @updateCellValue="emitUpdate"/>
+
+          const dialogPayload = {
+            item: this.displayedItem,
+            fields: this.fields,
+            fieldMapping: this.mapCardsSettingsDetail
+          }
+          this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
         }
       }
     },
-    emitUpdate (event) {
-      // console.log('\nC > DatamiMap > emitUpdate > event : ', event)
-      this.$emit('updateCellValue', event)
-    },
+    // emitUpdate (event) {
+    //   // console.log('\nC > DatamiMap > emitUpdate > event : ', event)
+    //   this.$emit('updateCellValue', event)
+    // },
     SendActionToParent (event) {
       this.$emit('action', event)
     },

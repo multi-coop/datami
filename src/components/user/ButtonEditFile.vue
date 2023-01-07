@@ -19,7 +19,7 @@
             size="is-small"
             expanded
             icon-left="pencil"
-            @click="commitChanges"/>
+            @click="OpenCommitDialog"/>
         </b-tooltip>
       </p>
       <p class="control">
@@ -83,8 +83,8 @@ export default {
     ...mapActions({
       changeViewMode: 'git-data/changeViewMode',
       changeEditViewMode: 'git-data/changeEditViewMode',
-      toggleEditNavbar: 'toggleEditNavbar',
-      updateSaving: 'git-data/updateSaving'
+      toggleEditNavbar: 'toggleEditNavbar'
+      // updateSaving: 'git-data/updateSaving'
     }),
     openEditMode () {
       this.changeEditViewMode({ fileId: this.fileId, mode: 'edit' })
@@ -99,8 +99,9 @@ export default {
       this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
       this.toggleEditNavbar({ uuid: this.fileId, status: false })
     },
-    commitChanges () {
-      this.updateSaving({ fileId: this.fileId, isSaving: true })
+    OpenCommitDialog () {
+      // console.log('\nC > ButtonEditFile > OpenCommitDialog ...')
+      this.updateFileDialogs('OpenCommitDialog', {})
     }
   }
 }
