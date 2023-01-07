@@ -67,13 +67,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-/* .ButtonWrapCell {
-  position: relative;
-  left: -2px;
-  top: 0px;
-} */
-
-</style>

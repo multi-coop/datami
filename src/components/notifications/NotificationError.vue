@@ -106,9 +106,3 @@ export default {
     }
   }
 }
-</script>
-<style scoped>
-/* .break-spaces {
-  white-space: break-spaces !important;
-} */
-</style>

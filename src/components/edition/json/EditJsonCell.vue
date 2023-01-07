@@ -185,17 +185,3 @@ export default {
 }
 
 </script>
-
-<style>
-
-/* .g-cell {
-  background-color: transparent;
-}
-.g-cell-darkmode {
-  background-color: white;
-}
-.g-label {
-  font-size: .85em!important;
-  font-weight: 600!important;
-} */
-</style>

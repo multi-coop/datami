@@ -129,7 +129,7 @@
       <b-tag
         :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
         :style="`${tagStyle}; z-index: 1;`"
-        @mouseover.native="showTag = true; showGlobalTooltip($event, { position: 'top', type: 'tag', data: { tag: val, field: field } })"
+        @mouseover.native="showTag = true; showGlobalTooltip($event, tagTooltipData(val))"
         @mouseleave.native="showTag = false; hideGlobalTooltip"
         @click.native="$emit('expand')">
         <span v-if="!getValueDefinitionLabel(val)">
@@ -151,7 +151,7 @@
       v-else
       :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
       :style="tagStyle"
-      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'tag', data: { tag: val, field: field } })"
+      @mouseover.native="showGlobalTooltip($event, tagTooltipData(val))"
       @mouseleave.native="hideGlobalTooltip"
       @click.native="$emit('expand')">
       {{ val }}
@@ -213,15 +213,21 @@ export default {
     itemDirect () {
       return this.getForeignItem(this.field, this.val)
     }
+  },
+  methods: {
+    tagTooltipData (val) {
+      const data = {
+        position: 'top',
+        type: 'tag',
+        field: this.field,
+        value: val,
+        icon: this.getIconFieldType(this.field),
+        valDefLabel: this.getValueDefinitionLabel(val),
+        valDefDescription: this.getValueDefinitionDescription(val),
+        ressourceInfos: this.ressourceInfos
+      }
+      return data
+    }
   }
 }
 </script>
-
-<style>
-/* .PreviewTagValue > .b-tooltip > .tooltip-trigger {
-  z-index: 1 !important;
-}
-.tag-pointer {
-  cursor: pointer;
-} */
-</style>

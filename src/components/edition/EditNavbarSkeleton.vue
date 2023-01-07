@@ -68,11 +68,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-/* .edit-save-button {
-  z-index: 3;
-} */
-
-</style>

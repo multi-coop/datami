@@ -432,38 +432,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/* .edit-md-full-height {
-  height: 100% !important;
-}
-.edit-md {
-  color: white;
-  font-family: monospace;
-  background-color: #191919;
-  max-height: 100% !important;
-  overflow: hidden;
-}
-.diff-data {
-  overflow-x: auto;
-  white-space: pre;
-  background-color: #f5f5f5;
-  padding: 1.25em 1.5em;
-  font-size: .875em;
-  word-wrap: normal;
-  font-weight: 400;
-  -webkit-font-smoothing: auto;
-  font-family: monospace;
-  margin-bottom: 3em;
-}
-
-.git-ins {
-  text-decoration: none !important;
-  background-color: #d4fcbc !important;
-}
-.git-del {
-  text-decoration: line-through !important;
-  background-color: #fbb6c2 !important;
-  color: #555 !important;
-} */
-</style>

@@ -731,34 +731,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-  /* .no-shadow {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-  }
-  .image-wrapper {
-    min-height: 200px;
-  }
-  .image-constrained {
-    max-height: 200px;
-    width: auto !important;
-  }
-  .card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-content {
-    height: 100%;
-  }
-  .hover-effect {
-    transition: all .3s cubic-bezier(.25,.8,.25,1);
-    box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22);
-  }
-  .detail-padding {
-    padding-bottom: 3em;
-    padding-left: 3em;
-    padding-right: 3em;
-  } */
-</style>

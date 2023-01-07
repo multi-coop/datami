@@ -1,27 +1,48 @@
 <template>
   <div
     :class="`datami-tooltip ${positionClass}`"
-    :style="`${left}; ${top}; transform: ${transform};`">
+    :style="`${left}; ${top}; transform: ${transform};${isFixedWidth ? 'width: 300px;' : ''}`">
     <div v-if="tooltipOptions">
+      <!-- INFO -->
       <p
         v-if="tooltipOptions.type === 'info'"
         class="has-text-centered">
         {{ tooltipOptions.label }}
       </p>
+
+      <!-- FIELD -->
       <p
         v-else-if="tooltipOptions.type === 'field'"
         class="">
-        FIELD
+        <DatamiTooltipField :locale="locale"/>
       </p>
+
+      <!-- FIELDTYPE -->
+      <p
+        v-else-if="tooltipOptions.type === 'fieldtype'"
+        class="">
+        <span class="mr-3">
+          {{ t('field.type', locale) }} :
+        </span>
+        <b-icon
+          :icon="tooltipOptions.icon"
+          class="ml-0 mr-1"
+          type="is-white"
+          size="is-small"/>
+        {{ t(`field.${tooltipOptions.field.type}`, locale) }}
+        {{ tooltipOptions.field.subtype ? '(' + t(`field.${tooltipOptions.field.subtype}`, locale) + ')' : '' }}
+      </p>
+
+      <!-- TAG -->
       <p
         v-else-if="tooltipOptions.type === 'tag'"
         class="">
-        TAG
+        <DatamiTooltipTag :locale="locale"/>
       </p>
     </div>
     <!-- DEBUGGING -->
     <div
-      v-if="tooltipOptions.type !== 'info'"
+      v-if="debugTypes.includes(tooltipOptions.type)"
       class="mt-3 px-2 py-2"
       style="background-color: grey;">
       <p class="mb-2 has-text-centered">
@@ -48,7 +69,7 @@
         <div
           class="column is-8">
           tooltipOptions : <br>
-          <pre style="max-height: 160px;"><code>{{ tooltipOptions }}</code></pre>
+          <pre style="max-height: 150px;"><code>{{ tooltipOptions }}</code></pre>
         </div>
       </div>
     </div>
@@ -63,11 +84,27 @@ import { mixinTooltip } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiTooltip',
+  components: {
+    DatamiTooltipField: () => import(/* webpackChunkName: "DatamiTooltipField" */ '@/components/user/DatamiTooltipField.vue'),
+    DatamiTooltipTag: () => import(/* webpackChunkName: "DatamiTooltipTag" */ '@/components/user/DatamiTooltipTag.vue')
+  },
   mixins: [mixinTooltip],
   props: {
+    locale: {
+      default: '',
+      type: String
+    },
     debug: {
       default: false,
       type: Boolean
+    }
+  },
+  data () {
+    return {
+      debugTypes: [
+        // 'field',
+        // 'tag'
+      ]
     }
   },
   computed: {
@@ -76,8 +113,13 @@ export default {
       tooltipOptions: (state) => state.tooltipOptions
     }),
     ...mapGetters({
+      t: 'git-translations/getTranslation',
       isDarkMode: 'git-storage/isDarkMode'
     }),
+    isFixedWidth () {
+      const fixedTypes = ['field', 'tag']
+      return this.tooltipOptions && fixedTypes.includes(this.tooltipOptions.type)
+    },
     position () {
       return this.tooltipOptions && this.tooltipOptions.position
     },
@@ -118,10 +160,10 @@ export default {
             top = this.rect.bottom + 5
             break
           case 'left':
-            top = this.rect.top + (this.rect.height / 2) - 5
+            top = this.rect.top + (this.rect.height / 2)
             break
           case 'right':
-            top = this.rect.top + (this.rect.height / 2) - 5
+            top = this.rect.top + (this.rect.height / 2)
             break
         }
         top += this.scrolled.top

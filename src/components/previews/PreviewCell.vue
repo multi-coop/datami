@@ -344,15 +344,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  /* .datami-nowrap {
-    white-space: nowrap;
-  }
-  .datami-wrap {
-    min-height: 2em;
-  }
-  .has-wrap-btn {
-
-  } */
-</style>

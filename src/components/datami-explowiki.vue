@@ -9,7 +9,8 @@
       :file-id="fileId"/>
 
     <DatamiTooltip
-      v-if="!fromMultiFiles && tooltip"/>
+      v-if="!fromMultiFiles && tooltip"
+      :locale="locale"/>
 
     <!-- WIDGET -->
     <div
@@ -483,26 +484,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-.datami-container {
-  max-width: 100% !important;
-}
-
-.no-text-transform {
-  text-transform: none!important;
-}
-
-@media (max-width: 768px) {
-  .filetitle-and-viewmodes{
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-  .usernavbar {
-    justify-content: center !important;
-  }
-}
-
-</style>

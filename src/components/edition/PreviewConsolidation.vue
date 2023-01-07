@@ -248,9 +248,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* .datami-selection {
-  min-width: 150px;
-} */
-</style>

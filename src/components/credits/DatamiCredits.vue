@@ -94,17 +94,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* .datami-darkmode-white-text{
-  color: white !important;
-}
-
-.link-multi {
-  color: grey;
-  text-decoration: underline;
-}
-.mini-logo {
-  width: 70px !important;
-} */
-</style>

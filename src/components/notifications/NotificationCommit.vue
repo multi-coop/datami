@@ -167,9 +167,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* a {
-  color: grey !important;
-} */
-</style>

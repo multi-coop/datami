@@ -11,7 +11,8 @@
       :file-id="fileId"/>
 
     <DatamiTooltip
-      v-if="!fromMultiFiles && tooltip"/>
+      v-if="!fromMultiFiles && tooltip"
+      :locale="locale"/>
 
     <!-- DEBUG ERRORS -->
     <!-- <div
@@ -721,31 +722,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-/* .datami-container {
-  max-width: 100% !important;
-}
-
-.no-text-transform{
-  text-transform: none!important;
-}
-.datami-darkmode-white-text{
-  color: white !important;
-}
-.datami-darkmode{
-  background-color: #2d2d30 !important;
-}
-@media(max-width:768px) {
-  .filetitle-and-viewmodes{
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-  .usernavbar{
-    justify-content: center !important;
-  }
-} */
-
-</style>

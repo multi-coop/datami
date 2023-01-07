@@ -6,27 +6,30 @@
   border-radius: 6px;
   font-size: .85rem;
   font-weight: 400;
-  box-shadow: 0 1px 2px 1px rgba(0,1,0,.2);
+  box-shadow: 0 1px 2px 1px rgba(0, 1, 0, .2);
   z-index: 50;
   /* white-space: nowrap; */
   position: absolute;
   max-width: 450px;
 }
+
 .datami-tooltip::before {
   position: absolute;
   content: "";
   pointer-events: none;
   z-index: 50;
 }
+
 .datami-tooltip.is-medium {
   max-width: 200px;
 }
+
 .datami-tooltip.is-large {
   max-width: 300px;
 }
 
 .datami-tooltip.is-top::before {
-  width: 0; 
+  width: 0;
   height: 0;
   left: 50%;
   top: 100%;
@@ -34,27 +37,30 @@
   border-right: 5px solid transparent;
   border-top: 5px solid #363636;
 }
+
 .datami-tooltip.is-left::before {
   width: 0;
   height: 0;
-  top: 50%;
+  top: calc(50% - 5px);
   left: 100%;
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
   border-left: 5px solid #363636;
 }
+
 .datami-tooltip.is-right::before {
-  width: 0; 
-  height: 0; 
-  top: 50%;
+  width: 0;
+  height: 0;
+  top: calc(50% - 5px);
   right: 100%;
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
   border-right: 5px solid #363636;
 }
+
 .datami-tooltip.is-bottom::before {
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   left: 50%;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;

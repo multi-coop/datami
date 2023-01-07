@@ -68,12 +68,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  /* .gitribute-darkmode-grey-background{
-    background-color: rgb(151, 151, 150) !important;
-  }
-  .white{
-    color: white !important;
-  } */
-</style>

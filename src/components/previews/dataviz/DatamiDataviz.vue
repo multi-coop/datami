@@ -100,14 +100,3 @@ export default {
 }
 
 </script>
-
-<style>
-/* .apexcharts-legend-text{
-  background-color: white !important;
-  padding: 1% !important;
-}
-
-.datami-dataviz-darkmode .apexcharts-tooltip {
-  color: black !important;
-} */
-</style>

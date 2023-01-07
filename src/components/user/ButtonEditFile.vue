@@ -145,19 +145,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-  .ButtonEditFile > .field > .field-body {
-    -webkit-box-flex: 1!important;
-    -ms-flex-positive: 1!important;
-    flex-grow: 1!important;
-  }
-
-</style>
-
-<style scoped>
-  /* .datami-darkmode {
-    background-color: #2d2d30 !important;
-  } */
-</style>

@@ -5,7 +5,14 @@
   width: 30em;
   z-index: 55;
 }
+
 .token-input {
   min-width: 30em;
   z-index: 50;
+}
+
+.ButtonEditFile>.field>.field-body {
+  -webkit-box-flex: 1 !important;
+  -ms-flex-positive: 1 !important;
+  flex-grow: 1 !important;
 }

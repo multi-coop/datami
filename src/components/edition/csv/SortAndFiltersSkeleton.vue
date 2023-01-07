@@ -143,9 +143,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/* .SortAndFiltersSkeleton > .navbar > .navbar-menu > .navbar-end {
-  margin-right: 0em;
-} */
-</style>

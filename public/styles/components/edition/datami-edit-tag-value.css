@@ -2,31 +2,38 @@
   display: block;
   flex-direction: column;
 }
-.dropdown-tag-menu, .dropdown-tags-menu {
+
+.dropdown-tag-menu,
+.dropdown-tags-menu {
   position: relative;
   z-index: 1;
 }
+
 .dropdown-tags {
   display: block;
 }
-.dropdown-tags > .dropdown-menu {
+
+.dropdown-tags>.dropdown-menu {
   z-index: 1 !important;
   position: relative;
   /* background-color: #2f2f2f !important; */
 }
-.dropdown-item > .field > .help, .dropdown-content > .field > .help  {
+
+.dropdown-item>.field>.help,
+.dropdown-content>.field>.help {
   text-align: left;
   font-size: .6em;
   font-style: italic;
   color: #b5b5b5;
   margin-bottom: .3em;
 }
+
 .is-tag-active {
   background-color: #2f2f2f !important;
   color: white !important;
 }
 
-.dropdown-tags-menu > .dropdown-content {
+.dropdown-tags-menu>.dropdown-content {
   max-height: 275px;
   overflow: auto;
 

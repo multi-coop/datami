@@ -1,17 +1,17 @@
-
-.datami-darkmode-tab-header.is-active > a {
+.datami-darkmode-tab-header.is-active>a {
   background-color: #dbdbdb !important;
   border: 1px solid white !important;
 }
 
-.multi-files-tabs.is-vertical.width-80 > .tab-content {
+.multi-files-tabs.is-vertical.width-80>.tab-content {
   width: 80%;
 }
-.multi-files-tabs.is-vertical.width-80 > .tabs {
+
+.multi-files-tabs.is-vertical.width-80>.tabs {
   width: 20%;
 }
 
-.multi-files-tabs > nav > ul {
+.multi-files-tabs>nav>ul {
   border-bottom: none !important;
 }
 
@@ -47,6 +47,7 @@
 .datami-clearmode-tab-header a {
   color: grey !important;
 }
+
 .datami-darkmode-tab-header a {
   color: white !important;
 }
@@ -54,6 +55,7 @@
 .datami-multi-files-tab.datami-darkmode-tab-header.is-active a {
   color: black !important;
 }
+
 .datami-multi-files-tab.datami-clearmode-tab-header.is-active a {
   color: white !important;
 }
@@ -61,6 +63,7 @@
 .datami-multi-files-tab.datami-darkmode-tab-header.is-active a:hover {
   color: black !important;
 }
+
 .datami-multi-files-tab.datami-clearmode-tab-header.is-active a:hover {
   color: white !important;
 }
@@ -68,6 +71,7 @@
 .datami-multi-files-tab.datami-darkmode-tab-header:not(.is-active) a:hover {
   color: black !important;
 }
+
 .datami-multi-files-tab.datami-clearmode-tab-header:not(.is-active) a:hover {
   color: black !important;
 }
@@ -77,15 +81,18 @@
   margin-right: -1em;
   margin-top: -1em;
 }
+
 .multifiles-container-top {
   margin-top: -1em;
 }
+
 .add-multifiles-border {
   border-left: 1px solid #dbdbdb;
   border-right: 1px solid #dbdbdb;
   border-bottom: 1px solid #dbdbdb;
   border-top: 1px solid #dbdbdb;
 }
+
 .add-multifiles-border-top {
   border-top: 1px solid #dbdbdb;
 }

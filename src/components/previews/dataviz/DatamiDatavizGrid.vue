@@ -201,12 +201,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-
-/* .dataviz-scroll {
-  overflow-y: auto;
-  height: 100%;
-} */
-
-</style>

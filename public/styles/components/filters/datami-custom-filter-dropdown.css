@@ -1,19 +1,20 @@
-.CustomFilterDropdown.dark-background > .navbar-link {
+.CustomFilterDropdown.dark-background>.navbar-link {
   color: white !important;
   background-color: #2d2d30 !important;
   border: 1px solid white !important;
 }
-.CustomFilterDropdown.dark-background > .navbar-link:hover {
+
+.CustomFilterDropdown.dark-background>.navbar-link:hover {
   background-color: black !important;
 }
 
-.CustomFilterDropdown > .navbar-dropdown {
+.CustomFilterDropdown>.navbar-dropdown {
   max-height: 275px;
   overflow: auto;
   padding-bottom: 1.5em;
 }
 
-.CustomFilterDropdown.clear-background > .navbar-dropdown {
+.CustomFilterDropdown.clear-background>.navbar-dropdown {
   background-color: white !important;
   /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
   background:
@@ -37,7 +38,8 @@
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
-.CustomFilterDropdown.dark-background > .navbar-dropdown {
+
+.CustomFilterDropdown.dark-background>.navbar-dropdown {
   background-color: black !important;
   background:
     /* Shadow covers */
@@ -60,21 +62,25 @@
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
-.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item {
+
+.CustomFilterDropdown.dark-background>.navbar-dropdown>.navbar-item {
   color: white !important;
 }
-.CustomFilterDropdown.dark-background > .navbar-dropdown > a.navbar-item:hover {
-  color: black !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item > a:hover {
+
+.CustomFilterDropdown.dark-background>.navbar-dropdown>a.navbar-item:hover {
   color: black !important;
 }
 
-.CustomFilterDropdown > .navbar-link {
+.CustomFilterDropdown.dark-background>.navbar-dropdown>.navbar-item>a:hover {
+  color: black !important;
+}
+
+.CustomFilterDropdown>.navbar-link {
   padding-top: 0;
   padding-bottom: 0;
   background-color: white !important;
 }
-.CustomFilterDropdown > .navbar-link:hover {
+
+.CustomFilterDropdown>.navbar-link:hover {
   background-color: #f2f2f2 !important;
 }

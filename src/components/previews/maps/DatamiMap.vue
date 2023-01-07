@@ -1788,39 +1788,3 @@ export default {
 }
 
 </script>
-
-<style lang="css">
-/* @import '~maplibre-gl/dist/maplibre-gl.css'; */
-/*
-.map-card {
-  z-index: 1;
-  position: absolute;
-}
-
-.map-bottom-right {
-  right: 50px;
-  bottom: 25px;
-}
-
-.map-mini-card-item {
-  z-index: 10;
-  left: 50px;
-}
-
-.map-detail-card-item {
-  z-index: 10;
-  width: 75%;
-  left: 50%;
-}
-
-.big-loader {
-  z-index: 10;
-  position: absolute !important;
-  left: 50%;
-  top: calc(50% - 8em);
-  border-width: 10px !important;
-  height: 8em !important;
-  width: 8em !important;
-} */
-
-</style>

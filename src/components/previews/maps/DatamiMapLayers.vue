@@ -170,11 +170,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-/* .map-layers {
-  margin-bottom: 5px;
-} */
-
-</style>

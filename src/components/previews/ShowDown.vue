@@ -98,9 +98,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  /* .datami-component-shodown div p, h1, h2, h3, h4, h6 {
-    color: var(---txtColor) !important;
-  } */
-</style>

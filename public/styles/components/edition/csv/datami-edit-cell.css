@@ -1,21 +1,26 @@
-.datami-cell > .field {
+.datami-cell>.field {
   /* border: none; */
   width: 100%;
 }
+
 .g-cell {
   background-color: transparent;
 }
+
 .g-cell-darkmode {
   background-color: white;
 }
+
 .g-cell-number-darkmode {
   background-color: white !important;
 }
+
 .g-header {
-  font-size: .85em!important;
-  font-weight: 600!important;
+  font-size: .85em !important;
+  font-weight: 600 !important;
 }
+
 .g-label {
-  font-size: .85em!important;
-  font-weight: 600!important;
+  font-size: .85em !important;
+  font-weight: 600 !important;
 }

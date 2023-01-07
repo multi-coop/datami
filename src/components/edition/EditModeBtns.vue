@@ -115,28 +115,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-/* .edit-mode-button {
-  z-index: 3;
-}
-
-.EditModeBtns > .field > .field-body > .field.has-addons {
-  justify-content: center !important;
-}
-
-.datami-darkmode-border-white {
-  border: 1px solid white !important;
-}
-.datami-darkmode-border-dark {
-  border: 1px solid #363636 !important;
-}
-
-@media(max-width: 768px) {
-  .EditModeBtns{
-    justify-content: end !important;
-  }
-} */
-
-</style>

@@ -1,24 +1,30 @@
 .image-wrapper {
   min-height: 200px;
 }
+
 .image-wrapper-table {
   height: 40px;
 }
+
 .image-wrapper-mini-from-map {
   height: 60px;
 }
+
 .image-constrained {
   max-height: 200px;
   width: auto !important;
 }
+
 .datami-card {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .datami-card-content {
   height: 100%;
 }
+
 .detail-padding {
   padding-bottom: 3em;
   padding-left: 3em;

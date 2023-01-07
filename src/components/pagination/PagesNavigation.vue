@@ -263,34 +263,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/* .PagesNavigation.datami-darkmode > div > nav > ul.pagination-list > li > a {
-  color: white !important;
-  border: 1px solid white !important;
-}
-
-.datami-darkmode-white-text{
-  color: white !important;
-}
-
-.datami-darkmode-white-text-dark-bg{
-  color: white !important;
-  background-color: #363636 !important;
-}
-.pagination-link.is-current {
-  background-color: #363636;
-  border-color: #363636;
-}
-.select-datami-darkmode > span > select {
-  color: white !important;
-  border: 1px solid white !important;
-  background-color: #363636 !important;
-}
-.select-datami-darkmode > span > select:hover::after {
-  border-color: white !important;
-}
-.select-datami-darkmode > span > select::after {
-  border-color: white !important;
-} */
-</style>

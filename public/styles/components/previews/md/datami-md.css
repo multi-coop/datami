@@ -1,6 +1,7 @@
 .edit-md-full-height {
   height: 100% !important;
 }
+
 .edit-md {
   color: white;
   font-family: monospace;
@@ -8,6 +9,7 @@
   max-height: 100% !important;
   overflow: hidden;
 }
+
 .diff-data {
   overflow-x: auto;
   white-space: pre;
@@ -25,6 +27,7 @@
   text-decoration: none !important;
   background-color: #d4fcbc !important;
 }
+
 .git-del {
   text-decoration: line-through !important;
   background-color: #fbb6c2 !important;

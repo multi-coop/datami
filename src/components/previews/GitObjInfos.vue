@@ -284,12 +284,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-/* a {
-  color: grey;
-  text-decoration: underline;
-} */
-
-</style>

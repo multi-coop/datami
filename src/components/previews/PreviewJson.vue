@@ -414,9 +414,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/* .b-numberinput.field.has-addons > .control {
-  margin-bottom: 0!important;
-} */
-</style>

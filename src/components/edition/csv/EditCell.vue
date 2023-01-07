@@ -367,23 +367,3 @@ export default {
 }
 
 </script>
-
-<style>
-
-/* .datami-cell > .field {
-  width: 100%;
-}
-.g-cell {
-  background-color: transparent;
-}
-.g-cell-darkmode {
-  background-color: white;
-}
-.g-cell-number-darkmode {
-  background-color: white !important;
-}
-.g-header {
-  font-size: .85em!important;
-  font-weight: 600!important;
-} */
-</style>

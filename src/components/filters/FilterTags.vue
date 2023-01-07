@@ -184,12 +184,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* .divider::after, .divider::before {
-  background-color: grey !important;
-}
-.filter-tag {
-  border: 3px solid white;
-} */
-</style>

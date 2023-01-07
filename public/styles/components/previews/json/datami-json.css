@@ -1,6 +1,7 @@
-.b-numberinput.field.has-addons > .control {
-  margin-bottom: 0!important;
+.b-numberinput.field.has-addons>.control {
+  margin-bottom: 0 !important;
 }
+
 .gt-node-label {
   background-color: #f5f5f5;
   color: #da1039;
