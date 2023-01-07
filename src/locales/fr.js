@@ -280,7 +280,7 @@ export default {
     templateMissing: 'Il manque le canevas pour le langage choisi'
   },
   widget: {
-    widgetCopiedMsg: 'Le widget {{widgetName}}<br>intitulé {{widgetTitle}}<br>est copié dans votre presse-papier.',
+    widgetCopiedMsg: 'Le widget {{widgetName}} intitulé {{widgetTitle}} est copié dans votre presse-papier.',
     widgetUse: 'Vous pouvez désormais l\'insérer dans la page html de votre choix.',
     widgetCopied: 'Widget copié'
   },

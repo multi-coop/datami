@@ -1,20 +1,5 @@
 <template>
   <div class="ButtonOpenCard">
-    <!-- <b-tooltip
-      :label="t('field.openDatamiCard', locale)"
-      position="is-right"
-      :type="isDarkMode ? 'is-white' : 'is-dark'">
-      <b-button
-        icon-left="eye"
-        class="mt-1"
-        size="is-small"
-        :type="isDarkMode ? 'is-white' : 'is-dark'"
-        :loading="isConsolidating"
-        outlined
-        @click="SendActionToParent"
-        @mouseover="showGlobalTooltip($event, { position: 'right', type: 'info', label: t('field.openDatamiCard', locale) })"
-        @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip> -->
     <b-button
       icon-left="eye"
       class="mt-1"

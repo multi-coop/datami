@@ -164,7 +164,7 @@
       :file-id="fileId"
       :locale="locale"/>
 
-    <!-- DEV - TEST MODAL -->
+    <!-- DIALOG MODAL -->
     <b-modal
       v-model="isModalActive"
       :width="'80%'"

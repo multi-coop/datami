@@ -1,20 +1,5 @@
 <template>
   <div class="ButtonCopyWidgetHtml datami-component">
-    <!-- <b-tooltip
-      :label="t('actions.copyWidget', locale)"
-      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-      multilined
-      position="is-left">
-      <b-button
-        size="is-small"
-        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-        :type="isDarkMode ? 'is-white' : ''"
-        :outlined="isDarkMode"
-        icon-left="code-tags"
-        @click="CopyWidgetHtml()"
-        @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t('actions.copyWidget', locale) })"
-        @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip> -->
     <b-button
       size="is-small"
       :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
@@ -59,6 +44,8 @@ export default {
   },
   methods: {
     CopyWidgetHtml () {
+      // console.log('\nC > ButtonCopyWidgetHtml > CopyWidgetHtml > this.fromMultiFiles : ', this.fromMultiFiles)
+      // console.log('C > ButtonCopyWidgetHtml > CopyWidgetHtml > this.gitObj : ', this.gitObj)
       const prettyChar = 2
       const datamiLink = `<a class="has-text-weight-bold has-text-dark is-underlined" href="${this.urlSourceCode}" target="_blank">Datami</a>`
       let widgetName
@@ -177,20 +164,22 @@ export default {
       message += `<br><p>${this.t('global.thanks', this.locale, { datamiRepo: datamiLink })}</p>`
       const confirmText = this.t('global.understood', this.locale)
 
+      const event = {
+        title: title,
+        message: message,
+        type: 'is-dark',
+        icon: 'code-tags',
+        hasIcon: true,
+        confirmText: confirmText
+      }
       navigator.clipboard.writeText(htmlStr)
         .then(
-          this.$buefy.dialog.alert({
-            title: title,
-            message: message,
-            type: 'is-dark',
-            icon: 'code-tags',
-            hasIcon: true,
-            confirmText: confirmText
-          })
+          this.updateFileDialogs('CopyWidget', event)
+          // this.$buefy.dialog.alert(event)
         )
 
       // track with matomo
-      this.trackEvent('click')
+      this.trackEvent('click', 'copyWidget', `${widgetName}-${widgetTitle}`)
     }
   }
 }

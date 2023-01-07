@@ -312,11 +312,17 @@ export const mixinGlobal = {
     userFullscreen () {
       return this.getUserFullscreen(this.fileId)
     },
+    multifilesDialogs () {
+      return this.getDialogsById(this.multiFilesId)
+    },
     fileDialogs () {
       return this.getDialogsById(this.fileId)
     },
     hasFileDialogs () {
       return this.fileDialogs.length
+    },
+    hasMultifilesDialogs () {
+      return this.multifilesDialogs.length
     },
 
     // SIGNALS
@@ -372,6 +378,10 @@ export const mixinGlobal = {
     resetFileDialog () {
       // console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
       this.updateDialogs({ fileId: this.fileId, reset: true })
+    },
+    resetMultiFilesDialog () {
+      // console.log('\nM > mixinGlobal > resetMultiFilesDialog > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.multiFilesId, reset: true })
     },
     addFileSignal (action, event) {
       // console.log('\nM > mixinGlobal > addFileSignal > component : ', component)
@@ -473,11 +483,11 @@ export const mixinGlobal = {
         const domain = document.domain
         // console.log('\nM > trackEvent > domain :', domain)
 
-        const eventCategory = category || this.gitObj.filefullname
-        // console.log('M > trackEvent > eventCategory :', eventCategory)
-
         const evAction = action || this.$options.name
         // console.log('M > trackEvent > evAction : ', evAction)
+
+        const eventCategory = category || (this.gitObj && this.gitObj.filefullname)
+        // console.log('M > trackEvent > eventCategory :', eventCategory)
 
         // console.log('M > trackEvent > value : ', value)
 

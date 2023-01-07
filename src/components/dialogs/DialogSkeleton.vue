@@ -77,6 +77,15 @@
         :dialog-id="dialog.dialogId"
         :locale="locale"
         :debug="debug"/>
+
+      <!-- COPY WIDGET -->
+      <DialogCopyWidget
+        v-else-if="dialog.component === 'CopyWidget'"
+        :file-id="fileId"
+        :dialog-id="dialog.dialogId"
+        :content="dialog.event"
+        :locale="locale"
+        :debug="debug"/>
     </div>
 
     <!-- DEBUGGING -->
@@ -146,7 +155,8 @@ export default {
     DialogAddRow: () => import(/* webpackChunkName: "DialogAddRow" */ '@/components/dialogs/DialogAddRow.vue'),
     DialogDeleteRows: () => import(/* webpackChunkName: "DialogDeleteRows" */ '@/components/dialogs/DialogDeleteRows.vue'),
     DialogUploadFile: () => import(/* webpackChunkName: "DialogUploadFile" */ '@/components/dialogs/DialogUploadFile.vue'),
-    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/dialogs/ConfirmCommit.vue')
+    ConfirmCommit: () => import(/* webpackChunkName: "ConfirmCommit" */ '@/components/dialogs/ConfirmCommit.vue'),
+    DialogCopyWidget: () => import(/* webpackChunkName: "DialogCopyWidget" */ '@/components/dialogs/DialogCopyWidget.vue')
   },
   mixins: [
     mixinGlobal

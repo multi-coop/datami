@@ -38,6 +38,14 @@
       <div
         v-if="!hideTitle"
         class="is-flex is-flex-direction-row is-align-items-center mb-4">
+        <!-- DEBUG OUTTER MODAL -->
+        <!-- <b-button
+          v-if="true"
+          icon-left="bug"
+          type="is-danger"
+          size="is-small"
+          style="z-index: 2"
+          @click="isModalActive = true"/> -->
         <!-- TABS POSITION -->
         <MultiFilesTabsPosition
           :default-display="defaultDisplay"
@@ -180,6 +188,16 @@
         </b-tabs>
       </section>
     </div>
+
+    <!-- DIALOG MODAL -->
+    <b-modal
+      v-model="isModalActive"
+      :width="'80%'"
+      @close="resetMultiFilesDialog">
+      <DialogSkeleton
+        :file-id="multiFilesId"
+        :locale="locale"/>
+    </b-modal>
   </div>
 </template>
 
@@ -194,6 +212,7 @@ export default {
   name: 'DatamiMultiFiles',
   components: {
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     DatamiTooltip: () => import(/* webpackChunkName: "DatamiTooltip" */ '@/components/user/DatamiTooltip.vue'),
     MultiFilesTabsPosition: () => import(/* webpackChunkName: "MultiFilesTabsPosition" */ '@/components/user/MultiFilesTabsPosition.vue'),
     ButtonCopyWidgetHtml: () => import(/* webpackChunkName: "ButtonCopyWidgetHtml" */ '@/components/user/ButtonCopyWidgetHtml.vue'),
@@ -259,6 +278,7 @@ export default {
         'styles/components/user/datami-tooltip.css',
         'styles/datami-multi-files.css'
       ],
+      isModalActive: false,
       multiFilesId: undefined,
       hideTitle: false,
       files: [],
@@ -267,6 +287,17 @@ export default {
       multiFilesOptions: undefined,
       activeTab: undefined,
       tabsVertical: false
+    }
+  },
+  watch: {
+    hasMultifilesDialogs (next) {
+      // console.log('\nC > DatamiMultiFiles > watch > hasMultifilesDialogs > next : ', next)
+      if (next) {
+        this.hideGlobalTooltip()
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
+      }
     }
   },
   beforeMount () {
