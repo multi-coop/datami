@@ -105,7 +105,7 @@ export default {
     change: 'Changer',
     save: 'Sauver',
     sendContrib: 'Envoyer votre contribution',
-    sendContribHelp: 'Vos modifications seront envoyées aux responsables du jeu de données. Les responsables modèrera votre proprosition avant de merger les modifications aux données.',
+    sendContribHelp: 'Vos modifications seront envoyées aux responsables du jeu de données. Les responsables modèreront votre proprosition avant de merger les modifications aux données.',
     send: 'Envoyer',
     cancel: 'Annuler',
     search: 'Rechercher',
