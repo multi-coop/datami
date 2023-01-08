@@ -14,20 +14,21 @@
           <!-- FIELD LABEL -->
           <b-tag>
             {{ getFieldLabel(tag.field) }}
+            <!-- - tag.field : <pre><code>{{ tag.field }}</code></pre> -->
           </b-tag>
-          <b-tag
+          <!-- {{ getFieldForeignKey(tag.field) }} -->
+          <!-- <hr> -->
+          <!-- {{ item(tag.field, tag.value) }} -->
+          <!-- HELPER FOREIGN KEY -->
+          <!-- <b-tag
             :style="`color: ${tagColor(tag.value, tag.bgColor)}; background-color: ${tagBackgroundColor(tag.value, tag.bgColor)}`">
-            <!-- TAG VALUE -->
+            TAG VALUE
             <b-tooltip
               v-if="getFieldForeignKey(tag.field) || getFieldDefinitions(tag.field)"
               multilined
               size="is-large"
               :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
               <template #content>
-                <!-- {{ getFieldForeignKey(tag.field) }} -->
-                <!-- <hr> -->
-                <!-- {{ item(tag.field, tag.value) }} -->
-                <!-- HELPER FOREIGN KEY -->
                 <div class="divider mt-1 mb-1 has-text-grey">
                   <b-icon
                     icon="information-outline"
@@ -43,7 +44,7 @@
                   </span>
                 </div>
 
-                <!-- FOREIGN KEY || RETURN FIELDS -->
+                FOREIGN KEY || RETURN FIELDS
                 <div v-if="getFieldForeignKey(tag.field)">
                   <div
                     v-for="entry in Object.entries(item(tag.field, tag.value))"
@@ -58,7 +59,7 @@
                   </div>
                 </div>
 
-                <!-- DEFINITIONS || RETURN FIELDS -->
+                DEFINITIONS || RETURN FIELDS
                 <div
                   v-if="getFieldDefinitions(tag.field)"
                   class="columns my-1 has-text-left">
@@ -78,11 +79,17 @@
                 </div>
               </template>
 
-              <!-- TAG'S TEXT -->
+              TAG'S TEXT
               <span class="px-2 has-text-weight-bold">
-                {{ tag.value }}
+                <span
+                  v-if="currentEditViewMode !== 'preview' && !getFieldForeignKey(tag.field) && !getFieldDefinitions(tag.field)">
+                  {{ tag.value }}
+                </span>
                 <span v-if="getValueDefinitionLabel(tag.value, getField(tag.field))">
-                  : {{ trimText(getValueDefinitionLabel(tag.value, getField(tag.field)), 7) }}
+                  <span v-if="currentEditViewMode !== 'preview'">
+                    :
+                  </span>
+                  {{ trimText(getValueDefinitionLabel(tag.value, getField(tag.field)), 7) }}
                 </span>
                 <b-icon
                   icon="information-outline"
@@ -96,7 +103,25 @@
               {{ tag.value }}
             </span>
 
-            <!-- TAG REMOVER -->
+            TAG REMOVER
+            <b-tooltip
+              :label="t(`filters.removeFilter`, locale)"
+              :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
+              position="is-top">
+              <b-icon
+                size="is-small"
+                icon="close"
+                @click.native="removeTag(tag)"/>
+            </b-tooltip>
+          </b-tag> -->
+          <PreviewTagValue
+            :file-id="fileId"
+            :val="tag.value"
+            :tag-style="`color: ${tagColor(tag.value, getFieldBgColor(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getFieldBgColor(tag.field), false)}`"
+            :field="getField(tag.field)"
+            :is-filter-tag="true"
+            :locale="locale"/>
+          <b-tag>
             <b-tooltip
               :label="t(`filters.removeFilter`, locale)"
               :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
@@ -122,6 +147,9 @@ import {
 
 export default {
   name: 'FilterTags',
+  components: {
+    PreviewTagValue: () => import(/* webpackChunkName: "PreviewTagValue" */ '@/components/previews/PreviewTagValue.vue')
+  },
   mixins: [
     mixinGlobal,
     mixinValue,
@@ -160,6 +188,10 @@ export default {
     getFieldLabel (field) {
       const header = this.getField(field)
       return header.label
+    },
+    getFieldBgColor (field) {
+      const header = this.getField(field)
+      return header && header.bgColor
     },
     getFieldForeignKey (field) {
       const header = this.getField(field)

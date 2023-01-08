@@ -18,7 +18,7 @@
     <!-- SIMPLE STRING -->
     <div
       v-if="isString && !field.subtype"
-      :class="`is-flex is-flex-direction-row ${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      :class="`is-flex is-flex-direction-row ${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : 'is-size-7'}`">
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
@@ -45,7 +45,7 @@
     <!-- LONG TEXT STRING -->
     <div
       v-if="isString && isLongText"
-      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : 'is-size-7'}`">
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
@@ -76,7 +76,7 @@
     <!-- TIMELINE TEXT STRING -->
     <div
       v-if="isString && isTimelineText"
-      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : 'is-size-7'}`">
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
@@ -176,7 +176,7 @@
     <!-- NUMBER -->
     <div
       v-if="isNumber"
-      :class="`has-text-right has-text-weight-bold is-size-6`">
+      :class="`has-text-right has-text-weight-bold is-size-7`">
       {{ getNumber(value) }}
       <span
         v-if="isPercent"
@@ -188,7 +188,7 @@
     <!-- IMAGE -->
     <div
       v-if="isImage"
-      :class="`has-text-right has-text-weight-bold is-size-6`">
+      :class="`has-text-right has-text-weight-bold is-size-7`">
       <!-- {{ value }} -->
       <!-- FIGURE IF ANY -->
       <figure

@@ -1,9 +1,11 @@
 <template>
-  <div class="EditCsvSkeleton datami-component">
-    <div :class="`columns is-mobile is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
+  <div
+    class="EditCsvSkeleton datami-component"
+    style="z-index: 3;">
+    <div :class="`columns is-multiline is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
       <!-- RESULTS -->
       <div
-        class="column is-3 has-text-left"
+        class="column is-12-mobile is-3 has-text-left"
         style="z-index: 1;">
         <p :class="`has-text-weight-bold is-size-6 ml-1 ${currentViewMode === 'map' ? 'text-shadow' : ''} ${isDarkMode && currentViewMode !== 'map' ? 'datami-darkmode-white-text' : 'has-text-dark'}`">
           <span>
@@ -20,7 +22,7 @@
       </div>
 
       <div
-        class="column is-6 has-text-centered"
+        class="column is-12-mobile is-6 has-text-centered"
         style="z-index: 1;">
         <!-- FILTER TAGS -->
         <div
@@ -37,7 +39,7 @@
       <!-- EDIT BUTTONS -->
       <div
         v-if="currentEditViewMode === 'edit'"
-        :class="`column is-3 is-justify-content-end is-flex is-flex-direction-row is-align-content-end`">
+        :class="`column is-12-mobile is-3 is-justify-content-end is-flex is-flex-direction-row is-align-content-end`">
         <ButtonAddRow
           :locale="locale"
           @action="SendActionToParent"/>

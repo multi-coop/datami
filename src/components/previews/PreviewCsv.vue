@@ -96,7 +96,7 @@
     <!-- LOADERS -->
     <div
       v-if="fileIsLoading || !fileOptions"
-      class="datami-loaders">
+      class="datami-loaders container">
       <!-- <LoaderEditNavbar
         :file-id="fileId"
         :only-preview="onlyPreview"/> -->

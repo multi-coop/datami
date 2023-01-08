@@ -6,7 +6,8 @@
       <div
         :id="`sort-and-filters-skeleton-${fileId}`"
         ref="sortandfiltersskeleton"
-        :class="`column is-12 py-0 ${currentViewMode === 'map' ? 'px-5' : '' } mt-2`">
+        :class="`column is-12 py-0 ${currentViewMode === 'map' ? 'px-5' : '' } mt-2`"
+        style="z-index: 3;">
         <SortAndFiltersSkeleton
           :file-id="fileId"
           :columns="columnsEdited"
@@ -53,7 +54,8 @@
       <div
         :id="`edit-csv-skeleton-${fileId}`"
         ref="editcsvskeleton"
-        class="column is-12 pt-0">
+        class="column is-12 pt-0"
+        style="z-index: 2;">
         <EditCsvSkeleton
           :file-id="fileId"
           :columns="columnsEdited"

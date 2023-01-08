@@ -1,20 +1,36 @@
-.CustomFilterDropdown.dark-background>.navbar-link {
+.CustomFilterDropdown {
+  width: 100%;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item {
   color: white !important;
   background-color: #2d2d30 !important;
   border: 1px solid white !important;
 }
 
-.CustomFilterDropdown.dark-background>.navbar-link:hover {
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item:hover {
   background-color: black !important;
 }
 
-.CustomFilterDropdown>.navbar-dropdown {
+.CustomFilterDropdown>.dropdown-menu {
   max-height: 275px;
+  width: 100%;
   overflow: auto;
-  padding-bottom: 1.5em;
+  /* padding: 1.5em 1em 1.5em 1em; */
+  padding-top: 0;
+  position: absolute;
+  z-index: 20;
+  box-shadow: 0 .5em 1em -.125em rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.02);
 }
 
-.CustomFilterDropdown.clear-background>.navbar-dropdown {
+.CustomFilterDropdown>.dropdown-menu>.dropdown-content {
+  background-color: transparent;
+  width: 100%;
+  /* border-radius: 0;
+  padding: 0; */
+}
+
+.CustomFilterDropdown.clear-background>.dropdown-menu {
   background-color: white !important;
   /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
   background:
@@ -39,7 +55,7 @@
   background-attachment: local, local, scroll, scroll;
 }
 
-.CustomFilterDropdown.dark-background>.navbar-dropdown {
+.CustomFilterDropdown.dark-background>.dropdown-menu {
   background-color: black !important;
   background:
     /* Shadow covers */
@@ -63,24 +79,24 @@
   background-attachment: local, local, scroll, scroll;
 }
 
-.CustomFilterDropdown.dark-background>.navbar-dropdown>.navbar-item {
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item {
   color: white !important;
 }
 
-.CustomFilterDropdown.dark-background>.navbar-dropdown>a.navbar-item:hover {
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>a.dropdown-item:hover {
   color: black !important;
 }
 
-.CustomFilterDropdown.dark-background>.navbar-dropdown>.navbar-item>a:hover {
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item>a:hover {
   color: black !important;
 }
 
-.CustomFilterDropdown>.navbar-link {
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: white !important;
+.CustomFilterDropdown>.dropdown-menu>.dropdown-content>.dropdown-item {
+  /* padding-top: 0;
+  padding-bottom: 0; */
+  /* background-color: white !important; */
 }
 
-.CustomFilterDropdown>.navbar-link:hover {
+.CustomFilterDropdown>.dropdown-menu>.dropdown-content>.dropdown-item:hover {
   background-color: #f2f2f2 !important;
 }

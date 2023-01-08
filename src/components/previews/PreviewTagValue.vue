@@ -1,162 +1,43 @@
 <template>
-  <span class="PreviewTagValue">
+  <b-tag
+    :class="`PreviewTagValue ${isFilterTag ? '' : 'mr-1'}`"
+    :style="tagStyle">
     <!-- <code>{{ sharedDataIsLoaded }}</code> -->
-    <!-- <pre><code>{{ field }}</code></pre> -->
+    <!-- field: <pre><code>{{ field }}</code></pre> -->
+    <!-- val: <code>{{ val }}</code><hr class="my-1"> -->
+    <!-- field.foreignKey : <pre><code>{{ field.foreignKey }}</code></pre><br> -->
+    <!-- item : <pre><code>{{ item }}</code></pre><hr> -->
 
-    <!-- FOREIGN KEY TOOLTIP | MINI | ... -->
-    <b-tooltip
+    <!-- TOOLTIP CONTENT (TAGS) -->
+    <span
       v-if="val === '...' || (field.foreignKey || field.definitions) || isMini"
-      :active="showTag"
-      always
-      multilined
-      :animated="false"
-      style="z-index: 1"
-      size="is-large"
-      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
-      <template #content>
-        <div
-          v-if="val !== '...' && (field.foreignKey || field.definitions)"
-          class="has-text-left">
-          <!-- val: <code>{{ val }}</code><hr class="my-1"> -->
-          <!-- <pre><code>{{ field.foreignKey }}</code></pre><br> -->
-          <!-- <pre><code>{{ item }}</code></pre><hr> -->
-
-          <!-- HELPER CURRENT VALUE -->
-          <div class="divider mt-0 mb-4 has-text-grey">
-            <b-icon
-              :icon="getIconFieldType(field)"
-              class="mr-2"
-              size="is-small"/>
-            <span class="has-text-weight-bold no-text-transform">
-              {{ t('global.value', locale) }}
-            </span>
-          </div>
-
-          <!-- REPEAT VAL -->
-          <div class="columns">
-            <div class="column my-0 py-0 is-4 has-text-weight-bold">
-              {{ trimText(field.name, 10) }}
-            </div>
-            <div class="column my-0 py-0 is-8">
-              {{ val }}
-            </div>
-          </div>
-
-          <!-- HELPER FOREIGN KEY -->
-          <div class="divider mt-1 mb-4 has-text-grey">
-            <b-icon
-              icon="information-outline"
-              class="mr-2"
-              size="is-small"/>
-            <span class="has-text-weight-bold no-text-transform">
-              <span v-if="field.foreignKey">
-                {{ t('field.ressourceValues', locale) }}
-              </span>
-              <span v-if="field.definitions">
-                {{ t('field.definition', locale) }}
-              </span>
-            </span>
-          </div>
-
-          <!-- RETURN FIELDS / FOREIGN KEY-->
-          <div v-if="field.foreignKey && Object.entries(itemDirect)">
-            <div
-              v-for="entry in Object.entries(itemDirect)"
-              :key="`${entry[0]}`"
-              class="columns pb-1">
-              <div class="column is-4 my-0 py-0 has-text-weight-bold">
-                {{ entry[0] }}
-              </div>
-              <div class="column is-8 my-0 py-0">
-                {{ entry[1].split(',').join(', ') }}
-              </div>
-            </div>
-          </div>
-
-          <!-- RETURN FIELDS / DEFINITION -->
-          <div v-if="field.definitions">
-            <div class="columns pb-3">
-              <div class="column is-4 my-0 py-0 has-text-weight-bold">
-                {{ t('field.definition', locale) }}
-              </div>
-              <div class="column is-8 my-0 py-0">
-                <p>
-                  {{ getValueDefinitionLabel(val) }}
-                </p>
-                <p
-                  v-if="getValueDefinitionDescription(val)"
-                  class="pt-2 is-italic">
-                  {{ getValueDefinitionDescription(val) }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- LINK TO RESSOURCE -->
-          <div
-            v-if="field.foreignKey"
-            class="divider mt-4 mb-1 has-text-grey">
-            <b-icon
-              icon="link"
-              size="is-small"
-              class="mr-2 pb-0 mb-0"/>
-            <span class="has-text-weight-bold no-text-transform">
-              {{ t('field.ressource', locale) }}
-            </span>
-          </div>
-          <p class="px-2 pb-2 my-0 is-size-7 is-italic has-text-centered">
-            <a
-              style="color: grey; text-decoration: underline;"
-              :href="ressourceInfos.url"
-              target="_blank"
-              class="outlink"
-              @click="trackLink(ressourceInfos.url)">
-              {{ ressourceInfos.filename }}
-            </a>
-          </p>
-        </div>
-
-        <!-- SEE MORE BUTTON -->
-        <div v-else-if="val === '...'">
-          {{ t('actions.clickForMoreTags', locale) }}
-        </div>
-        <div v-else>
-          {{ val }}
-        </div>
-      </template>
-
-      <!-- TOOLTIP CONTENT (TAGS) -->
-      <b-tag
-        :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
-        :style="`${tagStyle}; z-index: 1;`"
-        @mouseover.native="showTag = true; showGlobalTooltip($event, tagTooltipData(val))"
-        @mouseleave.native="showTag = false; hideGlobalTooltip"
-        @click.native="$emit('expand')">
-        <span v-if="!getValueDefinitionLabel(val)">
-          {{ isMini ? trimText(val) : val }}
-        </span>
-        <span v-else>
-          {{ trimText(getValueDefinitionLabel(val), isMini ? 10 : 25) }}
-        </span>
-        <b-icon
-          v-if="val !== '...' && (field.foreignKey || field.definitions)"
-          icon="information-outline"
-          size="is-small"
-          class="ml-1"/>
-      </b-tag>
-    </b-tooltip>
+      :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
+      @mouseover="showGlobalTooltip($event, tagTooltipData(val))"
+      @mouseleave="hideGlobalTooltip"
+      @click="$emit('expand')">
+      <span v-if="!getValueDefinitionLabel(val)">
+        {{ isMini ? trimText(val) : val }}
+      </span>
+      <span v-else>
+        {{ trimText(getValueDefinitionLabel(val), isMini ? 10 : 25) }}
+      </span>
+      <b-icon
+        v-if="val !== '...' && (field.foreignKey || field.definitions)"
+        icon="information-outline"
+        size="is-small"
+        class="ml-1"/>
+    </span>
 
     <!-- USUAL TAGS (NO TOOLTIP) -->
-    <b-tag
+    <!-- @mouseover="showGlobalTooltip($event, tagTooltipData(val))"
+    @mouseleave="hideGlobalTooltip" -->
+    <span
       v-else
       :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
-      :style="tagStyle"
-      @mouseover.native="showGlobalTooltip($event, tagTooltipData(val))"
-      @mouseleave.native="hideGlobalTooltip"
-      @click.native="$emit('expand')">
+      @click="$emit('expand')">
       {{ val }}
-    </b-tag>
-  </span>
+    </span>
+  </b-tag>
 </template>
 
 <script>
@@ -195,6 +76,10 @@ export default {
       default: null,
       type: Object
     },
+    isFilterTag: {
+      default: false,
+      type: Boolean
+    },
     isMini: {
       default: false,
       type: Boolean
@@ -204,11 +89,11 @@ export default {
       type: String
     }
   },
-  data () {
-    return {
-      showTag: false
-    }
-  },
+  // data () {
+  //   return {
+  //     showTag: false
+  //   }
+  // },
   computed: {
     itemDirect () {
       return this.getForeignItem(this.field, this.val)

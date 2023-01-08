@@ -1,11 +1,38 @@
 <template>
-  <div class="SortAndFiltersSkeleton datami-component">
-    <b-navbar
+  <div
+    class="SortAndFiltersSkeleton datami-component columns"
+    style="z-index: 3;">
+    <div class="column is-4">
+      <SearchFullText
+        :file-id="fileId"
+        :locale="locale"
+        @action="SendActionToParent"/>
+    </div>
+    <div class="column is-8">
+      <div
+        class="columns is-flex is-multiline mx-0 is-justify-content-end"
+        style="width: 100%; margin-top: 0.1em;">
+        <!-- v-for="filter in [...filtersDisplay, ...filtersDisplay]" -->
+        <div
+          v-for="filter in filtersDisplay"
+          :key="`nav-filter-${fileId}-${filter.field}`"
+          class="column px-1 py-1 is-12-mobile is-6-tablet is-3-desktop is-3-widescreen is-3-fullhd">
+          <CustomFilterDropdown
+            :class="`${isDarkMode ? 'is-dark' : 'is-white'}`"
+            :filter="filter"
+            :file-id="fileId"
+            :field-active-tags="fieldActiveTags(filter.field)"
+            :locale="locale"
+            @action="SendActionToParent"/>
+        </div>
+      </div>
+    </div>
+    <!-- <b-navbar
       type="is-white"
       class="is-align-items-center"
       style="background-color: transparent;">
-      <!-- FULL TEXT SEARCH -->
       <template #start>
+        FULL TEXT SEARCH
         <b-navbar-item
           tag="div"
           class="py-0 pl-0">
@@ -16,8 +43,8 @@
         </b-navbar-item>
       </template>
 
-      <!-- LOOP FILTERS -->
       <template #end>
+        LOOP FILTERS
         <CustomFilterDropdown
           v-for="filter in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}`"
@@ -28,7 +55,7 @@
           :locale="locale"
           @action="SendActionToParent"/>
       </template>
-    </b-navbar>
+    </b-navbar> -->
 
     <!-- DEBUGGING -->
     <!-- <div
