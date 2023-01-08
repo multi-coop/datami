@@ -23,6 +23,7 @@ export const defaultStore = {
     fileEditNavbar: [],
     trackAllOutlinks: [],
     urlMulti: 'https://multi.coop',
+    urlDatamiWebiste: 'https://datami.multi.coop',
     urlDocumentation: 'https://datami-docs.multi.coop',
     urlSourceCode: 'https://gitlab.com/multi-coop/datami-project/datami',
     urlReportIssue: 'https://gitlab.com/multi-coop/datami-project/datami/-/issues/new'

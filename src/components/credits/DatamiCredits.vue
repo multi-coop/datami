@@ -49,11 +49,11 @@
           {{ t('credits.code', locale) }}
         </b-button> -->
         <a
-          :href="urlSourceCode"
+          :href="urlDatamiWebiste"
           target="_blank"
           @mouseover="hoverLogo = true"
           @mouseleave="hoverLogo = false"
-          @click="trackLink(urlSourceCode)">
+          @click="trackLink(urlDatamiWebiste)">
           <img
             :src="`${''}/${hoverLogo ? 'logo_DATAMI_title' : 'logo-DATAMI'}.png`"
             alt="logo datami"
@@ -89,6 +89,7 @@ export default {
   computed: {
     ...mapState({
       urlMulti: (state) => state.urlMulti,
+      urlDatamiWebiste: (state) => state.urlDatamiWebiste,
       urlSourceCode: (state) => state.urlSourceCode
     })
   }
