@@ -143,7 +143,7 @@
               :field="col.field"
               :sticky="!idx"
               :visible="!col.hide"
-              :label="col.label">
+              :label="col.type === 'datami' ? t(col.label, locale) : col.label">
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div
@@ -854,6 +854,7 @@ export default {
             const consolidationColumn = {
               ...this.consolidationField,
               field: 'consolidation',
+              type: 'datami',
               subtype: 'consolidation',
               label: 'field.consolidation',
               apis: this.hasConsolidation
@@ -890,6 +891,7 @@ export default {
         const openCardColumn = {
           ...this.openCardField,
           field: 'openDatamiCard',
+          type: 'datami',
           subtype: 'openDatamiCard',
           label: 'field.openDatamiCard'
         }

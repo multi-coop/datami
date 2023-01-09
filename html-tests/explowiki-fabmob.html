@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- <script src="../dist/js/app.js"></script> -->
+  <title>Datami - Fabmob</title>
+</head>
+
+<body style="background-color: #D7D7D7; padding: 5em 1em 20em 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  <p style="margin: 5em 1em 1em 1em;">
+    Import wikidata content (fabmmob) to display as csv / cards content
+  </P>
+  <div style="background-color: white; margin: 1em;">
+    <datami-explowiki
+      wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
+      wikipages='[
+          "https://wiki.lafabriquedesmobilites.fr/wiki/Accra_Mobile",
+          "https://wiki.lafabriquedesmobilites.fr/wiki/Agremob_Self_Data_Territorial_La_Rochelle",
+          "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
+        ]' options='{
+          "height": "700px",
+          "schema": {
+            "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+          },
+          "fields-custom-properties": {
+            "fields": [
+              { 
+                "name": "pageUrl",
+                "subtype": "link",
+                "locked": true
+              },
+              { 
+                "name": "imageUrl",
+                "subtype": "link"
+              },
+              { 
+                "name": "url",
+                "subtype": "link"
+              },
+              {
+                "name": "Tags",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "Theme",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "location",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "from",
+                "subtype": "tags",
+                "tagSeparator": ","
+              },
+              {
+                "name": "challenge",
+                "subtype": "tags",
+                "tagSeparator": ","
+              }
+            ]
+          },
+          "wikisettings": {
+            "category": "projet",
+            "fields": [
+              "url",
+              "description",
+              "shortDescription",
+              "Main_Picture",
+              "Coordonnées géo",
+              "needs",
+              "referent",
+              "communauté d&#39;intérêt",
+              "Titre",
+              "Tags",
+              "etape",
+              "Theme",
+              "location",
+              "from",
+              "challenge"
+            ],
+            "tagfields": [
+              "Tags",
+              "Theme",
+              "location",
+              "from",
+              "challenge"
+            ]
+        },
+        "customsorting" : {
+          "activate": true,
+          "sortfields": [
+            "title"
+          ]
+        },
+        "customfilters" : {
+          "activate": true,
+          "filterfields": [
+            "Tags",
+            "Theme"
+          ]
+        },
+        "pagination": {
+          "itemsPerPage":12
+        },
+        "cardsview": {
+          "activate": true,
+          "default": true
+        },
+        "cardssettings": {
+          "mini": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "Tags": {"position": "tags"},
+            "Theme": {"position": "tags"},
+            "challenge": {"position": "tags"}
+          },
+          "detail": {
+            "title": {"position": "title"},
+            "imageUrl": {"position": "image"},
+            "shortDescription": {"position": "resume"},
+            "description": {"position": "description"},
+            "Tags": {"position": "tags"},
+            "Theme": {"position": "tags"},
+            "challenge": {"position": "tags"},
+            "communauté d&#39;intérêt": {"position": "tags"},
+            "url": {"position": "links"}
+          }
+        }
+      }' title="datami for explowiki - fabmob :)" locale="fr"></datami-explowiki>
+  </div>
+
+  <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+  <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+  <!-- <script src="https://preprod--datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+  <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+</body>
+
+</html>

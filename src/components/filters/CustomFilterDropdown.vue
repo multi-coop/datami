@@ -12,13 +12,24 @@
       size="is-small"
       aria-haspopup="true"
       expanded
-      :aria-controls="`${this.fileId}-filter-dropdown-${filter.field}`">
-      {{ filter.title || filter.label }}
+      :aria-controls="`${fileId}-filter-dropdown-${filter.field}`">
+      <!-- VISIBLE ABOVE TABLET -->
+      <span class="is-hidden-touch">
+        {{ trimText(filter.title || filter.label, 20) }}
+      </span>
+      <!-- VISIBLE ON TABLET ONLY -->
+      <span class="is-hidden-desktop is-hidden-mobile">
+        {{ trimText(filter.title || filter.label, 25) }}
+      </span>
+      <!-- VISIBLE ON MOBILE ONLY -->
+      <span class="is-hidden-tablet">
+        {{ trimText(filter.title || filter.label, 45) }}
+      </span>
     </b-button>
 
     <!-- FILTER DROPDOWN CONTENT -->
     <div
-      :id="`${this.fileId}-filter-dropdown-${filter.field}`"
+      :id="`${fileId}-filter-dropdown-${filter.field}`"
       class="dropdown-menu"
       role="menu">
       <div
@@ -29,6 +40,7 @@
           icon-left="close-thick"
           type="is-text"
           class="dropdown-item mr-2"
+          style="text-decoration: none;"
           @click="removeAllFilters">
           <span class="has-text-weight-bold">
             {{ t('filters.resetFilter', locale) }}

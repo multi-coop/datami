@@ -14,52 +14,54 @@
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
   </noscript>
-  
-  <div class="container has-text-dark">
 
-    <div style="background-color: white; margin: 1em;">
+  <div style="background-color: white; margin: 1em;">
 
-      <div class="content px-6 mx-6">
-        <div id="title-demo" class="pt-6 is-flex is-align-items-center is-justify-content-center">
-          <img class="mx-3 my-2" src="https://dy2xstsnk3r75.cloudfront.net/assets/logo_trousse-a-projets_violet_RVB-f25ad11cd20b9adc764abda455cf4d1d8dfb6f002ed5a4b3b679551aa8bc653f.png" alt="logo datami" style="height: 50px !important; width: auto !important">
-          <img class="mx-3 my-2" src="https://lamednum.coop/wp-content/uploads/2022/07/cropped-bleu.png.webp" alt="logo datami" style="height: 40px !important; width: auto !important">
-        </div>
-        <div id="title-demo" class="is-flex is-align-items-center is-justify-content-center">
-          <img class="mx-3 my-2" src="https://raw.githubusercontent.com/multi-coop/multi-site-contents/main/images/logos/logo-multi-003.png" alt="logo datami" style="height: 50px !important; width: auto !important">
-        </div>
-
-        <div class="pt-6 title has-text-center has-text-black">
-          Est-il pertinent de travailler sur un indice de fragilité numérique parentalité ?
-        </div>
-
-        <ul class="has-text-center has-text-black">
-          <li>
-            Retrouvez ici notre 
-            <a href='https://hackmd.io/@multi/SkXfV4YHs?type=view'>étude</a>.
-          </li>
-          <li>
-            Et retrouvez plus bas différentes visualisations (carte, fiches, tableau) qui permettent d'explorer les données utilisées dans cette étude.
-          </li>
-        </ul>
-
-        <p class="notification is-warning is-light is-size-6 has-text-center has-text-black">
-          <b>Attention</b><br>
-          Contrairement à l'étude qui utilise des valeurs à la commune, la cartographie aggrège les données au départements.
-          <br>
-          Seuls 12 département dits TNE sont concernés dans cette expérimentation.
-        </p>    
+    <div class="content px-6 mx-6">
+      <div id="title-demo" class="pt-6 is-flex is-align-items-center is-justify-content-center">
+        <img class="mx-3 my-2"
+          src="https://dy2xstsnk3r75.cloudfront.net/assets/logo_trousse-a-projets_violet_RVB-f25ad11cd20b9adc764abda455cf4d1d8dfb6f002ed5a4b3b679551aa8bc653f.png"
+          alt="logo datami" style="height: 50px !important; width: auto !important">
+        <img class="mx-3 my-2" src="https://lamednum.coop/wp-content/uploads/2022/07/cropped-bleu.png.webp"
+          alt="logo datami" style="height: 40px !important; width: auto !important">
+      </div>
+      <div id="title-demo" class="is-flex is-align-items-center is-justify-content-center">
+        <img class="mx-3 my-2"
+          src="https://raw.githubusercontent.com/multi-coop/multi-site-contents/main/images/logos/logo-multi-003.png"
+          alt="logo datami" style="height: 50px !important; width: auto !important">
       </div>
 
-      <!-- DATAMI - contribute with GIT ...but without minding it-->
-      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+      <div class="pt-6 title has-text-center has-text-black">
+        Est-il pertinent de travailler sur un indice de fragilité numérique parentalité ?
+      </div>
 
-      <!-- DATAMI WIDGET'S HTML BLOCK-->
-      <datami-multi-files
-        title="Etude de faisabilité de l&lsquo;indice de fragilité numérique parentalité"
-        options='{
+      <ul class="has-text-center has-text-black">
+        <li>
+          Retrouvez ici notre
+          <a href='https://hackmd.io/@multi/SkXfV4YHs?type=view'>étude</a>.
+        </li>
+        <li>
+          Et retrouvez plus bas différentes visualisations (carte, fiches, tableau) qui permettent d'explorer les
+          données utilisées dans cette étude.
+        </li>
+      </ul>
+
+      <p class="notification is-warning is-light is-size-6 has-text-center has-text-black">
+        <b>Attention</b><br>
+        Contrairement à l'étude qui utilise des valeurs à la commune, la cartographie aggrège les données au
+        départements.
+        <br>
+        Seuls 12 département dits TNE sont concernés dans cette expérimentation.
+      </p>
+    </div>
+
+    <!-- DATAMI - contribute with GIT ...but without minding it-->
+    <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+    <!-- DATAMI WIDGET'S HTML BLOCK-->
+    <datami-multi-files title="Etude de faisabilité de l&lsquo;indice de fragilité numérique parentalité" options='{
           "display": "horizontal"
-        }'
-        gitfiles='[
+        }' gitfiles='[
           {
             "title": "IFN dataset par département",
             "activate": true,
@@ -257,35 +259,13 @@
             "onlypreview": false,
             "usertoken": ""
           }
-        ]'
-        locale="fr"
-      />
+        ]' locale="fr" />
 
-      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
-      <script src="https://julien-percents--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
-      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
-      <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
-  
-
-    </div>
-
-    <p id="page-credits" class="mt-6 has-text-centered has-text-white">
-      Un projet numérique en partenariat avec la Mednum
-      <br>
-      Codé par la coopérative numérique 
-      <a href="https://multi.coop" target="_blank" class="has-text-white is-underlined">
-        multi
-      </a>
-    </p>
+    <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+    <script src="https://julien-percents--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
+    <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+    <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
   </div>
-
-  <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
-    <p>
-      <a href="https://gitlab.com/multi-coop/datami" target="_blank">
-        <img src="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo_DATAMI_title.png" alt="logo datami" style="height: 50px !important; width: auto !important">
-      </a>
-    </p>
-  </h2>
 
 </body>
 

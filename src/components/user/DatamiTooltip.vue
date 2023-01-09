@@ -1,7 +1,7 @@
 <template>
   <div
     :class="`datami-tooltip ${positionClass}`"
-    :style="`${left}; ${top}; transform: ${transform};${isFixedWidth ? 'width: 300px;' : ''}`">
+    :style="`${left}; ${top}; transform: ${transform};${isFixedWidth ? 'width: 300px;' : ''}; ${isDarkMode ? 'color: black; background-color: lightgrey' : ''}`">
     <div v-if="tooltipOptions">
       <!-- INFO -->
       <p

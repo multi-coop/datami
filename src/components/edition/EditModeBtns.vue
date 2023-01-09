@@ -3,7 +3,7 @@
     class="EditModeBtns datami-component px-2 content mb-0 is-flex is-align-items-center is-justify-content-center"
     style="z-index: 2">
     <!-- DEBUG -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns">
       <div class="column is-6">
@@ -22,7 +22,7 @@
           gitObj: <br><pre><code>{{ gitObj }}</code></pre>
         </p>
       </div>
-    </div>
+    </div> -->
 
     <!-- BUTTONS EDIT-->
     <b-field grouped>
@@ -38,7 +38,7 @@
             :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
             :position="`is-top`">
             <b-button
-              :class="`datami-darkmode-border-${isDarkMode ? 'white' : 'dark' }`"
+              :class="`datami-darkmode-border-${isDarkMode ? 'white has-text-white' : 'dark' }`"
               :icon-left="btn.icon"
               :type="getBtnType(btn.code)"
               :active="currentEditViewMode === btn.code"

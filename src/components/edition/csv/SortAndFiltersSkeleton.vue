@@ -16,7 +16,7 @@
         <div
           v-for="filter in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}`"
-          class="column px-1 py-1 is-12-mobile is-6-tablet is-3-desktop is-3-widescreen is-3-fullhd">
+          class="column px-1 py-1 is-12-mobile is-6-tablet is-4-desktop is-3-widescreen is-3-fullhd">
           <CustomFilterDropdown
             :class="`${isDarkMode ? 'is-dark' : 'is-white'}`"
             :filter="filter"
@@ -27,35 +27,6 @@
         </div>
       </div>
     </div>
-    <!-- <b-navbar
-      type="is-white"
-      class="is-align-items-center"
-      style="background-color: transparent;">
-      <template #start>
-        FULL TEXT SEARCH
-        <b-navbar-item
-          tag="div"
-          class="py-0 pl-0">
-          <SearchFullText
-            :file-id="fileId"
-            :locale="locale"
-            @action="SendActionToParent"/>
-        </b-navbar-item>
-      </template>
-
-      <template #end>
-        LOOP FILTERS
-        <CustomFilterDropdown
-          v-for="filter in filtersDisplay"
-          :key="`nav-filter-${fileId}-${filter.field}`"
-          :class="`${isDarkMode ? 'is-dark' : 'is-white'}`"
-          :filter="filter"
-          :file-id="fileId"
-          :field-active-tags="fieldActiveTags(filter.field)"
-          :locale="locale"
-          @action="SendActionToParent"/>
-      </template>
-    </b-navbar> -->
 
     <!-- DEBUGGING -->
     <!-- <div

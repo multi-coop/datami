@@ -52,7 +52,8 @@
           :locale="locale"
           @switch="switchTabsPosition"/>
         <!-- TITLE -->
-        <span class="is-size-3 ml-5">
+        <span
+          :class="`is-size-3 is-size-5-touch ml-5 ${isDarkMode ? 'datami-darkmode has-text-white' : ''}`">
           {{ title }}
         </span>
       </div>

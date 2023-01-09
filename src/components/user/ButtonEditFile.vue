@@ -9,7 +9,7 @@
           :label="t('actions.sendContrib', locale)"
           :type="isDarkMode ? 'is-white' : 'is-dark'"
           :outlined="isDarkMode"
-          :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+          :class="`${isDarkMode ? 'datami-darkmode has-text-white' : ''}`"
           size="is-small"
           expanded
           icon-left="pencil"
@@ -21,7 +21,7 @@
         <b-button
           :type="isDarkMode ? 'is-white' : 'is-dark'"
           :outlined="isDarkMode"
-          :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+          :class="`${isDarkMode ? 'datami-darkmode has-text-white' : ''}`"
           size="is-small"
           icon-left="close-thick"
           @click="closeEditMode"
@@ -35,7 +35,7 @@
       size="is-small"
       :label="t('actions.contribute', locale)"
       icon-left="pencil"
-      :class="`${isDarkMode ? 'datami-darkmode' : ''}`"
+      :class="`${isDarkMode ? 'datami-darkmode has-text-white' : ''}`"
       expanded
       @click="openEditMode"
       @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.enterEdit', locale) })"

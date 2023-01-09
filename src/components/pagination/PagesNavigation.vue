@@ -46,7 +46,7 @@
     <div class="mt-4 mx-5 columns is-multiline">
       <div class="column is-12 has-text-centered py-0">
         <p class="is-size-7 is-italic mb-0">
-          <span class="">
+          <span :class="`${isDarkMode ? 'has-text-white' : ''}`">
             {{ t('pagination.pageN', locale) }}
             {{ currentPage }}
             {{ t('pagination.pageToPages', locale) }}
@@ -57,7 +57,7 @@
       </div>
       <div class="column is-12 has-text-centered py-0">
         <p class="is-size-7 is-italic mb-0">
-          <span class="">
+          <span :class="`${isDarkMode ? 'has-text-white' : ''}`">
             {{ countElements }}
             {{ t('pagination.items', locale) }}
             {{ t('pagination.itemsTotal', locale) }}
@@ -72,7 +72,7 @@
           <b-select
             v-model="itemsPerPageSelected"
             rounded
-            :class="`${isDarkMode ? 'select-datami-darkmode' : ''}`"
+            :class="`${isDarkMode ? 'select-datami-darkmode has-text-white' : ''}`"
             placeholder="---"
             size="is-small">
             <option

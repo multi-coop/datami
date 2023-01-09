@@ -1,8 +1,10 @@
 <template>
-  <div class="LoaderCSV datami-component container">
-    <div class="columns is-mobile is-multiline mb-5 pb-4">
+  <div class="LoaderCSV datami-component">
+    <div class="columns is-mobile is-multiline mx-0 mb-5 pb-4">
       <!-- FAKE TABLE -->
-      <div class="column is-12 mt-2">
+      <div
+        class="column is-12 px-0 mt-2"
+        style="overflow: hidden;">
         <table :class="`table ${isDarkMode ? 'datami-darkmode-loader-background' : ''}`">
           <thead>
             <th
@@ -41,7 +43,7 @@ export default {
   name: 'LoaderCSV',
   data () {
     return {
-      columns: 4,
+      columns: 6,
       rows: 5,
       cellWidth: '120px'
     }

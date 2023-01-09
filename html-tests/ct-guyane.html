@@ -14,7 +14,7 @@
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
   </noscript>
-  
+
   <div class="container has-text-dark">
 
     <div style="background-color: white; margin: 1em;">
@@ -23,12 +23,9 @@
       <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
 
       <!-- DATAMI WIDGET'S HTML BLOCK-->
-      <datami-multi-files
-        title="CT GUYANE"
-        options='{
+      <datami-multi-files title="CT GUYANE" options='{
           "display": "horizontal"
-        }'
-        gitfiles='[
+        }' gitfiles='[
           {
             "title": "Données CT Guyane",
             "activate": true,
@@ -257,36 +254,13 @@
             "onlypreview": false,
             "usertoken": ""
           }
-        ]'
-        locale="fr"
-      />
+        ]' locale="fr" />
 
       <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
       <!-- <script src="https://deploy-preview-27--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
-      <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
-      <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script>
-
+      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
     </div>
-
-    <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
-      <p>
-        <a href="https://datami.multi.coop" target="_blank">
-          <img src="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo_DATAMI_title.png" alt="logo datami" style="height: 50px !important; width: auto !important">
-        </a>
-      </p>
-    </h2>
-
-    <p id="page-credits" class="mt-6 has-text-centered has-text-white">
-      Un projet numérique en partenariat avec
-      <a href="https://www.ctguyane.fr" target="_blank" class="has-text-white is-underlined">
-        CT GUYANE
-      </a>
-      <br>
-      Codé par la coopérative numérique 
-      <a href="https://multi.coop" target="_blank" class="has-text-white is-underlined">
-        multi
-      </a>
-    </p>
   </div>
 </body>
 

@@ -2,7 +2,7 @@
   <b-button
     :type="isDarkMode ? 'is-white' : ''"
     :outlined="isDarkMode"
-    :class="`ButtomOptionsSwitch datami-component ${isDarkMode ? 'datami-darkmode' : ''}`"
+    :class="`ButtomOptionsSwitch datami-component ${isDarkMode ? 'datami-darkmode has-text-white' : ''}`"
     icon-left="cog-outline"
     size="is-small"
     @click="clickBtn"

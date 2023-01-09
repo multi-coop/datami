@@ -5,7 +5,8 @@
     <!-- CREDITS -->
     <div
       :class="`column is-full is-italic has-text-centered`">
-      <p class="has-text-grey is-size-7 mb-2">
+      <p
+        :class="`${isDarkMode ? 'has-text-white' : 'has-text-grey'} is-size-7 mb-2`">
         <span :class=" ` ${isDarkMode ? 'datami-darkmode-white-text' : '' } ` ">
           {{ t('credits.reclaim', locale) }}
         </span>
@@ -18,7 +19,7 @@
         <span
           class="has-text-weight-bold">
           <a
-            class="link-multi outlink"
+            :class="`link-multi outlink ${isDarkMode ? 'has-text-white' : ''}`"
             :href="urlMulti"
             target="_blank"
             @click="trackLink(urlMulti)">

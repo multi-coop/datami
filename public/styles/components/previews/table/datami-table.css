@@ -34,6 +34,22 @@
   min-width: 100px;
 }
 
+@media(max-width:768px) {
+  tbody tr td.datami-table.datami-table-td {
+    min-width: 100%;
+  }
+
+  tbody tr td.datami-table.datami-table-td::before {
+    width: 35%;
+    overflow-x: scroll;
+  }
+
+  tbody tr td.datami-table.datami-table-td .datami-cell {
+    width: 65%;
+    text-align: left;
+  }
+}
+
 .datami-table-td.is-sticky {
   z-index: 2 !important;
 }

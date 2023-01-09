@@ -76,12 +76,12 @@
           :class="`mb-0 ${userFullscreen ? 'pt-6' : ''} ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
           style="z-index: 2">
           <div
-            class="columns is-centered mb-0"
+            class="columns is-multiline is-centered mb-0"
             style="z-index: 2">
             <!-- FILE TITLE -->
             <div
-              class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row is-align-items-center"
-              style="z-index: 2">
+              class="filetitle-and-viewmodes column is-12-mobile is-12-tablet is-7-desktop is-8-widescreen is-flex is-flex-direction-row is-align-items-center"
+              style="z-index: 3">
               <!-- DEBUG OUTTER MODAL -->
               <!-- <b-button
                 v-if="debug"
@@ -107,7 +107,7 @@
 
             <!-- USER NAVBAR -->
             <div
-              class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-align-items-center"
+              class="usernavbar column is-12-mobile is-12-tablet is-5-desktop is-4-widescreen is-flex is-align-items-center"
               style="z-index: 2">
               <UserOptions
                 v-if="gitObj"

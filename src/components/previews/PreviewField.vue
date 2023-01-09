@@ -20,6 +20,7 @@
 
       <!-- FIELD LABEL FOR isDatamiField -->
       <span
+        :class="`${isDarkMode ? 'has-text-white' : ''}`"
         @mouseover="showGlobalTooltip($event, { position: 'top', type: 'field', field: field, icon: getIconFieldType(field) })"
         @mouseleave="hideGlobalTooltip">
         <span
