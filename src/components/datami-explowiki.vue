@@ -281,7 +281,7 @@ export default {
       fileInfos: undefined,
       fileRaw: undefined,
       fileClientRaw: undefined,
-      // showFileInfos: false,
+      showFileInfos: false,
 
       // tests for mediawiki fetching
       mediawikiDefaultFields: ['title', 'imageUrl', 'pageUrl'],

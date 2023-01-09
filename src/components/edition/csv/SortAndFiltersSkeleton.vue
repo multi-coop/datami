@@ -14,7 +14,7 @@
         style="width: 100%; margin-top: 0.1em;">
         <!-- v-for="(filter, idx) in [...filtersDisplay, ...filtersDisplay]" -->
         <div
-          v-for="filter in filtersDisplay"
+          v-for="(filter, idx) in filtersDisplay"
           :key="`nav-filter-${fileId}-${filter.field}-${idx}`"
           class="column px-1 py-1 is-12-mobile is-6-tablet is-4-desktop is-3-widescreen is-2-fullhd">
           <CustomFilterDropdown
