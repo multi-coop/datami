@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>Département du Doubs - inclusion numérique</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+
+  <div class="container has-text-dark">
+    <!-- <div class="content my-6 px-6">
+      <p class="is-size-6">
+        L'import du widget <code>Datami</code> dans une page html permet d'afficher sur un site tiers des données hébergées sur github, gitlab ou dans un wiki.
+      </p>
+      <p class="">
+        L'import du widget consiste à simplement copier-coller quelques lignes de code dans la page html de votre choix.
+      </p>
+      <p class="">
+        Le widget est paramétrable et il peut être utilisé indistinctement et séparément pour différents jeux de données.
+      </p>
+      <p class="">
+        Le widget est sous licence libre et il n'y a aucun coût ou surcoût dans l'utilisation du widget.
+      </p>
+      <p class="">
+        Plusieurs fonctionnalités sont intégrées au widget Datami : 
+        <ul>
+          <li class="">
+            Filtres de sélection (paramétrables) ;
+          </li>
+          <li class="">
+            Redirection vers le site source depuis les fiches détaillées ;
+          </li>
+          <li class="">
+            Rechargement des données source ;
+          </li>
+          <li class="">
+            Possibilité de télécharger les données au format .tsv ;
+          </li>
+          <li class="">
+            ...et bien plus encore. Plus de d'infos dans la 
+            <a href="https://datami-docs.multi.coop" target="_blank" class="is-underlined">
+              documentation en ligne.
+            </a>
+          </li>
+        </ul>
+      </p>
+    </div> -->
+
+    <div style="background-color: white; margin: 1em;">
+
+      <!-- DATAMI - contribute with GIT ...but without minding it-->
+      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+      <!-- DATAMI WIDGET'S HTML BLOCK-->
+      <datami-multi-files title="Inclusion numérique dans le Doubs" options='{
+          "display": "horizontal"
+        }' gitfiles='[
+        {
+          "title": "Introduction",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8803/statics/markdown/introduction.md",
+          "gitfile": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/markdown/introduction.md",
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "Lieux de médiation numérique",
+          "activate": true,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8803/statics/csv/geocoding/geocoded.csv",
+          "gitfile": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/csv/geocoding/geocoded.csv",
+          "default-tab": true,
+          "options": {
+            "height": "500px",
+            "separator": ",",
+            "lockcolumns": true,
+            "customfilters": {
+              "activate": true,
+              "filterfields": [
+                {
+                  "name": "TYPE_STRUCTURE",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "SERVICES",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "ACCES",
+                  "filtering": "OR"
+                }
+              ]
+            },
+            "schema": {
+              "localdev": false,
+              "filelocal": "http://localhost:8803/statics/json/doubs-inclusion-lieux-schema.json",
+              "file": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/json/doubs-inclusion-lieux-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": false,
+              "filelocal": "http://localhost:8803/statics/json/doubs-inclusion-lieux-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/json/doubs-inclusion-lieux-fields-custom-props.json"
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardsdetail": true,
+            "cardssettings": {
+              "mini": {
+                "NOM_DISPOSITIF": {
+                  "position": "title"
+                },
+                "ADRESSE_COMPLETE": {
+                  "position": "adress"
+                },
+                "TYPE_STRUCTURE": {
+                  "position": "tags",
+                  "prefix": "Type de structure"
+                },
+                "type_lieu": {
+                  "position": "subtitle"
+                }
+              },
+              "detail": {
+                "NOM_DISPOSITIF": {
+                  "position": "title"
+                },
+                "ADRESSE_COMPLETE": {
+                  "position": "adress"
+                },
+                "INFOS": {
+                  "position": "description",
+                  "block_title": "Informations"
+                },
+                "N_TEL": {
+                  "position": "infos",
+                  "block_title": "N°de téléphone",
+                  "right": false
+                },
+                "WEBSITE": {
+                  "position": "links_top",
+                  "block_title": "Site internet",
+                  "right": true
+                },
+                "MAIL": {
+                  "position": "links_top",
+                  "block_title": "E-mail",
+                  "right": true
+                },
+                "TYPE_STRUCTURE": {
+                  "position": "tags",
+                  "block_title": "Type de structure",
+                  "right": true
+                },
+                "SERVICES": {
+                  "position": "tags",
+                  "block_title": "Types de services",
+                  "right": true
+                },
+                "ACCES": {
+                  "position": "tags",
+                  "block_title": "Accès",
+                  "right": true
+                }
+              },
+              "templates": {
+                "siren": {
+                  "use_on_mini": true,
+                  "use_on_detail": true,
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
+                      }
+                    }
+                  ]
+                }
+              },
+              "minimap": {
+                "activate": true,
+                "right_side": true,
+                "mapOptions": {
+                  "zoom": 5,
+                  "maxZoom": 18,
+                  "minZoom": 2,
+                  "item_geo_fields": {
+                    "latitude": "latitude",
+                    "longitude": "longitude"
+                  },
+                  "zoom_item": 13,
+                  "marker_icon": "map-marker",
+                  "marker_height": 45,
+                  "marker_width": 45,
+                  "marker_color": "#4a4a4a"
+                }
+              }
+            },
+            "datavizview": {
+              "activate": true,
+              "default": false,
+              "localdev": false,
+              "filelocal": "http://localhost:8803/statics/json/doubs-inclusion-lieux-dataviz-settings.json",
+              "file": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/json/doubs-inclusion-lieux-dataviz-settings.json"
+            },
+            "mapview": {
+              "activate": true,
+              "default": false,
+              "maps": [
+                {
+                  "title": {
+                    "fr": "CARTOGRAPHIE"
+                  },
+                  "cols": 12,
+                  "localdev": false,
+                  "filelocal": "http://localhost:8803/statics/json/doubs-inclusion-lieux-map-settings.json",
+                  "file": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/json/doubs-inclusion-lieux-map-settings.json"
+                }
+              ]
+            }
+          },
+          "usertoken": ""
+        },
+        {
+          "title": "Schéma des données",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8803/statics/json/doubs-inclusion-lieux-schema.json",
+          "gitfile": "https://github.com/multi-coop/data-doubs-inclusion/blob/main/json/doubs-inclusion-lieux-schema.json",
+          "options": {
+            "defaultDepth": 2,
+            "allowKeyEdit": true
+          },
+          "onlypreview": false,
+          "usertoken": ""
+        }
+      ]' locale="fr"></datami-multi-files>
+
+      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+    </div>
+  </div>
+</body>
+
+</html>

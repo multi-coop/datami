@@ -265,36 +265,22 @@ export const createHeatmapLayer = (sourceId, vars, layerId = 'heatmap-layer') =>
 // GEOJSON LAYERS - CHOROPLETH
 // cf : https://docs.mapbox.com/mapbox-gl-js/example/data-join/
 // cf :
-export const createChoroplethLayer = (sourceId, vars, layerId = 'choropleth') => {
+export const createChoroplethLayer = (sourceId, source, layerId = 'choropleth') => {
   const layerConfig = {
     id: layerId,
     type: 'fill',
     source: sourceId,
-    maxzoom: vars.max_zoom,
-    minzoom: vars.min_zoom,
+    maxzoom: source.max_zoom,
+    minzoom: source.min_zoom,
     // "source-layer": sourceId,
     paint: {
       // cf : https://docs.mapbox.com/mapbox-gl-js/style-spec/#layer-paint
-      'fill-color': vars.fill_color,
-      // 'fill-color': [
-      //   'interpolate',
-      //   ['linear'],
-      //   ['get', vars.agregated_data_field ],
-      //   0, vars.fill_color,
-      //   1,  '#EED322',
-      //   3,  '#E6B71E',
-      //   5,  '#DA9C20',
-      //   10, '#CA8323',
-      //   20, '#B86B25',
-      //   30, '#A25626',
-      //   40, '#8B4225',
-      //   50, '#723122'
-      // ],
-      'fill-opacity': vars.fill_opacity, // 0.5,
-      'fill-outline-color': vars.fill_outline_color // "rgb(256,256,256)",
+      'fill-color': source.fill_color,
+      'fill-opacity': source.fill_opacity, // 0.5,
+      'fill-outline-color': source.fill_outline_color // "rgb(256,256,256)",
     },
     layout: {
-      visibility: vars.is_default_visible ? 'visible' : 'none'
+      visibility: source.is_default_visible ? 'visible' : 'none'
     }
   }
 

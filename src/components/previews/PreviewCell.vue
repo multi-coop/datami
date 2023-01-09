@@ -18,7 +18,7 @@
     <!-- SIMPLE STRING -->
     <div
       v-if="isString && !field.subtype"
-      :class="`is-flex is-flex-direction-row ${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      :class="`is-flex is-flex-direction-row ${isCategory ? 'has-text-centered' : ''} ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : 'is-size-7'}`">
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
@@ -27,25 +27,14 @@
       <div
         class="has-wrap-btn"
         @click="nowrap = !nowrap">
-        <!-- <b-tooltip
-          :active="showExpand && field.foreignKey"
-          multilined
-          append-to-body
-          type="is-dark">
-          <template #content>
-            <div>
-              {{ field.foreignKey }}
-            </div>
-          </template> -->
         {{ trimmedText }}
-        <!-- </b-tooltip> -->
       </div>
     </div>
 
     <!-- LONG TEXT STRING -->
     <div
       v-if="isString && isLongText"
-      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : 'is-size-7'}`">
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
@@ -76,7 +65,7 @@
     <!-- TIMELINE TEXT STRING -->
     <div
       v-if="isString && isTimelineText"
-      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : ''}`">
+      :class="`is-flex is-flex-direction-row ${ isEditView ? 'has-text-grey-light is-size-7 pt-1' : 'is-size-7'}`">
       <ButtonWrapCell
         v-if="!isCardView"
         v-model="nowrap"
@@ -176,8 +165,8 @@
     <!-- NUMBER -->
     <div
       v-if="isNumber"
-      :class="`has-text-right has-text-weight-bold is-size-6`">
-      {{ value }}
+      :class="`has-text-right has-text-weight-bold is-size-7`">
+      {{ getNumber(value) }}
       <span
         v-if="isPercent"
         class="ml-2">
@@ -188,16 +177,16 @@
     <!-- IMAGE -->
     <div
       v-if="isImage"
-      :class="`has-text-right has-text-weight-bold is-size-6`">
+      :class="`has-text-right has-text-weight-bold is-size-7`">
       <!-- {{ value }} -->
       <!-- FIGURE IF ANY -->
       <figure
         v-if="value && value !== ''"
-        class="image mx-0 image-wrapper">
+        :class="`image mx-0 image-wrapper${currentViewMode === 'table' ? '-table' : ''}`">
         <img
           :src="value"
           class="image-constrained"
-          style="max-height: 75px; width: auto;"
+          style="max-height: 40px; width: auto;"
           :alt="`${value}`">
       </figure>
       <!-- NO IMAGE FOUND -->
@@ -220,7 +209,7 @@
 
 <script>
 
-import { mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinValue, mixinForeignKeys } from '@/utils/mixins.js'
 
 // import ButtonWrapCell from '@/components/previews/ButtonWrapCell.vue'
 // import PreviewTagValue from '@/components/previews/PreviewTagValue.vue'
@@ -237,6 +226,7 @@ export default {
     PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinValue,
     mixinForeignKeys
@@ -294,9 +284,7 @@ export default {
     },
     trimmedText () {
       // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
-      const textToTrim = this.value ?? ''
-      // const maxTextLength = this.field.maxLength || this.defaultMaxTextLength
-      // console.log('C > PreviewCell > trimmedText > maxTextLength : ', maxTextLength)
+      const textToTrim = this.value || ''
       const exceed = this.nowrap && (textToTrim.length > this.maxTextLength)
       // console.log('C > PreviewCell > trimmedText > exceed : ', exceed)
       const trimmed = exceed ? `${textToTrim.slice(0, this.maxTextLength)} [...]` : textToTrim
@@ -313,7 +301,7 @@ export default {
       // console.log('C > PreviewCell > tagsArray > valType : ', valType)
       let tags
       const tagsStr = (!!this.value && this.value.toString()) || ''
-      let allTags = (tagsStr && tagsStr.split(this.tagSeparator)) || [tagsStr]
+      let allTags = (tagsStr && this.fieldSubtype === 'tags' && tagsStr.split(this.tagSeparator)) || [tagsStr]
       allTags = allTags.filter(v => v !== '')
       if (this.nowrap) {
         tags = allTags.slice(0, this.defaultMaxTags)
@@ -325,6 +313,9 @@ export default {
     }
   },
   methods: {
+    getNumber (value) {
+      return this.getNumberByField(value, this.field)
+    },
     linkDomain (value) {
       // console.log('\nC > PreviewCell > linkDomain > value : ', value)
       let urlObj
@@ -340,24 +331,5 @@ export default {
       this.$emit('action', event)
     }
   }
-  // beforeMount () {
-  //   console.log('\nC > PreviewCell > beforeMount > this.value : ', this.value)
-  //   console.log('C > PreviewCell > beforeMount > this.field.label : ', this.field.label)
-  //   console.log('C > PreviewCell > beforeMount > this.field : ', this.field)
-  //   console.log('C > PreviewCell > beforeMount > this.tagSeparator : ', this.tagSeparator)
-  // }
-
 }
 </script>
-
-<style scoped>
-  .datami-nowrap {
-    white-space: nowrap;
-  }
-  .datami-wrap {
-    min-height: 2em;
-  }
-  .has-wrap-btn {
-
-  }
-</style>

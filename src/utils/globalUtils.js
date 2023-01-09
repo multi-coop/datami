@@ -80,7 +80,7 @@ export function debounce (fn, delay = 500) {
 
 // PAGINATION UTILS
 
-export const itemsPerPageChoicesTable = [3, 5, 10, 15, 20, 25, 50, 100]
+export const itemsPerPageChoicesTable = [3, 5, 10, 15, 20, 25, 50]
 export const itemsPerPageChoicesCards2perRow = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 export const itemsPerPageChoicesCards3perRow = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
 export const itemsPerPageChoicesCards4perRow = [4, 8, 12, 16, 20, 24, 28, 32, 36, 40]
@@ -177,6 +177,24 @@ export const range = (max, min = 0, step = 1) => {
   return arr
 }
 
+export const roundOff = (value, decimals) => {
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals)
+}
+
+export const getNumberByField = (value, field) => {
+  let computed = value
+  const round = field.round
+  const transform = field.transform
+  if (transform && transform.multiplyBy) {
+    computed = computed * transform.multiplyBy
+  }
+  if (round && round.digits) {
+    const digits = round.digits || 1
+    computed = roundOff(computed, digits)
+  }
+  return computed
+}
+
 // AGGREGATION UTILS
 export const groupByField = (items, groupKey) => {
   const groups = items.reduce((group, item) => {
@@ -222,7 +240,7 @@ export const aggregateByField = (items, field, aggregationtype = 'countitems') =
         })
       }
     } else {
-      const vals = name.includes(field.tagSeparator) ? name.split(field.tagSeparator) : [name]
+      const vals = name && name.includes(field.tagSeparator) ? name.split(field.tagSeparator) : [name]
       // console.log('U > globalUtils > aggregateByField > vals : ', vals)
       vals.forEach(v => {
         const i = series.findIndex(grp => grp.name === v)

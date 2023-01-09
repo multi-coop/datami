@@ -5,32 +5,33 @@
       class="card map-layers"
       style="">
       <div class="card-content px-2 py-2">
-        <b-tooltip
-          :label="t(`map.layersBtn`, locale)"
-          append-to-body
-          position="is-left"
+        <b-button
           :type="isDarkMode ? 'is-white': 'is-dark'"
-          style="width: 100%">
-          <b-button
-            :type="isDarkMode ? 'is-white': 'is-dark'"
-            :class="`${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-            size="is-small"
-            expanded
-            outlined
-            @click="toggleBtn">
-            {{ t('map.layers', locale) }}
-          </b-button>
-        </b-tooltip>
+          :class="`${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+          size="is-small"
+          expanded
+          outlined
+          @click="toggleBtn"
+          @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`map.layersBtn`, locale) })"
+          @mouseleave="hideGlobalTooltip">
+          {{ t('map.layers', locale) }}
+        </b-button>
 
         <!-- DEBUGGING -->
         <div
           v-if="debug"
           class="columns is-multiline">
-          <!-- isDrawerOpen: <code>{{ isDrawerOpen }}</code><br> -->
-          layersSwitches: <br><pre><code>{{ layersSwitches }}</code></pre>
+          <div class="column is-12">
+            <!-- isDrawerOpen: <code>{{ isDrawerOpen }}</code><br> -->
+            <!-- layersSwitches: <br><pre><code>{{ layersSwitches }}</code></pre> -->
+            radioChoice: <code>{{ radioChoice }}</code><br>
+          </div>
+          <div class="column is-12">
+            visibleLayers: <br><pre><code>{{ visibleLayers }}</code></pre>
+          </div>
         </div>
 
-        <!-- LAYERS CHECKBOXES -->
+        <!-- LAYERS CHECKBOXES / RADIO -->
         <p
           v-show="isDrawerOpen"
           class="legend-content px-3 pt-3">
@@ -39,6 +40,7 @@
             :key="`g-map-layer-${mapId}-${index}`"
             class="mb-1">
             <b-checkbox
+              v-if="switchesType === 'checkbox'"
               v-model="layer.visible"
               type="is-dark"
               @input="switchLayerVisibility(layer)">
@@ -46,6 +48,15 @@
                 {{ layer.label }}
               </span>
             </b-checkbox>
+            <b-radio
+              v-if="switchesType === 'radio'"
+              v-model="radioChoice"
+              :native-value="layer.index"
+              type="is-dark">
+              <span :class="`${ layer.visible ? 'has-text-weight-bold' : ''}`">
+                {{ layer.label }}
+              </span>
+            </b-radio>
           </b-field>
         </p>
       </div>
@@ -54,11 +65,14 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiMapLayers',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,
@@ -71,6 +85,10 @@ export default {
     layersSwitches: {
       default: null,
       type: Array
+    },
+    switchesType: {
+      default: 'checkbox',
+      type: String
     },
     isDefaultOpen: {
       default: false,
@@ -88,19 +106,34 @@ export default {
   data () {
     return {
       isDrawerOpen: false,
-      visibleLayers: []
+      visibleLayers: [],
+      radioChoice: undefined,
+      switchesAreSet: false
+    }
+  },
+  watch: {
+    radioChoice (next) {
+      if (this.switchesAreSet && next) {
+        const layer = this.visibleLayers.find(l => l.index === next)
+        this.switchLayerVisibility(layer)
+      }
     }
   },
   beforeMount () {
-    // console.log('\nC > DatamiMap > beforeMount > this.layersSwitches : ', this.layersSwitches)
+    // console.log('\nC > DatamiMapLayers > beforeMount > this.layersSwitches : ', this.layersSwitches)
     this.isDrawerOpen = this.isDefaultOpen
-    this.visibleLayers = this.layersSwitches.map(layer => {
+    this.visibleLayers = this.layersSwitches.map((layer, i) => {
       return {
+        index: `${this.mapId}-layer-switch-${i}`,
         label: layer.label,
         layers: layer.layers,
         visible: layer.default_visible
       }
     })
+    if (this.switchesType === 'radio') {
+      this.radioChoice = this.visibleLayers.find(l => l.visible).index
+    }
+    this.switchesAreSet = true
   },
   methods: {
     toggleBtn () {
@@ -110,7 +143,7 @@ export default {
       this.trackEvent(`click-${this.isDrawerOpen ? 'on' : 'off'}`)
     },
     switchLayerVisibility (layer) {
-      // console.log('\nC > DatamiMap > switchLayerVisibility > layer : ', layer)
+      // console.log('\nC > DatamiMapLayers > switchLayerVisibility > layer : ', layer)
       this.$emit('switchLayer', layer)
 
       // track with matomo
@@ -119,11 +152,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-.map-layers {
-  margin-bottom: 5px;
-}
-
-</style>

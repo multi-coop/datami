@@ -1,6 +1,7 @@
 <template>
   <div
-    class="ViewModeBtns datami-component is-flex is-align-items-center">
+    class="ViewModeBtns datami-component is-flex is-align-items-center"
+    style="z-index: 3">
     <!-- BUTTONS -->
     <div class="dropdown is-hoverable is-left">
       <div class="dropdown-trigger">
@@ -13,7 +14,8 @@
           aria-haspopup="true"
           :disabled="btnsEdit.length < 2"
           aria-controls="dropdown-views">
-          <span class="has-text-grey is-size-7 is-italic">
+          <span
+            :class="`${isDarkMode ? 'has-background-dark has-text-white' : 'has-text-grey'} is-size-7 is-italic`">
             {{ t(`views.${currentViewMode}`, locale) }}
           </span>
         </b-button>
@@ -206,36 +208,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .is-active {
-    background-color: #000000 !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content {
-    color: white !important;
-    background-color: black !important;
-  }
-  .datami-dropdown-viewmode-clearmode > .dropdown-content {
-    color: black !important;
-    background-color: white !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item {
-    color: white !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content > .dropdown-item.is-active {
-    color: black !important;
-    background-color: white !important;
-  }
-  .datami-dropdown-viewmode-clearmode > .dropdown-content > .dropdown-item.is-active {
-    color: white !important;
-    background-color: black !important;
-  }
-
-  .datami-dropdown-viewmode-darkmode > .dropdown-content > a.dropdown-item:hover:not(.is-active) {
-    color: black !important;
-  }
-
-</style>

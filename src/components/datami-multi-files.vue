@@ -1,15 +1,24 @@
 <template>
-  <div :class="`DatamiMultiFiles datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
+  <div :class="`DatamiMultiFiles datami-widget-root datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
     <!-- MATOMO -->
     <MatomoScript
       :file-id="multiFilesId"
       :from-multifiles="true"/>
 
+    <!-- DEBUGGING -->
+    <!-- <p>
+      scrolled : <pre><code>{{ scrolled }}</code></pre>
+    </p> -->
+
+    <DatamiTooltip
+      v-if="tooltip"
+      :locale="locale"/>
+
     <!-- WIDGET -->
     <div
       class="container mb-4 datami-container">
       <!-- DEBUGGING -->
-      <div
+      <!-- <div
         v-if="debug"
         class=" container columns is-multiline">
         <div class="column is-6">
@@ -23,19 +32,28 @@
           class="column is-6">
           multiFilesOptions : <code><pre>{{ multiFilesOptions }}</pre></code>
         </div>
-      </div>
+      </div> -->
 
       <!-- TITLE AND TAB OPTIONS -->
       <div
         v-if="!hideTitle"
         class="is-flex is-flex-direction-row is-align-items-center mb-4">
+        <!-- DEBUG OUTTER MODAL -->
+        <!-- <b-button
+          v-if="true"
+          icon-left="bug"
+          type="is-danger"
+          size="is-small"
+          style="z-index: 2"
+          @click="isModalActive = true"/> -->
         <!-- TABS POSITION -->
         <MultiFilesTabsPosition
           :default-display="defaultDisplay"
           :locale="locale"
           @switch="switchTabsPosition"/>
         <!-- TITLE -->
-        <span class="is-size-3 ml-5">
+        <span
+          :class="`is-size-3 is-size-5-touch ml-5 ${isDarkMode ? 'datami-darkmode has-text-white' : ''}`">
           {{ title }}
         </span>
       </div>
@@ -50,7 +68,7 @@
       </div>
 
       <!-- DEBUGGING FOREIGN KEYS-->
-      <div
+      <!-- <div
         v-if="debug && sharedData"
         class="columns is-multiline mb-4">
         <div class="column is-4">
@@ -91,7 +109,7 @@
           loadedSharedData<code>[{{ idx }}]</code> :<br>
           <pre><code>{{ debugShared(loadedSharedData(shared.ressource)) }}</code></pre>
         </div>
-      </div>
+      </div> -->
 
       <!-- TABS : LOOP FILES -->
       <section>
@@ -171,6 +189,18 @@
         </b-tabs>
       </section>
     </div>
+
+    <!-- DIALOG MODAL -->
+    <b-modal
+      v-model="isModalActive"
+      class="datami-modal-dialog-opener"
+      :width="'80%'"
+      @close="resetMultiFilesDialog">
+      <DialogSkeleton
+        :file-id="multiFilesId"
+        :is-multifile="true"
+        :locale="locale"/>
+    </b-modal>
   </div>
 </template>
 
@@ -179,30 +209,21 @@ import { trimText, booleanFromValue } from '@/utils/globalUtils'
 
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
-
-// import MatomoScript from '@/components/matomo/MatomoScript'
-
-// import MultiFilesTabsPosition from '@/components/user/MultiFilesTabsPosition'
-// import ButtonCopyWidgetHtml from '@/components/user/ButtonCopyWidgetHtml'
-// import DatamiFile from '@/components/datami-file'
-// import DatamiExplowiki from '@/components/datami-explowiki'
+import { mixinTooltip, mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiMultiFiles',
   components: {
-    // MatomoScript,
-    // MultiFilesTabsPosition,
-    // ButtonCopyWidgetHtml,
-    // DatamiFile,
-    // DatamiExplowiki
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
+    DatamiTooltip: () => import(/* webpackChunkName: "DatamiTooltip" */ '@/components/user/DatamiTooltip.vue'),
     MultiFilesTabsPosition: () => import(/* webpackChunkName: "MultiFilesTabsPosition" */ '@/components/user/MultiFilesTabsPosition.vue'),
     ButtonCopyWidgetHtml: () => import(/* webpackChunkName: "ButtonCopyWidgetHtml" */ '@/components/user/ButtonCopyWidgetHtml.vue'),
     DatamiFile: () => import(/* webpackChunkName: "DatamiFile" */ '@/components/datami-file.vue'),
     DatamiExplowiki: () => import(/* webpackChunkName: "DatamiExplowiki" */ '@/components/datami-explowiki.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinForeignKeys
   ],
@@ -234,6 +255,39 @@ export default {
   },
   data () {
     return {
+      datamiRoot: true,
+      cssFiles: [
+        'styles/components/credits/datami-credits.css',
+        'styles/datami-global.css',
+        'styles/datami-dark-mode.css',
+        'styles/components/edition/datami-edit-mode-buttons.css',
+        'styles/components/edition/datami-edit-navbar-skeleton.css',
+        'styles/components/edition/datami-edit-tag-value.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/json/datami-json.css',
+        'styles/components/previews/md/datami-md.css',
+        'styles/components/previews/md/datami-shodown.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css',
+        'styles/components/user/datami-tooltip.css',
+        'styles/datami-multi-files.css',
+        // 'fonts/materialdesignicons-webfont.eot',
+        // 'fonts/materialdesignicons-webfont.ttf',
+        // 'fonts/materialdesignicons-webfont.woff',
+        // 'fonts/materialdesignicons-webfont.woff2',
+        'fonts/materialdesignicons.min.css'
+        // 'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
+      ],
+      isModalActive: false,
       multiFilesId: undefined,
       hideTitle: false,
       files: [],
@@ -242,6 +296,17 @@ export default {
       multiFilesOptions: undefined,
       activeTab: undefined,
       tabsVertical: false
+    }
+  },
+  watch: {
+    hasMultifilesDialogs (next) {
+      // console.log('\nC > DatamiMultiFiles > watch > hasMultifilesDialogs > next : ', next)
+      if (next) {
+        this.hideGlobalTooltip()
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
+      }
     }
   },
   beforeMount () {
@@ -303,120 +368,14 @@ export default {
     booleanFromValue,
     ...mapActions({
       addFileOptions: 'addFileOptions',
+      toggleMultifileTabsPosition: 'git-user/toggleMultifileTabsPosition',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     switchTabsPosition (btn) {
       // console.log('C > DatamiMultiFiles > switchTabsPosition > btn : ', btn)
       this.tabsVertical = btn.position === 'vertical'
+      this.toggleMultifileTabsPosition()
     }
   }
 }
 </script>
-
-<style>
-
-.datami-floating-right {
-  float: right;
-}
-
-.datami-darkmode-white-text{
-  color: white !important;
-}
-.datami-darkmode{
-  background-color: #2d2d30 !important;
-}
-
-.datami-container {
-  max-width: 100% !important;
-}
-.datami-darkmode-tab-header.is-active > a {
-  background-color: #2d2d30 !important;
-  border: 1px solid white !important;
-}
-
-.multi-files-tabs.is-vertical.width-80 > .tab-content {
-  width: 80%;
-}
-.multi-files-tabs.is-vertical.width-80 > .tabs {
-  width: 20%;
-}
-
-.multi-files-tabs > nav > ul {
-  border-bottom: none !important;
-}
-
-.datami-multi-files-tab-horizontal.is-active a {
-  border: #dbdbdb thin solid !important;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  border-bottom-color: transparent !important;
-}
-
-.datami-multi-files-tab-horizontal:not(.is-active) a:hover {
-  border: #dbdbdb thin solid !important;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
-  background-color: white !important;
-}
-
-.datami-multi-files-tab-vertical.is-active a {
-  border: #dbdbdb thin solid !important;
-  border-radius: 6px;
-}
-
-.datami-multi-files-tab-vertical:not(.is-active) a {
-  border: none !important;
-}
-
-.datami-multi-files-tab-vertical:not(.is-active) a:hover {
-  border: #dbdbdb thin solid !important;
-  border-radius: 6px;
-  background-color: white !important;
-}
-
-.datami-clearmode-tab-header a {
-  color: grey !important;
-}
-.datami-darkmode-tab-header a {
-  color: white !important;
-}
-
-.datami-multi-files-tab.datami-darkmode-tab-header.is-active a {
-  color: white !important;
-}
-.datami-multi-files-tab.datami-clearmode-tab-header.is-active a {
-  color: black !important;
-}
-
-.datami-multi-files-tab.datami-darkmode-tab-header.is-active a:hover {
-  color: white !important;
-}
-.datami-multi-files-tab.datami-clearmode-tab-header.is-active a:hover {
-  color: black !important;
-}
-
-.datami-multi-files-tab.datami-darkmode-tab-header:not(.is-active) a:hover {
-  color: black !important;
-}
-.datami-multi-files-tab.datami-clearmode-tab-header:not(.is-active) a:hover {
-  color: black !important;
-}
-
-.multifiles-container {
-  margin-left: -1em;
-  margin-right: -1em;
-  margin-top: -1em;
-}
-.multifiles-container-top {
-  margin-top: -1em;
-}
-.add-multifiles-border {
-  border-left: 1px solid #dbdbdb;
-  border-right: 1px solid #dbdbdb;
-  border-bottom: 1px solid #dbdbdb;
-  border-top: 1px solid #dbdbdb;
-}
-.add-multifiles-border-top {
-  border-top: 1px solid #dbdbdb;
-}
-</style>

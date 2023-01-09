@@ -7,30 +7,18 @@
       v-if="!fileIsLoading && (!itemsForMap || showLoader)"
       class="loader big-loader"/>
 
-    <!-- DETAIL CARD FOR DISPLAYED ITEM -->
-    <div
-      v-show="showCard && displayedItemId && showDetail"
-      class="map-card map-detail-card-item"
-      :style="`width: ${cardDetailWidth}; transform: translate(-50%, ${mapHeightTop}px); -webkit-transform: translate(-50%, ${mapHeightTop}px)`">
-      <DatamiCard
-        :file-id="fileId"
-        :fields="fields"
-        :field-mapping="mapCardsSettingsDetail"
-        :item="displayedItem"
-        :show-detail="true"
-        :show-detail-card="showDetail"
-        :is-mini="false"
-        :from-map="true"
-        :locale="locale"
-        @toggleDetail="toggleItemCard"
-        @action="SendActionToParent"
-        @updateCellValue="emitUpdate"/>
-    </div>
+    <!-- DEBUGGING -->
+    <!-- <div
+      v-if="debug"
+      class="debug">
+      getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
+      getZoom : <code>{{ getZoom }}</code><br>
+    </div> -->
 
     <!-- DISPLAY MAP -->
     <div
       :id="mapId"
-      :ref="`container-map-${mapId}`"
+      ref="mapcontainer"
       :style="`height: ${mapHeight + mapHeightTop}px; width: 100%;`">
       <div class="controls-container">
         <!-- MINI CARD FOR DISPLAYED ITEM -->
@@ -49,8 +37,7 @@
             :from-map="true"
             :locale="locale"
             @toggleDetail="toggleItemCard"
-            @action="SendActionToParent"
-            @updateCellValue="emitUpdate"/>
+            @action="SendActionToParent"/>
         </div>
 
         <!-- LEGEND & LAYERS -->
@@ -61,34 +48,61 @@
             :file-id="fileId"
             :map-id="mapId"
             :layers-switches="layersVisibility.layers_switches"
+            :switches-type="layersVisibility.switches_type"
             :is-default-open="drawerLayersOpen"
             :locale="locale"
             @switchLayer="switchLayerVisibility"/>
 
           <!-- LEGEND -->
           <DatamiMapLegend
+            v-if="currentChoroSource"
             :file-id="fileId"
             :map-id="mapId"
             :current-choro-source="currentChoroSource"
+            :visible-layers="visibleLayers"
             :is-default-open="drawerScalesOpen"
             :locale="locale"/>
         </div>
 
         <!-- DEBUG -->
-        <div
+        <!-- <div
           v-if="debug"
           class="columns is-multiline">
           <div class="column is-6">
             mapSettings: <br><pre><code>{{ mapSettings }}</code></pre>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
+
+    <!-- DEBUG -->
+    <!-- <b-button
+      class="mx-1 my-1"
+      @click="getSizesScreen()">
+      getSizesScreen
+    </b-button>
+    <b-button
+      class="mx-1 my-1"
+      @click="map.redraw()">
+      map.redraw
+    </b-button>
+    <b-button
+      class="mx-1 my-1"
+      @click="getMapHeightTop">
+      getMapHeightTop
+    </b-button>
+    <b-button
+      class="mx-1 my-1"
+      @click="fakeResizeEvent">
+      fakeResizeEvent
+    </b-button> -->
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+
+import { mapState } from 'vuex'
 
 import {
   Map,
@@ -125,19 +139,12 @@ import {
 } from '@/utils/geoJson.js'
 // import { LoaderTargetPlugin } from 'webpack'
 
-// import DatamiCard from '@/components/previews/cards/DatamiCard'
-// import DatamiMapLayers from '@/components/previews/maps/DatamiMapLayers'
-// import DatamiMapLegend from '@/components/previews/maps/DatamiMapLegend'
-
 import PopupContent from '@/components/previews/maps/DatamiMapPopup'
 const PopupClass = Vue.extend(PopupContent)
 
 export default {
   name: 'DatamiMap',
   components: {
-    // DatamiCard,
-    // DatamiMapLayers,
-    // DatamiMapLegend
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue'),
     DatamiMapLayers: () => import(/* webpackChunkName: "DatamiMapLayers" */ '@/components/previews/maps/DatamiMapLayers.vue'),
     DatamiMapLegend: () => import(/* webpackChunkName: "DatamiMapLegend" */ '@/components/previews/maps/DatamiMapLegend.vue')
@@ -182,8 +189,12 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/maps/datami-maps.css'
+      // ],
 
       // MAPLIBRE MAP OBJECT
+      // mapCanBeInitialized: false,
       map: undefined,
       // isFullscreen: false,
       showLoader: true,
@@ -232,6 +243,10 @@ export default {
       // FIELDS MAPPER
       // contentFields: undefined,
 
+      // LAYERS
+      layersVisibility: undefined,
+      visibleLayers: [],
+
       // ITEMS
       showCard: false,
       showDetail: false,
@@ -245,7 +260,7 @@ export default {
 
       // MAP SETUP
       mapHeight: 600,
-      mapHeightTop: 240,
+      mapHeightTop: 140,
       preferCanvas: true,
 
       zoom: 13, // GeoCenters.FRANCE.zoom,
@@ -273,6 +288,17 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      multifileTabsPosition: (state) => state.multifileTabsPosition
+    }),
+    getContainerElement () {
+      // console.log('\nC > DatamiMap > getContainerElement > this.$refs :', this.$refs)
+      // console.log('C > DatamiMap > getContainerElement > this.mapId :', this.mapId)
+      // const container = this.$refs[this.mapId]
+      const container = this.$refs.mapcontainer
+      // console.log('C > DatamiMap > getContainerElement > container :', container)
+      return container
+    },
     mapOptions () {
       return this.mapSettings.mapOptions
     },
@@ -286,13 +312,7 @@ export default {
     mapCardsSettingsMini () {
       return this.fields.map(f => {
         const fieldMap = {
-          field: f.field,
-          name: f.name,
-          type: f.type,
-          subtype: f.subtype,
-          enumArr: f.enumArr,
-          definitions: f.definitions,
-          tagSeparator: f.tagSeparator,
+          ...this.trimField(f),
           ...this.mapCardsSettings.mini[f.name]
         }
         const templates = this.cardsSettingsTemplates
@@ -304,13 +324,7 @@ export default {
     mapCardsSettingsDetail () {
       return this.fields.map(f => {
         const fieldMap = {
-          field: f.field,
-          name: f.name,
-          type: f.type,
-          subtype: f.subtype,
-          enumArr: f.enumArr,
-          definitions: f.definitions,
-          tagSeparator: f.tagSeparator,
+          ...this.trimField(f),
           ...this.mapCardsSettings.detail[f.name]
         }
         const templates = this.cardsSettingsTemplates
@@ -362,10 +376,10 @@ export default {
       return currrentViewBbox
     },
     currentChoroSource () {
-      // console.log("\nC > DatamiMap > currentChoroSource ...")
-      // console.log("C > DatamiMap > currentChoroSource > this.choroplethGeoJSONS : ", this.choroplethGeoJSONS )
+      // console.log('\nC > DatamiMap > currentChoroSource ...')
+      // console.log('C > DatamiMap > currentChoroSource > this.choroplethGeoJSONS : ', this.choroplethGeoJSONS)
       const choroSource = this.choroplethGeoJSONS.find(c => c.min_zoom < this.getZoom && this.getZoom < c.max_zoom)
-      // console.log("C > DatamiMap > currentChoroSource > choroSource : ", choroSource )
+      // console.log('C > DatamiMap > currentChoroSource > choroSource : ', choroSource)
       return choroSource
     },
     getCorrespondingChoroConfigs () {
@@ -408,15 +422,26 @@ export default {
     }
   },
   watch: {
+    // getContainerElement (next) {
+    //   console.log('\nC > DatamiMap > watch > getContainerElement > next :', next)
+    //   if (next) {
+    //     this.initializeMap()
+    //   }
+    // },
     showCard (next) {
       if (next) {
         // track with matomo
         this.trackEvent('showCard')
       }
     },
+    multifileTabsPosition () {
+      this.redrawMap *= -1
+    },
     redrawMap () {
       // console.log('\nC > DatamiMap > watch > redrawMap :', this.redrawMap)
+      this.getSizesScreen()
       setTimeout(() => {
+        this.fakeResizeEvent()
         this.map.redraw()
       }, 150)
     },
@@ -425,7 +450,7 @@ export default {
         this.redrawMap *= -1
       }
     },
-    currentEditViewMode (next) {
+    currentEditViewMode () {
       if (this.map) {
         this.getMapHeightTop()
         this.redrawMap *= -1
@@ -450,10 +475,15 @@ export default {
       } else {
         // console.log('\nC > DatamiMap > watch > items > else (no map yet) ...')
       }
+      this.redrawMap *= -1
+      // this.map.redraw()
+      // this.getSizesScreen()
     },
     activeFilterTags (next) {
       // console.log('\nC > DatamiMap > watch > activeFilterTags > next:', next)
-      this.getMapHeightTop()
+      // this.getMapHeightTop()
+      this.redrawMap *= -1
+      // this.getSizesScreen()
     },
     userFullscreen (next) {
       // console.log('\nC > DatamiMap > watch > userFullscreen > next:', next)
@@ -477,7 +507,7 @@ export default {
     // console.log('\nC > DatamiMap > beforeMount > this.mapSettings : ', this.mapSettings)
     // console.log('C > DatamiMap > beforeMount > this.fields : ', this.fields)
     // set up fields mapper
-    this.getSizesScreen()
+    // this.getSizesScreen()
 
     // this.contentFields = this.mapSettings.contentFields
     // console.log('C > DatamiMap > beforeMount > this.mapCardsSettingsMini : ', this.mapCardsSettingsMini)
@@ -495,8 +525,10 @@ export default {
 
     // set up lat/long fields
     this.item_geo_fields = mapOptions.item_geo_fields || { latitude: 'lat', longitude: 'lon' }
-    this.fieldLat = this.fields.find(f => f.name === this.item_geo_fields.latitude).field
-    this.fieldLong = this.fields.find(f => f.name === this.item_geo_fields.longitude).field
+    const fieldLat = this.fields.find(f => f.name === this.item_geo_fields.latitude)
+    this.fieldLat = (fieldLat && fieldLat.field) || ''
+    const fieldLong = this.fields.find(f => f.name === this.item_geo_fields.longitude)
+    this.fieldLong = (fieldLong && fieldLong.field) || ''
     // console.log('C > DatamiMap > beforeMount > this.item_geo_fields : ', this.item_geo_fields)
     // console.log('C > DatamiMap > beforeMount > this.fieldLat : ', this.fieldLat)
     // console.log('C > DatamiMap > beforeMount > this.fieldLong : ', this.fieldLong)
@@ -522,9 +554,19 @@ export default {
   },
   mounted () {
     // console.log('\nC > DatamiMap > mounted > this.mapId : ', this.mapId)
+    this.getSizesScreen()
+    // console.log('\nC > DatamiMap > mounted > this.$refs : ', this.$refs)
+    // console.log('C > DatamiMap > mounted > this.mapId : ', this.mapId)
+    // const container = this.getContainerElement
+    // console.log('C > DatamiMap > mounted > container : ', container)
     this.initializeMap()
+    this.redrawMap *= -1
+    // console.log('\nC > DatamiMap > mounted > this.visibleLayers : ', this.visibleLayers)
   },
   methods: {
+    fakeResizeEvent () {
+      window.dispatchEvent(new Event('resize'))
+    },
     getDocWidth () {
       const docWidth = document.body.clientWidth
       // console.log('\nC > DatamiMap > getDocWidth > docWidth : ', docWidth)
@@ -555,10 +597,25 @@ export default {
     getMapHeightTop () {
       let height = 0
       if (this.mapOnTop) {
-        height = 240
-        const fileNavbarElem = document.getElementById(`file-navbar-${this.fileId}`)
-        const sortFiltersElem = document.getElementById(`sort-and-filters-skeleton-${this.fileId}`)
-        const editCsvElem = document.getElementById(`edit-csv-skeleton-${this.fileId}`)
+        height = 150
+        // const docRoot = this.getRootNode()
+        // console.log('\nC > DatamiMap > getMapHeightTop > this.$el : ', this.$el)
+        // console.log('C > DatamiMap > getMapHeightTop > this.mapId : ', this.mapId)
+        // console.log('C > DatamiMap > getMapHeightTop > this.$parent : ', this.$parent)
+        const docRoot = this.getAncestorNodeById(this.fileId)
+        // console.log('C > DatamiMap > getMapHeightTop > docRoot : ', docRoot)
+        // const fileNavbarElem = docRoot.getElementById(`file-navbar-${this.fileId}`)
+        // const sortFiltersElem = docRoot.getElementById(`sort-and-filters-skeleton-${this.fileId}`)
+        // const editCsvElem = docRoot.getElementById(`edit-csv-skeleton-${this.fileId}`)
+        const fileNavbarElem = docRoot.$refs[`file-navbar-${this.fileId}`]
+        // console.log('C > DatamiMap > getMapHeightTop > fileNavbarElem : ', fileNavbarElem)
+        const sortFiltersElem = docRoot.$refs.previewcsv.$refs.datamitable.$refs.sortandfiltersskeleton
+        // console.log('C > DatamiMap > getMapHeightTop > sortFiltersElem : ', sortFiltersElem)
+        const editCsvElem = docRoot.$refs.previewcsv.$refs.datamitable.$refs.editcsvskeleton
+        // console.log('C > DatamiMap > getMapHeightTop > editCsvElem : ', editCsvElem)
+        // const fileNavbarElem = this.getAncestorNodeById(`file-navbar-${this.fileId}`)
+        // const sortFiltersElem = this.getAncestorNodeById(`sort-and-filters-skeleton-${this.fileId}`)
+        // const editCsvElem = this.getAncestorNodeById(`edit-csv-skeleton-${this.fileId}`)
 
         if (fileNavbarElem && sortFiltersElem && editCsvElem) {
           // height = elem.clientHeight
@@ -572,7 +629,7 @@ export default {
           // console.log('C > DatamiMap > mapHeightTop > editCsvElem : ', editCsvElem)
           // console.log('C > DatamiMap > mapHeightTop > h3 : ', h3)
           // const adjusting = (this.activeFilterTags && this.activeFilterTags.length) ? 12 : 5
-          const adjusting = 4
+          const adjusting = -0.5
           height = h1 + h2 + h3 + adjusting
         }
         // console.log('C > DatamiMap > mapHeightTop > height : ', height)
@@ -580,14 +637,25 @@ export default {
       this.mapHeightTop = height
     },
     getSizesScreen () {
+      // console.log('\nC > DatamiMap > getSizesScreen > ... ')
       this.getDocWidth()
       this.getMapHeightTop()
     },
     initializeMap () {
       // Note: MapLibre GL uses longitude, latitude coordinate order (as opposed to latitude, longitude) to match GeoJSON.
       // cf : https://maplibre.org/maplibre-gl-js-docs/api/map/#map-parameters
-      const map = new Map({
-        container: this.mapId,
+      // const docRoot = this.getAncestorNodeById(this.fileId)
+      // console.log('\nC > DatamiMap > initializeMap > this.$refs : ', this.$refs)
+      // console.log('C > DatamiMap > initializeMap > this.$el : ', this.$el)
+      // console.log('C > DatamiMap > initializeMap > this.mapId : ', this.mapId)
+      // const mapContainerId = `container-map-${this.mapId}`
+      // console.log('C > DatamiMap > initializeMap > mapContainerId : ', mapContainerId)
+      // const container = this.getContainerElement
+      const container = this.$refs.mapcontainer
+      // console.log('C > DatamiMap > initializeMap > container : ', container)
+      const map = container && new Map({
+        // container: this.mapId,
+        container: container,
         center: this.center,
         zoom: this.zoom,
         maxZoom: this.maxZoom,
@@ -760,9 +828,17 @@ export default {
             // console.log('\nC > DatamiMap > createChoroplethSource > source : ', source)
             // console.log('C > DatamiMap > createChoroplethSource > source.source_id : ', source.source_id)
 
+            const sublayersLegend = source.sub_layers && source.sub_layers.map(sublayer => {
+              return {
+                layer_id: sublayer.layer_id,
+                legend: sublayer.legend
+              }
+            })
+
             this.choroplethGeoJSONS.push({
               source_id: source.source_id,
               legend: source.legend,
+              sublayers_legend: sublayersLegend,
               max_zoom: source.max_zoom,
               min_zoom: source.min_zoom,
               is_loaded: false,
@@ -797,7 +873,7 @@ export default {
                 const choroSource = await getData(source.source_url, 'createAddGeoJsonSource')
                 // console.log('C > DatamiMap > createAddGeoJsonSource > choroSource :', choroSource)
                 const dataLoaded = choroSource.data
-                this.joinProjectsToPolygon(source, dataLoaded, choroRefIdex)
+                this.joinItemsToPolygon(source, dataLoaded, choroRefIdex)
               }
 
               if (isUpdate) {
@@ -805,12 +881,11 @@ export default {
                 const dataLoaded = this.choroplethGeoJSONS[choroRefIdex].data
                 if (isDataLoaded) {
                   // modify > agregate data
-                  this.joinProjectsToPolygon(source, dataLoaded, choroRefIdex)
+                  this.joinItemsToPolygon(source, dataLoaded, choroRefIdex)
                 }
               }
             }
 
-            // if ( !source.need_aggregation || !isUpdate ) {
             if (!source.need_aggregation && !isUpdate) {
               // console.log('C > DatamiMap > createChoroplethSource > !source.need_aggregation ')
               this.map.addSource(source.source_id, { type: 'geojson', data: source.source_url })
@@ -913,7 +988,7 @@ export default {
           // console.log('C-SearchResultsMapbox > updateChoroSourceByZoom > dataLoaded : ', dataLoaded)
 
           if (choroSourceConfig.need_aggregation) {
-            this.joinProjectsToPolygon(choroSourceConfig, dataLoaded, choroRefIdex, true)
+            this.joinItemsToPolygon(choroSourceConfig, dataLoaded, choroRefIdex, true)
           }
 
           this.map.getSource(choroSourceConfig.source_id).setData(dataLoaded)
@@ -934,7 +1009,7 @@ export default {
         //   console.log('C-SearchResultsMapbox > updateChoroSourceByZoom > dataLoaded : ', dataLoaded)
 
         //   if (choroSourceConfig.need_aggregation) {
-        //     this.joinProjectsToPolygon(choroSourceConfig, dataLoaded, choroRefIdex, true)
+        //     this.joinItemsToPolygon(choroSourceConfig, dataLoaded, choroRefIdex, true)
         //   }
 
         //   this.map.getSource(choroSourceConfig.source_id).setData(dataLoaded)
@@ -1001,6 +1076,7 @@ export default {
           heatmapLayerId
         )
         this.map.addLayer(heatmapLayerConfig)
+        this.updateVisibleLayers(heatmapLayerId, heatmapLayerConfigOptions.is_default_visible)
       }
 
       // ALL POINTS
@@ -1016,6 +1092,7 @@ export default {
         )
         // console.log('C > DatamiMap > createAddGeoJsonLayers > allPointsConfig : ', allPointsConfig)
         this.map.addLayer(allPointsConfig)
+        this.updateVisibleLayers(allPointsLayerId, allPointsConfigOptions.is_default_visible)
         if (allPointsConfigOptions.is_clickable) {
           // CLICK
           mapLibre.on('click', allPointsLayerId, (e) => {
@@ -1073,15 +1150,6 @@ export default {
               })
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => itemProps : ', itemProps)
 
-              const pop = popup
-                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-                .setHTML(`
-                  <div id="vue-popup-marker">
-                  </div>`
-                )
-                .addTo(mapLibre)
-              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
-
               const popupConfig = allPointsConfigOptions.popup_config.fields_settings
               const config = Object.keys(popupConfig).map(k => {
                 return {
@@ -1091,13 +1159,22 @@ export default {
               })
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => config : ', config)
 
+              const PopupHtmlStr = this.buildMapPopupContent(itemProps, config)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => PopupHtmlStr : ', PopupHtmlStr)
+
+              const pop = popup
+                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+                .setHTML(PopupHtmlStr)
+                .addTo(mapLibre)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
+
               const popInstance = new PopupClass({
                 propsData: {
                   fileId: fileId,
                   mapId: mapId,
                   feature: featuresPolygon[0],
                   item: itemProps,
-                  config: config,
+                  // config: config,
                   locale: locale
                 }
               })
@@ -1128,6 +1205,7 @@ export default {
           clusterLayerId
         )
         this.map.addLayer(clusterLayerConfig)
+        this.updateVisibleLayers(clusterLayerId, clusterLayerConfigOptions.is_default_visible)
         if (clusterLayerConfigOptions.is_clickable) {
           this.map.on('click', clusterLayerId, (e) => {
             // const featuresSource = mapLibre.getSource(geoJsonSourceId.clusterId)
@@ -1163,6 +1241,7 @@ export default {
           countLayerId
         )
         this.map.addLayer(countLayerConfig)
+        this.updateVisibleLayers(countLayerId, countLayerConfigOptions.is_default_visible)
         if (countLayerConfigOptions.is_clickable) {
           this.map.on('click', countLayerId, (e) => {
             const featuresCluster = mapLibre.queryRenderedFeatures(e.point, { layers: [countLayerId] })
@@ -1196,6 +1275,7 @@ export default {
           unclusteredLayerId
         )
         this.map.addLayer(unclusteredLayerConfig)
+        this.updateVisibleLayers(unclusteredLayerId, unclusteredLayerConfigOptions.is_default_visible)
 
         if (unclusteredLayerConfigOptions.is_clickable) {
           // CLICK
@@ -1245,14 +1325,14 @@ export default {
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => coordinates : ', coordinates)
               // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => itemProps : ', itemProps)
 
-              const pop = popup
-                .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-                .setHTML(`
-                  <div id="vue-popup-marker">
-                  </div>`
-                )
-              pop.addTo(mapLibre)
-              // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => pop : ', pop)
+              // const pop = popup
+              //   .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+              //   .setHTML(`
+              //     <div id="vue-popup-marker">
+              //     </div>`
+              //   )
+              // pop.addTo(mapLibre)
+              // console.log('C > DatamiMap > createAddGeoJsonLayers > unclustering > hover => pop : ', pop)
 
               // const popInstance = new PopupClass({
               //   propsData: {
@@ -1262,7 +1342,7 @@ export default {
               //     locale : loc
               //   },
               // })
-              // // console.log('C > DatamiMap > createAddGeoJsonLayers > hover => popInstance : ', popInstance)
+              // // console.log('C > DatamiMap > createAddGeoJsonLayers > unclustering > hover => popInstance : ', popInstance)
               // popInstance.$mount('#vue-popup-marker')
               // pop._update()
             }
@@ -1284,87 +1364,169 @@ export default {
       const mapLibre = this.map
       const choroplethSourceId = source.source_id
       const choroplethLayerId = source.layer_id
+      const choroplethSublayers = source.sub_layers
+      // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethSourceId : ', choroplethSourceId)
+      // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethLayerId : ', choroplethLayerId)
+      // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethSublayers : ', choroplethSublayers)
 
+      // const fileId = this.fileId
+      // const mapId = this.mapId
+      // const locale = this.locale
+
+      if (choroplethSublayers && choroplethSublayers.length) {
+        choroplethSublayers.forEach(subLayer => {
+          const choroplethConfig = createChoroplethLayer(
+            choroplethSourceId,
+            subLayer,
+            subLayer.layer_id
+          )
+          // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethConfig : ', choroplethConfig)
+          mapLibre.addLayer(choroplethConfig)
+          this.updateVisibleLayers(subLayer.layer_id, subLayer.is_default_visible)
+          if (subLayer.has_popup) {
+            this.createAddChoroplethLayersPopup(subLayer.layer_id, subLayer.popup_config)
+          }
+        })
+      } else {
+        const choroplethConfig = createChoroplethLayer(
+          choroplethSourceId,
+          source,
+          choroplethLayerId
+        )
+        // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethConfig : ', choroplethConfig)
+        this.map.addLayer(choroplethConfig)
+        this.updateVisibleLayers(choroplethLayerId, source.is_default_visible)
+        if (source.has_popup) {
+          this.createAddChoroplethLayersPopup(choroplethLayerId, source.popup_config)
+        }
+      }
+
+      // if (source.has_popup) {
+      //   // cf : https://tech.beyondtracks.com/posts/mapbox-gl-popups-with-vue/
+      //   // cf : https://github.com/phegman/vue-mapbox-gl
+      //   // cf : https://github.com/phegman/vue-mapbox-gl/issues/22
+
+      //   // Create a popup, but don't add it to the map yet
+      //   const popup = new Popup({
+      //     closeButton: false,
+      //     closeOnClick: false
+      //   })
+
+      //   this.map.on(source.popup_config.action, choroplethLayerId, (e) => {
+      //     // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - e : ', e)
+
+      //     const featuresPolygon = mapLibre.queryRenderedFeatures(e.point, { layers: [choroplethLayerId] })
+      //     // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ", featuresPolygon)
+
+      //     // const coordinates = e.features[0].geometry.coordinates.slice()
+      //     // console.log('\nC > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - coordinates : ', coordinates)
+
+      //     // Ensure that if the map is zoomed out such that multiple
+      //     // copies of the feature are visible, the popup appears
+      //     // over the copy being pointed to.
+      //     // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      //     //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      //     // }
+      //     // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - coordinates : ", coordinates)
+
+      //     const itemProps = featuresPolygon[0].properties
+      //     // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
+
+      //     const pop = popup
+      //       .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+      //       .setHTML('<div id="vue-popup-content"></div>')
+      //       .addTo(mapLibre)
+      //     // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - pop : ', pop)
+      //     // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - source.popup_config : ", source.popup_config)
+
+      //     const popupConfig = source.popup_config.fields_settings
+      //     const config = Object.keys(popupConfig).map(k => {
+      //       return {
+      //         ...popupConfig[k],
+      //         field: k
+      //       }
+      //     })
+      //     // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - config : ', config)
+
+      //     const popInstance = new PopupClass({
+      //       propsData: {
+      //         fileId: fileId,
+      //         mapId: mapId,
+      //         feature: featuresPolygon[0],
+      //         item: itemProps,
+      //         config: config,
+      //         locale: locale
+      //       }
+      //     })
+      //     popInstance.$mount('#vue-popup-content')
+      //     // console.log('C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - popInstance : ', popInstance)
+
+      //     pop._update()
+      //   })
+
+      //   this.map.on('mouseleave', choroplethLayerId, () => {
+      //     mapLibre.getCanvas().style.cursor = ''
+      //     popup.remove()
+      //   })
+      // }
+    },
+    createAddChoroplethLayersPopup (layerId, popupConfig) {
+      const mapLibre = this.map
       const fileId = this.fileId
       const mapId = this.mapId
       const locale = this.locale
 
-      const choroplethConfig = createChoroplethLayer(
-        choroplethSourceId,
-        source,
-        choroplethLayerId
-      )
-      // console.log('C > DatamiMap > createAddChoroplethLayers > choroplethConfig : ', choroplethConfig)
-      this.map.addLayer(choroplethConfig)
+      // Create a popup, but don't add it to the map yet
+      const popup = new Popup({
+        closeButton: false,
+        closeOnClick: false
+      })
 
-      if (source.has_popup) {
-        // cf : https://tech.beyondtracks.com/posts/mapbox-gl-popups-with-vue/
-        // cf : https://github.com/phegman/vue-mapbox-gl
-        // cf : https://github.com/phegman/vue-mapbox-gl/issues/22
+      this.map.on(popupConfig.action, layerId, (e) => {
+        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - e : ', e)
 
-        // Create a popup, but don't add it to the map yet
-        const popup = new Popup({
-          closeButton: false,
-          closeOnClick: false
+        const featuresPolygon = mapLibre.queryRenderedFeatures(e.point, { layers: [layerId] })
+        // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ", featuresPolygon)
+
+        const itemProps = featuresPolygon[0].properties
+        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
+
+        const pop = popup
+          .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+          .setHTML('<div id="vue-popup-content"></div>')
+          .addTo(mapLibre)
+        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - pop : ', pop)
+        // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - popupConfig : ", popupConfig)
+
+        const popupFieldsSettings = popupConfig.fields_settings
+        const config = Object.keys(popupFieldsSettings).map(k => {
+          return {
+            ...popupFieldsSettings[k],
+            field: k
+          }
         })
+        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - config : ', config)
 
-        this.map.on(source.popup_config.action, choroplethLayerId, (e) => {
-          // console.log("C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - e : ", e)
-
-          const featuresPolygon = mapLibre.queryRenderedFeatures(e.point, { layers: [choroplethLayerId] })
-          // console.log("C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - featuresPolygon : ", featuresPolygon)
-
-          // const coordinates = e.features[0].geometry.coordinates.slice()
-          // console.log('\nC > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - coordinates : ', coordinates)
-
-          // Ensure that if the map is zoomed out such that multiple
-          // copies of the feature are visible, the popup appears
-          // over the copy being pointed to.
-          // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-          // }
-          // console.log("C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - coordinates : ", coordinates)
-
-          const itemProps = featuresPolygon[0].properties
-          // console.log('C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - itemProps : ', itemProps)
-
-          const pop = popup
-            .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-            .setHTML('<div id="vue-popup-content"></div>')
-            .addTo(mapLibre)
-          // console.log('C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - pop : ', pop)
-          // console.log("C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - source.popup_config : ", source.popup_config)
-
-          const popupConfig = source.popup_config.fields_settings
-          const config = Object.keys(popupConfig).map(k => {
-            return {
-              ...popupConfig[k],
-              field: k
-            }
-          })
-          // console.log('C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - config : ', config)
-
-          const popInstance = new PopupClass({
-            propsData: {
-              fileId: fileId,
-              mapId: mapId,
-              feature: featuresPolygon[0],
-              item: itemProps,
-              config: config,
-              locale: locale
-            }
-          })
-          popInstance.$mount('#vue-popup-content')
-          // console.log('C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - popInstance : ', popInstance)
-
-          pop._update()
+        const popInstance = new PopupClass({
+          propsData: {
+            fileId: fileId,
+            mapId: mapId,
+            feature: featuresPolygon[0],
+            item: itemProps,
+            config: config,
+            locale: locale
+          }
         })
+        popInstance.$mount('#vue-popup-content')
+        // console.log('C > DatamiMap > createAddChoroplethLayers > clic - choroplethLayerId - popInstance : ', popInstance)
 
-        this.map.on('mouseleave', choroplethLayerId, () => {
-          mapLibre.getCanvas().style.cursor = ''
-          popup.remove()
-        })
-      }
+        pop._update()
+      })
+
+      this.map.on('mouseleave', layerId, () => {
+        mapLibre.getCanvas().style.cursor = ''
+        popup.remove()
+      })
     },
 
     // - - - - - - - - - - - - - - - - - - //
@@ -1447,19 +1609,43 @@ export default {
     // - - - - - - - - - - - - - - - - - - //
     // UX FUNCTIONS
     // - - - - - - - - - - - - - - - - - - //
+    updateVisibleLayers (layerId, isVisible) {
+      // console.log('\nC > DatamiMap > updateVisibleLayers > layerId : ', layerId)
+      // console.log('C > DatamiMap > updateVisibleLayers > isVisible : ', isVisible)
+      if (isVisible && !this.visibleLayers.includes(layerId)) {
+        this.visibleLayers.push(layerId)
+      }
+      if (!isVisible && this.visibleLayers.includes(layerId)) {
+        this.visibleLayers = this.visibleLayers.filter(l => l !== layerId)
+      }
+      // console.log('C > DatamiMap > updateVisibleLayers > this.visibleLayers : ', this.visibleLayers)
+    },
     switchLayerVisibility (layer) {
+      // console.log('\nC > DatamiMap > switchLayerVisibility > layer : ', layer)
+      // console.log('C > DatamiMap > switchLayerVisibility > this.layersVisibility.layers_switches : ', this.layersVisibility.layers_switches)
+      if (this.layersVisibility.switches_type === 'radio') {
+        // console.log('C > DatamiMap > switchLayerVisibility > layer.switchesType : ', layer.switchesType)
+        this.layersVisibility.layers_switches.forEach(layers => {
+          layers.layers.forEach(layerId => {
+            this.map.setLayoutProperty(layerId, 'visibility', 'none')
+            this.updateVisibleLayers(layerId, false)
+          })
+        })
+      }
       for (const layerId of layer.layers) {
         const visibility = this.map.getLayoutProperty(layerId, 'visibility')
         if (visibility === 'visible') {
           this.map.setLayoutProperty(layerId, 'visibility', 'none')
+          this.updateVisibleLayers(layerId, false)
         } else {
           this.map.setLayoutProperty(layerId, 'visibility', 'visible')
+          this.updateVisibleLayers(layerId, true)
         }
       }
     },
-    goToDetailPage (itemId) {
-      console.log('C > DatamiMap > goToDetailPage > itemId : ', itemId)
-    },
+    // goToDetailPage (itemId) {
+    //   console.log('C > DatamiMap > goToDetailPage > itemId : ', itemId)
+    // },
 
     // - - - - - - - - - - - - - - - - - - //
     // ITEM MATCHING
@@ -1526,14 +1712,34 @@ export default {
       } else {
         this.showCard = true
         if (event.btn === 'showDetailButton') {
-          this.showDetail = true
+          // this.showDetail = true
+
+          // :file-id="fileId"
+          // :fields="fields"
+          // :field-mapping="mapCardsSettingsDetail"
+          // :item="displayedItem"
+          // :show-detail="true"
+          // :show-detail-card="showDetail"
+          // :is-mini="false"
+          // :from-map="true"
+          // :locale="locale"
+          // @toggleDetail="toggleItemCard"
+          // @action="SendActionToParent"
+          // @updateCellValue="emitUpdate"/>
+
+          const dialogPayload = {
+            item: this.displayedItem,
+            fields: this.fields,
+            fieldMapping: this.mapCardsSettingsDetail
+          }
+          this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
         }
       }
     },
-    emitUpdate (event) {
-      // console.log('\nC > DatamiMap > emitUpdate > event : ', event)
-      this.$emit('updateCellValue', event)
-    },
+    // emitUpdate (event) {
+    //   // console.log('\nC > DatamiMap > emitUpdate > event : ', event)
+    //   this.$emit('updateCellValue', event)
+    // },
     SendActionToParent (event) {
       this.$emit('action', event)
     },
@@ -1541,33 +1747,63 @@ export default {
     // - - - - - - - - - - - - - - - - - - //
     // UTILS
     // - - - - - - - - - - - - - - - - - - //
-    joinProjectsToPolygon (source, dataLoaded, choroRefIdex, noDataProxy = false) {
-      // console.log('\nC > DatamiMap > joinProjectsToPolygon ...')
-      // console.log('C > DatamiMap > joinProjectsToPolygon > source : ', source)
-      // console.log('C > DatamiMap > joinProjectsToPolygon > source.polygon_prop_id : ', source.polygon_prop_id)
-      // console.log('C > DatamiMap > joinProjectsToPolygon > source.join_polygon_id_to_field : ', source.join_polygon_id_to_field)
-      // console.log('C > DatamiMap > joinProjectsToPolygon > source.agregated_data_field : ', source.agregated_data_field)
+    joinItemsToPolygon (source, dataLoaded, choroRefIdex, noDataProxy = false) {
+      // console.log('\nC > DatamiMap > joinItemsToPolygon ...')
+      // console.log('C > DatamiMap > joinItemsToPolygon > source : ', source)
+      // console.log('C > DatamiMap > joinItemsToPolygon > source.polygon_prop_id : ', source.polygon_prop_id)
+      // console.log('C > DatamiMap > joinItemsToPolygon > source.join_polygon_id_to_field : ', source.join_polygon_id_to_field)
+      // console.log('C > DatamiMap > joinItemsToPolygon > source.agregated_data_field : ', source.agregated_data_field)
 
-      // console.log('C > DatamiMap > joinProjectsToPolygon > this.contentFields : ', this.contentFields)
-      // console.log('C > DatamiMap > joinProjectsToPolygon > this.fields : ', this.fields)
+      // console.log('C > DatamiMap > joinItemsToPolygon > this.contentFields : ', this.contentFields)
+      // console.log('C > DatamiMap > joinItemsToPolygon > this.fields : ', this.fields)
+      // console.log('C > DatamiMap > joinItemsToPolygon > this.items : ', this.items)
 
       // modify > agregate data
       this.showLoader = true
 
       const dataFeatures = dataLoaded.features
-      // console.log('C > DatamiMap > joinProjectsToPolygon > dataFeatures : ', dataFeatures)
+      // console.log('C > DatamiMap > joinItemsToPolygon > dataFeatures : ', dataFeatures)
       const jointureFieldPolygon = source.polygon_prop_id
       const jointureFieldItem = this.getItemField(source.join_polygon_id_to_field)
-      // console.log('C > DatamiMap > joinProjectsToPolygon > jointureFieldItem : ', jointureFieldItem)
+      // console.log('C > DatamiMap > joinItemsToPolygon > jointureFieldItem : ', jointureFieldItem)
 
-      dataFeatures.forEach(i => {
-        const result = this.items.reduce((sum, item) =>
-          (String(item[jointureFieldItem]) === String(i.properties[jointureFieldPolygon]) ? sum + 1 : sum), 0
+      // looping each choropleth source geojson feature
+      dataFeatures.forEach(feat => {
+        // count joined items for this feature
+        const itemsCountResult = this.items.reduce((sum, item) =>
+          (String(item[jointureFieldItem]) === String(feat.properties[jointureFieldPolygon]) ? sum + 1 : sum), 0
         )
-        i.properties[source.agregated_data_field] = result
+        feat.properties[source.agregated_data_field] = itemsCountResult
+
+        // added props if any
+        if (source.joined_props) {
+          source.joined_props.forEach(f => {
+            let result
+            const aggregType = f.aggregation_type || 'sum'
+            switch (aggregType) {
+              case 'sum':
+                result = this.items.reduce((sum, item) => {
+                  // console.log('\n...C > DatamiMap > joinItemsToPolygon > item : ', item)
+                  const itemJoinField = String(item[jointureFieldItem])
+                  const polygonJoinField = String(feat.properties[jointureFieldPolygon])
+                  const itemField = this.getItemField(f.field)
+                  // console.log('...C > DatamiMap > joinItemsToPolygon > itemField : ', itemField)
+                  // console.log('...C > DatamiMap > joinItemsToPolygon > item[itemField] : ', item[itemField])
+                  return itemJoinField === polygonJoinField ? sum + item[itemField] : sum
+                }, 0)
+                // console.log('...C > DatamiMap > joinItemsToPolygon > result : ', result)
+                result = result === 0 ? null : result
+                break
+              case 'copy':
+                result = 'test'
+                break
+            }
+            feat.properties[f.field] = result
+          })
+        }
       })
       dataLoaded.features = dataFeatures
-      // console.log('C > DatamiMap > joinProjectsToPolygon > dataLoaded : ', dataLoaded)
+      // console.log('C > DatamiMap > joinItemsToPolygon > dataLoaded : ', dataLoaded)
 
       this.map.getSource(source.source_id).setData(dataLoaded)
 
@@ -1589,52 +1825,119 @@ export default {
       const itemLat = item[this.fieldLat]
       const itemLong = item[this.fieldLong]
       return this.checkIfStringFloat(itemLat) && this.checkIfStringFloat(itemLong)
+    },
+
+    // - - - - - - - - - - - - - - - - - - //
+    // MAP POPUP UTILS
+    // - - - - - - - - - - - - - - - - - - //
+    getPosition (config, position) {
+      const posConfig = config.find(i => i.position === position)
+      return posConfig
+    },
+    getFieldClass (config, position) {
+      const posConfig = this.getPosition(config, position)
+      return posConfig && posConfig.class
+    },
+    getFieldValue (item, config, position) {
+      // console.log('\nC-DatamiMap > getFieldValue > config : ', config)
+      // console.log('C-DatamiMap > getFieldValue > tem : ',item)
+      // console.log('C-DatamiMap > getFieldValue > position : ', position)
+
+      const posConfig = this.getPosition(config, position)
+      // console.log('C-DatamiMap > getFieldValue > posConfig : ', posConfig)
+
+      let prop = posConfig && item[posConfig.field]
+
+      if (typeof prop === 'undefined') { prop = '' }
+
+      if (posConfig && posConfig.prefix) {
+        prop = posConfig.prefix + prop
+      }
+
+      if (posConfig && posConfig.suffix) {
+        prop = prop + posConfig.suffix
+      }
+      return prop
+    },
+    buildMapPopupDiv (item, config, position) {
+      const content = {
+        position: this.getPosition(config, position),
+        class: this.getFieldClass(config, position),
+        value: this.getFieldValue(item, config, position),
+        html: undefined
+      }
+      switch (position) {
+        case 'main_title':
+          content.html = content.value && `
+            <div
+              class="${content.class} has-text-dark has-text-centered"
+              style="padding-bottom:.5em;">
+              ${content.value}
+            </div>`
+          break
+        case 'title':
+          content.html = content.value && `
+            <h3
+              class="has-text-dark has-text-centered">
+              <span
+                class="${content.class}">
+                ${content.value}
+              </span>
+            </h3>`
+          break
+        case 'title_post':
+          content.html = content.value && `
+            <h3
+              class="has-text-dark has-text-centered">
+              <span
+                class="${content.class}">
+                ${content.value}
+              </span>
+            </h3>`
+          break
+        case 'value':
+          content.html = content.value && `
+            <p
+              class="${content.class}">
+              ${content.value}
+            </p>`
+          break
+        case 'info':
+          content.html = content.value && `
+            <p
+              class="${content.class}">
+              ${content.value}
+            </p>`
+          break
+      }
+      return content
+    },
+    buildMapPopupContent (item, config) {
+      // console.log('\nC-DatamiMap > getFieldValue > item : ', item)
+      // console.log('C-DatamiMap > getFieldValue > config : ', config)
+
+      const mainTitle = this.buildMapPopupDiv(item, config, 'main_title')
+      // console.log('C-DatamiMap > getFieldValue > mainTitle : ', mainTitle)
+      const title = this.buildMapPopupDiv(item, config, 'title')
+      // console.log('C-DatamiMap > getFieldValue > title : ', title)
+      const titlePost = this.buildMapPopupDiv(item, config, 'title_post')
+      // console.log('C-DatamiMap > getFieldValue > titlePost : ', titlePost)
+      const value = this.buildMapPopupDiv(item, config, 'value')
+      // console.log('C-DatamiMap > getFieldValue > value : ', value)
+      const info = this.buildMapPopupDiv(item, config, 'info')
+      // console.log('C-DatamiMap > getFieldValue > info : ', info)
+
+      const htmlStr = `
+<div id="vue-popup-marker">
+  ${mainTitle.value && mainTitle.html}
+  ${title.value && title.html}
+  ${titlePost.value && titlePost.html}
+  ${value.value && value.html}
+  ${info.value && info.html}
+</div>`
+      return htmlStr
     }
   }
 }
 
 </script>
-
-<style lang="css">
-@import '~maplibre-gl/dist/maplibre-gl.css';
-
-/* @media screen and (min-width: 1216px)
-.controls-container:not(.is-max-desktop) {
-  max-width: 1152px;
-} */
-
-.map-card {
-  z-index: 1;
-  position: absolute;
-}
-
-.map-bottom-right {
-  right: 50px;
-  bottom: 25px;
-}
-
-.map-mini-card-item {
-  z-index: 10;
-  left: 50px;
-}
-
-.map-detail-card-item {
-  z-index: 10;
-  width: 75%;
-  left: 50%;
-  /* -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); */
-}
-
-.big-loader {
-  z-index: 10;
-  position: absolute !important;
-  left: 50%;
-  top: calc(50% - 8em);
-  border-width: 10px !important;
-  /* border: 10px solid #dbdbdb !important; */
-  height: 8em !important;
-  width: 8em !important;
-}
-
-</style>

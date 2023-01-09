@@ -1,7 +1,9 @@
 <template>
-  <div class="EditModeBtns datami-component content is-flex is-justify-content-center">
+  <div
+    class="EditModeBtns datami-component px-2 content mb-0 is-flex is-align-items-center is-justify-content-center"
+    style="z-index: 2">
     <!-- DEBUG -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns">
       <div class="column is-6">
@@ -20,7 +22,7 @@
           gitObj: <br><pre><code>{{ gitObj }}</code></pre>
         </p>
       </div>
-    </div>
+    </div> -->
 
     <!-- BUTTONS EDIT-->
     <b-field grouped>
@@ -36,7 +38,7 @@
             :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
             :position="`is-top`">
             <b-button
-              :class="`datami-darkmode-border-${isDarkMode ? 'white' : 'dark' }`"
+              :class="`datami-darkmode-border-${isDarkMode ? 'white has-text-white' : 'dark' }`"
               :icon-left="btn.icon"
               :type="getBtnType(btn.code)"
               :active="currentEditViewMode === btn.code"
@@ -75,15 +77,17 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/edition/datami-edit-mode-buttons.css'
+      // ],
       debug: false,
       buttonsEdit: editViewsOptions
     }
   },
-  beforeMount () {
-    // console.log('\nC > EditModeBtns > beforeMount ... : ')
-    this.changeEdit('preview')
-    // this.changeView('table')
-  },
+  // beforeMount () {
+  //   // console.log('\nC > EditModeBtns > beforeMount ... : ')
+  //   this.changeEdit('preview')
+  // },
   methods: {
     getBtnType (btnCode) {
       const isCurrentEditMode = this.currentEditViewMode === btnCode
@@ -111,28 +115,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-.edit-mode-button {
-  z-index: 3;
-}
-
-.EditModeBtns > .field > .field-body > .field.has-addons {
-  justify-content: center !important;
-}
-
-.datami-darkmode-border-white {
-  border: 1px solid white !important;
-}
-.datami-darkmode-border-dark {
-  border: 1px solid #363636 !important;
-}
-
-@media(max-width: 768px) {
-  .EditModeBtns{
-    justify-content: end !important;
-  }
-}
-
-</style>

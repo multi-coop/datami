@@ -1,27 +1,25 @@
 <template>
   <div class="ButtonDownloadFile datami-component">
-    <b-tooltip
-      :label="t('actions.downloadFile', locale)"
-      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-      position="is-top">
-      <b-button
-        size="is-small"
-        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-        :type="isDarkMode ? 'is-white' : ''"
-        :outlined="isDarkMode"
-        :icon-left="'download'"
-        :loading="downloading"
-        @click="DownloadFile()"/>
-    </b-tooltip>
+    <b-button
+      size="is-small"
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      :icon-left="'download'"
+      :loading="downloading"
+      @click="DownloadFile()"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.downloadFile', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 
 <script>
-import { mixinGlobal, mixinDownload } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinDownload } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonDownloadFile',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinDownload
   ],
@@ -53,8 +51,8 @@ export default {
         const respFileRaw = await this.getFileDataRaw(this.gitObj)
         // console.log('C > ButtonDownloadFile > DownloadFile > respFileRaw.data : ', respFileRaw.data)
         const dl = this.buildFileLink(respFileRaw.data, window)
-        console.log('C > ButtonDownloadFile > DownloadFile > dl : ', dl)
-        // this.removeLink(dl)
+        // console.log('C > ButtonDownloadFile > DownloadFile > dl : ', dl)
+        this.removeLink(dl)
         this.updateDownloading({ fileId: this.fileId, isDownloading: false })
       }
 

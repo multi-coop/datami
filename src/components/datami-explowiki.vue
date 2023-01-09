@@ -1,25 +1,39 @@
 <template>
   <div
     :id="fileId"
-    :class="`DatamiExplowiki datami-widget section ${fromMultiFiles ? 'pt-3 px-4 add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'add-multifiles-border-top' : '' }`"
+    :class="`DatamiExplowiki datami-widget-root datami-widget section pb-0 ${currentViewMode === 'map' ? 'px-0' : 'px-3'} ${fromMultiFiles ? 'add-multifiles-border' : ''} ${fromMultiFilesVertical ? 'pt-3 add-multifiles-border-top' : 'pt-0' } ${isDarkMode ? 'datami-darkmode' : ''}`"
     :style="`z-index: 0; max-width: 100%; background-color: ${currentViewMode === 'cards' ? '#e9e9e9' : 'white'};`">
     <!-- style="z-index: 0; max-width: 100%"> -->
     <!-- MATOMO -->
     <MatomoScript
       :file-id="fileId"/>
 
+    <DatamiTooltip
+      v-if="!fromMultiFiles && tooltip"
+      :locale="locale"/>
+
     <!-- WIDGET -->
     <div
       :id="`datami-widget-${fileId}`"
-      :class="`container mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
+      :class="`mb-4 ${fromMultiFiles && !fromMultiFilesVertical ? 'mt-4' : '' }`"
       :style="`z-index: 0; ${userFullscreen ? 'background-color: white;' : ''}`">
       <!-- NAVBAR FILE TITLE / USER BTNS -->
       <div
         :id="`file-navbar-${fileId}`"
-        class="columns is-centered mb-4"
-        style="z-index: 2;">
+        class="columns is-multiline is-centered mb-4"
+        style="z-index: 3;">
         <!-- FILE TITLE -->
-        <div class="filetitle-and-viewmodes column is-12-mobile is-6-tablet is-8-desktop is-flex is-flex-direction-row">
+        <div
+          class="filetitle-and-viewmodes column is-12-mobile is-12-tablet is-7-desktop is-8-widescreen is-flex is-flex-direction-row is-align-items-center"
+          style="z-index: 3">
+          <!-- DEBUG OUTTER MODAL -->
+          <!-- <b-button
+            v-if="debug"
+            icon-left="bug"
+            type="is-danger"
+            size="is-small"
+            @click="isModalActive = true"/> -->
+          <!-- USER OPTIONS -->
           <ViewModeBtns
             :file-id="fileId"
             :locale="locale"/>
@@ -32,7 +46,9 @@
         </div>
 
         <!-- USER NAVBAR -->
-        <div class="usernavbar column is-12-mobile is-6-tablet is-4-desktop is-flex is-direction-row is-align-items-center">
+        <div
+          class="usernavbar column is-12-mobile is-12-tablet is-5-desktop is-4-widescreen is-flex is-direction-row is-align-items-center"
+          style="z-index: 2">
           <UserOptions
             v-if="gitObj"
             :file-id="fileId"
@@ -112,39 +128,6 @@
       </div> -->
     </div>
 
-    <!-- FILE INFOS -->
-    <DialogFileInfos
-      v-show="showFileInfos"
-      v-model="showFileInfos"
-      :file-id="fileId"
-      :locale="locale"
-      :debug="debug"
-      @closeDialogFileInfos="showFileInfos = false"/>
-
-    <!-- NOTIFICATIONS -->
-    <div
-      v-if="notifications && notifications.length"
-      class="mb-6">
-      <NotificationInfos
-        v-for="(notif, index) in notifications"
-        :key="`notif-${fileId}-${index}-${notif.code}`"
-        :file-id="fileId"
-        :notif="notif"
-        :locale="locale"/>
-    </div>
-
-    <!-- ERRORS -->
-    <div
-      v-if="errors && errors.length"
-      class="mb-6">
-      <NotificationErrors
-        v-for="(error, index) in errors"
-        :key="`error-${fileId}-${index}-${error.code}`"
-        :file-id="fileId"
-        :error="error"
-        :locale="locale"/>
-    </div>
-
     <!-- FILE NAVBAR BUTTONS -->
     <!-- {{ fileOptions }} -->
     <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
@@ -184,62 +167,41 @@
     <DatamiCredits
       :file-id="fileId"
       :locale="locale"/>
+
+    <!-- DIALOG MODAL -->
+    <b-modal
+      v-model="isModalActive"
+      class="datami-modal-dialog-opener"
+      :width="'80%'"
+      @close="resetFileDialog">
+      <DialogSkeleton
+        :file-id="fileId"
+        :locale="locale"/>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
-
-import { extractGitInfos } from '@/utils/utilsGitUrl.js'
-import { getFileDataRaw } from '@/utils/gitProvidersAPI.js'
-
-// import MatomoScript from '@/components/matomo/MatomoScript'
-
-// import FileTitle from '@/components/navbar/FileTitle'
-// import ViewModeBtns from '@/components/previews/ViewModeBtns'
-// import UserOptions from '@/components/user/UserOptions'
-
-// import NotificationInfos from '@/components/notifications/NotificationInfos'
-// import NotificationErrors from '@/components/notifications/NotificationErrors'
-
-// import EditNavbarSkeleton from '@/components/edition/EditNavbarSkeleton'
-// import DialogFileInfos from '@/components/previews/DialogFileInfos'
-
-// import LoaderWiki from '@/components/loaders/LoaderWIKI'
-
-// import PreviewCsv from '@/components/previews/PreviewCsv'
-
-// import DatamiCredits from '@/components/credits/DatamiCredits'
+import { mixinTooltip, mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiExploWiki',
   components: {
-    // MatomoScript,
-    // FileTitle,
-    // ViewModeBtns,
-    // UserOptions,
-    // NotificationInfos,
-    // NotificationErrors,
-    // EditNavbarSkeleton,
-    // DialogFileInfos,
-    // LoaderWiki,
-    // PreviewCsv,
-    // DatamiCredits
     MatomoScript: () => import(/* webpackChunkName: "MatomoScript" */ '@/components/matomo/MatomoScript.vue'),
+    DatamiTooltip: () => import(/* webpackChunkName: "DatamiTooltip" */ '@/components/user/DatamiTooltip.vue'),
+    DialogSkeleton: () => import(/* webpackChunkName: "DialogSkeleton" */ '@/components/dialogs/DialogSkeleton.vue'),
     FileTitle: () => import(/* webpackChunkName: "FileTitle" */ '@/components/navbar/FileTitle.vue'),
     ViewModeBtns: () => import(/* webpackChunkName: "ViewModeBtns" */ '@/components/previews/ViewModeBtns.vue'),
     UserOptions: () => import(/* webpackChunkName: "UserOptions" */ '@/components/user/UserOptions.vue'),
-    NotificationInfos: () => import(/* webpackChunkName: "NotificationInfos" */ '@/components/notifications/NotificationInfos.vue'),
-    NotificationErrors: () => import(/* webpackChunkName: "NotificationErrors" */ '@/components/notifications/NotificationErrors.vue'),
     EditNavbarSkeleton: () => import(/* webpackChunkName: "EditNavbarSkeleton" */ '@/components/edition/EditNavbarSkeleton.vue'),
-    DialogFileInfos: () => import(/* webpackChunkName: "DialogFileInfos" */ '@/components/previews/DialogFileInfos.vue'),
     LoaderWikimedia: () => import(/* webpackChunkName: "LoaderWikimedia" */ '@/components/loaders/LoaderWikimedia.vue'),
     PreviewCsv: () => import(/* webpackChunkName: "PreviewCsv" */ '@/components/previews/PreviewCsv.vue'),
     DatamiCredits: () => import(/* webpackChunkName: "DatamiCredits" */ '@/components/credits/DatamiCredits.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinGit,
     mixinCsv,
@@ -289,13 +251,37 @@ export default {
   },
   data () {
     return {
+      datamiRoot: true,
+      cssFiles: [],
+      cssFilesExtra: [
+        'styles/components/credits/datami-credits.css',
+        'styles/datami-dark-mode.css',
+        'styles/datami-global.css',
+        'styles/components/filters/datami-button-filter-by.css',
+        'styles/components/filters/datami-custom-filter-dropdown.css',
+        'styles/components/filters/datami-filter-tags.css',
+        'styles/components/pagination/datami-pages-navigation.css',
+        'styles/components/previews/cards/datami-cards.css',
+        'styles/components/previews/dataviz/datami-dataviz.css',
+        'styles/components/previews/maps/datami-maps.css',
+        'styles/components/previews/table/datami-table.css',
+        'styles/components/previews/tags/datami-tags.css',
+        'styles/components/previews/datami-view-mode-buttons.css',
+        'styles/components/sorting/datami-buttons-sort-by.css',
+        'styles/components/user/datami-user-buttons.css',
+        'styles/components/user/datami-tooltip.css',
+        // 'fonts/materialdesignicons-webfont.woff2'
+        'fonts/materialdesignicons.min.css'
+        // 'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
+      ],
+      isModalActive: false,
       // file infos
       fileId: undefined,
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
       fileClientRaw: undefined,
-      showFileInfos: false,
+      // showFileInfos: false,
 
       // tests for mediawiki fetching
       mediawikiDefaultFields: ['title', 'imageUrl', 'pageUrl'],
@@ -320,6 +306,15 @@ export default {
     }
   },
   watch: {
+    hasFileDialogs (next) {
+      // console.log('\nC > DatamiExploWiki > watch > hasFileDialogs > next : ', next)
+      if (next) {
+        this.hideGlobalTooltip()
+        this.isModalActive = true
+      } else {
+        this.isModalActive = false
+      }
+    },
     showFileInfos (next) {
       if (next) {
         // track with matomo
@@ -332,15 +327,21 @@ export default {
     }
   },
   async beforeMount () {
+    if (!this.fromMultiFiles) {
+      this.cssFiles = [...this.cssFilesExtra]
+    }
+    const wikiUuid = this.uuidv4()
+    this.fileId = wikiUuid
+
     // INITIALIZING LOCAL STORAGE
     this.initializeStorage()
+    this.resetReqErrors(this.fileId)
 
     // console.log('\nC > DatamiExploWiki > beforeMount > this.wikifile : ', this.wikifile)
     // console.log('C > DatamiExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > DatamiExploWiki > beforeMount > this.options : ', this.options)
     this.setWidgetCopy()
 
-    const wikiUuid = this.uuidv4()
     this.activateTrackAllOutlinks({ uuid: wikiUuid, val: this.trackalloutlinks })
 
     // build options object
@@ -361,7 +362,7 @@ export default {
     wikiInfosObject.wikipages = this.wikipages && JSON.parse(this.wikipages)
     wikiInfosObject.onlyPreview = this.onlypreview
     this.wikiObj = wikiInfosObject
-    this.fileId = wikiInfosObject.uuid
+    // this.fileId = wikiInfosObject.uuid
     this.fileType = wikiInfosObject.filetype
     // console.log('C > DatamiExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
     if (!this.getGitInfosObj[wikiUuid]) {
@@ -371,14 +372,15 @@ export default {
     let mediawikiSchema = mediawikiOptions.schema
     // console.log('C > DatamiExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
     if (mediawikiSchema && mediawikiSchema.file) {
-      const schemaGitObj = extractGitInfos(mediawikiSchema.file)
+      const schemaGitObj = this.extractGitInfos(mediawikiSchema.file)
       // console.log('C > DatamiExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
-      const schemaRaw = await getFileDataRaw(schemaGitObj)
+      // const schemaRaw = await this.getFileDataRaw(schemaGitObj)
+      const schemaRaw = await this.getFileDataAndErrors(schemaGitObj, undefined, true)
       // console.log('C > DatamiExploWiki > beforeMount > schemaRaw : ', schemaRaw)
       const schemaData = schemaRaw && schemaRaw.data
       // console.log('C > DatamiExploWiki > beforeMount > schemaData : ', schemaData)
-      const schema = JSON.parse(schemaData)
-      mediawikiSchema = { ...schema, file: mediawikiSchema.file }
+      const schema = schemaRaw.ok && JSON.parse(schemaData)
+      mediawikiSchema = schema && { ...schema, file: mediawikiSchema.file }
       // mediawikiOptions.schema = schema
       // console.log('C > DatamiExploWiki > beforeMount > schema : ', schema)
     }
@@ -387,10 +389,11 @@ export default {
     let mediawikiCustomProps = mediawikiOptions['fields-custom-properties']
     if (mediawikiCustomProps && mediawikiCustomProps.file) {
       const customPropsGitObj = this.extractGitInfos(mediawikiCustomProps.file)
-      const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      // const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
+      const customPropsRaw = await this.getFileDataAndErrors(customPropsGitObj, undefined, true)
       const customPropsData = customPropsRaw && customPropsRaw.data
-      const customProps = JSON.parse(customPropsData)
-      mediawikiCustomProps = { ...customProps, file: mediawikiCustomProps.file }
+      const customProps = customPropsRaw.ok && JSON.parse(customPropsData)
+      mediawikiCustomProps = customProps && { ...customProps, file: mediawikiCustomProps.file }
     }
 
     // update fileOptions with schema and consolidation settings
@@ -412,14 +415,12 @@ export default {
       addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
       updateReloading: 'git-data/updateReloading',
-      updateReqErrors: 'git-data/updateReqErrors',
       initializeStorage: 'git-storage/initializeStorage',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     async reloadMediawikiRessources () {
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
-      this.updateReqErrors({ fileId: this.fileId, addToErrors: false })
 
       // reset local data
       let wikiItems = []
@@ -491,26 +492,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-.datami-container {
-  max-width: 100% !important;
-}
-
-.no-text-transform {
-  text-transform: none!important;
-}
-
-@media (max-width: 768px) {
-  .filetitle-and-viewmodes{
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-  .usernavbar {
-    justify-content: center !important;
-  }
-}
-
-</style>

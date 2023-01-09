@@ -1,33 +1,30 @@
 <template>
   <div class="ButtonSortByField datami-component px-2">
     <!-- DEBUGGING -->
-    <div v-if="debug">
+    <!-- <div v-if="debug">
       counter: {{ counter }}
       reset: {{ reset }}
       isAscending: {{ isAscending }}
-    </div>
+    </div> -->
 
     <!-- FIELD'S SORT ICON -->
-    <b-tooltip
-      :label="t(getSortTooltip, locale)"
-      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-      position="is-top"
-      append-to-body>
-      <b-icon
-        :icon="getSortIcon"
-        :type="counter ? 'is-dark' : 'is-grey-light'"
-        size="is-small"
-        @click.native="updateAscending"/>
-    </b-tooltip>
+    <b-icon
+      :icon="getSortIcon"
+      :type="counter ? 'is-dark' : 'is-grey-light'"
+      size="is-small"
+      @click.native="updateAscending"
+      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(getSortTooltip, locale) })"
+      @mouseleave.native="hideGlobalTooltip"/>
   </div>
 </template>
 
 <script>
-import { mixinGlobal, mixinCsv } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonSortByField',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinCsv
   ],
@@ -124,12 +121,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.gt-label-sort {
-  padding-top: 0.1em!important;
-}
-.ButtonSortBy > .field > .field-body > .field {
-  margin-right: 0!important;
-}
-</style>

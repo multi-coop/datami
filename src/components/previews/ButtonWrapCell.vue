@@ -1,16 +1,15 @@
 <template>
-  <div class="ButtonWrapCell pl-2 pr-1">
-    <b-tooltip
+  <div
+    class="ButtonWrapCell pl-2 pr-1"
+    style="position: relative; left: -2px; top: 0px;">
+    <b-icon
       v-if="showExpand"
-      :label="t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale)"
-      append-to-body
-      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
-      <b-icon
-        :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
-        :type="nowrap ? 'is-grey-light' : 'is-dark'"
-        size="is-small"
-        @click.native="handleInput(!nowrap)"/>
-    </b-tooltip>
+      :icon="`arrow-${nowrap ? 'expand' : 'collapse'}`"
+      :type="nowrap ? 'is-grey-light' : 'is-dark'"
+      size="is-small"
+      @click.native="handleInput(!nowrap)"
+      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(`actions.${ nowrap ? 'expandCell' : 'reduceCell'}`, locale) })"
+      @mouseleave.native="hideGlobalTooltip"/>
     <b-icon
       v-else
       size="is-small"/>
@@ -18,11 +17,14 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonWrapCell',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   model: {
     prop: 'hidden',
     event: 'blur'
@@ -53,13 +55,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-.ButtonWrapCell {
-  position: relative;
-  left: -2px;
-  top: 0px;
-}
-
-</style>

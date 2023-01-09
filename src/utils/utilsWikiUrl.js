@@ -62,7 +62,8 @@ export async function fetchMediaWikiData (urls) {
     queryResult = await response.json()
     pages = await queryResult.query.pages
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    console.log('U > utilsWikiUrl > fetchMediaWikiData > error : ', error)
   }
 
   const results = []

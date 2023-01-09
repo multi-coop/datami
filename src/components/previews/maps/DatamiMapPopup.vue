@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div
+    <!-- <div
       v-if="getPosition('main_title')"
       :class="`${getFieldClass('main_title')} has-text-dark has-text-centered`"
       style="padding-bottom:.5em;"
@@ -27,18 +27,18 @@
     <p
       v-if="getPosition('info')"
       :class="`${getFieldClass('info')}`"
-      v-html="getFieldValue('info')"/>
+      v-html="getFieldValue('info')"/> -->
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+// import { mixinGlobal } from '@/utils/mixins.js'
 
 export default Vue.extend({
   name: 'DatamiMapPopup',
-  mixins: [mixinGlobal],
+  // mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -56,10 +56,10 @@ export default Vue.extend({
       required: true,
       type: Object
     },
-    config: {
-      required: true,
-      type: Array
-    },
+    // config: {
+    //   required: true,
+    //   type: Array
+    // },
     locale: {
       default: '',
       type: String
@@ -67,35 +67,35 @@ export default Vue.extend({
   },
 
   methods: {
-    getPosition (position) {
-      const posConfig = this.config.find(i => i.position === position)
-      return posConfig
-    },
-    getFieldClass (position) {
-      const posConfig = this.getPosition(position)
-      return posConfig.class
-    },
-    getFieldValue (position) {
-      // console.log('\nC-DatamiMapPopup > getFieldValue > this.config : ', this.config)
-      // console.log('C-DatamiMapPopup > getFieldValue > this.item : ', this.item)
-      // console.log('C-DatamiMapPopup > getFieldValue > position : ', position)
+    // getPosition (position) {
+    //   const posConfig = this.config.find(i => i.position === position)
+    //   return posConfig
+    // },
+    // getFieldClass (position) {
+    //   const posConfig = this.getPosition(position)
+    //   return posConfig.class
+    // },
+    // getFieldValue (position) {
+    //   // console.log('\nC-DatamiMapPopup > getFieldValue > this.config : ', this.config)
+    //   // console.log('C-DatamiMapPopup > getFieldValue > this.item : ', this.item)
+    //   // console.log('C-DatamiMapPopup > getFieldValue > position : ', position)
 
-      const posConfig = this.getPosition(position)
-      // console.log('C-DatamiMapPopup > getFieldValue > posConfig : ', posConfig)
+    //   const posConfig = this.getPosition(position)
+    //   // console.log('C-DatamiMapPopup > getFieldValue > posConfig : ', posConfig)
 
-      let prop = posConfig && this.item[posConfig.field]
+    //   let prop = posConfig && this.item[posConfig.field]
 
-      if (typeof prop === 'undefined') { prop = '' }
+    //   if (typeof prop === 'undefined') { prop = '' }
 
-      if (posConfig && posConfig.prefix) {
-        prop = posConfig.prefix + prop
-      }
+    //   if (posConfig && posConfig.prefix) {
+    //     prop = posConfig.prefix + prop
+    //   }
 
-      if (posConfig && posConfig.suffix) {
-        prop = prop + posConfig.suffix
-      }
-      return prop
-    }
+    //   if (posConfig && posConfig.suffix) {
+    //     prop = prop + posConfig.suffix
+    //   }
+    //   return prop
+    // }
     // popupClicked() {
     //   alert('Learn more clicked')
     // },

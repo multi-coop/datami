@@ -1,29 +1,29 @@
 <template>
   <div class="ButtonReloadFile datami-component">
-    <b-tooltip
-      :label="t('actions.reloadFile', locale)"
-      :type=" `${isDarkMode ? 'is-white' : 'is-dark'}`"
-      position="is-top">
-      <b-button
-        size="is-small"
-        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-        :type="isDarkMode ? 'is-white' : ''"
-        :outlined="isDarkMode"
-        icon-left="reload"
-        :loading="loading"
-        @click="ReloadFile()"/>
-    </b-tooltip>
+    <b-button
+      size="is-small"
+      :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+      :type="isDarkMode ? 'is-white' : ''"
+      :outlined="isDarkMode"
+      icon-left="reload"
+      :loading="loading"
+      @click="ReloadFile()"
+      @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.reloadFile', locale) })"
+      @mouseleave="hideGlobalTooltip"/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonReloadFile',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
     fileId: {
       default: null,

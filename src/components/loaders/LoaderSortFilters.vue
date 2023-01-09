@@ -1,8 +1,8 @@
 <template>
   <div class="LoaderSortFilters datami-component container">
-    <div class="columns is-mobile is-multiline mb-3 mt-0">
+    <div class="columns is-mobile is-multiline mx-0 mb-3 mt-0">
       <!-- FAKE SORTINGS -->
-      <div class="column is-3 pt-2">
+      <div class="column px-0 is-3 pt-2">
         <b-skeleton
           position="is-left"
           size="is-large"
@@ -10,7 +10,7 @@
           width="75%"/>
       </div>
       <!-- FAKE FILTERS -->
-      <div class="column is-3 is-offset-6 pt-2">
+      <div class="column px-0 is-3 is-offset-6 pt-2">
         <b-skeleton
           position="is-right"
           size="is-large"

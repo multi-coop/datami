@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="../dist/js/app.js"></script>
+  <title>Datami test - Bera</title>
+</head>
+
+<body style="background-color: #D7D7D7; padding: 5em 1em 20em 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  <div style="background-color: white; margin: 1em;">
+    <datami-file gitfile="https://github.com/qloridant/meteofrance_bra_hist/blob/master/src/data/ARAVIS/hist.csv"
+      options='{
+        "separator":",",
+        "height": "1000px"
+      }' title="datami for github file - csv BERA (comma separator) - only preview" usertoken="" locale="fr"
+      onlypreview="true" debug="false">
+    </datami-file>
+  </div>
+</body>
+
+</html>

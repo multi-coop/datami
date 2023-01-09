@@ -42,7 +42,7 @@
     </div>
 
     <!-- DISPLAY DETAILLED CARD -->
-    <div
+    <!-- <div
       v-show="showDetail && activeCardId"
       class="columns is-centered">
       <div
@@ -59,7 +59,7 @@
           @action="SendActionToParent"
           @updateCellValue="emitUpdate"/>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -130,6 +130,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/cards/datami-cards.css'
+      // ],
       showDetail: false,
       activeCardId: undefined
     }
@@ -145,15 +148,15 @@ export default {
     // },
     toggleDetail (event) {
       // console.log('\nC > DatamiCardsGrid > toggleDetail > event : ', event)
-      if (event.showDetail) {
-        this.showDetail = false
-        this.activeCardId = undefined
-        // this.handleInput(false)
-      } else {
-        this.showDetail = true
-        this.activeCardId = event.itemId
-        // this.handleInput(true)
-      }
+      // if (event.showDetail) {
+      //   this.showDetail = false
+      //   this.activeCardId = undefined
+      //   // this.handleInput(false)
+      // } else {
+      //   this.showDetail = true
+      //   this.activeCardId = event.itemId
+      //   // this.handleInput(true)
+      // }
       this.$emit('toggleDetail', event)
     },
     emitUpdate (event) {

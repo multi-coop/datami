@@ -262,6 +262,9 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/previews/json/datami-json.css'
+      // ],
       contentIsSet: false,
       beginEdit: false,
       data: undefined,
@@ -411,9 +414,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.b-numberinput.field.has-addons > .control {
-  margin-bottom: 0!important;
-}
-</style>

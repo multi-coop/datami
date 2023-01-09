@@ -1,0 +1,102 @@
+.CustomFilterDropdown {
+  width: 100%;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item {
+  color: white !important;
+  background-color: #2d2d30 !important;
+  border: 1px solid white !important;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item:hover {
+  background-color: black !important;
+}
+
+.CustomFilterDropdown>.dropdown-menu {
+  max-height: 275px;
+  width: 100%;
+  overflow: auto;
+  /* padding: 1.5em 1em 1.5em 1em; */
+  padding-top: 0;
+  position: absolute;
+  z-index: 20;
+  box-shadow: 0 .5em 1em -.125em rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.02);
+}
+
+.CustomFilterDropdown>.dropdown-menu>.dropdown-content {
+  background-color: transparent;
+  width: 100%;
+  /* border-radius: 0;
+  padding: 0; */
+}
+
+.CustomFilterDropdown.clear-background>.dropdown-menu {
+  background-color: white !important;
+  /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
+  background:
+    /* Shadow covers */
+    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+
+  background:
+    /* Shadow covers */
+    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
+  background-repeat: no-repeat;
+  /* background-color: white; */
+  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu {
+  background-color: black !important;
+  background:
+    /* Shadow covers */
+    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+
+  background:
+    /* Shadow covers */
+    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
+    /* Shadows */
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
+    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
+  background-repeat: no-repeat;
+  /* background-color: white; */
+  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item {
+  color: white !important;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>a.dropdown-item:hover {
+  color: black !important;
+}
+
+.CustomFilterDropdown.dark-background>.dropdown-menu>.dropdown-content>.dropdown-item>a:hover {
+  color: black !important;
+}
+
+.CustomFilterDropdown>.dropdown-menu>.dropdown-content>.dropdown-item {
+  /* padding-top: 0;
+  padding-bottom: 0; */
+  /* background-color: white !important; */
+}
+
+.CustomFilterDropdown>.dropdown-menu>.dropdown-content>.dropdown-item:hover {
+  background-color: #f2f2f2 !important;
+}

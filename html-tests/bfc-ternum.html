@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>TERNUM</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+
+  <div class="has-text-dark">
+
+    <div style="background-color: white; margin: 1em;">
+
+      <!-- DATAMI - contribute with GIT ...but without minding it-->
+      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+      <!-- DATAMI WIDGET'S HTML BLOCK-->
+      <datami-multi-files title="Ternum - Inclusion et médiation numérique en Occitanie" options='{
+          "display": "horizontal"
+        }' gitfiles='[
+        {
+          "title": "Accueil",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8800/statics/markdown/accueil.md",
+          "gitfile": "https://github.com/multi-coop/data-bfc-ternum/blob/main/markdown/accueil.md",
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "Lieux de médiation numérique",
+          "activate": true,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8800/statics/csv/bfc-ternum-dataset.csv",
+          "gitfile": "https://github.com/multi-coop/data-bfc-ternum/blob/main/csv/bfc-ternum-dataset.csv",
+          "default-tab": true,
+          "options": {
+            "height": "500px",
+            "separator": ",",
+            "lockcolumns": true,
+            "customfilters": {
+              "activate": true,
+              "filterfields": [
+                {
+                  "name": "departement",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "code_typo",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "code_label",
+                  "filtering": "OR"
+                },
+                {
+                  "name": "code_accomp",
+                  "filtering": "OR"
+                }
+              ]
+            },
+            "schema": {
+              "localdev": false,
+              "filelocal": "http://localhost:8800/statics/json/bfc-ternum-schema.json",
+              "file": "https://github.com/multi-coop/data-bfc-ternum/blob/main/json/bfc-ternum-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": false,
+              "filelocal": "http://localhost:8800/statics/json/bfc-ternum-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/data-bfc-ternum/blob/main/json/bfc-ternum-fields-custom-props.json"
+            },
+            "cardsview": {
+              "activate": true,
+              "default": false
+            },
+            "cardsdetail": true,
+            "cardssettings": {
+              "mini": {
+                "nom_structure": {
+                  "position": "title"
+                },
+                "adresse": {
+                  "position": "adress"
+                },
+                "ville": {
+                  "position": "adress"
+                },
+                "departement": {
+                  "position": "tags",
+                  "prefix": "Département : "
+                },
+                "code_typo": {
+                  "position": "tags",
+                  "prefix": "Typologie : "
+                },
+                "code_label": {
+                  "position": "tags",
+                  "prefix": "Label(s) : "
+                },
+                "code_accomp": {
+                  "position": "tags",
+                  "prefix": "Accompagnement : "
+                }
+              },
+              "detail": {
+                "nom_structure": {
+                  "position": "title"
+                },
+                "adresse": {
+                  "position": "adress"
+                },
+                "ville": {
+                  "position": "adress"
+                },
+                "code_postal": {
+                  "position": "adress"
+                },
+                "departement": {
+                  "position": "tags_top",
+                  "block_title": "Département",
+                  "right": true
+                },
+                "lundi matin": {
+                  "position": "infos",
+                  "block_title": "Horaires",
+                  "note": "templated"
+                },
+                "code_typo": {
+                  "position": "tags",
+                  "block_title": "Typologie",
+                  "right": true
+                },
+                "code_label": {
+                  "position": "tags",
+                  "block_title": "Label(s)",
+                  "right": true
+                },
+                "code_accomp": {
+                  "position": "tags",
+                  "block_title": "Modalités d&lsquo;accompagnement",
+                  "right": true
+                },
+                "contact_tel": {
+                  "position": "description",
+                  "block_title": "Téléphone"
+                },
+                "contact_email": {
+                  "position": "links",
+                  "block_title": "Email"
+                },
+                "url_lieu": {
+                  "position": "links",
+                  "block_title": "Site internet"
+                },
+                "mise_a_jour": {
+                  "position": "infos",
+                  "prefix": "Date de mise à jour :",
+                  "right": true
+                }
+              },
+              "templates": {
+                "lundi matin": {
+                  "use_on_mini": true,
+                  "use_on_detail": true,
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "Lundi matin &#123;&#123; lundi matin &#125;&#125; / après-midi &#123;&#123; lundi après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Mardi matin &#123;&#123; mardi matin &#125;&#125; / après-midi &#123;&#123; mardi après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Mercredi matin &#123;&#123; mercredi matin &#125;&#125; / après-midi &#123;&#123; mercredi après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Jeudi matin &#123;&#123; jeudi matin &#125;&#125; / après-midi &#123;&#123; jeudi après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Vendredi matin &#123;&#123; vendredi matin &#125;&#125; / après-midi &#123;&#123; vendredi après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Samedi matin &#123;&#123; samedi matin &#125;&#125; / après-midi &#123;&#123; samedi après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Dimanche matin &#123;&#123; dimanche matin &#125;&#125; / après-midi &#123;&#123; dimanche après-midi &#125;&#125;"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Plus d&lsquo;infos en cliquant ici : ~~ url_lieu ~~"
+                      }
+                    }
+                  ]
+                }
+              },
+              "minimap": {
+                "activate": true,
+                "right_side": true,
+                "mapOptions": {
+                  "zoom": 5,
+                  "maxZoom": 18,
+                  "minZoom": 2,
+                  "item_geo_fields": {
+                    "latitude": "lat",
+                    "longitude": "lon"
+                  },
+                  "zoom_item": 13,
+                  "marker_icon": "map-marker",
+                  "marker_height": 45,
+                  "marker_width": 45,
+                  "marker_color": "#4a4a4a"
+                }
+              }
+            },
+            "datavizview": {
+              "activate": false,
+              "default": false,
+              "localdev": false,
+              "filelocal": "http://localhost:8800/statics/json/bfc-ternum-dataviz-settings.json",
+              "file": "https://github.com/multi-coop/data-bfc-ternum/blob/main/json/bfc-ternum-dataviz-settings.json"
+            },
+            "mapview": {
+              "activate": true,
+              "default": true,
+              "maps": [
+                {
+                  "title": {
+                    "fr": "CARTOGRAPHIE"
+                  },
+                  "cols": 12,
+                  "localdev": false,
+                  "filelocal": "http://localhost:8800/statics/json/bfc-ternum-map-settings.json",
+                  "file": "https://github.com/multi-coop/data-bfc-ternum/blob/main/json/bfc-ternum-map-settings.json"
+                }
+              ]
+            }
+          },
+          "usertoken": ""
+        },
+        {
+          "title": "Les données",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8800/statics/markdown/les-donnees.md",
+          "gitfile": "https://github.com/multi-coop/data-bfc-ternum/blob/main/markdown/les-donnees.md",
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "La MedNum BFC",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8800/statics/markdown/mednum-bfc.md",
+          "gitfile": "https://github.com/multi-coop/data-bfc-ternum/blob/main/markdown/mednum-bfc.md",
+          "onlypreview": true,
+          "usertoken": ""
+        }
+      ]' locale="fr"></datami-multi-files>
+
+      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+      <!-- <script src="https://preprod--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
+      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+
+    </div>
+  </div>
+</body>
+
+</html>

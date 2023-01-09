@@ -2,9 +2,10 @@
   <div
     class="DatamiMiniMap datami-component">
     <!-- DISPLAY MAP -->
+    <!-- :ref="`container-minimap-${mapId}`" -->
     <div
       :id="mapId"
-      :ref="`container-minimap-${mapId}`"
+      ref="minimapcontainer"
       :style="`height: ${minimapHeight}px; width: 100%;`">
       <!-- MINIMAP CONTAINER -->
     </div>
@@ -91,6 +92,7 @@ export default {
   watch: {
     item (next) {
       // console.log('\nC > DatamiMiniMap > watch > item > next : ', next)
+      // console.log('C > DatamiMiniMap > watch > item > this.fields : ', this.fields)
       const newCenter = [next[this.fieldLong], next[this.fieldLat]]
       this.marker.setLngLat(newCenter)
       this.map.easeTo({
@@ -112,6 +114,7 @@ export default {
   beforeMount () {
     // console.log('\nC > DatamiMiniMap > beforeMount > this.item : ', this.item)
     const mapOptions = this.mapOptions
+    // console.log('\nC > DatamiMiniMap > beforeMount > mapOptions : ', mapOptions)
 
     // set up map's basic parameters
     this.minimapHeight = mapOptions.height ?? this.minimapHeight
@@ -148,8 +151,9 @@ export default {
       // console.log('C > DatamiMiniMap > initializeMiniMap > this.item[2] : ', this.item[2])
       // Note: MapLibre GL uses longitude, latitude coordinate order (as opposed to latitude, longitude) to match GeoJSON.
       // cf : https://maplibre.org/maplibre-gl-js-docs/api/map/#map-parameters
+      const container = this.$refs.minimapcontainer
       const map = new Map({
-        container: this.mapId,
+        container: container,
         center: this.center,
         // center: [0, 0],
         zoom: this.zoom,

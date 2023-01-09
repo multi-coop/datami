@@ -12,7 +12,7 @@
         :icon-right="`${searchValue ? 'close-thick' : ''}`"
         icon-right-clickable
         @icon-right-click="clearInput"
-        @input="SendActionToParent"/>
+        @input="emitChange"/>
     </b-field>
   </div>
 </template>
@@ -20,7 +20,7 @@
 <script>
 import { mixinGlobal } from '@/utils/mixins.js'
 
-// import { debounce } from '@/utils/globalUtils'
+import { debounce } from '@/utils/globalUtils'
 
 export default {
   name: 'SearchFullText',
@@ -37,14 +37,19 @@ export default {
   },
   data () {
     return {
-      searchValue: undefined
+      searchValue: ''
     }
   },
   methods: {
     clearInput () {
-      this.searchValue = undefined
+      this.searchValue = ''
       this.SendActionToParent()
     },
+    emitChange: debounce(function (event) {
+      // console.log('\nC > SearchFullText > emitChange > event : ', event)
+      // console.log('C > SearchFullText > emitChange > event > debounce : ', event)
+      this.SendActionToParent(event)
+    }, 750),
     SendActionToParent () {
       // console.log('\nC > SearchFullText > SendActionToParent > ... : ')
       const filterPayload = {
@@ -63,13 +68,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .gitribute-darkmode-grey-background{
-    background-color: rgb(151, 151, 150) !important;
-  }
-  .white{
-    color: white !important;
-  }
-
-</style>

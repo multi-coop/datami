@@ -1,48 +1,6 @@
 <template>
   <div
     :class="`EditCell datami-component datami-cell is-flex is-align-items-center ${field && ['boolean', 'datami'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
-    <!-- DEBUGGING -->
-    <b-tooltip
-      v-if="debug"
-      multilined
-      append-to-body
-      type="is-warning">
-      <b-icon
-        icon="information"
-        type="is-warning"
-        size="is-small"/>
-      <template #content>
-        isCardView: <code>{{ isCardView }}</code><br>
-        fieldType: <code>{{ fieldType }}</code><br>
-        fieldSubtype: <code>{{ fieldSubtype }}</code><br>
-        hasConsolidation: <code>{{ hasConsolidation }}</code><br>
-        inputData: <code>{{ inputData }}</code><br>
-        isCategory: <code>{{ isCategory }}</code><br>
-        <span v-if="!isTag && isCategory">
-          input : <code>{{ input }}</code><br>
-        </span>
-        <span v-if="isTag && isCategory">
-          tagsValue : <code>{{ tagsValue }}</code><br>
-          tagsEnum : <code>{{ tagsEnum }}</code><br>
-        </span>
-        <span v-if="isTag">
-          field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
-        </span>
-        field: <br><pre><code>{{ field }}</code></pre>
-        <!-- fileOptions: <br><pre><code>{{ fileOptions }}</code></pre> -->
-      </template>
-    </b-tooltip>
-
-    <div v-if="debug && !isHeader && isTag && !isCategory">
-      tagsValue : <code>{{ tagsValue }}</code><br>
-      tagsEnum : <code>{{ tagsEnum }}</code><br>
-      tagsEnumEnriched : <code>{{ tagsEnumEnriched }}</code><br>
-    </div>
-
-    <div v-if="debug && !isHeader && isBoolean">
-      input : <code>{{ input }}</code><br>
-    </div>
-
     <!-- USER BUTTONS FOR DATAMI FIELDS (CONSOLIDATION...) -->
     <div
       v-if="field && isOpenCardField"
@@ -115,7 +73,7 @@
         v-else-if="!isHeader && isTag && !isCategory"
         v-model="tagsValue"
         :data="tagsEnum"
-        :class="`g-cell py-0`"
+        :class="`editcell-tag-input g-cell py-0`"
         :disabled="isConsolidating"
         :read-only="field.locked"
         :allow-new="field.allowNew"
@@ -124,10 +82,10 @@
         ellipsis
         autocomplete
         expanded
-        append-to-body
         attached
         type="is-dark"
         @input="emitChange">
+        <!-- append-to-body -->
         <template slot-scope="props">
           <span :class="`${tagsValue.includes(props.option) ? 'has-text-weight-bold' : ''}`">
             {{ props.option }}
@@ -171,14 +129,11 @@
 
 import { mixinGlobal, mixinValue } from '@/utils/mixins.js'
 
-// import ButtonConsolidation from '@/components/edition/ButtonConsolidation.vue'
-// import EditTagValue from '@/components/edition/EditTagValue.vue'
+import { debounce } from '@/utils/globalUtils'
 
 export default {
   name: 'EditCell',
   components: {
-    // ButtonConsolidation,
-    // EditTagValue
     ButtonOpenCard: () => import(/* webpackChunkName: "ButtonOpenCard" */ '@/components/previews/ButtonOpenCard.vue'),
     ButtonConsolidation: () => import(/* webpackChunkName: "ButtonConsolidation" */ '@/components/edition/ButtonConsolidation.vue'),
     EditTagValue: () => import(/* webpackChunkName: "EditTagValue" */ '@/components/edition/EditTagValue.vue')
@@ -208,6 +163,10 @@ export default {
       default: false,
       type: Boolean
     },
+    fromDialog: {
+      default: false,
+      type: Boolean
+    },
     rowId: {
       default: null,
       type: String
@@ -231,6 +190,9 @@ export default {
   },
   data () {
     return {
+      cssFiles: [
+        'styles/components/edition/csv/datami-edit-cell.css'
+      ],
       input: undefined,
       inputBool: false,
       tagsValue: []
@@ -301,12 +263,18 @@ export default {
           field: updatedField
         }
       }
-      this.$emit('action', payload)
+      // this.$emit('action', payload)
+      this.addFileSignal('addTagToEnum', payload)
     },
-    emitChange (event) {
+    emitChange: debounce(function (event) {
       // console.log('\nC > EditCell > emitChange > event : ', event)
-      // console.log('C > EditCell > emitChange > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
-      // console.log('C > EditCell > emitChange > this.field : ', this.field)
+      // console.log('C > EditCell > emitChange > event > debounce : ', event)
+      this.emitChangeDebounced(event)
+    }, 750),
+    emitChangeDebounced (event) {
+      // console.log('\nC > EditCell > emitChangeDebounced > event : ', event)
+      // console.log('C > EditCell > emitChangeDebounced > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
+      // console.log('C > EditCell > emitChangeDebounced > this.field : ', this.field)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
@@ -337,8 +305,15 @@ export default {
       } else {
         payload.isHeader = true
       }
-      // console.log('C > EditCell > emitChange > payload : ', payload)
-      this.$emit('updateCellValue', payload)
+      // console.log('C > EditCell > emitChangeDebounced > payload : ', payload)
+
+      // Update cell value using store git-data
+      // this.$emit('updateCellValue', payload)
+      if (this.fromDialog) {
+        this.$emit('updateTempValue', payload)
+      } else {
+        this.addFileSignal('updateCellValue', payload)
+      }
 
       // track with matomo
       this.trackEvent('updateCellValue')
@@ -350,24 +325,3 @@ export default {
 }
 
 </script>
-
-<style>
-
-.datami-cell > .field {
-  /* border: none; */
-  width: 100%;
-}
-.g-cell {
-  background-color: transparent;
-}
-.g-cell-darkmode {
-  background-color: white;
-}
-.g-cell-number-darkmode {
-  background-color: white !important;
-}
-.g-header {
-  font-size: .85em!important;
-  font-weight: 600!important;
-}
-</style>

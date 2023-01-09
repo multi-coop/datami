@@ -1,7 +1,7 @@
 <template>
   <div
     v-show="showEditNavbar && !noEditNavbarViews.includes(currentViewMode)"
-    class="EditNavbarSkeleton datami-component container mt-2">
+    class="EditNavbarSkeleton datami-component mt-2">
     <div
       v-if="gitObj"
       class="columns is-multiline is-mobile mb-2">
@@ -19,9 +19,10 @@
         v-if="!onlyPreview"
         class="column py-0 is-4 is-5-mobile is-1-tablet has-text-right">
         <ButtonImportData
-          :locale="locale"
-          :show-upload-file-dialog="showUploadFileDialog"
-          @action="SendActionToParent"/>
+          :file-id="fileId"
+          :locale="locale"/>
+          <!-- @action="SendActionToParent"/> -->
+          <!-- :show-upload-file-dialog="showUploadFileDialog" -->
       </div>
     </div>
   </div>
@@ -51,10 +52,6 @@ export default {
       default: false,
       type: Boolean
     },
-    showUploadFileDialog: {
-      default: false,
-      type: Boolean
-    },
     locale: {
       default: 'en',
       type: String
@@ -62,22 +59,12 @@ export default {
   },
   data () {
     return {
+      // cssFiles: [
+      //   'styles/components/edition/datami-edit-navbar-skeleton.css'
+      // ],
       loading: false,
       noEditNavbarViews: ['dataviz']
-    }
-  },
-  methods: {
-    SendActionToParent (event) {
-      this.$emit('action', event)
     }
   }
 }
 </script>
-
-<style scoped>
-
-.edit-save-button {
-  z-index: 3;
-}
-
-</style>

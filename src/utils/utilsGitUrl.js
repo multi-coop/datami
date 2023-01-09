@@ -447,11 +447,11 @@ export async function buildPutCommitReqData (gitObj, branch, edited, message, au
 }
 
 export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch, token = undefined, userGit = undefined) {
-  console.log('\nU > utilsGitUrl > buildPostMergeRequestUrl > ...')
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitObj : ', gitObj)
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > targetBranch : ', targetBranch)
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > newBranch : ', newBranch)
-  console.log('U > utilsGitUrl > buildPostMergeRequestUrl > token : ', token)
+  // console.log('\nU > utilsGitUrl > buildPostMergeRequestUrl > ...')
+  // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitObj : ', gitObj)
+  // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > targetBranch : ', targetBranch)
+  // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > newBranch : ', newBranch)
+  // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > token : ', token)
 
   const errors = []
   let urlPostMergeRequest
@@ -470,8 +470,8 @@ export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch,
     const userInfosUrl = buildGitUserInfosUrl(gitObj, token)
     const userInfosReq = await fetch(userInfosUrl.url, userInfosUrl.requestOptions)
     userInfosData = await userInfosReq.json()
-    console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosUrl : ', userInfosUrl)
-    console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosData : ', userInfosData)
+    // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosUrl : ', userInfosUrl)
+    // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > userInfosData : ', userInfosData)
   } else {
     userInfosData = userGit
   }
@@ -480,7 +480,7 @@ export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch,
     case 'gitlab':
       // build url for urlPostMergeRequest
       urlPostMergeRequest = `${gitObj.apiRepo}/merge_requests`
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > urlPostMergeRequest : ', urlPostMergeRequest)
+      // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > gitlab > urlPostMergeRequest : ', urlPostMergeRequest)
 
       username = userInfosData.username
 
@@ -497,7 +497,7 @@ export async function buildPostMergeRequestUrl (gitObj, targetBranch, newBranch,
 
       // build url for urlPostMergeRequest
       urlPostMergeRequest = `${gitObj.apiRepo}/pulls`
-      console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > urlPostMergeRequest : ', urlPostMergeRequest)
+      // console.log('U > utilsGitUrl > buildPostMergeRequestUrl > github > urlPostMergeRequest : ', urlPostMergeRequest)
 
       username = userInfosData.login
 

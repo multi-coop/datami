@@ -18,11 +18,17 @@
     <!-- BLOCK TITLE IF ANY -->
     <p
       v-show="currentEditViewMode !== 'edit' && field.block_title"
-      class="is-size-7 mb-1">
+      class="is-size-7 mb-1"
+      @click="showCollapse = !showCollapse">
       <span
         class="has-text-weight-bold is-uppercase">
         {{ field.block_title }}
       </span>
+      <b-icon
+        v-if="field.longtextOptions && field.longtextOptions.canCollapse"
+        :icon="`chevron-${showCollapse ? 'down' : 'up'}`"
+        class="ml-4"
+        size="is-small"/>
     </p>
 
     <!-- ITEM VALUE IF PREVIEW MODE -->
@@ -33,22 +39,30 @@
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"
+        class="mr-2"
         size="is-small"/>
       <span
         v-if="field.prefix"
         class="mr-1 has-text-weight-bold">
         {{ field.prefix }}
       </span>
-      <PreviewLongText
-        v-if="field.subtype === 'longtext' && field.longtextOptions"
-        :raw-text="itemValue"
-        :file-id="fileId"
-        :field-id="field.field"
-        :field="field"
-        :longtext-options="field.longtextOptions"
-        :nowrap="isMini"
-        :max-text-length="field.maxLength"
-        :locale="locale"/>
+      <span v-if="field.subtype === 'longtext' && field.longtextOptions">
+        <!-- DEBUGGING -->
+        <!-- <div v-if="field.subtype === 'longtext'">
+              field : <code>{{ field }}</code>
+            </div> -->
+        <span v-show="showCollapse">
+          <PreviewLongText
+            :raw-text="itemValue"
+            :file-id="fileId"
+            :field-id="field.field"
+            :field="field"
+            :longtext-options="field.longtextOptions"
+            :nowrap="isMini"
+            :max-text-length="field.maxLength"
+            :locale="locale"/>
+        </span>
+      </span>
       <span v-else-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
@@ -60,6 +74,15 @@
         :field="field"
         :step-options="field.stepOptions"
         :locale="locale"/>
+
+      <!-- NUMBERS -->
+      <span v-else-if="field.type === 'number'">
+        {{ getNumber(itemValue) || t('global.noValue', locale) }}
+        <!-- {{ field }} -->
+        <span v-if="field.subtype === 'percent'">
+          &nbsp;%
+        </span>
+      </span>
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
@@ -70,8 +93,9 @@
       </span>
     </p>
 
-    <!-- DEBUGGING - APPLY TEMPLATE IF ANY -->
+    <!-- APPLY TEMPLATE IF ANY -->
     <div v-if="currentEditViewMode === 'preview' && field.templating">
+      <!-- <code>{{ templatedValues }}</code> -->
       <p
         v-for="(paragraph, idx) in templatedValues"
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">
@@ -106,8 +130,8 @@
         :is-added="itemAdded"
         :input-data="itemValue"
         :locale="locale"
-        :is-card-view="true"
-        @updateCellValue="emitUpdate"/>
+        :is-card-view="true"/>
+        <!-- @updateCellValue="emitUpdate"/> -->
     </div>
   </div>
 </template>
@@ -115,14 +139,9 @@
 <script>
 import { mixinGlobal, mixinValue, mixinDiff, mixinIcons } from '@/utils/mixins.js'
 
-// import PreviewCell from '@/components/previews/PreviewCell'
-// import EditCell from '@/components/edition/csv/EditCell'
-
 export default {
   name: 'DatamiCardBlockContent',
   components: {
-    // PreviewCell,
-    // EditCell
     PreviewLongText: () => import(/* webpackChunkName: "PreviewLongText" */ '@/components/previews/PreviewLongText.vue'),
     PreviewTimelineText: () => import(/* webpackChunkName: "PreviewTimelineText" */ '@/components/previews/PreviewTimelineText.vue'),
     EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue')
@@ -185,6 +204,7 @@ export default {
   },
   data () {
     return {
+      showCollapse: true,
       classes: {
         title: {
           content: 'is-size-4 mb-0 has-text-weight-bold title-line-height',
@@ -210,55 +230,27 @@ export default {
           content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
-        steps: {
+        timeline: {
           content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         }
       }
     }
   },
-  // beforeMount () {
+  beforeMount () {
+    if (this.field.subtype === 'longtext' && this.field.longtextOptions && this.field.longtextOptions.canCollapse) {
+      this.showCollapse = this.field.longtextOptions.isOpen
+    }
   //   console.log('\nC > DatamiCardBlockContent > beforeMount > this.itemId :', this.itemId)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.position :', this.position)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.fieldLabel :', this.fieldLabel)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.field :', this.field)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.itemValue :', this.itemValue)
-  // },
+  },
   methods: {
-    // applyTemplate (text) {
-    //   // prepare regex
-    //   const fieldStart = '{{'
-    //   const fieldEnd = '}}'
-    //   const quotesRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
-    //   let textArr = text.split(quotesRegex)
-    //   console.log('\nC > DatamiCardBlockContent > applyTemplate > textArr :', textArr)
-    //   textArr = textArr.map(str => {
-    //     let strClean
-    //     if (str.startsWith(fieldStart)) {
-    //       const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
-    //       console.log('C > DatamiCardBlockContent > applyTemplate > fieldName :', fieldName)
-    //       strClean = str
-    //     } else {
-    //       strClean = str
-    //     }
-    //     return strClean
-    //   })
-    //   const textClean = textArr.join('')
-    //   return textClean
-    // },
-    emitUpdate (event) {
-      this.$emit('updateCellValue', event)
+    getNumber (value) {
+      return this.getNumberByField(value, this.field)
     }
-    // toggleDetail () {
-    //   console.log('C > DatamiCardBlockContent > toggleDetail > this.position :', this.position)
-    //   this.$emit('toggleDetail', this.position)
-    // }
   }
 }
 </script>
-
-<style scoped>
-  .title-line-height {
-    line-height: 1.2em;
-  }
-</style>

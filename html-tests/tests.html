@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="../dist/js/app.js"></script>
+  <title>Datami test</title>
+</head>
+
+<body style="background-color: #D7D7D7; padding: 5em 1em 20em 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
+  <p style="margin: 5em 1em 1em 1em;">
+    Import and edit a markdow file from gitlab
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <div style="background-color: white; margin: 1em;">
+      <datami-file
+        gitfile="https://gitlab.com/multi-coop/datami-content-test/-/blob/main/texts/markdown/test-file-datami-fr.md"
+        options="" title="datami for gitlab file - md" usertoken="" locale="fr" debug="false"></datami-file>
+    </div>
+  </div>
+
+  <p style="margin: 5em 1em 1em 1em;">
+    Import and edit a markdow file from github
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <div style="background-color: white; margin: 1em;">
+      <datami-file
+        gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/jailbreak-devient-multi-fr.md"
+        options="" title="datami for github file - md" usertoken="" locale="en">
+      </datami-file>
+    </div>
+  </div>
+
+  <p style="margin: 5em 1em 1em 1em;">
+    Import a csv file from github for only preview
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <div style="background-color: white; margin: 1em;">
+      <datami-file
+        gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
+        "separator":",",
+        "height": "300px"
+      }' title="datami for github file - csv (comma separator) - only preview" usertoken="" locale="tk"
+        onlypreview="true" debug="false">
+      </datami-file>
+    </div>
+  </div>
+
+  <p style="margin: 5em 1em 1em 1em;">
+    Import and edit a csv file from gitlab
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <div style="background-color: white; margin: 1em;">
+      <datami-file
+        gitfile="https://gitlab.com/multi-coop/datami-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
+        options='{
+            "separator": ";",
+            "lockcolumns": true,
+            "tagseparator":", ",
+            "height": "500px",
+            "pagination":{
+              "itemsPerPage":5
+            },
+            "cardsview": { "activate": true, "default": false },
+            "cardsdetail": true,
+            "cardssettings": {
+              "mini": {
+                "name": {"position": "title"},
+                "surname": {"position": "title"},
+                "profession": {"position": "resume"}
+              },
+              "detail": {
+                "name": {"position": "title"},
+                "surname": {"position": "title"},
+                "profession": {"position": "desription"}
+              }
+            }
+          }' title="datami for gitlab file - csv (semicolon separator)" usertoken="" locale="fr"></datami-file>
+    </div>
+  </div>
+</body>
+
+</html>

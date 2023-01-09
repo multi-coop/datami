@@ -2,22 +2,20 @@
   <div class="ButtonChangeUserBranch datami-component">
     <div :class="`dropdown is-right ${showContent ? 'is-active' : '' }`">
       <!-- TRIGGER BUTTON -->
-      <div class="dropdown-trigger">
-        <b-tooltip
-          :label="t('actions.changeActiveBranch', locale)"
-          :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-          position="is-top">
-          <b-button
-            size="is-small"
-            :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-            :outlined="isDarkMode"
-            :type="showContent ? 'is-dark' : ''"
-            :disabled="!userActiveBranch"
-            icon-left="source-branch"
-            aria-haspopup="true"
-            aria-controls="dropdown-user-branch"
-            @click="toggleBtn"/>
-        </b-tooltip>
+      <div
+        class="dropdown-trigger"
+        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('actions.changeActiveBranch', locale) })"
+        @mouseleave="hideGlobalTooltip">
+        <b-button
+          size="is-small"
+          :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
+          :outlined="isDarkMode"
+          :type="showContent ? 'is-dark' : ''"
+          :disabled="!userActiveBranch"
+          icon-left="source-branch"
+          aria-haspopup="true"
+          aria-controls="dropdown-user-branch"
+          @click="toggleBtn"/>
       </div>
       <!-- INPUT -->
       <div
@@ -125,11 +123,12 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinGlobal, mixinGit } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal, mixinGit } from '@/utils/mixins.js'
 
 export default {
   name: 'ButtonChangeUserBranch',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinGit
   ],
@@ -176,10 +175,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .branch-input {
-    width: 30em;
-    z-index: 55;
-  }
-</style>

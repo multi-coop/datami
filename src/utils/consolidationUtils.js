@@ -33,6 +33,7 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
 
   if (!reqError.ok || !req.ok) {
     const err = {
+      url: apiUrl,
       function: 'getConsolidationApiUrl',
       code: reqError.status || req.status,
       resp: req || reqError.err
@@ -64,9 +65,10 @@ export async function getConsolidationApiUrl (consolidationData, fields, sourceF
   if (isAllEmpty) {
     consolidation = undefined
     const emptyErr = {
+      url: apiUrl,
       function: 'getConsolidationApiUrl',
       code: 200,
-      resp: 'No one single new value retrieved from the API'
+      resp: 'No one single new value retrieved from the API or bad consolidation settings'
     }
     errors.push(emptyErr)
   }

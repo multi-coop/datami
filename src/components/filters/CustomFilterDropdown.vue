@@ -1,115 +1,126 @@
 <template>
-  <b-navbar-dropdown
-    hoverable
-    arrowless
-    right
-    tag="div"
-    :class="`CustomFilterDropdown ml-1 ${isDarkMode ? 'dark-background' : 'clear-background'}`"
-    style="height: 2.5em;">
-    <!-- LABEL SLOT -->
-    <template #label>
-      <b-tooltip
-        :label="`${ t('filters.filterByField', locale) } : ${filter.label}`"
-        :type="`${isDarkMode ? 'is-white' : 'is-dark'}`"
-        position="is-left">
-        <b-icon
-          icon="filter"
-          class="mr-2"
-          :type="isDarkMode ? 'is-white' : isActiveField ? 'is-dark' : 'is-grey'"
-          size="is-small"/>
-        <span
-          :class="`${isActiveField ? 'has-text-weight-bold' : '' }`">
-          {{ filter.title || filter.label }}
-          <!-- {{ filter }} -->
-        </span>
-      </b-tooltip>
-    </template>
-
-    <!-- RESET FIELD FILTERS -->
-    <b-navbar-item
-      v-if="isActiveField"
-      class="pr-2"
-      @click.native="removeAllFilters">
-      <b-icon
-        icon="close-thick"
-        class="mr-2"
-        size="is-small"/>
-      <span class="has-text-weight-bold">
-        {{ t('filters.resetFilter', locale) }}
+  <div
+    :class="`CustomFilterDropdown dropdown is-hoverable ${isDarkMode ? 'dark-background' : 'clear-background'}`"
+    @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: `${ t('filters.filterByField', locale) } : ${filter.label}` })"
+    @mouseleave="hideGlobalTooltip">
+    <!-- @click="showFilterDropdown = !showFilterDropdown"> -->
+    <!-- FILTER DROPDOWN TRIGGER -->
+    <b-button
+      class="dropdown-trigger"
+      :type="isDarkMode ? 'is-white' : isActiveField ? 'is-dark' : 'is-grey'"
+      icon-left="filter"
+      size="is-small"
+      aria-haspopup="true"
+      expanded
+      :aria-controls="`${fileId}-filter-dropdown-${filter.field}`">
+      <!-- VISIBLE ABOVE TABLET -->
+      <span class="is-hidden-touch">
+        {{ trimText(filter.title || filter.label, 20) }}
       </span>
-    </b-navbar-item>
-    <hr
-      v-if="isActiveField"
-      class="`mx-0 mt-2 mb-3">
+      <!-- VISIBLE ON TABLET ONLY -->
+      <span class="is-hidden-desktop is-hidden-mobile">
+        {{ trimText(filter.title || filter.label, 25) }}
+      </span>
+      <!-- VISIBLE ON MOBILE ONLY -->
+      <span class="is-hidden-tablet">
+        {{ trimText(filter.title || filter.label, 45) }}
+      </span>
+    </b-button>
 
-    <!-- TAG VALUES LOOP -->
-    <b-navbar-item
-      v-for="filterVal, idx in filter.enumArr"
-      :key="`nav-filter-${fileId}-${filter.field}-${idx}-${filterVal}`"
-      class="pr-2"
-      @click.native="updateActiveTag(filterVal)">
-      <!-- SELECTION ICON -->
-      <b-icon
-        v-if="isActive(filterVal) && filter.filtering === 'AND'"
-        class="mr-2"
-        size="is-small"
-        icon="close-thick"/>
-      <b-icon
-        v-if="filter.filtering === 'OR'"
-        class="mr-2"
-        size="is-small"
-        :icon="isActive(filterVal) ? 'checkbox-marked' : 'checkbox-blank-outline'"/>
-      <!-- FILTER + FOREIGN KEY || DEFINITIONS -->
-      <div v-if="filter.foreignKey || filter.definitions">
-        <span>
-          <span v-if="filter.foreignKey">
-            {{ filter.title || filter.label }} :
-          </span>
+    <!-- FILTER DROPDOWN CONTENT -->
+    <div
+      :id="`${fileId}-filter-dropdown-${filter.field}`"
+      class="dropdown-menu"
+      role="menu">
+      <div
+        class="dropdown-content">
+        <!-- RESET FIELD FILTERS -->
+        <b-button
+          v-if="isActiveField"
+          icon-left="close-thick"
+          type="is-text"
+          class="dropdown-item mr-2"
+          style="text-decoration: none;"
+          @click="removeAllFilters">
           <span class="has-text-weight-bold">
-            {{ trimText(filterVal, 50) }}
+            {{ t('filters.resetFilter', locale) }}
           </span>
-          <b-icon
-            icon="information-outline"
-            size="is-small"
-            class="mx-1"/>
-        </span>
-        <br>
-        <!-- HELPERS FOREIGN KEY -->
-        <span v-if="filter.foreignKey">
-          <span
-            v-for="entry in Object.entries(itemDirect(filter, filterVal))"
-            :key="`${entry[0]}`">
-            <span>
-              {{ entry[0] }} :
-            </span>
-            <span class="has-text-weight-bold">
-              {{ entry[1] }}
-            </span>
-            <br>
-          </span>
-        </span>
-        <!-- HELPERS DEFINITION -->
-        <span v-if="filter.definitions">
-          <span class="pt-1">
-            {{ trimText(getValueDefinitionLabel(filterVal, filter), 35) }}
-          </span>
-          <br>
-        </span>
-      </div>
+        </b-button>
 
-      <!-- SIMPLE FILTER -->
-      <span
-        v-else
-        :class="`${isActive(filterVal) ? 'has-text-weight-bold' : '' }`">
-        {{ trimText(filterVal, 50) }}
-      </span>
-    </b-navbar-item>
-  </b-navbar-dropdown>
+        <hr
+          v-if="isActiveField"
+          class="mx-0 my-0">
+
+        <!-- TAG VALUES LOOP -->
+        <div
+          v-for="filterVal, idx in filter.enumArr"
+          :key="`nav-filter-${fileId}-${filter.field}-${idx}-${filterVal}`"
+          type="is-text"
+          class="dropdown-item has-text-left px-1"
+          @click="updateActiveTag(filterVal)">
+          <div class="columns is-flex mx-0 my-0">
+            <div class="column is-1 is-1-mobile px-0 pt-1 py-0 has-text-centered">
+              <b-icon
+                :icon="getFilterIcon(filterVal)"
+                size="is-small"
+                class=""/>
+            </div>
+            <div class="column is-11 is-11-mobile px-1 pt-1 py-0">
+              <!-- FILTER + FOREIGN KEY || DEFINITIONS -->
+              <div v-if="filter.foreignKey || filter.definitions">
+                <span>
+                  <span v-if="filter.foreignKey">
+                    {{ filter.title || filter.label }} :
+                  </span>
+                  <span class="has-text-weight-bold">
+                    {{ trimText(filterVal, 50) }}
+                  </span>
+                  <b-icon
+                    icon="information-outline"
+                    size="is-small"
+                    class="mx-1"/>
+                </span>
+                <br>
+                <!-- HELPERS FOREIGN KEY -->
+                <span v-if="filter.foreignKey">
+                  <span
+                    v-for="entry in Object.entries(itemDirect(filter, filterVal))"
+                    :key="`${entry[0]}`">
+                    <span>
+                      {{ entry[0] }} :
+                    </span>
+                    <span class="has-text-weight-bold">
+                      {{ entry[1] }}
+                    </span>
+                  </span>
+                </span>
+                <!-- HELPERS DEFINITION -->
+                <span v-if="filter.definitions">
+                  <span class="pt-1">
+                    {{ trimText(getValueDefinitionLabel(filterVal, filter), 35) }}
+                  </span>
+                  <br>
+                </span>
+              </div>
+
+              <!-- SIMPLE FILTER -->
+              <span
+                v-else
+                :class="`${isActive(filterVal) ? 'has-text-weight-bold' : '' }`">
+                {{ trimText(filterVal, 50) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 
 import {
+  mixinTooltip,
   mixinGlobal,
   mixinValue,
   mixinForeignKeys
@@ -118,6 +129,7 @@ import {
 export default {
   name: 'CustomFilterDropdown',
   mixins: [
+    mixinTooltip,
     mixinGlobal,
     mixinValue,
     mixinForeignKeys
@@ -144,6 +156,11 @@ export default {
       type: Boolean
     }
   },
+  // data () {
+  //   return {
+  //     showFilterDropdown: false
+  //   }
+  // },
   computed: {
     isActiveField () {
       return this.fieldActiveTags.length
@@ -154,11 +171,24 @@ export default {
       const activeTags = this.fieldActiveTags.map(t => t.value)
       return activeTags.includes(filterVal)
     },
+    getFilterIcon (filterVal) {
+      let icon
+      const isActive = this.isActive(filterVal)
+      const isAnd = this.filter.filtering === 'AND'
+      if (isActive && isAnd) {
+        icon = 'close-thick'
+      }
+      if (!isAnd) {
+        icon = isActive ? 'checkbox-marked' : 'checkbox-blank-outline'
+      }
+      return icon
+    },
     itemDirect (field, val) {
       return this.getForeignItem(field, val)
     },
     updateActiveTag (filterVal) {
       // console.log('\nC > CustomFilterDropdown > updateActiveTag > filterVal : ', filterVal)
+      this.showFilterDropdown = false
       const remove = this.isActive(filterVal)
       this.SendActionToParent(filterVal, remove)
 
@@ -186,95 +216,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.CustomFilterDropdown.dark-background > .navbar-link {
-  color: white !important;
-  background-color: #2d2d30 !important;
-  border: 1px solid white !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-link:hover {
-  background-color: black !important;
-}
-
-.CustomFilterDropdown > .navbar-dropdown {
-  max-height: 275px;
-  overflow: auto;
-  padding-bottom: 1.5em;
-}
-
-.CustomFilterDropdown.clear-background > .navbar-dropdown {
-  background-color: white !important;
-  /* shadow while scroll solution : https://stackoverflow.com/questions/44793453/how-do-i-add-a-top-and-bottom-shadow-while-scrolling-but-only-when-needed */
-  background:
-    /* Shadow covers */
-    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
-
-  background:
-    /* Shadow covers */
-    linear-gradient(white 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), white 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
-  background-repeat: no-repeat;
-  /* background-color: white; */
-  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown {
-  background-color: black !important;
-  background:
-    /* Shadow covers */
-    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)),
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
-
-  background:
-    /* Shadow covers */
-    linear-gradient(black 30%, rgba(0, 0, 0, 0)),
-    linear-gradient(rgba(0, 0, 0, 0), black 70%) 0 100%,
-    /* Shadows */
-    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .2)) 0 100%,
-    linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, 0));
-  background-repeat: no-repeat;
-  /* background-color: white; */
-  background-size: 100% 40px, 100% 40px, 100% 30px, 100% 30px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item {
-  color: white !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > a.navbar-item:hover {
-  color: black !important;
-}
-.CustomFilterDropdown.dark-background > .navbar-dropdown > .navbar-item > a:hover {
-  color: black !important;
-}
-
-.CustomFilterDropdown > .navbar-link {
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: white !important;
-}
-.CustomFilterDropdown > .navbar-link:hover {
-  background-color: #f2f2f2 !important;
-}
-
-.datami-darkmode-dark-background{
-  background-color: black !important;
-}
-
-.datami-darkmode-hover-grey:hover{
-  background-color: rgb(86, 83, 79) !important;
-}
-
-</style>

@@ -5,6 +5,18 @@
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-12">
+        - fileIsLoading : <code>{{ fileIsLoading }}</code><br>
+        - !!fileRaw : <code>{{ !!fileRaw }}</code><br>
+        - !!dataRaw : <code>{{ !!dataRaw }}</code><br>
+        - !!data : <code>{{ !!data }}</code><br>
+        - !!fileOptions : <code>{{ !!fileOptions }}</code><br>
+      </div>
+    </div>
+    <!-- DEBUGGING -->
+    <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-12">
         <p>
           currentEditViewMode:
           <code>{{ currentEditViewMode }}</code>
@@ -21,7 +33,16 @@
 
       <!-- DEBUG RAW CONTENT OBJECTS -->
       <div
-        v-if="debug"
+        v-if="true"
+        class="column is-6">
+        <p>
+          fileOptions:
+          <br>
+          <pre><code>{{ fileOptions }}</code></pre>
+        </p>
+      </div>
+      <div
+        v-if="true"
         class="column is-6">
         <p>
           dataRaw:
@@ -59,10 +80,23 @@
       </div>
     </div>
 
+    <!-- DEBUGGING SIGNALS -->
+    <!-- <div
+      v-if="debug"
+      class="columns is-multiline">
+      <div class="column is-12">
+        <p>
+          fileSignals:
+          <br>
+          <pre><code>{{ fileSignals }}</code></pre>
+        </p>
+      </div>
+    </div> -->
+
     <!-- LOADERS -->
     <div
       v-if="fileIsLoading || !fileOptions"
-      class="datami-loaders">
+      class="datami-loaders container">
       <!-- <LoaderEditNavbar
         :file-id="fileId"
         :only-preview="onlyPreview"/> -->
@@ -127,6 +161,7 @@
         class="datami-table-previews">
         <!-- ORIGINAL DATA -->
         <DatamiTable
+          ref="datamitable"
           :file-id="fileId"
           :data="data"
           :columns="dataColumns"
@@ -134,12 +169,7 @@
           :columns-edited="editedColumns"
           :items-total="itemsTotal || edited.length"
           :locale="locale"
-          :debug="debug"
-          @updateEdited="updateEdited"
-          @addTagToEnum="addTagToEnum"
-          @deleteRows="deleteRowsEvent"
-          @addRow="addRowEvent"
-          @sortRows="sortEdited"/>
+          :debug="debug"/>
       </div>
     </div>
   </div>
@@ -158,25 +188,11 @@ import {
   mixinDownload
 } from '@/utils/mixins.js'
 
-// import LoaderEditNavbar from '@/components/loaders/LoaderEditNavbar'
-// import LoaderSortFilters from '@/components/loaders/LoaderSortFilters'
-// import LoaderCSV from '@/components/loaders/LoaderCSV'
-// import LoaderCards from '@/components/loaders/LoaderCards'
-
-// import PreviewHelpers from '@/components/previews/PreviewHelpers'
-// import DatamiTable from '@/components/previews/DatamiTable'
-
 import { defaultTagsSeparator } from '@/utils/globalUtils'
 
 export default {
   name: 'PreviewCsv',
   components: {
-    // LoaderEditNavbar,
-    // LoaderSortFilters,
-    // LoaderCSV,
-    // LoaderCards,
-    // PreviewHelpers,
-    // DatamiTable
     LoaderSortFilters: () => import(/* webpackChunkName: "LoaderSortFilters" */ '@/components/loaders/LoaderSortFilters.vue'),
     LoaderCSV: () => import(/* webpackChunkName: "LoaderCSV" */ '@/components/loaders/LoaderCSV.vue'),
     LoaderCards: () => import(/* webpackChunkName: "LoaderCards" */ '@/components/loaders/LoaderCards.vue'),
@@ -284,8 +300,11 @@ export default {
         const currentFile = this.gitObj.id
         // console.log('\nC > PreviewCsv > watch > dataIsSet > currentFile : ', currentFile)
 
+        // console.log('\nC > PreviewCsv > watch > dataIsSet > this.dataRaw : ', this.dataRaw)
         const data = this.dataRaw.data
+        // console.log('C > PreviewCsv > watch > dataIsSet > data : ', data)
         const dataColumns = this.buildColumns(this.dataRaw)
+        // console.log('C > PreviewCsv > watch > dataIsSet > dataColumns : ', dataColumns)
         this.data = data
         this.dataColumns = dataColumns
         // console.log('C > PreviewCsv > watch > dataIsSet > this.dataColumns : \n', this.dataColumns)
@@ -408,23 +427,52 @@ export default {
           this.updateShareableFiles(updatedShareableFile)
         }
       }
+    },
+    fileSignals (next) {
+      if (next && next.length) {
+        next.forEach(signal => {
+          switch (signal.action) {
+            case 'updateCellValue':
+              this.updateEdited(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'addTagToEnum':
+              this.addTagToEnum(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'deleteRows':
+              this.deleteRowsEvent(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'addNewRow':
+              this.addRowEvent(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+            case 'sortRows':
+              this.sortEdited(signal.event)
+              this.removeFileSignal(signal.signalId)
+              break
+          }
+        })
+      }
     }
   },
   methods: {
     ...mapActions({
       updateBuffer: 'git-data/updateBuffer'
     }),
-    buildEnumArr (data, separator) {
+    buildEnumArr (data, separator, fieldSubtype) {
       const dataCopy = data.filter(d => !!d)
       // console.log('C > PreviewCsv > buildEnumArr > dataCopy : ', dataCopy)
       // console.log('C > PreviewCsv > buildEnumArr > separator : ', separator)
+      // console.log('C > PreviewCsv > buildEnumArr > fieldSubtype : ', fieldSubtype)
       // make a set from dataParsed instead of simple array
       const dataParsedSet = new Set()
       dataCopy && dataCopy.forEach(tag => {
         // console.log('...C > PreviewCsv > buildEnumArr > tag : ', tag)
         const tagStr = tag && tag.toString()
         // console.log('...C > PreviewCsv > buildEnumArr > tagStr : ', tagStr)
-        if (tagStr && tagStr.includes(separator)) {
+        if (tagStr && fieldSubtype === 'tags' && tagStr.includes(separator)) {
           const subArr = tag.split(separator).map(t => t.trim())
           subArr.forEach(item => dataParsedSet.add(item))
         } else if (tagStr) {
@@ -494,6 +542,8 @@ export default {
             ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
+            ...fieldCustomProps && fieldCustomProps.round && { round: fieldCustomProps.round },
+            ...fieldCustomProps && fieldCustomProps.transform && { transform: fieldCustomProps.transform },
             ...fieldCustomProps && fieldCustomProps.longtextOptions && { longtextOptions: fieldCustomProps.longtextOptions },
             ...fieldCustomProps && fieldCustomProps.booleanOptions && { booleanOptions: fieldCustomProps.booleanOptions },
             ...fieldCustomProps && fieldCustomProps.stepSeparator && { stepSeparator: fieldCustomProps.stepSeparator },
@@ -505,8 +555,10 @@ export default {
           if (!defaultEnumArr && needEnumArr) {
             const enumArr = this.buildEnumArr(
               dataRaw.data.map(item => item[fieldId]),
-              fieldCustomProps.tagSeparator || defaultTagsSeparator
+              fieldCustomProps.tagSeparator || defaultTagsSeparator,
+              fieldSubtype
             )
+            // console.log('C > PreviewCsv > buildColumns > enumArr : ', enumArr)
             fieldData.enumArr = enumArr
           }
 
@@ -645,9 +697,12 @@ export default {
         added: true
       }
       // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+
+      // Send signal to switch to last page
+      this.addFileSignal('goToLastPage', {})
 
       // update changesData
       const changeObj = {

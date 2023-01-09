@@ -435,7 +435,7 @@ export default {
         parentId: this.nodeId,
         newNode: newNode
       }
-      console.log('\nC > JsonTree > addNode > payload : ', payload)
+      // console.log('\nC > JsonTree > addNode > payload : ', payload)
       this.$emit('updateJson', payload)
     },
     removeNode () {
@@ -464,14 +464,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.gt-node-label {
-  background-color: #f5f5f5;
-  color: #da1039;
-  font-size: .875em;
-  font-weight: 400;
-  padding: 0.25em 0.5em 0.25em;
-  font-family: monospace;
-}
-</style>

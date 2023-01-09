@@ -5,26 +5,16 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="icon" href="<%= BASE_URL %>logo-DATAMI-favicon.ico">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 
-<body style="background-color: #D7D7D7; padding: 1em 1em 20em 1em;">
+<body style="background-color: #D7D7D7; padding: 15em 1em 20em 1em;">
+  <!-- <link rel="icon" href="<%= BASE_URL %>logo-DATAMI-favicon.ico"> -->
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
   </noscript>
-  <!-- <div id="app"></div> -->
-
-  <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
-    <a href="https://datami.multi.coop" target="_blank">
-      <img src="/logo_DATAMI_title.png" alt="logo datami" style="height: 75px !important; width: auto !important">
-    </a>
-    <!-- <span class="ml-3 pb-3">
-      Some examples of datami widgets' integration
-    </span> -->
-  </h2>
-  <p class="has-text-centered"></p>
 
   <!-- TEST FILTERS COMPONENTS -->
   <!-- TO DO  -->
@@ -32,100 +22,8 @@
   <!-- TEST LOAD / EDIT REPO COMPONENTS -->
   <!-- TO DO  -->
 
-  <!-- TEST LOAD / EDIT DISTANT MARKDOWN/CSV/JSON/GEOJSON FILE -->
-  <!-- <p id="datami-md-gitlab" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-md-gitlab" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import and edit a markdow file from gitlab
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-file
-      gitfile="https://gitlab.com/multi-coop/datami-content-test/-/blob/main/texts/markdown/test-file-datami-fr.md"
-      options="" title="datami for gitlab file - md" usertoken="" locale="fr" debug="false"></datami-file>
-  </div> -->
-
-  <!-- <p id="datami-md-github" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-md-github" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import and edit a markdow file from github
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-file
-      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/jailbreak-devient-multi-fr.md"
-      options="" title="datami for github file - md" usertoken="" locale="en">
-    </datami-file>
-  </div> -->
-
-  <!-- <p id="datami-csv-gitlab" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-csv-gitlab" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import and edit a csv file from gitlab
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-file
-      gitfile="https://gitlab.com/multi-coop/datami-content-test/-/blob/main/data/csv/test-table-semicolon.csv"
-      options='{
-        "separator": ";",
-        "lockcolumns": true,
-        "tagseparator":", ",
-        "height": "500px",
-        "pagination":{
-          "itemsPerPage":5
-        },
-        "cardsview": { "activate": true, "default": false },
-        "cardsdetail": true,
-        "cardssettings": {
-          "mini": {
-            "name": {"position": "title"},
-            "surname": {"position": "title"},
-            "profession": {"position": "resume"}
-          },
-          "detail": {
-            "name": {"position": "title"},
-            "surname": {"position": "title"},
-            "profession": {"position": "desription"}
-          }
-        }
-      }' title="datami for gitlab file - csv (semicolon separator)" usertoken="" locale="fr"></datami-file>
-  </div> -->
-
-  <!-- <p id="datami-csv-github-bera" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#datami-csv-github-bera" style="color: white; margin-right:  0.5em;">
-        #
-      </a>
-      Import a csv file from github for only preview
-    </p>
-    <div style="background-color: white; margin: 1em;">
-      <datami-file
-        gitfile="https://github.com/qloridant/meteofrance_bra_hist/blob/master/src/data/ARAVIS/hist.csv" options='{
-        "separator":",",
-        "height": "1000px"
-      }' title="datami for github file - csv BERA (comma separator) - only preview" usertoken="" locale="fr"
-        onlypreview="true" debug="false">
-      </datami-file>
-    </div> -->
-
-  <!-- <p id="datami-csv-github" class="ml-4 pt-6 subtitle has-text-white">
-      <a href="/#datami-csv-github" style="color: white; margin-right:  0.5em;">
-        #
-      </a>
-      Import a csv file from github for only preview
-    </p>
-    <div style="background-color: white; margin: 1em;">
-      <datami-file
-        gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/test-table-comma.csv" options='{
-        "separator":",",
-        "height": "300px"
-      }' title="datami for github file - csv (comma separator) - only preview" usertoken="" locale="tk"
-      onlypreview="true" debug="false">
-    </datami-file>
-  </div> -->
-
   <!-- <p id="datami-csv-github-odf-ressources" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-csv-github-odf-ressources" style="color: white; margin-right:  0.5em;">
+    <a href="/#datami-csv-github-odf-ressources" style="margin-right:  0.5em;">
       #
     </a>
     Import ODF data - ressources
@@ -183,836 +81,223 @@
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></datami-file>
   </div> -->
 
-  <!-- <p id="datami-multifiles-ping" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-multifiles-ping" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    multifiles PiNG - Tiers-Lieux
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-multi-files title="Tiers lieux en Pays de la Loire" options='{
-        "display": "horizontal"
-      }' gitfiles='[
-        {
-          "title": "PING : base de données tiers-lieux",
-          "activate": true,
-          "localdev": false,
-          "gitfilelocal_": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded-test.csv",
-          "gitfilelocal": "http://localhost:8802/statics/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
-          "gitfile": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/csv/geocoding/Ping-tiers-lieux-dataset-geocoded.csv",
-          "default-tab": true,
-          "options": {
-            "height": "600px",
-            "separator": ",",
-            "lockcolumns": true,
-            "customfilters": {
-              "activate": true,
-              "filterfields": [
-                {
-                  "name": "SOURCE_codes_temp",
-                  "filtering": "OR"
-                },
-                {
-                  "name": "PUBLICS",
-                  "filtering": "OR"
-                },
-                {
-                  "name": "TYPOLOGIE",
-                  "filtering": "OR"
-                },
-                {
-                  "name": "MODELE_JURIDIQUE",
-                  "filtering": "OR"
-                },
-                {
-                  "name": "ESPACES PROPOSÉS",
-                  "filtering": "OR"
-                }
-              ]
-            },
-            "schema": {
-              "localdev": false,
-              "filelocal": "http://localhost:8802/statics/json/Ping-tiers-lieux-schema.json",
-              "file": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-schema.json"
-            },
-            "fields-custom-properties": {
-              "localdev": false,
-              "filelocal": "http://localhost:8802/statics/json/Ping-tiers-lieux-fields-custom-props.json",
-              "file": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-fields-custom-props.json"
-            },
-            "cardsview": {
-              "activate": true,
-              "default": false
-            },
-            "cardsdetail": true,
-            "cardssettings": {
-              "mini": {
-                "NOM DU LIEU": {
-                  "position": "title"
-                },
-                "IMAGE": {
-                  "position": "image"
-                },
-                "ADRESSE": {
-                  "position": "adress"
-                },
-                "DESCRIPTION": {
-                  "position": "resume"
-                },
-                "TYPOLOGIE": {
-                  "position": "tags"
-                },
-                "DEPARTEMENT": {
-                  "position": "tags"
-                }
-              },
-              "detail": {
-                "NOM DU LIEU": {
-                  "position": "title"
-                },
-                "IMAGE": {
-                  "position": "image",
-                  "right": true
-                },
-                "ADRESSE": {
-                  "position": "adress"
-                },
-                "DESCRIPTION": {
-                  "position": "description",
-                  "block_title": "Description"
-                },
-                "DEPARTEMENT": {
-                  "position": "tags",
-                  "block_title": "Département(s)",
-                  "right": true
-                },
-                "COMMUNE": {
-                  "position": "tags",
-                  "block_title": "Commune",
-                  "right": true
-                },
-                "TYPOLOGIE": {
-                  "position": "tags",
-                  "block_title": "Typologie d&lsquo;usage",
-                  "right": true
-                },
-                "PUBLICS": {
-                  "position": "tags",
-                  "block_title": "Type de public",
-                  "right": true
-                },
-                "MODELE_JURIDIQUE": {
-                  "position": "tags",
-                  "block_title": "Modèle juridique",
-                  "right": true
-                },
-                "SOURCE_codes_temp": {
-                  "position": "tags",
-                  "block_title": "Source",
-                  "right": true
-                },
-                "ESPACES PROPOSÉS": {
-                  "position": "tags",
-                  "block_title": "Espaces proposés",
-                  "right": true
-                },
-                "STEPS": {
-                  "position": "steps",
-                  "block_title": "Déroulé",
-                  "right": true
-                },
-                "URL": {
-                  "position": "links",
-                  "block_title": "Lien vers le site du lieu",
-                  "right": false
-                }
-              },
-              "templates": {
-                "siren": {
-                  "use_on_mini": true,
-                  "use_on_detail": true,
-                  "paragraphs": [
-                    {
-                      "text": {
-                        "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Cette commune représente une population de {{ pop_insee }} habitants."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "{{ nom }} publie sur {{ merge }} avec une plateforme de type {{ platform_clean }}."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Cette organisation a publié {{ nb_ptf }} jeux de données sur sa plateforme et {{ nb_datagouv }} jeux sur data.gouv.fr."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
-                      }
-                    }
-                  ]
-                }
-              },
-              "minimap": {
-                "activate": true,
-                "right_side": false,
-                "mapOptions": {
-                  "zoom": 5,
-                  "maxZoom": 18,
-                  "minZoom": 2,
-                  "item_geo_fields": {
-                    "latitude": "latitude",
-                    "longitude": "longitude"
-                  },
-                  "zoom_item": 13,
-                  "marker_icon": "map-marker",
-                  "marker_height": 45,
-                  "marker_width": 45,
-                  "marker_color": "#4a4a4a"
-                }
-              }
-            },
-            "datavizview": {
-              "activate": true,
-              "default": false,
-              "localdev": false,
-              "filelocal": "http://localhost:8802/statics/json/Ping-tiers-lieux-dataviz-settings.json",
-              "file": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-dataviz-settings.json"
-            },
-            "mapview": {
-              "activate": true,
-              "default": true,
-              "maps": [
-                {
-                  "title": {
-                    "fr": "CARTOGRAPHIE"
-                  },
-                  "height": 800,
-                  "cols": 12,
-                  "localdev": false,
-                  "filelocal": "http://localhost:8802/statics/json/Ping-tiers-lieux-map-settings.json",
-                  "file": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-map-settings.json"
-                }
-              ]
-            }
-          },
-          "usertoken": ""
-        },
-        {
-          "title": "Démarche",
-          "activate": true,
-          "default-tab": false,
-          "localdev": false,
-          "gitfilelocal": "http://localhost:8802/statics/markdown/Ping-tiers-lieux-demarche.md",
-          "gitfile": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/markdown/Ping-tiers-lieux-demarche.md",
-          "onlypreview": true,
-          "usertoken": ""
-        },
-        {
-          "title": "Schéma des données",
-          "activate": true,
-          "default-tab": false,
-          "localdev": false,
-          "gitfilelocal": "http://localhost:8802/statics/json/Ping-tiers-lieux-schema.json",
-          "gitfile": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-schema.json",
-          "options": {
-            "defaultDepth": 2,
-            "allowKeyEdit": false
-          },
-          "onlypreview": true,
-          "usertoken": ""
-        },
-        {
-          "title": "Schéma complémentaire",
-          "activate": true,
-          "default-tab": false,
-          "localdev": true,
-          "gitfilelocal": "http://localhost:8802/statics/json/Ping-tiers-lieux-fields-custom-props.json",
-          "gitfile": "https://github.com/multi-coop/data-ping-tiers-lieux/blob/main/json/Ping-tiers-lieux-fields-custom-props.json",
-          "options": {
-            "defaultDepth": 2,
-            "allowKeyEdit": false
-          },
-          "onlypreview": true,
-          "usertoken": ""
-        }
-      ]' locale="fr" />
-  </div> -->
-
-  <!-- <p id="datami-multifiles-decider-ensemble" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-multifiles-decider-ensemble" style="color: white; margin-right:  0.5em;">
+  <p id="datami-multifiles-decider-ensemble" class="ml-4 pt-6 subtitle has-text-white">
+    <a href="/#datami-multifiles-decider-ensemble" style="margin-right:  0.5em;">
       #
     </a>
     Décider ensemble
   </p>
   <div style="background-color: white; margin: 1em;">
+    <!-- DATAMI WIDGET'S HTML BLOCK-->
     <datami-multi-files title="Ressources Décider ensemble" options='{
-        "display": "horizontal"
-      }' gitfiles='[
-        {
-          "title": "Fiches ressources",
-          "activate": true,
-          "localdev": true,
-          "gitfilelocal": "http://localhost:8805/statics/csv/geocoding/geocoded.csv",
-          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/csv/geocoding/geocoded.csv",
-          "default-tab": true,
-          "options": {
-            "height": "800px",
-            "separator": ",",
-            "lockcolumns": true,
-            "customfilters": {
-              "activate": true,
-              "filterfields": [
-                {
-                  "name": "FILTRE 1 - TYPE DE PORTEUR DE PROJET",
-                  "filtering": "OR"
-                },
-                {
-                  "name": "FILTRE 2 - TYPE DE DEMARCHE",
-                  "filtering": "OR"
-                },
-                {
-                  "name": "FILTRE 3 - THÉMATIQUE PRINCIPALE",
-                  "filtering": "OR"
-                }
-              ]
-            },
-            "schema": {
-              "localdev": true,
-              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
-              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json"
-            },
-            "fields-custom-properties": {
-              "localdev": true,
-              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-fields-custom-props.json",
-              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-fields-custom-props.json"
-            },
-            "cardsview": {
-              "activate": true,
-              "default": true
-            },
-            "cardsdetail": true,
-            "cardssettings": {
-              "mini": {
-                "TITRE DU PROJET": {
-                  "position": "title"
-                },
-                "NOM_PORTEUR_PROJET": {
-                  "position": "subtitle"
-                },
-                "LOGO URL": {
-                  "position": "image"
-                },
-                "adresse_postale": {
-                  "position": "adress"
-                },
-                "PRÉSENTATION DU PROJET": {
-                  "position": "resume"
-                }
-              },
-              "detail": {
-                "TITRE DU PROJET": {
-                  "position": "title"
-                },
-                "LOGO URL": {
-                  "position": "image",
-                  "right": true
-                },
-                "adresse_postale": {
-                  "position": "adress"
-                },
-                "SOURCE": {
-                  "position": "infos",
-                  "block_title": "Source"
-                },
-                "À RETENIR": {
-                  "position": "resume",
-                  "block_title": "À retenir"
-                },
-                "PRÉSENTATION DU PROJET": {
-                  "position": "resume",
-                  "block_title": "Présentation du projet"
-                },
-                "DESCRIPTION": {
-                  "position": "description",
-                  "block_title": "Description"
-                },
-                "PORTEUR DE PROJET - EXTENSIF": {
-                  "position": "description",
-                  "block_title": "Présentation du porteur de projet"
-                },
-                "FILTRE 1 - TYPE DE PORTEUR DE PROJET": {
-                  "position": "tags",
-                  "block_title": "Type de porteur",
-                  "right": true
-                },
-                "FILTRE 2 - TYPE DE DEMARCHE": {
-                  "position": "tags",
-                  "block_title": "Type de démarche",
-                  "right": true
-                },
-                "FILTRE 3 - THÉMATIQUE PRINCIPALE": {
-                  "position": "tags",
-                  "block_title": "Type de thématique",
-                  "right": true
-                },
-                "SITE WEB": {
-                  "position": "links",
-                  "block_title": "Lien vers le site du projet",
-                  "right": false
-                },
-                "LIEN PDF PROTEGE": {
-                  "position": "links_top",
-                  "block_title": "Lien vers le pdf",
-                  "right": true
-                },
-                "ÉTAPES": {
-                  "position": "timeline",
-                  "block_title": "Déroulé",
-                  "right": true
-                }
-              },
-              "templates": {
-                "siren": {
-                  "use_on_mini": true,
-                  "use_on_detail": true,
-                  "paragraphs": [
-                    {
-                      "text": {
-                        "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Cette commune représente une population de {{ pop_insee }} habitants."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "{{ nom }} publie sur {{ merge }} avec une plateforme de type {{ platform_clean }}."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Cette organisation a publié {{ nb_ptf }} jeux de données sur sa plateforme et {{ nb_datagouv }} jeux sur data.gouv.fr."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
-                      }
-                    }
-                  ]
-                }
-              },
-              "minimap": {
-                "activate": true,
-                "position": "map_top",
-                "right_side": true,
-                "mapOptions": {
-                  "zoom": 5,
-                  "maxZoom": 18,
-                  "minZoom": 2,
-                  "item_geo_fields": {
-                    "latitude": "latitude",
-                    "longitude": "longitude"
-                  },
-                  "zoom_item": 13,
-                  "marker_icon": "map-marker",
-                  "marker_height": 45,
-                  "marker_width": 45,
-                  "marker_color": "#4a4a4a"
-                }
+       "display": "horizontal"
+     }' gitfiles='[
+       {
+         "title": "Données Décider ensemble",
+         "activate": true,
+         "localdev": false,
+         "gitfilelocal": "http://localhost:8805/statics/csv/geocoding/decider-ensemble-ressources-geocoded.csv",
+         "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/csv/geocoding/decider-ensemble-ressources-geocoded.csv",
+         "default-tab": true,
+         "options": {
+           "height": "800px",
+           "separator": ",",
+           "lockcolumns": true,
+           "customfilters": {
+             "activate": true,
+             "filterfields": [
+               {
+                 "name": "CODE PORTEUR DE PROJET",
+                 "filtering": "OR"
+               },
+               {
+                 "name": "CODE DEMARCHE",
+                 "filtering": "OR"
+               },
+               {
+                 "name": "CODE THEMATIQUE",
+                 "filtering": "OR"
+               }
+             ]
+           },
+           "schema": {
+             "localdev": false,
+             "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
+             "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json",
+             "file_": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema-bug.json"
+           },
+           "fields-custom-properties": {
+             "localdev": false,
+             "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-fields-custom-props.json",
+             "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-fields-custom-props.json"
+           },
+           "cardsview": {
+             "activate": true,
+             "default": false
+           },
+           "cardsdetail": true,
+           "cardssettings": {
+             "mini": {
+               "TITRE DU PROJET": {
+                 "position": "title"
+               },
+               "NOM_PORTEUR_PROJET": {
+                 "position": "subtitle"
+               },
+               "LOGO URL": {
+                 "position": "image"
+               },
+               "adresse_postale": {
+                 "position": "adress"
+               },
+               "PRÉSENTATION DU PROJET": {
+                 "position": "resume"
+               },
+              "CODE THEMATIQUE": {
+                "position": "tags"
               }
-            },
-            "datavizview": {
-              "activate": true,
-              "default": false,
-              "localdev": true,
-              "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-dataviz-settings.json",
-              "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-dataviz-settings.json"
-            },
-            "mapview": {
-              "activate": true,
-              "default": false,
-              "maps": [
-                {
-                  "title": {
-                    "fr": "CARTOGRAPHIE"
-                  },
-                  "height": 800,
-                  "cols": 12,
-                  "localdev": true,
-                  "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-map-settings.json",
-                  "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-map-settings.json"
-                }
-              ]
-            }
-          },
-          "usertoken": ""
-        },
-        {
-          "title": "Schéma des données",
-          "activate": true,
-          "default-tab": false,
-          "localdev": true,
-          "gitfilelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
-          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json",
-          "options": {
-            "defaultDepth": 2,
-            "allowKeyEdit": true
-          },
-          "onlypreview": false,
-          "usertoken": ""
-        },
-        {
-          "title": "Schéma complémentaire",
-          "activate": true,
-          "default-tab": false,
-          "localdev": true,
-          "gitfilelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-fields-custom-props.json",
-          "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-fields-custom-props.json",
-          "options": {
-            "defaultDepth": 2,
-            "allowKeyEdit": true
-          },
-          "onlypreview": false,
-          "usertoken": ""
-        }
-      ]' locale="fr" />
-  </div> -->
-
-
-  <p id="datami-multifiles-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-multifiles-odf-observatoire" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    multifiles ODF data - observatoire
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-multi-files title="Observatoire de l&lsquo;open data - Open Data France" debug="false" locale="fr" options='{
-      "hidetitle": true,
-      "display": "horizontal"
-      }' gitfiles='[
-        {
-          "title": "Données de l&lsquo;observatoire",
-          "activate": true,
-          "localdev": false,
-          "gitfilelocal": "http://localhost:8800/statics/data/csv/ODF-Observatoire-organisations.csv",
-          "gitfile_": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv",
-          "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/csv/ODF-Observatoire-organisations.csv",
-          "default-tab": true,
-          "options": {
-            "height": "500px",
-            "separator": ",",
-            "lockcolumns": true,
-            "customfilters": {
-              "activate": true, 
-              "filterfields" : [ 
-                { "name": "type", "filtering": "OR" },
-                "platform_clean",
-                "depcode"
-              ]
-            },
-            "schema": {
-              "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json",
-              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
-            },
-            "fields-custom-properties": {
-              "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json",
-              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json"
-            },
-            "cardsview": { 
-              "activate": true,
-              "default" : false
-            },
-            "cardsdetail": true,
-            "cardsdetail": true,
-            "cardssettings": {
-              "mini": {
-                "nom": { "position": "title" },
-                "id_odf" : { "position": "subtitle", "prefix": "Identifiant :" },
-                "adress" : { "position": "adress" },
-                "siren" : { "position": "resume", "prefix": "Numéro SIREN :" },
-                "tags" : { "position": "tags" } 
+             },
+             "detail": {
+               "TITRE DU PROJET": {
+                 "position": "title"
+               },
+               "LOGO URL": {
+                 "position": "image",
+                 "right": true
+               },
+               "adresse_postale": {
+                 "position": "adress"
+               },
+               "PRÉSENTATION DU PROJET": {
+                 "position": "resume"
+               },
+               "DESCRIPTION": {
+                 "position": "description",
+                 "block_title": "Description"
+               },
+               "CODE PORTEUR DE PROJET": {
+                "position": "tags",
+                "block_title": "Type de porteur",
+                "right": true
               },
-              "detail": {
-                "nom": { "position": "title" },
-                "id_odf" : { "position": "subtitle", "prefix": "Identifiant :" },
-                "adress" : { "position": "adress" },
-                "siren": { "position": "description", "prefix": "Numéro SIREN :", "block_title": "Description", "right": true },
-                "url_ptf": { "position": "links", "block_title": "Lien vers la plateforme" },
-                "url_datagouv": { "position": "links", "block_title": "Lien vers data.gouv.fr" },
-                "dep_label": { "position": "tags", "block_title": "Département(s)" },
-                "tags" : { "position": "tags", "block_title": "Tags thématiques", "right": true }
+              "CODE DEMARCHE": {
+                "position": "tags",
+                "block_title": "Type de démarche",
+                "right": true
               },
-              "templates": {
-                "siren" : {
-                  "use_on_mini": true,
-                  "use_on_detail": true,
-                  "paragraphs" : [ 
-                    {
-                      "text" : {
-                        "fr": "L&lsquo;organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
-                      }
-                    },
-                    {
-                      "text" : {
-                        "fr": "Cette commune représente une population de {{ pop_insee }} habitants."
-                      }
-                    },
-                    { 
-                      "text" : {
-                        "fr": "{{ nom }} publie sur {{ merge }} avec une plateforme de type {{ platform_clean }}."
-                      }
-                    },
-                    {
-                      "text" : {
-                        "fr": "Cette organisation a publié {{ nb_ptf }} jeux de données sur sa plateforme et {{ nb_datagouv }} jeux sur data.gouv.fr."
-                      }
-                    },
-                    {
-                      "text" : {
-                        "fr": "Plus d&lsquo;infos en cliquant sur ici : ~~ url_ptf ~~"
-                      }
-                    }
-                  ]
-                }
+              "CODE THEMATIQUE": {
+                "position": "tags",
+                "block_title": "Type de thématique",
+                "right": true
               },
-              "minimap": {
-                "activate": true,
-                "right_side": true,
-                "mapOptions": {
-                  "zoom": 5,
-                  "maxZoom": 18,
-                  "minZoom": 2,
-                  "item_geo_fields": {
-                    "latitude": "lat",
-                    "longitude": "lon"
-                  },
-                  "zoom_item": 13,
-                  "marker_icon": "map-marker",
-                  "marker_height": 45,
-                  "marker_width": 45,
-                  "marker_color": "#4a4a4a"
-                }
-              }
-            },
-            "datavizview": {
-              "activate": true,
-              "default": false,
-              "localdev": false,
-              "filelocal": "http://localhost:8800/statics/data/json/ODF-Observatoire-dataviz-settings.json",
-              "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-dataviz-settings.json",
-              "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-dataviz-settings.json"
-            },
-            "mapview": {
-              "activate": true,
-              "default": true,
-              "maps": [
-                {
-                  "title": { "fr": "CARTOGRAPHIE DES ACTEURS DE L&lsquo;OPEN DATA" },
-                  "cols": 12,
-                  "file_": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-map-settings.json",
-                  "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-map-settings.json"
-                }
-              ]
-            }
-          },
-          "usertoken": ""
-        },
-        {
-          "title": "Thématiques",
-          "activate": true,
-          "gitfile": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-thematiques.csv",
-          "options": {
-            "height": "500px",
-            "separator": ",",
-            "lockcolumns": true,
-            "customfilters": {
-              "activate": true, 
-              "filterfields" : [ 
-                "Tags",
-                "Organisations_Noms"
-              ]
-            },
-            "schema": {
-              "fields": [
-                {
-                  "name": "Organisations copy",
-                  "type": "boolean"
-                }
-              ]
-            },
-            "fields-custom-properties": {
-              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-thematiques-fields-custom-props.json"
-            }
-          },
-          "onlypreview": true,
-          "usertoken": ""
-        },
-        {
-          "title": "Schéma des données de l&#39;observatoire",
-          "activate": true,
-          "default-tab": false,
-          "gitfile": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json",
-          "options": {
-            "defaultDepth": 2,
-            "allowKeyEdit": true
-          },  
-          "onlypreview": false,
-          "usertoken": ""
-        },
-        {
-          "title": "Présentation de l&#39;Observatoire de l&#39;Open data",
-          "activate": true,
-          "gitfile": "https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/odf/ODF-observatoire-intro.md",
-          "options": ""
-        }
-      ]'></datami-multi-files>
+               "SITE WEB": {
+                 "position": "links",
+                 "block_title": "Lien vers le site du projet",
+                 "right": false
+               },
+               "LIEN PDF PROTEGE": {
+                "position": "links",
+                "block_title": "Lien vers fichier pdf",
+                "right": false
+              },
+               "ÉTAPES": {
+                 "position": "timeline",
+                 "block_title": "Déroulé",
+                 "right": true
+               }
+             },
+             "templates": {
+               "siren": {
+                 "use_on_mini": true,
+                 "use_on_detail": true,
+                 "paragraphs": [
+                   {
+                     "text": {
+                       "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
+                     }
+                   },
+                   {
+                     "text": {
+                       "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
+                     }
+                   }
+                 ]
+               }
+             },
+             "minimap": {
+               "activate": true,
+               "right_side": true,
+               "mapOptions": {
+                 "zoom": 5,
+                 "maxZoom": 18,
+                 "minZoom": 2,
+                 "item_geo_fields": {
+                   "latitude": "BAN_latitude",
+                   "longitude": "BAN_longitude"
+                 },
+                 "zoom_item": 13,
+                 "marker_icon": "map-marker",
+                 "marker_height": 45,
+                 "marker_width": 45,
+                 "marker_color": "#4a4a4a"
+               }
+             }
+           },
+           "datavizview": {
+             "activate": true,
+             "default": false,
+             "localdev": false,
+             "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-dataviz-settings.json",
+             "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-dataviz-settings.json"
+           },
+           "mapview": {
+             "activate": true,
+             "default": false,
+             "maps": [
+               {
+                 "title": {
+                   "fr": "CARTOGRAPHIE"
+                 },
+                 "height": 800,
+                 "cols": 12,
+                 "localdev": false,
+                 "filelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-map-settings.json",
+                 "file": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-map-settings.json"
+               }
+             ]
+           }
+         },
+         "usertoken": ""
+       },
+       {
+         "title": "Introduction",
+         "activate": true,
+         "default-tab": false,
+         "localdev": false,
+         "gitfilelocal": "http://localhost:8805/statics/markdown/decider-ensemble-intro.md",
+         "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/markdown/decider-ensemble-intro.md",
+         "onlypreview": true,
+         "usertoken": ""
+       },
+       {
+         "title": "Schéma des données",
+         "activate": false,
+         "default-tab": false,
+         "localdev": false,
+         "gitfilelocal": "http://localhost:8805/statics/json/decider-ensemble-ressources-schema.json",
+         "gitfile": "https://github.com/multi-coop/data-decider-ensemble/blob/main/json/decider-ensemble-ressources-schema.json",
+         "options": {
+           "defaultDepth": 2,
+           "allowKeyEdit": true
+         },
+         "onlypreview": false,
+         "usertoken": ""
+       }
+     ]' locale="fr" />
   </div>
 
-  <!-- <p id="datami-csv-github-odf-observatoire" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-csv-github-odf-observatoire" style="color: white; margin-right:  0.5em;">
-      #
-    </a>
-    Import ODF data - observatoire
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-file
-      gitfile="https://github.com/multi-coop/data-odf-observatoire/blob/main/csv/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv"
-      options='{
-        "height": "500px",
-        "separator": ";",
-        "lockcolumns": true,
-        "tagseparator": "-",
-        "customfilters": {
-          "activate": true, 
-          "filterfields" : [ 
-            { "name": "type", "filtering": "OR" },
-            "platform_clean"
-          ]
-        },
-        "schema": {
-          "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-apiviz_data-schema.json"
-        },
-        "fields-custom-properties": {
-          "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-apiviz_data-fields-custom-props.json"
-        },
-        "customsorting": {
-          "activate": true,
-          "sortfields": [
-            { "name" : "nom" }
-          ]
-        },
-        "pagination": {
-          "itemsPerPage": 20
-        },
-        "cardsview": { 
-          "activate": true,
-          "default" : false
-        },
-        "cardsdetail": true,
-        "cardssettings": {
-          "mini": {
-            "nom": { "position": "title" },
-            "id_odf" : { "position": "subtitle", "prefix": "Identifiant :" },
-            "adress" : { "position": "adress" },
-            "siren" : { "position": "resume", "prefix": "Numéro SIREN :" },
-            "tags" : { "position": "tags" } 
-          },
-          "detail": {
-            "nom": { "position": "title" },
-            "id_odf" : { "position": "subtitle", "prefix": "Identifiant :" },
-            "adress" : { "position": "adress" },
-            "siren": { "position": "description", "prefix": "Numéro SIREN :", "block_title": "Description" },
-            "url_ptf": { "position": "links", "block_title": "Lien vers la plateforme" },
-            "url_datagouv": { "position": "links", "block_title": "Lien vers data.gouv.fr" },
-            "dep_label": { "position": "tags", "block_title": "Département(s)" },
-            "tags" : { "position": "tags", "block_title": "Tags thématiques", "right": true }
-          },
-          "templates": {
-            "siren" : {
-              "use_on_mini": true,
-              "use_on_detail": true,
-              "paragraphs" : [ 
-                {
-                  "text" : {
-                    "fr": "L&lsquo;organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
-                  }
-                },
-                {
-                  "text" : {
-                    "fr": "Cette commune représente une population de {{ pop_insee }} habitants."
-                  }
-                },
-                { 
-                  "text" : {
-                    "fr": "{{ nom }} publie sur {{ merge }} avec une plateforme de type {{ platform_clean }}."
-                  }
-                },
-                {
-                  "text" : {
-                    "fr": "Cette organisation a publié {{ nb_ptf }} jeux de données sur sa plateforme et {{ nb_datagouv }} jeux sur data.gouv.fr."
-                  }
-                },
-                {
-                  "text" : {
-                    "fr": "Plus d&lsquo;infos en cliquant sur ici : ~~ url_ptf ~~"
-                  }
-                }
-              ]
-            }
-          },
-          "minimap": {
-            "activate": true,
-            "right_side": true,
-            "mapOptions": {
-              "zoom": 5,
-              "maxZoom": 18,
-              "minZoom": 2,
-              "item_geo_fields": {
-                "latitude": "lat",
-                "longitude": "lon"
-              },
-              "zoom_item": 13,
-              "marker_icon": "map-marker",
-              "marker_height": 45,
-              "marker_width": 45,
-              "marker_color": "#4a4a4a"
-            }
-          }
-        },
-        "datavizview": {
-          "activate": true,
-          "default": false,
-          "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-dataviz-settings.json"
-        },
-        "mapview": {
-          "activate": true,
-          "default": true,
-          "maps": [
-            {
-              "title": { "fr": "CARTOGRAPHIE DES ACTEURS DE L&lsquo;OPEN DATA" },
-              "cols": 12,
-              "file": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-map-settings.json"
-            }
-          ]
-        }
-      }' title="Données de l'observatoire Open Data France" usertoken="" locale="fr" trackalloutlinks="false"
-      debug="false">
-    </datami-file>
-  </div> -->
-
   <!-- <p id="datami-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-csv-github-cooptech" style="color: white; margin-right:  0.5em;">
+    <a href="/#datami-csv-github-cooptech" style="margin-right:  0.5em;">
       #
     </a>
     Liste des coopératives de la tech en France
@@ -1072,233 +357,6 @@
       debug="false"></datami-file>
   </div> -->
 
-  <!-- <p id="datami-json-github-odf-schema" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-json-github-odf-schema" style="color: white; margin-right: 0.5em;">
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-file
-      gitfile="https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json"
-      options='{
-        "defaultDepth": 2,
-        "allowKeyEdit": true
-      }' title="datami for github file - json schema ODF" usertoken="" locale="fr" onlypreview="false"
-      debug="false">
-    </datami-file>
-  </div> -->
-
-  <!-- <p id="datami-wiki-communs" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-wiki-communs" style="color: white; margin-right: 0.5em;">
-      #
-    </a>
-    Import wikidata content (wiki resilience) to display as csv / cards content
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-explowiki
-      wikilist="https://wiki.resilience-territoire.ademe.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Commun=on&wf-expl-Tags="
-      options='{
-          "height": "900px",
-          "fields-custom-properties": {
-            "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/ademe/ademe-communs-fields-custom-props.json"
-          },
-          "wikisettings": {
-            "category": "commun",
-            "fields": [
-              "url",
-              "description",
-              "shortDescription",
-              "Main_Picture",
-              "Tags",
-              "Theme",
-              "location",
-              "complement",
-              "challenge",
-              "commonscategorie",
-              "url",
-              "from"
-            ],
-            "tagfields": [
-              "challenge",
-              "Tags",
-              "Theme"
-            ]
-        },
-        "customsorting" : {
-          "activate": true,
-          "sortfields": [
-            "title"
-          ]
-        },
-        "customfilters" : {
-          "activate": true,
-          "filterfields": [
-            "challenge",
-            "Tags",
-            "commonscategorie",
-            "Theme"
-          ]
-        },
-        "pagination": {
-          "itemsPerPage": 9
-        },
-        "cardsview": { "activate": true, "default": true },
-        "cardssettings": {
-          "mini": {
-            "title": {"position": "title"},
-            "imageUrl": {"position": "image"},
-            "shortDescription": {"position": "resume"},
-            "Tags": {"position": "tags"},
-            "Theme": {"position": "tags"},
-            "commonscategorie": {"position": "tags"},
-            "challenge": {"position": "tags"}
-          },
-          "detail": {
-            "title": {"position": "title"},
-            "imageUrl": {"position": "image"},
-            "shortDescription": {"position": "resume"},
-            "description": {"position": "description"},
-            "complement": {"position": "description"},
-            "from": {"position": "description"},
-            "Tags": {"position": "tags"},
-            "Theme": {"position": "tags"},
-            "commonscategorie": {"position": "tags"},
-            "challenge": {"position": "tags"},
-            "url": {"position": "links"}
-          }
-        }
-      }' title="datami for explowiki - communs :)" locale="fr"></datami-explowiki>
-  </div> -->
-
-  <!-- <p id="datami-wiki-fabmob" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-wiki-fabmob" style="color: white; margin-right: 0.5em;">
-      #
-    </a>
-    Import wikidata content (fabmmob) to display as csv / cards content
-  </p>
-  <div style="background-color: white; margin: 1em;">
-    <datami-explowiki
-      wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
-      wikipages='[
-          "https://wiki.lafabriquedesmobilites.fr/wiki/Accra_Mobile",
-          "https://wiki.lafabriquedesmobilites.fr/wiki/Agremob_Self_Data_Territorial_La_Rochelle",
-          "https://wiki.lafabriquedesmobilites.fr/wiki/Autonomous_Kart_for_Student"
-        ]' options='{
-          "height": "700px",
-          "schema": {
-            "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
-          },
-          "fields-custom-properties": {
-            "fields": [
-              { 
-                "name": "pageUrl",
-                "subtype": "link",
-                "locked": true
-              },
-              { 
-                "name": "imageUrl",
-                "subtype": "link"
-              },
-              { 
-                "name": "url",
-                "subtype": "link"
-              },
-              {
-                "name": "Tags",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "Theme",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "location",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "from",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "challenge",
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            ]
-          },
-          "wikisettings": {
-            "category": "projet",
-            "fields": [
-              "url",
-              "description",
-              "shortDescription",
-              "Main_Picture",
-              "Coordonnées géo",
-              "needs",
-              "referent",
-              "communauté d&#39;intérêt",
-              "Titre",
-              "Tags",
-              "etape",
-              "Theme",
-              "location",
-              "from",
-              "challenge"
-            ],
-            "tagfields": [
-              "Tags",
-              "Theme",
-              "location",
-              "from",
-              "challenge"
-            ]
-        },
-        "customsorting" : {
-          "activate": true,
-          "sortfields": [
-            "title"
-          ]
-        },
-        "customfilters" : {
-          "activate": true,
-          "filterfields": [
-            "Tags",
-            "Theme"
-          ]
-        },
-        "pagination": {
-          "itemsPerPage":12
-        },
-        "cardsview": {
-          "activate": true,
-          "default": true
-        },
-        "cardssettings": {
-          "mini": {
-            "title": {"position": "title"},
-            "imageUrl": {"position": "image"},
-            "shortDescription": {"position": "resume"},
-            "Tags": {"position": "tags"},
-            "Theme": {"position": "tags"},
-            "challenge": {"position": "tags"}
-          },
-          "detail": {
-            "title": {"position": "title"},
-            "imageUrl": {"position": "image"},
-            "shortDescription": {"position": "resume"},
-            "description": {"position": "description"},
-            "Tags": {"position": "tags"},
-            "Theme": {"position": "tags"},
-            "challenge": {"position": "tags"},
-            "communauté d&#39;intérêt": {"position": "tags"},
-            "url": {"position": "links"}
-          }
-        }
-      }' title="datami for explowiki - fabmob :)" locale="fr"></datami-explowiki>
-  </div> -->
-
   <!-- <p id="datami-json-github" class="ml-4 pt-6 subtitle has-text-white">
     <a href="/#datami-json-github" style="color: white; margin-right: 0.5em;">
       #
@@ -1315,12 +373,6 @@
   </div> -->
 
   <!-- built files will be auto injected -->
-  <style>
-    .datami-component {
-      /* for debugging purposes... */
-      /* border: thin green dashed; */
-    }
-  </style>
 </body>
 
 </html>

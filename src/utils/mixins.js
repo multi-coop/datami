@@ -16,9 +16,11 @@ import {
   trimText,
   getContrastYIQ,
   range,
+  roundOff,
+  getNumberByField,
   groupByField,
   aggregateByField
-} from '@/utils/globalUtils'
+} from '@/utils/globalUtils.js'
 import {
   extractGitInfos
 } from '@/utils/utilsGitUrl.js'
@@ -55,12 +57,70 @@ import {
 } from '@/utils/utilsWikiUrl.js'
 import {
   getConsolidationApiUrl
-} from '@/utils/consolidationUtils'
+} from '@/utils/consolidationUtils.js'
+import {
+  createStyleLink
+} from '@/utils/utilsHtml.js'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
 
+export const mixinTooltip = {
+  computed: {
+    ...mapState({
+      tooltip: (state) => state.showTooltip,
+      tooltipOptions: (state) => state.tooltipOptions,
+      scrolled: (state) => state.scrolled
+    })
+  },
+  methods: {
+    ...mapActions({
+      showTooltip: 'showTooltip',
+      hideTooltip: 'hideTooltip',
+      updateScrolled: 'updateScrolled'
+    }),
+    handleScroll (event) {
+      // console.log('mixinTooltip > handleScroll > event : ', event)
+      // console.log('mixinTooltip > handleScroll > document.body : ', document.body)
+      // const scrollTop = document.body.scrollTop
+      const scrollTop = window.scrollY
+      // const windowHeight = window.innerHeight
+      // this.scrolled = { top: scrollTop }
+      this.hideGlobalTooltip()
+      this.updateScrolled({ top: scrollTop })
+      // console.log('mixinTooltip > handleScroll > this.scrolled : ', this.scrolled)
+    },
+    showGlobalTooltip (event, tooltipOptions) {
+      // console.log(`\nmixinTooltip > showGlobalTooltip > ${this.$options.name} > event : `, event)
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > tooltipOptions : `, tooltipOptions)
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > this.$el : `, this.$el)
+      const boundingRect = this.$el.getBoundingClientRect()
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > boundingRect : `, boundingRect)
+      this.showTooltip({
+        component: this.$options.name,
+        ...tooltipOptions,
+        rect: boundingRect
+      })
+    },
+    hideGlobalTooltip () {
+      // console.log(`\nmixinTooltip > hideGlobalTooltip > ${this.$options.name} > ...`)
+      this.hideTooltip()
+    }
+  }
+}
+
 export const mixinGlobal = {
+  mounted () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      window.addEventListener('scroll', this.handleScroll)
+    }
+    this.addStyles(this.cssFiles)
+  },
+  destroyed () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      window.removeEventListener('scroll', this.handleScroll)
+    }
+  },
   computed: {
     ...mapGetters({
       t: 'git-translations/getTranslation',
@@ -78,8 +138,17 @@ export const mixinGlobal = {
       getReqNotifications: 'git-data/getReqNotifications',
       getReqErrors: 'git-data/getReqErrors',
       getUserFullscreen: 'git-user/getUserFullscreen',
-      isDarkMode: 'git-storage/isDarkMode'
+      isDarkMode: 'git-storage/isDarkMode',
+      getDialogsById: 'git-dialogs/getDialogsById',
+      getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
+    getUrlBase () {
+      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
+      const isLocal = widgetProvider.startsWith('localhost')
+      const Http = isLocal ? 'http' : 'https'
+      const urlBase = `${Http}://${widgetProvider}`
+      return urlBase
+    },
     fileToken () {
       return this.getFileToken(this.fileId)
     },
@@ -241,20 +310,126 @@ export const mixinGlobal = {
       return this.fileOptions && this.fileOptions.customProps && this.fileOptions.customProps.consolidation
     },
 
+    // UX
     userFullscreen () {
       return this.getUserFullscreen(this.fileId)
+    },
+    multifilesDialogs () {
+      return this.getDialogsById(this.multiFilesId)
+    },
+    fileDialogs () {
+      return this.getDialogsById(this.fileId)
+    },
+    hasFileDialogs () {
+      return this.fileDialogs.length
+    },
+    hasMultifilesDialogs () {
+      return this.multifilesDialogs.length
+    },
+
+    // SIGNALS
+    fileSignals () {
+      return this.getSignalsByFileId(this.fileId)
     }
   },
   methods: {
     uuidv4,
     findFromPath,
+    ...mapActions({
+      updateDialogs: 'git-dialogs/updateFileDialog',
+      removeFileDialog: 'git-dialogs/removeFileDialog',
+      removeFileDialogByComponent: 'git-dialogs/removeFromDialogsByComponent',
+      addSignal: 'git-signals/addSignal',
+      removeSignal: 'git-signals/removeSignal'
+    }),
+    getAncestorNodeById (id) {
+      // console.log(`\nmixinGlobal > getAncestorNodeById > ${this.$options.name} > id : `, id)
+      let parent = this.$parent
+      while (parent && parent.$el.id !== id) {
+        parent = parent.$parent
+      }
+      // console.log(`mixinGlobal > getAncestorNodeById > ${this.$options.name} > parent : `, parent)
+      return parent
+    },
+    getRootNode () {
+      const shadowRoot = this.$el.parentNode
+      // console.log(`mixinGlobal > getRootNode > ${this.$options.name} > shadowRoot : `, shadowRoot)
+      return shadowRoot
+    },
+    addStyles (urls) {
+      if (urls && urls.length) {
+        const shadowRoot = this.getRootNode()
+        // const componentName = this.$options.name
+        // console.log(`\nM > mixinGlobal > addStyle > ${componentName} > shadowRoot : `, shadowRoot)
+        // console.log(`M > mixinGlobal > addStyle > ${componentName} > url : `, url)
+        // console.log(`M > mixinGlobal > addStyle > ${componentName} > process.env : `, process.env)
+
+        const urlBase = this.getUrlBase
+
+        urls.forEach(url => {
+          const isFont = url.startsWith('fonts/') && !url.endsWith('.css')
+          let fileUrl
+          if (url.startsWith('http')) {
+            fileUrl = url
+          } else {
+            fileUrl = `${urlBase}/${url}`
+          }
+          // const fileUrl = `${process.env.BASE_URL}${url}`
+          // console.log(`M > mixinGlobal > addStyle > ${componentName} > fileUrl : `, fileUrl)
+          createStyleLink(shadowRoot, fileUrl, isFont)
+        })
+      }
+    },
+    updateFileDialogs (component, event, show = true) {
+      // console.log('\nM > mixinGlobal > updateFileDialogs > component : ', component)
+      // console.log('M > mixinGlobal > updateFileDialogs > show : ', show)
+      // console.log('M > mixinGlobal > updateFileDialogs > event : ', event)
+      // console.log('M > mixinGlobal > updateFileDialogs > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.fileId, component: component, show: show, event: event })
+    },
+    resetFileDialog () {
+      // console.log('\nM > mixinGlobal > resetFileDialogs > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.fileId, reset: true })
+    },
+    resetMultiFilesDialog () {
+      // console.log('\nM > mixinGlobal > resetMultiFilesDialog > this.fileId : ', this.fileId)
+      this.updateDialogs({ fileId: this.multiFilesId, reset: true })
+    },
+    addFileSignal (action, event) {
+      // console.log('\nM > mixinGlobal > addFileSignal > component : ', component)
+      // console.log('M > mixinGlobal > addFileSignal > event : ', event)
+      // console.log('M > mixinGlobal > addFileSignal > this.fileId : ', this.fileId)
+      const signalId = uuidv4()
+      this.addSignal({ fileId: this.fileId, signalId: signalId, action: action, event: event })
+    },
+    removeFileSignal (signalId) {
+      this.removeSignal({ signalId: signalId })
+    },
+    trimField (field) {
+      return {
+        field: field.field,
+        name: field.name,
+        type: field.type,
+        subtype: field.subtype,
+        bgColor: field.bgColor,
+        round: field.round,
+        transform: field.transform,
+        enumArr: field.enumArr,
+        definitions: field.definitions,
+        tagSeparator: field.tagSeparator,
+        maxLength: field.maxLength,
+        longtextOptions: field.longtextOptions,
+        stepOptions: field.stepOptions
+      }
+    },
     setWidgetCopy () {
+      // const shadowRoot = this.getRootNode()
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
-      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
+      // const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
       // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
 
-      const isLocal = widgetProvider.startsWith('localhost')
-      const Http = isLocal ? 'http' : 'https'
+      // const isLocal = widgetProvider.startsWith('localhost')
+      // const Http = isLocal ? 'http' : 'https'
 
       /* Stuff we need to add to <head>
         <script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
@@ -270,23 +445,23 @@ export const mixinGlobal = {
       //     body: true
       //   }
       // ]
-      const links = [
-        {
-          type: 'text/css',
-          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/css/app.css`,
-          rel: 'stylesheet'
-        },
-        {
-          type: 'font/woff2',
-          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/fonts/materialdesignicons-webfont.woff2`,
-          rel: 'stylesheet',
-          as: 'font'
-        }
-      ]
+      // const links = [
+      //   {
+      //     type: 'text/css',
+      //     href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/css/app.css`,
+      //     rel: 'stylesheet'
+      //   },
+      //   {
+      //     type: 'font/woff2',
+      //     href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/fonts/materialdesignicons-webfont.woff2`,
+      //     rel: 'stylesheet',
+      //     as: 'font'
+      //   }
+      // ]
       // console.log('M > mixinGlobal > setWidgetCopy > scripts : ', scripts)
       // console.log('M > mixinGlobal > setWidgetCopy > links : ', links)
 
-      const head = document.head
+      // const head = document.head
       // console.log('M > mixinGlobal > setWidgetCopy > head : ', head)
 
       // scripts.forEach(script => {
@@ -301,17 +476,17 @@ export const mixinGlobal = {
       //   }
       // })
 
-      links.forEach(link => {
-        const tagCss = document.createElement('link')
-        const existingLink = head.querySelector(`[href='${link.href}']`)
-        // console.log('M > mixinGlobal > setWidgetCopy > existingLink : ', existingLink)
-        if (!existingLink) {
-          Object.keys(link).forEach(linkKey => {
-            tagCss.setAttribute(linkKey, link[linkKey])
-          })
-          document.head.appendChild(tagCss)
-        }
-      })
+      // links.forEach(link => {
+      //   const tagCss = document.createElement('link')
+      //   const existingLink = head.querySelector(`[href='${link.href}']`)
+      //   // console.log('M > mixinGlobal > setWidgetCopy > existingLink : ', existingLink)
+      //   if (!existingLink) {
+      //     Object.keys(link).forEach(linkKey => {
+      //       tagCss.setAttribute(linkKey, link[linkKey])
+      //     })
+      //     document.head.appendChild(tagCss)
+      //   }
+      // })
     },
     trackEvent (value, action = undefined, category = undefined) {
       const matomoServer = process.env.VUE_APP_DATAMI_MATOMO
@@ -321,11 +496,11 @@ export const mixinGlobal = {
         const domain = document.domain
         // console.log('\nM > trackEvent > domain :', domain)
 
-        const eventCategory = category || this.gitObj.filefullname
-        // console.log('M > trackEvent > eventCategory :', eventCategory)
-
         const evAction = action || this.$options.name
         // console.log('M > trackEvent > evAction : ', evAction)
+
+        const eventCategory = category || (this.gitObj && this.gitObj.filefullname)
+        // console.log('M > trackEvent > eventCategory :', eventCategory)
 
         // console.log('M > trackEvent > value : ', value)
 
@@ -459,7 +634,8 @@ export const mixinGit = {
       getRefBranch: 'git-user/getRefBranch',
       getUserBranchesNotRef: 'git-user/getUserBranchesNotRef',
       getUserActiveBranch: 'git-user/getUserActiveBranch',
-      userBranch: 'git-user/getUserBranch'
+      userBranch: 'git-user/getUserBranch',
+      checkIfErrorExists: 'git-data/checkIfErrorExists'
     }),
     userGit () {
       return this.getUserGit(this.fileId)
@@ -483,9 +659,40 @@ export const mixinGit = {
     getFileDataRaw,
     getUserInfosFromToken,
     ...mapActions({
+      resetReqErrors: 'git-data/resetReqErrors',
+      updateReqErrors: 'git-data/updateReqErrors',
       updateUserBranches: 'git-user/updateUserBranches',
       changeActiveUserBranch: 'git-user/changeActiveUserBranch'
-    })
+    }),
+    async getFileDataAndErrors (gitObj, token, raw = false) {
+      // this.updateReloading({ fileId: this.fileId, isLoading: true })
+      // console.log('\nM > MixinGit > getFileDataAndErrors > gitObj.filefullname : ', gitObj.filefullname)
+
+      // fetch data
+      let resp
+      if (raw) {
+        resp = await this.getFileDataRaw(gitObj, token)
+      } else {
+        resp = await this.getFileData(gitObj, token)
+      }
+      // console.log('\nM > MixinGit > getFileDataAndErrors > resp : ', resp)
+
+      // process errors if any
+      const errors = resp.errors
+      if (errors.length) {
+        const reqErrors = errors.map(err => { return { ...err, fileId: this.fileId, errorId: this.uuidv4() } })
+        // console.log('M > MixinGit > getFileDataAndErrors > reqErrors : ', reqErrors)
+        reqErrors.forEach(err => {
+          if (!this.checkIfErrorExists(err)) {
+            this.updateReqErrors({ error: err, addToErrors: true })
+            this.updateFileDialogs('NotificationErrors', { error: err })
+          }
+        })
+      }
+
+      // this.updateReloading({ fileId: this.fileId, isLoading: false })
+      return resp
+    }
   }
 }
 
@@ -691,6 +898,8 @@ export const mixinValue = {
   methods: {
     booleanFromValue,
     trimText,
+    roundOff,
+    getNumberByField,
     getValueDefinition (value, field = undefined) {
       const Field = field || this.field
       const definitions = Field.definitions
@@ -853,10 +1062,10 @@ export const mixinCards = {
   computed: {
     cardsSettingsFromFileOptions () {
       let cardsSettings
-      console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+      // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
       if (this.hasCardsView && this.cardsViewIsActive) {
         const settings = this.cardsSettingsFromOptions
-        console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
+        // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
         const miniSettings = settings.mini
         const detailSettings = settings.detail
         const mapping = this.columns.map(h => {
@@ -876,7 +1085,7 @@ export const mixinCards = {
           mapping: mapping
         }
       }
-      console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
     }
     // mappingForAll () {
