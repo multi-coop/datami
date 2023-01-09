@@ -1,5 +1,7 @@
 <template>
-  <div class="ButtonEditFile datami-component">
+  <div
+    :class="`ButtonEditFile datami-component ${showEditNavbar ? 'edition-mode' : ''}`"
+    :style="`${!showEditNavbar ? 'margin-left: 25%;' : ''}`">
     <b-field
       v-if="showEditNavbar"
       grouped

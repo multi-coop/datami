@@ -12,7 +12,7 @@
     </div>
     <div
       v-if="showOptions"
-      :class="`column is-10 is-10-mobile is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between`">
+      :class="`datami-user-options-container column is-10 is-10-mobile is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between`">
       <ButtonCopyWidgetHtml
         :file-id="fileId"
         :locale="locale"/>

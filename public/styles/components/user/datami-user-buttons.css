@@ -16,3 +16,16 @@
   -ms-flex-positive: 1 !important;
   flex-grow: 1 !important;
 }
+
+@media screen and (max-width:1023px) {
+  .ButtonEditFile.edition-mode {
+    margin-left: 25%;
+  }
+}
+
+@media screen and (max-width:1023px) and (min-width:768px) {
+  .datami-user-options-container {
+    margin-left: 25% !important;
+    width: 50% !important;
+  }
+}

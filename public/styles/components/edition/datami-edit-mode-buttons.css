@@ -6,7 +6,7 @@
   justify-content: center !important;
 }
 
-@media(max-width: 768px) {
+@media screen and (max-width: 768px) {
   .EditModeBtns {
     justify-content: end !important;
   }
