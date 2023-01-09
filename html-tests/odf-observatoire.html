@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Open Data France - Observatoire de l'Open Data</title>
+</head>
+
+<body style="background-color: white !important; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+
+  <div style="background-color: white; margin: 1em;">
+
+    <!-- DATAMI - contribute with GIT ...but without minding it-->
+    <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+    <!-- DATAMI WIDGET'S HTML BLOCK-->
+    <datami-multi-files
+      title="Observatoire de l'open data"
+      options='{
+        "display": "horizontal"
+      }'
+      gitfiles='[
+      {
+        "title": "Présentation",
+        "activate": true,
+        "localdev": false,
+        "gitfile_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/texts/markdown/odf/ODF-observatoire-intro.md",
+        "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/md/ODF-observatoire-intro.md",
+        "gitfilelocal": "http://localhost:8800/content/data/md/ODF-observatoire-intro.md",
+        "options": ""
+      },
+      {
+        "title": "Données de l&lsquo;observatoire",
+        "activate": true,
+        "localdev": false,
+        "gitfile_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv",
+        "gitfile_": "http://localhost:8800/content/data/csv/ODF-Observatoire-apiviz_data-export_solidata-220425b-simplified.csv",
+        "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/csv/geocoding/ODF-Observatoire-organisations-geocoded.csv",
+        "gitfilelocal": "http://localhost:8800/content/data/csv/geocoding/ODF-Observatoire-organisations-geocoded.csv",
+        "default-tab": true,
+        "options": {
+          "height": "500px",
+          "separator": ",",
+          "lockcolumns": true,
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              {
+                "name": "type",
+                "filtering": "OR"
+              },
+              {
+                "name": "thématiques",
+                "filtering": "OR"
+              },
+              {
+                "name": "platform_clean",
+                "filtering": "OR"
+              },
+              {
+                "name": "reg_code_short",
+                "filtering": "OR"
+              },
+              {
+                "name": "tranche_pop",
+                "filtering": "OR"
+              },
+              {
+                "name": "tranche_ptf",
+                "filtering": "OR"
+              }
+            ]
+          },
+          "schema": {
+            "localdev": false,
+            "file_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-schema.json",
+            "filelocal": "http://localhost:8800/content/data/json/ODF-Observatoire-schema.json"
+          },
+          "fields-custom-properties": {
+            "localdev": false,
+            "file_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-fields-custom-props.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-fields-custom-props.json",
+            "filelocal": "http://localhost:8800/content/data/json/ODF-Observatoire-fields-custom-props.json"
+          },
+          "cardsview": {
+            "activate": true,
+            "default": false
+          },
+          "cardsdetail": true,
+          "cardssettings": {
+            "mini": {
+              "nom": {
+                "position": "title"
+              },
+              "adress": {
+                "position": "adress"
+              },
+              "dep_label": {
+                "position": "adress"
+              },
+              "reg_code_short": {
+                "position": "tags",
+                "prefix": "Région :"
+              },
+              "platform_clean": {
+                "position": "tags",
+                "prefix": "Type de plateforme :"
+              },
+              "thématiques": {
+                "position": "tags",
+                "prefix": "Thématique(s) :"
+              }
+            },
+            "detail": {
+              "nom": {
+                "position": "title"
+              },
+              "id_odf": {
+                "position": "subtitle",
+                "prefix": "Identifiant :"
+              },
+              "adress": {
+                "position": "adress"
+              },
+              "dep_label": {
+                "position": "adress"
+              },
+              "siren": {
+                "position": "resume",
+                "prefix": "Numéro SIREN : "
+              },
+              "id_ods": {
+                "position": "description",
+                "block_title": "Description de l&lsquo;organisation"
+              },
+              "url_ptf": {
+                "position": "links",
+                "block_title": "Lien vers la plateforme",
+                "right": true
+              },
+              "url_datagouv": {
+                "position": "links",
+                "block_title": "Lien vers data.gouv.fr",
+                "right": true
+              },
+              "orga": {
+                "position": "tags_middle",
+                "block_title": "Organisation(s)",
+                "right": true
+              },
+              "platform_clean": {
+                "position": "tags_middle",
+                "block_title": "Plateforme(s)",
+                "right": true
+              },
+              "thématiques": {
+                "position": "tags_middle",
+                "block_title": "Thématique(s)",
+                "right": true
+              },
+              "tranche_ptf": {
+                "position": "tags_middle",
+                "block_title": "Nombre de jeux de données publiés",
+                "right": true
+              },
+              "reg_code_short": {
+                "position": "tags",
+                "block_title": "Région",
+                "right": false
+              },
+              "tranche_pop": {
+                "position": "tags",
+                "block_title": "Tranche de population",
+                "right": false
+              }
+            },
+            "templates": {
+              "id_ods": {
+                "use_on_mini": true,
+                "use_on_detail": true,
+                "paragraphs": [
+                  {
+                    "text": {
+                      "fr": "L&lsquo;organisation &#123;&#123; nom &#125;&#125; est un(e) &#123;&#123; type &#125;&#125; et se situe dans le département &#123;&#123; depcode &#125;&#125; (&#123;&#123; dep_label &#125;&#125;) en région &#123;&#123; reg_code_short &#125;&#125;."
+                    }
+                  },
+                  {
+                    "text": {
+                      "fr": "Cette entité représente une population de &#123;&#123; pop_insee &#125;&#125; habitants."
+                    }
+                  },
+                  {
+                    "text": {
+                      "fr": "L&lsquo;organisation &#123;&#123; nom &#125;&#125; publie sur &#123;&#123; merge &#125;&#125; avec une plateforme de type &#123;&#123; platform_clean &#125;&#125;."
+                    }
+                  },
+                  {
+                    "text": {
+                      "fr": "Cette organisation a publié &#123;&#123; nb_ptf &#125;&#125; jeux de données sur sa plateforme et &#123;&#123; nb_datagouv &#125;&#125; jeux sur data.gouv.fr."
+                    }
+                  },
+                  {
+                    "text": {
+                      "fr": "Plus d&lsquo;infos en cliquant ici : ~~ url_ptf ~~ ou sur ce lien ~~ url_datagouv ~~"
+                    }
+                  }
+                ]
+              }
+            },
+            "minimap": {
+              "activate": true,
+              "right_side": true,
+              "mapOptions": {
+                "zoom": 5,
+                "maxZoom": 18,
+                "minZoom": 2,
+                "item_geo_fields": {
+                  "latitude": "BAN_latitude",
+                  "longitude": "BAN_longitude"
+                },
+                "zoom_item": 13,
+                "marker_icon": "map-marker",
+                "marker_height": 45,
+                "marker_width": 45,
+                "marker_color": "#4a4a4a"
+              }
+            }
+          },
+          "datavizview": {
+            "activate": true,
+            "default": false,
+            "localdev": false,
+            "file_test": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-dataviz-settings.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-dataviz-settings.json",
+            "filelocal": "http://localhost:8800/content/data/json/ODF-Observatoire-dataviz-settings.json"
+          },
+          "mapview": {
+            "activate": true,
+            "default": true,
+            "maps": [
+              {
+                "title": {
+                  "fr": "CARTOGRAPHIE DES ACTEURS DE L&lsquo;OPEN DATA"
+                },
+                "cols": 12,
+                "localdev": false,
+                "file_test": "https://github.com/multi-coop/data-odf-observatoire/blob/main/json/ODF-Observatoire-map-settings.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-map-settings.json",
+                "filelocal": "http://localhost:8800/content/data/json/ODF-Observatoire-map-settings.json"
+              }
+            ]
+          }
+        },
+        "usertoken": ""
+      },
+      {
+        "title": "Thématiques",
+        "activate": true,
+        "localdev": false,
+        "gitfile_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/csv/odf/ODF-Observatoire-thematiques.csv",
+        "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/csv/ODF-Observatoire-thematiques.csv",
+        "gitfilelocal": "http://localhost:8800/content/data/csv/ODF-Observatoire-thematiques.csv",
+        "options": {
+          "height": "500px",
+          "separator": ",",
+          "lockcolumns": true,
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              "Tags",
+              "Organisations_Noms"
+            ]
+          },
+          "schema": {
+            "fields": [
+              {
+                "name": "Organisations copy",
+                "type": "boolean"
+              }
+            ]
+          },
+          "fields-custom-properties": {
+            "localdev": false,
+            "file_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-thematiques-fields-custom-props.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-thematiques-fields-custom-props.json",
+            "filelocal": "http://localhost:8800/content/data/json/ODF-thematiques-fields-custom-props.json"
+          }
+        },
+        "onlypreview": true,
+        "usertoken": ""
+      },
+      {
+        "title": "Schéma des données de l&lsquo;observatoire",
+        "activate": true,
+        "default-tab": false,
+        "localdev": false,
+        "gitfile_test": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/odf/ODF-Observatoire-apiviz_data-schema.json",
+        "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-odf-observatoire/-/blob/main/data/json/ODF-Observatoire-schema.json",
+        "gitfilelocal": "http://localhost:8800/content/data/json/ODF-Observatoire-schema.json",
+        "options": {
+          "defaultDepth": 2,
+          "allowKeyEdit": true
+        },
+        "onlypreview": false,
+        "usertoken": ""
+      }
+    ]'
+      locale="fr"
+    ></datami-multi-files>
+
+    <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+    <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+    <script src="https://preprod--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
+    <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
+
+  </div>
+
+  <!-- <div class="container has-text-dark">
+    <div class="content my-6 px-6">
+      <p class="is-size-6">
+        L'import du widget <code>Datami</code> dans une page html permet d'afficher sur un site tiers des données hébergées sur github, gitlab ou dans un wiki.
+      </p>
+    <p class="">
+      L'import du widget consiste à simplement copier-coller quelques lignes de code dans la page html de votre choix.
+    </p>
+    <p class="">
+      Le widget est paramétrable et il peut être utilisé indistinctement et séparément pour différents jeux de données.
+    </p>
+    <p class="">
+      Le widget est sous licence libre et il n'y a aucun coût ou surcoût dans l'utilisation du widget.
+    </p>
+    <p class="">
+      Plusieurs fonctionnalités sont intégrées au widget Datami : 
+      <ul>
+        <li class="">
+          Filtres de sélection (paramétrables) ;
+        </li>
+        <li class="">
+          Redirection vers le site source depuis les fiches détaillées ;
+        </li>
+        <li class="">
+          Rechargement des données source ;
+        </li>
+        <li class="">
+          Possibilité de télécharger les données au format .tsv ;
+        </li>
+        <li class="">
+          ...et bien plus encore. Plus de d'infos dans la 
+          <a href="https://datami-docs.multi.coop" target="_blank" class="is-underlined">
+            documentation en ligne.
+          </a>
+        </li>
+      </ul>
+    </p>
+  </div> -->
+
+  <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
+    <p>
+      <a href="https://gitlab.com/multi-coop/datami" target="_blank">
+        <img src="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo_DATAMI_title.png" alt="logo gitribute" style="height: 35px !important; width: auto !important">
+      </a>
+    </p>
+  </h2>
+
+  <p id="page-credits" class="mt-6 has-text-centered has-text-grey">
+    Un projet numérique en partenariat avec
+    <a href="https://www.opendatafrance.net/" target="_blank" class="has-text-grey is-underlined">
+      Open Data France
+    </a>
+    <br>
+    Codé par la coopérative numérique 
+    <a href="https://multi.coop" target="_blank" class="has-text-grey is-underlined">
+      multi
+    </a>
+  </p>
+  <p id="page-credits" class="my-6 is-flex is-align-items-center is-justify-content-center">
+    <a href="https://www.opendatafrance.net/" class="mr-5" target="_blank">
+      <img src="https://gitlab.com/multi-coop/gitribute-odf-observatoire/-/raw/main/images/odf-logo.svg" alt="logo ODF" style="height: 40px !important; width: auto !important">
+    </a>
+    <a href="https://multi.coop" class="" target="_blank">
+      <img src="https://gitlab.com/multi-coop/gitribute-odf-observatoire/-/raw/main/images/multi-logo.png" alt="logo multi" style="height: 40px !important; width: auto !important">
+    </a>
+  </p>
+</body>
+
+</html>

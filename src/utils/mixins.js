@@ -147,6 +147,13 @@ export const mixinGlobal = {
       getDialogsById: 'git-dialogs/getDialogsById',
       getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
+    getUrlBase () {
+      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
+      const isLocal = widgetProvider.startsWith('localhost')
+      const Http = isLocal ? 'http' : 'https'
+      const urlBase = `${Http}://${widgetProvider}`
+      return urlBase
+    },
     fileToken () {
       return this.getFileToken(this.fileId)
     },
@@ -361,10 +368,20 @@ export const mixinGlobal = {
         // console.log(`\nM > mixinGlobal > addStyle > ${componentName} > shadowRoot : `, shadowRoot)
         // console.log(`M > mixinGlobal > addStyle > ${componentName} > url : `, url)
         // console.log(`M > mixinGlobal > addStyle > ${componentName} > process.env : `, process.env)
+
+        const urlBase = this.getUrlBase
+
         urls.forEach(url => {
-          const fileUrl = `${process.env.BASE_URL}${url}`
+          const isFont = url.startsWith('fonts/') && !url.endsWith('.css')
+          let fileUrl
+          if (url.startsWith('http')) {
+            fileUrl = url
+          } else {
+            fileUrl = `${urlBase}/${url}`
+          }
+          // const fileUrl = `${process.env.BASE_URL}${url}`
           // console.log(`M > mixinGlobal > addStyle > ${componentName} > fileUrl : `, fileUrl)
-          createStyleLink(shadowRoot, fileUrl)
+          createStyleLink(shadowRoot, fileUrl, isFont)
         })
       }
     },
@@ -411,12 +428,13 @@ export const mixinGlobal = {
       }
     },
     setWidgetCopy () {
+      // const shadowRoot = this.getRootNode()
       // console.log('\nM > mixinGlobal > setWidgetCopy > process.env : ', process.env)
-      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
+      // const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
       // console.log('M > mixinGlobal > setWidgetCopy > widgetProvider : ', widgetProvider)
 
-      const isLocal = widgetProvider.startsWith('localhost')
-      const Http = isLocal ? 'http' : 'https'
+      // const isLocal = widgetProvider.startsWith('localhost')
+      // const Http = isLocal ? 'http' : 'https'
 
       /* Stuff we need to add to <head>
         <script src="https://${widgetProvider}/js/app.js" type="text/javascript"/>\n
@@ -432,23 +450,23 @@ export const mixinGlobal = {
       //     body: true
       //   }
       // ]
-      const links = [
-        {
-          type: 'text/css',
-          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/css/app.css`,
-          rel: 'stylesheet'
-        },
-        {
-          type: 'font/woff2',
-          href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/fonts/materialdesignicons-webfont.woff2`,
-          rel: 'stylesheet',
-          as: 'font'
-        }
-      ]
+      // const links = [
+      //   {
+      //     type: 'text/css',
+      //     href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/css/app.css`,
+      //     rel: 'stylesheet'
+      //   },
+      //   {
+      //     type: 'font/woff2',
+      //     href: `${Http}://${widgetProvider}${isLocal ? '/dist' : ''}/fonts/materialdesignicons-webfont.woff2`,
+      //     rel: 'stylesheet',
+      //     as: 'font'
+      //   }
+      // ]
       // console.log('M > mixinGlobal > setWidgetCopy > scripts : ', scripts)
       // console.log('M > mixinGlobal > setWidgetCopy > links : ', links)
 
-      const head = document.head
+      // const head = document.head
       // console.log('M > mixinGlobal > setWidgetCopy > head : ', head)
 
       // scripts.forEach(script => {
@@ -463,17 +481,17 @@ export const mixinGlobal = {
       //   }
       // })
 
-      links.forEach(link => {
-        const tagCss = document.createElement('link')
-        const existingLink = head.querySelector(`[href='${link.href}']`)
-        // console.log('M > mixinGlobal > setWidgetCopy > existingLink : ', existingLink)
-        if (!existingLink) {
-          Object.keys(link).forEach(linkKey => {
-            tagCss.setAttribute(linkKey, link[linkKey])
-          })
-          document.head.appendChild(tagCss)
-        }
-      })
+      // links.forEach(link => {
+      //   const tagCss = document.createElement('link')
+      //   const existingLink = head.querySelector(`[href='${link.href}']`)
+      //   // console.log('M > mixinGlobal > setWidgetCopy > existingLink : ', existingLink)
+      //   if (!existingLink) {
+      //     Object.keys(link).forEach(linkKey => {
+      //       tagCss.setAttribute(linkKey, link[linkKey])
+      //     })
+      //     document.head.appendChild(tagCss)
+      //   }
+      // })
     },
     trackEvent (value, action = undefined, category = undefined) {
       const matomoServer = process.env.VUE_APP_DATAMI_MATOMO

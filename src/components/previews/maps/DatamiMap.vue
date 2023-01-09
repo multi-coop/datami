@@ -74,11 +74,35 @@
         </div> -->
       </div>
     </div>
+
+    <!-- DEBUG -->
+    <!-- <b-button
+      class="mx-1 my-1"
+      @click="getSizesScreen()">
+      getSizesScreen
+    </b-button>
+    <b-button
+      class="mx-1 my-1"
+      @click="map.redraw()">
+      map.redraw
+    </b-button>
+    <b-button
+      class="mx-1 my-1"
+      @click="getMapHeightTop">
+      getMapHeightTop
+    </b-button>
+    <b-button
+      class="mx-1 my-1"
+      @click="fakeResizeEvent">
+      fakeResizeEvent
+    </b-button> -->
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+
+import { mapState } from 'vuex'
 
 import {
   Map,
@@ -264,6 +288,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      multifileTabsPosition: (state) => state.multifileTabsPosition
+    }),
     getContainerElement () {
       // console.log('\nC > DatamiMap > getContainerElement > this.$refs :', this.$refs)
       // console.log('C > DatamiMap > getContainerElement > this.mapId :', this.mapId)
@@ -407,9 +434,14 @@ export default {
         this.trackEvent('showCard')
       }
     },
+    multifileTabsPosition () {
+      this.redrawMap *= -1
+    },
     redrawMap () {
       // console.log('\nC > DatamiMap > watch > redrawMap :', this.redrawMap)
+      this.getSizesScreen()
       setTimeout(() => {
+        this.fakeResizeEvent()
         this.map.redraw()
       }, 150)
     },
@@ -418,7 +450,7 @@ export default {
         this.redrawMap *= -1
       }
     },
-    currentEditViewMode (next) {
+    currentEditViewMode () {
       if (this.map) {
         this.getMapHeightTop()
         this.redrawMap *= -1
@@ -443,10 +475,15 @@ export default {
       } else {
         // console.log('\nC > DatamiMap > watch > items > else (no map yet) ...')
       }
+      this.redrawMap *= -1
+      // this.map.redraw()
+      // this.getSizesScreen()
     },
     activeFilterTags (next) {
       // console.log('\nC > DatamiMap > watch > activeFilterTags > next:', next)
-      this.getMapHeightTop()
+      // this.getMapHeightTop()
+      this.redrawMap *= -1
+      // this.getSizesScreen()
     },
     userFullscreen (next) {
       // console.log('\nC > DatamiMap > watch > userFullscreen > next:', next)
@@ -523,9 +560,13 @@ export default {
     // const container = this.getContainerElement
     // console.log('C > DatamiMap > mounted > container : ', container)
     this.initializeMap()
+    this.redrawMap *= -1
     // console.log('\nC > DatamiMap > mounted > this.visibleLayers : ', this.visibleLayers)
   },
   methods: {
+    fakeResizeEvent () {
+      window.dispatchEvent(new Event('resize'))
+    },
     getDocWidth () {
       const docWidth = document.body.clientWidth
       // console.log('\nC > DatamiMap > getDocWidth > docWidth : ', docWidth)
@@ -596,6 +637,7 @@ export default {
       this.mapHeightTop = height
     },
     getSizesScreen () {
+      // console.log('\nC > DatamiMap > getSizesScreen > ... ')
       this.getDocWidth()
       this.getMapHeightTop()
     },

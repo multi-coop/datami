@@ -167,6 +167,7 @@
     <!-- DIALOG MODAL -->
     <b-modal
       v-model="isModalActive"
+      class="datami-modal-dialog-opener"
       :width="'80%'"
       @close="resetFileDialog">
       <DialogSkeleton
@@ -264,7 +265,10 @@ export default {
         'styles/components/previews/datami-view-mode-buttons.css',
         'styles/components/sorting/datami-buttons-sort-by.css',
         'styles/components/user/datami-user-buttons.css',
-        'styles/components/user/datami-tooltip.css'
+        'styles/components/user/datami-tooltip.css',
+        // 'fonts/materialdesignicons-webfont.woff2'
+        'fonts/materialdesignicons.min.css'
+        // 'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
       ],
       isModalActive: false,
       // file infos

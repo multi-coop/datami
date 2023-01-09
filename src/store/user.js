@@ -6,6 +6,7 @@ export const user = {
     userLocale: 'en',
     userGit: [],
     userBranches: [],
+    multifileTabsPosition: 1,
     fullscreens: []
   },
   getters: {
@@ -70,6 +71,9 @@ export const user = {
       } else {
         state.fullscreens.push(fullscreenInfos)
       }
+    },
+    switchMultifileTabsPosition (state) {
+      state.multifileTabsPosition *= -1
     }
   },
   actions: {
@@ -100,6 +104,9 @@ export const user = {
     },
     updateFullscreen ({ commit }, fullscreenInfos) {
       commit('setUserFullscreen', fullscreenInfos)
+    },
+    toggleMultifileTabsPosition ({ commit }) {
+      commit('switchMultifileTabsPosition')
     }
   }
 }

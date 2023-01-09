@@ -55,7 +55,7 @@
           @mouseleave="hoverLogo = false"
           @click="trackLink(urlDatamiWebiste)">
           <img
-            :src="`${''}/${hoverLogo ? 'logo_DATAMI_title' : 'logo-DATAMI'}.png`"
+            :src="`${getUrlBase}/${hoverLogo ? 'logo_DATAMI_title' : 'logo-DATAMI'}.png`"
             alt="logo datami"
             :style="`height: 20px !important; width: auto !important; ${!hoverLogo ? 'filter: grayscale(1)' : ''}`">
         </a>

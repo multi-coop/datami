@@ -1,15 +1,17 @@
 <template>
   <div class="NotificationError datami-component container px-3 py-3 mb-2">
+    <!-- TEST ERROR NOTIF -->
     <b-notification
       v-model="isActive"
       aria-close-label="Close notification"
       @close="closeDialog">
+      <!-- eventError: <br><pre><code>{{ eventError }}</code></pre> -->
       <div class="columns is-mobile is-multiline">
         <!-- ERROR URL -->
         <div class="column is-11 is-offset-1 has-text-centered">
           <p>
             <code>
-              {{ error.url }}
+              {{ eventError.url }}
             </code>
           </p>
         </div>
@@ -40,20 +42,20 @@
         <div class="column is-3 pt-0 is-offset-1 has-text-centered">
           <p>
             <code>
-              {{ error.function }}
+              {{ eventError.function }}
             </code>
           </p>
         </div>
         <div class="column is-3 pt-0 has-text-centered">
           <p>
             <code>
-              {{ error.code }}
+              {{ eventError.code }}
             </code>
           </p>
         </div>
         <div class="column is-5 pt-0 has-text-centered">
           <p>
-            <pre class="break-spaces"><code> {{ getErrorMessage(error.resp) }} </code></pre>
+            <pre class="break-spaces"><code> {{ getErrorMessage(eventError.resp) }} </code></pre>
           </p>
         </div>
       </div>
@@ -62,11 +64,12 @@
 </template>
 
 <script>
-import { mixinGlobal } from '@/utils/mixins.js'
+// import { mixinGlobal } from '@/utils/mixins.js'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'NotificationError',
-  mixins: [mixinGlobal],
+  // mixins: [mixinGlobal],
   props: {
     fileId: {
       default: null,
@@ -76,7 +79,7 @@ export default {
       default: null,
       type: String
     },
-    error: {
+    eventError: {
       default: null,
       type: Object
     },
@@ -94,15 +97,24 @@ export default {
       isActive: true
     }
   },
+  computed: {
+    ...mapGetters({
+      t: 'git-translations/getTranslation'
+    })
+  },
   methods: {
+    ...mapActions({
+      removeFileDialog: 'git-dialogs/removeFileDialog'
+    }),
     getErrorMessage (errResp) {
       return errResp.message || errResp.statusText || errResp
     },
     closeDialog (event) {
-      // console.log('\nC > NotificationError > closeDialog > event : ', event)
-      // console.log('C > NotificationError > closeDialog > this.dialogId : ', this.dialogId)
-      // console.log('C > NotificationError > closeDialog > this.error : ', this.error)
+      console.log('\nC > NotificationError > closeDialog > event : ', event)
+      console.log('C > NotificationError > closeDialog > this.dialogId : ', this.dialogId)
+      console.log('C > NotificationError > closeDialog > this.eventError : ', this.eventError)
       this.removeFileDialog(this.dialogId)
     }
   }
 }
+</script>

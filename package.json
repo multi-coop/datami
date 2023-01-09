@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "cp -a ./node_modules/@mdi/font/fonts/. ./public/fonts && vue-cli-service serve",
-    "build": "cp -a ./node_modules/@mdi/font/fonts/. ./public/fonts && vue-cli-service build",
+    "serve": "cp -a ./node_modules/@mdi/font/css/. ./public/fonts && cp -a ./node_modules/@mdi/font/fonts/. ./public/fonts && vue-cli-service serve",
+    "build": "cp -a ./node_modules/@mdi/font/css/. ./public/fonts && cp -a ./node_modules/@mdi/font/fonts/. ./public/fonts && vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "http": "http-server ./ -c-1 -p 8180 -o ./html-tests",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "diff2html": "^3.4.16",
     "document-register-element": "^1.14.10",
     "gray-matter": "^4.0.3",
+    "http-server": "^14.1.1",
     "maplibre-gl": "^2.3.0",
     "raw-loader": "^4.0.2",
     "register-service-worker": "^1.7.2",

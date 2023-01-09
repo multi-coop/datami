@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>CONUMM - carto</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  
+  <div class="container has-text-dark">
+    <!-- <div class="content my-6 px-6">
+      <p class="is-size-6">
+        L'import du widget <code>Datami</code> dans une page html permet d'afficher sur un site tiers des données hébergées sur github, gitlab ou dans un wiki.
+      </p>
+      <p class="">
+        L'import du widget consiste à simplement copier-coller quelques lignes de code dans la page html de votre choix.
+      </p>
+      <p class="">
+        Le widget est paramétrable et il peut être utilisé indistinctement et séparément pour différents jeux de données.
+      </p>
+      <p class="">
+        Le widget est sous licence libre et il n'y a aucun coût ou surcoût dans l'utilisation du widget.
+      </p>
+      <p class="">
+        Plusieurs fonctionnalités sont intégrées au widget Datami : 
+        <ul>
+          <li class="">
+            Filtres de sélection (paramétrables) ;
+          </li>
+          <li class="">
+            Redirection vers le site source depuis les fiches détaillées ;
+          </li>
+          <li class="">
+            Rechargement des données source ;
+          </li>
+          <li class="">
+            Possibilité de télécharger les données au format .tsv ;
+          </li>
+          <li class="">
+            ...et bien plus encore. Plus de d'infos dans la 
+            <a href="https://datami-docs.multi.coop" target="_blank" class="is-underlined">
+              documentation en ligne.
+            </a>
+          </li>
+        </ul>
+      </p>
+    </div> -->
+
+    <div style="background-color: white; margin: 1em;">
+
+      <!-- DATAMI - contribute with GIT ...but without minding it-->
+      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+      <!-- DATAMI WIDGET'S HTML BLOCK-->
+      <datami-multi-files
+        title="CONUMM"
+        options='{
+          "display": "horizontal"
+        }'
+        gitfiles='[
+          {
+            "title": "Démarche",
+            "activate": true,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/markdown/hubs-conumm-intro.md",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/markdown/hubs-conumm-intro.md",
+            "onlypreview": true,
+            "usertoken": ""
+          },
+          {
+            "title": "Le projet",
+            "activate": true,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/markdown/hubs-conumm-le-projet.md",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/markdown/hubs-conumm-le-projet.md",
+            "onlypreview": true,
+            "usertoken": ""
+          },
+          {
+            "title": "Base de données",
+            "activate": true,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/csv/geocoding/hubs-conumm-dataset-geocoded.csv",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/csv/geocoding/hubs-conumm-dataset-geocoded.csv",
+            "default-tab": true,
+            "options": {
+              "height": "550px",
+              "separator": ",",
+              "lockcolumns": true,
+              "customfilters": {
+                "activate": true,
+                "filterfields": [
+                  {
+                    "name": "departement",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "Activites-codes",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "Formations-codes",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "acces-codes",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "publics-codes",
+                    "filtering": "OR"
+                  }
+                ]
+              },
+              "schema": {
+                "localdev": false,
+                "filelocal": "http://localhost:8805/statics/json/hubs-conumm-schema.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/json/hubs-conumm-schema.json"
+              },
+              "fields-custom-properties": {
+                "localdev": false,
+                "filelocal": "http://localhost:8805/statics/json/hubs-conumm-fields-custom-props.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/json/hubs-conumm-fields-custom-props.json"
+              },
+              "cardsview": {
+                "activate": true,
+                "default": false
+              },
+              "cardsdetail": true,
+              "cardssettings": {
+                "mini": {
+                  "Nom lieu": {
+                    "position": "title"
+                  },
+                  "URL illustration / Logo": {
+                    "position": "image"
+                  },
+                  "Adresse postale": {
+                    "position": "adress"
+                  },
+                  "dep_nom": {
+                    "position": "tags"
+                  },
+                  "Activites-codes": {
+                    "position": "tags"
+                  }
+                },
+                "detail": {
+                  "Nom lieu": {
+                    "position": "title"
+                  },
+                  "URL illustration / Logo": {
+                    "position": "image",
+                    "right": true
+                  },
+                  "Adresse postale": {
+                    "position": "adress"
+                  },
+                  "dep_nom": {
+                    "position": "resume",
+                    "block_title": "Département",
+                    "right": false
+                  },
+                  "Public": {
+                    "position": "description",
+                    "block_title": "Publics",
+                    "right": false
+                  },
+                  "Conditions acces": {
+                    "position": "description",
+                    "block_title": "Conditions d&lsquo;accès",
+                    "right": false
+                  },
+                  "Nom Prenom du référent": {
+                    "position": "description",
+                    "block_title": "Contact",
+                    "right": false
+                  },
+                  "Nunmero de téléphone": {
+                    "position": "description",
+                    "block_title": "Téléphone",
+                    "right": false
+                  },
+                  "Mail contact": {
+                    "position": "links",
+                    "block_title": "Email",
+                    "right": false
+                  },
+                  "Activites-codes": {
+                    "position": "tags",
+                    "block_title": "Typologie d&lsquo;activités",
+                    "right": true
+                  },
+                  "publics-codes": {
+                    "position": "tags",
+                    "block_title": "Type de publics",
+                    "right": true
+                  },
+                  "Formations-codes": {
+                    "position": "tags",
+                    "block_title": "Formations et initiations",
+                    "right": true
+                  },
+                  "acces-codes": {
+                    "position": "tags",
+                    "block_title": "Conditions d&lsquo;accès",
+                    "right": true
+                  },
+                  "Site Web": {
+                    "position": "links",
+                    "block_title": "Lien vers le site du lieu",
+                    "right": false
+                  }
+                },
+                "templates": {
+                  "activate": false,
+                  "siren": {
+                    "use_on_mini": true,
+                    "use_on_detail": true,
+                    "paragraphs": [
+                      {
+                        "text": {
+                          "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
+                        }
+                      },
+                      {
+                        "text": {
+                          "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "minimap": {
+                  "activate": true,
+                  "right_side": true,
+                  "mapOptions": {
+                    "zoom": 5,
+                    "maxZoom": 18,
+                    "minZoom": 2,
+                    "item_geo_fields": {
+                      "latitude": "BAN_latitude",
+                      "longitude": "BAN_longitude"
+                    },
+                    "zoom_item": 13,
+                    "marker_icon": "map-marker",
+                    "marker_height": 45,
+                    "marker_width": 45,
+                    "marker_color": "#4a4a4a"
+                  }
+                }
+              },
+              "datavizview": {
+                "activate": true,
+                "default": false,
+                "localdev": false,
+                "filelocal": "http://localhost:8805/statics/json/hubs-conumm-dataviz-settings.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/json/hubs-conumm-dataviz-settings.json"
+              },
+              "mapview": {
+                "activate": true,
+                "default": true,
+                "maps": [
+                  {
+                    "title": {
+                      "fr": "CARTOGRAPHIE"
+                    },
+                    "height": 900,
+                    "cols": 12,
+                    "localdev": false,
+                    "filelocal": "http://localhost:8805/statics/json/hubs-conumm-map-settings.json",
+                    "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/json/hubs-conumm-map-settings.json"
+                  }
+                ]
+              }
+            },
+            "usertoken": ""
+          },
+          {
+            "title": "Partenaires",
+            "activate": true,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/markdown/hubs-conumm-partenaires.md",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/markdown/hubs-conumm-partenaires.md",
+            "onlypreview": true,
+            "usertoken": ""
+          },
+          {
+            "title": "CONUMM",
+            "activate": true,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/markdown/hubs-conumm-qui-sommes-nous.md",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/markdown/hubs-conumm-qui-sommes-nous.md",
+            "onlypreview": true,
+            "usertoken": ""
+          },
+          {
+            "title": "Schéma des données",
+            "activate": false,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/json/hubs-conumm-schema.json",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/json/hubs-conumm-schema.json",
+            "options": {
+              "defaultDepth": 2,
+              "allowKeyEdit": false
+            },
+            "onlypreview": true,
+            "usertoken": ""
+          },
+          {
+            "title": "Schéma complémentaire",
+            "activate": false,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8805/statics/json/hubs-conumm-fields-custom-props.json",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-hubs-conumm/-/blob/main/json/hubs-conumm-fields-custom-props.json",
+            "options": {
+              "defaultDepth": 3,
+              "allowKeyEdit": false
+            },
+            "onlypreview": true,
+            "usertoken": ""
+          }
+        ]'
+        locale="fr"
+      />
+
+      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+      <script src="https://preprod--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+      <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
+
+
+    </div>
+
+    <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
+      <p>
+        <a href="https://datami.multi.coop" target="_blank">
+          <img src="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo_DATAMI_title.png" alt="logo datami" style="height: 35px !important; width: auto !important">
+        </a>
+      </p>
+    </h2>
+
+    <p id="page-credits" class="mt-6 has-text-centered has-text-grey">
+      Un projet numérique en partenariat avec
+      <a href="https://conumm.fr" target="_blank" class="has-text-grey is-underlined">
+        CONUMM
+      </a>
+      <br>
+      Codé par la coopérative numérique 
+      <a href="https://multi.coop" target="_blank" class="has-text-grey is-underlined">
+        multi
+      </a>
+    </p>
+  </div>
+</body>
+
+</html>

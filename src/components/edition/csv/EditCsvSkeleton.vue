@@ -2,7 +2,7 @@
   <div
     class="EditCsvSkeleton datami-component"
     style="z-index: 3;">
-    <div :class="`columns is-multiline is-vcentered ${currentViewMode === 'map' ? 'px-3' : ''}`">
+    <div :class="`columns is-multiline ${currentViewMode === 'map' ? 'px-3' : ''}`">
       <!-- RESULTS -->
       <div
         class="column is-12-mobile is-3 has-text-left"

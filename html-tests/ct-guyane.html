@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>CT GUYANE</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  
+  <div class="container has-text-dark">
+
+    <div style="background-color: white; margin: 1em;">
+
+      <!-- DATAMI - contribute with GIT ...but without minding it-->
+      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+      <!-- DATAMI WIDGET'S HTML BLOCK-->
+      <datami-multi-files
+        title="CT GUYANE"
+        options='{
+          "display": "horizontal"
+        }'
+        gitfiles='[
+          {
+            "title": "Données CT Guyane",
+            "activate": true,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8811/statics/csv/ct-guyane.csv",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-ct-guyane/-/blob/main/csv/ct-guyane.csv",
+            "default-tab": true,
+            "options": {
+              "height": "800px",
+              "separator": ",",
+              "lockcolumns": true,
+              "customfilters": {
+                "activate": true,
+                "filterfields": [
+                  {
+                    "name": "clg ou lyc",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "Demi pension",
+                    "filtering": "OR"
+                  }
+                ]
+              },
+              "schema": {
+                "localdev": false,
+                "filelocal": "http://localhost:8811/statics/json/ct-guyane-schema.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-ct-guyane/-/blob/main/json/ct-guyane-schema.json"
+              },
+              "fields-custom-properties": {
+                "localdev": false,
+                "filelocal": "http://localhost:8811/statics/json/ct-guyane-fields-custom-props.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-ct-guyane/-/blob/main/json/ct-guyane-fields-custom-props.json"
+              },
+              "cardsview": {
+                "activate": true,
+                "default": false
+              },
+              "cardsdetail": true,
+              "cardssettings": {
+                "mini": {
+                  "nom eple": {
+                    "position": "title"
+                  },
+                  "Label": {
+                    "position": "subtitle"
+                  },
+                  "adresse": {
+                    "position": "adress"
+                  },
+                  "UAI": {
+                    "prefix": "UAI : ",
+                    "position": "resume"
+                  }
+                },
+                "detail": {
+                  "nom eple": {
+                    "position": "title"
+                  },
+                  "adresse": {
+                    "position": "adress"
+                  },
+                  "cp": {
+                    "position": "adress"
+                  },
+                  "ville": {
+                    "position": "adress"
+                  },
+                  "Téléphone": {
+                    "position": "infos",
+                    "block_title": "Téléphone"
+                  },
+                  "E-mail": {
+                    "position": "links",
+                    "block_title": "E-mail"
+                  },
+                  "UAI": {
+                    "prefix": "UAI : ",
+                    "position": "resume"
+                  },
+                  "Demi pension": {
+                    "position": "tags",
+                    "block_title": "Demi-pension",
+                    "right": false
+                  },
+                  "Site Web": {
+                    "position": "links",
+                    "block_title": "Lien vers le site web",
+                    "right": false
+                  },
+                  "BAC Professionnel": {
+                    "position": "description",
+                    "block_title": "BAC Professionnel",
+                    "right": true
+                  },
+                  "BAC Technologique": {
+                    "position": "description",
+                    "block_title": "BAC Technologique",
+                    "right": true
+                  },
+                  "BTS": {
+                    "position": "description",
+                    "block_title": "BTS",
+                    "right": true
+                  },
+                  "Licence": {
+                    "position": "description",
+                    "block_title": "Licence",
+                    "right": true
+                  },
+                  "CAP": {
+                    "position": "description",
+                    "block_title": "CAP",
+                    "right": true
+                  },
+                  "MC": {
+                    "position": "description",
+                    "block_title": "MC",
+                    "right": true
+                  },
+                  "MAN": {
+                    "position": "description",
+                    "block_title": "MAN",
+                    "right": true
+                  },
+                  "FCIL": {
+                    "position": "description",
+                    "block_title": "FCIL",
+                    "right": true
+                  },
+                  "CPGE": {
+                    "position": "description",
+                    "block_title": "CPGE",
+                    "right": true
+                  }
+                },
+                "templates": {
+                  "siren": {
+                    "use_on_mini": true,
+                    "use_on_detail": true,
+                    "paragraphs": [
+                      {
+                        "text": {
+                          "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
+                        }
+                      },
+                      {
+                        "text": {
+                          "fr": "Cette commune représente une population de {{ pop_insee }} habitants."
+                        }
+                      },
+                      {
+                        "text": {
+                          "fr": "{{ nom }} publie sur {{ merge }} avec une plateforme de type {{ platform_clean }}."
+                        }
+                      },
+                      {
+                        "text": {
+                          "fr": "Cette organisation a publié {{ nb_ptf }} jeux de données sur sa plateforme et {{ nb_datagouv }} jeux sur data.gouv.fr."
+                        }
+                      },
+                      {
+                        "text": {
+                          "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "minimap": {
+                  "activate": true,
+                  "right_side": true,
+                  "mapOptions": {
+                    "zoom": 5,
+                    "maxZoom": 18,
+                    "minZoom": 2,
+                    "item_geo_fields": {
+                      "latitude": "pt gps",
+                      "longitude": "pt gps2"
+                    },
+                    "zoom_item": 13,
+                    "marker_icon": "map-marker",
+                    "marker_height": 45,
+                    "marker_width": 45,
+                    "marker_color": "#4a4a4a"
+                  }
+                }
+              },
+              "datavizview": {
+                "activate": false,
+                "default": false,
+                "localdev": false,
+                "filelocal": "http://localhost:8811/statics/json/ct-guyane-dataviz-settings.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-ct-guyane/-/blob/main/json/ct-guyane-dataviz-settings.json"
+              },
+              "mapview": {
+                "activate": true,
+                "default": true,
+                "maps": [
+                  {
+                    "title": {
+                      "fr": "CARTOGRAPHIE"
+                    },
+                    "height": 700,
+                    "cols": 12,
+                    "localdev": false,
+                    "filelocal": "http://localhost:8811/statics/json/ct-guyane-map-settings.json",
+                    "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-ct-guyane/-/blob/main/json/ct-guyane-map-settings.json"
+                  }
+                ]
+              }
+            },
+            "usertoken": ""
+          },
+          {
+            "title": "Schéma des données",
+            "activate": false,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8811/statics/json/ct-guyane-schema.json",
+            "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-ct-guyane/-/blob/main/json/ct-guyane-schema.json",
+            "options": {
+              "defaultDepth": 2,
+              "allowKeyEdit": true
+            },
+            "onlypreview": false,
+            "usertoken": ""
+          }
+        ]'
+        locale="fr"
+      />
+
+      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+      <!-- <script src="https://deploy-preview-27--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
+      <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
+      <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script>
+
+    </div>
+
+    <h2 id="title-demo" class="pt-6 title is-flex is-align-items-center is-justify-content-center has-text-white">
+      <p>
+        <a href="https://datami.multi.coop" target="_blank">
+          <img src="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo_DATAMI_title.png" alt="logo datami" style="height: 50px !important; width: auto !important">
+        </a>
+      </p>
+    </h2>
+
+    <p id="page-credits" class="mt-6 has-text-centered has-text-white">
+      Un projet numérique en partenariat avec
+      <a href="https://www.ctguyane.fr" target="_blank" class="has-text-white is-underlined">
+        CT GUYANE
+      </a>
+      <br>
+      Codé par la coopérative numérique 
+      <a href="https://multi.coop" target="_blank" class="has-text-white is-underlined">
+        multi
+      </a>
+    </p>
+  </div>
+</body>
+
+</html>

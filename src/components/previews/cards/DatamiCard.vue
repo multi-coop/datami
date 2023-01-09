@@ -84,7 +84,7 @@
         <b-tooltip
           :label="t(`preview.${showDetail || fromMap ? 'closeCard' : 'showCardDetails'}`, locale)"
           type="is-dark"
-          position="is-right">
+          position="is-left">
           <b-icon
             size="is-small"
             :icon="showDetail || fromMap ? 'close' : 'eye'"/>

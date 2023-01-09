@@ -15,10 +15,15 @@
       <div
         v-else-if="dialog.component === 'NotificationErrors'"
         class="card">
+        <!-- fileId: <code>{{ fileId }}</code><br>
+        isMultifile: <code>{{ isMultifile }}</code><br>
+        dialog.dialogId: <code>{{ dialog.dialogId }}</code><br> -->
+        <!-- <pre><code>{{ dialog }}</code></pre> -->
         <NotificationError
           :file-id="fileId"
+          :is-multifile="isMultifile"
           :dialog-id="dialog.dialogId"
-          :error="dialog.event.error"
+          :event-error="dialog.event.error"
           :locale="locale"/>
       </div>
 
@@ -166,6 +171,10 @@ export default {
       default: null,
       type: String
     },
+    isMultifile: {
+      default: false,
+      type: Boolean
+    },
     locale: {
       default: '',
       type: String
@@ -177,8 +186,20 @@ export default {
   },
   data () {
     return {
+      // isActive: true,
       showDebugDetails: false
     }
   }
+  // methods: {
+  //   getErrorMessage (errResp) {
+  //     return errResp.message || errResp.statusText || errResp
+  //   },
+  //   closeDialog (dialogId) {
+  //     // console.log('\nC > NotificationError > closeDialog > event : ', event)
+  //     // console.log('C > NotificationError > closeDialog > this.dialogId : ', this.dialogId)
+  //     // console.log('C > NotificationError > closeDialog > this.error : ', this.error)
+  //     this.removeFileDialog(dialogId)
+  //   }
+  // }
 }
 </script>

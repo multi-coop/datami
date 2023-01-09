@@ -192,10 +192,12 @@
     <!-- DIALOG MODAL -->
     <b-modal
       v-model="isModalActive"
+      class="datami-modal-dialog-opener"
       :width="'80%'"
       @close="resetMultiFilesDialog">
       <DialogSkeleton
         :file-id="multiFilesId"
+        :is-multifile="true"
         :locale="locale"/>
     </b-modal>
   </div>
@@ -276,7 +278,13 @@ export default {
         'styles/components/sorting/datami-buttons-sort-by.css',
         'styles/components/user/datami-user-buttons.css',
         'styles/components/user/datami-tooltip.css',
-        'styles/datami-multi-files.css'
+        'styles/datami-multi-files.css',
+        // 'fonts/materialdesignicons-webfont.eot',
+        // 'fonts/materialdesignicons-webfont.ttf',
+        // 'fonts/materialdesignicons-webfont.woff',
+        // 'fonts/materialdesignicons-webfont.woff2',
+        'fonts/materialdesignicons.min.css'
+        // 'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
       ],
       isModalActive: false,
       multiFilesId: undefined,
@@ -359,11 +367,13 @@ export default {
     booleanFromValue,
     ...mapActions({
       addFileOptions: 'addFileOptions',
+      toggleMultifileTabsPosition: 'git-user/toggleMultifileTabsPosition',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
     switchTabsPosition (btn) {
       // console.log('C > DatamiMultiFiles > switchTabsPosition > btn : ', btn)
       this.tabsVertical = btn.position === 'vertical'
+      this.toggleMultifileTabsPosition()
     }
   }
 }

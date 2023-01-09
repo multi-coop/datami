@@ -5,18 +5,6 @@
         v-for="btn in buttons"
         :key="btn.id"
         class="control">
-        <!-- <b-tooltip
-          type="is-dark"
-          :label="`${t('tabs.switchPosition', locale)}: ${t('tabs.' + btn.id, locale)}`"
-          multiline>
-          <b-button
-            :icon-left="btn.icon"
-            size="is-small"
-            :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-            :type="isDarkMode ? 'is-white' : 'is-grey'"
-            outlined
-            @click="changePosition(btn)"/>
-        </b-tooltip> -->
         <b-button
           :icon-left="btn.icon"
           size="is-small"

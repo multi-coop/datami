@@ -1,30 +1,13 @@
 <template>
-  <div class="ButtomOptionsSwitch datami-component">
-    <!-- <b-tooltip
-      :label="t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale)"
-      :type="isDarkMode ? 'is-white' : 'is-dark'"
-      position="is-top">
-      <b-button
-        :type="isDarkMode ? 'is-white' : ''"
-        :outlined="isDarkMode"
-        :class="isDarkMode ? 'datami-darkmode' : ''"
-        icon-left="cog-outline"
-        size="is-small"
-        expanded
-        @click="showOptions = !showOptions"
-        @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale) })"
-        @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip> -->
-    <b-button
-      :type="isDarkMode ? 'is-white' : ''"
-      :outlined="isDarkMode"
-      :class="isDarkMode ? 'datami-darkmode' : ''"
-      icon-left="cog-outline"
-      size="is-small"
-      @click="clickBtn"
-      @mouseover="showGlobalTooltip($event, { position: 'left', type: 'info', label: t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale) })"
-      @mouseleave="hideGlobalTooltip"/>
-  </div>
+  <b-button
+    :type="isDarkMode ? 'is-white' : ''"
+    :outlined="isDarkMode"
+    :class="`ButtomOptionsSwitch datami-component ${isDarkMode ? 'datami-darkmode' : ''}`"
+    icon-left="cog-outline"
+    size="is-small"
+    @click="clickBtn"
+    @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(`user.${showOptions ? 'hideOptions' : 'showOptions'}`, locale) })"
+    @mouseleave="hideGlobalTooltip"/>
 </template>
 
 <script>

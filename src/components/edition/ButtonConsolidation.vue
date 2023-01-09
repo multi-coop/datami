@@ -3,38 +3,6 @@
     class="ButtonConsolidation"
     @mouseover="showGlobalTooltip($event, { position: 'right', type: 'info', label: t('actions.consolidate', locale) })"
     @mouseleave="hideGlobalTooltip">
-    <!-- <b-tooltip
-      :label="t('actions.consolidate', locale)"
-      append-to-body
-      position="is-right"
-      :type="isDarkMode ? 'is-white' : 'is-dark'">
-      <b-dropdown
-        aria-role="list"
-        append-to-body>
-        <template #trigger>
-          <b-button
-            icon-left="wrench"
-            class="mt-1"
-            size="is-small"
-            :type="isDarkMode ? 'is-white' : 'is-dark'"
-            :loading="isConsolidating"
-            expanded
-            outlined/>
-        </template>
-        <b-dropdown-item
-          v-for="api in activeApis"
-          :key="api.api_name"
-          aria-role="listitem"
-          @click="consolidateRow(api)">
-          <b-icon
-            :icon="field.icon"
-            class="ml-0 mr-2"
-            type="is-grey-light"
-            size="is-small"/>
-          {{ api.api_name }}
-        </b-dropdown-item>
-      </b-dropdown>
-    </b-tooltip> -->
     <b-dropdown
       aria-role="list"
       append-to-body>

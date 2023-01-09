@@ -1,48 +1,6 @@
 <template>
   <div
     :class="`EditCell datami-component datami-cell is-flex is-align-items-center ${field && ['boolean', 'datami'].includes(field.type) ? 'is-justify-content-center' : ''} ${field && field.type === 'tag' ? 'is-justify-content-center' : ''}`">
-    <!-- DEBUGGING -->
-    <!-- <b-tooltip
-      v-if="debug"
-      multilined
-      append-to-body
-      type="is-warning">
-      <b-icon
-        icon="information"
-        type="is-warning"
-        size="is-small"/>
-      <template #content>
-        isCardView: <code>{{ isCardView }}</code><br>
-        fieldType: <code>{{ fieldType }}</code><br>
-        fieldSubtype: <code>{{ fieldSubtype }}</code><br>
-        hasConsolidation: <code>{{ hasConsolidation }}</code><br>
-        inputData: <code>{{ inputData }}</code><br>
-        isCategory: <code>{{ isCategory }}</code><br>
-        <span v-if="!isTag && isCategory">
-          input : <code>{{ input }}</code><br>
-        </span>
-        <span v-if="isTag && isCategory">
-          tagsValue : <code>{{ tagsValue }}</code><br>
-          tagsEnum : <code>{{ tagsEnum }}</code><br>
-        </span>
-        <span v-if="isTag">
-          field.enumArr: <br><pre><code>{{ field.enumArr }}</code></pre><br>
-        </span>
-        field: <br><pre><code>{{ field }}</code></pre>
-        fileOptions: <br><pre><code>{{ fileOptions }}</code></pre>
-      </template>
-    </b-tooltip> -->
-
-    <!-- <div v-if="debug && !isHeader && isTag && !isCategory">
-      tagsValue : <code>{{ tagsValue }}</code><br>
-      tagsEnum : <code>{{ tagsEnum }}</code><br>
-      tagsEnumEnriched : <code>{{ tagsEnumEnriched }}</code><br>
-    </div> -->
-
-    <!-- <div v-if="debug && !isHeader && isBoolean">
-      input : <code>{{ input }}</code><br>
-    </div> -->
-
     <!-- USER BUTTONS FOR DATAMI FIELDS (CONSOLIDATION...) -->
     <div
       v-if="field && isOpenCardField"

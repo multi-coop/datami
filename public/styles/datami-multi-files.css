@@ -52,6 +52,14 @@
   color: white !important;
 }
 
+.datami-multi-files-tab.datami-multi-files-tab-horizontal.is-active {
+  border: #dbdbdb thin solid !important;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-bottom-color: transparent !important;
+}
+
+
 .datami-multi-files-tab.datami-darkmode-tab-header.is-active a {
   color: black !important;
 }

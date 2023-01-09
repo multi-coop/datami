@@ -1,17 +1,5 @@
 <template>
   <div class="ButtonDarkMode datami-component">
-    <!-- <b-tooltip
-      :label="t(isDarkMode ? 'actions.setLightMode' : 'actions.setDarkMode', locale)"
-      :type="`${isDarkMode ? 'is-white' : 'is-dark'}`">
-      <b-button
-        :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
-        :type="isDarkMode ? 'is-white' : ''"
-        :outlined="isDarkMode"
-        :icon-left="`${isDarkMode ?'white-balance-sunny' : 'weather-night' }`"
-        @click="switchContrast"
-        @mouseover="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(isDarkMode ? 'actions.setLightMode' : 'actions.setDarkMode', locale) })"
-        @mouseleave="hideGlobalTooltip"/>
-    </b-tooltip> -->
     <b-button
       :class="`ml-1 is-small ${isDarkMode ? 'has-background-dark has-text-white' : ''}`"
       :type="isDarkMode ? 'is-white' : ''"

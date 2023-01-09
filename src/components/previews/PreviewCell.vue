@@ -27,18 +27,7 @@
       <div
         class="has-wrap-btn"
         @click="nowrap = !nowrap">
-        <!-- <b-tooltip
-          :active="showExpand && field.foreignKey"
-          multilined
-          append-to-body
-          type="is-dark">
-          <template #content>
-            <div>
-              {{ field.foreignKey }}
-            </div>
-          </template> -->
         {{ trimmedText }}
-        <!-- </b-tooltip> -->
       </div>
     </div>
 
