@@ -15,7 +15,7 @@
       :aria-controls="`${fileId}-filter-dropdown-${filter.field}`">
       <!-- VISIBLE ABOVE TABLET -->
       <span class="is-hidden-touch">
-        {{ trimText(filter.title || filter.label, 20) }}
+        {{ trimText(filter.title || filter.label, 17) }}
       </span>
       <!-- VISIBLE ON TABLET ONLY -->
       <span class="is-hidden-desktop is-hidden-mobile">
