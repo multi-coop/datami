@@ -486,9 +486,6 @@ export default {
       // console.log('\nC > DatamiFile > initWidget > this.trackalloutlinks : ', this.trackalloutlinks)
       this.activateTrackAllOutlinks({ uuid: this.fileId, val: this.trackalloutlinks })
 
-      if (!this.fromMultiFiles) {
-        this.setWidgetCopy()
-      }
       const gitInfosObject = this.extractGitInfos(this.gitfileDatami)
       // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
 

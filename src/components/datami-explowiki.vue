@@ -332,15 +332,16 @@ export default {
     }
     const wikiUuid = this.uuidv4()
     this.fileId = wikiUuid
+    this.toggleEditNavbar({ uuid: this.fileId, status: false })
+    this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
+    this.resetReqErrors(this.fileId)
 
     // INITIALIZING LOCAL STORAGE
     this.initializeStorage()
-    this.resetReqErrors(this.fileId)
 
     // console.log('\nC > DatamiExploWiki > beforeMount > this.wikifile : ', this.wikifile)
     // console.log('C > DatamiExploWiki > beforeMount > this.wikilist : ', this.wikilist)
     // console.log('C > DatamiExploWiki > beforeMount > this.options : ', this.options)
-    this.setWidgetCopy()
 
     this.activateTrackAllOutlinks({ uuid: wikiUuid, val: this.trackalloutlinks })
 
@@ -411,6 +412,8 @@ export default {
   },
   methods: {
     ...mapActions({
+      changeEditViewMode: 'git-data/changeEditViewMode',
+      toggleEditNavbar: 'toggleEditNavbar',
       addGitInfos: 'addGitInfos',
       addFileOptions: 'addFileOptions',
       addFileReqInfos: 'addFileReqInfos',
