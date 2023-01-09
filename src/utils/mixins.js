@@ -66,11 +66,6 @@ import {
 import { createTwoFilesPatch, diffWords } from 'diff'
 
 export const mixinTooltip = {
-  // data () {
-  //   return {
-  //     scrolled: { top: 0 }
-  //   }
-  // },
   computed: {
     ...mapState({
       tooltip: (state) => state.showTooltip,

@@ -15,6 +15,7 @@ _but without having to use Github or Gitlab interfaces_
 - [Websites](#websites-)
 - [Documentation](#documentation-)
 - [Project setup](#project-setup-)
+- [Testing examples](#testing-examples-)
 - [Stack](#stack-)
 
 ---
@@ -106,6 +107,37 @@ npm run lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+---
+
+## Testing examples [⇡](#summary)
+
+Some http files are stored in the [`./http-tests`](./http-tests) folder, showing examples of Datami working as a stand-alone widget embedded in a page in a shadow DOM.
+
+Setup :
+
+```bash
+nvm use 
+
+# Option one - Build the app
+npm run build
+
+# Option 2 - Run the app to serve the script
+npm run serve
+```
+
+_Note : Depending on the option you will chose, you will have to check where to point to the Datami script in the html file. Some files are commented to check the different approaches._
+
+Then you can launch the http server :
+
+```bash
+nvm use
+
+# Run the server
+npm run http
+```
+
+The server will automatically open a page in your brower at `http://localhost:8180/html-tests/`
 
 ---
 
