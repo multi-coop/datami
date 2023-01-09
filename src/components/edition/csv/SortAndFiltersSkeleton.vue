@@ -1,22 +1,22 @@
 <template>
   <div
-    class="SortAndFiltersSkeleton datami-component columns"
+    class="SortAndFiltersSkeleton datami-component columns is-multiline"
     style="z-index: 3;">
-    <div class="column is-4">
+    <div class="datami-search-text-container column is-12-mobile is-12-tablet is-5-desktop is-4-widescreen is-3-fullhd">
       <SearchFullText
         :file-id="fileId"
         :locale="locale"
         @action="SendActionToParent"/>
     </div>
-    <div class="column is-8">
+    <div class="datami-custom-filters-container column is-12-mobile is-12-tablet is-7-desktop is-8-widescreen is-9-fullhd">
       <div
         class="columns is-flex is-multiline mx-0 is-justify-content-end"
         style="width: 100%; margin-top: 0.1em;">
-        <!-- v-for="filter in [...filtersDisplay, ...filtersDisplay]" -->
+        <!-- v-for="filter in filtersDisplay" -->
         <div
-          v-for="filter in filtersDisplay"
-          :key="`nav-filter-${fileId}-${filter.field}`"
-          class="column px-1 py-1 is-12-mobile is-6-tablet is-4-desktop is-3-widescreen is-3-fullhd">
+          v-for="(filter, idx) in [...filtersDisplay, ...filtersDisplay]"
+          :key="`nav-filter-${fileId}-${filter.field}-${idx}`"
+          class="column px-1 py-1 is-12-mobile is-6-tablet is-4-desktop is-3-widescreen is-2-fullhd">
           <CustomFilterDropdown
             :class="`${isDarkMode ? 'is-dark' : 'is-white'}`"
             :filter="filter"

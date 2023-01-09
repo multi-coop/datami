@@ -57,7 +57,7 @@ a.is-underlined {
   background-color: grey !important;
 }
 
-@media(max-width:1023px) {
+@media screen and (max-width:1023px) {
   .filetitle-and-viewmodes {
     padding-top: 1.5em;
     justify-content: center;
@@ -76,4 +76,10 @@ a.is-underlined {
 
 .ConfirmCommit>.card-content>.content ul>li.is-active a {
   color: white;
+}
+
+@media screen and (min-width:1480px) {
+  .datami-custom-filters-container {
+    padding-left: 6.5em;
+  }
 }
