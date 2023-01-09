@@ -167,7 +167,7 @@ export const mixinGlobal = {
       return this.fileTypeFamily && this.fileTypeFamily === 'table'
     },
     currentEditViewMode () {
-      return this.getEditViewMode(this.fileId)
+      return this.getEditViewMode(this.fileId) || 'preview'
     },
     currentViewMode () {
       return this.getViewMode(this.fileId)

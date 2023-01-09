@@ -847,7 +847,7 @@ export default {
     columnsForView () {
       let columns
       let originalFields, editedFields, concat, uniquesFields
-      // console.log('\nC > DatamiTable > dataForView > this.currentEditViewMode : ', this.currentEditViewMode)
+      // console.log('\nC > DatamiTable > columnsForView > this.currentEditViewMode : ', this.currentEditViewMode)
       switch (this.currentEditViewMode) {
         case 'edit':
           if (this.hasConsolidation) {
@@ -886,7 +886,7 @@ export default {
           break
       }
 
-      // console.log('C > DatamiTable > dataForView > preview > columns : ', columns)
+      // console.log('C > DatamiTable > columnsForView > preview > columns : ', columns)
       if (this.hasCardsView && this.cardsViewIsActive) {
         const openCardColumn = {
           ...this.openCardField,
@@ -938,7 +938,7 @@ export default {
   beforeMount () {
     // prepare sorting from custom settings if any
     // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
-    // console.log('\nC > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
+    // console.log('C > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
     // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
     if (this.hasCustomSorting) {
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
