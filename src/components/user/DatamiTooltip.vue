@@ -104,6 +104,7 @@ export default {
       debugTypes: [
         // 'field',
         // 'tag'
+        'info'
       ]
     }
   },
