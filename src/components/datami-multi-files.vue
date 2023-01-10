@@ -148,7 +148,7 @@
                   </b-tag>
                   <span>
                     <span>
-                      {{ trimText(fileTab.title, tabsVertical ? 25 : 15) }}
+                      {{ trimText(fileTab.title, tabsVertical ? 23 : 15) }}
                     </span>
                   </span>
                 </div>
