@@ -56,8 +56,18 @@
           :class="`is-size-3 is-size-5-touch ml-5 ${isDarkMode ? 'datami-darkmode has-text-white' : ''}`">
           {{ title }}
         </span>
+        <!-- COPY WIDGET BTN IN VERTICAL MODE -->
+        <span
+          v-if="tabsVertical"
+          class="mt-2 ml-5">
+          <ButtonCopyWidgetHtml
+            :file-id="multiFilesId"
+            :from-multi-files="true"
+            :locale="locale"/>
+        </span>
       </div>
 
+      <!-- COPY WIDGET BTN IN HORIZONTAL MODE -->
       <div
         v-if="!tabsVertical"
         class="datami-floating-right">
