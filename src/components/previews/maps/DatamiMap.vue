@@ -1491,13 +1491,6 @@ export default {
         const itemProps = featuresPolygon[0].properties
         // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
 
-        const pop = popup
-          .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
-          .setHTML('<div id="vue-popup-content"></div>')
-          .addTo(mapLibre)
-        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - pop : ', pop)
-        // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - popupConfig : ", popupConfig)
-
         const popupFieldsSettings = popupConfig.fields_settings
         const config = Object.keys(popupFieldsSettings).map(k => {
           return {
@@ -1505,6 +1498,15 @@ export default {
             field: k
           }
         })
+        const PopupHtmlStr = this.buildMapPopupContent(itemProps, config)
+
+        const pop = popup
+          .setLngLat({ lng: e.lngLat.lng, lat: e.lngLat.lat })
+          .setHTML(PopupHtmlStr)
+          .addTo(mapLibre)
+        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - pop : ', pop)
+        // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - popupConfig : ", popupConfig)
+
         // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - config : ', config)
 
         const popInstance = new PopupClass({
@@ -1513,7 +1515,7 @@ export default {
             mapId: mapId,
             feature: featuresPolygon[0],
             item: itemProps,
-            config: config,
+            // config: config,
             locale: locale
           }
         })
