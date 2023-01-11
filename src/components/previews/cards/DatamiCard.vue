@@ -7,12 +7,13 @@
     @mouseleave="isHovered = false">
     <!-- style="background-color: #f6f6f6" -->
     <!-- HEADER / TITLE : 'title'-->
-    <header class="card-header no-shadow">
+    <header
+      v-if="!showDetail"
+      class="card-header no-shadow">
       <div
-        class="card-header-title"
-        @click="toggleDetail">
+        class="card-header-title is-clickable"
+        @click="currentEditViewMode !== 'edit' && toggleDetail('showDetailButton')">
         <div
-          v-if="!showDetail"
           class="columns is-multiline my-0 pl-3">
           <div class="column is-12 px-0 py-0">
             <!-- TITLE BLOCK : 'title' -->
@@ -78,25 +79,28 @@
       </div>
 
       <button
-        v-if="fromMap && !showDetail"
+        v-if="fromMap"
         class="card-header-icon"
         @click="toggleDetail('closeButton')">
-        <b-tooltip
+        <!-- <b-tooltip
           :label="t(`preview.${showDetail || fromMap ? 'closeCard' : 'showCardDetails'}`, locale)"
           type="is-dark"
           position="is-left">
           <b-icon
             size="is-small"
             :icon="showDetail || fromMap ? 'close' : 'eye'"/>
-        </b-tooltip>
+        </b-tooltip> -->
+        <b-icon
+          size="is-small"
+          :icon="showDetail || fromMap ? 'close' : 'eye'"/>
       </button>
     </header>
 
     <!-- IMAGE BLOCK : 'image' -->
     <div
       v-if="!showDetail && hasContentByPosition('image')"
-      class="card-image mb-2"
-      @click="toggleDetail">
+      class="card-image mb-2 is-clickable"
+      @click="currentEditViewMode !== 'edit' && toggleDetail('showDetailButton')">
       <DatamiCardBlockImage
         v-for="(fieldObj, i) in getFieldsByPosition('image')"
         :key="`image-${i}-${fieldObj.field}`"
@@ -114,7 +118,7 @@
 
     <!-- CONTENT -->
     <div
-      :class="`card-content datami-card-content pt-3 ${showDetail ? 'detail-padding' : ''}`">
+      :class="`card-content datami-card-content ${showDetail ? 'datami-card-detail-padding' : 'pt-3'}`">
       <!-- :style="`${isMini && fromMap ? 'max-height: 300px; overflow: auto;' : ''}`"> -->
       <!-- DEBUG -->
       <div v-if="debug">

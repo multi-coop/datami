@@ -1,5 +1,7 @@
 .image-wrapper {
   min-height: 200px;
+  /* width: 100%;
+  object-fit: cover; */
 }
 
 .image-wrapper-table {
@@ -7,12 +9,22 @@
 }
 
 .image-wrapper-mini-from-map {
-  height: 60px;
+  height: 100px;
 }
 
 .image-constrained {
+  width: 100% !important;
+  object-fit: cover;
+  height: 100%;
+}
+
+.image-constrained.image-card-mini {
   max-height: 200px;
-  width: auto !important;
+}
+
+.image-constrained.image-card-detail {
+  max-height: 300px;
+  object-fit: contain;
 }
 
 .datami-card {
@@ -25,8 +37,6 @@
   height: 100%;
 }
 
-.detail-padding {
-  padding-bottom: 3em;
-  padding-left: 3em;
-  padding-right: 3em;
+.datami-card-detail-padding {
+  padding: 3em;
 }
