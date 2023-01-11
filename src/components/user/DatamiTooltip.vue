@@ -197,7 +197,7 @@ export default {
             // top = this.cursor.pageY + (this.rect.height / 2) - 15
             break
         }
-        // top -= this.scrolled.top
+        // top += this.scrolled.top
       }
       return (top && `top: ${top}px`) || 'top: auto'
     },
