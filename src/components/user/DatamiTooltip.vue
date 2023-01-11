@@ -130,44 +130,55 @@ export default {
     rect () {
       return this.tooltipOptions && this.tooltipOptions.rect
     },
+    cursor () {
+      return this.tooltipOptions && this.tooltipOptions.cursor
+    },
     left () {
       let left
       if (this.rect) {
         switch (this.position) {
           case 'top':
             left = this.rect.left + (this.rect.width / 2)
+            // left = this.cursor.PageX + (this.rect.width / 2)
             break
           case 'bottom':
             left = this.rect.left + (this.rect.width / 2)
+            // left = this.cursor.PageX + (this.rect.width / 2)
             break
           case 'left':
             left = this.rect.left - 5
+            // left = this.cursor.PageX - 5
             break
           case 'right':
             left = this.rect.right + 5
+            // left = this.cursor.PageX + 5
             break
         }
       }
       return (left && `left: ${left}px`) || 'left: 50%'
     },
     top () {
-      let top
+      let top = 'auto'
       if (this.rect) {
         switch (this.position) {
           case 'top':
-            top = this.rect.top - 5
+            // top = this.rect.top - 5
+            top = this.cursor.pageY - 15
             break
           case 'bottom':
-            top = this.rect.bottom + 5
+            // top = this.rect.bottom + 5
+            top = this.cursor.pageY - this.rect.height + 5
             break
           case 'left':
-            top = this.rect.top + (this.rect.height / 2)
+            // top = this.rect.top + (this.rect.height / 2)
+            top = this.cursor.pageY + (this.rect.height / 2) - 10
             break
           case 'right':
-            top = this.rect.top + (this.rect.height / 2)
+            // top = this.rect.top + (this.rect.height / 2)
+            top = this.cursor.pageY + (this.rect.height / 2) - 15
             break
         }
-        top += this.scrolled.top
+        // top += this.scrolled.top
       }
       return (top && `top: ${top}px`) || 'top: auto'
     },

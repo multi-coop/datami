@@ -99,6 +99,7 @@ export const mixinTooltip = {
       this.showTooltip({
         component: this.$options.name,
         ...tooltipOptions,
+        cursor: event,
         rect: boundingRect
       })
     },
