@@ -1,5 +1,7 @@
 <template>
-  <div :class="`DatamiMultiFiles datami-widget-root datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
+  <div
+    :id="multiFilesId"
+    :class="`DatamiMultiFiles datami-widget-root datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
     <!-- MATOMO -->
     <MatomoScript
       :file-id="multiFilesId"
@@ -12,6 +14,7 @@
 
     <DatamiTooltip
       v-if="tooltip"
+      :file-id="multiFilesId"
       :locale="locale"/>
 
     <!-- WIDGET -->
@@ -56,8 +59,18 @@
           :class="`is-size-3 is-size-5-touch ml-5 ${isDarkMode ? 'datami-darkmode has-text-white' : ''}`">
           {{ title }}
         </span>
+        <!-- COPY WIDGET BTN IN VERTICAL MODE -->
+        <span
+          v-if="tabsVertical"
+          class="mt-2 ml-5">
+          <ButtonCopyWidgetHtml
+            :file-id="multiFilesId"
+            :from-multi-files="true"
+            :locale="locale"/>
+        </span>
       </div>
 
+      <!-- COPY WIDGET BTN IN HORIZONTAL MODE -->
       <div
         v-if="!tabsVertical"
         class="datami-floating-right">
@@ -138,7 +151,7 @@
                   </b-tag>
                   <span>
                     <span>
-                      {{ trimText(fileTab.title, 15) }}
+                      {{ trimText(fileTab.title, tabsVertical ? 23 : 15) }}
                     </span>
                   </span>
                 </div>

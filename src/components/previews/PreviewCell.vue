@@ -185,20 +185,22 @@
         :class="`image mx-0 image-wrapper${currentViewMode === 'table' ? '-table' : ''}`">
         <img
           :src="value"
-          class="image-constrained"
+          :class="`image-constrained ${currentViewMode === 'table' ? 'image-table' : ''}`"
           style="max-height: 40px; width: auto;"
           :alt="`${value}`">
       </figure>
       <!-- NO IMAGE FOUND -->
       <article
         v-else
-        class="notification is-light image-wrapper is-flex is-align-items-center is-justify-content-center">
+        :class="`notification is-light image-wrapper${currentViewMode === 'table' ? '-table' : ''} is-flex is-align-items-center is-justify-content-center`">
         <p class="subtitle py-1 has-text-centered">
           <b-icon
             icon="image-off-outline"
             size="is-small"/>
           <br>
-          <span class="is-size-7">
+          <span
+            v-if="currentViewMode !== 'table'"
+            class="is-size-7">
             {{ t('preview.noIllustration', locale) }}
           </span>
         </p>

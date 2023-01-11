@@ -12,6 +12,7 @@
 
     <DatamiTooltip
       v-if="!fromMultiFiles && tooltip"
+      :file-id="fileId"
       :locale="locale"/>
 
     <!-- DEBUG ERRORS -->
