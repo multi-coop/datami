@@ -80,7 +80,7 @@
 
       <button
         v-if="fromMap"
-        class="card-header-icon"
+        class="card-header-icon is-align-items-flex-start"
         @click="toggleDetail('closeButton')">
         <!-- <b-tooltip
           :label="t(`preview.${showDetail || fromMap ? 'closeCard' : 'showCardDetails'}`, locale)"

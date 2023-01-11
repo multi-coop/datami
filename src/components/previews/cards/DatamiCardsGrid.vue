@@ -25,7 +25,7 @@
       <div
         v-for="(item, idx) in items"
         :key="`item-card-${idx}-${item.id}`"
-        :class="`column is-${itemsPerRow === 3 ? 4 : 3}`">
+        :class="`column is-12-mobile is-6-tablet is-${itemsPerRow === 3 ? '4' : '3'}-desktop`">
         <DatamiCard
           :file-id="fileId"
           :fields="cardsSettings.originalHeaders"

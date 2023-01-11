@@ -16,7 +16,7 @@
       :class="`image image-wrapper${isMini && fromMap ? '-mini-from-map' : ''} ${position === 'logo' ? 'ml-0 mr-2' : 'mx-0 my-0'} is-flex is-align-items-center is-justify-content-center`">
       <img
         :src="itemValue"
-        :class="`image-constrained ${isMini ? 'image-card-mini' : 'image-card-detail'}`"
+        :class="`image-constrained ${isMini ? 'image-card-mini' : 'image-card-detail'} ${fromMap ? 'image-card-mini-from-map' : ''}`"
         :style="`${position === 'logo' || (isMini && fromMap) ? 'height: 100%; object-fit: cover; width: 100%;' : ''}`"
         :alt="`image-${itemId}`">
       <!-- <p v-if="currentEditViewMode !== 'edit' && !itemValue">

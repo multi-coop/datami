@@ -9,7 +9,7 @@
 }
 
 .image-wrapper-mini-from-map {
-  height: 100px;
+  height: 130px;
 }
 
 .image-constrained {
@@ -18,8 +18,16 @@
   height: 100%;
 }
 
+.image-constrained.image-table {
+  object-fit: contain;
+}
+
 .image-constrained.image-card-mini {
   max-height: 200px;
+}
+
+.image-constrained.mage-card-mini.image-card-mini-from-map {
+  object-fit: contain;
 }
 
 .image-constrained.image-card-detail {
