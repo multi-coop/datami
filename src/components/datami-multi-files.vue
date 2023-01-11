@@ -1,5 +1,7 @@
 <template>
-  <div :class="`DatamiMultiFiles datami-widget-root datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
+  <div
+    :id="multiFilesId"
+    :class="`DatamiMultiFiles datami-widget-root datami-widget section ${isDarkMode ? 'datami-darkmode' : ''}`">
     <!-- MATOMO -->
     <MatomoScript
       :file-id="multiFilesId"
@@ -12,6 +14,7 @@
 
     <DatamiTooltip
       v-if="tooltip"
+      :file-id="multiFilesId"
       :locale="locale"/>
 
     <!-- WIDGET -->

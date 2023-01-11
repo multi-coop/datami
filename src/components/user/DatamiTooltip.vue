@@ -1,7 +1,12 @@
 <template>
   <div
     :class="`datami-tooltip ${positionClass}`"
-    :style="`${left}; ${top}; transform: ${transform};${isFixedWidth ? 'width: 300px;' : ''}; ${isDarkMode ? 'color: black; background-color: lightgrey' : ''}`">
+    :style="`
+      ${top};
+      ${left};
+      transform: ${transform};
+      ${isFixedWidth ? 'width: 300px;' : ''};
+      ${isDarkMode ? 'color: black; background-color: lightgrey' : ''}`">
     <div v-if="tooltipOptions">
       <!-- INFO -->
       <p
@@ -80,7 +85,7 @@
 
 import { mapState, mapGetters } from 'vuex'
 
-import { mixinTooltip } from '@/utils/mixins.js'
+import { mixinTooltip, mixinGlobal } from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiTooltip',
@@ -88,8 +93,15 @@ export default {
     DatamiTooltipField: () => import(/* webpackChunkName: "DatamiTooltipField" */ '@/components/user/DatamiTooltipField.vue'),
     DatamiTooltipTag: () => import(/* webpackChunkName: "DatamiTooltipTag" */ '@/components/user/DatamiTooltipTag.vue')
   },
-  mixins: [mixinTooltip],
+  mixins: [
+    mixinTooltip,
+    mixinGlobal
+  ],
   props: {
+    fileId: {
+      default: '',
+      type: String
+    },
     locale: {
       default: '',
       type: String
@@ -117,6 +129,11 @@ export default {
       t: 'git-translations/getTranslation',
       isDarkMode: 'git-storage/isDarkMode'
     }),
+    // getRootNodePosition () {
+    //   const rootNode = this.getAncestorNodeById(this.fileId)
+    //   console.log('\nC > DatamiTooltip > getRootNodePosition > rootNode : ', rootNode)
+    //   return rootNode && rootNode.$el
+    // },
     isFixedWidth () {
       const fixedTypes = ['field', 'tag']
       return this.tooltipOptions && fixedTypes.includes(this.tooltipOptions.type)
@@ -158,27 +175,29 @@ export default {
       return (left && `left: ${left}px`) || 'left: 50%'
     },
     top () {
+      // const rootElement = this.getRootNodePosition
+      // console.log('\nC > DatamiTooltip > top > rootElement : ', rootElement)
       let top = 'auto'
       if (this.rect) {
         switch (this.position) {
           case 'top':
-            // top = this.rect.top - 5
-            top = this.cursor.pageY - 15
+            top = this.rect.top - 5
+            // top = this.cursor.pageY - 15
             break
           case 'bottom':
-            // top = this.rect.bottom + 5
-            top = this.cursor.pageY - this.rect.height + 5
+            top = this.rect.bottom + 5
+            // top = this.cursor.pageY - this.rect.height + 5
             break
           case 'left':
-            // top = this.rect.top + (this.rect.height / 2)
-            top = this.cursor.pageY + (this.rect.height / 2) - 10
+            top = this.rect.top + (this.rect.height / 2)
+            // top = this.cursor.pageY + (this.rect.height / 2) - 10
             break
           case 'right':
-            // top = this.rect.top + (this.rect.height / 2)
-            top = this.cursor.pageY + (this.rect.height / 2) - 15
+            top = this.rect.top + (this.rect.height / 2)
+            // top = this.cursor.pageY + (this.rect.height / 2) - 15
             break
         }
-        // top += this.scrolled.top
+        // top -= this.scrolled.top
       }
       return (top && `top: ${top}px`) || 'top: auto'
     },
