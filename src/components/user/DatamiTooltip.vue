@@ -167,7 +167,7 @@ export default {
             top = this.rect.top + (this.rect.height / 2)
             break
         }
-        top += this.scrolled.top
+        // top += this.scrolled.top
       }
       return (top && `top: ${top}px`) || 'top: auto'
     },
