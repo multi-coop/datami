@@ -53,8 +53,10 @@
               v-model="radioChoice"
               :native-value="layer.index"
               type="is-dark">
-              <span :class="`${ layer.visible ? 'has-text-weight-bold' : ''}`">
+              <span :class="`${ layer.index === radioChoice ? 'has-text-weight-bold' : ''}`">
                 {{ layer.label }}
+                <!-- DEBUGGING -->
+                <!-- <br><code>{{ layer }}</code> -->
               </span>
             </b-radio>
           </b-field>

@@ -92,10 +92,15 @@
     <!-- DEBUGGING -->
     <div
       v-if="debug"
-      class="debug">
-      multifileActiveTab : <code>{{ multifileActiveTab }}</code><br>
-      getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
-      getZoom : <code>{{ getZoom }}</code><br>
+      class="columns py-3 px-4 has-background-white">
+      <div class="column is-6">
+        multifileActiveTab : <code>{{ multifileActiveTab }}</code><br>
+        getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
+        getZoom : <code>{{ getZoom }}</code><br>
+      </div>
+      <div class="column is-6">
+        currentChoroSource : <br><pre><code>{{ currentChoroSource ? {...currentChoroSource, data : '[...]'} : 'no active chrosource' }}</code></pre>
+      </div>
     </div>
   </div>
 </template>
