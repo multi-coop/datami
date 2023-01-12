@@ -141,6 +141,7 @@
               <!-- TAB HEADER -->
               <template #header>
                 <div
+                  @click="changeMultifilesActiveTab(fileTab)"
                   @mouseover="hovered = fileTab.id"
                   @mouseleave="hovered = undefined">
                   <b-tag
@@ -170,6 +171,7 @@
                   <!-- CALL DATAMI-FILE COMPONENT HERE -->
                   <DatamiFile
                     v-if="fileTab.gitfile"
+                    :file-id-from-multifiles="fileTab.id"
                     :title="fileTab.title"
                     :gitfile="fileTab.gitfile"
                     :gitfilelocal="fileTab.gitfilelocal"
@@ -185,6 +187,7 @@
                   <!-- CALL DATAMI-FILE COMPONENT HERE -->
                   <DatamiExplowiki
                     v-if="fileTab.mediawiki"
+                    :file-id-from-multifiles="fileTab.id"
                     :title="fileTab.title"
                     :wikilist="fileTab.wikilist"
                     :wikipages="fileTab.wikipages"
@@ -339,11 +342,6 @@ export default {
       return fileSettings
     })
 
-    // Set default active tab
-    const defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || files[0]
-    // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)
-    this.activeTab = defaultFile.id
-
     // console.log('C > DatamiMultiFiles > beforeMount > files : ', files)
     this.files = filesParsed || []
 
@@ -359,6 +357,12 @@ export default {
     this.defaultDisplay = multiFilesOptions.options.display
     this.tabsVertical = this.defaultDisplay === 'vertical'
     this.hideTitle = !!multiFilesOptions.options.hidetitle
+
+    // Set default active tab
+    const defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || files[0]
+    // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)
+    this.activeTab = defaultFile.id
+    this.changeMultifilesActiveTab(defaultFile)
 
     // Set in store
     // console.log('\nC > DatamiMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
@@ -379,6 +383,7 @@ export default {
     booleanFromValue,
     ...mapActions({
       addFileOptions: 'addFileOptions',
+      toggleMultifileActiveTab: 'git-user/toggleMultifileActiveTab',
       toggleMultifileTabsPosition: 'git-user/toggleMultifileTabsPosition',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
@@ -386,6 +391,10 @@ export default {
       // console.log('C > DatamiMultiFiles > switchTabsPosition > btn : ', btn)
       this.tabsVertical = btn.position === 'vertical'
       this.toggleMultifileTabsPosition()
+    },
+    changeMultifilesActiveTab (tab) {
+      // console.log('C > DatamiMultiFiles > switchTabsPosition > tab : ', tab)
+      this.toggleMultifileActiveTab({ fileId: this.multiFilesId, activeTab: tab.id })
     }
   }
 }

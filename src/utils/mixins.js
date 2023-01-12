@@ -91,11 +91,11 @@ export const mixinTooltip = {
       // console.log('mixinTooltip > handleScroll > this.scrolled : ', this.scrolled)
     },
     showGlobalTooltip (event, tooltipOptions) {
-      console.log(`\nmixinTooltip > showGlobalTooltip > ${this.$options.name} > event : `, event)
+      // console.log(`\nmixinTooltip > showGlobalTooltip > ${this.$options.name} > event : `, event)
       // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > tooltipOptions : `, tooltipOptions)
-      console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > this.$el : `, this.$el)
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > this.$el : `, this.$el)
       const boundingRect = this.$el.getBoundingClientRect()
-      console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > boundingRect : `, boundingRect)
+      // console.log(`mixinTooltip > showGlobalTooltip > ${this.$options.name} > boundingRect : `, boundingRect)
       this.showTooltip({
         component: this.$options.name,
         ...tooltipOptions,

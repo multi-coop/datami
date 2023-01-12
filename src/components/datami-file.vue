@@ -290,6 +290,10 @@ export default {
     mixinGit
   ],
   props: {
+    fileIdFromMultifiles: {
+      default: undefined,
+      type: String
+    },
     title: {
       default: 'datami',
       type: String
@@ -441,7 +445,7 @@ export default {
       this.cssFiles = [...this.cssFilesExtra]
     }
     // console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
-    this.fileId = this.uuidv4()
+    this.fileId = this.fileIdFromMultifiles || this.uuidv4()
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
     this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
     this.resetReqErrors(this.fileId)

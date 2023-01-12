@@ -2,6 +2,7 @@
   <div
     class="DatamiMapLegend datami-component">
     <div
+      v-if="currentChoroSource && currentChoroSource.legend"
       class="card map-legend"
       :style="cssMapLegend.join(';')">
       <div class="card-content px-2 py-2">
