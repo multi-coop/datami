@@ -303,6 +303,10 @@ export default {
         'fonts/materialdesignicons.min.css'
         // 'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
       ],
+      cssHeadFiles: [
+        // 'https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css',
+        'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
+      ],
       isModalActive: false,
       multiFilesId: undefined,
       hideTitle: false,

@@ -117,6 +117,7 @@ export const mixinGlobal = {
       window.addEventListener('scroll', this.handleScroll)
     }
     this.addStyles(this.cssFiles)
+    this.addStyles(this.cssHeadFiles, true)
   },
   destroyed () {
     if (!this.fromMultiFiles && this.datamiRoot) {
@@ -358,13 +359,13 @@ export const mixinGlobal = {
       // console.log(`mixinGlobal > getRootNode > ${this.$options.name} > shadowRoot : `, shadowRoot)
       return shadowRoot
     },
-    addStyles (urls) {
+    addStyles (urls, addToHead = false) {
       if (urls && urls.length) {
-        const shadowRoot = this.getRootNode()
+        const node = addToHead ? document.head : this.getRootNode()
         // const componentName = this.$options.name
-        // console.log(`\nM > mixinGlobal > addStyle > ${componentName} > shadowRoot : `, shadowRoot)
-        // console.log(`M > mixinGlobal > addStyle > ${componentName} > url : `, url)
-        // console.log(`M > mixinGlobal > addStyle > ${componentName} > process.env : `, process.env)
+        // console.log(`\nM > mixinGlobal > addStyle > ${this.$options.name} > node : `, node)
+        // console.log(`M > mixinGlobal > addStyle > ${this.$options.name} > urls : `, urls)
+        // console.log(`M > mixinGlobal > addStyle > ${this.$options.name} > process.env : `, process.env)
 
         const urlBase = this.getUrlBase
 
@@ -377,8 +378,8 @@ export const mixinGlobal = {
             fileUrl = `${urlBase}/${url}`
           }
           // const fileUrl = `${process.env.BASE_URL}${url}`
-          // console.log(`M > mixinGlobal > addStyle > ${componentName} > fileUrl : `, fileUrl)
-          createStyleLink(shadowRoot, fileUrl, isFont)
+          // console.log(`M > mixinGlobal > addStyle > ${this.$options.name} > fileUrl : `, fileUrl)
+          createStyleLink(node, fileUrl, isFont)
         })
       }
     },
