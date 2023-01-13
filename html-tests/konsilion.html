@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>Konsilion</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+
+  <div class="has-text-dark">
+
+    <div style="background-color: white; margin: 3em;">
+      <datami-file title="Projets"
+        gitfile="https://github.com/Konsilion/katalog-template/blob/master/docs/katalog/projets/data.csv" options='{
+          "height": "500px",
+          "separator": ";",
+          "lockcolumns": false,
+          "pagination": {
+            "itemsPerPage": 6
+          },
+          "cardsview": {
+            "activate": true,
+            "default": true
+          },
+          "schema": {
+            "file": "https://github.com/Konsilion/katalog-setup/blob/master/json/projets/schema.json"
+          },
+          "fields-custom-properties": {
+            "file": "https://github.com/Konsilion/katalog-setup/blob/master/json/projets/custom.json"
+          },
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              "CATEGORIES",
+              "ETAT"
+            ],
+            "tagsSeparator": ","
+          },
+          "cardsdetail": false,
+          "cardssettings": {
+            "mini": {
+              "DESIGNATION": {
+                "position": "title"
+              },
+              "ETAT": {
+                "position": "tags"
+              },
+              "CATEGORIES": {
+                "position": "tags"
+              }
+            },
+            "detail": {
+              "DESIGNATION": {
+                "position": "title"
+              },
+              "DESCRIPTION": {
+                "position": "resume"
+              },
+              "LIEN": {
+                "position": "links"
+              },
+              "CATEGORIES": {
+                "position": "tags"
+              },
+              "ETAT": {
+                "position": "tags"
+              }
+            }
+          }
+        }' onlypreview="false" usertoken="TEST_TOKEN" locale="fr">
+      </datami-file>
+    </div>
+
+    <div style="background-color: white; margin: 3em;">
+      <datami-file title="Tâches"
+        gitfile="https://github.com/Konsilion/katalog-template/blob/master/docs/katalog/taches/data.csv" options='{
+          "height": "500px",
+          "separator": ";",
+          "lockcolumns": false,
+          "pagination": {
+            "itemsPerPage": 6
+          },
+          "cardsview": {
+            "activate": true,
+            "default": true
+          },
+          "schema": {
+            "file": "https://github.com/Konsilion/katalog-setup/blob/master/json/taches/schema.json"
+          },
+          "fields-custom-properties": {
+            "file": "https://github.com/Konsilion/katalog-setup/blob/master/json/taches/custom.json"
+          },
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              "CATEGORIES",
+              "PROJETS"
+            ],
+            "tagsSeparator": ","
+          },
+          "cardsdetail": false,
+          "cardssettings": {
+            "mini": {
+              "DESIGNATION": {
+                "position": "title"
+              },
+              "DESCRIPTION": {
+                "position": "resume"
+              },
+            "CATEGORIES": {
+                "position": "tags"
+              },                
+              "PROJETS": {
+                "position": "tags", 
+                "block_title": "Projet"
+              }
+            },
+            "detail": {
+              "DESIGNATION": {
+                "position": "title"
+              },
+              "DESCRIPTION": {
+                "position": "description"
+              },
+              "LIEN": {
+                "position": "links"
+              },
+              "CATEGORIES": {
+                "position": "tags"
+              },
+              "ETAT": {
+                "position": "tags"
+              }
+            }
+          }
+        }' onlypreview="false" usertoken="TEST_TOKEN" locale="fr">
+      </datami-file>
+    </div>
+
+    <div style="background-color: white; margin: 3em;">
+      <datami-file title="Ressources"
+        gitfile="https://github.com/Konsilion/katalog-template/blob/master/docs/katalog/ressources/data.csv" options='{
+          "height": "500px",
+          "separator": ";",
+          "lockcolumns": false,
+          "pagination": {
+            "itemsPerPage": 6
+          },
+          "cardsview": {
+            "activate": true,
+            "default": true
+          },
+          "schema": {
+            "file": "https://github.com/Konsilion/katalog-setup/blob/master/json/ressources/schema.json"
+          },
+          "fields-custom-properties": {
+            "file": "https://github.com/Konsilion/katalog-setup/blob/master/json/ressources/custom.json"
+          },
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              "CATEGORIE",
+              "PROJETS"
+            ]
+          },
+          "cardsdetail": false,
+          "cardssettings": {
+            "mini": {
+              "DESIGNATION": {
+                "position": "title"
+              },
+            "PROJETS": {
+                "position": "tags", 
+                "block_title": "Projet"
+              },
+              "CATEGORIES": {
+                "position": "tags"
+              }
+            },
+            "detail": {
+              "DESIGNATION": {
+                "position": "title"
+              },
+              "DESCRIPTION": {
+                "position": "resume"
+              },
+              "LIEN": {
+                "position": "links"
+              },
+            "PROJETS": {
+                "position": "tags", 
+                "block_title": "Projet"
+              },
+              "CATEGORIES": {
+                "position": "tags"
+              },
+              "ETAT": {
+                "position": "tags"
+              }
+            }
+          }
+        }' onlypreview="false" usertoken="TEST_TOKEN" locale="fr">
+      </datami-file>
+
+      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+      <!-- <script src="https://preprod--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
+      <!-- <script src="https://deploy-preview-33--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
+      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+
+    </div>
+  </div>
+</body>
+
+</html>
