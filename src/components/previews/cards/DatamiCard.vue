@@ -635,7 +635,7 @@ export default {
       return boolArray.some(b => b)
     },
     getTemplatedValues (field) {
-      // console.log('\nC > DatamiCard > applyTemplate > field :', field)
+      // console.log('\nC > DatamiCard > getTemplatedValues > field :', field)
       const ignoreDefinitions = field.ignoreDefinitions
       const templatedArray = field.templating.map(paragraph => {
         const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
@@ -663,15 +663,15 @@ export default {
           // console.log('C > DatamiCard > applyTemplate > fieldName :', fieldName)
           const fieldObj = this.fields.find(f => f.name === fieldName)
           // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
-          const itemValue = this.item[fieldObj.field]
+          const itemValue = fieldObj && this.item[fieldObj.field]
           // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
           strClean = itemValue || this.t('global.noValue', this.locale)
           // replace by value defintion if any in fieldObj
-          if (itemValue && !ignoreDefinitions && fieldObj.definitions) {
+          if (itemValue && !ignoreDefinitions && fieldObj && fieldObj.definitions) {
             const definition = fieldObj.definitions.find(def => def.value === strClean)
             strClean = (definition && definition.label) || strClean
           }
-          if (itemValue && fieldObj.type === 'number') {
+          if (itemValue && fieldObj && fieldObj.type === 'number') {
             strClean = this.getNumberByField(strClean, fieldObj)
           }
         }

@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <!-- <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css"> -->
   <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
   <title>IFN</title>
 </head>
@@ -32,11 +34,11 @@
           alt="logo datami" style="height: 50px !important; width: auto !important">
       </div>
 
-      <div class="pt-6 title has-text-center has-text-black">
+      <div class="pt-6 title has-text-centered has-text-black">
         Est-il pertinent de travailler sur un indice de fragilité numérique parentalité ?
       </div>
 
-      <ul class="has-text-center has-text-black">
+      <ul class="has-text-left has-text-black">
         <li>
           Retrouvez ici notre
           <a href='https://hackmd.io/@multi/SkXfV4YHs?type=view'>étude</a>.
@@ -47,18 +49,20 @@
         </li>
       </ul>
 
-      <p class="notification is-warning is-light is-size-6 has-text-center has-text-black">
-        <b>Attention</b><br>
-        Contrairement à l'étude qui utilise des valeurs à la commune, la cartographie aggrège les données au
-        départements.
+      <p class="notification is-warning is-light is-size-6 has-text-centered has-text-black">
+        <span><b>Attention !</b></span>
         <br>
-        Seuls 12 département dits TNE sont concernés dans cette expérimentation.
+        <span>
+          <!-- Contrairement à l'étude qui utilise des valeurs à la commune, la cartographie aggrège les données au
+          départements.
+          <br> -->
+          Seuls 12 département dits TNE sont concernés dans cette expérimentation.
+        </span>
       </p>
     </div>
   </div>
 
   <div>
-
     <!-- DATAMI - contribute with GIT ...but without minding it-->
     <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
 
@@ -67,15 +71,15 @@
         "display": "horizontal"
       }' gitfiles='[
         {
-          "title": "IFN dataset par département",
+          "title": "Par département",
           "activate": true,
           "onlypreview": true,
-          "localdev": false,
+          "localdev": true,
           "gitfilelocal_": "http://localhost:8810/statics/data/data_departement-old.csv",
           "gitfilelocal": "http://localhost:8810/statics/data/data_departements.csv",
           "gitfile_": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/data/data_departement-old.csv",
           "gitfile": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/data/data_departements.csv",
-          "default-tab": true,
+          "default-tab": false,
           "options": {
             "height": "600px",
             "separator": ";",
@@ -90,16 +94,16 @@
               ]
             },
             "schema": {
-              "localdev": false,
-              "filelocal": "http://localhost:8810/statics/json/schema_departement_simplified.json",
-              "file_": "https://gitlab.com/ifn-ednat-public/ifn-parentalite/-/blob/main/json/schema_departement_simplified.json",
-              "file":  "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_departement_simplified.json"
+              "localdev": true,
+              "filelocal": "http://localhost:8810/statics/json/schema_simplified.json",
+              "file_": "https://gitlab.com/ifn-ednat-public/ifn-parentalite/-/blob/main/json/schema_simplified.json",
+              "file":  "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_simplified.json"
             },
             "fields-custom-properties": {
-              "localdev": false,
-              "filelocal": "http://localhost:8810/statics/json/schema_departement_custom_props.json",
-              "file_": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_departement_custom_props.json",
-              "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_departement_custom_props.json"
+              "localdev": true,
+              "filelocal": "http://localhost:8810/statics/json/schema_custom_props.json",
+              "file_": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_custom_props.json",
+              "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_custom_props.json"
             },
             "cardsview": {
               "activate": true,
@@ -213,7 +217,7 @@
             "datavizview_": {
               "activate": false,
               "default": false,
-              "localdev": false,
+              "localdev": true,
               "filelocal": "http://localhost:8810/statics/json/dataviz-settings.json",
               "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/dataviz-settings.json"
             },
@@ -227,9 +231,188 @@
                   },
                   "height": 800,
                   "cols": 12,
-                  "localdev": false,
-                  "filelocal": "http://localhost:8810/statics/json/map-settings.json",
-                  "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/map-settings.json"
+                  "localdev": true,
+                  "filelocal": "http://localhost:8810/statics/json/map-settings-departements.json",
+                  "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/map-settings-departements.json"
+                }
+              ]
+            }
+          },
+          "usertoken": ""
+        },
+        {
+          "title": "Par commune",
+          "activate": true,
+          "onlypreview": true,
+          "localdev": true,
+          "gitfilelocal_": "http://localhost:8810/statics/data/data_commune-geocoded.csv",
+          "gitfilelocal": "http://localhost:8810/statics/data/data_commune.csv",
+          "gitfile": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/data/data_commune.csv",
+          "default-tab": true,
+          "options": {
+            "height": "600px",
+            "separator": ";",
+            "lockcolumns": true,
+            "customfilters": {
+              "activate": true,
+              "filterfields": [
+                {
+                  "name": "libelle_departement",
+                  "filtering": "OR"
+                }
+              ]
+            },
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8810/statics/json/schema_simplified.json",
+              "file":  "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_simplified.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8810/statics/json/schema_custom_props.json",
+              "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_custom_props.json"
+            },
+            "cardsview": {
+              "activate": true,
+              "default": false
+            },
+            "cardsdetail": true,
+            "cardssettings": {
+              "mini": {
+                "libelle_commune": {
+                  "position": "title"
+                },
+                "libelle_departement": {
+                  "position": "adress",
+                  "prefix": "Département : "
+                },
+                "brevet_taux_de_reussite": {
+                  "position": "description",
+                  "block_title": "Réussite au brevet"
+                },
+                "ifn_computed_score": {
+                  "position": "description",
+                  "block_title": "Score IFN dans son intégralité"
+                },
+                "pix_score": {
+                  "position": "description",
+                  "block_title": "Score aggregé de la campagne PIX"
+                },
+                "ips": {
+                  "position": "description",
+                  "block_title": "Indice de position sociale"
+                }
+              },
+              "detail": {
+                "libelle_commune": {
+                  "position": "title"
+                },
+                "libelle_departement": {
+                  "position": "adress"
+                },
+                "code_departement": {
+                  "position": "resume"
+                },
+                "ifn_computed_score": {
+                  "position": "infos",
+                  "block_title": "Score IFN dans son intégralité",
+                  "right" : true
+                },
+                "ifn_tx_non_thd": {
+                  "position": "infos",
+                  "block_title": "(composante IFN) Taux de non-couverture au Très-Haut Débit",
+                  "right" : true
+                },
+                "ifn_dist_bibliotheque": {
+                  "position": "infos",
+                  "block_title": "(composante IFN) Distance moyenne à une bibliothèque",
+                  "suffix": "&nbsp;km",
+                  "right" : true
+                },
+                "ifn_tx_fammono": {
+                  "position": "infos",
+                  "block_title": "(composante IFN) Taux moyen de familles monoparentales",
+                  "right" : true
+                },
+                "ifn_tx_etrangers": {
+                  "position": "infos",
+                  "block_title": "(composante IFN) Taux moyen de populations étrangères",
+                  "right" : true
+                },
+                "brevet_mention_b_tb": {
+                  "position": "description",
+                  "block_title": "Taux de mention Bien / Très Bien au brevet"
+                },
+                "ips": {
+                  "position": "description",
+                  "block_title": "Indice de position sociale"
+                },
+                "pix_score": {
+                  "position": "description",
+                  "block_title": "Score aggregé de la campagne PIX",
+                  "right" : true
+                },
+                "pix_taux_couverture": {
+                  "position": "description",
+                  "block_title": "Taux de couverture PIX",
+                  "right" : true
+                }
+              },
+              "templates": {
+                "code_departement": {
+                  "use_on_mini": false,
+                  "use_on_detail": true,
+                  "ignore_definitions": true,
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "La commune &#123;&#123; libelle_commune &#125;&#125; a les principales caractéristiques suivantes :"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "La commune se situe dans le département &#123;&#123; libelle_departement &#125;&#125; (&#123;&#123; code_departement &#125;&#125;)."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le taux de mentions Bien ou Très Bien au brevet est de &#123;&#123; brevet_mention_b_tb &#125;&#125; %."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le score IFN dans son intégralité est de &#123;&#123; ifn_computed_score &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le score agrégé de la campagne PIX est de &#123;&#123; pix_score &#125;&#125;."
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "datavizview_": {
+              "activate": false,
+              "default": false,
+              "localdev": true,
+              "filelocal": "http://localhost:8810/statics/json/dataviz-settings.json",
+              "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/dataviz-settings.json"
+            },
+            "mapview": {
+              "activate": true,
+              "default": true,
+              "maps": [
+                {
+                  "title": {
+                    "fr": "CARTOGRAPHIE"
+                  },
+                  "height": 800,
+                  "cols": 12,
+                  "localdev": true,
+                  "filelocal": "http://localhost:8810/statics/json/map-settings-communes.json",
+                  "file": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/map-settings-communes.json"
                 }
               ]
             }
@@ -240,7 +423,7 @@
           "title": "Schéma des données / départements",
           "activate": false,
           "default-tab": false,
-          "localdev": false,
+          "localdev": true,
           "gitfilelocal": "http://localhost:8810/statics/json/schema_departement_simplified.json",
           "gitfile": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_departement_simplified.json",
           "options": {
@@ -254,9 +437,9 @@
           "title": "Schéma complémentaire",
           "activate": false,
           "default-tab": false,
-          "localdev": false,
-          "gitfilelocal": "http://localhost:8810/statics/json/schema_departement_custom_props.json",
-          "gitfile": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_departement_custom_props.json",
+          "localdev": true,
+          "gitfilelocal": "http://localhost:8810/statics/json/schema_custom_props.json",
+          "gitfile": "https://gitlab.com/multi-coop/ifn-parentalite/ifn-ednat-public/-/blob/main/json/schema_custom_props.json",
           "options": {
             "defaultDepth": 2,
             "allowKeyEdit": true
@@ -272,7 +455,6 @@
     <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
 
   </div>
-
 </body>
 
 </html>

@@ -7,14 +7,6 @@
       v-if="!fileIsLoading && (!itemsForMap || showLoader)"
       class="loader big-loader"/>
 
-    <!-- DEBUGGING -->
-    <!-- <div
-      v-if="debug"
-      class="debug">
-      getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
-      getZoom : <code>{{ getZoom }}</code><br>
-    </div> -->
-
     <!-- DISPLAY MAP -->
     <div
       :id="mapId"
@@ -96,6 +88,20 @@
       @click="fakeResizeEvent">
       fakeResizeEvent
     </b-button> -->
+
+    <!-- DEBUGGING -->
+    <div
+      v-if="debug"
+      class="columns py-3 px-4 has-background-white">
+      <div class="column is-6">
+        multifileActiveTab : <code>{{ multifileActiveTab }}</code><br>
+        getCenter : <code>lat : {{ getCenter.lat }} / lng : {{ getCenter.lng }}</code><br>
+        getZoom : <code>{{ getZoom }}</code><br>
+      </div>
+      <div class="column is-6">
+        currentChoroSource : <br><pre><code>{{ currentChoroSource ? {...currentChoroSource, data : '[...]'} : 'no active chrosource' }}</code></pre>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -289,7 +295,8 @@ export default {
   },
   computed: {
     ...mapState({
-      multifileTabsPosition: (state) => state.multifileTabsPosition
+      multifileActiveTab: (state) => state['git-user'].multifileActiveTab,
+      multifileTabsPosition: (state) => state['git-user'].multifileTabsPosition
     }),
     getContainerElement () {
       // console.log('\nC > DatamiMap > getContainerElement > this.$refs :', this.$refs)
@@ -433,6 +440,9 @@ export default {
         // track with matomo
         this.trackEvent('showCard')
       }
+    },
+    multifileActiveTab () {
+      this.redrawMap *= -1
     },
     multifileTabsPosition () {
       this.redrawMap *= -1
@@ -1486,7 +1496,7 @@ export default {
         // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - e : ', e)
 
         const featuresPolygon = mapLibre.queryRenderedFeatures(e.point, { layers: [layerId] })
-        // console.log("C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ", featuresPolygon)
+        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ', featuresPolygon)
 
         const itemProps = featuresPolygon[0].properties
         // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)

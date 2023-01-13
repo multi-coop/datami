@@ -30,9 +30,9 @@
         v-if="!onlyPreview"
         :file-id="fileId"
         :locale="locale"/>
-      <ButtonFullscreen
+      <!-- <ButtonFullscreen
         :file-id="fileId"
-        :locale="locale"/>
+        :locale="locale"/> -->
       <ButtonDarkMode
         :locale="locale"/>
       <ButtonChangeLocale
@@ -67,7 +67,7 @@ export default {
     ButtonChangeUserBranch: () => import(/* webpackChunkName: "ButtonChangeUserBranch" */ '@/components/user/ButtonChangeUserBranch.vue'),
     ButtonChangeLocale: () => import(/* webpackChunkName: "ButtonChangeLocale" */ '@/components/user/ButtonChangeLocale.vue'),
     ButtonCopyWidgetHtml: () => import(/* webpackChunkName: "ButtonCopyWidgetHtml" */ '@/components/user/ButtonCopyWidgetHtml.vue'),
-    ButtonFullscreen: () => import(/* webpackChunkName: "ButtonFullscreen" */ '@/components/user/ButtonFullscreen.vue'),
+    // ButtonFullscreen: () => import(/* webpackChunkName: "ButtonFullscreen" */ '@/components/user/ButtonFullscreen.vue'),
     ButtonDarkMode: () => import(/* webpackChunkName: "ButtonDarkMode" */ '@/components/user/ButtonDarkMode.vue'),
     ButtomOptionsSwitch: () => import(/* webpackChunkName: "ButtomOptionsSwitch" */ '@/components/user/ButtomOptionsSwitch.vue')
   },

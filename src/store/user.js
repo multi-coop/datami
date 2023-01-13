@@ -6,6 +6,7 @@ export const user = {
     userLocale: 'en',
     userGit: [],
     userBranches: [],
+    multifileActiveTab: '',
     multifileTabsPosition: 1,
     fullscreens: []
   },
@@ -52,8 +53,8 @@ export const user = {
       }
     },
     addToBranches (state, userBranches) {
-      // console.log('\nS-user > G > addToBranches > state.userBranches : ', state.userBranches)
-      // console.log('S-user > G > addToBranches > userBranches : ', userBranches)
+      // console.log('\nS-user > M > addToBranches > state.userBranches : ', state.userBranches)
+      // console.log('S-user > M > addToBranches > userBranches : ', userBranches)
       const index = state.userBranches.findIndex(branches => branches.uuid === userBranches.uuid)
       if (index !== -1) {
         const userBranchesUpdated = { ...state.userBranches[index] }
@@ -74,6 +75,11 @@ export const user = {
     },
     switchMultifileTabsPosition (state) {
       state.multifileTabsPosition *= -1
+    },
+    updateMultifileActiveTab (state, { fileId, activeTab }) {
+      // console.log('\nS-user > M > updateMultifileActiveTab > fileId : ', fileId)
+      // console.log('S-user > M > updateMultifileActiveTab > activeTab : ', activeTab)
+      state.multifileActiveTab = activeTab
     }
   },
   actions: {
@@ -107,6 +113,13 @@ export const user = {
     },
     toggleMultifileTabsPosition ({ commit }) {
       commit('switchMultifileTabsPosition')
+    },
+    toggleMultifileActiveTab ({ commit }, { fileId, activeTab }) {
+      const multifileActiveTab = {
+        fileId: fileId,
+        activeTab: activeTab
+      }
+      commit('updateMultifileActiveTab', multifileActiveTab)
     }
   }
 }

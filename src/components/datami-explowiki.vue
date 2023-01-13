@@ -209,6 +209,10 @@ export default {
     mixinWiki
   ],
   props: {
+    fileIdFromMultifiles: {
+      default: undefined,
+      type: String
+    },
     title: {
       default: 'datami',
       type: String
@@ -275,6 +279,11 @@ export default {
         'fonts/materialdesignicons.min.css'
         // 'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
       ],
+      cssHeadFiles: [],
+      cssHeadFilesExtra: [
+        // 'https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css',
+        'https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css'
+      ],
       isModalActive: false,
       // file infos
       fileId: undefined,
@@ -330,8 +339,9 @@ export default {
   async beforeMount () {
     if (!this.fromMultiFiles) {
       this.cssFiles = [...this.cssFilesExtra]
+      this.cssHeadFiles = [...this.cssHeadFilesExtra]
     }
-    const wikiUuid = this.uuidv4()
+    const wikiUuid = this.fileIdFromMultifiles || this.uuidv4()
     this.fileId = wikiUuid
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
     this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
