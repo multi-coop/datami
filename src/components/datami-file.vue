@@ -534,7 +534,7 @@ export default {
       if (!this.fromMultiFiles) {
         // Check if any custom css from options
         const custommCssFiles = fileOptions.csscustomfiles
-        this.cssFiles = custommCssFiles ? [...this.cssFilesExtra, ...custommCssFiles] : [...this.cssFilesExtra]
+        this.cssFiles = custommCssFiles && custommCssFiles.length ? [...this.cssFilesExtra, ...custommCssFiles] : [...this.cssFilesExtra]
         this.cssHeadFiles = [...this.cssHeadFilesExtra]
       }
 
