@@ -362,6 +362,12 @@ export default {
     this.tabsVertical = this.defaultDisplay === 'vertical'
     this.hideTitle = !!multiFilesOptions.options.hidetitle
 
+    // Append custom css files if any
+    const custommCssFiles = multiFilesOptions.options.csscustomfiles
+    if (custommCssFiles && custommCssFiles.length) {
+      this.cssFiles = [...this.cssFiles, ...custommCssFiles]
+    }
+
     // Set default active tab
     const defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || files[0]
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)

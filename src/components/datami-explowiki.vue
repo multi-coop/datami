@@ -337,10 +337,6 @@ export default {
     }
   },
   async beforeMount () {
-    if (!this.fromMultiFiles) {
-      this.cssFiles = [...this.cssFilesExtra]
-      this.cssHeadFiles = [...this.cssHeadFilesExtra]
-    }
     const wikiUuid = this.fileIdFromMultifiles || this.uuidv4()
     this.fileId = wikiUuid
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
@@ -361,6 +357,14 @@ export default {
     mediawikiOptions.tagseparator = ',' // to parse tags fields
     mediawikiOptions.separator = '\t' // for csv export
     this.mediawikiOptions = mediawikiOptions
+
+    // Set css files
+    if (!this.fromMultiFiles) {
+      // Check if any custom css from options
+      const custommCssFiles = mediawikiOptions.csscustomfiles
+      this.cssFiles = custommCssFiles ? [...this.cssFilesExtra, ...custommCssFiles] : [...this.cssFilesExtra]
+      this.cssHeadFiles = [...this.cssHeadFilesExtra]
+    }
 
     // add default fields for pages structuration
     // console.log('C > DatamiExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)

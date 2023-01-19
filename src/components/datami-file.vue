@@ -446,10 +446,6 @@ export default {
     }
   },
   async beforeMount () {
-    if (!this.fromMultiFiles) {
-      this.cssFiles = [...this.cssFilesExtra]
-      this.cssHeadFiles = [...this.cssHeadFilesExtra]
-    }
     // console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
     this.fileId = this.fileIdFromMultifiles || this.uuidv4()
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
@@ -533,6 +529,14 @@ export default {
       // build options object
       let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
       // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
+
+      // Set css files
+      if (!this.fromMultiFiles) {
+        // Check if any custom css from options
+        const custommCssFiles = fileOptions.csscustomfiles
+        this.cssFiles = custommCssFiles ? [...this.cssFilesExtra, ...custommCssFiles] : [...this.cssFilesExtra]
+        this.cssHeadFiles = [...this.cssHeadFilesExtra]
+      }
 
       let fileSchema = fileOptions.schema
       // console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
