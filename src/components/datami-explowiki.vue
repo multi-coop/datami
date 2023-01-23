@@ -185,7 +185,14 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinTooltip, mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
+import {
+  mixinTooltip,
+  mixinClientUrl,
+  mixinGlobal,
+  mixinGit,
+  mixinCsv,
+  mixinWiki
+} from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiExploWiki',
@@ -203,6 +210,7 @@ export default {
   },
   mixins: [
     mixinTooltip,
+    mixinClientUrl,
     mixinGlobal,
     mixinGit,
     mixinCsv,
@@ -248,6 +256,10 @@ export default {
     fromMultiFiles: {
       default: false,
       type: Boolean
+    },
+    tabId: {
+      default: 1,
+      type: Number
     },
     fromMultiFilesVertical: {
       default: false,

@@ -61,6 +61,11 @@ import {
 import {
   createStyleLink
 } from '@/utils/utilsHtml.js'
+import {
+  getUrlParams,
+  builUrlNewParams,
+  updateUrlParams
+} from '@/utils/utilsUrl.js'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -107,6 +112,57 @@ export const mixinTooltip = {
     hideGlobalTooltip () {
       // console.log(`\nmixinTooltip > hideGlobalTooltip > ${this.$options.name} > ...`)
       this.hideTooltip()
+    }
+  }
+}
+
+export const mixinClientUrl = {
+  created () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      const urlParams = this.getUrlParams()
+      console.log(`\nM > mixinClientUrl > created > ${this.$options.name} > urlParams : `, urlParams)
+      this.updateUrlParamStore(urlParams)
+    }
+  },
+  computed: {
+    ...mapState({
+      urlParameters: (state) => state['git-user'].urlParameters
+    }),
+    urlActiveTab () {
+      return this.urlParameters && this.urlParameters.datami_tab
+    },
+    urlActiveView () {
+      return this.urlParameters && this.urlParameters.datami_view
+    },
+    urlActiveEditMode () {
+      return this.urlParameters && this.urlParameters.datami_edit
+    },
+    urlActiveDetailCard () {
+      return this.urlParameters && this.urlParameters.datami_detail_id
+    }
+  },
+  methods: {
+    getUrlParams,
+    builUrlNewParams,
+    updateUrlParams,
+    ...mapActions({
+      updateUrlParamStore: 'git-user/updateUrlParameters'
+    }),
+    isTabActive (tabId) {
+      return tabId === this.urlParameters.datami_tab
+    },
+    updateParams (param, value) {
+      const newParams = this.builUrlNewParams(param, value)
+      this.updateUrlParams(newParams.str)
+      this.updateUrlParamStore(newParams.obj)
+    },
+    changeUrlActiveTab (tabId) {
+      // console.log('\nM > mixinClientUrl > changeUrlActiveTab > tabId : ', tabId)
+      this.updateParams('datami_tab', tabId)
+    },
+    changeUrlView (code) {
+      // console.log('\nM > mixinClientUrl > changeUrlView > code : ', code)
+      this.updateParams('datami_view', code)
     }
   }
 }

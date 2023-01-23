@@ -15,6 +15,15 @@
       :file-id="fileId"
       :locale="locale"/>
 
+    <!-- DEBUG URL -->
+    <div
+      v-if="true"
+      class="columns">
+      <div class="column is-4">
+        fileId : <code>{{ fileId }}</code>
+      </div>
+    </div>
+
     <!-- DEBUG ERRORS -->
     <!-- <div
       v-if="debug"
@@ -265,7 +274,13 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinTooltip, mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
+import {
+  mixinTooltip,
+  mixinClientUrl,
+  mixinGlobal,
+  mixinForeignKeys,
+  mixinGit
+} from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
 
 export default {
@@ -285,6 +300,7 @@ export default {
   },
   mixins: [
     mixinTooltip,
+    mixinClientUrl,
     mixinGlobal,
     mixinForeignKeys,
     mixinGit
@@ -337,6 +353,10 @@ export default {
     fromMultiFiles: {
       default: false,
       type: Boolean
+    },
+    tabId: {
+      default: 1,
+      type: Number
     },
     fromMultiFilesVertical: {
       default: false,
