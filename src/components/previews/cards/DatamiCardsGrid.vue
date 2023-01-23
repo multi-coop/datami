@@ -146,7 +146,7 @@ export default {
   },
   mounted () {
     if (this.urlActiveDetailCard && this.currentViewMode === 'cards') {
-      console.log('\nC > DatamiCardsGrid > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+      // console.log('\nC > DatamiCardsGrid > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
       this.toggleDetail({ itemId: this.urlActiveDetailCard })
     }
   },

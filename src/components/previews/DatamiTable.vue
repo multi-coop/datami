@@ -1276,7 +1276,7 @@ export default {
       }
     },
     getDetailItem (rowId) {
-      return this.dataEditedPaginated.find(item => item.id === rowId)
+      return this.data.find(item => item.id === rowId)
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)
@@ -1297,14 +1297,18 @@ export default {
     toggleDetail (event) {
       // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
       const item = this.getDetailItem(event.itemId)
-      const dialogPayload = {
-        fromTable: false,
-        item: item,
-        fields: this.columns,
-        fieldMapping: this.mappingsForDetail
+      if (item) {
+        const dialogPayload = {
+          fromTable: false,
+          item: item,
+          fields: this.columns,
+          fieldMapping: this.mappingsForDetail
+        }
+        this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
+        this.changeUrlDetailId(item)
+      } else {
+        this.deleteUrlParam('datami_detail_id')
       }
-      this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
-      this.changeUrlDetailId(item)
     },
     changePage (event) {
       // console.log('\nC > DatamiTable > changePage > event : ', event)

@@ -135,11 +135,12 @@ export default {
     }
   },
   watch: {
-    currentViewMode (next) {
+    currentViewMode (next, prev) {
       if (this.multifileActiveTab === this.fileId) {
         // console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
+        // console.log('C > ViewModeBtns > watch > currentViewMode > prev : ', prev)
         this.changeUrlView(next)
-        if (next !== 'map') {
+        if (prev && next !== 'map') {
           this.deleteUrlParam('datami_detail_id')
           this.deleteUrlParam('datami_lon')
           this.deleteUrlParam('datami_lat')
