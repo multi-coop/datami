@@ -174,7 +174,7 @@
       v-model="isModalActive"
       class="datami-modal-dialog-opener"
       :width="'80%'"
-      @close="resetFileDialog">
+      @close="resetDialogs">
       <DialogSkeleton
         :file-id="fileId"
         :locale="locale"/>
@@ -514,6 +514,13 @@ export default {
         }
       })
       // console.log('C > DatamiExploWiki > updateCustomFilters > this.fileFilters : ', this.fileFilters)
+    },
+    resetDialogs () {
+      console.log('\nC > DatamiExploWiki > resetDialogs > ... ')
+      this.resetFileDialog()
+      if (this.currentViewMode !== 'map') {
+        this.deleteUrlParam('datami_detail_id')
+      }
     }
   }
 }

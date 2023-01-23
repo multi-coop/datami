@@ -11,7 +11,9 @@ export const availableParams = [
       'map',
       'dataviz',
       'cards',
-      'text'
+      'text',
+      'md',
+      'json'
     ]
   },
   {
@@ -30,6 +32,18 @@ export const availableParams = [
   {
     param: 'datami_filter',
     type: 'string'
+  },
+  {
+    param: 'datami_lon',
+    type: 'number'
+  },
+  {
+    param: 'datami_lat',
+    type: 'number'
+  },
+  {
+    param: 'datami_zoom',
+    type: 'number'
   }
 ]
 
@@ -45,18 +59,22 @@ export const cleanParams = (paramsRaw, onlyDatamiParams = false) => {
   const params = onlyDatamiParams ? {} : paramsToObject(paramsRaw)
   availableParams.forEach(p => {
     if (paramsRaw.has(p.param)) {
+      let canAdd = true
       let value = paramsRaw.get(p.param)
       switch (p.type) {
         case 'int':
           value = parseInt(value)
           break
+        case 'number':
+          value = parseFloat(value)
+          break
         case 'string':
-          if (p.available) {
-            value = (p.available.includes(value) && value) || p.available[0]
+          if (p.available && !p.available.includes(value)) {
+            canAdd = false
           }
           break
       }
-      params[p.param] = value
+      if (canAdd) { params[p.param] = value }
     }
   })
   return params
@@ -76,7 +94,11 @@ export const builUrlNewParams = (param, value) => {
   // console.log('U > utilsUrl > builUrlNewParams > window.location : ', window.location)
   // console.log('U > utilsUrl > builUrlNewParams > window.location.search : ', window.location.search)
   const urlParams = new URLSearchParams(window.location.search)
-  urlParams.set(param, value)
+  if (value) {
+    urlParams.set(param, value)
+  } else {
+    urlParams.delete(param)
+  }
   // console.log('U > utilsUrl > builUrlNewParams > urlParams : ', urlParams)
   return {
     obj: cleanParams(urlParams, true),

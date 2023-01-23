@@ -16,13 +16,13 @@
       :locale="locale"/>
 
     <!-- DEBUG URL -->
-    <div
-      v-if="true"
+    <!-- <div
+      v-if="debug"
       class="columns">
       <div class="column is-4">
         fileId : <code>{{ fileId }}</code>
       </div>
-    </div>
+    </div> -->
 
     <!-- DEBUG ERRORS -->
     <!-- <div
@@ -263,7 +263,7 @@
       v-model="isModalActive"
       class="datami-modal-dialog-opener"
       :width="'80%'"
-      @close="resetFileDialog">
+      @close="resetDialogs">
       <DialogSkeleton
         :file-id="fileId"
         :locale="locale"/>
@@ -749,6 +749,13 @@ export default {
           isLoaded: true
         }
         this.updateSharedData(payload)
+      }
+    },
+    resetDialogs () {
+      console.log('\nC > DatamiFile > resetDialogs > ... ')
+      this.resetFileDialog()
+      if (this.currentViewMode !== 'map') {
+        this.deleteUrlParam('datami_detail_id')
       }
     }
   }

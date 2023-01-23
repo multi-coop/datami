@@ -120,7 +120,7 @@ export const mixinClientUrl = {
   created () {
     if (!this.fromMultiFiles && this.datamiRoot) {
       const urlParams = this.getUrlParams()
-      console.log(`\nM > mixinClientUrl > created > ${this.$options.name} > urlParams : `, urlParams)
+      // console.log(`\nM > mixinClientUrl > created > ${this.$options.name} > urlParams : `, urlParams)
       this.updateUrlParamStore(urlParams)
     }
   },
@@ -139,6 +139,15 @@ export const mixinClientUrl = {
     },
     urlActiveDetailCard () {
       return this.urlParameters && this.urlParameters.datami_detail_id
+    },
+    urlActiveCenter () {
+      const lon = this.urlParameters && this.urlParameters.datami_lon
+      const lat = this.urlParameters && this.urlParameters.datami_lat
+      const zoom = this.urlParameters && this.urlParameters.datami_zoom
+      return {
+        center: lat && lon && [lon, lat],
+        zoom: zoom
+      }
     }
   },
   methods: {
@@ -163,6 +172,24 @@ export const mixinClientUrl = {
     changeUrlView (code) {
       // console.log('\nM > mixinClientUrl > changeUrlView > code : ', code)
       this.updateParams('datami_view', code)
+    },
+    changeUrlDetailId (item, idField = 'id') {
+      // console.log('\nM > mixinClientUrl > changeUrlDetailId > item : ', item)
+      // console.log('M > mixinClientUrl > changeUrlDetailId > idField : ', idField)
+      this.updateParams('datami_detail_id', item[idField])
+    },
+    updateUrlMapCenter (coordinates) {
+      // console.log('\nM > mixinClientUrl > updateUrlMapCenter > coordinates : ', coordinates)
+      this.updateParams('datami_lon', coordinates.lng)
+      this.updateParams('datami_lat', coordinates.lat)
+    },
+    updateUrlMapZoom (zoom) {
+      // console.log('\nM > mixinClientUrl > updateUrlMapZoom > zoom : ', zoom)
+      this.updateParams('datami_zoom', zoom)
+    },
+    deleteUrlParam (param) {
+      // console.log('\nM > mixinClientUrl > deleteUrlParam > param : ', param)
+      this.updateParams(param, undefined)
     }
   }
 }

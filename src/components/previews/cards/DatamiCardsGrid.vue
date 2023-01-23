@@ -66,6 +66,7 @@
 <script>
 
 import {
+  mixinClientUrl,
   mixinGlobal
   // mixinsCards
 } from '@/utils/mixins.js'
@@ -79,6 +80,7 @@ export default {
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue')
   },
   mixins: [
+    mixinClientUrl,
     mixinGlobal
     // mixinsCards
   ],
@@ -142,21 +144,18 @@ export default {
       return this.items.find(item => item.id === this.activeCardId)
     }
   },
+  mounted () {
+    if (this.urlActiveDetailCard && this.currentViewMode === 'cards') {
+      console.log('\nC > DatamiCardsGrid > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+      this.toggleDetail({ itemId: this.urlActiveDetailCard })
+    }
+  },
   methods: {
     // handleInput (value) {
     //   this.$emit('blur', value)
     // },
     toggleDetail (event) {
       // console.log('\nC > DatamiCardsGrid > toggleDetail > event : ', event)
-      // if (event.showDetail) {
-      //   this.showDetail = false
-      //   this.activeCardId = undefined
-      //   // this.handleInput(false)
-      // } else {
-      //   this.showDetail = true
-      //   this.activeCardId = event.itemId
-      //   // this.handleInput(true)
-      // }
       this.$emit('toggleDetail', event)
     },
     emitUpdate (event) {

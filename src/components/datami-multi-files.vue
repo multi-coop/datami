@@ -38,8 +38,8 @@
       </div> -->
 
       <!-- DEBUG URL PARAMS -->
-      <div
-        v-if="true"
+      <!-- <div
+        v-if="debug"
         class="columns">
         <div class="column is-4">
           activeTab : <br><pre><code>{{ activeTab }}</code></pre>
@@ -47,7 +47,7 @@
         <div class="column is-4">
           urlParameters : <br><pre><code>{{ urlParameters }}</code></pre>
         </div>
-      </div>
+      </div> -->
 
       <!-- TITLE AND TAB OPTIONS -->
       <div
@@ -226,7 +226,7 @@
       v-model="isModalActive"
       class="datami-modal-dialog-opener"
       :width="'80%'"
-      @close="resetMultiFilesDialog">
+      @close="resetDialogs">
       <DialogSkeleton
         :file-id="multiFilesId"
         :is-multifile="true"
@@ -341,10 +341,16 @@ export default {
   },
   watch: {
     activeTab (next) {
-      console.log('\nC > DatamiMultiFiles > watch > activeTab > next : ', next)
+      // console.log('\nC > DatamiMultiFiles > watch > activeTab > next : ', next)
       const viewMode = this.getViewMode(next)
-      console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
-      if (viewMode) { this.changeUrlView(viewMode) }
+      // console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
+      if (viewMode) {
+        this.changeUrlView(viewMode)
+        this.deleteUrlParam('datami_detail_id')
+        this.deleteUrlParam('datami_lon')
+        this.deleteUrlParam('datami_lat')
+        this.deleteUrlParam('datami_zoom')
+      }
     },
     hasMultifilesDialogs (next) {
       // console.log('\nC > DatamiMultiFiles > watch > hasMultifilesDialogs > next : ', next)
@@ -392,7 +398,7 @@ export default {
 
     // Get active tab from url if any
     const activeTabFromUrl = this.urlActiveTab
-    console.log('C > DatamiMultiFiles > beforeMount > activeTabFromUrl : ', activeTabFromUrl)
+    // console.log('C > DatamiMultiFiles > beforeMount > activeTabFromUrl : ', activeTabFromUrl)
     // Set default active tab
     let defaultFile
     if (activeTabFromUrl) {
@@ -436,9 +442,14 @@ export default {
       this.toggleMultifileTabsPosition()
     },
     changeMultifilesActiveTab (tab) {
-      console.log('C > DatamiMultiFiles > switchTabsPosition > tab : ', tab)
+      // console.log('C > DatamiMultiFiles > switchTabsPosition > tab : ', tab)
       this.toggleMultifileActiveTab({ fileId: this.multiFilesId, activeTab: tab.id })
       this.changeUrlActiveTab(tab.tabId)
+    },
+    resetDialogs () {
+      // console.log('\nC > DatamiMultiFiles > resetDialogs > ... ')
+      this.resetMultiFilesDialog()
+      this.deleteUrlParam('datami_detail_id')
     }
   }
 }

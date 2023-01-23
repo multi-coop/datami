@@ -474,6 +474,7 @@
 
 <script>
 import {
+  mixinClientUrl,
   mixinGlobal,
   mixinIcons,
   mixinDiff,
@@ -505,6 +506,7 @@ export default {
     PagesNavigation: () => import(/* webpackChunkName: "PagesNavigation" */ '@/components/pagination/PagesNavigation.vue')
   },
   mixins: [
+    mixinClientUrl,
     mixinGlobal,
     mixinIcons,
     mixinDiff,
@@ -979,7 +981,12 @@ export default {
     this.itemsPerRow = pagination.itemsPerRow
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
-
+  mounted () {
+    if (this.urlActiveDetailCard && this.currentViewMode === 'table') {
+      // console.log('\nC > DatamiTable > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+      this.toggleDetail({ itemId: this.urlActiveDetailCard })
+    }
+  },
   methods: {
     ...mapActions({
       updateReqErrors: 'git-data/updateReqErrors'
@@ -1120,6 +1127,7 @@ export default {
             fieldMapping: this.mappingsForDetail,
             item: this.getDetailItem(event.rowId)
           })
+          this.changeUrlDetailId(this.getDetailItem(event.rowId))
           break
 
         // IMPORT DATA
@@ -1288,15 +1296,15 @@ export default {
     },
     toggleDetail (event) {
       // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
-      // console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
-      // this.showCardDetails = !event.showDetail
+      const item = this.getDetailItem(event.itemId)
       const dialogPayload = {
         fromTable: false,
-        item: this.getDetailItem(event.itemId),
+        item: item,
         fields: this.columns,
         fieldMapping: this.mappingsForDetail
       }
       this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
+      this.changeUrlDetailId(item)
     },
     changePage (event) {
       // console.log('\nC > DatamiTable > changePage > event : ', event)

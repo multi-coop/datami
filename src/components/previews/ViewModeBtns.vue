@@ -52,12 +52,12 @@
     </div>
 
     <!-- DEBUGGING -->
-    <div v-if="true">
+    <!-- <div v-if="debug">
       <p>
         currentViewMode: <code>{{ currentViewMode }}</code><br>
         multifileActiveTab: <code>{{ multifileActiveTab }}</code>
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -89,7 +89,12 @@ export default {
   },
   data () {
     return {
-      buttonsView: viewsOptions
+      buttonsView: viewsOptions,
+      availableViews: {
+        table: ['cards', 'dataviz', 'map', 'table'],
+        text: ['md', 'text'],
+        json: ['json']
+      }
     }
   },
   computed: {
@@ -132,15 +137,21 @@ export default {
   watch: {
     currentViewMode (next) {
       if (this.multifileActiveTab === this.fileId) {
-        console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
+        // console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
         this.changeUrlView(next)
+        if (next !== 'map') {
+          this.deleteUrlParam('datami_detail_id')
+          this.deleteUrlParam('datami_lon')
+          this.deleteUrlParam('datami_lat')
+          this.deleteUrlParam('datami_zoom')
+        }
       }
     },
     fileOptions (next) {
-      console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
+      // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
         let defaultViews
-        console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
+        // console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
         switch (this.fileTypeFamily) {
           case 'table':
             defaultViews = [
@@ -171,12 +182,12 @@ export default {
               {
                 view: 'md',
                 activate: this.hasMdView,
-                isDefault: true
+                isDefault: this.urlActiveView === 'md' || true
               },
               {
                 view: 'text',
                 activate: this.hasTxtView,
-                isDefault: true
+                isDefault: this.urlActiveView === 'text' || true
               }
             ]
             break
@@ -185,18 +196,12 @@ export default {
               {
                 view: 'json',
                 activate: this.hasJsonView,
-                isDefault: true
+                isDefault: this.urlActiveView === 'json' || true
               }
             ]
             break
         }
         const defaultView = defaultViews.find(v => v.isDefault)
-        // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
-        // if (this.urlActiveView) {
-        //   this.changeView(this.urlActiveView)
-        // } else {
-        //   this.changeView(defaultView.view)
-        // }
         this.changeView(defaultView.view)
       } else {
         this.changeView('loading')
@@ -204,13 +209,14 @@ export default {
     }
   },
   beforeMount () {
-    console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
-    console.log('C > ViewModeBtns > beforeMount > this.gitObj : ', this.gitObj)
-    console.log('C > ViewModeBtns > beforeMount > this.gitObj.filetype : ', this.gitObj.filetype)
-    console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
-    console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
-    if (this.urlActiveView) {
-      console.log('C > ViewModeBtns > beforeMount > this.urlActiveView : ', this.urlActiveView)
+    // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
+    // console.log('C > ViewModeBtns > beforeMount > this.gitObj : ', this.gitObj)
+    // console.log('C > ViewModeBtns > beforeMount > this.gitObj.filetype : ', this.gitObj.filetype)
+    // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
+    // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
+    const availableViews = this.availableViews[this.fileTypeFamily]
+    if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
+      // console.log('C > ViewModeBtns > beforeMount > this.urlActiveView : ', this.urlActiveView)
       this.changeView(this.urlActiveView)
     } else {
       this.changeView(this.fileTypeFamily || 'loading')
@@ -222,7 +228,7 @@ export default {
       changeViewMode: 'git-data/changeViewMode'
     }),
     changeView (code) {
-      console.log(`\nC > ViewModeBtns > changeView > ${this.fileId} > code : `, code)
+      // console.log(`\nC > ViewModeBtns > changeView > ${this.fileId} > code : `, code)
       this.changeViewMode({ fileId: this.fileId, mode: code })
       this.trackEvent(code)
     },

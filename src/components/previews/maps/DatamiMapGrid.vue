@@ -21,7 +21,7 @@
     </div>
 
     <!-- DEBUG -->
-    <div
+    <!-- <div
       v-if="debug"
       class="columns is-multiline">
       <div class="column is-4">
@@ -33,13 +33,17 @@
       <div class="column is-4">
         items: <br><pre><code>{{ items }}</code></pre>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 
-import { mixinGlobal, mixinMap } from '@/utils/mixins.js'
+import {
+  // mixinClientUrl,
+  mixinGlobal,
+  mixinMap
+} from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiMapGrid',
@@ -47,6 +51,7 @@ export default {
     DatamiMap: () => import(/* webpackChunkName: "DatamiMap" */ '@/components/previews/maps/DatamiMap.vue')
   },
   mixins: [
+    // mixinClientUrl,
     mixinGlobal,
     mixinMap
   ],
@@ -72,6 +77,10 @@ export default {
       type: Boolean
     }
   },
+  // mounted () {
+  //   // Show detail card if any from url
+  //   console.log('\nC > DatamiMapGrid > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+  // },
   methods: {
     isMapOnTop (map, idx) {
       // console.log('\nC > DatamiMapGrid > isMapOnTop > map : ', map)
