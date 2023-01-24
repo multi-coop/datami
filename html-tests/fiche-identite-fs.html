@@ -176,19 +176,24 @@
               },
               "minivizs": [
                 {
-                  "title": { "fr": "Typologie du territoire" },
-                  "viztype": "text-templated",
+                  "title": { "fr": "Usagers par tranche d&lsquo;âge" },
+                  "viztype": "barchart-horizontal",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
                   "cols": 8,
-                  "paragraphs": [
-                    {
-                      "text": {
-                        "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo;."
-                      }
-                    }
-                  ]
+                  "serieName": "Usagers",
+                  "serieFromFields": [
+                    { "field": "fs_age_taux_entre_18_et_26_ans" },
+                    { "field": "fs_age_taux_entre_27_et_45_ans" },
+                    { "field": "fs_age_taux_entre_45_et_55_ans" },
+                    { "field": "fs_age_taux_entre_55_et_62_ans" },
+                    { "field": "fs_age_taux_plus_de_62_ans" },
+                    { "field": "fs_age_taux_moins_de_18_ans" },
+                    { "field": "fs_age_taux_non_connu" }
+                  ],
+                  "chartOptions": {
+                  }
                 },
                 {
                   "title": { "fr": "Usagers de la France Service" },
@@ -197,21 +202,7 @@
                   "position": "viz-top",
                   "showOnMiniCard": true,
                   "cols": 4,
-                  "serieFromField": [
-                    { "field": "fs_sexe_taux_femme" },
-                    { "field": "fs_sexe_taux_homme" }
-                  ],
-                  "chartOptions": {
-                  }
-                },
-                {
-                  "title": { "fr": "Tranches d&lsquo;âge" },
-                  "viztype": "barchart-vertical",
-                  "activate": false,
-                  "position": "viz-top",
-                  "showOnMiniCard": false,
-                  "cols": 6,
-                  "serieFromField": [
+                  "serieFromFields": [
                     { "field": "fs_sexe_taux_femme" },
                     { "field": "fs_sexe_taux_homme" }
                   ],
@@ -220,23 +211,34 @@
                 },
                 {
                   "title": { "fr": "Nombre de France services dans un rayon de 30km" },
-                  "viztype": "big-value",
+                  "viztype": "big-values",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
                   "cols": 6,
-                  "serieFromField": [
+                  "serieFromFields": [
                     {
                       "field": "nbre_fs_rayon_30km",
                       "title": { "fr": "Nombre de France Service dans un rayon de 30km" }
                     },
                     {
-                      "field": "nbre_fs_rayon_30km",
-                      "title": { "fr": "Nombre de demandes traitées" }
-                    },
+                      "field": "actes_d_etat_civil",
+                      "title": { "fr": "Nombre d&lsquo;actes d&lsquo;état civil" }
+                    }
+                  ]
+                },
+                {
+                  "title": { "fr": "Typologie du territoire" },
+                  "viztype": "text-templated",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 6,
+                  "paragraphs": [
                     {
-                      "field": "nbre_fs_rayon_30km",
-                      "title": { "fr": "Présence de CNFS" }
+                      "text": {
+                        "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo;."
+                      }
                     }
                   ]
                 }
