@@ -658,10 +658,11 @@ export default {
           originalHeaders: this.columns,
           editedHeaders: this.columnsForView,
           settings: { mini: miniSettings, detail: detailSettings },
-          mapping: mapping
+          mapping: mapping,
+          minivizs: this.cardsSettingsMinivizs
         }
       }
-      // console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
     },
     hasCardMappings () {
@@ -669,6 +670,7 @@ export default {
     },
     mappingsForMini () {
       return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
+        // console.log('C > DatamiTable > mappingsForMini > h : ', h)
         const fieldMap = {
           ...this.trimField(h),
           ...h.mini
@@ -678,11 +680,13 @@ export default {
           fieldMap.templating = h.templating.paragraphs
           fieldMap.ignoreDefinitions = h.templating.ignore_definitions
         }
+        // console.log('C > DatamiTable > mappingsForMini > fieldMap : ', fieldMap)
         return fieldMap
       })
     },
     mappingsForDetail () {
       return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
+        // console.log('C > DatamiTable > mappingsForDetail > h : ', h)
         const fieldMap = {
           ...this.trimField(h),
           ...h.detail
@@ -694,6 +698,7 @@ export default {
           fieldMap.ignoreDefinitions = h.templating.ignore_definitions
           // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)
         }
+        // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)
         return fieldMap
       })
     },

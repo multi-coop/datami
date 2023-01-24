@@ -174,17 +174,69 @@
                   "marker_color": "#4a4a4a"
                 }
               },
-              "minivizs": {
-                "nbre_fs_rayon_30km": {
+              "minivizs": [
+                {
+                  "title": { "fr": "Typologie du territoire" },
+                  "viztype": "text-templated",
                   "position": "viz-top",
-                  "right": true,
+                  "showOnMiniCard": true,
                   "cols": 6,
-                  "text": { "fr": "dummy legend text..."},
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo;."
+                      }
+                    }
+                  ]
+                },
+                {
+                  "title": { "fr": "Usagers de la France Service" },
+                  "viztype": "simple-pie",
+                  "position": "viz-top",
+                  "showOnMiniCard": true,
+                  "cols": 6,
+                  "serieFromField": [
+                    { "field": "fs_sexe_taux_femme" },
+                    { "field": "fs_sexe_taux_homme" }
+                  ],
                   "chartOptions": {
-                    "chart": "simple-number"
                   }
+                },
+                {
+                  "title": { "fr": "Tranches d&lsquo;âge" },
+                  "viztype": "barchart-vertical",
+                  "position": "viz-top",
+                  "showOnMiniCard": true,
+                  "cols": 6,
+                  "serieFromField": [
+                    { "field": "fs_sexe_taux_femme" },
+                    { "field": "fs_sexe_taux_homme" }
+                  ],
+                  "chartOptions": {
+                  }
+                },
+                {
+                  "title": { "fr": "Nombre de France services dans un rayon de 30km" },
+                  "viztype": "big-value",
+                  "position": "viz-top",
+                  "showOnMiniCard": true,
+                  "cols": 6,
+                  "serieFromField": [
+                    {
+                      "field": "nbre_fs_rayon_30km",
+                      "title": { "fr": "Nombre de France Service dans un rayon de 30km" }
+                    },
+                    {
+                      "field": "nbre_fs_rayon_30km",
+                      "title": { "fr": "Nombre de demandes traitées" }
+                    },
+                    {
+                      "field": "nbre_fs_rayon_30km",
+                      "title": { "fr": "Présence de CNFS" }
+                    }
+                  ]
                 }
-              }
+              ]
             },
             "datavizview_": {
               "activate": false,

@@ -349,6 +349,9 @@ export const mixinGlobal = {
     cardHasMiniMap () {
       return this.cardsSettingsMiniMap && this.cardsSettingsMiniMap.activate
     },
+    cardsSettingsMinivizs () {
+      return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minivizs
+    },
 
     // DATAVIZ SETTINGS
     hasDatavizView () {
@@ -1078,85 +1081,38 @@ export const mixinPagination = {
   }
 }
 
-export const mixinCards = {
-  computed: {
-    cardsSettingsFromFileOptions () {
-      let cardsSettings
-      // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
-      if (this.hasCardsView && this.cardsViewIsActive) {
-        const settings = this.cardsSettingsFromOptions
-        // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
-        const miniSettings = settings.mini
-        const detailSettings = settings.detail
-        const mapping = this.columns.map(h => {
-          const fieldMap = {
-            ...h,
-            mini: miniSettings[h.name],
-            detail: detailSettings[h.name]
-          }
-          const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
-          if (hasTemplate) { fieldMap.templating = hasTemplate }
-          return fieldMap
-        })
-        cardsSettings = {
-          originalHeaders: this.columns,
-          editedHeaders: this.columnsForView,
-          settings: { mini: miniSettings, detail: detailSettings },
-          mapping: mapping
-        }
-      }
-      // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
-      return cardsSettings
-    }
-    // mappingForAll () {
-    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
-    //     return {
-    //       field: h.field,
-    //       name: h.name,
-    //       type: h.type,
-    //       subtype: h.subtype,
-    //       enumArr: h.enumArr,
-    //       definitions: h.definitions,
-    //       tagSeparator: h.tagSeparator
-    //     }
-    //   })
-    // },
-    // mappingsForMini () {
-    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
-    //     const fieldMap = {
-    //       field: h.field,
-    //       name: h.name,
-    //       type: h.type,
-    //       subtype: h.subtype,
-    //       enumArr: h.enumArr,
-    //       definitions: h.definitions,
-    //       tagSeparator: h.tagSeparator,
-    //       ...h.mini
-    //     }
-    //     const hasTemplate = h.templating && h.templating.use_on_mini
-    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
-    //     return fieldMap
-    //   })
-    // },
-    // mappingsForDetail () {
-    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
-    //     const fieldMap = {
-    //       field: h.field,
-    //       name: h.name,
-    //       type: h.type,
-    //       subtype: h.subtype,
-    //       enumArr: h.enumArr,
-    //       definitions: h.definitions,
-    //       tagSeparator: h.tagSeparator,
-    //       ...h.detail
-    //     }
-    //     const hasTemplate = h.templating && h.templating.use_on_detail
-    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
-    //     return fieldMap
-    //   })
-    // }
-  }
-}
+// export const mixinCards = {
+//   computed: {
+//     cardsSettingsFromFileOptions () {
+//       let cardsSettings
+//       // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
+//       if (this.hasCardsView && this.cardsViewIsActive) {
+//         const settings = this.cardsSettingsFromOptions
+//         console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
+//         const miniSettings = settings.mini
+//         const detailSettings = settings.detail
+//         const mapping = this.columns.map(h => {
+//           const fieldMap = {
+//             ...h,
+//             mini: miniSettings[h.name],
+//             detail: detailSettings[h.name]
+//           }
+//           const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
+//           if (hasTemplate) { fieldMap.templating = hasTemplate }
+//           return fieldMap
+//         })
+//         cardsSettings = {
+//           originalHeaders: this.columns,
+//           editedHeaders: this.columnsForView,
+//           settings: { mini: miniSettings, detail: detailSettings },
+//           mapping: mapping
+//         }
+//       }
+//       console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+//       return cardsSettings
+//     }
+//   }
+// }
 
 export const mixinCsv = {
   computed: {

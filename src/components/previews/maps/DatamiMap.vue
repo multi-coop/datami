@@ -327,7 +327,9 @@ export default {
         }
         const templates = this.cardsSettingsTemplates
         const hasTemplate = templates && templates[f.name] && templates[f.name].use_on_mini
-        if (hasTemplate) { fieldMap.templating = templates[f.name].paragraphs }
+        if (hasTemplate) {
+          fieldMap.templating = templates[f.name].paragraphs
+        }
         return fieldMap
       })
     },
@@ -339,7 +341,9 @@ export default {
         }
         const templates = this.cardsSettingsTemplates
         const hasTemplate = templates && templates[f.name] && templates[f.name].use_on_detail
-        if (hasTemplate) { fieldMap.templating = templates[f.name].paragraphs }
+        if (hasTemplate) {
+          fieldMap.templating = templates[f.name].paragraphs
+        }
         return fieldMap
       })
     },

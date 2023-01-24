@@ -144,6 +144,7 @@
         </p>
       </div>
 
+      <!-- VALUES CONTENT -->
       <div class="columns is-8 is-multiline">
         <!-- COLUMN LEFT DETAIL -->
         <div
@@ -448,6 +449,19 @@
             class="">
             <pre><code>{{ item.content }}</code></pre>
           </p>
+        </div>
+      </div>
+
+      <!-- MINIVIZS CONTENT -->
+      <div
+        v-if="cardsSettingsMinivizs"
+        class="columns is-8 is-multiline">
+        <!-- DEBUGGING -->
+        <div
+          v-for="(viz, idx) in cardsSettingsMinivizs"
+          :key="`card-miniviz-${fileId}-${item.id}-${idx}`"
+          class="column is-6">
+          viz-{{ idx }}: <br><pre><code>{{ viz }}</code></pre>
         </div>
       </div>
     </div>
