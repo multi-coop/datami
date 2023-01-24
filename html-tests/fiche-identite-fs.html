@@ -158,7 +158,7 @@
               },
               "minimap": {
                 "activate": true,
-                "right_side": false,
+                "right_side": true,
                 "mapOptions": {
                   "zoom": 5,
                   "maxZoom": 18,
@@ -178,9 +178,10 @@
                 {
                   "title": { "fr": "Typologie du territoire" },
                   "viztype": "text-templated",
+                  "activate": true,
                   "position": "viz-top",
-                  "showOnMiniCard": true,
-                  "cols": 6,
+                  "showOnMiniCard": false,
+                  "cols": 8,
                   "paragraphs": [
                     {
                       "text": {
@@ -191,10 +192,11 @@
                 },
                 {
                   "title": { "fr": "Usagers de la France Service" },
-                  "viztype": "simple-pie",
+                  "viztype": "simple-donut",
+                  "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": true,
-                  "cols": 6,
+                  "cols": 4,
                   "serieFromField": [
                     { "field": "fs_sexe_taux_femme" },
                     { "field": "fs_sexe_taux_homme" }
@@ -205,8 +207,9 @@
                 {
                   "title": { "fr": "Tranches d&lsquo;âge" },
                   "viztype": "barchart-vertical",
+                  "activate": false,
                   "position": "viz-top",
-                  "showOnMiniCard": true,
+                  "showOnMiniCard": false,
                   "cols": 6,
                   "serieFromField": [
                     { "field": "fs_sexe_taux_femme" },
@@ -218,8 +221,9 @@
                 {
                   "title": { "fr": "Nombre de France services dans un rayon de 30km" },
                   "viztype": "big-value",
+                  "activate": true,
                   "position": "viz-top",
-                  "showOnMiniCard": true,
+                  "showOnMiniCard": false,
                   "cols": 6,
                   "serieFromField": [
                     {

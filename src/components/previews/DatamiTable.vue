@@ -662,7 +662,7 @@ export default {
           minivizs: this.cardsSettingsMinivizs
         }
       }
-      console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
+      // console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
       return cardsSettings
     },
     hasCardMappings () {

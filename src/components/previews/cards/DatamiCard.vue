@@ -454,14 +454,28 @@
 
       <!-- MINIVIZS CONTENT -->
       <div
-        v-if="cardsSettingsMinivizs"
-        class="columns is-8 is-multiline">
+        v-if="minivizsSettings"
+        class="columns is-8 is-multiline mt-3"
+        style="margin-left: -1.5em; margin-right: -1.5em;">
         <!-- DEBUGGING -->
         <div
-          v-for="(viz, idx) in cardsSettingsMinivizs"
+          v-for="(vizSettings, idx) in minivizsSettings"
           :key="`card-miniviz-${fileId}-${item.id}-${idx}`"
-          class="column is-6">
-          viz-{{ idx }}: <br><pre><code>{{ viz }}</code></pre>
+          :class="`column is-${showDetail ? (vizSettings.cols || 12) : 12}-tablet`">
+          <!-- <div
+            v-if="debug"
+            class="column is-12">
+            vizSettings: <br><code>{{ vizSettings }}</code>
+          </div> -->
+          <DatamiMiniviz
+            :file-id="fileId"
+            :miniviz-settings="vizSettings"
+            :item="item"
+            :fields="fields"
+            :show-detail="showDetail"
+            :locale="locale"/>
+            <!-- :data="computeMinivizSeries(vizSettings)" -->
+            <!-- :options="computeMinivizOptions(vizSettings)" -->
         </div>
       </div>
     </div>
@@ -513,7 +527,8 @@ export default {
     DatamiCardBlockContent: () => import(/* webpackChunkName: "DatamiCardBlockContent" */ '@/components/previews/cards/DatamiCardBlockContent.vue'),
     DatamiCardBlockTags: () => import(/* webpackChunkName: "DatamiCardBlockTags" */ '@/components/previews/cards/DatamiCardBlockTags.vue'),
     DatamiCardBlockLinks: () => import(/* webpackChunkName: "DatamiCardBlockLinks" */ '@/components/previews/cards/DatamiCardBlockLinks.vue'),
-    DatamiMiniMap: () => import(/* webpackChunkName: "DatamiMiniMap" */ '@/components/previews/maps/DatamiMiniMap.vue')
+    DatamiMiniMap: () => import(/* webpackChunkName: "DatamiMiniMap" */ '@/components/previews/maps/DatamiMiniMap.vue'),
+    DatamiMiniviz: () => import(/* webpackChunkName: "DatamiMiniviz" */ '@/components/previews/dataviz/DatamiMiniviz.vue')
   },
   mixins: [
     mixinGlobal,
@@ -615,6 +630,15 @@ export default {
   computed: {
     norTagsNorLinks () {
       return [...this.linksPositions, ...this.tagsPositions]
+    },
+    minivizsSettings () {
+      return this.cardsSettingsMinivizs.filter(v => {
+        if (!this.showDetail) {
+          return v.activate && v.showOnMiniCard
+        } else {
+          return v.activate
+        }
+      })
     }
   },
   methods: {
