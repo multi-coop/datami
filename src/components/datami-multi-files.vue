@@ -380,7 +380,7 @@ export default {
       return fileSettings
     })
 
-    // console.log('C > DatamiMultiFiles > beforeMount > filesParsed : ', filesParsed)
+    console.log('C > DatamiMultiFiles > beforeMount > filesParsed : ', filesParsed)
     this.files = filesParsed || []
 
     // Set up options
@@ -399,13 +399,12 @@ export default {
     // Get active tab from url if any
     const activeTabFromUrl = this.urlActiveTab
     // console.log('C > DatamiMultiFiles > beforeMount > activeTabFromUrl : ', activeTabFromUrl)
+
     // Set default active tab
-    let defaultFile
+    let defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || filesParsed[0]
     if (activeTabFromUrl) {
-      defaultFile = filesParsed[activeTabFromUrl - 1]
+      defaultFile = filesParsed[activeTabFromUrl - 1] ? filesParsed[activeTabFromUrl - 1] : defaultFile
     }
-    // Escape default file error if any
-    defaultFile = defaultFile || filesParsed.find(file => file.activate && file['default-tab']) || files[0]
 
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile.id : ', defaultFile.id)

@@ -752,7 +752,7 @@ export default {
       }
     },
     resetDialogs () {
-      console.log('\nC > DatamiFile > resetDialogs > ... ')
+      // console.log('\nC > DatamiFile > resetDialogs > ... ')
       this.resetFileDialog()
       if (this.currentViewMode !== 'map') {
         this.deleteUrlParam('datami_detail_id')

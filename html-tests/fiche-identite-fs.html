@@ -31,7 +31,8 @@
           "activate": true,
           "onlypreview": true,
           "localdev": true,
-          "gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
+          "gitfilelocal": "http://localhost:8811/statics/data/france_service.csv",
+          "_gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
           "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/data/dummy_france_services.csv",
           "default-tab": false,
           "options": {
@@ -157,7 +158,7 @@
               },
               "minimap": {
                 "activate": true,
-                "right_side": true,
+                "right_side": false,
                 "mapOptions": {
                   "zoom": 5,
                   "maxZoom": 18,
@@ -171,6 +172,17 @@
                   "marker_height": 45,
                   "marker_width": 45,
                   "marker_color": "#4a4a4a"
+                }
+              },
+              "minivizs": {
+                "nbre_fs_rayon_30km": {
+                  "position": "viz-top",
+                  "right": true,
+                  "cols": 6,
+                  "text": { "fr": "dummy legend text..."},
+                  "chartOptions": {
+                    "chart": "simple-number"
+                  }
                 }
               }
             },
@@ -205,8 +217,8 @@
       <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
       <!-- <script src="https://julien-percents--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
       <!-- <script src="https://preprod--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
-      <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script>
-      <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
 
     </div>
 </body>

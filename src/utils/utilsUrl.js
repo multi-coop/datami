@@ -82,8 +82,9 @@ export const cleanParams = (paramsRaw, onlyDatamiParams = false) => {
 
 export const getUrlParams = () => {
   // console.log('\nU > utilsUrl > getParams > window.location : ', window.location)
+  // console.log('U > utilsUrl > getParams > window.location : ', window.location.search)
   const urlParams = new URLSearchParams(window.location.search)
-  // console.log('\nU > utilsUrl > getParams > urlParams : ', urlParams)
+  // console.log('U > utilsUrl > getParams > urlParams : ', urlParams)
   const params = cleanParams(urlParams)
   return params
 }
@@ -109,7 +110,7 @@ export const builUrlNewParams = (param, value) => {
 export const updateUrlParams = (paramString) => {
   // console.log('\nU > utilsUrl > updateUrlParams > paramString : ', paramString)
   const href = window.location.toString().replace(location.search, '')
-  const newUrl = `${href}?${paramString}`
+  const newUrl = `${href}${href.endsWith('/') ? '?' : '/?'}${paramString}`
   // console.log('U > utilsUrl > updateUrlParams > newUrl : ', newUrl)
   if (typeof window.history.pushState !== 'undefined') {
     window.history.replaceState({}, null, newUrl)
