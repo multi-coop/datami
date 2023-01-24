@@ -154,6 +154,7 @@ export default {
       // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
         let defaultViews
+        const availableViews = this.availableViews[this.fileTypeFamily]
         // console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
         switch (this.fileTypeFamily) {
           case 'table':
@@ -161,22 +162,22 @@ export default {
               {
                 view: 'cards',
                 activate: this.cardsViewIsActive,
-                isDefault: this.cardsViewIsActive && (this.cardsViewIsDefault || this.urlActiveView === 'cards')
+                isDefault: this.cardsViewIsActive && this.cardsViewIsDefault
               },
               {
                 view: 'dataviz',
                 activate: this.datavizViewIsActive,
-                isDefault: this.datavizViewIsActive && (this.datavizViewIsDefault || this.urlActiveView === 'dataviz')
+                isDefault: this.datavizViewIsActive && this.datavizViewIsDefault
               },
               {
                 view: 'map',
                 activate: this.mapViewIsActive,
-                isDefault: this.mapViewIsActive && (this.mapViewIsDefault || this.urlActiveView === 'map')
+                isDefault: this.mapViewIsActive && this.mapViewIsDefault
               },
               {
                 view: 'table',
                 activate: true,
-                isDefault: this.urlActiveView === 'table' || true
+                isDefault: true
               }
             ]
             break
@@ -185,12 +186,12 @@ export default {
               {
                 view: 'md',
                 activate: this.hasMdView,
-                isDefault: this.urlActiveView === 'md' || true
+                isDefault: true
               },
               {
                 view: 'text',
                 activate: this.hasTxtView,
-                isDefault: this.urlActiveView === 'text' || true
+                isDefault: true
               }
             ]
             break
@@ -199,10 +200,19 @@ export default {
               {
                 view: 'json',
                 activate: this.hasJsonView,
-                isDefault: this.urlActiveView === 'json' || true
+                isDefault: true
               }
             ]
             break
+        }
+        // overwrite default view if url param
+        if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
+          defaultViews = defaultViews.map(v => {
+            return {
+              ...v,
+              isDefault: v.view === this.urlActiveView
+            }
+          })
         }
         const defaultView = defaultViews.find(v => v.isDefault)
         this.changeView(defaultView.view)

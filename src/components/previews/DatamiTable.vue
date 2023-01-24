@@ -982,8 +982,10 @@ export default {
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
   mounted () {
-    if (this.urlActiveDetailCard && this.currentViewMode === 'table') {
-      // console.log('\nC > DatamiTable > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+    // console.log('\nC > DatamiTable > mounted > this.currentViewMode : ', this.currentViewMode)
+    // console.log('C > DatamiTable > mounted > this.showCardDetails : ', this.showCardDetails)
+    if (this.urlActiveDetailCard && this.currentViewMode !== 'map' && !this.showCardDetails) {
+      // console.log('C > DatamiTable > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
       this.toggleDetail({ itemId: this.urlActiveDetailCard })
     }
   },
@@ -1306,8 +1308,10 @@ export default {
         }
         this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
         this.changeUrlDetailId(item)
+        this.showCardDetails = true
       } else {
         this.deleteUrlParam('datami_detail_id')
+        this.showCardDetails = false
       }
     },
     changePage (event) {

@@ -380,7 +380,7 @@ export default {
       return fileSettings
     })
 
-    console.log('C > DatamiMultiFiles > beforeMount > filesParsed : ', filesParsed)
+    // console.log('C > DatamiMultiFiles > beforeMount > filesParsed : ', filesParsed)
     this.files = filesParsed || []
 
     // Set up options
