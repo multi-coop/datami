@@ -1,8 +1,11 @@
 <template>
   <div
-    :class="`content ${showDetail ? 'px-3 py-3' : 'mb-5'}`"
+    :class="`content ${showDetail ? 'px-3 py-3' : 'mb-2'}`"
     :style="`height: 100%; background-color: ${showDetail? 'white' : 'white'}`">
     <!-- MINIVIZ TITLE -->
+    <hr
+      v-if="!showDetail"
+      class="mt-0 mb-3">
     <h4 :class="`${!showDetail ? 'has-text-centered' : ''}`">
       {{ minivizSettings.title[locale] }}
     </h4>
@@ -50,12 +53,14 @@
       </div>
 
       <!-- BIG VALUES -->
-      <div v-if="minivizSettings.viztype === 'big-values'">
+      <div
+        v-if="minivizSettings.viztype === 'big-values'"
+        :class="`${showDetail ? 'mb-3' : 'mb-0'}`">
         <div class="columns is-multiline is-centered">
           <div
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
-            :class="`column $(showDetail ? 'is-3 is-6-tablet' : 'is-4'} pt-3 pb-4 has-text-centered is-align-self-flex-end`">
+            :class="`column $(showDetail ? 'is-3 is-6-tablet' : 'is-4'} py-3 has-text-centered is-align-self-flex-end`">
             <p class="has-text-weight-semibold is-size-7">
               {{ val.field.title || val.field.label || val.field.name }}
             </p>
@@ -74,7 +79,9 @@
       </div>
 
       <!-- TEMPLATED VALUES -->
-      <div v-if="minivizSettings.viztype === 'text-templated'">
+      <div
+        v-if="minivizSettings.viztype === 'text-templated'"
+        class="mb-3">
         <p
           v-for="(paragraph, i) in getTemplatedValues(templating)"
           :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`">
@@ -272,6 +279,7 @@ export default {
         if (sf.title) { field.title = sf.title[this.locale] || sf.title }
         if (sf.unit) { field.unit = sf.unit[this.locale] || sf.unit }
         if (sf.bgColor) { field.bgColor = sf.bgColor }
+        if (sf.serieColor) { field.serieColor = sf.serieColor }
         return field
       })
       return fieldsForSeries
@@ -330,6 +338,12 @@ export default {
       this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > labels : ', labels)
       return labels
     },
+    buildLabelsColors () {
+      const colors = this.fieldsForSeries && this.fieldsForSeries.map(f => {
+        return f.serieColor
+      })
+      return colors
+    },
     buildCategs () {
       const categs = this.fieldsForSeries.map(s => {
         return s.name
@@ -339,13 +353,64 @@ export default {
     buildOptions () {
       const options = { ...this.chartOptionsDefault }
       options.chart.type = this.vizSpecs.type
+
+      // default data labels
+      options.dataLabels = {
+        enabled: true,
+        style: {
+          colors: ['#111']
+        },
+        background: {
+          enabled: true,
+          foreColor: '#fff',
+          borderWidth: 0
+        }
+      }
+      // set labels
       if (this.vizSpecs.needLabels) {
         options.labels = this.buildLabels()
+        options.colors = this.buildLabelsColors()
       }
+      // specific to donut charts
+      if (this.vizSpecs.type === 'donut') {
+        if (this.minivizSettings.showTotal) {
+          options.plotOptions = {
+            pie: {
+              donut: {
+                labels: {
+                  show: true,
+                  name: {
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    offsetY: -2
+                  },
+                  value: {
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    offsetY: 2
+                  },
+                  total: {
+                    show: true,
+                    showAlways: true,
+                    label: 'Total',
+                    fontSize: '12px',
+                    fontWeight: 400
+                  }
+                },
+                size: '60%'
+              }
+            }
+          }
+        }
+      }
+      // specific to barcharts
       if (this.vizSpecs.type === 'bar') {
         options.chart.height = 400
         options.plotOptions = {
           bar: { horizontal: this.vizSpecs.horiz }
+        }
+        if (this.minivizSettings.serieColor) {
+          options.colors = [this.minivizSettings.serieColor]
         }
       }
       if (this.vizSpecs.needCategs) {

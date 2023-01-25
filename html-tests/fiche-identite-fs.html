@@ -29,11 +29,17 @@
         {
           "title": "Maison France Service",
           "activate": true,
+          "creditslogo": {
+            "imageUrl": "http://localhost:8811/statics/images/mednum-logo.png",
+            "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/mednum-logo.png",
+            "url": "https://lamednum.coop",
+            "imageHeight": "15px"
+          },
           "onlypreview": true,
           "localdev": true,
           "gitfilelocal": "http://localhost:8811/statics/data/france_service.csv",
           "_gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
-          "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/data/dummy_france_services.csv",
+          "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/data/dummy_france_services.csv",
           "default-tab": false,
           "options": {
             "height": "650px",
@@ -55,12 +61,12 @@
             "schema": {
               "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/schema.json",
-              "file":  "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/schema.json"
+              "file":  "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/json/schema.json"
             },
             "fields-custom-properties": {
               "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/schema-custom_props.json",
-              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/schema-custom_props.json"
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/json/schema-custom_props.json"
             },
             "cardsview": {
               "activate": true,
@@ -220,22 +226,26 @@
                     { "field": "fs_age_taux_moins_de_18_ans" },
                     { "field": "fs_age_taux_non_connu" }
                   ],
-                  "chartOptions": {
-                  }
+                  "serieColor": "#e49a28"
                 },
                 {
                   "title": { "fr": "Usagers par sexe" },
-                  "viztype": "simple-pie",
+                  "viztype": "simple-donut",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": true,
                   "cols": 4,
                   "serieFromFields": [
-                    { "field": "fs_sexe_taux_femme" },
-                    { "field": "fs_sexe_taux_homme" }
+                    { 
+                      "field": "fs_sexe_taux_femme",
+                      "serieColor": "#e428d0"
+                    },
+                    { 
+                      "field": "fs_sexe_taux_homme",
+                      "serieColor": "#28d0e4"
+                    }
                   ],
-                  "chartOptions": {
-                  }
+                  "showTotal": true
                 },
                 {
                   "title": { "fr": "Typologie du territoire" },
@@ -247,7 +257,7 @@
                   "templates": [
                     {
                       "text": {
-                        "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; insee_dep &#125;&#125;)."
+                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; insee_dep &#125;&#125;)."
                       }
                     },
                     {
@@ -274,7 +284,7 @@
               "default": false,
               "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/dataviz-settings.json",
-              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/dataviz-settings.json"
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/json/dataviz-settings.json"
             },
             "mapview": {
               "activate": true,
@@ -288,7 +298,7 @@
                   "cols": 12,
                   "localdev": true,
                   "filelocal": "http://localhost:8811/statics/json/map-settings.json",
-                  "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/map-settings.json"
+                  "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/json/map-settings.json"
                 }
               ]
             }

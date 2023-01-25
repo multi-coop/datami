@@ -2,9 +2,25 @@
   <div
     class="DatamiCredits datami-component columns is-centered is-multiline py-3 mt-4"
     style="z-index: 0;">
-    <!-- CREDITS -->
     <div
       :class="`column is-full is-italic has-text-centered`">
+      <!-- CLIENT LOGO -->
+      <p
+        v-if="creditsLogo && creditsLogo.imageUrl"
+        class="mb-3">
+        <!-- creditsLogo : <pre><code>{{ creditsLogo }}</code></pre> -->
+        <a
+          :href="creditsLogo.url"
+          target="_blank"
+          @mouseover="hoverLogoClient = true"
+          @mouseleave="hoverLogoClient = false">
+          <img
+            :src="creditsLogo.imageUrl"
+            alt="logo client"
+            :style="`height: ${creditsLogo.imageHeight || '25px'} !important; width: auto !important; ${!hoverLogoClient ? 'filter: grayscale(1)' : ''}`">
+        </a>
+      </p>
+      <!-- CREDITS -->
       <p
         :class="`${isDarkMode ? 'has-text-white' : 'has-text-grey'} is-size-7 mb-2`">
         <span :class=" ` ${isDarkMode ? 'datami-darkmode-white-text' : '' } ` ">
@@ -77,6 +93,10 @@ export default {
       default: null,
       type: String
     },
+    creditsLogo: {
+      default: null,
+      type: Object
+    },
     locale: {
       default: '',
       type: String
@@ -84,7 +104,8 @@ export default {
   },
   data () {
     return {
-      hoverLogo: false
+      hoverLogo: false,
+      hoverLogoClient: false
     }
   },
   computed: {

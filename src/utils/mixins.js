@@ -228,6 +228,11 @@ export const mixinGlobal = {
       getDialogsById: 'git-dialogs/getDialogsById',
       getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
+    fileCreditsLogo () {
+      // console.log('\nM > mixinGlobal > fileCreditsLogo > this.creditslogo : ', this.creditslogo)
+      const logoObj = this.creditslogo && this.creditslogo.length ? JSON.parse(this.options) : this.creditslogo
+      return logoObj
+    },
     getUrlBase () {
       const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
       const isLocal = widgetProvider.startsWith('localhost')
