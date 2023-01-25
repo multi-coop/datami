@@ -1,62 +1,113 @@
 <template>
   <div
-    :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-    :style="`background-color: ${showDetail? 'white' : 'white'}`">
+    :class="`content ${showDetail ? 'px-3 py-3' : 'mb-5'}`"
+    :style="`height: 100%; background-color: ${showDetail? 'white' : 'white'}`">
     <!-- MINIVIZ TITLE -->
-    <h4>
+    <h4 :class="`${!showDetail ? 'has-text-centered' : ''}`">
       {{ minivizSettings.title[locale] }}
     </h4>
 
-    <!-- SWITCH VIZ BY TYPE -->
-    <div v-if="minivizSettings.viztype === 'simple-pie'">
-      <ApexChart
-        ref="simple-pie"
-        type="pie"
-        :options="options"
-        :series="series"/>
-    </div>
-    <div v-if="minivizSettings.viztype === 'simple-donut'">
-      <ApexChart
-        ref="simple-donut"
-        type="donut"
-        :options="options"
-        :series="series"/>
-    </div>
-    <div v-if="minivizSettings.viztype === 'barchart-vertical'">
-      <ApexChart
-        ref="barchart-vertical"
-        type="bar"
-        :options="options"
-        :series="series"/>
-    </div>
-    <div v-if="minivizSettings.viztype === 'barchart-horizontal'">
-      <ApexChart
-        ref="barchart-horizontal"
-        type="bar"
-        :options="options"
-        :series="series"/>
-    </div>
-    <div v-if="minivizSettings.viztype === 'big-values'">
-      <span
-        v-for="(val, i) in series"
-        :key="`${val.field.field}-${i}`"
-        class="mx-3">
-        {{ val.field.name }}
-        <span class="tag is-info is-large">
-          {{ val.value }}
-        </span>
-      </span>
+    <!-- SWITCH MINIVIZ BY TYPE -->
+    <div
+      :class="`${vizSpecs.type ? 'is-flex is-align-items-center' : ''}`"
+      :style="`${vizSpecs.type ? 'height: 80%;' : ''}`">
+      <!-- APEX CHARTS -->
+      <div
+        v-if="minivizSettings.viztype === 'simple-pie'"
+        style="width: 100%;">
+        <ApexChart
+          ref="simple-pie"
+          type="pie"
+          :options="options"
+          :series="series"/>
+      </div>
+      <div
+        v-if="minivizSettings.viztype === 'simple-donut'"
+        style="width: 100%;">
+        <ApexChart
+          ref="simple-donut"
+          type="donut"
+          :options="options"
+          :series="series"/>
+      </div>
+      <div
+        v-if="minivizSettings.viztype === 'barchart-vertical'"
+        style="width: 100%;">
+        <ApexChart
+          ref="barchart-vertical"
+          type="bar"
+          :options="options"
+          :series="series"/>
+      </div>
+      <div
+        v-if="minivizSettings.viztype === 'barchart-horizontal'"
+        style="width: 100%;">
+        <ApexChart
+          ref="barchart-horizontal"
+          type="bar"
+          :options="options"
+          :series="series"/>
+      </div>
+
+      <!-- BIG VALUES -->
+      <div v-if="minivizSettings.viztype === 'big-values'">
+        <div class="columns is-multiline is-centered">
+          <div
+            v-for="(val, i) in series"
+            :key="`${val.field.field}-${i}`"
+            :class="`column $(showDetail ? 'is-3 is-6-tablet' : 'is-4'} pt-3 pb-4 has-text-centered is-align-self-flex-end`">
+            <p class="has-text-weight-semibold is-size-7">
+              {{ val.field.title || val.field.label || val.field.name }}
+            </p>
+            <p
+              class="tag is-dark is-large has-text-weight-bold"
+              :style="`background-color: ${getBgColor(val.field)}; color: ${getColor(val.field)}`">
+              {{ val.value }}
+              <span
+                v-if="val.field.unit"
+                class="is-size-7 ml-3">
+                {{ val.field.unit }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEMPLATED VALUES -->
+      <div v-if="minivizSettings.viztype === 'text-templated'">
+        <p
+          v-for="(paragraph, i) in getTemplatedValues(templating)"
+          :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`">
+          {{ paragraph }}
+        </p>
+        <!-- DEBUGGING -->
+        <div
+          v-if="needsDebug"
+          class="columns is-multiline">
+          <div class="column is-12">
+            getTemplatedValues(templating) : <br><code>{{ getTemplatedValues(templating) }}</code>
+          </div>
+          <div class="column is-6">
+            minivizSettings.templates: <br><pre><code>{{ minivizSettings.templates }}</code></pre>
+          </div>
+          <div class="column is-6">
+            fields: <br><pre><code>{{ fields }}</code></pre>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- DEBUGGING -->
-    <div v-if="true">
+    <div v-if="needsDebug">
       <hr>
       vizType: <code>{{ vizType }}</code><br>
       <span v-if="vizSpecs.needSerie">series: <br><code>{{ series }}</code></span><br>
+      <!-- <span v-if="vizSpecs.needTemplating">fields: <br><pre><code>{{ fields }}</code></pre></span><br> -->
     </div>
     <div v-if="needsDebug">
       <span v-if="vizSpecs.needOptions">options: <br><pre><code>{{ options }}</code></pre></span><br>
-      fieldsForSeries: <br><pre><code>{{ fieldsForSeries }}</code></pre><br>
+      <!-- <span v-if="vizSpecs.needTemplating">minivizSettings.templates: <br><pre><code>{{ minivizSettings.templates }}</code></pre></span><br> -->
+      <!-- <span v-if="vizSpecs.needOptions">paragraphs: <br><pre><code>{{ paragraphs }}</code></pre></span><br> -->
       <!-- minivizSettings : <br><code>{{ minivizSettings }}</code> -->
     </div>
   </div>
@@ -64,8 +115,21 @@
 
 <script>
 
+import { getContrastYIQ } from '@/utils/globalUtils.js'
+
+import {
+  mixinGlobal,
+  mixinValue,
+  mixinTexts
+} from '@/utils/mixins.js'
+
 export default {
   name: 'DatamiMiniviz',
+  mixins: [
+    mixinGlobal,
+    mixinValue,
+    mixinTexts
+  ],
   props: {
     fileId: {
       default: null,
@@ -133,6 +197,7 @@ export default {
           needFieldName: true
         },
         'text-templated': {
+          needTemplating: true
         }
       },
       series: undefined,
@@ -140,7 +205,8 @@ export default {
       chartOptionsDefault: {
         chart: {
           // type: 'pie',
-          // width: 380
+          // width: 380,
+          // height: 400,
           toolbar: {
             show: false
           }
@@ -150,7 +216,7 @@ export default {
           position: 'bottom'
         },
         responsive: [{
-          breakpoint: 480,
+          breakpoint: 400,
           options: {
             chart: {
               width: 200
@@ -167,7 +233,8 @@ export default {
         // 'simple-donut',
         // 'barchart-vertical',
         // 'barchart-horizontal',
-        'big-values'
+        // 'big-values',
+        // 'text-templated'
       ]
     }
   },
@@ -182,6 +249,13 @@ export default {
     vizSpecs () {
       return this.availableVizTypes[this.vizType]
     },
+    templating () {
+      // const settings = this.minivizSettings
+      const settingsTemplates = {
+        templating: this.minivizSettings.templates
+      }
+      return settingsTemplates
+    },
     fieldsForSeries () {
       // const fieldsForSeries = this.minivizSettings.seriesFromFields && this.minivizSettings.seriesFromFields.map(s => {
       //   const serieFields = {
@@ -194,7 +268,11 @@ export default {
       // })
       // return fieldsForSeries
       const fieldsForSeries = this.minivizSettings.serieFromFields && this.minivizSettings.serieFromFields.map(sf => {
-        return this.fields.find(f => f.name === sf.field)
+        const field = this.fields.find(f => f.name === sf.field)
+        if (sf.title) { field.title = sf.title[this.locale] || sf.title }
+        if (sf.unit) { field.unit = sf.unit[this.locale] || sf.unit }
+        if (sf.bgColor) { field.bgColor = sf.bgColor }
+        return field
       })
       return fieldsForSeries
     }
@@ -216,6 +294,7 @@ export default {
   //   // this.reRender *= -1
   // },
   methods: {
+    getContrastYIQ,
     buildSerie () {
       this.needsDebug && console.log('\nC-DatamiMiniviz > buildSeries > this.fieldsForSeries : ', this.fieldsForSeries)
       this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > this.vizType : ', this.vizType)
@@ -246,7 +325,7 @@ export default {
       this.needsDebug && console.log('C-DatamiMiniviz > buildLabels > this.fieldsForSeries : ', this.fieldsForSeries)
       // const labels = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'] // example
       const labels = this.fieldsForSeries && this.fieldsForSeries.map(f => {
-        return f.name
+        return f.title || f.label || f.name
       })
       this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > labels : ', labels)
       return labels
@@ -264,6 +343,7 @@ export default {
         options.labels = this.buildLabels()
       }
       if (this.vizSpecs.type === 'bar') {
+        options.chart.height = 400
         options.plotOptions = {
           bar: { horizontal: this.vizSpecs.horiz }
         }
@@ -276,6 +356,13 @@ export default {
       }
       this.needsDebug && console.log('C-DatamiMiniviz > buildOptions > options : ', options)
       this.options = options
+    },
+    getBgColor (field) {
+      return field.bgColor || '#343434'
+    },
+    getColor (field) {
+      const bgColor = this.getBgColor(field)
+      return this.getContrastYIQ(bgColor)
     }
     // updateRender () {
     //   // console.log('\nC-DatamiMiniviz > updateRender > this.options : ', this.options)

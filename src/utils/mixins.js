@@ -949,7 +949,6 @@ export const mixinValue = {
       }
       return color
     },
-
     tagColor (value, bgColor = undefined, isDiff = false) {
       let textColor
       if (isDiff) {
@@ -959,6 +958,77 @@ export const mixinValue = {
         textColor = getContrastYIQ(hex)
       }
       return textColor
+    }
+  }
+}
+
+export const mixinTexts = {
+  methods: {
+    getTemplatedValues (field) {
+      const ignoreDefinitions = field.ignoreDefinitions
+      const templatedArray = field.templating.map(paragraph => {
+        const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
+        return this.applyTemplate(this.fields, text, ignoreDefinitions)
+      })
+      return templatedArray
+    },
+    applyTemplate (fields, text, ignoreDefinitions = false) {
+      // replace value fields
+      // console.log('\nM > mixinTexts > applyTemplating > text :', text)
+      // console.log('M > mixinTexts > applyTemplating > ignoreDefinitions :', ignoreDefinitions)
+      const fieldStart = '{{'
+      const fieldEnd = '}}'
+      const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
+      // const fieldRegex = /\s*(\{{.}})\s*
+      // console.log('M > mixinTexts > applyTemplating > fieldRegex :', fieldRegex)
+
+      let textArr = text.split(fieldRegex).filter(s => !!s)
+      // console.log('M > mixinTexts > applyTemplating > textArr :', textArr)
+      textArr = textArr.map(str => {
+        // console.log('M > mixinTexts > applyTemplating > str :', str)
+        let strClean = str
+        if (str.startsWith(fieldStart)) {
+          const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
+          // console.log('M > mixinTexts > applyTemplating > fieldName :', fieldName)
+          const fieldObj = fields.find(f => f.name === fieldName)
+          // console.log('M > mixinTexts > applyTemplating > fieldObj :', fieldObj)
+          const itemValue = fieldObj && this.item[fieldObj.field]
+          // console.log('M > mixinTexts > applyTemplating > itemValue :', itemValue)
+          strClean = itemValue || this.t('global.noValue', this.locale)
+          // replace by value defintion if any in fieldObj
+          if (itemValue && !ignoreDefinitions && fieldObj && fieldObj.definitions) {
+            const definition = fieldObj.definitions.find(def => def.value === strClean)
+            strClean = (definition && definition.label) || strClean
+          }
+          if (itemValue && fieldObj && fieldObj.type === 'number') {
+            strClean = this.getNumberByField(strClean, fieldObj)
+          }
+        }
+        return strClean
+      })
+
+      // replace links fields
+      const linksStart = '~~'
+      const linksEnd = '~~'
+      const linksRegex = new RegExp(`(${linksStart}.*?${linksEnd})`)
+      textArr = textArr.join('')
+        .split(linksRegex)
+        .map(str => {
+          let strClean
+          if (str.startsWith(linksStart)) {
+            const fieldName = str.replace(linksStart, '').replace(linksEnd, '').trim()
+            // console.log('\nM > mixinTexts > applyTemplating > fieldName :', fieldName)
+            const fieldObj = fields.find(f => f.name === fieldName)
+            // console.log('M > mixinTexts > applyTemplating > fieldObj :', fieldObj)
+            strClean = this.item[fieldObj.field] ? `<a href="${this.item[fieldObj.field]}" style="color: grey; text-decoration: underline;">${this.t('global.link', this.locale)}</a>` : this.t('global.noLinkValue', this.locale)
+          } else {
+            strClean = str
+          }
+          return strClean
+        })
+
+      const textClean = textArr.join('')
+      return textClean
     }
   }
 }

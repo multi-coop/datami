@@ -421,17 +421,6 @@
                 <br> cardsSettingsMiniMap.right_side : <code>{{ cardsSettingsMiniMap.right_side }}</code>
               </div> -->
             </div>
-
-            <!-- DATAVIZ / TO DO -->
-            <!-- <div
-              v-if="hasAnyContentByPosition(['dataviz'])"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                DATAVIZ
-              </div>
-            </div> -->
           </div>
         </div>
 
@@ -474,8 +463,8 @@
             :fields="fields"
             :show-detail="showDetail"
             :locale="locale"/>
-            <!-- :data="computeMinivizSeries(vizSettings)" -->
-            <!-- :options="computeMinivizOptions(vizSettings)" -->
+          <!-- :data="computeMinivizSeries(vizSettings)" -->
+          <!-- :options="computeMinivizOptions(vizSettings)" -->
         </div>
       </div>
     </div>
@@ -518,7 +507,12 @@
 
 <script>
 
-import { mixinGlobal, mixinValue, mixinDiff } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinValue,
+  mixinTexts,
+  mixinDiff
+} from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiCard',
@@ -533,6 +527,7 @@ export default {
   mixins: [
     mixinGlobal,
     mixinValue,
+    mixinTexts,
     mixinDiff
   ],
   props: {
@@ -632,7 +627,7 @@ export default {
       return [...this.linksPositions, ...this.tagsPositions]
     },
     minivizsSettings () {
-      return this.cardsSettingsMinivizs.filter(v => {
+      return this.cardsSettingsMinivizs && this.cardsSettingsMinivizs.filter(v => {
         if (!this.showDetail) {
           return v.activate && v.showOnMiniCard
         } else {
@@ -671,73 +666,6 @@ export default {
         boolArray.push(this.hasContentByPosition(p, isRight))
       })
       return boolArray.some(b => b)
-    },
-    getTemplatedValues (field) {
-      // console.log('\nC > DatamiCard > getTemplatedValues > field :', field)
-      const ignoreDefinitions = field.ignoreDefinitions
-      const templatedArray = field.templating.map(paragraph => {
-        const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
-        return this.applyTemplate(text, ignoreDefinitions)
-      })
-      return templatedArray
-    },
-    applyTemplate (text, ignoreDefinitions = false) {
-      // replace value fields
-      // console.log('\nC > DatamiCard > applyTemplate > text :', text)
-      // console.log('C > DatamiCard > applyTemplate > ignoreDefinitions :', ignoreDefinitions)
-      const fieldStart = '{{'
-      const fieldEnd = '}}'
-      const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
-      // const fieldRegex = /\s*(\{{.}})\s*
-      // console.log('C > DatamiCard > applyTemplate > fieldRegex :', fieldRegex)
-
-      let textArr = text.split(fieldRegex).filter(s => !!s)
-      // console.log('C > DatamiCard > applyTemplate > textArr :', textArr)
-      textArr = textArr.map(str => {
-        // console.log('C > DatamiCard > applyTemplate > str :', str)
-        let strClean = str
-        if (str.startsWith(fieldStart)) {
-          const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
-          // console.log('C > DatamiCard > applyTemplate > fieldName :', fieldName)
-          const fieldObj = this.fields.find(f => f.name === fieldName)
-          // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
-          const itemValue = fieldObj && this.item[fieldObj.field]
-          // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
-          strClean = itemValue || this.t('global.noValue', this.locale)
-          // replace by value defintion if any in fieldObj
-          if (itemValue && !ignoreDefinitions && fieldObj && fieldObj.definitions) {
-            const definition = fieldObj.definitions.find(def => def.value === strClean)
-            strClean = (definition && definition.label) || strClean
-          }
-          if (itemValue && fieldObj && fieldObj.type === 'number') {
-            strClean = this.getNumberByField(strClean, fieldObj)
-          }
-        }
-        return strClean
-      })
-
-      // replace links fields
-      const linksStart = '~~'
-      const linksEnd = '~~'
-      const linksRegex = new RegExp(`(${linksStart}.*?${linksEnd})`)
-      textArr = textArr.join('')
-        .split(linksRegex)
-        .map(str => {
-          let strClean
-          if (str.startsWith(linksStart)) {
-            const fieldName = str.replace(linksStart, '').replace(linksEnd, '').trim()
-            // console.log('\nC > DatamiCard > applyTemplate > fieldName :', fieldName)
-            const fieldObj = this.fields.find(f => f.name === fieldName)
-            // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
-            strClean = this.item[fieldObj.field] ? `<a href="${this.item[fieldObj.field]}" style="color: grey; text-decoration: underline;">${this.t('global.link', this.locale)}</a>` : this.t('global.noLinkValue', this.locale)
-          } else {
-            strClean = str
-          }
-          return strClean
-        })
-
-      const textClean = textArr.join('')
-      return textClean
     },
     // closeCard () {
     //   this.$emit('toggleDetail', this.item.id)

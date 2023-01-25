@@ -132,13 +132,13 @@
                   "position": "tags",
                   "block_title": "Catégorie IFN"
                 },
-                "com_insee": {
+                "insee_com": {
                   "position": "description",
-                  "right" : true
+                  "right" : false
                 }
               },
               "templates": {
-                "com_insee": {
+                "insee_com": {
                   "use_on_mini": false,
                   "use_on_detail": true,
                   "ignore_definitions": true,
@@ -176,6 +176,34 @@
               },
               "minivizs": [
                 {
+                  "title": { "fr": "Valeurs clés" },
+                  "viztype": "big-values",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": true,
+                  "cols": 12,
+                  "serieFromFields": [
+                    {
+                      "field": "nbre_fs_rayon_30km",
+                      "title": { "fr": "Nombre de France Service dans un rayon de 30km" },
+                      "unit": { "fr": "France service" },
+                      "bgColor": "#d0e428"
+                    },
+                    {
+                      "field": "actes_d_etat_civil",
+                      "title": { "fr": "Nombre d&lsquo;actes d&lsquo;état civil" },
+                      "unit": { "fr": "actes" },
+                      "bgColor": "#7f18c1"
+                    },
+                    {
+                      "field": "le_ministere_de_l_interieur__ants",
+                      "title": { "fr": "Nombre d&lsquo;ANTS" },
+                      "unit": { "fr": "ANTS" },
+                      "bgColor": "#2872e4"
+                    }
+                  ]
+                },
+                {
                   "title": { "fr": "Usagers par tranche d&lsquo;âge" },
                   "viztype": "barchart-horizontal",
                   "activate": true,
@@ -196,8 +224,8 @@
                   }
                 },
                 {
-                  "title": { "fr": "Usagers de la France Service" },
-                  "viztype": "simple-donut",
+                  "title": { "fr": "Usagers par sexe" },
+                  "viztype": "simple-pie",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": true,
@@ -210,34 +238,31 @@
                   }
                 },
                 {
-                  "title": { "fr": "Nombre de France services dans un rayon de 30km" },
-                  "viztype": "big-values",
-                  "activate": true,
-                  "position": "viz-top",
-                  "showOnMiniCard": false,
-                  "cols": 6,
-                  "serieFromFields": [
-                    {
-                      "field": "nbre_fs_rayon_30km",
-                      "title": { "fr": "Nombre de France Service dans un rayon de 30km" }
-                    },
-                    {
-                      "field": "actes_d_etat_civil",
-                      "title": { "fr": "Nombre d&lsquo;actes d&lsquo;état civil" }
-                    }
-                  ]
-                },
-                {
                   "title": { "fr": "Typologie du territoire" },
                   "viztype": "text-templated",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 6,
-                  "paragraphs": [
+                  "cols": 12,
+                  "templates": [
                     {
                       "text": {
-                        "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo;."
+                        "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; insee_dep &#125;&#125;)."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le chiffre pour la DGFIP est de &#123;&#123; dgfip &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le chiffre pour la CAF est de &#123;&#123; caf &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le chiffre pour la CNAM est de &#123;&#123; cnam &#125;&#125;."
                       }
                     }
                   ]
