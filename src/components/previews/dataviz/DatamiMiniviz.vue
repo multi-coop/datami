@@ -13,7 +13,7 @@
     <!-- SWITCH MINIVIZ BY TYPE -->
     <div
       :class="`${vizSpecs.type ? 'is-flex is-align-items-center' : ''}`"
-      :style="`${vizSpecs.type ? 'height: 80%;' : ''}`">
+      :style="`${vizSpecs.type ? 'height: 90%;' : ''}`">
       <!-- APEX CHARTS -->
       <div
         v-if="minivizSettings.viztype === 'simple-pie'"

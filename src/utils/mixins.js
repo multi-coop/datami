@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   debounce,
   itemsPerPageChoicesTable,
+  itemsPerPageChoicesCards1perRow,
   itemsPerPageChoicesCards2perRow,
   itemsPerPageChoicesCards3perRow,
   itemsPerPageChoicesCards4perRow,
@@ -1145,6 +1146,7 @@ export const mixinPagination = {
   data () {
     return {
       itemsPerPageChoicesTable: itemsPerPageChoicesTable,
+      itemsPerPageChoicesCards1perRow: itemsPerPageChoicesCards1perRow,
       itemsPerPageChoicesCards2perRow: itemsPerPageChoicesCards2perRow,
       itemsPerPageChoicesCards3perRow: itemsPerPageChoicesCards3perRow,
       itemsPerPageChoicesCards4perRow: itemsPerPageChoicesCards4perRow

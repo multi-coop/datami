@@ -712,6 +712,10 @@ export default {
         // console.log('C > DatamiTable > itemsPerPageChoices > this.itemsPerRow : ', this.itemsPerRow)
         const itemsPerRow = this.itemsPerRow
         switch (itemsPerRow) {
+          case 1:
+            // console.log('C > DatamiTable > itemsPerPageChoices > case 1 > this.itemsPerRow : ', this.itemsPerRow)
+            result = this.itemsPerPageChoicesCards1perRow
+            break
           case 2:
             // console.log('C > DatamiTable > itemsPerPageChoices > case 2 > this.itemsPerRow : ', this.itemsPerRow)
             result = this.itemsPerPageChoicesCards2perRow
@@ -745,7 +749,7 @@ export default {
       // retrieve options from file options
       const hasPaginationOptions = this.fileOptions && this.fileOptions.pagination
       if (hasPaginationOptions) {
-        // console.log('C > DatamiTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
+        console.log('C > DatamiTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
         Object.keys(hasPaginationOptions).forEach(key => {
           pagination[key] = hasPaginationOptions[key]
         })
@@ -763,7 +767,10 @@ export default {
       }
       // for cards view
       if (pagination.itemsPerRow) {
-        const itemsPerRow = this.getClosest([2, 3, 4], pagination.itemsPerRow)
+        const itemsPerRow = this.getClosest([1, 2, 3, 4], pagination.itemsPerRow)
+        if (itemsPerRow === 1) {
+          pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards1perRow, goal)
+        }
         if (itemsPerRow === 2) {
           pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards2perRow, goal)
         }
@@ -775,6 +782,7 @@ export default {
         }
         pagination.itemsPerRow = itemsPerRow
       }
+      console.log('C > DatamiTable > paginationFromFileOptions > pagination : ', pagination)
       return pagination
     },
     dataFiltered () {

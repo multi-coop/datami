@@ -81,6 +81,7 @@ export function debounce (fn, delay = 500) {
 // PAGINATION UTILS
 
 export const itemsPerPageChoicesTable = [3, 5, 10, 15, 20, 25, 50]
+export const itemsPerPageChoicesCards1perRow = [5, 10, 15, 20, 25, 30]
 export const itemsPerPageChoicesCards2perRow = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 export const itemsPerPageChoicesCards3perRow = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
 export const itemsPerPageChoicesCards4perRow = [4, 8, 12, 16, 20, 24, 28, 32, 36, 40]

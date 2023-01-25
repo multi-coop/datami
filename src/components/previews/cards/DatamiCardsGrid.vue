@@ -25,12 +25,13 @@
       <div
         v-for="(item, idx) in items"
         :key="`item-card-${idx}-${item.id}`"
-        :class="`column is-12-mobile is-6-tablet is-${itemsPerRow === 3 ? '4' : '3'}-desktop`">
+        :class="`column is-12-mobile is-${columnSizeTablet}-tablet is-${columnSize}-desktop`">
         <DatamiCard
           :file-id="fileId"
           :fields="cardsSettings.originalHeaders"
           :field-mapping="mappingsForMini"
           :item="item"
+          :items-per-row="itemsPerRow"
           :show-detail="false"
           :show-detail-card="showDetail"
           :locale="locale"
@@ -140,6 +141,46 @@ export default {
     }
   },
   computed: {
+    columnSize () {
+      let colSize
+      switch (this.itemsPerRow) {
+        case 1:
+          colSize = 12
+          break
+        case 2:
+          colSize = 6
+          break
+        case 3:
+          colSize = 4
+          break
+        case 4:
+          colSize = 3
+          break
+        default:
+          colSize = 3
+      }
+      return colSize
+    },
+    columnSizeTablet () {
+      let colSize
+      switch (this.itemsPerRow) {
+        case 1:
+          colSize = 12
+          break
+        case 2:
+          colSize = 6
+          break
+        case 3:
+          colSize = 6
+          break
+        case 4:
+          colSize = 6
+          break
+        default:
+          colSize = 6
+      }
+      return colSize
+    },
     getDetailItem () {
       return this.items.find(item => item.id === this.activeCardId)
     }

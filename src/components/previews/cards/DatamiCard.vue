@@ -444,13 +444,13 @@
       <!-- MINIVIZS CONTENT -->
       <div
         v-if="minivizsSettings"
-        class="columns is-8 is-multiline mt-3"
+        class="columns is-8 is-multiline is-centered mt-3"
         style="margin-left: -1.5em; margin-right: -1.5em;">
         <!-- DEBUGGING -->
         <div
           v-for="(vizSettings, idx) in minivizsSettings"
           :key="`card-miniviz-${fileId}-${item.id}-${idx}`"
-          :class="`column is-${showDetail ? (vizSettings.cols || 12) : 12}-tablet`">
+          :class="`column is-${showDetail ? (vizSettings.cols || 12) : defaultMiniColumnSize}-tablet`">
           <!-- <div
             v-if="debug"
             class="column is-12">
@@ -538,6 +538,10 @@ export default {
     item: {
       default: null,
       type: Object
+    },
+    itemsPerRow: {
+      default: 3,
+      type: Number
     },
     fields: {
       default: null,
@@ -634,6 +638,20 @@ export default {
           return v.activate
         }
       })
+    },
+    defaultMiniColumnSize () {
+      let colSize
+      switch (this.itemsPerRow) {
+        case 1:
+          colSize = 4
+          break
+        case 2:
+          colSize = 6
+          break
+        default:
+          colSize = 12
+      }
+      return colSize
     }
   },
   methods: {

@@ -23,11 +23,11 @@
       <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
 
       <!-- DATAMI WIDGET'S HTML BLOCK-->
-      <datami-multi-files title="Maisons France Service" options='{
+      <datami-multi-files title="Fiches d'identité France Service" options='{
         "display": "horizontal"
-      }' gitfiles='[
+        }' gitfiles='[
         {
-          "title": "Maison France Service",
+          "title": "Maisons France Service",
           "activate": true,
           "creditslogo": {
             "imageUrl": "http://localhost:8811/statics/images/mednum-logo.png",
@@ -39,7 +39,7 @@
           "localdev": true,
           "gitfilelocal": "http://localhost:8811/statics/data/france_service.csv",
           "_gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
-          "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/data/dummy_france_services.csv",
+          "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/data/france_service.csv",
           "default-tab": false,
           "options": {
             "height": "650px",
@@ -67,6 +67,9 @@
               "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/schema-custom_props.json",
               "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/json/schema-custom_props.json"
+            },
+            "pagination":{
+              "itemsPerRow": 2
             },
             "cardsview": {
               "activate": true,
@@ -253,7 +256,7 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 12,
+                  "cols": 4,
                   "templates": [
                     {
                       "text": {
@@ -276,6 +279,25 @@
                       }
                     }
                   ]
+                },
+                {
+                  "title": { "fr": "Usagers par tranche d&lsquo;âge" },
+                  "viztype": "barchart-vertical",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 8,
+                  "serieName": "Usagers",
+                  "serieFromFields": [
+                    { "field": "fs_age_taux_entre_18_et_26_ans" },
+                    { "field": "fs_age_taux_entre_27_et_45_ans" },
+                    { "field": "fs_age_taux_entre_45_et_55_ans" },
+                    { "field": "fs_age_taux_entre_55_et_62_ans" },
+                    { "field": "fs_age_taux_plus_de_62_ans" },
+                    { "field": "fs_age_taux_moins_de_18_ans" },
+                    { "field": "fs_age_taux_non_connu" }
+                  ],
+                  "serieColor": "#e43c28"
                 }
               ]
             },
