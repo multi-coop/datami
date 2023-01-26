@@ -6,18 +6,21 @@
       :class="`column is-full is-italic has-text-centered`">
       <!-- CLIENT LOGO -->
       <p
-        v-if="creditsLogo && creditsLogo.imageUrl"
-        class="mb-3">
+        v-if="creditsLogos && creditsLogos.length"
+        class="my-5 is-flex is-align-items-center is-justify-content-center">
         <!-- creditsLogo : <pre><code>{{ creditsLogo }}</code></pre> -->
         <a
-          :href="creditsLogo.url"
+          v-for="(logo, i) in creditsLogos"
+          :key="`credit-logo-${i}`"
+          class="mx-3"
+          :href="logo.url"
           target="_blank"
-          @mouseover="hoverLogoClient = true"
-          @mouseleave="hoverLogoClient = false">
+          @mouseover="hoverLogoClient = `credit-logo-${i}`"
+          @mouseleave="hoverLogoClient = ''">
           <img
-            :src="creditsLogo.imageUrl"
-            alt="logo client"
-            :style="`height: ${creditsLogo.imageHeight || '25px'} !important; width: auto !important; ${!hoverLogoClient ? 'filter: grayscale(1)' : ''}`">
+            :src="logo.imageUrl"
+            :alt="`logo client - ${i + 1}`"
+            :style="`height: ${logo.imageHeight || '25px'} !important; width: auto !important;${hoverLogoClient === 'credit-logo-' + i ? '' : 'filter: grayscale(1);'}`">
         </a>
       </p>
       <!-- CREDITS -->
@@ -93,9 +96,9 @@ export default {
       default: null,
       type: String
     },
-    creditsLogo: {
+    creditsLogos: {
       default: null,
-      type: Object
+      type: Array
     },
     locale: {
       default: '',
@@ -105,7 +108,7 @@ export default {
   data () {
     return {
       hoverLogo: false,
-      hoverLogoClient: false
+      hoverLogoClient: ''
     }
   },
   computed: {

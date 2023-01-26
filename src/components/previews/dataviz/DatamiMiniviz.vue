@@ -239,7 +239,7 @@ export default {
       vizTypeNeedsDebug: [
         // 'simple-pie',
         // 'simple-donut',
-        // 'barchart-vertical',
+        'barchart-vertical'
         // 'barchart-horizontal',
         // 'big-values',
         // 'text-templated'
@@ -306,9 +306,10 @@ export default {
   methods: {
     getContrastYIQ,
     buildSerie () {
-      // this.needsDebug && console.log('\nC-DatamiMiniviz > buildSeries > this.fieldsForSeries : ', this.fieldsForSeries)
+      // this.needsDebug && console.log('\nC-DatamiMiniviz > buildSeries > this.fields : ', this.fields)
       // this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > this.vizType : ', this.vizType)
-      // console.log('C-DatamiMiniviz > buildSeries > this.item : ', this.item)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > this.fieldsForSeries : ', this.fieldsForSeries)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > this.item : ', this.item)
       // const series = [44, 55, 13, 43, 22] // example 1
       // const series = { name: 'Serie name', data: [44, 55, 13, 43, 22] } // example 2
       let series = this.fieldsForSeries && this.fieldsForSeries.map(f => {

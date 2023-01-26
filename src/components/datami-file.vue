@@ -256,7 +256,7 @@
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
-      :credits-logo="fileCreditsLogo"
+      :credits-logos="fileCreditsLogos"
       :locale="locale"/>
 
     <!-- DIALOG MODAL -->
@@ -315,9 +315,9 @@ export default {
       default: 'datami',
       type: String
     },
-    creditslogo: {
+    creditslogos: {
       default: '',
-      type: [String, Object]
+      type: [String, Array]
     },
     localdev: {
       default: false,
