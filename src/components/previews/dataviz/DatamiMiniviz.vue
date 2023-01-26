@@ -84,8 +84,9 @@
         class="mb-3">
         <p
           v-for="(paragraph, i) in getTemplatedValues(templating)"
-          :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`">
-          {{ paragraph }}
+          :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`"
+          :class="paragraph.customClass">
+          {{ paragraph.text }}
         </p>
         <!-- DEBUGGING -->
         <div
@@ -105,13 +106,13 @@
     </div>
 
     <!-- DEBUGGING -->
-    <div v-if="needsDebug">
+    <div v-if="false && needsDebug">
       <hr>
       vizType: <code>{{ vizType }}</code><br>
       <span v-if="vizSpecs.needSerie">series: <br><code>{{ series }}</code></span><br>
       <!-- <span v-if="vizSpecs.needTemplating">fields: <br><pre><code>{{ fields }}</code></pre></span><br> -->
     </div>
-    <div v-if="needsDebug">
+    <div v-if="false && needsDebug">
       <span v-if="vizSpecs.needOptions">options: <br><pre><code>{{ options }}</code></pre></span><br>
       <!-- <span v-if="vizSpecs.needTemplating">minivizSettings.templates: <br><pre><code>{{ minivizSettings.templates }}</code></pre></span><br> -->
       <!-- <span v-if="vizSpecs.needOptions">paragraphs: <br><pre><code>{{ paragraphs }}</code></pre></span><br> -->
@@ -280,6 +281,7 @@ export default {
         if (sf.unit) { field.unit = sf.unit[this.locale] || sf.unit }
         if (sf.bgColor) { field.bgColor = sf.bgColor }
         if (sf.serieColor) { field.serieColor = sf.serieColor }
+        if (sf.customLabel) { field.customLabel = sf.customLabel }
         return field
       })
       return fieldsForSeries
@@ -304,8 +306,8 @@ export default {
   methods: {
     getContrastYIQ,
     buildSerie () {
-      this.needsDebug && console.log('\nC-DatamiMiniviz > buildSeries > this.fieldsForSeries : ', this.fieldsForSeries)
-      this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > this.vizType : ', this.vizType)
+      // this.needsDebug && console.log('\nC-DatamiMiniviz > buildSeries > this.fieldsForSeries : ', this.fieldsForSeries)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > this.vizType : ', this.vizType)
       // console.log('C-DatamiMiniviz > buildSeries > this.item : ', this.item)
       // const series = [44, 55, 13, 43, 22] // example 1
       // const series = { name: 'Serie name', data: [44, 55, 13, 43, 22] } // example 2
@@ -326,16 +328,16 @@ export default {
           }
         })
       }
-      this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > series : ', series)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > series : ', series)
       this.series = series
     },
     buildLabels () {
-      this.needsDebug && console.log('C-DatamiMiniviz > buildLabels > this.fieldsForSeries : ', this.fieldsForSeries)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildLabels > this.fieldsForSeries : ', this.fieldsForSeries)
       // const labels = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'] // example
       const labels = this.fieldsForSeries && this.fieldsForSeries.map(f => {
-        return f.title || f.label || f.name
+        return f.customLabel || f.title || f.label || f.name
       })
-      this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > labels : ', labels)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildSeries > labels : ', labels)
       return labels
     },
     buildLabelsColors () {
@@ -345,8 +347,8 @@ export default {
       return colors
     },
     buildCategs () {
-      const categs = this.fieldsForSeries.map(s => {
-        return s.name
+      const categs = this.fieldsForSeries.map(f => {
+        return f.customLabel || f.title || f.name
       })
       return categs
     },
@@ -419,7 +421,7 @@ export default {
           tooltip: { enabled: false }
         }
       }
-      this.needsDebug && console.log('C-DatamiMiniviz > buildOptions > options : ', options)
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildOptions > options : ', options)
       this.options = options
     },
     getBgColor (field) {

@@ -20,6 +20,11 @@
       v-show="currentEditViewMode !== 'edit' && field.block_title"
       class="is-size-7 mb-1"
       @click="showCollapse = !showCollapse">
+      <b-icon
+        v-if="field.titleIcon"
+        :icon="field.titleIcon"
+        class="mr-2"
+        size="is-small"/>
       <span
         class="has-text-weight-bold is-uppercase">
         {{ field.block_title }}
@@ -39,6 +44,11 @@
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"
+        class="mr-2"
+        size="is-small"/>
+      <b-icon
+        v-if="field.prefixIcon"
+        :icon="field.prefixIcon"
         class="mr-2"
         size="is-small"/>
       <span
@@ -98,13 +108,14 @@
       <!-- <code>{{ templatedValues }}</code> -->
       <p
         v-for="(paragraph, idx) in templatedValues"
-        :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">
+        :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`"
+        :class="paragraph.customClass">
         <span
           v-if="isMini && !idx"
-          v-html="trimText(paragraph || t('global.noValue', locale), 150)"/>
+          v-html="trimText(paragraph.text || t('global.noValue', locale), 150)"/>
         <span
           v-if="!isMini"
-          v-html="paragraph"/>
+          v-html="paragraph.text"/>
       </p>
     </div>
 

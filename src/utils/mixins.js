@@ -973,14 +973,19 @@ export const mixinTexts = {
     getTemplatedValues (field) {
       const ignoreDefinitions = field.ignoreDefinitions
       const templatedArray = field.templating.map(paragraph => {
+        const customClass = paragraph.customClass
         const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
-        return this.applyTemplate(this.fields, text, ignoreDefinitions)
+        return {
+          customClass: customClass,
+          text: this.applyTemplate(this.fields, text, ignoreDefinitions)
+        }
       })
       return templatedArray
     },
     applyTemplate (fields, text, ignoreDefinitions = false) {
-      // replace value fields
       // console.log('\nM > mixinTexts > applyTemplating > text :', text)
+      // console.log('M > mixinTexts > applyTemplating > fields :', fields)
+      // replace value fields
       // console.log('M > mixinTexts > applyTemplating > ignoreDefinitions :', ignoreDefinitions)
       const fieldStart = '{{'
       const fieldEnd = '}}'

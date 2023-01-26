@@ -69,7 +69,7 @@
               "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/blob/main/json/schema-custom_props.json"
             },
             "pagination":{
-              "itemsPerRow": 4
+              "itemsPerRow": 3
             },
             "cardsview": {
               "activate": true,
@@ -85,12 +85,20 @@
                   "position": "adress",
                   "prefix": "Département : "
                 },
-                "adresse": {
+                "fs_adresse": {
                   "position": "adress"
                 },
                 "com_lib": {
                   "position": "adress",
                   "prefix": "Commune : "
+                },
+                "fs_telephone": {
+                  "position": "description",
+                  "prefixIcon": "phone-outline"
+                },
+                "fs_mail": {
+                  "position": "description",
+                  "prefixIcon": "at"
                 },
                 "terr_thematique_asso_principale": {
                   "position": "tags",
@@ -117,13 +125,25 @@
                   "position": "adress",
                   "prefix" : "Département : "
                 },
-                "adresse": {
+                "fs_adresse": {
                   "position": "adress",
                   "prefix" : "Adresse : "
                 },
                 "com_lib": {
                   "position": "adress",
                   "prefix" : "Commune : "
+                },
+                "fs_telephone": {
+                  "position": "resume",
+                  "block_title": "Téléphone",
+                  "titleIcon": "phone-outline",
+                  "right": true
+                },
+                "fs_mail": {
+                  "position": "resume",
+                  "block_title": "Email",
+                  "titleIcon": "at",
+                  "right": true
                 },
                 "terr_thematique_asso_principale": {
                   "position": "tags",
@@ -144,6 +164,12 @@
                 "insee_com": {
                   "position": "description",
                   "right" : false
+                },
+                "fs_h_lundi": {
+                  "position": "description",
+                  "block_title": "Horaires",
+                  "titleIcon": "clock-outline",
+                  "right" : true
                 }
               },
               "templates": {
@@ -159,15 +185,58 @@
                     },
                     {
                       "text": {
-                        "fr": "La commune &ldquo;&#123;&#123; com_lib &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; com_taux_pauvrete &#125;&#125; % et un taux de chômage de &#123;&#123; com_taux_chomage &#125;&#125; %."
+                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; com_taux_pauvrete &#125;&#125; % et un taux de chômage de &#123;&#123; com_taux_chomage &#125;&#125; %."
                       }
+                    }
+                  ]
+                },
+                "fs_h_lundi": {
+                  "use_on_mini": false,
+                  "use_on_detail": true,
+                  "ignore_definitions": true,
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "<b>Lundi</b> : &#123;&#123; fs_h_lundi &#125;&#125;"
+                      },
+                      "customClass": "mt-3 mb-1 is-size-6"
+                    },
+                    {
+                      "text": {
+                        "fr": "<b>Mardi</b> : &#123;&#123; fs_h_mardi &#125;&#125;"
+                      },
+                      "customClass": "mb-1 is-size-6"
+                    },
+                    {
+                      "text": {
+                        "fr": "<b>Mercredi</b> : &#123;&#123; fs_h_mercredi &#125;&#125;"
+                      },
+                      "customClass": "mb-1 is-size-6"
+                    },
+                    {
+                      "text": {
+                        "fr": "<b>Jeudi</b> : &#123;&#123; fs_h_jeudi &#125;&#125;"
+                      },
+                      "customClass": "mb-1 is-size-6"
+                    },
+                    {
+                      "text": {
+                        "fr": "<b>Vendredi</b> : &#123;&#123; fs_h_vendredi &#125;&#125;"
+                      },
+                      "customClass": "mb-1 is-size-6"
+                    },
+                    {
+                      "text": {
+                        "fr": "<b>Samedi</b> : &#123;&#123; fs_h_samedi &#125;&#125;"
+                      },
+                      "customClass": "is-size-6"
                     }
                   ]
                 }
               },
               "minimap": {
                 "activate": true,
-                "right_side": true,
+                "right_side": false,
                 "mapOptions": {
                   "zoom": 5,
                   "maxZoom": 18,
@@ -199,13 +268,13 @@
                       "bgColor": "#d0e428"
                     },
                     {
-                      "field": "actes_d_etat_civil",
+                      "field": "fs_actes_d_etat_civil",
                       "title": { "fr": "Nombre d&lsquo;actes d&lsquo;état civil" },
                       "unit": { "fr": "actes" },
                       "bgColor": "#7f18c1"
                     },
                     {
-                      "field": "le_ministere_de_l_interieur__ants",
+                      "field": "fs_le_ministere_de_l_interieur__ants",
                       "title": { "fr": "Nombre d&lsquo;ANTS" },
                       "unit": { "fr": "ANTS" },
                       "bgColor": "#2872e4"
@@ -221,15 +290,36 @@
                   "cols": 8,
                   "serieName": "Usagers",
                   "serieFromFields": [
-                    { "field": "fs_age_taux_entre_18_et_26_ans" },
-                    { "field": "fs_age_taux_entre_27_et_45_ans" },
-                    { "field": "fs_age_taux_entre_45_et_55_ans" },
-                    { "field": "fs_age_taux_entre_55_et_62_ans" },
-                    { "field": "fs_age_taux_plus_de_62_ans" },
-                    { "field": "fs_age_taux_moins_de_18_ans" },
-                    { "field": "fs_age_taux_non_connu" }
+                    { 
+                      "field": "fs_age_moins_de_18_ans",
+                      "customLabel": ["- de 18 ans"]
+                    },
+                    { 
+                      "field": "fs_age_entre_18_et_26_ans",
+                      "customLabel": ["entre 18-26 ans"]
+                    },
+                    { 
+                      "field": "fs_age_entre_27_et_45_ans",
+                      "customLabel": ["entre 26-45 ans"]
+                    },
+                    {
+                      "field": "fs_age_entre_45_et_55_ans",
+                      "customLabel": ["entre 45-55 ans"]
+                    },
+                    { 
+                      "field": "fs_age_entre_55_et_62_ans",
+                      "customLabel": ["entre 55-62 ans"]
+                    },
+                    { 
+                      "field": "fs_age_plus_de_62_ans",
+                      "customLabel": ["+ de 62 ans"]
+                    },
+                    { 
+                      "field": "fs_age_non_connu",
+                      "customLabel": ["(âge inconnu)"]
+                    }
                   ],
-                  "serieColor": "#e49a28"
+                  "serieColor": "#d81b47"
                 },
                 {
                   "title": { "fr": "Usagers par sexe" },
@@ -240,12 +330,14 @@
                   "cols": 4,
                   "serieFromFields": [
                     { 
-                      "field": "fs_sexe_taux_femme",
-                      "serieColor": "#e428d0"
+                      "field": "fs_sexe_femme",
+                      "customLabel": ["Femmes"],
+                      "serieColor": "#1bd8ac"
                     },
                     { 
-                      "field": "fs_sexe_taux_homme",
-                      "serieColor": "#28d0e4"
+                      "field": "fs_sexe_homme",
+                      "customLabel": ["Hommes"],
+                      "serieColor": "#e7c03f"
                     }
                   ],
                   "showTotal": true
@@ -260,28 +352,33 @@
                   "templates": [
                     {
                       "text": {
-                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; insee_dep &#125;&#125;)."
+                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Le chiffre pour la DGFIP est de &#123;&#123; dgfip &#125;&#125;."
+                        "fr": "Le nombre de services DGFIP est de &#123;&#123; fs_dgfip &#125;&#125; pour cet établissement."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Le chiffre pour la CAF est de &#123;&#123; caf &#125;&#125;."
+                        "fr": "Le nombre de services CAF est de &#123;&#123; fs_caf &#125;&#125; pour cet établissement."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Le chiffre pour la CNAM est de &#123;&#123; cnam &#125;&#125;."
+                        "fr": "Le nombre de services CNAM est de &#123;&#123; fs_cnam &#125;&#125; pour cet établissement."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le nombre d&lsquo;autres services de &#123;&#123; fs_autre &#125;&#125; pour cet établissement."
                       }
                     }
                   ]
                 },
                 {
-                  "title": { "fr": "Usagers par tranche d&lsquo;âge" },
+                  "title": { "fr": "Services réalisés par la France Service" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
@@ -289,15 +386,52 @@
                   "cols": 8,
                   "serieName": "Usagers",
                   "serieFromFields": [
-                    { "field": "fs_age_taux_entre_18_et_26_ans" },
-                    { "field": "fs_age_taux_entre_27_et_45_ans" },
-                    { "field": "fs_age_taux_entre_45_et_55_ans" },
-                    { "field": "fs_age_taux_entre_55_et_62_ans" },
-                    { "field": "fs_age_taux_plus_de_62_ans" },
-                    { "field": "fs_age_taux_moins_de_18_ans" },
-                    { "field": "fs_age_taux_non_connu" }
+                    {
+                      "field": "fs_dgfip",
+                      "customLabel": ["DGFIP"]
+                    },
+                    {
+                      "field": "fs_caf",
+                      "customLabel": ["CAF"]
+                    },
+                    {
+                      "field": "fs_cnam",
+                      "customLabel": ["CNAM"]
+                    },
+                    {
+                      "field": "fs_cnav_ou_carsat",
+                      "customLabel": ["CNAV ou CARSAT"]
+                    },
+                    {
+                      "field": "fs_la_poste",
+                      "customLabel": ["La Poste"]
+                    },
+                    {
+                      "field": "fs_pole_emploi",
+                      "customLabel": ["Pôle Emploi"]
+                    },
+                    {
+                      "field": "fs_le_ministere_de_la_justice",
+                      "customLabel": ["Min. de la Justice"]
+                    },
+                    {
+                      "field": "fs_le_ministere_de_l_interieur__ants",
+                      "customLabel": ["Min. Intérieur", "ANTS"]
+                    },
+                    {
+                      "field": "fs_la_msa",
+                      "customLabel": ["MSA"]
+                    },
+                    {
+                      "field": "fs_actes_d_etat_civil",
+                      "customLabel": ["actes", "d&lsquo;état civil"]
+                    },
+                    {
+                      "field": "fs_autre",
+                      "customLabel": ["autres", "services"]
+                    }
                   ],
-                  "serieColor": "#e43c28"
+                  "serieColor": "#ac1bd8"
                 }
               ]
             },

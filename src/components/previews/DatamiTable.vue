@@ -749,7 +749,7 @@ export default {
       // retrieve options from file options
       const hasPaginationOptions = this.fileOptions && this.fileOptions.pagination
       if (hasPaginationOptions) {
-        console.log('C > DatamiTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
+        // console.log('C > DatamiTable > paginationFromFileOptions > this.fileOptions : ', this.fileOptions)
         Object.keys(hasPaginationOptions).forEach(key => {
           pagination[key] = hasPaginationOptions[key]
         })
@@ -782,7 +782,7 @@ export default {
         }
         pagination.itemsPerRow = itemsPerRow
       }
-      console.log('C > DatamiTable > paginationFromFileOptions > pagination : ', pagination)
+      // console.log('C > DatamiTable > paginationFromFileOptions > pagination : ', pagination)
       return pagination
     },
     dataFiltered () {
