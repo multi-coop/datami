@@ -679,6 +679,7 @@ export default {
         if (hasTemplate) {
           fieldMap.templating = h.templating.paragraphs
           fieldMap.ignoreDefinitions = h.templating.ignore_definitions
+          fieldMap.ignoreTrimming = h.templating.use_on_mini
         }
         // console.log('C > DatamiTable > mappingsForMini > fieldMap : ', fieldMap)
         return fieldMap
@@ -696,6 +697,7 @@ export default {
           // console.log('C > DatamiTable > mappingsForDetail > h : ', h)
           fieldMap.templating = h.templating.paragraphs
           fieldMap.ignoreDefinitions = h.templating.ignore_definitions
+          // fieldMap.useOnMini = h.templating.use_on_mini
           // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)
         }
         // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)

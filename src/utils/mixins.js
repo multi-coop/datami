@@ -978,12 +978,14 @@ export const mixinTexts = {
   methods: {
     getTemplatedValues (field) {
       const ignoreDefinitions = field.ignoreDefinitions
+      const ignoreTrimming = field.ignoreTrimming
       const templatedArray = field.templating.map(paragraph => {
         const customClass = paragraph.customClass
         const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
         return {
           customClass: customClass,
-          text: this.applyTemplate(this.fields, text, ignoreDefinitions)
+          text: this.applyTemplate(this.fields, text, ignoreDefinitions),
+          ignoreTrimming: ignoreTrimming
         }
       })
       return templatedArray

@@ -1536,13 +1536,13 @@ export default {
       })
 
       this.map.on(popupConfig.action, layerId, (e) => {
-        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - e : ', e)
+        console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - e : ', e)
 
         const featuresPolygon = mapLibre.queryRenderedFeatures(e.point, { layers: [layerId] })
-        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ', featuresPolygon)
+        console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - featuresPolygon : ', featuresPolygon)
 
         const itemProps = featuresPolygon[0].properties
-        // console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
+        console.log('C > DatamiMap > createAddChoroplethLayers > map.on - choroplethLayerId - itemProps : ', itemProps)
 
         const popupFieldsSettings = popupConfig.fields_settings
         const config = Object.keys(popupFieldsSettings).map(k => {

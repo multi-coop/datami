@@ -111,10 +111,10 @@
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`"
         :class="paragraph.customClass">
         <span
-          v-if="isMini && !idx"
+          v-if="isMini && !idx && !paragraph.ignoreTrimming"
           v-html="trimText(paragraph.text || t('global.noValue', locale), 150)"/>
         <span
-          v-if="!isMini"
+          v-if="!isMini || paragraph.ignoreTrimming"
           v-html="paragraph.text"/>
       </p>
     </div>

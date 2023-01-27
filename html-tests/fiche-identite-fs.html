@@ -31,20 +31,23 @@
           "activate": true,
           "creditslogos": [
             {
-              "imageUrl": "http://localhost:8811/statics/images/mednum-logo.png",
-              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/mednum-logo.png",
+              "localdev": true,
+              "imageUrlLocal": "http://localhost:8811/statics/images/mednum-logo.png",
+              "imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/mednum-logo.png",
               "url": "https://lamednum.coop",
               "imageHeight": "15px"
             },
             {
-              "imageUrl": "http://localhost:8811/statics/images/anct-logo.png",
-              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/anct-logo.png",
+              "localdev": true,
+              "imageUrlLocal": "http://localhost:8811/statics/images/anct-logo.png",
+              "imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/anct-logo.png",
               "url": "https://agence-cohesion-territoires.gouv.fr",
               "imageHeight": "30px"
             },
             {
-              "imageUrl": "http://localhost:8811/statics/images/bdt-logo.png",
-              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/bdt-logo.png",
+              "localdev": true,
+              "imageUrlLocal": "http://localhost:8811/statics/images/bdt-logo.png",
+              "imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/bdt-logo.png",
               "url": "https://www.banquedesterritoires.fr",
               "imageHeight": "25px"
             }
@@ -114,6 +117,12 @@
                   "position": "description",
                   "prefixIcon": "at"
                 },
+                "fs_h_lundi": {
+                  "position": "infos",
+                  "block_title": "Horaires",
+                  "titleIcon": "clock-outline",
+                  "right" : true
+                },
                 "terr_thematique_asso_principale": {
                   "position": "tags",
                   "block_title": "Thématique principale"
@@ -149,15 +158,15 @@
                 },
                 "fs_telephone": {
                   "position": "resume",
-                  "block_title": "Téléphone",
-                  "titleIcon": "phone-outline",
-                  "right": true
+                  "prefix": "Téléphone :",
+                  "prefixIcon": "phone-outline",
+                  "right": false
                 },
                 "fs_mail": {
                   "position": "resume",
-                  "block_title": "Email",
-                  "titleIcon": "at",
-                  "right": true
+                  "prefix": "Email :",
+                  "prefixIcon": "at",
+                  "right": false
                 },
                 "terr_thematique_asso_principale": {
                   "position": "tags",
@@ -205,7 +214,7 @@
                   ]
                 },
                 "fs_h_lundi": {
-                  "use_on_mini": false,
+                  "use_on_mini": true,
                   "use_on_detail": true,
                   "ignore_definitions": true,
                   "paragraphs": [
@@ -250,7 +259,7 @@
               },
               "minimap": {
                 "activate": true,
-                "right_side": false,
+                "right_side": true,
                 "mapOptions": {
                   "zoom": 5,
                   "maxZoom": 18,
@@ -340,7 +349,7 @@
                   "viztype": "simple-donut",
                   "activate": true,
                   "position": "viz-top",
-                  "showOnMiniCard": true,
+                  "showOnMiniCard": false,
                   "cols": 4,
                   "serieFromFields": [
                     { 
@@ -450,7 +459,7 @@
               ]
             },
             "datavizview_": {
-              "activate": false,
+              "activate": true,
               "default": false,
               "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/dataviz-settings.json",

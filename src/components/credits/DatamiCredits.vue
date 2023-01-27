@@ -18,7 +18,7 @@
           @mouseover="hoverLogoClient = `credit-logo-${i}`"
           @mouseleave="hoverLogoClient = ''">
           <img
-            :src="logo.imageUrl"
+            :src="logo.localdev ? logo.imageUrlLocal : logo.imageUrl"
             :alt="`logo client - ${i + 1}`"
             :style="`height: ${logo.imageHeight || '25px'} !important; width: auto !important;${hoverLogoClient === 'credit-logo-' + i ? '' : 'filter: grayscale(1);'}`">
         </a>
