@@ -33,12 +33,12 @@
           <footer
             class="card-footer px-0 py-3">
             <b-button
-              class="map-mini-btn-show-detail"
               type="is-dark"
               size="is-small"
               icon-left="eye"
               expanded
               outlined
+              class="map-mini-btn-show-detail"
               @click="toggleItemCard({ btn: 'showDetailButton' })">
               {{ t('preview.showCardDetails', locale) }}
             </b-button>
