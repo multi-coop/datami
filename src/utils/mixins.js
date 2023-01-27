@@ -231,11 +231,12 @@ export const mixinGlobal = {
     }),
     fileCreditsLogos () {
       // console.log('\nM > mixinGlobal > fileCreditsLogo > this.creditslogos : ', this.creditslogos)
+      const hasCreditsLogos = this.creditsLogos && this.creditsLogos !== ''
       let logosArray
-      if (Array.isArray(this.creditslogos)) {
+      if (hasCreditsLogos && Array.isArray(this.creditslogos)) {
         logosArray = this.creditslogos
       }
-      if (typeof (this.creditslogos) === 'string') {
+      if (hasCreditsLogos && typeof (this.creditslogos) === 'string') {
         logosArray = JSON.parse(this.creditslogos)
       }
       return logosArray
