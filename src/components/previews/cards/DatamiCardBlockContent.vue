@@ -93,9 +93,13 @@
           &nbsp;%
         </span>
       </span>
+
+      <!-- SIMPLE TEXT VALUE -->
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
+
+      <!-- SUFFIX -->
       <span
         v-if="field.suffix"
         class="mr-1">

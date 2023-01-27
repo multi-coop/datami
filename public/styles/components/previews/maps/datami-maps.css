@@ -32,6 +32,10 @@
   transform: translate(-50%, -50%); */
 }
 
+.map-mini-btn-show-detail:not(:hover) {
+  background-color: white !important;
+}
+
 .big-loader {
   z-index: 10;
   position: absolute !important;

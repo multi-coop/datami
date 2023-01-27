@@ -30,17 +30,19 @@
             :locale="locale"
             @toggleDetail="toggleItemCard"
             @action="SendActionToParent"/>
-          <!-- <footer class="card-footer px-3 py-3">
+          <footer
+            class="card-footer px-0 py-3">
             <b-button
+              class="map-mini-btn-show-detail"
               type="is-dark"
               size="is-small"
               icon-left="eye"
               expanded
               outlined
-              @click="toggleItemCard">
+              @click="toggleItemCard({ btn: 'showDetailButton' })">
               {{ t('preview.showCardDetails', locale) }}
             </b-button>
-          </footer> -->
+          </footer>
         </div>
 
         <!-- LEGEND & LAYERS -->
@@ -340,6 +342,7 @@ export default {
         const hasTemplate = templates && templates[f.name] && templates[f.name].use_on_mini
         if (hasTemplate) {
           fieldMap.templating = templates[f.name].paragraphs
+          fieldMap.ignoreTrimming = templates[f.name].use_on_mini
         }
         return fieldMap
       })

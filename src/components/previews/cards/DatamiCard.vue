@@ -153,7 +153,7 @@
             <!-- LEFT - TITLE / SUBTITLE / ADRESS -->
             <div
               v-if="hasAnyContentByPosition(['title', 'subtitle', 'adress', 'logo'])"
-              class="column is-12">
+              :class="`column is-12 ${isMini ? 'pb-1' : ''}`">
               <div
                 :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
@@ -496,7 +496,7 @@
 
     <!-- CARD FOOTER -->
     <footer
-      v-if="isMini"
+      v-if="isMini && !fromMap"
       class="card-footer px-3 py-3">
       <!-- SHOW DETAILS BUTTON -->
       <b-button
@@ -699,6 +699,7 @@ export default {
       cardsSettings = Object.entries(cardsSettings)
         .map(entry => { return { name: entry[0], ...entry[1] } })
         .filter(f => {
+          if (this.fromMap && this.isMini && f.hide_on_mini_map) return false
           if (isRight) {
             return f.position === position && f.right
           } else {
