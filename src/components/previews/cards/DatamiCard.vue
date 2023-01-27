@@ -686,15 +686,29 @@ export default {
     },
     getFieldsByPosition (position, isRight = false) {
       // const debug = this.mapPositions.includes(position)
+      // const debug = position === 'adress'
       // debug && console.log('\nC > DatamiCard > getFieldsByPosition > position :', position)
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.cardsSettingsFromOptions :', this.cardsSettingsFromOptions)
       // debug && console.log('C > DatamiCard > getFieldsByPosition > isRight :', isRight)
       // debug && console.log('C > DatamiCard > getFieldsByPosition > this.fieldMapping :', this.fieldMapping)
-      const fields = this.fieldMapping.filter(f => {
-        if (isRight) {
-          return f.position === position && f.right
-        } else {
-          return f.position === position && (!f.right || typeof f.right === 'undefined')
-        }
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.cardsSettingsEntriesMini :', this.cardsSettingsEntriesMini)
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.cardsSettingsEntriesDetail :', this.cardsSettingsEntriesDetail)
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.fieldMapping :', this.fieldMapping)
+      const fields = []
+      let cardsSettings = this.isMini ? this.cardsSettingsEntriesMini : this.cardsSettingsEntriesDetail
+      cardsSettings = Object.entries(cardsSettings)
+        .map(entry => { return { name: entry[0], ...entry[1] } })
+        .filter(f => {
+          if (isRight) {
+            return f.position === position && f.right
+          } else {
+            return f.position === position && (!f.right || typeof f.right === 'undefined')
+          }
+        })
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > cardsSettings :', cardsSettings)
+      cardsSettings.forEach(f => {
+        const field = this.fieldMapping.find(fm => fm.name === f.name)
+        if (field) { fields.push(field) }
       })
       // debug && console.log('C > DatamiCard > getFieldsByPosition > fields :', fields)
       return fields

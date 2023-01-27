@@ -331,7 +331,7 @@ export default {
       return this.cardsSettingsFromOptions
     },
     mapCardsSettingsMini () {
-      return this.fields.map(f => {
+      const fields = this.fields.map(f => {
         const fieldMap = {
           ...this.trimField(f),
           ...this.mapCardsSettings.mini[f.name]
@@ -343,9 +343,10 @@ export default {
         }
         return fieldMap
       })
+      return fields
     },
     mapCardsSettingsDetail () {
-      return this.fields.map(f => {
+      const fields = this.fields.map(f => {
         const fieldMap = {
           ...this.trimField(f),
           ...this.mapCardsSettings.detail[f.name]
@@ -357,6 +358,7 @@ export default {
         }
         return fieldMap
       })
+      return fields
     },
     itemsForMap () {
       // console.log('\nC > DatamiMap > itemsForMap ...')

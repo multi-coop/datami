@@ -360,6 +360,12 @@ export const mixinGlobal = {
     cardsSettingsFromOptions () {
       return this.fileOptions.cardssettings
     },
+    cardsSettingsEntriesMini () {
+      return this.cardsSettingsFromOptions.mini
+    },
+    cardsSettingsEntriesDetail () {
+      return this.cardsSettingsFromOptions.detail
+    },
     cardsSettingsTemplates () {
       return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.templates
     },
@@ -1180,39 +1186,6 @@ export const mixinPagination = {
     getClosest
   }
 }
-
-// export const mixinCards = {
-//   computed: {
-//     cardsSettingsFromFileOptions () {
-//       let cardsSettings
-//       // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
-//       if (this.hasCardsView && this.cardsViewIsActive) {
-//         const settings = this.cardsSettingsFromOptions
-//         console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
-//         const miniSettings = settings.mini
-//         const detailSettings = settings.detail
-//         const mapping = this.columns.map(h => {
-//           const fieldMap = {
-//             ...h,
-//             mini: miniSettings[h.name],
-//             detail: detailSettings[h.name]
-//           }
-//           const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
-//           if (hasTemplate) { fieldMap.templating = hasTemplate }
-//           return fieldMap
-//         })
-//         cardsSettings = {
-//           originalHeaders: this.columns,
-//           editedHeaders: this.columnsForView,
-//           settings: { mini: miniSettings, detail: detailSettings },
-//           mapping: mapping
-//         }
-//       }
-//       console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
-//       return cardsSettings
-//     }
-//   }
-// }
 
 export const mixinCsv = {
   computed: {
