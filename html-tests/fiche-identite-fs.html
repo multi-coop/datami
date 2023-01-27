@@ -31,23 +31,27 @@
           "activate": true,
           "creditslogos": [
             {
-              "localdev": true,
+              "localdev": false,
               "imageUrlLocal": "http://localhost:8811/statics/images/mednum-logo.png",
-              "imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/mednum-logo.png",
+              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/mednum-logo.png",
+              "imageUrl": "https://github.com//multi-coop/datami-website-content/blob/main/images/clients/mednum-logo-transparent.png?raw=true",
               "url": "https://lamednum.coop",
               "imageHeight": "15px"
             },
             {
-              "localdev": true,
-              "imageUrlLocal": "http://localhost:8811/statics/images/anct-logo.png",
-              "imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/anct-logo.png",
+              "hide": true,
+              "localdev": false,
+              "imageUrlLocal": "http://localhost:8811/statics/images/anct-logo-transparent.png",
+              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/anct-logo-transparent.png",
+              "imageUrl": "https://github.com//multi-coop/datami-website-content/blob/main/images/clients/anct-logo-transparent.png?raw=true",
               "url": "https://agence-cohesion-territoires.gouv.fr",
               "imageHeight": "30px"
             },
             {
-              "localdev": true,
+              "localdev": false,
               "imageUrlLocal": "http://localhost:8811/statics/images/bdt-logo.png",
-              "imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/bdt-logo.png",
+              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/bdt-logo.png",
+              "imageUrl": "https://github.com//multi-coop/datami-website-content/blob/main/images/clients/bdt-logo.png?raw=true",
               "url": "https://www.banquedesterritoires.fr",
               "imageHeight": "25px"
             }
@@ -98,16 +102,17 @@
                 "lib_fs": {
                   "position": "title"
                 },
-                "dep_lib": {
-                  "position": "adress",
-                  "prefix": "Département : "
-                },
                 "fs_adresse": {
                   "position": "adress"
                 },
-                "com_lib": {
-                  "position": "adress",
-                  "prefix": "Commune : "
+                "lib_com": {
+                  "position": "adress"
+                },
+                "ifn_com": {
+                  "position": "adress"
+                },
+                "dep_lib": {
+                  "position": "adress"
                 },
                 "fs_telephone": {
                   "position": "description",
@@ -152,7 +157,11 @@
                   "position": "adress",
                   "prefix" : "Adresse : "
                 },
-                "com_lib": {
+                "ifn_com": {
+                  "position": "adress",
+                  "prefix" : "Code postal : "
+                },
+                "lib_com": {
                   "position": "adress",
                   "prefix" : "Commune : "
                 },

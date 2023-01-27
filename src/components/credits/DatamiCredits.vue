@@ -10,7 +10,7 @@
         v-if="logos && logos.length"
         class="my-5 is-flex is-align-items-center is-justify-content-center">
         <a
-          v-for="(logo, i) in logos"
+          v-for="(logo, i) in logos.filter(l => !l.hide)"
           :key="`credit-logo-${i}`"
           class="mx-3"
           :href="logo.url"

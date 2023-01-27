@@ -216,19 +216,44 @@
 
                 <!-- ADRESS BLOCK : 'adress' -->
                 <div v-if="hasContentByPosition('adress')">
-                  <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('adress')"
-                    :key="`adress-${i}-${fieldObj.field}`"
-                    :file-id="fileId"
-                    :position="'adress'"
-                    :field="fieldObj"
-                    :field-label="getFieldLabel(fieldObj.field)"
-                    :item-id="item.id"
-                    :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
-                    :item-added="item.added"
-                    :item-value="item[fieldObj.field]"
-                    :is-mini="isMini"
-                    :locale="locale"/>
+                  <div v-if="currentEditViewMode === 'preview' && isMini">
+                    <div class="media">
+                      <div class="media-left mr-2">
+                        <b-icon
+                          icon="map-marker-outline"
+                          size="is-small"/>
+                      </div>
+                      <div class="media-content">
+                        <p
+                          v-for="(fieldObj, i) in getFieldsByPosition('adress')"
+                          :key="`adress-mini-${i}-${fieldObj.field}`"
+                          class="mb-0">
+                          <b-icon
+                            v-if="fieldObj.prefixIcon"
+                            :icon="fieldObj.prefixIcon"
+                            class="mr-2"
+                            size="is-small"/>
+                          {{ item[fieldObj.field] }}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- <code>{{ getFieldsByPosition('adress') }}</code> -->
+                  </div>
+                  <div v-else>
+                    <DatamiCardBlockContent
+                      v-for="(fieldObj, i) in getFieldsByPosition('adress')"
+                      :key="`adress-${i}-${fieldObj.field}`"
+                      :file-id="fileId"
+                      :position="'adress'"
+                      :field="fieldObj"
+                      :field-label="getFieldLabel(fieldObj.field)"
+                      :item-id="item.id"
+                      :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
+                      :item-added="item.added"
+                      :item-value="item[fieldObj.field]"
+                      :is-mini="isMini"
+                      :locale="locale"/>
+                  </div>
                 </div>
               </div>
             </div>
