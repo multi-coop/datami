@@ -73,7 +73,7 @@ export const buildApiRoots = (gitInfos) => {
     apiFile = `${apiFileBase}?ref=${gitInfos.branch}`
     apiFileRaw = `${apiFileBase}/raw?ref=${gitInfos.branch}`
   } else {
-    console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
+    // console.log('U > utilsGitUrl > buildApiRoots > ELSE > gitInfos : ', gitInfos)
   }
   // console.log('U > utilsGitUrl > buildApiRoots > apiRepo : ', apiRepo)
   // console.log('U > utilsGitUrl > buildApiRoots > apiFile : ', apiFile)

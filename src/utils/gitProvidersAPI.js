@@ -12,12 +12,23 @@ import {
 
 export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined, filefullname = undefined) {
   // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
+  // console.log('U > gitProvidersAPI > getData > A > token : ', token)
   // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
   // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
   const errors = []
 
-  // pure fetch
-  const req = await fetch(url)
+  // build auth headers to get raw data from private repo if any
+  let requestOptions
+  if (token) {
+    requestOptions = buildGitRequestOptions('GET', provider, token)
+  }
+  // console.log('U > gitProvidersAPI > getData > A > headers : ', headers)
+  let req
+  if (requestOptions) {
+    req = await fetch(url, requestOptions)
+  } else {
+    req = await fetch(url)
+  }
   // console.log('\nU > gitProvidersAPI > getData > B > url : ', url)
   // console.log('U > gitProvidersAPI > getData > B > req : ', req)
   // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)
