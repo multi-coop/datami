@@ -5,12 +5,12 @@
     <div
       :class="`column is-full is-italic has-text-centered`">
       <!-- CLIENT LOGO -->
+      <!-- logos : <pre><code>{{ logos }}</code></pre> -->
       <p
-        v-if="creditsLogos && creditsLogos.length"
+        v-if="logos && logos.length"
         class="my-5 is-flex is-align-items-center is-justify-content-center">
-        <!-- creditsLogo : <pre><code>{{ creditsLogo }}</code></pre> -->
         <a
-          v-for="(logo, i) in creditsLogos"
+          v-for="(logo, i) in logos"
           :key="`credit-logo-${i}`"
           class="mx-3"
           :href="logo.url"
@@ -96,7 +96,7 @@ export default {
       default: null,
       type: String
     },
-    creditsLogos: {
+    logos: {
       default: null,
       type: Array
     },
@@ -118,5 +118,8 @@ export default {
       urlSourceCode: (state) => state.urlSourceCode
     })
   }
+  // beforeMount () {
+  //   console.log('\nC > DatamiCredits > beforeMount > this.logos: ', this.logos)
+  // }
 }
 </script>

@@ -229,9 +229,16 @@ export const mixinGlobal = {
       getDialogsById: 'git-dialogs/getDialogsById',
       getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
+    widgetProvider () {
+      return process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
+    },
+    isLocalDev () {
+      return this.widgetProvider.startsWith('localhost')
+    },
     fileCreditsLogos () {
-      // console.log('\nM > mixinGlobal > fileCreditsLogo > this.creditslogos : ', this.creditslogos)
-      const hasCreditsLogos = this.creditsLogos && this.creditsLogos !== ''
+      // console.log('\nM > mixinGlobal > fileCreditsLogos > this.creditslogos : ', this.creditslogos)
+      const hasCreditsLogos = this.creditslogos && this.creditslogos !== ''
+      // console.log('M > mixinGlobal > fileCreditsLogos > hasCreditsLogos : ', hasCreditsLogos)
       let logosArray
       if (hasCreditsLogos && Array.isArray(this.creditslogos)) {
         logosArray = this.creditslogos
@@ -239,13 +246,15 @@ export const mixinGlobal = {
       if (hasCreditsLogos && typeof (this.creditslogos) === 'string') {
         logosArray = JSON.parse(this.creditslogos)
       }
+      if (hasCreditsLogos && this.isLocalDev) {
+        logosArray = logosArray.map(l => { return { ...l, localdev: true } })
+      }
+      // console.log('M > mixinGlobal > fileCreditsLogos > logosArray : ', logosArray)
       return logosArray
     },
     getUrlBase () {
-      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
-      const isLocal = widgetProvider.startsWith('localhost')
-      const Http = isLocal ? 'http' : 'https'
-      const urlBase = `${Http}://${widgetProvider}`
+      const Http = this.isLocalDev ? 'http' : 'https'
+      const urlBase = `${Http}://${this.widgetProvider}`
       return urlBase
     },
     fileToken () {

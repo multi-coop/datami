@@ -167,7 +167,7 @@
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
-      :credits-logos="fileCreditsLogos"
+      :logos="fileCreditsLogos"
       :locale="locale"/>
 
     <!-- DIALOG MODAL -->
