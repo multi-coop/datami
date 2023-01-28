@@ -2,7 +2,7 @@
   <div
     v-if="item"
     :class="`DatamiCard datami-component card datami-card ${isHovered || showDetail ? 'hover-effect' : '' }`"
-    :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};${isMini && fromMap ? 'max-height: 500px; overflow: auto;' : ''}`"
+    :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};${isMini && fromMap ? 'max-height: 500px; overflow: auto; border: 1px solid #363636;' : ''}`"
     @mouseover="isHovered = true"
     @mouseleave="isHovered = false">
     <!-- style="background-color: #f6f6f6" -->

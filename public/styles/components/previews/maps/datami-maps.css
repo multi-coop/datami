@@ -21,7 +21,7 @@
 
 .map-mini-card-item {
   z-index: 10;
-  left: 50px;
+  left: 1em;
 }
 
 .map-detail-card-item {
@@ -30,10 +30,6 @@
   left: 50%;
   /* -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); */
-}
-
-.map-mini-btn-show-detail:not(:hover) {
-  background-color: white !important;
 }
 
 .big-loader {

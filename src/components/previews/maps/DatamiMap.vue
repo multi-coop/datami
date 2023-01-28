@@ -17,7 +17,7 @@
         <div
           v-if="showCard && displayedItemId && !showDetail"
           class="map-card map-mini-card-item"
-          :style="`width: ${cardMiniWidth}; top: ${mapHeightTop}px`">
+          :style="`width: ${cardMiniWidth}; top: ${mapHeightTop + 10}px`">
           <DatamiCard
             :file-id="fileId"
             :fields="fields"
@@ -38,8 +38,10 @@
               icon-left="eye"
               expanded
               outlined
-              class="map-mini-btn-show-detail"
-              @click="toggleItemCard({ btn: 'showDetailButton' })">
+              :style="`border-radius: .25rem; ${isBtnDetailCardHovered ? '' : 'background-color: white;'}`"
+              @click="toggleItemCard({ btn: 'showDetailButton' })"
+              @mouseover="isBtnDetailCardHovered = true"
+              @mouseleave="isBtnDetailCardHovered = false">
               {{ t('preview.showCardDetails', locale) }}
             </b-button>
           </footer>
@@ -305,6 +307,7 @@ export default {
       mapStyle: StylesOSM.testRasterVoyager, // OK better - default
 
       // CARDS
+      isBtnDetailCardHovered: false,
       cardMiniWidth: '30%',
       cardDetailWidth: '65%'
     }
