@@ -502,7 +502,7 @@ export default {
     },
     async items () {
       if (this.map && !this.isClusterSet && this.itemsForMap) {
-        console.log('\nC > DatamiMap > watch > items > createGeoJsonDataPoints ( from geoJson.js ) ...')
+        // console.log('\nC > DatamiMap > watch > items > createGeoJsonDataPoints ( from geoJson.js ) ...')
         this.geoJson = createGeoJsonDataPoints(this.itemsForMap, this.fieldLat, this.fieldLong)
         // console.log('C > DatamiMap > watch - items - this.geoJson : ', this.geoJson)
         await this.createMapItems(this.geoJson)
@@ -761,7 +761,7 @@ export default {
     // MAP ITEMS AS GEOJSON
     // - - - - - - - - - - - - - - - - - - //
     async createMapItems (geoJson) {
-      console.log('\nC > DatamiMap > createMapItems ...')
+      // console.log('\nC > DatamiMap > createMapItems ...')
       const mapOptions = this.mapOptions
 
       // adding reactive source
@@ -785,28 +785,29 @@ export default {
     // SOURCES
     // - - - - - - - - - - - - - - - - - - //
     updateSourceData (itemsForMap) {
-      this.log && console.log('\nC > DatamiMap > updateSourceData ...')
-      // console.log("C > DatamiMap > updateSourceData > this.map :", this.map)
-      // console.log("C > DatamiMap > updateSourceData > itemsForMap :", itemsForMap)
+      // console.log('\nC > DatamiMap > updateSourceData ...')
+      // console.log('C > DatamiMap > updateSourceData > this.map :', this.map)
+      // console.log('C > DatamiMap > updateSourceData > itemsForMap :', itemsForMap)
 
       if (itemsForMap) {
         const mapLayersOptions = this.mapLayersOptions
+        // console.log('C > DatamiMap > updateSourceData > mapLayersOptions :', mapLayersOptions)
+
+        // console.log('C > DatamiMap > updateSourceData > allPointsSourceId :', allPointsSourceId)
+        // console.log('C > DatamiMap > updateSourceData > clusterSourceId :', clusterSourceId)
 
         const allPointsSourceId = (mapLayersOptions.all_points_layer && mapLayersOptions.all_points_layer.source_id) || 'allPointsSource'
-        const geoJsonSourceId = (mapLayersOptions.cluster_circles_layer && mapLayersOptions.cluster_circles_layer.source_id) || 'clusterSource'
-
         // console.log('\nC > DatamiMap > updateSourceData > createGeoJsonDataPoints ( from geoJson.js ) ...')
         const geoJson = createGeoJsonDataPoints(itemsForMap, this.fieldLat, this.fieldLong)
-        // console.log('C-SearchResultsMapbox > updateSourceData > geoJson : ', geoJson)
+        // console.log('C > DatamiMap > updateSourceData > geoJson : ', geoJson)
 
         // console.log('C > DatamiMap > updateSourceData > allPointsSourceId : ', allPointsSourceId)
         this.map.getSource(allPointsSourceId).setData(geoJson)
 
-        // console.log('C > DatamiMap > updateSourceData > geoJsonSourceId : ', geoJsonSourceId)
-        this.map.getSource(geoJsonSourceId).setData(geoJson)
-
-        // this.map.getSource('allPointsSource').setData(geoJson)
-        // this.map.getSource('clusterSource').setData(geoJson)
+        // const clusterSourceId = (mapLayersOptions.cluster_circles_layer && mapLayersOptions.cluster_circles_layer.source_id) || 'clusterSource'
+        const clusterSourceId = mapLayersOptions.cluster_circles_layer && mapLayersOptions.cluster_circles_layer.source_id
+        // clusterSourceId && console.log('C > DatamiMap > updateSourceData > clusterSourceId : ', clusterSourceId)
+        clusterSourceId && this.map.getSource(clusterSourceId).setData(geoJson)
 
         // TO DO : update choropleth
         // const choroplethConfigOptions = mapLayersOptions.choropleth_layer
@@ -866,15 +867,15 @@ export default {
       this.showLoader = false
     },
     async createChoroplethSource (isUpdate = false) {
-      console.log('\nC > DatamiMap > createChoroplethSource > isUpdate : ', isUpdate)
+      // console.log('\nC > DatamiMap > createChoroplethSource > isUpdate : ', isUpdate)
 
       const mapLayersOptions = this.mapLayersOptions
-      console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions :', mapLayersOptions)
+      // console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions :', mapLayersOptions)
 
       // - - - - - - - - - - - - - - - - //
       // SOURCE - CHOROPLETH //
       if (mapLayersOptions.choropleth_layer && mapLayersOptions.choropleth_layer.is_activated) {
-        console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions.choropleth_layer :', mapLayersOptions.choropleth_layer)
+        // console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions.choropleth_layer :', mapLayersOptions.choropleth_layer)
         this.showLoader = true
 
         // cf : https://github.com/gregoiredavid/france-geojson
