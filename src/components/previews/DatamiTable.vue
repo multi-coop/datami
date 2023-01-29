@@ -490,7 +490,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'DatamiTable',
   components: {
-    SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/edition/csv/SortAndFiltersSkeleton.vue'),
+    SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/filters/SortAndFiltersSkeleton.vue'),
     ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
     EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
 
@@ -1064,69 +1064,71 @@ export default {
       })
       // console.log('C > DatamiTable > filterData > regroupedFilterTags : ', regroupedFilterTags)
 
-      // console.log('filtres sélectionnés', filterTags)
-      // const filterTagsFields = filterTags.map(f => f.field) || []
-      // console.log('C > DatamiTable > filterData > filterTagsFields : ', filterTagsFields)
-
-      // const customFiltersConfig = this.customFiltersConfig
-      // console.log('C > DatamiTable > dataEditedFiltered > customFiltersConfig : ', customFiltersConfig)
-
       // filter out data
       data = data.filter(row => {
-        // console.log('\nC > DatamiTable > dataEditedFiltered > row.id : ', row.id)
-        const hasSearchVal = searchStr ? [] : [true]
-        // console.log('\nC > DatamiTable > filterData > row : ', row)
+        // const debug = row.id === '0'
+        // debug && console.log('\nC > DatamiTable > filterData > row.id : ', row.id)
+        // debug && console.log('C > DatamiTable > filterData > row : ', row)
 
-        // FOR SEARCHBAR FILTER
-        for (const field in colFields) {
-          // console.log('C > DatamiTable > filterData > field : ', field)
-          const cellValSearch = row[field] || ''
-          const cellValLowSearch = cellValSearch.toString().toLowerCase()
-          // console.log('C > DatamiTable > filterData > rowVal : ', rowVal)
-          // search text
-          if (searchStr) {
+        // FOR SEARCHBAR FILTER (TEXT SEARCH)
+        let boolSearch
+        const hasSearchVal = searchStr ? [] : [true]
+        if (searchStr) {
+          for (const field in colFields) {
+            // debug && console.log('C > DatamiTable > filterData > field : ', field)
+            const cellValSearch = row[field] || ''
+            const cellValLowSearch = cellValSearch.toString().toLowerCase()
+            // debug && console.log('C > DatamiTable > filterData > rowVal : ', rowVal)
+            // check if text in cell contains search string
             const cellHasSearch = cellValLowSearch.includes(searchStr.toLowerCase())
             hasSearchVal.push(cellHasSearch)
           }
+          boolSearch = hasSearchVal.some(b => b)
+        } else {
+          boolSearch = true
         }
-        const boolSearch = hasSearchVal.some(b => b)
 
         // AND / OR FILTERS
         const boolAndOrFilters = []
 
-        // BEGINNING NEW FILTERING PROCESS
-        regroupedFilterTags.forEach(filterField => {
-          // console.log('C > DatamiTable > dataEditedFiltered > filterField : ', filterField)
-          const cellVal = row[filterField.field] || ''
-          const cellValLow = cellVal.toString().toLowerCase()
-          // console.log('\nC > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
-          // console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
-          // console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+        // FILTERING PROCESS
+        let boolFilters
+        if (regroupedFilterTags.length) {
+          regroupedFilterTags.forEach(filterField => {
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField : ', filterField)
+            const cellVal = row[filterField.field] || ''
+            const cellValLow = cellVal.toString().toLowerCase()
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
 
-          // console.log('C > DatamiTable > dataEditedFiltered > cellValLow : ', cellValLow)
-          // const filterVal = filterField.value.toLowerCase()
-          const boolArr = filterField.activeValues.map(activeValue => {
-            return cellValLow.includes(activeValue)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > cellValLow : ', cellValLow)
+            const boolArr = filterField.activeValues.map(activeValue => {
+              // Check if cell value is equivalent to each active value from filter
+              // return cellValLow.includes(activeValue) // => bad parsing because 'Tag12' contains 'Tag1'
+              return cellValLow === activeValue
+            })
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
+
+            let fieldBool = true
+            if (filterField.filtering === 'OR') {
+              fieldBool = boolArr.some(b => b)
+            } else if (filterField.filtering === 'AND') {
+              fieldBool = boolArr.every(b => b)
+            }
+            boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > fieldBool : ', fieldBool)
           })
-          // console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
+          // debug && console.log('\nC > DatamiTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
 
-          let fieldBool = true
-          if (filterField.filtering === 'OR') {
-            fieldBool = boolArr.some(b => b)
-          } else if (filterField.filtering === 'AND') {
-            fieldBool = boolArr.every(b => b)
-          }
-          boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
-          // console.log('C > DatamiTable > dataEditedFiltered > fieldBool : ', fieldBool)
-        })
-
-        // console.log('\nC > DatamiTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
-
-        const boolFilters = boolAndOrFilters
-          .map(b => b.bool)
-          .every(b => b) // HORIZONTAL "AND" CONDITION
-        // console.log('C > DatamiTable > dataEditedFiltered > boolSearch : ', boolSearch)
-        // console.log('C > DatamiTable > dataEditedFiltered > boolFilters : ', boolFilters)
+          boolFilters = boolAndOrFilters
+            .map(b => b.bool)
+            .every(b => b) // HORIZONTAL "AND" CONDITION
+          // debug && console.log('C > DatamiTable > dataEditedFiltered > boolSearch : ', boolSearch)
+          // debug && console.log('C > DatamiTable > dataEditedFiltered > boolFilters : ', boolFilters)
+        } else {
+          boolFilters = true
+        }
 
         return boolSearch && boolFilters
       })

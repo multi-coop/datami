@@ -502,7 +502,7 @@ export default {
     },
     async items () {
       if (this.map && !this.isClusterSet && this.itemsForMap) {
-        // console.log('\nC > DatamiMap > watch > items > createGeoJsonDataPoints ( from geoJson.js ) ...')
+        console.log('\nC > DatamiMap > watch > items > createGeoJsonDataPoints ( from geoJson.js ) ...')
         this.geoJson = createGeoJsonDataPoints(this.itemsForMap, this.fieldLat, this.fieldLong)
         // console.log('C > DatamiMap > watch - items - this.geoJson : ', this.geoJson)
         await this.createMapItems(this.geoJson)
@@ -761,7 +761,7 @@ export default {
     // MAP ITEMS AS GEOJSON
     // - - - - - - - - - - - - - - - - - - //
     async createMapItems (geoJson) {
-      // console.log('\nC > DatamiMap > createMapItems ...')
+      console.log('\nC > DatamiMap > createMapItems ...')
       const mapOptions = this.mapOptions
 
       // adding reactive source
@@ -866,15 +866,15 @@ export default {
       this.showLoader = false
     },
     async createChoroplethSource (isUpdate = false) {
-      // console.log('\nC > DatamiMap > createChoroplethSource > isUpdate : ', isUpdate)
+      console.log('\nC > DatamiMap > createChoroplethSource > isUpdate : ', isUpdate)
 
       const mapLayersOptions = this.mapLayersOptions
-      // console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions :', mapLayersOptions)
+      console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions :', mapLayersOptions)
 
       // - - - - - - - - - - - - - - - - //
       // SOURCE - CHOROPLETH //
       if (mapLayersOptions.choropleth_layer && mapLayersOptions.choropleth_layer.is_activated) {
-        // console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions.choropleth_layer :', mapLayersOptions.choropleth_layer)
+        console.log('C > DatamiMap > createChoroplethSource > mapLayersOptions.choropleth_layer :', mapLayersOptions.choropleth_layer)
         this.showLoader = true
 
         // cf : https://github.com/gregoiredavid/france-geojson

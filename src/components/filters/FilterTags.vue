@@ -13,8 +13,9 @@
           aria-close-label="Close tag">
           <!-- FIELD LABEL -->
           <b-tag>
-            {{ getFieldLabel(tag.field) }}
+            {{ getFieldLabel(tag.field, currentEditViewMode) }}
             <!-- - tag.field : <pre><code>{{ tag.field }}</code></pre> -->
+            <!-- - getField(tag.field) : <pre><code>{{ getField(tag.field) }}</code></pre> -->
           </b-tag>
           <!-- {{ getFieldForeignKey(tag.field) }} -->
           <!-- <hr> -->
@@ -90,9 +91,15 @@ export default {
       const header = this.headers.find(f => f.field === field)
       return header
     },
-    getFieldLabel (field) {
+    getFieldLabel (field, editMode) {
+      // console.log('C > FilterTags > getFieldLabel > field : ', field)
       const header = this.getField(field)
-      return header.label
+      // console.log('C > FilterTags > getFieldLabel > header : ', header)
+      if (editMode !== 'edit') {
+        return header.title || header.label
+      } else {
+        return header.label
+      }
     },
     getFieldBgColor (field) {
       const header = this.getField(field)

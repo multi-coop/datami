@@ -535,7 +535,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.description && { description: fieldCustomProps.description },
             ...fieldCustomProps && fieldCustomProps.locked && { locked: fieldCustomProps.locked },
             ...fieldCustomProps && fieldCustomProps.maxLength && { maxLength: fieldCustomProps.maxLength },
-            ...fieldCustomProps && fieldCustomProps.tagSeparator && { tagSeparator: fieldCustomProps.tagSeparator },
+            ...fieldCustomProps && (fieldCustomProps.tagSeparator || fieldSubtype === 'tags') && { tagSeparator: fieldCustomProps.tagSeparator || defaultTagsSeparator },
             ...fieldCustomProps && fieldCustomProps.hide && { hide: fieldCustomProps.hide },
             ...fieldCustomProps && fieldCustomProps.bgColor && { bgColor: fieldCustomProps.bgColor },
             ...fieldCustomProps && fieldCustomProps.primaryKey && { primaryKey: fieldCustomProps.primaryKey },

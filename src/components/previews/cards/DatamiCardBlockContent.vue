@@ -39,7 +39,8 @@
     <!-- ITEM VALUE IF PREVIEW MODE -->
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
-      class="is-flex is-flex-direction-row is-align-items-center">
+      class="is-flex is-flex-direction-row is-align-items-center"
+      :style="`word-break: break-word;`">
       <slot name="logo"/>
       <b-icon
         v-if="position === 'adress'"

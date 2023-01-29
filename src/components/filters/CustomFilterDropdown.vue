@@ -200,12 +200,17 @@ export default {
     },
     SendActionToParent (filterVal, remove = false, reset = false) {
       // console.log('\nC > CustomFilterDropdown > SendActionToParent > filterVal : ', filterVal)
+      // console.log('C > CustomFilterDropdown > SendActionToParent > this.filter : ', this.filter)
       // console.log('C > CustomFilterDropdown > SendActionToParent > remove : ', remove)
       const filterPayload = {
         field: this.filter.field,
+        subtype: this.filter.subtype,
         bgColor: this.filter.bgColor,
         value: filterVal,
         reset: reset
+      }
+      if (filterPayload.subtype === 'tags') {
+        filterPayload.tagSeparator = this.filter.tagSeparator
       }
       const payload = {
         action: remove ? 'removeTag' : 'filterBy',
