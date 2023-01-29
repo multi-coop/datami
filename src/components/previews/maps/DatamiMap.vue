@@ -138,7 +138,7 @@ import * as turf from '@turf/turf'
 import { mixinClientUrl, mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 import { StylesOSM } from '@/utils/mapVectorStyles.js'
 
-import { debounce } from '@/utils/globalUtils'
+import { debounce, roundOff } from '@/utils/globalUtils'
 
 import {
   getData
@@ -463,11 +463,16 @@ export default {
     // },
     getCenter: debounce(function (next) {
       // console.log('\nC > DatamiMap > watch > getCenter > next :', next)
-      this.updateUrlMapCenter(this.getCenter)
+      const digits = 5
+      const roundedCenter = { lng: roundOff(next.lng, digits), lat: roundOff(next.lat, digits) }
+      // console.log('\nC > DatamiMap > watch > getCenter > roundedCenter :', roundedCenter)
+      this.updateUrlMapCenter(roundedCenter)
     }, 200),
     getZoom: debounce(function (next) {
       // console.log('\nC > DatamiMap > watch > getZoom > next :', next)
-      this.updateUrlMapZoom(this.getZoom)
+      const roundedZoom = roundOff(next, 2)
+      // console.log('C > DatamiMap > watch > getZoom > roundedZoom :', roundedZoom)
+      this.updateUrlMapZoom(roundedZoom)
     }, 200),
     showCard (next) {
       if (next) {
