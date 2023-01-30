@@ -463,7 +463,7 @@ export default {
     // },
     getCenter: debounce(function (next) {
       // console.log('\nC > DatamiMap > watch > getCenter > next :', next)
-      const digits = 5
+      const digits = 6
       const roundedCenter = { lng: roundOff(next.lng, digits), lat: roundOff(next.lat, digits) }
       // console.log('\nC > DatamiMap > watch > getCenter > roundedCenter :', roundedCenter)
       this.updateUrlMapCenter(roundedCenter)
@@ -1644,6 +1644,22 @@ export default {
     //     )
     //   }
     // },
+    removeMapMarkers () {
+      // remove all map markers if any
+      this.mapMarkers.forEach(mapMarker => {
+        const source = mapMarker.source
+        // switch item's 'selected' feature
+        this.map.setFeatureState(
+          { source, id: this.selectedStateId[source] },
+          { selected: false }
+        )
+        // reset selectedStateId[source]
+        this.selectedStateId[source] = undefined
+        // reset markers list
+        mapMarker.marker.remove()
+      })
+      this.mapMarkers = []
+    },
     toggleSelectedOn (event, source) {
       if (event.features.length > 0) {
         // console.log('\nC > DatamiMap > toggleSelectedOn > event.features : ', event.features)
@@ -1655,15 +1671,13 @@ export default {
         }
 
         // remove all map markers if any
-        this.mapMarkers.forEach(mapMarker => {
-          mapMarker.remove()
-        })
-        this.mapMarkers = []
+        this.removeMapMarkers()
 
         // set feature state and marker
         // console.log('C > DatamiMap > toggleSelectedOn > this.selectedStateId[ : ', this.selectedStateId)
         // console.log('C > DatamiMap > toggleSelectedOn > event.features[0] : ', event.features[0])
-        this.selectedStateId[source] = event.features[0].id
+        const selectionId = event.features[0].id
+        this.selectedStateId[source] = selectionId
         this.map.setFeatureState(
           { source, id: this.selectedStateId[source] },
           { selected: true }
@@ -1673,12 +1687,8 @@ export default {
         // console.log('C > DatamiMap > toggleSelectedOn > itemProps : ', itemProps)
         const itemCoordinates = [itemProps[this.fieldLong], itemProps[this.fieldLat]]
         const markerEl = createMarkerElement(this.markerHeight, this.markerWidth, this.markerIcon, this.markerColor)
-        // const markerEl = document.createElement('div')
-        // markerEl.className = 'marker'
-        // markerEl.innerHTML = `<span class="icon" style="height: ${this.markerHeight}px; width: ${this.markerWidth}px; transform: translateY(-${this.markerHeight / 2}px)"><i class="mdi mdi-${this.markerIcon}" style="font-size: ${this.markerHeight}px"></i></span>`
-        // // console.log('C > DatamiMap > toggleSelectedOn > markerEl : ', markerEl)
         const marker = new Marker(markerEl).setLngLat(itemCoordinates)
-        this.mapMarkers.push(marker)
+        this.mapMarkers.push({ marker: marker, source: source, id: selectionId })
         marker.addTo(this.map)
       }
     },
@@ -1788,13 +1798,17 @@ export default {
     //   }
     // },
     toggleItemCard (event) {
-      // console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
+      console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
+      console.log('C > DatamiMap > toggleItemCard > this.mapMarkers : ', this.mapMarkers)
+      console.log('C > DatamiMap > toggleItemCard > this.selectedStateId : ', this.selectedStateId)
       this.redrawMap *= -1
       if (event.btn === 'closeButton') {
         this.showCard = false
         this.showDetail = false
         this.displayedItem = undefined
         this.displayedItemId = undefined
+        // remove all markers from map
+        this.removeMapMarkers()
         this.deleteUrlParam('datami_detail_id')
       } else {
         this.showCard = true
