@@ -82,17 +82,17 @@
         v-if="fromMap"
         class="card-header-icon is-align-items-flex-start"
         @click="toggleDetail('closeButton')">
-        <!-- <b-tooltip
-          :label="t(`preview.${showDetail || fromMap ? 'closeCard' : 'showCardDetails'}`, locale)"
-          type="is-dark"
-          position="is-left">
-          <b-icon
-            size="is-small"
-            :icon="showDetail || fromMap ? 'close' : 'eye'"/>
-        </b-tooltip> -->
-        <b-icon
+        <!-- <b-icon
           size="is-small"
-          :icon="showDetail || fromMap ? 'close' : 'eye'"/>
+          icon="close"
+          @mouseover.native="showGlobalTooltip($event, { position: 'right', type: 'info', label: t('preview.closeCard', locale) })"
+          @mouseleave.native="hideGlobalTooltip"/> -->
+        <HoverableIconWithTooltip
+          :size="'is-small'"
+          :icon="'close'"
+          :position="'right'"
+          :type="'info'"
+          :label="t('preview.closeCard', locale)"/>
       </button>
     </header>
 
@@ -542,6 +542,7 @@ import {
 export default {
   name: 'DatamiCard',
   components: {
+    HoverableIconWithTooltip: () => import(/* webpackChunkName: "HoverableIconWithTooltip" */ '@/components/user/HoverableIconWithTooltip.vue'),
     DatamiCardBlockImage: () => import(/* webpackChunkName: "DatamiCardBlockImage" */ '@/components/previews/cards/DatamiCardBlockImage.vue'),
     DatamiCardBlockContent: () => import(/* webpackChunkName: "DatamiCardBlockContent" */ '@/components/previews/cards/DatamiCardBlockContent.vue'),
     DatamiCardBlockTags: () => import(/* webpackChunkName: "DatamiCardBlockTags" */ '@/components/previews/cards/DatamiCardBlockTags.vue'),
