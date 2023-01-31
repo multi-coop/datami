@@ -334,7 +334,7 @@
               </div>
               <div
                 v-if="mapPositions.includes(pos) && showDetail && cardHasMiniMap && cardsSettingsMiniMap.position === pos && !cardsSettingsMiniMap.right_side"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? mapPositionsClasses[pos] : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <DatamiMiniMap
                   :file-id="fileId"
@@ -428,10 +428,11 @@
               </div>
               <div
                 v-if="mapPositions.includes(pos) && showDetail && cardHasMiniMap && cardsSettingsMiniMap.position === pos && cardsSettingsMiniMap.right_side"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? mapPositionsClasses[pos] : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <DatamiMiniMap
                   :file-id="fileId"
+                  :position="pos"
                   :map-id="`${fileId}-minimap-${item.id}`"
                   :fields="fields"
                   :item="item"
@@ -621,10 +622,10 @@ export default {
         'logo'
       ],
       positions: [
+        'map_top',
         'resume',
         'infos',
         'links_top',
-        'map_top',
         'tags_top',
         'description',
         'links_middle',
@@ -649,7 +650,12 @@ export default {
         'map_top',
         'map_middle',
         'map_bottom'
-      ]
+      ],
+      mapPositionsClasses: {
+        map_top: 'px-3 py-3 mt-3 mb-2',
+        map_middle: 'px-3 py-3 my-2',
+        map_bottom: 'px-3 py-3 mt-2'
+      }
     }
   },
   computed: {

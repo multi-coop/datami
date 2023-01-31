@@ -39,15 +39,6 @@
               "imageHeight": "15px"
             },
             {
-              "hide": true,
-              "localdev": false,
-              "imageUrlLocal": "http://localhost:8811/statics/images/anct-logo-transparent.png",
-              "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/anct-logo-transparent.png",
-              "imageUrl": "https://github.com//multi-coop/datami-website-content/blob/main/images/clients/anct-logo-transparent.png?raw=true",
-              "url": "https://agence-cohesion-territoires.gouv.fr",
-              "imageHeight": "30px"
-            },
-            {
               "localdev": false,
               "imageUrlLocal": "http://localhost:8811/statics/images/bdt-logo.png",
               "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/bdt-logo.png",
@@ -57,7 +48,7 @@
             }
           ],
           "onlypreview": true,
-          "localdev": true,
+          "localdev": false,
           "gitfilelocal": "http://localhost:8811/statics/data/france_service.csv",
           "_gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
           "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/data/france_service.csv",
@@ -80,12 +71,12 @@
               ]
             },
             "schema": {
-              "localdev": true,
+              "localdev": false,
               "filelocal": "http://localhost:8811/statics/json/schema.json",
               "file":  "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/schema.json"
             },
             "fields-custom-properties": {
-              "localdev": true,
+              "localdev": false,
               "filelocal": "http://localhost:8811/statics/json/schema-custom_props.json",
               "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/schema-custom_props.json"
             },
@@ -94,7 +85,7 @@
             },
             "cardsview": {
               "activate": true,
-              "default": false
+              "default": true
             },
             "cardsdetail": true,
             "cardssettings": {
@@ -118,6 +109,13 @@
                 "fs_mail": {
                   "position": "description",
                   "prefixIcon": "at"
+                },
+                "fs_h_lundi_": {
+                  "position": "infos",
+                  "block_title": "Horaires",
+                  "hide_on_mini_map": true,
+                  "titleIcon": "clock-outline",
+                  "right" : true
                 },
                 "terr_thematique_asso_principale": {
                   "position": "tags",
@@ -144,35 +142,50 @@
                   "position": "adress",
                   "prefix" : "Adresse : "
                 },
-                "ifn_com": {
-                  "position": "adress",
-                  "prefix" : "Code postal : "
-                },
                 "lib_com": {
                   "position": "adress",
                   "prefix" : "Commune : "
+                },
+                "ifn_com": {
+                  "position": "adress",
+                  "prefix" : "Code postal : "
                 },
                 "dep_lib": {
                   "position": "adress",
                   "prefix" : "Département : "
                 },
-                "fs_telephone": {
+                "dep_insee": {
+                  "position": "description",
+                  "block_title": "Informations sur la commune",
+                  "right": false
+                },
+                "id_fs": {
                   "position": "resume",
-                  "block_title": "Coordonnées",
+                  "prefix": "Identifiant France services :",
+                  "right": true
+                },
+                "fs_statut": {
+                  "position": "resume",
+                  "prefix": "Type de structure :",
+                  "right": false
+                },
+                "fs_telephone": {
+                  "position": "infos",
+                  "block_title": "Coordonnées de la France services",
                   "prefix": "Téléphone :",
                   "prefixIcon": "phone-outline",
                   "right": false
                 },
                 "fs_mail": {
-                  "position": "resume",
+                  "position": "infos",
                   "prefix": "Email :",
                   "prefixIcon": "at",
                   "right": false
                 },
-                "id_fs": {
-                  "position": "infos",
-                  "prefix": "Identifiant France Service :",
-                  "right": true
+                "insee_com": {
+                  "position": "description",
+                  "block_title": "Informations sur la France services",
+                  "right" : true
                 },
                 "terr_thematique_asso_principale": {
                   "position": "tags",
@@ -190,11 +203,7 @@
                   "position": "tags",
                   "block_title": "Catégorie IFN"
                 },
-                "insee_com": {
-                  "position": "description",
-                  "right" : false
-                },
-                "fs_h_lundi": {
+                "COMMENTED_fs_h_lundi": {
                   "position": "description",
                   "block_title": "Horaires",
                   "titleIcon": "clock-outline",
@@ -202,6 +211,28 @@
                 }
               },
               "templates": {
+                "dep_insee": {
+                  "use_on_mini": false,
+                  "use_on_detail": true,
+                  "ignore_definitions": true,
+                  "paragraphs": [
+                    {
+                      "text": {
+                        "fr": "Nombre d&lsquo;habitants : &#123;&#123; com_hab &#125;&#125; habitants."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Densité : &#123;&#123; com_densite &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Nombre d&lsquo;habitants et densité de population par rapport à la médiane française : &#123;&#123; com_ratio_densite &#125;&#125;."
+                      }
+                    }
+                  ]
+                },
                 "insee_com": {
                   "use_on_mini": false,
                   "use_on_detail": true,
@@ -209,17 +240,32 @@
                   "paragraphs": [
                     {
                       "text": {
-                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; a les caractéristiques suivantes :"
+                        "fr": "La maison France services &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; a les caractéristiques suivantes :"
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Cette France services est en &#123;&#123; QPV &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Cette France services est en zone d&lsquo;IFN &#123;&#123; ifn_taux &#125;&#125;."
                       }
                     },
                     {
                       "text": {
                         "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; com_taux_pauvrete &#125;&#125; et un taux de chômage de &#123;&#123; com_taux_chomage &#125;&#125;."
                       }
+                    },
+                    {
+                      "text": {
+                        "fr": "La part des personnes de 65 ans et plus est de &#123;&#123; part_65 &#125;&#125;."
+                      }
                     }
                   ]
                 },
-                "fs_h_lundi": {
+                "COMMENTED_fs_h_lundi": {
                   "use_on_mini": true,
                   "use_on_detail": true,
                   "ignore_definitions": true,
@@ -265,6 +311,7 @@
               },
               "minimap": {
                 "activate": true,
+                "position": "map_top",
                 "right_side": true,
                 "mapOptions": {
                   "zoom": 5,
@@ -292,21 +339,9 @@
                   "serieFromFields": [
                     {
                       "field": "nbre_fs_rayon_30km",
-                      "title": { "fr": "Nombre de France Service dans un rayon de 30km" },
-                      "unit": { "fr": "France service" },
+                      "title": { "fr": "Nombre de France services dans un rayon de 30km" },
+                      "unit": { "fr": "France services" },
                       "bgColor": "#d0e428"
-                    },
-                    {
-                      "field": "fs_actes_d_etat_civil",
-                      "title": { "fr": "Nombre d&lsquo;actes d&lsquo;état civil" },
-                      "unit": { "fr": "actes" },
-                      "bgColor": "#7f18c1"
-                    },
-                    {
-                      "field": "fs_le_ministere_de_l_interieur__ants",
-                      "title": { "fr": "Nombre d&lsquo;ANTS" },
-                      "unit": { "fr": "ANTS" },
-                      "bgColor": "#2872e4"
                     }
                   ]
                 },
@@ -315,7 +350,7 @@
                   "viztype": "barchart-horizontal",
                   "activate": true,
                   "position": "viz-top",
-                  "showOnMiniCard": true,
+                  "showOnMiniCard": false,
                   "cols": 8,
                   "serieName": "Usagers",
                   "serieFromFields": [
@@ -374,7 +409,7 @@
                 {
                   "title": { "fr": "Typologie du territoire" },
                   "viztype": "text-templated",
-                  "activate": true,
+                  "activate": false,
                   "position": "viz-top",
                   "showOnMiniCard": false,
                   "cols": 4,
@@ -412,7 +447,7 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 8,
+                  "cols": 12,
                   "serieName": "Usagers",
                   "serieFromFields": [
                     {
@@ -467,7 +502,7 @@
             "datavizview_": {
               "activate": true,
               "default": false,
-              "localdev": true,
+              "localdev": false,
               "filelocal": "http://localhost:8811/statics/json/dataviz-settings.json",
               "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/dataviz-settings.json"
             },
@@ -481,7 +516,7 @@
                   },
                   "height": 800,
                   "cols": 12,
-                  "localdev": true,
+                  "localdev": false,
                   "filelocal": "http://localhost:8811/statics/json/map-settings.json",
                   "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/map-settings.json"
                 }
