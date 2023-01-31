@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`content ${showDetail ? 'px-3 py-3' : 'mb-2'}`"
+    :class="`content ${showDetail ? 'px-3' : 'mb-2'} ${showDetail && minivizSettings.viztype === 'big-values' ? 'pt-3 pb-0' : 'py-3'}`"
     :style="`height: 100%; background-color: ${showDetail? 'white' : 'white'}`">
     <!-- MINIVIZ TITLE -->
     <hr
@@ -8,14 +8,14 @@
       class="mt-0 mb-3">
     <h4
       v-if="minivizSettings.title"
-      :class="`${!showDetail ? 'has-text-centered' : ''}`">
+      :class="`mb-2 ${minivizSettings.titleCustomClass} ${!showDetail ? 'has-text-centered' : ''}`">
       {{ minivizSettings.title[locale] }}
     </h4>
 
     <!-- SWITCH MINIVIZ BY TYPE -->
     <div
-      :class="`${vizSpecs.type ? 'is-flex is-align-items-center' : ''}`"
-      :style="`${vizSpecs.type ? 'height: 90%;' : ''}`">
+      :class="`miniviz-switcher ${vizSpecs.type || minivizSettings.viztype === 'big-values' ? 'is-flex is-align-items-center' : ''} ${minivizSettings.viztype === 'big-values' ? 'is-justify-content-center' : ''}`"
+      :style="`${vizSpecs.type || minivizSettings.viztype === 'big-values' ? 'height: 90%;' : ''}`">
       <!-- APEX CHARTS -->
       <div
         v-if="minivizSettings.viztype === 'simple-pie'"
@@ -57,12 +57,13 @@
       <!-- BIG VALUES -->
       <div
         v-if="minivizSettings.viztype === 'big-values'"
-        :class="`${showDetail ? 'mb-3' : 'mb-0'}`">
-        <div class="columns is-multiline is-centered">
+        :class="`${showDetail ? 'pb-1' : 'mb-0'} ${minivizSettings.title ? '' : 'pt-3'}`"
+        style="width: 100%;">
+        <div class="columns mb-0 is-multiline is-centered is-vcentered">
           <div
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
-            :class="`column $(showDetail ? 'is-3 is-6-tablet' : 'is-4'} py-3 has-text-centered is-align-self-flex-end`">
+            :class="`column ${showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-4'} py-3 has-text-centered is-align-self-flex-end`">
             <p class="has-text-weight-semibold is-size-7">
               {{ val.field.title || val.field.label || val.field.name }}
             </p>
