@@ -18,7 +18,7 @@
     <!-- BLOCK TITLE IF ANY -->
     <p
       v-show="currentEditViewMode !== 'edit' && field.block_title"
-      class="is-size-7 mb-1"
+      class="is-size-7 mb-3"
       @click="showCollapse = !showCollapse">
       <b-icon
         v-if="field.titleIcon"
@@ -39,7 +39,7 @@
     <!-- ITEM VALUE IF PREVIEW MODE -->
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
-      class="is-flex is-flex-direction-row is-align-items-center"
+      class="is-flex is-flex-direction-row is-align-items-center mb-2"
       :style="`word-break: break-word;`">
       <slot name="logo"/>
       <b-icon
@@ -114,7 +114,7 @@
       <p
         v-for="(paragraph, idx) in templatedValues"
         :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`"
-        :class="paragraph.customClass">
+        :class="`mb-2 ${paragraph.customClass}`">
         <span
           v-if="isMini && !idx && !paragraph.ignoreTrimming"
           v-html="trimText(paragraph.text || t('global.noValue', locale), 150)"/>
@@ -235,11 +235,11 @@ export default {
           label: 'is-size-7 has-text-weight-bold mb-2'
         },
         resume: {
-          content: 'has-text-weight-medium mb-4',
+          content: 'has-text-weight-medium mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         description: {
-          content: 'mb-4',
+          content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         infos: {

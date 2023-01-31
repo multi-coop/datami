@@ -155,7 +155,7 @@
               v-if="hasAnyContentByPosition(['title', 'subtitle', 'adress', 'logo'])"
               :class="`column is-12 ${isMini ? 'pb-1' : ''}`">
               <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <div v-if="showDetail">
                   <!-- TITLE BLOCK : 'title' -->
@@ -286,7 +286,7 @@
               :class="`column is-12 position-left-${pos} ${hasAnyContentByPosition([pos]) ? '' : 'py-0'}`">
               <div
                 v-if="hasAnyContentByPosition([pos])"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <div v-if="!norTagsNorLinks.includes(pos) && hasContentByPosition(pos) ">
                   <DatamiCardBlockContent
@@ -380,7 +380,7 @@
               :class="`column is-12 position-right-${pos} ${hasAnyContentByPosition([pos], true) ? '' : 'py-0'}`">
               <div
                 v-if="hasAnyContentByPosition([pos], true)"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <div v-if="!norTagsNorLinks.includes(pos) && hasContentByPosition(pos, true) ">
                   <DatamiCardBlockContent

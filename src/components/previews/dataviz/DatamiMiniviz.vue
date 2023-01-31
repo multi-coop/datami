@@ -6,7 +6,9 @@
     <hr
       v-if="!showDetail"
       class="mt-0 mb-3">
-    <h4 :class="`${!showDetail ? 'has-text-centered' : ''}`">
+    <h4
+      v-if="minivizSettings.title"
+      :class="`${!showDetail ? 'has-text-centered' : ''}`">
       {{ minivizSettings.title[locale] }}
     </h4>
 
