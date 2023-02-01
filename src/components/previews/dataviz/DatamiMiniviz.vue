@@ -63,12 +63,12 @@
           <div
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
-            :class="`column ${series.length === 1 ? 'is-12' : showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-6'} py-3 has-text-centered is-align-self-flex-end`">
+            :class="`column ${series.length === 1 ? (showDetail ? 'is-6' : 'is-12') : (showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-6')} py-3 has-text-centered is-align-self-flex-end`">
             <p class="has-text-weight-semibold is-size-7">
               {{ val.field.title || val.field.label || val.field.name }}
             </p>
             <p
-              class="tag is-dark is-large has-text-weight-bold"
+              class="notification has-text-weight-bold py-2 px-2"
               :style="`background-color: ${getBgColor(val.field)}; color: ${getColor(val.field)}`">
               {{ val.value }}
               <span
@@ -242,9 +242,9 @@ export default {
       vizTypeNeedsDebug: [
         // 'simple-pie',
         // 'simple-donut',
-        'barchart-vertical'
+        // 'barchart-vertical',
         // 'barchart-horizontal',
-        // 'big-values',
+        'big-values'
         // 'text-templated'
       ]
     }
@@ -319,6 +319,10 @@ export default {
           case 'float':
             value = parseFloat(value)
             break
+        }
+        if (f.definitions) {
+          const def = f.definitions.find(d => d.value === value)
+          value = def ? def.label : value
         }
         return value
       })
