@@ -31,7 +31,7 @@
           "activate": true,
           "creditslogos": [
             {
-              "localdev": false,
+              "localdev": true,
               "imageUrlLocal": "http://localhost:8811/statics/images/mednum-logo.png",
               "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/mednum-logo.png",
               "imageUrl": "https://github.com//multi-coop/datami-website-content/blob/main/images/clients/mednum-logo-transparent.png?raw=true",
@@ -39,7 +39,7 @@
               "imageHeight": "15px"
             },
             {
-              "localdev": false,
+              "localdev": true,
               "imageUrlLocal": "http://localhost:8811/statics/images/bdt-logo.png",
               "_imageUrl": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/raw/main/images/bdt-logo.png",
               "imageUrl": "https://github.com//multi-coop/datami-website-content/blob/main/images/clients/bdt-logo.png?raw=true",
@@ -48,7 +48,7 @@
             }
           ],
           "onlypreview": true,
-          "localdev": false,
+          "localdev": true,
           "gitfilelocal": "http://localhost:8811/statics/data/france_service.csv",
           "_gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
           "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/data/france_service.csv",
@@ -71,12 +71,12 @@
               ]
             },
             "schema": {
-              "localdev": false,
+              "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/schema.json",
               "file":  "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/schema.json"
             },
             "fields-custom-properties": {
-              "localdev": false,
+              "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/schema-custom_props.json",
               "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/schema-custom_props.json"
             },
@@ -330,7 +330,7 @@
               },
               "minivizs": [
                 {
-                  "_title": { "fr": "Valeurs clés" },
+                  "COMMENTED_title": { "fr": "Valeurs clés" },
                   "viztype": "big-values",
                   "activate": true,
                   "position": "viz-top",
@@ -344,6 +344,27 @@
                       "bgColor": "#d0e428"
                     }
                   ]
+                },
+                {
+                  "title": { "fr": "Usagers par sexe" },
+                  "viztype": "simple-donut",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 4,
+                  "serieFromFields": [
+                    { 
+                      "field": "fs_sexe_femme",
+                      "customLabel": ["Femmes"],
+                      "serieColor": "#1bd8ac"
+                    },
+                    { 
+                      "field": "fs_sexe_homme",
+                      "customLabel": ["Hommes"],
+                      "serieColor": "#e7c03f"
+                    }
+                  ],
+                  "showTotal": true
                 },
                 {
                   "title": { "fr": "Usagers par tranche d&lsquo;âge" },
@@ -386,27 +407,6 @@
                   "serieColor": "#d81b47"
                 },
                 {
-                  "title": { "fr": "Usagers par sexe" },
-                  "viztype": "simple-donut",
-                  "activate": true,
-                  "position": "viz-top",
-                  "showOnMiniCard": false,
-                  "cols": 4,
-                  "serieFromFields": [
-                    { 
-                      "field": "fs_sexe_femme",
-                      "customLabel": ["Femmes"],
-                      "serieColor": "#1bd8ac"
-                    },
-                    { 
-                      "field": "fs_sexe_homme",
-                      "customLabel": ["Hommes"],
-                      "serieColor": "#e7c03f"
-                    }
-                  ],
-                  "showTotal": true
-                },
-                {
                   "title": { "fr": "Typologie du territoire" },
                   "viztype": "text-templated",
                   "activate": false,
@@ -442,13 +442,13 @@
                   ]
                 },
                 {
-                  "title": { "fr": "Services réalisés par la France Service" },
+                  "title": { "fr": "Thématiques traitées par la France Service (partenaires)" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 12,
-                  "serieName": "Usagers",
+                  "cols": 7,
+                  "serieName": "Actes",
                   "serieFromFields": [
                     {
                       "field": "fs_dgfip",
@@ -485,7 +485,19 @@
                     {
                       "field": "fs_la_msa",
                       "customLabel": ["MSA"]
-                    },
+                    }
+                  ],
+                  "serieColor": "#ac1bd8"
+                },
+                {
+                  "title": { "fr": "Thématiques traitées par la France Service (hors partenaires)" },
+                  "viztype": "barchart-vertical",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 5,
+                  "serieName": "Actes",
+                  "serieFromFields": [
                     {
                       "field": "fs_actes_d_etat_civil",
                       "customLabel": ["actes", "d&lsquo;état civil"]
@@ -496,13 +508,40 @@
                     }
                   ],
                   "serieColor": "#ac1bd8"
+                },
+                {
+                  "title": { "fr": "Associations dans un rayon de 20 km par catégorie" },
+                  "viztype": "barchart-vertical",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 6,
+                  "serieName": "Actes",
+                  "serieFromFields": [
+                    {
+                      "field": "asso_theme_actions_sociales",
+                      "customLabel": ["actions", "sociales"],
+                      "serieColor": "#c27ba0"
+                    },
+                    {
+                      "field": "asso_theme_citoyennete",
+                      "customLabel": ["citoyenneté"],
+                      "serieColor": "#ffd966"
+                    },
+                    {
+                      "field": "asso_theme_jeunesse_et_famille",
+                      "customLabel": ["jeunesse", "et famille"],
+                      "serieColor": "#93c47d"
+                    }
+                  ],
+                  "distributed": true
                 }
               ]
             },
             "datavizview_": {
               "activate": true,
               "default": false,
-              "localdev": false,
+              "localdev": true,
               "filelocal": "http://localhost:8811/statics/json/dataviz-settings.json",
               "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/dataviz-settings.json"
             },
@@ -516,7 +555,7 @@
                   },
                   "height": 800,
                   "cols": 12,
-                  "localdev": false,
+                  "localdev": true,
                   "filelocal": "http://localhost:8811/statics/json/map-settings.json",
                   "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs/-/blob/main/json/map-settings.json"
                 }

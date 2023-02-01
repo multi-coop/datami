@@ -359,6 +359,7 @@ export default {
     buildOptions () {
       const options = { ...this.chartOptionsDefault }
       options.chart.type = this.vizSpecs.type
+      // this.needsDebug && console.log('C-DatamiMiniviz > buildOptions > this.minivizSettings : ', this.minivizSettings)
 
       // default data labels
       options.dataLabels = {
@@ -417,6 +418,10 @@ export default {
         }
         if (this.minivizSettings.serieColor) {
           options.colors = [this.minivizSettings.serieColor]
+        }
+        if (this.minivizSettings.distributed) {
+          options.colors = this.buildLabelsColors()
+          options.plotOptions.bar.distributed = true
         }
       }
       if (this.vizSpecs.needCategs) {
