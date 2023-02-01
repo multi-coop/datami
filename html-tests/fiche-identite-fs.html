@@ -510,12 +510,33 @@
                   "serieColor": "#ac1bd8"
                 },
                 {
+                  "title": { "fr": "Vitalité associative du territoire" },
+                  "viztype": "big-values",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 4,
+                  "serieFromFields": [
+                    {
+                      "field": "nbre_asso_rayon_20km",
+                      "title": { "fr": "Nombre de d&lsquo;associations dans un rayon de 20km" },
+                      "unit": { "fr": "associations" },
+                      "bgColor": "#0b5394"
+                    },
+                    {
+                      "field": "asso_thematique_principale",
+                      "title": { "fr": "Thématique principale" },
+                      "bgColor": "#c90076"
+                    }
+                  ]
+                },
+                {
                   "title": { "fr": "Associations dans un rayon de 20 km par catégorie" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 6,
+                  "cols": 8,
                   "serieName": "Actes",
                   "serieFromFields": [
                     {

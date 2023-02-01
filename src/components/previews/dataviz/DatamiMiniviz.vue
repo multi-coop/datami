@@ -63,7 +63,7 @@
           <div
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
-            :class="`column ${showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-4'} py-3 has-text-centered is-align-self-flex-end`">
+            :class="`column ${series.length === 1 ? 'is-12' : showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-6'} py-3 has-text-centered is-align-self-flex-end`">
             <p class="has-text-weight-semibold is-size-7">
               {{ val.field.title || val.field.label || val.field.name }}
             </p>
@@ -268,26 +268,18 @@ export default {
       return settingsTemplates
     },
     fieldsForSeries () {
-      // const fieldsForSeries = this.minivizSettings.seriesFromFields && this.minivizSettings.seriesFromFields.map(s => {
-      //   const serieFields = {
-      //     name: s.serieName[this.locale] || s.serieName.fr,
-      //     fields: s.fields.map(sf => {
-      //       return this.fields.find(f => f.name === sf.field)
-      //     })
-      //   }
-      //   return serieFields
-      // })
-      // return fieldsForSeries
       const fieldsForSeries = this.minivizSettings.serieFromFields && this.minivizSettings.serieFromFields.map(sf => {
         const field = this.fields.find(f => f.name === sf.field)
-        if (sf.title) { field.title = sf.title[this.locale] || sf.title }
-        if (sf.unit) { field.unit = sf.unit[this.locale] || sf.unit }
-        if (sf.bgColor) { field.bgColor = sf.bgColor }
-        if (sf.serieColor) { field.serieColor = sf.serieColor }
-        if (sf.customLabel) { field.customLabel = sf.customLabel }
+        if (field) {
+          if (sf.title) { field.title = sf.title[this.locale] || sf.title }
+          if (sf.unit) { field.unit = sf.unit[this.locale] || sf.unit }
+          if (sf.bgColor) { field.bgColor = sf.bgColor }
+          if (sf.serieColor) { field.serieColor = sf.serieColor }
+          if (sf.customLabel) { field.customLabel = sf.customLabel }
+        }
         return field
       })
-      return fieldsForSeries
+      return fieldsForSeries.filter(f => f && f.field)
     }
   },
   watch: {
@@ -316,8 +308,21 @@ export default {
       // const series = [44, 55, 13, 43, 22] // example 1
       // const series = { name: 'Serie name', data: [44, 55, 13, 43, 22] } // example 2
       let series = this.fieldsForSeries && this.fieldsForSeries.map(f => {
-        return parseInt(this.item[f.field])
+        let value = this.item[f.field]
+        switch (f.type) {
+          case 'number':
+            value = parseFloat(value)
+            break
+          case 'integer':
+            value = parseInt(value)
+            break
+          case 'float':
+            value = parseFloat(value)
+            break
+        }
+        return value
       })
+
       if (this.vizSpecs.needSerieData) {
         series = [{
           name: this.minivizSettings.serieName || '',
