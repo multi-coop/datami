@@ -140,10 +140,10 @@ export default {
   },
   watch: {
     currentViewMode (next, prev) {
-      console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
-      console.log('C > ViewModeBtns > watch > currentViewMode > prev : ', prev)
-      console.log('C > ViewModeBtns > watch > currentViewMode > this.fileId : ', this.fileId)
-      console.log('C > ViewModeBtns > watch > currentViewMode > this.multifileActiveTab : ', this.multifileActiveTab)
+      // console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
+      // console.log('C > ViewModeBtns > watch > currentViewMode > prev : ', prev)
+      // console.log('C > ViewModeBtns > watch > currentViewMode > this.fileId : ', this.fileId)
+      // console.log('C > ViewModeBtns > watch > currentViewMode > this.multifileActiveTab : ', this.multifileActiveTab)
       if (this.multifileActiveTab === this.fileId) {
         this.changeUrlView(next)
         if (prev && next !== 'map') {
@@ -155,11 +155,11 @@ export default {
       }
     },
     fileOptions (next) {
-      console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
+      // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
         let defaultViews
         const availableViews = this.availableViews[this.fileTypeFamily]
-        console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
+        // console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
         switch (this.fileTypeFamily) {
           case 'table':
             defaultViews = [
