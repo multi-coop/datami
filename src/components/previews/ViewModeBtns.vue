@@ -78,6 +78,10 @@ export default {
       default: undefined,
       type: String
     },
+    defaultView: {
+      default: undefined,
+      type: String
+    },
     locale: {
       default: 'en',
       type: String
@@ -136,10 +140,10 @@ export default {
   },
   watch: {
     currentViewMode (next, prev) {
-      // console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
-      // console.log('C > ViewModeBtns > watch > currentViewMode > prev : ', prev)
-      // console.log('C > ViewModeBtns > watch > currentViewMode > this.fileId : ', this.fileId)
-      // console.log('C > ViewModeBtns > watch > currentViewMode > this.multifileActiveTab : ', this.multifileActiveTab)
+      console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
+      console.log('C > ViewModeBtns > watch > currentViewMode > prev : ', prev)
+      console.log('C > ViewModeBtns > watch > currentViewMode > this.fileId : ', this.fileId)
+      console.log('C > ViewModeBtns > watch > currentViewMode > this.multifileActiveTab : ', this.multifileActiveTab)
       if (this.multifileActiveTab === this.fileId) {
         this.changeUrlView(next)
         if (prev && next !== 'map') {
@@ -151,11 +155,11 @@ export default {
       }
     },
     fileOptions (next) {
-      // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
+      console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
         let defaultViews
         const availableViews = this.availableViews[this.fileTypeFamily]
-        // console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
+        console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
         switch (this.fileTypeFamily) {
           case 'table':
             defaultViews = [
@@ -228,11 +232,15 @@ export default {
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
     // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
     const availableViews = this.availableViews[this.fileTypeFamily]
+    // console.log('C > ViewModeBtns > beforeMount > availableViews : ', availableViews)
     if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
       // console.log('C > ViewModeBtns > beforeMount > this.urlActiveView : ', this.urlActiveView)
       this.changeView(this.urlActiveView)
     } else {
-      this.changeView(this.fileTypeFamily || 'loading')
+      // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
+      // console.log('C > ViewModeBtns > beforeMount > this.defaultView : ', this.defaultView)
+      // this.changeView(this.fileTypeFamily || 'loading')
+      this.changeView(this.defaultView || 'loading')
     }
     // this.changeView(this.fileTypeFamily || 'loading')
   },
