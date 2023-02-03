@@ -162,7 +162,7 @@
                   <!-- FIELD INFOS -->
                   <div
                     v-if="col.type !== 'datami'"
-                    class="table-field-header has-text-left pt-1"
+                    class="table-field-header has-text-left py-1"
                     style="flex: auto;">
                     <!-- EDIT HEADERS -->
                     <div v-if="currentEditViewMode === 'edit'">

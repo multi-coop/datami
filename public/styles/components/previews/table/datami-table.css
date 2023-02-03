@@ -39,18 +39,19 @@ th.datami-table.datami-table-th > .th-wrap > span {
 }
 
 th.datami-table.datami-table-th {
-  border-top: .5px solid #DBDBDB ;
-  /* border-left: .5px dashed #DBDBDB ; */
+  background-color: #f4f4f4 !important;
+  border-top: 1px solid #DBDBDB ;
+  border-left: 1px solid white ;
 }
 th.datami-table.datami-table-th:first-child {
-  /* border-left: none ; */
+  border-left: none ;
 }
-td.datami-table.datami-table-td {
-  /* border-left: .5px dashed #DBDBDB ; */
+/* td.datami-table.datami-table-td {
+  border-left: .5px dashed #DBDBDB ;
 }
 td.datami-table.datami-table-td:first-child {
-  /* border-left: none ; */
-}
+  border-left: none ;
+} */
 
 .datami-table-td {
   padding: .1em .1em .1em .1em !important;
