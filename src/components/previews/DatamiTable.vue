@@ -147,7 +147,7 @@
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div
-                  :class="`datami-table-header-${col.type}${col.subtype ? '-' + col.subtype : ''} is-flex is-flex-direction-row is-align-items-start ${col.type !== 'datami' ? '' : ''}`">
+                  :class="`datami-table-header-${col.type}${col.subtype ? '-' + col.subtype : ''} is-flex is-flex-direction-row is-align-items-start ${col.type === 'datami' ? 'is-justify-content-center' : ''}`">
                   <!-- style="white-space: nowrap;"> -->
                   <!-- EDITION HEADERS-->
 
@@ -1049,7 +1049,8 @@ export default {
       // console.log('C > DatamiTable > columnTdAttrs > fieldSubype : ', fieldSubype)
       // const props = fieldTypeIcons.find(ft => ft.type === fieldType && ft.subtype === fieldSubype)
       let classTd = 'datami-table datami-table-td'
-      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''} ${this.isDarkMode ? 'datami-darkmode-grey-shades' : ''}`
+      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''}`
+      classTd += `${this.isDarkMode ? ' datami-darkmode-grey-shades' : ''}`
       classTd += `${this.currentEditViewMode === 'edit' ? ' datami-table-td-edit' : ''}`
       return {
         class: classTd
