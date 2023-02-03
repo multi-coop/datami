@@ -143,7 +143,8 @@ export const booleanFromValue = (val, field = undefined) => {
 }
 
 export const trimText = (str, maxLength = 25) => {
-  if (str && str.length > maxLength) return `${str.slice(0, maxLength)}...`
+  if (!maxLength) return str
+  else if (str && str.length > maxLength) return `${str.slice(0, maxLength)}...`
   else return str
 }
 

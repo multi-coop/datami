@@ -13,7 +13,7 @@
       :type="counter ? 'is-dark' : 'is-grey-light'"
       size="is-small"
       @click.native="updateAscending"
-      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t(getSortTooltip, locale) })"
+      @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', title: getTooltipTitle, label: t(getSortTooltip, locale) })"
       @mouseleave.native="hideGlobalTooltip"/>
   </div>
 </template>
@@ -68,6 +68,13 @@ export default {
           break
       }
       return icon
+    },
+    getTooltipTitle () {
+      if (this.currentEditViewMode === 'preview') {
+        return this.field.title || this.field.label
+      } else {
+        return this.field.label
+      }
     },
     getSortTooltip () {
       let tooltip

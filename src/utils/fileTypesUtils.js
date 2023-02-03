@@ -77,8 +77,13 @@ export const fieldTypeIcons = [
   },
   {
     type: 'string',
-    subtype: 'steptext',
+    subtype: 'timelinetext',
     icon: 'dots-horizontal'
+  },
+  {
+    type: 'string',
+    subtype: 'image',
+    icon: 'image'
   },
   {
     type: 'uri',

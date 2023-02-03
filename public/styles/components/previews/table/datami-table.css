@@ -29,6 +29,15 @@
   display: none;
 }
 
+th.datami-table.datami-table-th {
+  padding: .25em 0em;
+  min-width: 170px;
+}
+
+th.datami-table.datami-table-th > .th-wrap > span {
+  width: 100%;
+}
+
 .datami-table-td {
   padding: .1em .1em !important;
   min-width: 100px;

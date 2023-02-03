@@ -147,57 +147,76 @@
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div
-                  class="is-flex is-flex-direction-row is-align-items-center datami-nowrap"
-                  style="white-space: nowrap;">
+                  :class="`datami-table-header-${col.type}${col.subtype ? '-' + col.subtype : ''} is-flex is-flex-direction-row is-align-items-start ${col.type !== 'datami' ? '' : ''}`">
+                  <!-- style="white-space: nowrap;"> -->
                   <!-- EDITION HEADERS-->
-                  <div v-if="currentEditViewMode === 'edit'">
-                    <b-field
-                      v-if="!lockHeaders">
-                      <EditCell
-                        :file-id="fileId"
-                        :is-header="true"
-                        :field="col"
-                        :input-data="column.label"/>
-                    </b-field>
-                    <PreviewField
-                      v-else
+
+                  <!-- FIELD TYPE ICON -->
+                  <div class="table-field-icon">
+                    <PreviewFieldIcon
                       :file-id="fileId"
                       :field="col"
-                      :lock-headers="lockHeaders"
                       :locale="locale"/>
                   </div>
 
-                  <!-- DIFF HEADERS -->
-                  <div v-if="currentEditViewMode === 'diff'">
-                    <div
-                      v-if="isInChanges(true, col.added, col.field)">
-                      <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                  <!-- FIELD INFOS -->
+                  <div
+                    v-if="col.type !== 'datami'"
+                    class="table-field-header has-text-left pt-1"
+                    style="flex: auto;">
+                    <!-- EDIT HEADERS -->
+                    <div v-if="currentEditViewMode === 'edit'">
+                      <b-field
+                        v-if="!lockHeaders">
+                        <EditCell
+                          :file-id="fileId"
+                          :is-header="true"
+                          :field="col"
+                          :input-data="column.label"/>
+                      </b-field>
+                      <PreviewField
+                        v-else
+                        :file-id="fileId"
+                        :field="col"
+                        :lock-headers="lockHeaders"
+                        :locale="locale"/>
                     </div>
-                    <span v-else>
+
+                    <!-- DIFF HEADERS -->
+                    <div v-if="currentEditViewMode === 'diff'">
+                      <div
+                        v-if="isInChanges(true, col.added, col.field)">
+                        <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                      </div>
+                      <span v-else>
+                        <PreviewField
+                          :file-id="fileId"
+                          :field="col"
+                          :lock-headers="lockHeaders"
+                          :locale="locale"/>
+                      </span>
+                    </div>
+
+                    <!-- PREVIEW HEADERS -->
+                    <div v-if="currentEditViewMode === 'preview'">
                       <PreviewField
                         :file-id="fileId"
                         :field="col"
                         :lock-headers="lockHeaders"
                         :locale="locale"/>
-                    </span>
+                    </div>
                   </div>
 
-                  <!-- PREVIEW HEADERS -->
-                  <div v-if="currentEditViewMode === 'preview'">
-                    <PreviewField
+                  <!-- FIELD SORTING -->
+                  <div
+                    v-if="col.type !== 'datami' && !noSortingFields.includes(col.subtype)"
+                    class="table-field-sorting">
+                    <ButtonSortByField
                       :file-id="fileId"
                       :field="col"
-                      :lock-headers="lockHeaders"
-                      :locale="locale"/>
+                      :locale="locale"
+                      @action="processAction"/>
                   </div>
-
-                  <!-- SORTING -->
-                  <ButtonSortByField
-                    v-if="col.type !== 'datami' && !noSortingFields.includes(col.subtype)"
-                    :file-id="fileId"
-                    :field="col"
-                    :locale="locale"
-                    @action="processAction"/>
                 </div>
               </template>
 
@@ -474,6 +493,7 @@
 
 <script>
 import {
+  mixinTooltip,
   mixinClientUrl,
   mixinGlobal,
   mixinIcons,
@@ -494,6 +514,7 @@ export default {
     ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
     EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
 
+    PreviewFieldIcon: () => import(/* webpackChunkName: "PreviewFieldIcon" */ '@/components/previews/PreviewFieldIcon.vue'),
     PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
     PreviewCell: () => import(/* webpackChunkName: "PreviewCell" */ '@/components/previews/PreviewCell.vue'),
     EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue'),
@@ -506,6 +527,7 @@ export default {
     PagesNavigation: () => import(/* webpackChunkName: "PagesNavigation" */ '@/components/pagination/PagesNavigation.vue')
   },
   mixins: [
+    mixinTooltip,
     mixinClientUrl,
     mixinGlobal,
     mixinIcons,
