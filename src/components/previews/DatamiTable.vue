@@ -147,7 +147,7 @@
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div
-                  :class="`datami-table-header-${col.type}${col.subtype ? '-' + col.subtype : ''} is-flex is-flex-direction-row is-align-items-start ${col.type === 'datami' ? 'is-justify-content-center' : ''}`">
+                  :class="`datami-table-header-${col.type}${col.subtype ? '-' + col.subtype : ''} is-flex is-flex-direction-row ${col.type === 'datami' ? 'is-align-items-center is-justify-content-center' : 'is-align-items-start'}`">
                   <!-- style="white-space: nowrap;"> -->
                   <!-- EDITION HEADERS-->
 
