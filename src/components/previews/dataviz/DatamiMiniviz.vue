@@ -64,7 +64,9 @@
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
             :class="`column ${series.length === 1 ? (showDetail ? 'is-6' : 'is-12') : (showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-6')} py-3 has-text-centered is-align-self-flex-end`">
-            <p class="has-text-weight-semibold is-size-7">
+            <p
+              v-if="!val.field.noTitle"
+              class="has-text-weight-semibold is-size-7">
               {{ val.field.title || val.field.label || val.field.name }}
             </p>
             <p
@@ -276,6 +278,7 @@ export default {
           if (sf.bgColor) { field.bgColor = sf.bgColor }
           if (sf.serieColor) { field.serieColor = sf.serieColor }
           if (sf.customLabel) { field.customLabel = sf.customLabel }
+          if (sf.noTitle) { field.noTitle = sf.noTitle }
         }
         return field
       })
