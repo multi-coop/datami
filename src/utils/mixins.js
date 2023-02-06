@@ -106,7 +106,6 @@ export const mixinTooltip = {
         component: this.$options.name,
         ...tooltipOptions,
         cursor: event,
-        // rect: boundingRect,
         rect: boundingRect
       })
     },
@@ -995,7 +994,8 @@ export const mixinTexts = {
     getTemplatedValues (field) {
       const ignoreDefinitions = field.ignoreDefinitions
       const ignoreTrimming = field.ignoreTrimming
-      const templatedArray = field.templating.map(paragraph => {
+      const templating = field.templating.filter(p => p.text)
+      const templatedArray = templating.map(paragraph => {
         const customClass = paragraph.customClass
         const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
         return {

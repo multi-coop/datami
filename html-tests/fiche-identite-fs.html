@@ -231,7 +231,7 @@
                       }
                     },
                     {
-                      "text": {
+                      "text_": {
                         "fr": "Nombre d&lsquo;habitants et densité de population par rapport à la médiane française : &#123;&#123; com_ratio_densite &#125;&#125;."
                       }
                     }
@@ -254,12 +254,12 @@
                     },
                     {
                       "text": {
-                        "fr": "Cette France services est en zone d&lsquo;IFN &#123;&#123; ifn_taux &#125;&#125;."
+                        "fr": "Cette France services a un score d&lsquo;IFN de : &#123;&#123; ifn_retr_cor &#125;&#125;."
                       }
                     },
                     {
                       "text": {
-                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; com_taux_pauvrete &#125;&#125; et un taux de chômage de &#123;&#123; com_taux_chomage &#125;&#125;."
+                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; ifn_tx_pauv_cor &#125;&#125; et un taux de chômage de &#123;&#123; if_chom_cor &#125;&#125;."
                       }
                     },
                     {
@@ -409,6 +409,33 @@
                     }
                   ],
                   "serieColor": "#d81b47"
+                },
+                {
+                  "title": { "fr": "Distance parcourue par les usagers" },
+                  "viztype": "barchart-horizontal",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 6,
+                  "serieName": "distance en km",
+                  "serieFromFields": [
+                    { 
+                      "field": "fs_distance_usagers_avg",
+                      "customLabel": ["moyenne"],
+                      "serieColor": "#9fc5e8"
+                    },
+                    { 
+                      "field": "fs_distance_usagers_min",
+                      "customLabel": ["minimmale"],
+                      "serieColor": "#9fc5e8"
+                    },
+                    { 
+                      "field": "fs_distance_usagers_max",
+                      "customLabel": ["maximale"],
+                      "serieColor": "#9fc5e8"
+                    }
+                  ],
+                  "distributed": true
                 },
                 {
                   "title": { "fr": "Typologie du territoire" },
