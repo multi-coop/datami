@@ -222,6 +222,11 @@
                   "paragraphs": [
                     {
                       "text": {
+                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
+                      }
+                    },
+                    {
+                      "text": {
                         "fr": "Nombre d&lsquo;habitants : &#123;&#123; com_hab &#125;&#125; habitants."
                       }
                     },
@@ -359,17 +364,12 @@
                   "templates": [
                     {
                       "text": {
-                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
-                      }
-                    },
-                    {
-                      "text": {
                         "fr": "Cette France services est en zone &#123;&#123; QPV &#125;&#125;."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Cette France services a un score d&lsquo;IFN de : &#123;&#123; ifn_retr_cor &#125;&#125;."
+                        "fr": "Cette France services a un score d&lsquo;IFN de &#123;&#123; ifn &#125;&#125; / 30."
                       }
                     },
                     {
@@ -379,7 +379,7 @@
                     },
                     {
                       "text": {
-                        "fr": "La part des personnes de 65 ans et plus est de &#123;&#123; part_65 &#125;&#125;."
+                        "fr": "La part des personnes de 65 ans et plus est de &#123;&#123; ifn_retr_cor &#125;&#125; %."
                       }
                     }
                   ]
@@ -443,10 +443,11 @@
                       "customLabel": ["(âge inconnu)"]
                     }
                   ],
+                  "serieUnit": "pers.",
                   "serieColor": "#d81b47"
                 },
                 {
-                  "title": { "fr": "Demandes" },
+                  "title": { "fr": "Activités de la France Service" },
                   "viztype": "big-values",
                   "activate": true,
                   "position": "viz-top",
@@ -457,7 +458,7 @@
                       "field": "demandes_traitees",
                       "title": { "fr": "Nombre de demandes traitées" },
                       "unit": { "fr": "demandes" },
-                      "bgColor": "#d0e428"
+                      "bgColor": "#0B5394"
                     }
                   ]
                 },
@@ -473,7 +474,7 @@
                       "field": "fs_satisfaction",
                       "title": { "fr": "Pourcentage de satisfaction" },
                       "unit": { "fr": "%" },
-                      "bgColor": "#6aa84f"
+                      "bgColor": "#427e28"
                     }
                   ]
                 },
@@ -502,6 +503,7 @@
                       "serieColor": "#9fc5e8"
                     }
                   ],
+                  "serieUnit": "km",
                   "distributed": true
                 },
                 {
@@ -529,6 +531,7 @@
                       "serieColor": "#9fc5e8"
                     }
                   ],
+                  "serieUnit": "usagers",
                   "distributed": true
                 },
                 {

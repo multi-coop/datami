@@ -57,7 +57,7 @@
       <!-- BIG VALUES -->
       <div
         v-if="minivizSettings.viztype === 'big-values'"
-        :class="`${showDetail ? 'pb-1' : 'mb-0'} ${minivizSettings.title ? '' : 'pt-3'}`"
+        :class="`${showDetail ? 'pb-1' : 'mb-0'} ${minivizSettings.title ? 'pb-3' : 'pt-3'}`"
         style="width: 100%;">
         <div class="columns mb-0 is-multiline is-centered is-vcentered">
           <div
@@ -70,9 +70,9 @@
             <p
               class="notification has-text-weight-bold py-2 px-2"
               :style="`background-color: ${getBgColor(val.field)}; color: ${getColor(val.field)}`">
-              {{ val.value }}
+              {{ val.value || t('global.noValue', locale) }}
               <span
-                v-if="val.field.unit"
+                v-if="val.value && val.field.unit"
                 class="is-size-7 ml-3">
                 {{ val.field.unit }}
               </span>
@@ -435,6 +435,11 @@ export default {
         if (this.minivizSettings.distributed) {
           options.colors = this.buildLabelsColors()
           options.plotOptions.bar.distributed = true
+        }
+        if (this.minivizSettings.serieUnit) {
+          options.dataLabels.formatter = (val) => {
+            return `${val} ${this.minivizSettings.serieUnit}`
+          }
         }
       }
       if (this.vizSpecs.needCategs) {
