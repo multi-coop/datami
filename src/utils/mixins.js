@@ -1038,6 +1038,7 @@ export const mixinTexts = {
           if (itemValue && fieldObj && fieldObj.type === 'number') {
             strClean = this.getNumberByField(strClean, fieldObj)
           }
+          strClean = `<span class="has-text-weight-medium">${strClean}</span>`
         }
         return strClean
       })

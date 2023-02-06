@@ -90,9 +90,8 @@
         <p
           v-for="(paragraph, i) in getTemplatedValues(templating)"
           :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`"
-          :class="paragraph.customClass || 'mb-2'">
-          {{ paragraph.text }}
-        </p>
+          :class="paragraph.customClass || 'mb-2'"
+          v-html="paragraph.text"/>
         <!-- DEBUGGING -->
         <div
           v-if="needsDebug"
