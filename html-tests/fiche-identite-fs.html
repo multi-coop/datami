@@ -161,11 +161,6 @@
                 "dep_insee": {
                   "position": "description",
                   "block_title": "Informations sur la commune",
-                  "right": false
-                },
-                "id_fs": {
-                  "position": "resume",
-                  "prefix": "Identifiant France services :",
                   "right": true
                 },
                 "fs_statut": {
@@ -186,7 +181,12 @@
                   "prefixIcon": "at",
                   "right": false
                 },
-                "insee_com": {
+                "id_fs": {
+                  "position": "resume",
+                  "prefix": "Identifiant France services :",
+                  "right": false
+                },
+                "insee_com_": {
                   "position": "description",
                   "block_title": "Informations sur la France services",
                   "right" : true
@@ -237,7 +237,7 @@
                     }
                   ]
                 },
-                "insee_com": {
+                "insee_com_": {
                   "use_on_mini": false,
                   "use_on_detail": true,
                   "ignore_definitions": true,
@@ -259,7 +259,7 @@
                     },
                     {
                       "text": {
-                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; ifn_tx_pauv_cor &#125;&#125; et un taux de chômage de &#123;&#123; if_chom_cor &#125;&#125;."
+                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; ifn_tx_pauv_cor &#125;&#125; % et un taux de chômage de &#123;&#123; if_chom_cor &#125;&#125; %."
                       }
                     },
                     {
@@ -339,13 +339,48 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": true,
-                  "cols": 12,
+                  "cols": 4,
                   "serieFromFields": [
                     {
                       "field": "nbre_fs_rayon_30km",
                       "title": { "fr": "Nombre de France services dans un rayon de 30km" },
                       "unit": { "fr": "France services" },
                       "bgColor": "#d0e428"
+                    }
+                  ]
+                },
+                {
+                  "title": { "fr": "Typologie du territoire" },
+                  "viztype": "text-templated",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 8,
+                  "templates": [
+                    {
+                      "text": {
+                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Cette France services est en zone &#123;&#123; QPV &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Cette France services a un score d&lsquo;IFN de : &#123;&#123; ifn_retr_cor &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; ifn_tx_pauv_cor &#125;&#125; % et un taux de chômage de &#123;&#123; if_chom_cor &#125;&#125; %."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "La part des personnes de 65 ans et plus est de &#123;&#123; part_65 &#125;&#125;."
+                      }
                     }
                   ]
                 },
@@ -411,7 +446,39 @@
                   "serieColor": "#d81b47"
                 },
                 {
-                  "title": { "fr": "Distance parcourue par les usagers" },
+                  "title": { "fr": "Demandes" },
+                  "viztype": "big-values",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": true,
+                  "cols": 4,
+                  "serieFromFields": [
+                    {
+                      "field": "demandes_traitees",
+                      "title": { "fr": "Nombre de demandes traitées" },
+                      "unit": { "fr": "demandes" },
+                      "bgColor": "#d0e428"
+                    }
+                  ]
+                },
+                {
+                  "title": { "fr": "Satisfaction des usagers" },
+                  "viztype": "big-values",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": true,
+                  "cols": 8,
+                  "serieFromFields": [
+                    {
+                      "field": "fs_satisfaction",
+                      "title": { "fr": "Pourcentage de satisfaction" },
+                      "unit": { "fr": "%" },
+                      "bgColor": "#6aa84f"
+                    }
+                  ]
+                },
+                {
+                  "title": { "fr": "Distance parcourue par les usagers (en km)" },
                   "viztype": "barchart-horizontal",
                   "activate": true,
                   "position": "viz-top",
@@ -426,7 +493,7 @@
                     },
                     { 
                       "field": "fs_distance_usagers_min",
-                      "customLabel": ["minimmale"],
+                      "customLabel": ["minimale"],
                       "serieColor": "#9fc5e8"
                     },
                     { 
@@ -438,39 +505,31 @@
                   "distributed": true
                 },
                 {
-                  "title": { "fr": "Typologie du territoire" },
-                  "viztype": "text-templated",
-                  "activate": false,
+                  "title": { "fr": "Distance parcourue par les usagers (en km)" },
+                  "viztype": "barchart-horizontal",
+                  "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 4,
-                  "templates": [
-                    {
-                      "text": {
-                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
-                      }
+                  "cols": 6,
+                  "serieName": "distance en km",
+                  "serieFromFields": [
+                    { 
+                      "field": "fs_distance_usagers_avg",
+                      "customLabel": ["entre 0 et 5 km"],
+                      "serieColor": "#9fc5e8"
                     },
-                    {
-                      "text": {
-                        "fr": "Le nombre de services DGFIP est de &#123;&#123; fs_dgfip &#125;&#125; pour cet établissement."
-                      }
+                    { 
+                      "field": "fs_distance_usagers_min",
+                      "customLabel": ["5 à 10 km"],
+                      "serieColor": "#9fc5e8"
                     },
-                    {
-                      "text": {
-                        "fr": "Le nombre de services CAF est de &#123;&#123; fs_caf &#125;&#125; pour cet établissement."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Le nombre de services CNAM est de &#123;&#123; fs_cnam &#125;&#125; pour cet établissement."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Le nombre d&lsquo;autres services de &#123;&#123; fs_autre &#125;&#125; pour cet établissement."
-                      }
+                    { 
+                      "field": "fs_distance_usagers_max",
+                      "customLabel": ["plus de 10 km"],
+                      "serieColor": "#9fc5e8"
                     }
-                  ]
+                  ],
+                  "distributed": true
                 },
                 {
                   "title": { "fr": "Nombre de services traités par la France Service (opérateurs)" },

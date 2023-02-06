@@ -172,6 +172,11 @@
         class="ml-2">
         %
       </span>
+      <span
+        v-else-if="field.unit"
+        class="ml-2">
+        {{ field.unit }}
+      </span>
     </div>
 
     <!-- IMAGE -->

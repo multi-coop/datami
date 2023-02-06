@@ -542,6 +542,7 @@ export default {
             ...fieldCustomProps && fieldCustomProps.allowNew && { allowNew: fieldCustomProps.allowNew },
             ...fieldCustomProps && fieldCustomProps.foreignKey && { foreignKey: fieldCustomProps.foreignKey },
             ...fieldCustomProps && fieldCustomProps.definitions && { definitions: fieldCustomProps.definitions },
+            ...fieldCustomProps && fieldCustomProps.unit && { unit: fieldCustomProps.unit },
             ...fieldCustomProps && fieldCustomProps.round && { round: fieldCustomProps.round },
             ...fieldCustomProps && fieldCustomProps.transform && { transform: fieldCustomProps.transform },
             ...fieldCustomProps && fieldCustomProps.longtextOptions && { longtextOptions: fieldCustomProps.longtextOptions },

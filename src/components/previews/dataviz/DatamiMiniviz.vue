@@ -88,7 +88,7 @@
         <p
           v-for="(paragraph, i) in getTemplatedValues(templating)"
           :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`"
-          :class="paragraph.customClass">
+          :class="paragraph.customClass || 'mb-2'">
           {{ paragraph.text }}
         </p>
         <!-- DEBUGGING -->
@@ -308,16 +308,20 @@ export default {
       // const series = [44, 55, 13, 43, 22] // example 1
       // const series = { name: 'Serie name', data: [44, 55, 13, 43, 22] } // example 2
       let series = this.fieldsForSeries && this.fieldsForSeries.map(f => {
+        let valTemp
         let value = this.item[f.field]
+        const round = f.round
         switch (f.type) {
           case 'number':
-            value = parseFloat(value)
+            valTemp = parseFloat(value)
+            value = round ? this.roundOff(valTemp, round.digits) : valTemp
             break
           case 'integer':
             value = parseInt(value)
             break
           case 'float':
-            value = parseFloat(value)
+            valTemp = parseFloat(value)
+            value = round ? this.roundOff(valTemp, round.digits) : valTemp
             break
         }
         if (f.definitions) {
