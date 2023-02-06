@@ -61,6 +61,10 @@
               "activate": true,
               "filterfields": [
                 {
+                  "name": "com_ifn_categ",
+                  "filtering": "OR"
+                },
+                {
                   "name": "dep_lib",
                   "filtering": "OR"
                 },
@@ -365,12 +369,12 @@
                   "templates": [
                     {
                       "text": {
-                        "fr": "Cette France services est en zone &#123;&#123; QPV &#125;&#125;."
+                        "fr": "Cette France services a &#123;&#123; nbre_qpv_rayon_30km &#125;&#125; zones QPV dans un rayon de 30km."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Cette France services a un score d&lsquo;IFN de &#123;&#123; ifn &#125;&#125; / 30."
+                        "fr": "Cette France services a un score d&lsquo;IFN (v3) de &#123;&#123; ifn &#125;&#125; / 30."
                       }
                     },
                     {
@@ -533,6 +537,7 @@
                     }
                   ],
                   "serieUnit": "usagers",
+                  "offsetDatalabelsX": 20,
                   "distributed": true
                 },
                 {
@@ -609,10 +614,10 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 4,
+                  "cols": 6,
                   "serieFromFields": [
                     {
-                      "field": "nbre_asso_rayon_20km",
+                      "field": "nbre_asso_rayon_30km",
                       "title": { "fr": "Nombre de d&lsquo;associations dans un rayon de 20km" },
                       "unit": { "fr": "associations" },
                       "bgColor": "#0b5394"
@@ -630,7 +635,7 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 8,
+                  "cols": 6,
                   "serieName": "Actes",
                   "serieFromFields": [
                     {

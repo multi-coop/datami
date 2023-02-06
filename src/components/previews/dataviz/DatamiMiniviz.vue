@@ -63,7 +63,7 @@
           <div
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
-            :class="`column ${series.length === 1 ? (showDetail ? 'is-6' : 'is-12') : (showDetail ? 'is-12-mobile is-6-tablet is-4-desktop' : 'is-6')} py-3 has-text-centered is-align-self-flex-end`">
+            :class="`column ${series.length === 1 ? (showDetail ? 'is-6' : 'is-12') : (showDetail ? 'is-12-mobile is-6-tablet is-6-desktop is-4-widescreen' : 'is-6')} py-3 has-text-centered is-align-self-flex-end`">
             <p
               v-if="!val.field.noTitle"
               class="has-text-weight-semibold is-size-7">
@@ -442,6 +442,9 @@ export default {
         if (this.minivizSettings.serieUnit) {
           options.dataLabels.formatter = (val) => {
             return `${val} ${this.minivizSettings.serieUnit}`
+          }
+          if (this.minivizSettings.viztype === 'barchart-horizontal') {
+            options.dataLabels.offsetX = this.minivizSettings.offsetX || 15
           }
         }
       }
