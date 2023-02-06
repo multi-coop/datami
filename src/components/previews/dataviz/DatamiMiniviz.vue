@@ -444,7 +444,7 @@ export default {
             return `${val} ${this.minivizSettings.serieUnit}`
           }
           if (this.minivizSettings.viztype === 'barchart-horizontal') {
-            options.dataLabels.offsetX = this.minivizSettings.offsetX || 15
+            options.dataLabels.offsetX = this.minivizSettings.offsetDatalabelsX || 15
           }
         }
       }
@@ -453,6 +453,9 @@ export default {
           categories: this.buildCategs(),
           tooltip: { enabled: false }
         }
+      }
+      if (this.minivizSettings.noLegend) {
+        options.legend = { show: false }
       }
       // this.needsDebug && console.log('C-DatamiMiniviz > buildOptions > options : ', options)
       this.options = options
