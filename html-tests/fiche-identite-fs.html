@@ -236,44 +236,7 @@
                     },
                     {
                       "text": {
-                        "fr": "Densité : &#123;&#123; com_densite &#125;&#125;."
-                      }
-                    },
-                    {
-                      "text_": {
-                        "fr": "Nombre d&lsquo;habitants et densité de population par rapport à la médiane française : &#123;&#123; com_ratio_densite &#125;&#125;."
-                      }
-                    }
-                  ]
-                },
-                "insee_com_": {
-                  "use_on_mini": false,
-                  "use_on_detail": true,
-                  "ignore_definitions": true,
-                  "paragraphs": [
-                    {
-                      "text": {
-                        "fr": "La maison France services &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; a les caractéristiques suivantes :"
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Cette France services est en &#123;&#123; QPV &#125;&#125;."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "Cette France services a un score d&lsquo;IFN de : &#123;&#123; ifn_retr_cor &#125;&#125;."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; ifn_tx_pauv_cor &#125;&#125; % et un taux de chômage de &#123;&#123; if_chom_cor &#125;&#125; %."
-                      }
-                    },
-                    {
-                      "text": {
-                        "fr": "La part des personnes de 65 ans et plus est de &#123;&#123; part_65 &#125;&#125;."
+                        "fr": "Densité : &#123;&#123; com_densite &#125;&#125; hab./km2."
                       }
                     }
                   ]
@@ -379,7 +342,7 @@
                     },
                     {
                       "text": {
-                      "fr": "Cette commune a un score IFN (v3) &#123;&#123; com_ifn_categ &#125;&#125;, de &#123;&#123; com_score_ifn &#125;&#125; sur 3."
+                        "fr": "Cette commune a un score IFN (v3) &#123;&#123; com_ifn_categ &#125;&#125;, de &#123;&#123; com_score_ifn &#125;&#125;."
                       }
                     },
                     {
@@ -388,6 +351,27 @@
                       }
                     }
                   ]
+                },
+                {
+                  "title": { "fr": "Usagers par sexe" },
+                  "viztype": "simple-donut",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 5,
+                  "serieFromFields": [
+                    { 
+                      "field": "fs_sexe_femme",
+                      "customLabel": ["Femmes"],
+                      "serieColor": "#1bd8ac"
+                    },
+                    { 
+                      "field": "fs_sexe_homme",
+                      "customLabel": ["Hommes"],
+                      "serieColor": "#e7c03f"
+                    }
+                  ],
+                  "showTotal": true
                 },
                 {
                   "title": { "fr": "Usagers par tranche d&lsquo;âge" },
@@ -431,27 +415,6 @@
                   "serieColor": "#d81b47"
                 },
                 {
-                  "title": { "fr": "Usagers par sexe" },
-                  "viztype": "simple-donut",
-                  "activate": true,
-                  "position": "viz-top",
-                  "showOnMiniCard": false,
-                  "cols": 5,
-                  "serieFromFields": [
-                    { 
-                      "field": "fs_sexe_femme",
-                      "customLabel": ["Femmes"],
-                      "serieColor": "#1bd8ac"
-                    },
-                    { 
-                      "field": "fs_sexe_homme",
-                      "customLabel": ["Hommes"],
-                      "serieColor": "#e7c03f"
-                    }
-                  ],
-                  "showTotal": true
-                },
-                {
                   "title": { "fr": "Activités de la France Service" },
                   "viztype": "big-values",
                   "activate": true,
@@ -460,7 +423,7 @@
                   "cols": 6,
                   "serieFromFields": [
                     {
-                      "field": "demandes_traitees",
+                      "field": "fs_nombre_total_services",
                       "title": { "fr": "Nombre de demandes traitées" },
                       "unit": { "fr": "demandes" },
                       "bgColor": "#0B5394"
@@ -478,7 +441,7 @@
                     {
                       "field": "fs_satisfaction",
                       "title": { "fr": "Pourcentage de satisfaction" },
-                      "unit": { "fr": "%" },
+                      "unit": { "fr": "% de satisfaction" },
                       "bgColor": "#427e28"
                     }
                   ]
@@ -543,7 +506,7 @@
                   "distributed": true
                 },
                 {
-                  "title": { "fr": "Distances parcourues" },
+                  "title": { "fr": "Nombre de trajets d&lsquo;usagers par distance parcourue" },
                   "viztype": "simple-donut",
                   "activate": true,
                   "position": "viz-top",
@@ -574,7 +537,8 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 7,
+                  "cols": 12,
+                  "chartHeight": "350px",
                   "serieName": "Actes",
                   "serieFromFields": [
                     {
@@ -617,21 +581,87 @@
                   "serieColor": "#ac1bd8"
                 },
                 {
+                  "title": { "fr": "Services traités hors opérateurs" },
+                  "viztype": "big-values",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 3,
+                  "serieName": "Actes",
+                  "serieFromFields": [
+                    {
+                      "field": "fs_actes_d_etat_civil",
+                      "unit": { "fr": "actes" },
+                      "bgColor": "#D07EE8"
+                    },
+                    {
+                      "field": "fs_autre",
+                      "unit": { "fr": "services" },
+                      "bgColor": "#D07EE8"
+                    }
+                  ]
+                },
+                {
                   "title": { "fr": "Thématiques traitées par la France Service (hors opérateurs)" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 5,
-                  "serieName": "Actes",
+                  "cols": 9,
+                  "chartHeight": "350px",
+                  "serieName": "Services",
                   "serieFromFields": [
                     {
-                      "field": "fs_actes_d_etat_civil",
-                      "customLabel": ["actes", "d&lsquo;état civil"]
+                      "field": "thematique_alimentaire",
+                      "customLabel": ["alimentaire"]
                     },
                     {
-                      "field": "fs_autre",
-                      "customLabel": ["autres", "services"]
+                      "field": "thematique_banque_et_mutuelle",
+                      "customLabel": ["banque et", "mutuelle"]
+                    },
+                    {
+                      "field": "thematique_covid19",
+                      "customLabel": ["covid 19"]
+                    },
+                    {
+                      "field": "thematique_ecoles_petite_enfance_et_jeunesse",
+                      "customLabel": ["écoles", "petite enfance", "jeunesse"]
+                    },
+                    {
+                      "field": "thematique_emploi_et_insertion",
+                      "customLabel": ["emploi", "et insertion"]
+                    },
+                    {
+                      "field": "thematique_environnement__dechets",
+                      "customLabel": ["environnement", "déchets"]
+                    },
+                    {
+                      "field": "thematique_inclusion_numerique",
+                      "customLabel": ["inclusion", "numérique"]
+                    },
+                    {
+                      "field": "thematique_logement_energie_mobilite",
+                      "customLabel": ["logement", "énergie", "mobilité"]
+                    },
+                    {
+                      "field": "thematique_microcredit_surendettement",
+                      "customLabel": ["microcrédit", "surendettement"]
+                    },
+                    {
+                      "field": "thematique_sante",
+                      "customLabel": ["santé"]
+                    },
+                    {
+                      "field": "thematique_services_publics_regaliens_justice_citoyennete_etc",
+                      "customLabel": ["services publics", "justice", "citoyenneté..."]
+                    },
+                    {
+                      "field": "thematique_social_solidarite_retraite",
+                      "customLabel": ["social", "solidarité", "retraite"]
+                    },
+                    {
+                      "field": "thematique_tourisme_et_culture",
+                      "customLabel": ["tourisme", "et culture"]
                     }
                   ],
                   "serieColor": "#D07EE8"
@@ -646,7 +676,7 @@
                   "serieFromFields": [
                     {
                       "field": "nbre_asso_rayon_30km",
-                      "title": { "fr": "Nombre de d&lsquo;associations dans un rayon de 30km" },
+                      "title": { "fr": "Nombre d&lsquo;associations dans un rayon de 30km" },
                       "unit": { "fr": "associations" },
                       "bgColor": "#0b5394"
                     },
@@ -658,13 +688,13 @@
                   ]
                 },
                 {
-                  "title": { "fr": "Associations dans un rayon de 30 km par catégorie" },
+                  "title": { "fr": "Associations dans un rayon de 30 km par thématique" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
                   "cols": 7,
-                  "serieName": "Actes",
+                  "serieName": "Associations",
                   "serieFromFields": [
                     {
                       "field": "asso_theme_actions_sociales",

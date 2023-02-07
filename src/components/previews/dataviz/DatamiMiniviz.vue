@@ -17,47 +17,60 @@
       :class="`miniviz-switcher ${vizSpecs.type || minivizSettings.viztype === 'big-values' ? 'is-flex is-align-items-center' : ''} ${minivizSettings.viztype === 'big-values' ? 'is-justify-content-center' : ''}`"
       :style="`${vizSpecs.type || minivizSettings.viztype === 'big-values' ? 'height: 90%;' : ''}`">
       <!-- APEX CHARTS -->
+      <!-- :style="`width: 100%;${minivizSettings.height ? 'max-height:' + minivizSettings.height + ';' : ''}`"> -->
       <div
         v-if="minivizSettings.viztype === 'simple-pie'"
-        style="width: 100%;">
+        class="miniviz-simple-pie"
+        style="width: 100%">
         <ApexChart
           ref="simple-pie"
           type="pie"
+          class="chart-simple-pie"
           :options="options"
+          :height="minivizSettings.chartHeight || 'auto'"
           :series="series"/>
       </div>
       <div
         v-if="minivizSettings.viztype === 'simple-donut'"
-        style="width: 100%;">
+        class="miniviz-simple-donut"
+        style="width: 100%">
         <ApexChart
           ref="simple-donut"
           type="donut"
+          class="chart-simple-donut"
           :options="options"
+          :height="minivizSettings.chartHeight || 'auto'"
           :series="series"/>
       </div>
       <div
         v-if="minivizSettings.viztype === 'barchart-vertical'"
-        style="width: 100%;">
+        class="miniviz-barchart-vertical"
+        style="width: 100%">
         <ApexChart
           ref="barchart-vertical"
           type="bar"
+          class="chart-barchart-vertical"
           :options="options"
+          :height="minivizSettings.chartHeight || 'auto'"
           :series="series"/>
       </div>
       <div
         v-if="minivizSettings.viztype === 'barchart-horizontal'"
-        style="width: 100%;">
+        class="miniviz-barchart-horizontal"
+        style="width: 100%">
         <ApexChart
           ref="barchart-horizontal"
           type="bar"
+          class="chart-barchart-horizontal"
           :options="options"
+          :height="minivizSettings.chartHeight || 'auto'"
           :series="series"/>
       </div>
 
       <!-- BIG VALUES -->
       <div
         v-if="minivizSettings.viztype === 'big-values'"
-        :class="`${showDetail ? 'pb-1' : 'mb-0'} ${minivizSettings.title ? 'pb-3' : 'pt-3'}`"
+        :class="`miniviz-big-values ${showDetail ? 'pb-1' : 'mb-0'} ${minivizSettings.title ? 'pb-3' : 'pt-3'}`"
         style="width: 100%;">
         <div class="columns mb-0 is-multiline is-centered is-vcentered">
           <div
@@ -86,7 +99,7 @@
       <!-- TEMPLATED VALUES -->
       <div
         v-if="minivizSettings.viztype === 'text-templated'"
-        class="mb-3">
+        class="miniviz-text-templated mb-3">
         <p
           v-for="(paragraph, i) in getTemplatedValues(templating)"
           :key="`card-miniviz-${fileId}-${item.id}-templated-${i}`"
@@ -375,7 +388,6 @@ export default {
       const options = { ...this.chartOptionsDefault }
       options.chart.type = this.vizSpecs.type
       // this.needsDebug && console.log('C-DatamiMiniviz > buildOptions > this.minivizSettings : ', this.minivizSettings)
-
       // default data labels
       options.dataLabels = {
         enabled: true,
