@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
-  <title>Maisons France Service</title>
+  <title>Maisons France Services</title>
 </head>
 
 <body style="background-color: white;">
@@ -23,11 +23,11 @@
       <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
 
       <!-- DATAMI WIDGET'S HTML BLOCK-->
-      <datami-multi-files title="Fiches d'identité France Service" options='{
+      <datami-multi-files title="Fiches d'identité des France Services" options='{
         "display": "horizontal"
         }' gitfiles='[
         {
-          "title": "Liste des France Service (échantillon)",
+          "title": "Liste des France Services (échantillon)",
           "activate": true,
           "creditslogos": [
             {
@@ -162,7 +162,7 @@
                   "position": "adress",
                   "prefix" : "Département : "
                 },
-                "dep_insee": {
+                "COMMENTED_dep_insee": {
                   "position": "description",
                   "block_title": "Informations sur la commune",
                   "right": true
@@ -188,7 +188,7 @@
                 "id_fs": {
                   "position": "resume",
                   "prefix": "Identifiant France services :",
-                  "right": false
+                  "right": true
                 },
                 "insee_com_": {
                   "position": "description",
@@ -219,14 +219,14 @@
                 }
               },
               "templates": {
-                "dep_insee": {
+                "COMMENTED_dep_insee": {
                   "use_on_mini": false,
                   "use_on_detail": true,
                   "ignore_definitions": true,
                   "paragraphs": [
                     {
                       "text": {
-                        "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
+                        "fr": "La France Services &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
                       }
                     },
                     {
@@ -332,22 +332,42 @@
                   "templates": [
                     {
                       "text": {
-                        "fr": "La commune &ldquo;&#123;&#123; lib_com &#125;&#125;&ldquo; a un score de pauvreté de &#123;&#123; com_pauvrete &#125;&#125; sur 3, et un score de chômage de &#123;&#123; com_chomage &#125;&#125; sur 3."
+                        "fr": "La France Services &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; se situe dans la commune de &#123;&#123; lib_com &#125;&#125; (&#123;&#123; dep_insee &#125;&#125;)."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Cette commune a &#123;&#123; nbre_qpv_rayon_30km &#125;&#125; zones QPV dans un rayon de 30km."
+                        "fr": "Nombre d&lsquo;habitants : &#123;&#123; com_population &#125;&#125; habitants."
                       }
                     },
                     {
                       "text": {
-                        "fr": "Cette commune a un score IFN (v3) &#123;&#123; com_ifn_categ &#125;&#125;, de &#123;&#123; com_score_ifn &#125;&#125;."
+                        "fr": "Densité : &#123;&#123; com_densite &#125;&#125; hab./km2."
                       }
                     },
                     {
                       "text": {
-                      "fr": "La score relatif à la part des personnes de 65 ans et plus est de &#123;&#123; com_65etplus &#125;&#125; sur 3."
+                        "fr": "QPV dans un rayon de 30km : &#123;&#123; nbre_qpv_rayon_30km &#125;&#125; QPV."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le score IFN de cette commune est de &#123;&#123; com_score_ifn &#125;&#125;, soit un score &#123;&#123; com_ifn_categ &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le score de l&lsquo;indicateur &ldquo;Taux de pauvreté&rdquo; est de &#123;&#123; com_pauvrete &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                        "fr": "Le score de l&lsquo;indicateur &ldquo;Taux de chômage&rdquo; est de &#123;&#123; com_chomage &#125;&#125;."
+                      }
+                    },
+                    {
+                      "text": {
+                      "fr": "La score relatif à la &ldquo;Part des personnes de 65 ans et plus&rdquo; est de &#123;&#123; com_65etplus &#125;&#125;."
                       }
                     }
                   ]
@@ -415,7 +435,7 @@
                   "serieColor": "#d81b47"
                 },
                 {
-                  "title": { "fr": "Activités de la France Service" },
+                  "title": { "fr": "Activités de la France Services" },
                   "viztype": "big-values",
                   "activate": true,
                   "position": "viz-top",
@@ -447,9 +467,25 @@
                   ]
                 },
                 {
+                  "title": { "fr": "Distances parcourues par les usagers" },
+                  "viztype": "big-values",
+                  "activate": true,
+                  "position": "viz-top",
+                  "showOnMiniCard": false,
+                  "cols": 4,
+                  "serieFromFields": [
+                    {
+                      "field": "fs_distance_usagers_avg",
+                      "title": { "fr": "Distance moyenne" },
+                      "unit": { "fr": "km" },
+                      "bgColor": "#9fc5e8"
+                    }
+                  ]
+                },
+                {
                   "title": { "fr": "Distance parcourue par les usagers (en km)" },
                   "viztype": "barchart-horizontal",
-                  "activate": true,
+                  "activate": false,
                   "position": "viz-top",
                   "showOnMiniCard": false,
                   "cols": 7,
@@ -511,7 +547,8 @@
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 5,
+                  "cols": 8,
+                  "chartHeight": "300px",
                   "serieFromFields": [
                     { 
                       "field": "fs_nbre_trajet_moins_5km",
@@ -532,7 +569,7 @@
                   "showTotal": true
                 },
                 {
-                  "title": { "fr": "Nombre de services traités par la France Service (opérateurs)" },
+                  "title": { "fr": "Nombre de services traités par la France Services (opérateurs)" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
@@ -581,33 +618,12 @@
                   "serieColor": "#ac1bd8"
                 },
                 {
-                  "title": { "fr": "Services traités hors opérateurs" },
-                  "viztype": "big-values",
-                  "activate": true,
-                  "position": "viz-top",
-                  "showOnMiniCard": false,
-                  "cols": 3,
-                  "serieName": "Actes",
-                  "serieFromFields": [
-                    {
-                      "field": "fs_actes_d_etat_civil",
-                      "unit": { "fr": "actes" },
-                      "bgColor": "#D07EE8"
-                    },
-                    {
-                      "field": "fs_autre",
-                      "unit": { "fr": "services" },
-                      "bgColor": "#D07EE8"
-                    }
-                  ]
-                },
-                {
-                  "title": { "fr": "Thématiques traitées par la France Service (hors opérateurs)" },
+                  "title": { "fr": "Thématiques traitées par la France Services (hors opérateurs)" },
                   "viztype": "barchart-vertical",
                   "activate": true,
                   "position": "viz-top",
                   "showOnMiniCard": false,
-                  "cols": 9,
+                  "cols": 12,
                   "chartHeight": "350px",
                   "serieName": "Services",
                   "serieFromFields": [

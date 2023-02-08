@@ -67,6 +67,9 @@ import {
   builUrlNewParams,
   updateUrlParams
 } from '@/utils/utilsUrl.js'
+import {
+  localeValue
+} from '@/utils/utilsTranslations'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -450,6 +453,7 @@ export const mixinGlobal = {
   },
   methods: {
     uuidv4,
+    localeValue,
     findFromPath,
     ...mapActions({
       updateDialogs: 'git-dialogs/updateFileDialog',
@@ -1023,6 +1027,8 @@ export const mixinTexts = {
         // console.log('M > mixinTexts > applyTemplating > str :', str)
         let strClean = str
         if (str.startsWith(fieldStart)) {
+          let customClass = 'has-text-weight-semibold'
+          let customStyle = ''
           const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
           // console.log('M > mixinTexts > applyTemplating > fieldName :', fieldName)
           const fieldObj = fields.find(f => f.name === fieldName)
@@ -1035,10 +1041,13 @@ export const mixinTexts = {
             const definition = fieldObj.definitions.find(def => def.value === strClean)
             strClean = (definition && definition.label) || strClean
           }
-          if (itemValue && fieldObj && fieldObj.type === 'number') {
-            strClean = this.getNumberByField(strClean, fieldObj)
+          if (itemValue && fieldObj && (fieldObj.type === 'integer' || fieldObj.type === 'number')) {
+            customClass += ' px-1'
+            customStyle += 'color: white; background-color: black;'
+            const value = this.getNumberByField(strClean, fieldObj)
+            strClean = this.localeValue(value, this.locale, fieldObj.round)
           }
-          strClean = `<span class="has-text-weight-semibold">${strClean}</span>`
+          strClean = `<span class="${customClass}" style="${customStyle}">${strClean}</span>`
         }
         return strClean
       })

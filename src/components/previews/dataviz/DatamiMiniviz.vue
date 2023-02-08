@@ -76,7 +76,7 @@
           <div
             v-for="(val, i) in series"
             :key="`${val.field.field}-${i}`"
-            :class="`column ${series.length === 1 ? (showDetail ? 'is-6' : 'is-12') : (showDetail ? 'is-12-mobile is-6-tablet is-6-desktop is-4-widescreen' : 'is-6')} py-3 has-text-centered is-align-self-flex-end`">
+            :class="`column ${series.length === 1 ? (showDetail ? 'is-6' : 'is-12') : (showDetail ? 'is-12-mobile is-6-tablet is-6-desktop is-5-widescreen is-4-fullhd' : 'is-6')} py-3 has-text-centered is-align-self-flex-end`">
             <p
               v-if="!val.field.noTitle"
               class="has-text-weight-semibold is-size-7">
@@ -85,10 +85,15 @@
             <p
               class="notification has-text-weight-bold py-2 px-2"
               :style="`background-color: ${getBgColor(val.field)}; color: ${getColor(val.field)}`">
-              {{ val.value || t('global.noValue', locale) }}
+              <span v-if="val.field.type === 'number' || val.field.type === 'integer'">
+                {{ (val.value && localeValue(val.value, locale, val.field.round)) || t('global.noValue', locale) }}
+              </span>
+              <span v-else>
+                {{ val.value || t('global.noValue', locale) }}
+              </span>
               <span
                 v-if="val.value && val.field.unit"
-                class="is-size-7 ml-3">
+                class="is-size-7 ml-2">
                 {{ val.field.unit }}
               </span>
             </p>
@@ -236,6 +241,11 @@ export default {
             show: false
           }
         },
+        // dataLabels: {
+        //   formatter: (val) => {
+        //     return this.localeValue(val, this.locale)
+        //   }
+        // },
         // labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
         legend: {
           position: 'bottom'
@@ -398,6 +408,9 @@ export default {
           enabled: true,
           foreColor: '#fff',
           borderWidth: 0
+        },
+        formatter: (val) => {
+          return this.localeValue(val, this.locale)
         }
       }
       // set labels
@@ -452,7 +465,7 @@ export default {
         }
         if (this.minivizSettings.serieUnit) {
           options.dataLabels.formatter = (val) => {
-            return `${val} ${this.minivizSettings.serieUnit}`
+            return `${this.localeValue(val, this.locale)} ${this.minivizSettings.serieUnit}`
           }
           if (this.minivizSettings.viztype === 'barchart-horizontal') {
             options.dataLabels.offsetX = this.minivizSettings.offsetDatalabelsX || 15

@@ -321,7 +321,8 @@ export default {
   },
   methods: {
     getNumber (value) {
-      return this.getNumberByField(value, this.field)
+      const val = this.getNumberByField(value, this.field)
+      return this.localeValue(val, this.locale, this.field.round)
     },
     linkDomain (value) {
       // console.log('\nC > PreviewCell > linkDomain > value : ', value)
