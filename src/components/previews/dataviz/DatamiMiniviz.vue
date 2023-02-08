@@ -408,9 +408,6 @@ export default {
           enabled: true,
           foreColor: '#fff',
           borderWidth: 0
-        },
-        formatter: (val) => {
-          return this.localeValue(val, this.locale)
         }
       }
       // set labels
@@ -463,12 +460,17 @@ export default {
           options.colors = this.buildLabelsColors()
           options.plotOptions.bar.distributed = true
         }
+        // formatter
         if (this.minivizSettings.serieUnit) {
           options.dataLabels.formatter = (val) => {
             return `${this.localeValue(val, this.locale)} ${this.minivizSettings.serieUnit}`
           }
           if (this.minivizSettings.viztype === 'barchart-horizontal') {
             options.dataLabels.offsetX = this.minivizSettings.offsetDatalabelsX || 15
+          }
+        } else {
+          options.dataLabels.formatter = (val) => {
+            return this.localeValue(val, this.locale)
           }
         }
       }
