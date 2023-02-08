@@ -168,12 +168,12 @@
       :class="`has-text-right has-text-weight-bold is-size-7`">
       {{ getNumber(value) }}
       <span
-        v-if="isPercent"
+        v-if="value && isPercent"
         class="ml-2">
         %
       </span>
       <span
-        v-else-if="field.unit"
+        v-else-if="value && field.unit"
         class="ml-2">
         {{ field.unit }}
       </span>
@@ -322,7 +322,7 @@ export default {
   methods: {
     getNumber (value) {
       const val = this.getNumberByField(value, this.field)
-      return this.localeValue(val, this.locale, this.field.round)
+      return val ? this.localeValue(val, this.locale, this.field.round) : this.t('global.noValue', this.locale)
     },
     linkDomain (value) {
       // console.log('\nC > PreviewCell > linkDomain > value : ', value)
