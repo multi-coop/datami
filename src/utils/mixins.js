@@ -1053,15 +1053,24 @@ export const mixinTexts = {
             const definition = fieldObj.definitions.find(def => def.value === strClean)
             strClean = (definition && definition.label) || strClean
           }
+          // specific to numbers
           if (itemValue && fieldObj && (fieldObj.type === 'integer' || fieldObj.type === 'number')) {
             customClass += ' px-1'
             customStyle += 'color: white; background-color: black;'
             const value = this.getNumberByField(strClean, fieldObj)
             strClean = this.localeValue(value, this.locale, fieldObj.round)
           }
+          // specific to tags
           if (itemValue && fieldObj && (fieldObj.subtype === 'tag' || fieldObj.subtype === 'tags')) {
             customClass += ' px-1'
             customStyle += 'color: white; background-color: black;'
+          }
+          // specific to booleans
+          if (itemValue && fieldObj && (fieldObj.type === 'boolean' || fieldObj.subtype === 'tags')) {
+            customClass += ' px-1'
+            customStyle += 'color: white; background-color: black;'
+            const valueAsBoolean = this.booleanFromValue(itemValue, fieldObj)
+            strClean = this.t(`global.${valueAsBoolean ? 'yes' : 'no'}`, this.locale)
           }
           strClean = `<span class="${customClass}" style="${customStyle}">${strClean}</span>`
         }
