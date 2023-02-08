@@ -103,6 +103,13 @@
                 </span>
               </div>
 
+              <!-- BOOLEAN FILTER -->
+              <span
+                v-else-if="filter.type === 'boolean'"
+                :class="`${isActive(filterVal) ? 'has-text-weight-bold' : '' }`">
+                {{ t(`global.${filterVal ? 'yes' : 'no'}`, locale) }}
+              </span>
+
               <!-- SIMPLE FILTER -->
               <span
                 v-else
@@ -175,11 +182,15 @@ export default {
       let icon
       const isActive = this.isActive(filterVal)
       const isAnd = this.filter.filtering === 'AND'
+      const isRadio = this.filter.filtering === 'RADIO'
       if (isActive && isAnd) {
         icon = 'close-thick'
       }
-      if (!isAnd) {
+      if (!isAnd && !isRadio) {
         icon = isActive ? 'checkbox-marked' : 'checkbox-blank-outline'
+      }
+      if (isRadio) {
+        icon = isActive ? 'radiobox-marked' : 'radiobox-blank'
       }
       return icon
     },
@@ -204,6 +215,7 @@ export default {
       // console.log('C > CustomFilterDropdown > SendActionToParent > remove : ', remove)
       const filterPayload = {
         field: this.filter.field,
+        type: this.filter.type,
         subtype: this.filter.subtype,
         bgColor: this.filter.bgColor,
         value: filterVal,

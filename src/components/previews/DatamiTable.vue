@@ -493,6 +493,10 @@
 
 <script>
 import {
+  booleanFromValue
+} from '@/utils/globalUtils.js'
+
+import {
   mixinTooltip,
   mixinClientUrl,
   mixinGlobal,
@@ -1080,6 +1084,7 @@ export default {
           const filterField = this.filterFields.find(f => f.field === activeTag.field)
           regroupedFilterTags.push({
             field: activeTag.field,
+            type: activeTag.type,
             filtering: filterField.filtering,
             activeValues: [tagValueLower]
           })
@@ -1089,7 +1094,7 @@ export default {
 
       // filter out data
       data = data.filter(row => {
-        // const debug = row.id === '0'
+        // const debug = row.id === '0' || rowid === '1'
         // debug && console.log('\nC > DatamiTable > filterData > row.id : ', row.id)
         // debug && console.log('C > DatamiTable > filterData > row : ', row)
 
@@ -1119,11 +1124,16 @@ export default {
         if (regroupedFilterTags.length) {
           regroupedFilterTags.forEach(filterField => {
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField : ', filterField)
-            const cellVal = row[filterField.field] || ''
-            const cellValLow = cellVal.toString().toLowerCase()
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+            let cellVal = row[filterField.field] || ''
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > cellVal : ', cellVal)
+            switch (filterField.type) {
+              case 'boolean':
+                cellVal = booleanFromValue(cellVal, filterField)
+            }
+            const cellValLow = cellVal.toString().toLowerCase()
 
             // debug && console.log('C > DatamiTable > dataEditedFiltered > cellValLow : ', cellValLow)
             const boolArr = filterField.activeValues.map(activeValue => {
@@ -1134,10 +1144,13 @@ export default {
             // debug && console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
 
             let fieldBool = true
+            // VERTICAL CONDITION WITHIN TAGS FROM SAME FIELD
             if (filterField.filtering === 'OR') {
               fieldBool = boolArr.some(b => b)
             } else if (filterField.filtering === 'AND') {
               fieldBool = boolArr.every(b => b)
+            } else if (filterField.filtering === 'RADIO') {
+              fieldBool = boolArr.some(b => b)
             }
             boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
             // debug && console.log('C > DatamiTable > dataEditedFiltered > fieldBool : ', fieldBool)
@@ -1251,11 +1264,12 @@ export default {
       }
     },
     processFilterValue (tag, remove = false) {
-      // console.log('C > DatamiTable > processFilterValue > tag : ', tag)
-      // console.log('C > DatamiTable > processFilterValue > remove : ', remove)
+      console.log('C > DatamiTable > processFilterValue > tag : ', tag)
+      console.log('C > DatamiTable > processFilterValue > remove : ', remove)
+      const isRadio = tag.type === 'boolean'
       const filterTags = this.filterTags.filter(t => {
         const sameField = t.field === tag.field
-        const sameValue = t.value === tag.value
+        const sameValue = isRadio || t.value === tag.value
         return !(sameField && sameValue)
       })
       if (!remove) {

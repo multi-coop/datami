@@ -110,10 +110,17 @@ export default {
         // console.log('\nC > SortAndFiltersSkeleton > filtersDisplay > this.fileFilters : ', this.fileFilters)
         filters = this.fileFilters.map(filter => {
           // console.log('\nC > SortAndFiltersSkeleton > filtersDisplay > filter : ', filter)
-          const enumArr = filter.enumArr || []
+          let enumArr = filter.enumArr || []
+          if (filter.type === 'boolean') {
+            enumArr = [
+              true,
+              false
+            ]
+          }
           const field = {
             field: filter.field,
             title: filter.title,
+            type: filter.type,
             subtype: filter.subtype,
             label: filter.label,
             enumArr: enumArr,

@@ -103,6 +103,8 @@
         <span v-else>
           {{ t('global.no', locale) }}
         </span>
+        <!-- DEBUGGING -->
+        <!-- <code>{{ value }}</code> -->
       </span>
     </div>
 
