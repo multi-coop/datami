@@ -1264,8 +1264,8 @@ export default {
       }
     },
     processFilterValue (tag, remove = false) {
-      console.log('C > DatamiTable > processFilterValue > tag : ', tag)
-      console.log('C > DatamiTable > processFilterValue > remove : ', remove)
+      // console.log('C > DatamiTable > processFilterValue > tag : ', tag)
+      // console.log('C > DatamiTable > processFilterValue > remove : ', remove)
       const isRadio = tag.type === 'boolean'
       const filterTags = this.filterTags.filter(t => {
         const sameField = t.field === tag.field
