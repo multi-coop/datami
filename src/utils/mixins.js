@@ -1047,6 +1047,10 @@ export const mixinTexts = {
             const value = this.getNumberByField(strClean, fieldObj)
             strClean = this.localeValue(value, this.locale, fieldObj.round)
           }
+          if (itemValue && fieldObj && (fieldObj.subtype === 'tag' || fieldObj.subtype === 'tags')) {
+            customClass += ' px-1'
+            customStyle += 'color: white; background-color: black;'
+          }
           strClean = `<span class="${customClass}" style="${customStyle}">${strClean}</span>`
         }
         return strClean
