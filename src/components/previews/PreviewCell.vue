@@ -90,15 +90,18 @@
     <!-- BOOLEAN -->
     <div
       v-if="isBoolean"
-      :class="`has-text-left is-flex is-align-content-center ml-4`">
+      :class="`has-text-left is-flex is-align-items-center ml-4`">
       <b-icon
         :icon="`checkbox-${booleanFromValue(value, field) ? 'marked' : 'blank-outline'}`"/>
-      <span class="ml-2">
+      <span class="ml-2 is-size-7">
         <span v-if="value === ''">
           {{ t('global.noValue', locale) }}
         </span>
+        <span v-else-if="booleanFromValue(value, field)">
+          {{ t('global.yes', locale) }}
+        </span>
         <span v-else>
-          {{ value }}
+          {{ t('global.no', locale) }}
         </span>
       </span>
     </div>
@@ -120,7 +123,7 @@
           :key="`tags-${field.field}-${tagIdx}`"
           :file-id="fileId"
           :val="val"
-          :tag-style="`color: ${tagColor(val, field.bgColor, isDiffView)}; background-color:  ${tagBackgroundColor(val, field.bgColor, isDiffView)}`"
+          :tag-style="`color: ${tagColor(val, field, isDiffView)}; background-color:  ${tagBackgroundColor(val, field, isDiffView)}`"
           :field="field"
           :is-mini="isMini"
           :locale="locale"

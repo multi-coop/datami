@@ -971,21 +971,33 @@ export const mixinValue = {
       const description = definition && definition.description
       return description
     },
-    tagBackgroundColor (value, bgColor = undefined, isDiff = false) {
+    tagBackgroundColor (value, field = undefined, isDiff = false) {
       let color
+
+      // get default background color if any
+      let bgColor = field.bgColor
+
+      // check if definition has a custom color
+      const defaultBgColor = field.bgColor
+      if (field.definitions) {
+        const valDef = field.definitions.find(d => d.value === value)
+        bgColor = (valDef && valDef.bgColor) || defaultBgColor
+      }
+
+      // generate background color
       if (!isDiff) {
-        color = bgColor ?? stringToColor(value)
+        color = bgColor || stringToColor(value)
       } else {
         color = '#363636'
       }
       return color
     },
-    tagColor (value, bgColor = undefined, isDiff = false) {
+    tagColor (value, field = undefined, isDiff = false) {
       let textColor
       if (isDiff) {
         textColor = 'white'
       } else {
-        const hex = this.tagBackgroundColor(value, bgColor)
+        const hex = this.tagBackgroundColor(value, field)
         textColor = getContrastYIQ(hex)
       }
       return textColor

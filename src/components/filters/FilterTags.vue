@@ -20,10 +20,11 @@
           <!-- {{ getFieldForeignKey(tag.field) }} -->
           <!-- <hr> -->
           <!-- {{ item(tag.field, tag.value) }} -->
+          <!-- :tag-style="`color: ${tagColor(tag.value, getFieldBgColor(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getFieldBgColor(tag.field), false)}`" -->
           <PreviewTagValue
             :file-id="fileId"
             :val="tag.value"
-            :tag-style="`color: ${tagColor(tag.value, getFieldBgColor(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getFieldBgColor(tag.field), false)}`"
+            :tag-style="`color: ${tagColor(tag.value, getField(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getField(tag.field), false)}`"
             :field="getField(tag.field)"
             :is-filter-tag="true"
             :locale="locale"/>
@@ -101,10 +102,10 @@ export default {
         return header.label
       }
     },
-    getFieldBgColor (field) {
-      const header = this.getField(field)
-      return header && header.bgColor
-    },
+    // getFieldBgColor (field) {
+    //   const header = this.getField(field)
+    //   return header && header.bgColor
+    // },
     getFieldForeignKey (field) {
       const header = this.getField(field)
       return header.foreignKey
