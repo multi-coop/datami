@@ -782,6 +782,7 @@ export default {
           pagination[key] = hasPaginationOptions[key]
         })
       }
+      // console.log('C > DatamiTable > paginationFromFileOptions > pagination : ', pagination)
       // set raw values
       if (pagination.itemsPerPageTable < 1) pagination.itemsPerPageTable = 20
       if (pagination.itemsPerRow < 1) pagination.itemsPerRow = 3
@@ -810,7 +811,7 @@ export default {
         }
         pagination.itemsPerRow = itemsPerRow
       }
-      // console.log('C > DatamiTable > paginationFromFileOptions > pagination : ', pagination)
+      // console.log('C > DatamiTable > paginationFromFileOptions > pagination (return) : ', pagination)
       return pagination
     },
     dataFiltered () {
@@ -985,13 +986,15 @@ export default {
     // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
     if (this.hasCustomSorting) {
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
+      // console.log('\nC > DatamiTable > beforeMount > this.customSortingConfig : ', this.customSortingConfig)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {
         const fieldName = f.name || f
         const header = this.columns.find(c => c.name === fieldName)
         return {
           field: header && header.field,
           fieldName: fieldName,
-          ascending: !!f.ascending
+          ascending: !!f.ascending,
+          random: !!f.random
         }
       })
       // console.log('C > DatamiTable > beforeMount > settingsSortings : ', settingsSortings)
@@ -1085,6 +1088,8 @@ export default {
           regroupedFilterTags.push({
             field: activeTag.field,
             type: activeTag.type,
+            subtype: activeTag.subtype,
+            tagSeparator: activeTag.tagSeparator,
             filtering: filterField.filtering,
             activeValues: [tagValueLower]
           })
@@ -1094,7 +1099,7 @@ export default {
 
       // filter out data
       data = data.filter(row => {
-        // const debug = row.id === '0' || rowid === '1'
+        // const debug = row.id === '18' // || row.id === '19'
         // debug && console.log('\nC > DatamiTable > filterData > row.id : ', row.id)
         // debug && console.log('C > DatamiTable > filterData > row : ', row)
 
@@ -1123,10 +1128,11 @@ export default {
         let boolFilters
         if (regroupedFilterTags.length) {
           regroupedFilterTags.forEach(filterField => {
-            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField : ', filterField)
+            // debug && console.log('\nC > DatamiTable > dataEditedFiltered > filterField : ', filterField)
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
             // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > row : ', row)
             let cellVal = row[filterField.field] || ''
             // debug && console.log('C > DatamiTable > dataEditedFiltered > cellVal : ', cellVal)
             switch (filterField.type) {
@@ -1139,7 +1145,11 @@ export default {
             const boolArr = filterField.activeValues.map(activeValue => {
               // Check if cell value is equivalent to each active value from filter
               // return cellValLow.includes(activeValue) // => bad parsing because 'Tag12' contains 'Tag1'
-              return cellValLow === activeValue
+              if (filterField.subtype === 'tags') {
+                return cellValLow.split(filterField.tagSeparator).some(v => v.trim() === activeValue)
+              } else {
+                return cellValLow === activeValue
+              }
             })
             // debug && console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
 
