@@ -59,16 +59,16 @@
           class="dropdown-item has-text-left px-1"
           @click="updateActiveTag(filterVal)">
           <div class="columns is-flex mx-0 my-0">
-            <div class="column is-1 is-1-mobile px-0 pt-1 py-0 has-text-centered">
+            <div class="column is-1 is-1-mobile px-0 py-0 has-text-centered">
               <b-icon
                 :icon="getFilterIcon(filterVal)"
                 size="is-small"
                 class=""/>
             </div>
-            <div class="column is-11 is-11-mobile px-1 pt-1 py-0">
+            <div class="column is-11 is-11-mobile px-1 py-0">
               <!-- FILTER + FOREIGN KEY || DEFINITIONS -->
               <div v-if="filter.foreignKey || filter.definitions">
-                <span>
+                <span v-show="currentEditViewMode !== 'preview'">
                   <span v-if="filter.foreignKey">
                     {{ filter.title || filter.label }} :
                   </span>
@@ -80,7 +80,7 @@
                     size="is-small"
                     class="mx-1"/>
                 </span>
-                <br>
+                <br v-show="currentEditViewMode !== 'preview'">
                 <!-- HELPERS FOREIGN KEY -->
                 <span v-if="filter.foreignKey">
                   <span
@@ -102,6 +102,13 @@
                   <br>
                 </span>
               </div>
+
+              <!-- BOOLEAN FILTER -->
+              <span
+                v-else-if="filter.type === 'boolean'"
+                :class="`${isActive(filterVal) ? 'has-text-weight-bold' : '' }`">
+                {{ t(`global.${filterVal ? 'yes' : 'no'}`, locale) }}
+              </span>
 
               <!-- SIMPLE FILTER -->
               <span
@@ -175,11 +182,15 @@ export default {
       let icon
       const isActive = this.isActive(filterVal)
       const isAnd = this.filter.filtering === 'AND'
+      const isRadio = this.filter.filtering === 'RADIO'
       if (isActive && isAnd) {
         icon = 'close-thick'
       }
-      if (!isAnd) {
+      if (!isAnd && !isRadio) {
         icon = isActive ? 'checkbox-marked' : 'checkbox-blank-outline'
+      }
+      if (isRadio) {
+        icon = isActive ? 'radiobox-marked' : 'radiobox-blank'
       }
       return icon
     },
@@ -200,12 +211,18 @@ export default {
     },
     SendActionToParent (filterVal, remove = false, reset = false) {
       // console.log('\nC > CustomFilterDropdown > SendActionToParent > filterVal : ', filterVal)
+      // console.log('C > CustomFilterDropdown > SendActionToParent > this.filter : ', this.filter)
       // console.log('C > CustomFilterDropdown > SendActionToParent > remove : ', remove)
       const filterPayload = {
         field: this.filter.field,
+        type: this.filter.type,
+        subtype: this.filter.subtype,
         bgColor: this.filter.bgColor,
         value: filterVal,
         reset: reset
+      }
+      if (filterPayload.subtype === 'tags') {
+        filterPayload.tagSeparator = this.filter.tagSeparator
       }
       const payload = {
         action: remove ? 'removeTag' : 'filterBy',

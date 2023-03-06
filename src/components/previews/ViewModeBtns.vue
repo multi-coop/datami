@@ -78,6 +78,10 @@ export default {
       default: undefined,
       type: String
     },
+    defaultView: {
+      default: undefined,
+      type: String
+    },
     locale: {
       default: 'en',
       type: String
@@ -228,11 +232,15 @@ export default {
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
     // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
     const availableViews = this.availableViews[this.fileTypeFamily]
+    // console.log('C > ViewModeBtns > beforeMount > availableViews : ', availableViews)
     if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
       // console.log('C > ViewModeBtns > beforeMount > this.urlActiveView : ', this.urlActiveView)
       this.changeView(this.urlActiveView)
     } else {
-      this.changeView(this.fileTypeFamily || 'loading')
+      // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
+      // console.log('C > ViewModeBtns > beforeMount > this.defaultView : ', this.defaultView)
+      // this.changeView(this.fileTypeFamily || 'loading')
+      this.changeView(this.defaultView || 'loading')
     }
     // this.changeView(this.fileTypeFamily || 'loading')
   },

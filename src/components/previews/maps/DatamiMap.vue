@@ -17,7 +17,7 @@
         <div
           v-if="showCard && displayedItemId && !showDetail"
           class="map-card map-mini-card-item"
-          :style="`width: ${cardMiniWidth}; top: ${mapHeightTop}px`">
+          :style="`width: ${cardMiniWidth}; top: ${mapHeightTop + 10}px`">
           <DatamiCard
             :file-id="fileId"
             :fields="fields"
@@ -30,6 +30,21 @@
             :locale="locale"
             @toggleDetail="toggleItemCard"
             @action="SendActionToParent"/>
+          <footer
+            class="card-footer px-0 py-3">
+            <b-button
+              type="is-dark"
+              size="is-small"
+              icon-left="eye"
+              expanded
+              outlined
+              :style="`border-radius: .25rem; ${isBtnDetailCardHovered ? '' : 'background-color: white;'}`"
+              @click="toggleItemCard({ btn: 'showDetailButton' })"
+              @mouseover="isBtnDetailCardHovered = true"
+              @mouseleave="isBtnDetailCardHovered = false">
+              {{ t('preview.showCardDetails', locale) }}
+            </b-button>
+          </footer>
         </div>
 
         <!-- LEGEND & LAYERS -->
@@ -123,7 +138,7 @@ import * as turf from '@turf/turf'
 import { mixinClientUrl, mixinGlobal, mixinCsv } from '@/utils/mixins.js'
 import { StylesOSM } from '@/utils/mapVectorStyles.js'
 
-import { debounce } from '@/utils/globalUtils'
+import { debounce, roundOff } from '@/utils/globalUtils'
 
 import {
   getData
@@ -292,6 +307,7 @@ export default {
       mapStyle: StylesOSM.testRasterVoyager, // OK better - default
 
       // CARDS
+      isBtnDetailCardHovered: false,
       cardMiniWidth: '30%',
       cardDetailWidth: '65%'
     }
@@ -320,28 +336,35 @@ export default {
       return this.cardsSettingsFromOptions
     },
     mapCardsSettingsMini () {
-      return this.fields.map(f => {
+      const fields = this.fields.map(f => {
         const fieldMap = {
           ...this.trimField(f),
           ...this.mapCardsSettings.mini[f.name]
         }
         const templates = this.cardsSettingsTemplates
         const hasTemplate = templates && templates[f.name] && templates[f.name].use_on_mini
-        if (hasTemplate) { fieldMap.templating = templates[f.name].paragraphs }
+        if (hasTemplate) {
+          fieldMap.templating = templates[f.name].paragraphs
+          fieldMap.ignoreTrimming = templates[f.name].use_on_mini
+        }
         return fieldMap
       })
+      return fields
     },
     mapCardsSettingsDetail () {
-      return this.fields.map(f => {
+      const fields = this.fields.map(f => {
         const fieldMap = {
           ...this.trimField(f),
           ...this.mapCardsSettings.detail[f.name]
         }
         const templates = this.cardsSettingsTemplates
         const hasTemplate = templates && templates[f.name] && templates[f.name].use_on_detail
-        if (hasTemplate) { fieldMap.templating = templates[f.name].paragraphs }
+        if (hasTemplate) {
+          fieldMap.templating = templates[f.name].paragraphs
+        }
         return fieldMap
       })
+      return fields
     },
     itemsForMap () {
       // console.log('\nC > DatamiMap > itemsForMap ...')
@@ -440,11 +463,16 @@ export default {
     // },
     getCenter: debounce(function (next) {
       // console.log('\nC > DatamiMap > watch > getCenter > next :', next)
-      this.updateUrlMapCenter(this.getCenter)
+      const digits = 6
+      const roundedCenter = { lng: roundOff(next.lng, digits), lat: roundOff(next.lat, digits) }
+      // console.log('\nC > DatamiMap > watch > getCenter > roundedCenter :', roundedCenter)
+      this.updateUrlMapCenter(roundedCenter)
     }, 200),
     getZoom: debounce(function (next) {
       // console.log('\nC > DatamiMap > watch > getZoom > next :', next)
-      this.updateUrlMapZoom(this.getZoom)
+      const roundedZoom = roundOff(next, 2)
+      // console.log('C > DatamiMap > watch > getZoom > roundedZoom :', roundedZoom)
+      this.updateUrlMapZoom(roundedZoom)
     }, 200),
     showCard (next) {
       if (next) {
@@ -716,8 +744,19 @@ export default {
           const item = this.getItemFromItemId(this.urlActiveDetailCard)
           // console.log('C > DatamiMap > initializeMap > item : ', item)
           if (item) {
-            this.showItemCard(item)
             const coordinates = [item[this.fieldLong], item[this.fieldLat]]
+            this.showItemCard(item)
+            const pseudoItem = {
+              id: this.urlActiveDetailCard,
+              properties: {}
+            }
+            pseudoItem.properties[this.fieldLat] = item[this.fieldLat]
+            pseudoItem.properties[this.fieldLong] = item[this.fieldLong]
+            const pseudoEvent = { features: [pseudoItem] }
+            const allPointsSourceId = (this.mapOptions.all_points_layer && this.mapOptions.all_points_layer.source_id) || 'allPointsSource'
+            // console.log('C > DatamiMap > initializeMap > pseudoEvent : ', pseudoEvent)
+            // console.log('C > DatamiMap > initializeMap > allPointsSourceId : ', allPointsSourceId)
+            this.toggleSelectedOn(pseudoEvent, allPointsSourceId)
             // fly to point
             const mapZoomItem = 12
             // const mapZoomAdd = allPointsConfigOptions.add_zoom_on_click || 2
@@ -748,11 +787,11 @@ export default {
       await this.createChoroplethSource(false)
 
       const allPointsSourceId = (mapOptions.all_points_layer && mapOptions.all_points_layer.source_id) || 'allPointsSource'
-      const geoJsonSourceId = (mapOptions.cluster_circles_layer && mapOptions.cluster_circles_layer.source_id) || 'clusterSource'
+      const clusterSourceId = (mapOptions.cluster_circles_layer && mapOptions.cluster_circles_layer.source_id) || 'clusterSource'
       // cf : https://www.jerriepelser.com/books/airport-explorer/mapping/clustering/
       this.createAddGeoJsonLayers({
         allPointsId: allPointsSourceId, // 'allPointsSource'
-        clusterId: geoJsonSourceId // 'clusterSource'
+        clusterId: clusterSourceId // 'clusterSource'
       })
       this.isClusterSet = true
       // console.log("C > DatamiMap > createMapItems > this.map :", this.map)
@@ -762,28 +801,29 @@ export default {
     // SOURCES
     // - - - - - - - - - - - - - - - - - - //
     updateSourceData (itemsForMap) {
-      this.log && console.log('\nC > DatamiMap > updateSourceData ...')
-      // console.log("C > DatamiMap > updateSourceData > this.map :", this.map)
-      // console.log("C > DatamiMap > updateSourceData > itemsForMap :", itemsForMap)
+      // console.log('\nC > DatamiMap > updateSourceData ...')
+      // console.log('C > DatamiMap > updateSourceData > this.map :', this.map)
+      // console.log('C > DatamiMap > updateSourceData > itemsForMap :', itemsForMap)
 
       if (itemsForMap) {
         const mapLayersOptions = this.mapLayersOptions
+        // console.log('C > DatamiMap > updateSourceData > mapLayersOptions :', mapLayersOptions)
+
+        // console.log('C > DatamiMap > updateSourceData > allPointsSourceId :', allPointsSourceId)
+        // console.log('C > DatamiMap > updateSourceData > clusterSourceId :', clusterSourceId)
 
         const allPointsSourceId = (mapLayersOptions.all_points_layer && mapLayersOptions.all_points_layer.source_id) || 'allPointsSource'
-        const geoJsonSourceId = (mapLayersOptions.cluster_circles_layer && mapLayersOptions.cluster_circles_layer.source_id) || 'clusterSource'
-
         // console.log('\nC > DatamiMap > updateSourceData > createGeoJsonDataPoints ( from geoJson.js ) ...')
         const geoJson = createGeoJsonDataPoints(itemsForMap, this.fieldLat, this.fieldLong)
-        // console.log('C-SearchResultsMapbox > updateSourceData > geoJson : ', geoJson)
+        // console.log('C > DatamiMap > updateSourceData > geoJson : ', geoJson)
 
         // console.log('C > DatamiMap > updateSourceData > allPointsSourceId : ', allPointsSourceId)
         this.map.getSource(allPointsSourceId).setData(geoJson)
 
-        // console.log('C > DatamiMap > updateSourceData > geoJsonSourceId : ', geoJsonSourceId)
-        this.map.getSource(geoJsonSourceId).setData(geoJson)
-
-        // this.map.getSource('allPointsSource').setData(geoJson)
-        // this.map.getSource('clusterSource').setData(geoJson)
+        // const clusterSourceId = (mapLayersOptions.cluster_circles_layer && mapLayersOptions.cluster_circles_layer.source_id) || 'clusterSource'
+        const clusterSourceId = mapLayersOptions.cluster_circles_layer && mapLayersOptions.cluster_circles_layer.source_id
+        // clusterSourceId && console.log('C > DatamiMap > updateSourceData > clusterSourceId : ', clusterSourceId)
+        clusterSourceId && this.map.getSource(clusterSourceId).setData(geoJson)
 
         // TO DO : update choropleth
         // const choroplethConfigOptions = mapLayersOptions.choropleth_layer
@@ -1615,6 +1655,22 @@ export default {
     //     )
     //   }
     // },
+    removeMapMarkers () {
+      // remove all map markers if any
+      this.mapMarkers.forEach(mapMarker => {
+        const source = mapMarker.source
+        // switch item's 'selected' feature
+        this.map.setFeatureState(
+          { source, id: this.selectedStateId[source] },
+          { selected: false }
+        )
+        // reset selectedStateId[source]
+        this.selectedStateId[source] = undefined
+        // reset markers list
+        mapMarker.marker.remove()
+      })
+      this.mapMarkers = []
+    },
     toggleSelectedOn (event, source) {
       if (event.features.length > 0) {
         // console.log('\nC > DatamiMap > toggleSelectedOn > event.features : ', event.features)
@@ -1626,15 +1682,13 @@ export default {
         }
 
         // remove all map markers if any
-        this.mapMarkers.forEach(mapMarker => {
-          mapMarker.remove()
-        })
-        this.mapMarkers = []
+        this.removeMapMarkers()
 
         // set feature state and marker
-        // console.log('C > DatamiMap > toggleSelectedOn > this.selectedStateId[ : ', this.selectedStateId)
+        // console.log('C > DatamiMap > toggleSelectedOn > this.selectedStateId : ', this.selectedStateId)
         // console.log('C > DatamiMap > toggleSelectedOn > event.features[0] : ', event.features[0])
-        this.selectedStateId[source] = event.features[0].id
+        const selectionId = event.features[0].id
+        this.selectedStateId[source] = selectionId
         this.map.setFeatureState(
           { source, id: this.selectedStateId[source] },
           { selected: true }
@@ -1644,12 +1698,8 @@ export default {
         // console.log('C > DatamiMap > toggleSelectedOn > itemProps : ', itemProps)
         const itemCoordinates = [itemProps[this.fieldLong], itemProps[this.fieldLat]]
         const markerEl = createMarkerElement(this.markerHeight, this.markerWidth, this.markerIcon, this.markerColor)
-        // const markerEl = document.createElement('div')
-        // markerEl.className = 'marker'
-        // markerEl.innerHTML = `<span class="icon" style="height: ${this.markerHeight}px; width: ${this.markerWidth}px; transform: translateY(-${this.markerHeight / 2}px)"><i class="mdi mdi-${this.markerIcon}" style="font-size: ${this.markerHeight}px"></i></span>`
-        // // console.log('C > DatamiMap > toggleSelectedOn > markerEl : ', markerEl)
         const marker = new Marker(markerEl).setLngLat(itemCoordinates)
-        this.mapMarkers.push(marker)
+        this.mapMarkers.push({ marker: marker, source: source, id: selectionId })
         marker.addTo(this.map)
       }
     },
@@ -1760,12 +1810,16 @@ export default {
     // },
     toggleItemCard (event) {
       // console.log('\nC > DatamiMap > toggleItemCard > event : ', event)
+      // console.log('C > DatamiMap > toggleItemCard > this.mapMarkers : ', this.mapMarkers)
+      // console.log('C > DatamiMap > toggleItemCard > this.selectedStateId : ', this.selectedStateId)
       this.redrawMap *= -1
       if (event.btn === 'closeButton') {
         this.showCard = false
         this.showDetail = false
         this.displayedItem = undefined
         this.displayedItemId = undefined
+        // remove all markers from map
+        this.removeMapMarkers()
         this.deleteUrlParam('datami_detail_id')
       } else {
         this.showCard = true

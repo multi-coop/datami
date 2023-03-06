@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
-  <title>Département du Doubs - inclusion numérique</title>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+    <title>Département du Doubs - inclusion numérique</title>
+  </head>
 
-<body style="background-color: white; padding: 1em;">
-  <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+  <body style="background-color: white; padding: 1em;">
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
-  </noscript>
+    </noscript>
 
-  <div class="container has-text-dark">
-    <!-- <div class="content my-6 px-6">
+    <div class="container has-text-dark">
+      <!-- <div class="content my-6 px-6">
       <p class="is-size-6">
         L'import du widget <code>Datami</code> dans une page html permet d'afficher sur un site tiers des données hébergées sur github, gitlab ou dans un wiki.
       </p>
@@ -54,13 +54,13 @@
       </p>
     </div> -->
 
-    <div style="background-color: white; margin: 1em;">
+      <div style="background-color: white; margin: 1em;">
 
-      <!-- DATAMI - contribute with GIT ...but without minding it-->
-      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+        <!-- DATAMI - contribute with GIT ...but without minding it-->
+        <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
 
-      <!-- DATAMI WIDGET'S HTML BLOCK-->
-      <datami-multi-files title="Inclusion numérique dans le Doubs" options='{
+        <!-- DATAMI WIDGET'S HTML BLOCK-->
+        <datami-multi-files title="Inclusion numérique dans le Doubs" options='{
           "display": "horizontal"
         }' gitfiles='[
         {
@@ -113,7 +113,7 @@
             },
             "cardsview": {
               "activate": true,
-              "default": true
+              "default": false
             },
             "cardsdetail": true,
             "cardssettings": {
@@ -220,7 +220,7 @@
             },
             "mapview": {
               "activate": true,
-              "default": false,
+              "default": true,
               "maps": [
                 {
                   "title": {
@@ -252,11 +252,11 @@
         }
       ]' locale="fr"></datami-multi-files>
 
-      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
-      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
-      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+        <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+        <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+        <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 
 </html>

@@ -21,7 +21,7 @@
 
 .map-mini-card-item {
   z-index: 10;
-  left: 50px;
+  left: 1em;
 }
 
 .map-detail-card-item {

@@ -81,11 +81,268 @@
     }' title="ODF - Ressources (export airtable)" usertoken="" locale="fr" debug="false"></datami-file>
   </div> -->
 
+  <!-- <p id="datami-multifiles-decider-ensemble" style="margin: 1em;">
+    Mednum
+  </p>
+  <div style="background-color: white; margin: 1em;">
+    <datami-multi-files title="Maisons France Service" options='{
+      "display": "horizontal"
+    }' gitfiles='[
+      {
+        "title": "Fiches d&lsquo;identité des maisons France Service",
+        "activate": true,
+        "onlypreview": true,
+        "localdev": true,
+        "gitfilelocal": "http://localhost:8811/statics/data/france_service.csv",
+        "_gitfilelocal": "http://localhost:8811/statics/data/dummy_france_services.csv",
+        "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/data/dummy_france_services.csv",
+        "default-tab": false,
+        "options": {
+          "height": "650px",
+          "separator": ";",
+          "lockcolumns": true,
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              {
+                "name": "dep_lib",
+                "filtering": "OR"
+              },
+              {
+                "name": "terr_thematique_asso_principale",
+                "filtering": "OR"
+              }
+            ]
+          },
+          "schema": {
+            "localdev": true,
+            "filelocal": "http://localhost:8811/statics/json/schema.json",
+            "file":  "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/schema.json"
+          },
+          "fields-custom-properties": {
+            "localdev": true,
+            "filelocal": "http://localhost:8811/statics/json/schema-custom_props.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/schema-custom_props.json"
+          },
+          "cardsview": {
+            "activate": true,
+            "default": false
+          },
+          "cardsdetail": true,
+          "cardssettings": {
+            "mini": {
+              "lib_fs": {
+                "position": "title"
+              },
+              "dep_lib": {
+                "position": "adress",
+                "prefix": "Département : "
+              },
+              "adresse": {
+                "position": "adress"
+              },
+              "com_lib": {
+                "position": "adress",
+                "prefix": "Commune : "
+              },
+              "terr_thematique_asso_principale": {
+                "position": "tags",
+                "block_title": "Thématique principale"
+              },
+              "com_densite_categ": {
+                "position": "tags",
+                "block_title": "Densité"
+              },
+              "typo_territoire": {
+                "position": "tags",
+                "block_title": "Typologie de territoire"
+              },
+              "ifn_categ": {
+                "position": "tags",
+                "block_title": "Catégorie IFN"
+              }
+            },
+            "detail": {
+              "lib_fs": {
+                "position": "title"
+              },
+              "dep_lib": {
+                "position": "adress",
+                "prefix" : "Département : "
+              },
+              "adresse": {
+                "position": "adress",
+                "prefix" : "Adresse : "
+              },
+              "com_lib": {
+                "position": "adress",
+                "prefix" : "Commune : "
+              },
+              "terr_thematique_asso_principale": {
+                "position": "tags",
+                "block_title": "Thématique principale"
+              },
+              "com_densite_categ": {
+                "position": "tags",
+                "block_title": "Densité"
+              },
+              "typo_territoire": {
+                "position": "tags",
+                "block_title": "Typologie de territoire"
+              },
+              "ifn_categ": {
+                "position": "tags",
+                "block_title": "Catégorie IFN"
+              },
+              "com_insee": {
+                "position": "description",
+                "right" : true
+              }
+            },
+            "templates": {
+              "com_insee": {
+                "use_on_mini": false,
+                "use_on_detail": true,
+                "ignore_definitions": true,
+                "paragraphs": [
+                  {
+                    "text": {
+                      "fr": "La maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo; a les caractéristiques suivantes :"
+                    }
+                  },
+                  {
+                    "text": {
+                      "fr": "La commune &ldquo;&#123;&#123; com_lib &#125;&#125;&ldquo; a un taux de pauvreté de &#123;&#123; com_taux_pauvrete &#125;&#125; % et un taux de chômage de &#123;&#123; com_taux_chomage &#125;&#125; %."
+                    }
+                  }
+                ]
+              }
+            },
+            "minimap": {
+              "activate": true,
+              "right_side": true,
+              "mapOptions": {
+                "zoom": 5,
+                "maxZoom": 18,
+                "minZoom": 2,
+                "item_geo_fields": {
+                  "latitude": "latitude",
+                  "longitude": "longitude"
+                },
+                "zoom_item": 13,
+                "marker_icon": "map-marker",
+                "marker_height": 45,
+                "marker_width": 45,
+                "marker_color": "#4a4a4a"
+              }
+            },
+            "minivizs": [
+              {
+                "title": { "fr": "Usagers par tranche d&lsquo;âge" },
+                "viztype": "barchart-horizontal",
+                "activate": true,
+                "position": "viz-top",
+                "showOnMiniCard": false,
+                "cols": 8,
+                "serieName": "Usagers",
+                "serieFromFields": [
+                  { "field": "fs_age_taux_entre_18_et_26_ans" },
+                  { "field": "fs_age_taux_entre_27_et_45_ans" },
+                  { "field": "fs_age_taux_entre_45_et_55_ans" },
+                  { "field": "fs_age_taux_entre_55_et_62_ans" },
+                  { "field": "fs_age_taux_plus_de_62_ans" },
+                  { "field": "fs_age_taux_moins_de_18_ans" },
+                  { "field": "fs_age_taux_non_connu" }
+                ],
+                "chartOptions": {
+                }
+              },
+              {
+                "title": { "fr": "Usagers par sexe" },
+                "viztype": "simple-donut",
+                "activate": true,
+                "position": "viz-top",
+                "showOnMiniCard": true,
+                "cols": 4,
+                "serieFromFields": [
+                  { "field": "fs_sexe_taux_femme" },
+                  { "field": "fs_sexe_taux_homme" }
+                ],
+                "chartOptions": {
+                }
+              },
+              {
+                "title": { "fr": "Valeurs clés" },
+                "viztype": "big-values",
+                "activate": true,
+                "position": "viz-top",
+                "showOnMiniCard": false,
+                "cols": 6,
+                "serieFromFields": [
+                  {
+                    "field": "nbre_fs_rayon_30km",
+                    "title": { "fr": "Nombre de France Service dans un rayon de 30km" },
+                    "unit": { "fr": "France service" },
+                    "bgColor": "#d0e428"
+                  },
+                  {
+                    "field": "actes_d_etat_civil",
+                    "title": { "fr": "Nombre d&lsquo;actes d&lsquo;état civil" },
+                    "unit": { "fr": "actes" },
+                    "bgColor": "#7f18c1"
+                  }
+                ]
+              },
+              {
+                "title": { "fr": "Typologie du territoire" },
+                "viztype": "text-templated",
+                "activate": true,
+                "position": "viz-top",
+                "showOnMiniCard": false,
+                "cols": 6,
+                "templates": [
+                  {
+                    "text": {
+                      "fr": "Territoire de la maison France Service &ldquo;&#123;&#123; lib_fs &#125;&#125;&ldquo;."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "datavizview_": {
+            "activate": false,
+            "default": false,
+            "localdev": true,
+            "filelocal": "http://localhost:8811/statics/json/dataviz-settings.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/dataviz-settings.json"
+          },
+          "mapview": {
+            "activate": true,
+            "default": true,
+            "maps": [
+              {
+                "title": {
+                  "fr": "CARTOGRAPHIE"
+                },
+                "height": 800,
+                "cols": 12,
+                "localdev": true,
+                "filelocal": "http://localhost:8811/statics/json/map-settings.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/fiche-identite-fs-/blob/main/json/map-settings.json"
+              }
+            ]
+          }
+        },
+        "usertoken": ""
+      }
+    ]' locale="fr" />
+  </div> -->
+
   <p id="datami-multifiles-decider-ensemble" style="margin: 1em;">
     Décider ensemble
   </p>
   <div style="background-color: white; margin: 1em;">
-    <!-- DATAMI WIDGET'S HTML BLOCK-->
     <datami-multi-files title="Ressources Décider ensemble" options='{
        "display": "horizontal"
      }' gitfiles='[
@@ -211,12 +468,12 @@
                  "paragraphs": [
                    {
                      "text": {
-                       "fr": "L‘organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
+                       "fr": "L&lsquo;organisation {{ nom }} est une {{ type }} et se situe dans le département {{ depcode }} ({{ dep_label }}) en région {{ reg_code_short }}."
                      }
                    },
                    {
                      "text": {
-                       "fr": "Plus d‘infos en cliquant sur ici : ~~ url_ptf ~~"
+                       "fr": "Plus d&lsquo;infos en cliquant sur ici : ~~ url_ptf ~~"
                      }
                    }
                  ]
@@ -250,7 +507,7 @@
            },
            "mapview": {
              "activate": true,
-             "default": false,
+             "default": true,
              "maps": [
                {
                  "title": {
@@ -269,7 +526,7 @@
        },
        {
          "title": "Introduction",
-         "activate": true,
+         "activate": false,
          "default-tab": false,
          "localdev": false,
          "gitfilelocal": "http://localhost:8805/statics/markdown/decider-ensemble-intro.md",
@@ -295,9 +552,6 @@
   </div>
 
   <!-- <p id="datami-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
-    <a href="/#datami-csv-github-cooptech" style="margin-right:  0.5em;">
-      #
-    </a>
     Liste des coopératives de la tech en France
   </p>
   <div style="background-color: white; margin: 1em;">

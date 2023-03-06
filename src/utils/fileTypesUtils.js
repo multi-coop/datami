@@ -77,8 +77,13 @@ export const fieldTypeIcons = [
   },
   {
     type: 'string',
-    subtype: 'steptext',
+    subtype: 'timelinetext',
     icon: 'dots-horizontal'
+  },
+  {
+    type: 'string',
+    subtype: 'image',
+    icon: 'image'
   },
   {
     type: 'uri',
@@ -178,3 +183,33 @@ export const viewsOptions = [
   { code: 'loading', icon: 'sync', textCode: '...' }
 ]
 export const viewModes = viewsOptions.map(v => v.code)
+
+export const getDefaultViewMode = (options, fileType) => {
+  // console.log('\nU > fileTypesUtils > getDefaultViewMode > options : ', options)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > fileType : ', fileType)
+  let view
+  const fileFamily = authorizedFileTypes[fileType]
+  if (fileFamily.family === 'table') {
+    const cardsView = options.cardsview
+    const datavizView = options.datavizview
+    const mapView = options.mapview
+    // console.log('U > fileTypesUtils > getDefaultViewMode > cardsView : ', cardsView)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > datavizView : ', datavizView)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > mapView : ', mapView)
+    const cardViewDefault = cardsView && cardsView.activate && cardsView.default && 'cards'
+    const datavizViewDefault = datavizView && datavizView.activate && datavizView.default && 'dataviz'
+    const mapViewDefault = mapView && mapView.activate && mapView.default && 'map'
+    // console.log('U > fileTypesUtils > getDefaultViewMode > cardViewDefault : ', cardViewDefault)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > datavizViewDefault : ', datavizViewDefault)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > mapViewDefault : ', mapViewDefault)
+    view = cardViewDefault || datavizViewDefault || mapViewDefault || 'table'
+  }
+  if (fileFamily.family === 'json') {
+    view = 'json'
+  }
+  if (fileFamily.family === 'text') {
+    view = 'text'
+  }
+  // console.log('U > fileTypesUtils > getDefaultViewMode > view : ', view)
+  return view
+}

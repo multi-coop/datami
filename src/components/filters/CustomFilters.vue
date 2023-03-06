@@ -76,9 +76,12 @@ export default {
     filtersDisplay () {
       let filters
       if (this.fileFilters && this.fileFilters.length) {
+        console.log('\nC > CustomFilters > filtersDisplay > this.fileFilters : ', this.fileFilters)
         filters = this.fileFilters.map(filter => {
           return {
             field: filter.field,
+            subtype: filter.subtype,
+            separator: filter.separator,
             label: filter.label,
             enumArr: Array.from(filter.enumArr).sort((a, b) => a.localeCompare(b))
           }

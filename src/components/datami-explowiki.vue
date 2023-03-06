@@ -37,6 +37,7 @@
           <!-- USER OPTIONS -->
           <ViewModeBtns
             :file-id="fileId"
+            :default-view="defaultView"
             :locale="locale"/>
           <FileTitle
             :show-file-infos="showFileInfos"
@@ -167,6 +168,7 @@
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
+      :logos="fileCreditsLogos"
       :locale="locale"/>
 
     <!-- DIALOG MODAL -->
@@ -193,6 +195,7 @@ import {
   mixinCsv,
   mixinWiki
 } from '@/utils/mixins.js'
+import { getDefaultViewMode } from '@/utils/fileTypesUtils'
 
 export default {
   name: 'DatamiExploWiki',
@@ -224,6 +227,10 @@ export default {
     title: {
       default: 'datami',
       type: String
+    },
+    creditslogos: {
+      default: '',
+      type: [String, Array]
     },
     wikilist: {
       default: '',
@@ -311,7 +318,8 @@ export default {
       wikiObj: undefined,
       wikiItems: undefined,
       wikiFields: undefined,
-      wikiPages: undefined
+      wikiPages: undefined,
+      defaultView: undefined
     }
   },
   computed: {
@@ -373,6 +381,10 @@ export default {
     mediawikiOptions.tagseparator = ',' // to parse tags fields
     mediawikiOptions.separator = '\t' // for csv export
     this.mediawikiOptions = mediawikiOptions
+
+    const defaultView = getDefaultViewMode(mediawikiOptions, 'table')
+    // console.log('C > DatamiExploWiki > beforeMount > defaultView : ', defaultView)
+    this.defaultView = defaultView
 
     // add default fields for pages structuration
     // console.log('C > DatamiExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)

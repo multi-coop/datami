@@ -113,9 +113,11 @@ export default {
       this.SendActionToParent(true)
     },
     SendActionToParent (remove = false) {
-      // console.log('\nC > CustomFilter > SendActionToParent > ... : ')
+      console.log('\nC > CustomFilter > SendActionToParent > this.filter :', this.filter)
       const filterPayload = {
         field: this.filter.field,
+        subtype: this.filter.subtype,
+        separator: this.filter.separator,
         value: this.activeTag,
         reset: remove
       }
