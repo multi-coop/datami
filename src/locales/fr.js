@@ -180,7 +180,7 @@ export default {
     string: 'Texte',
     longtext: 'Texte long',
     timelinetext: 'Texte avec étapes',
-    image: 'Image`',
+    image: 'Image',
     link: 'Lien',
     email: 'Email',
     geopoint: 'Coordonnée géographique',

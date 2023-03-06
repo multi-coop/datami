@@ -36,6 +36,10 @@ export default {
       default: null,
       type: String
     },
+    position: {
+      default: null,
+      type: String
+    },
     mapId: {
       default: null,
       type: String

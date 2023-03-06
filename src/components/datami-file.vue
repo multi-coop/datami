@@ -15,6 +15,15 @@
       :file-id="fileId"
       :locale="locale"/>
 
+    <!-- DEBUG URL -->
+    <!-- <div
+      v-if="debug"
+      class="columns">
+      <div class="column is-4">
+        fileId : <code>{{ fileId }}</code>
+      </div>
+    </div> -->
+
     <!-- DEBUG ERRORS -->
     <!-- <div
       v-if="debug"
@@ -94,6 +103,7 @@
               <!-- USER OPTIONS -->
               <ViewModeBtns
                 :file-id="fileId"
+                :default-view="defaultView"
                 :locale="locale"/>
               <EditModeBtns
                 v-if="!onlypreview && showEditNavbar"
@@ -247,6 +257,7 @@
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
+      :logos="fileCreditsLogos"
       :locale="locale"/>
 
     <!-- DIALOG MODAL -->
@@ -254,7 +265,7 @@
       v-model="isModalActive"
       class="datami-modal-dialog-opener"
       :width="'80%'"
-      @close="resetFileDialog">
+      @close="resetDialogs">
       <DialogSkeleton
         :file-id="fileId"
         :locale="locale"/>
@@ -265,8 +276,15 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinTooltip, mixinGlobal, mixinForeignKeys, mixinGit } from '@/utils/mixins.js'
+import {
+  mixinTooltip,
+  mixinClientUrl,
+  mixinGlobal,
+  mixinForeignKeys,
+  mixinGit
+} from '@/utils/mixins.js'
 import { csvToObject } from '@/utils/csvUtils'
+import { getDefaultViewMode } from '@/utils/fileTypesUtils'
 
 export default {
   name: 'DatamiFile',
@@ -285,6 +303,7 @@ export default {
   },
   mixins: [
     mixinTooltip,
+    mixinClientUrl,
     mixinGlobal,
     mixinForeignKeys,
     mixinGit
@@ -297,6 +316,10 @@ export default {
     title: {
       default: 'datami',
       type: String
+    },
+    creditslogos: {
+      default: '',
+      type: [String, Array]
     },
     localdev: {
       default: false,
@@ -337,6 +360,10 @@ export default {
     fromMultiFiles: {
       default: false,
       type: Boolean
+    },
+    tabId: {
+      default: 1,
+      type: Number
     },
     fromMultiFilesVertical: {
       default: false,
@@ -390,7 +417,8 @@ export default {
       fileType: undefined,
       fileInfos: undefined,
       fileRaw: undefined,
-      fileClientRaw: undefined
+      fileClientRaw: undefined,
+      defaultView: undefined
     }
   },
   watch: {
@@ -500,6 +528,14 @@ export default {
       const gitInfosObject = this.extractGitInfos(this.gitfileDatami)
       // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
 
+      // console.log('C > DatamiFile > initWidget > this.options : ', this.options)
+      // build options object
+      let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+      // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
+      const defaultView = getDefaultViewMode(fileOptions, gitInfosObject.filetype)
+      // console.log('C > DatamiFile > initWidget > defaultView : ', defaultView)
+      this.defaultView = defaultView
+
       this.updateShareableFiles({ gitfile: this.gitfileDatami, fileId: this.fileId, isSet: false })
       gitInfosObject.uuid = this.fileId
       gitInfosObject.title = this.title
@@ -528,11 +564,6 @@ export default {
         this.addGitInfos(gitInfosObject)
       }
       // console.log('\nC > DatamiFile > initWidget > this.gitObj : ', this.gitObj)
-
-      // console.log('C > DatamiFile > initWidget > this.options : ', this.options)
-      // build options object
-      let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
-      // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
 
       let fileSchema = fileOptions.schema
       // console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
@@ -729,6 +760,13 @@ export default {
           isLoaded: true
         }
         this.updateSharedData(payload)
+      }
+    },
+    resetDialogs () {
+      // console.log('\nC > DatamiFile > resetDialogs > ... ')
+      this.resetFileDialog()
+      if (this.currentViewMode !== 'map') {
+        this.deleteUrlParam('datami_detail_id')
       }
     }
   }

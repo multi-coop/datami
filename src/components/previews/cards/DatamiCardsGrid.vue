@@ -25,12 +25,13 @@
       <div
         v-for="(item, idx) in items"
         :key="`item-card-${idx}-${item.id}`"
-        :class="`column is-12-mobile is-6-tablet is-${itemsPerRow === 3 ? '4' : '3'}-desktop`">
+        :class="`column is-12-mobile is-${columnSizeTablet}-tablet is-${columnSize}-desktop`">
         <DatamiCard
           :file-id="fileId"
           :fields="cardsSettings.originalHeaders"
           :field-mapping="mappingsForMini"
           :item="item"
+          :items-per-row="itemsPerRow"
           :show-detail="false"
           :show-detail-card="showDetail"
           :locale="locale"
@@ -66,6 +67,7 @@
 <script>
 
 import {
+  // mixinClientUrl,
   mixinGlobal
   // mixinsCards
 } from '@/utils/mixins.js'
@@ -79,6 +81,7 @@ export default {
     DatamiCard: () => import(/* webpackChunkName: "DatamiCard" */ '@/components/previews/cards/DatamiCard.vue')
   },
   mixins: [
+    // mixinClientUrl,
     mixinGlobal
     // mixinsCards
   ],
@@ -138,25 +141,62 @@ export default {
     }
   },
   computed: {
+    columnSize () {
+      let colSize
+      switch (this.itemsPerRow) {
+        case 1:
+          colSize = 12
+          break
+        case 2:
+          colSize = 6
+          break
+        case 3:
+          colSize = 4
+          break
+        case 4:
+          colSize = 3
+          break
+        default:
+          colSize = 3
+      }
+      return colSize
+    },
+    columnSizeTablet () {
+      let colSize
+      switch (this.itemsPerRow) {
+        case 1:
+          colSize = 12
+          break
+        case 2:
+          colSize = 6
+          break
+        case 3:
+          colSize = 6
+          break
+        case 4:
+          colSize = 6
+          break
+        default:
+          colSize = 6
+      }
+      return colSize
+    },
     getDetailItem () {
       return this.items.find(item => item.id === this.activeCardId)
     }
   },
+  // mounted () {
+  //   if (this.urlActiveDetailCard && this.currentViewMode === 'cards') {
+  //     console.log('\nC > DatamiCardsGrid > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+  //     this.toggleDetail({ itemId: this.urlActiveDetailCard })
+  //   }
+  // },
   methods: {
     // handleInput (value) {
     //   this.$emit('blur', value)
     // },
     toggleDetail (event) {
       // console.log('\nC > DatamiCardsGrid > toggleDetail > event : ', event)
-      // if (event.showDetail) {
-      //   this.showDetail = false
-      //   this.activeCardId = undefined
-      //   // this.handleInput(false)
-      // } else {
-      //   this.showDetail = true
-      //   this.activeCardId = event.itemId
-      //   // this.handleInput(true)
-      // }
       this.$emit('toggleDetail', event)
     },
     emitUpdate (event) {

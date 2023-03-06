@@ -38,16 +38,24 @@ const availableLanguaguages = [
   {
     locale: 'fr',
     label: 'Français',
+    i18nCode: 'fr-FR',
     dict: fr
   },
   {
     locale: 'en',
     label: 'English',
+    i18nCode: 'en-EN',
     dict: en
   }
 ]
 export const allowedLanguages = availableLanguaguages
-  .map(l => { return { locale: l.locale, label: l.label } })
+  .map(l => {
+    return {
+      locale: l.locale,
+      label: l.label,
+      i18nCode: l.i18nCode
+    }
+  })
   .sort((a, b) => (a.label > b.label) ? 1 : -1)
 
 export const dicts = buildDict(availableLanguaguages)
@@ -67,4 +75,14 @@ export const translate = (key, locale, params = undefined, debug = false) => {
     }
     return translated
   }
+}
+
+export const localeValue = (value, locale, round = undefined) => {
+  // cf : https://github.com/TiagoDanin/Locale-Codes
+  const loc = availableLanguaguages.find(l => l.locale === locale) || availableLanguaguages[0]
+  const rounder = {}
+  if (round) {
+    rounder.minimumFractionDigits = round.digits
+  }
+  return Number(value).toLocaleString(loc.i18nCode, rounder)
 }

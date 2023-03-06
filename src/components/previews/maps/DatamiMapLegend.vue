@@ -149,6 +149,7 @@ export default {
   },
   beforeMount () {
     // console.log('\nC > DatamiMapLegend > beforeMount > this.currentChoroSource : ', this.currentChoroSource)
+    // console.log('C > DatamiMapLegend > beforeMount > this.isDefaultOpen : ', this.isDefaultOpen)
     this.isDrawerOpen = this.isDefaultOpen
   },
   methods: {

@@ -15,7 +15,18 @@ export const dialogs = {
   mutations: {
     addToDialogs (state, { fileId, component, event }) {
       // console.log('S-dialogs > M > addToDialogs > fileId : ', fileId)
-      state.fileDialogs.push({ fileId: fileId, component: component, event: event, dialogId: uuidv4() })
+      // console.log('S-dialogs > M > addToDialogs > component : ', component)
+      // console.log('S-dialogs > M > addToDialogs > event : ', event)
+      // console.log('S-dialogs > M > addToDialogs > state.fileDialogs : ', state.fileDialogs)
+      // Prevent from pushing twice the same card detail
+      const newDialog = { fileId: fileId, component: component, event: event, dialogId: uuidv4() }
+      let canPush = true
+      switch (component) {
+        case 'CardDetail':
+          canPush = !state.fileDialogs.find(d => d.fileId === fileId && d.component === 'CardDetail' && d.event.itemId === event.itemId)
+          break
+      }
+      canPush && state.fileDialogs.push(newDialog)
     },
     removeFromDialogsByComponent (state, { fileId, component, event }) {
       // console.log('S-dialogs > M > removeFromDialogs > component : ', component)

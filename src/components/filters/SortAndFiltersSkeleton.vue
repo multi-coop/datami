@@ -107,12 +107,21 @@ export default {
     filtersDisplay () {
       let filters
       if (this.fileFilters && this.fileFilters.length) {
+        // console.log('\nC > SortAndFiltersSkeleton > filtersDisplay > this.fileFilters : ', this.fileFilters)
         filters = this.fileFilters.map(filter => {
           // console.log('\nC > SortAndFiltersSkeleton > filtersDisplay > filter : ', filter)
-          const enumArr = filter.enumArr || []
-          return {
+          let enumArr = filter.enumArr || []
+          if (filter.type === 'boolean') {
+            enumArr = [
+              true,
+              false
+            ]
+          }
+          const field = {
             field: filter.field,
             title: filter.title,
+            type: filter.type,
+            subtype: filter.subtype,
             label: filter.label,
             enumArr: enumArr,
             bgColor: filter.bgColor,
@@ -120,6 +129,10 @@ export default {
             filtering: filter.filtering,
             definitions: filter.definitions
           }
+          if (field.subtype === 'tags') {
+            field.tagSeparator = filter.tagSeparator
+          }
+          return field
         })
       }
       // console.log('C > SortAndFiltersSkeleton > filtersDisplay > filters : ', filters)

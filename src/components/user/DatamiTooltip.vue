@@ -12,6 +12,11 @@
       <p
         v-if="tooltipOptions.type === 'info'"
         class="has-text-centered">
+        <span
+          v-if="tooltipOptions.title"
+          class="has-text-weight-bold pb-1">
+          {{ tooltipOptions.title }}<br>
+        </span>
         {{ tooltipOptions.label }}
       </p>
 

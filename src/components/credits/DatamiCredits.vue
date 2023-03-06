@@ -2,9 +2,28 @@
   <div
     class="DatamiCredits datami-component columns is-centered is-multiline py-3 mt-4"
     style="z-index: 0;">
-    <!-- CREDITS -->
     <div
       :class="`column is-full is-italic has-text-centered`">
+      <!-- CLIENT LOGO -->
+      <!-- logos : <pre><code>{{ logos }}</code></pre> -->
+      <p
+        v-if="logos && logos.length"
+        class="my-5 is-flex is-align-items-center is-justify-content-center">
+        <a
+          v-for="(logo, i) in logos.filter(l => !l.hide)"
+          :key="`credit-logo-${i}`"
+          class="mx-3"
+          :href="logo.url"
+          target="_blank"
+          @mouseover="hoverLogoClient = `credit-logo-${i}`"
+          @mouseleave="hoverLogoClient = ''">
+          <img
+            :src="logo.localdev ? logo.imageUrlLocal : logo.imageUrl"
+            :alt="`logo client - ${i + 1}`"
+            :style="`height: ${logo.imageHeight || '25px'} !important; width: auto !important;${hoverLogoClient === 'credit-logo-' + i ? '' : 'filter: grayscale(1);'}`">
+        </a>
+      </p>
+      <!-- CREDITS -->
       <p
         :class="`${isDarkMode ? 'has-text-white' : 'has-text-grey'} is-size-7 mb-2`">
         <span :class=" ` ${isDarkMode ? 'datami-darkmode-white-text' : '' } ` ">
@@ -77,6 +96,10 @@ export default {
       default: null,
       type: String
     },
+    logos: {
+      default: null,
+      type: Array
+    },
     locale: {
       default: '',
       type: String
@@ -84,7 +107,8 @@ export default {
   },
   data () {
     return {
-      hoverLogo: false
+      hoverLogo: false,
+      hoverLogoClient: ''
     }
   },
   computed: {
@@ -94,5 +118,8 @@ export default {
       urlSourceCode: (state) => state.urlSourceCode
     })
   }
+  // beforeMount () {
+  //   console.log('\nC > DatamiCredits > beforeMount > this.logos: ', this.logos)
+  // }
 }
 </script>

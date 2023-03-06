@@ -18,8 +18,13 @@
     <!-- BLOCK TITLE IF ANY -->
     <p
       v-show="currentEditViewMode !== 'edit' && field.block_title"
-      class="is-size-7 mb-1"
+      class="is-size-7 mb-3"
       @click="showCollapse = !showCollapse">
+      <b-icon
+        v-if="field.titleIcon"
+        :icon="field.titleIcon"
+        class="mr-2"
+        size="is-small"/>
       <span
         class="has-text-weight-bold is-uppercase">
         {{ field.block_title }}
@@ -34,11 +39,17 @@
     <!-- ITEM VALUE IF PREVIEW MODE -->
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
-      class="is-flex is-flex-direction-row is-align-items-center">
+      class="is-flex is-flex-direction-row is-align-items-center mb-2"
+      :style="`word-break: break-word;`">
       <slot name="logo"/>
       <b-icon
         v-if="position === 'adress'"
         icon="map-marker-outline"
+        class="mr-2"
+        size="is-small"/>
+      <b-icon
+        v-if="field.prefixIcon"
+        :icon="field.prefixIcon"
         class="mr-2"
         size="is-small"/>
       <span
@@ -83,9 +94,13 @@
           &nbsp;%
         </span>
       </span>
+
+      <!-- SIMPLE TEXT VALUE -->
       <span v-else>
         {{ itemValue || t('global.noValue', locale) }}
       </span>
+
+      <!-- SUFFIX -->
       <span
         v-if="field.suffix"
         class="mr-1">
@@ -98,13 +113,14 @@
       <!-- <code>{{ templatedValues }}</code> -->
       <p
         v-for="(paragraph, idx) in templatedValues"
-        :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`">
+        :key="`template-paragraph-${itemId}-${position}-${field.id}-${idx}`"
+        :class="`mb-2 ${paragraph.customClass}`">
         <span
-          v-if="isMini && !idx"
-          v-html="trimText(paragraph || t('global.noValue', locale), 150)"/>
+          v-if="isMini && !idx && !paragraph.ignoreTrimming"
+          v-html="trimText(paragraph.text || t('global.noValue', locale), 150)"/>
         <span
-          v-if="!isMini"
-          v-html="paragraph"/>
+          v-if="!isMini || paragraph.ignoreTrimming"
+          v-html="paragraph.text"/>
       </p>
     </div>
 
@@ -219,11 +235,11 @@ export default {
           label: 'is-size-7 has-text-weight-bold mb-2'
         },
         resume: {
-          content: 'has-text-weight-medium mb-4',
+          content: 'has-text-weight-medium mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         description: {
-          content: 'mb-4',
+          content: 'mb-3',
           label: 'is-size-7 has-text-weight-bold mb-2 is-uppercase'
         },
         infos: {

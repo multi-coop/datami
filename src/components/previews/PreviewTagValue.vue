@@ -28,6 +28,13 @@
         class="ml-1"/>
     </span>
 
+    <span
+      v-else-if="field.type === 'boolean'"
+      :class="`mr-2 mb-2 has-text-weight-bold tag-pointer`"
+      @click="$emit('expand')">
+      {{ t(`global.${val ? 'yes' : 'no'}`, locale) }}
+    </span>
+
     <!-- USUAL TAGS (NO TOOLTIP) -->
     <!-- @mouseover="showGlobalTooltip($event, tagTooltipData(val))"
     @mouseleave="hideGlobalTooltip" -->

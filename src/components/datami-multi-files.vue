@@ -37,6 +37,18 @@
         </div>
       </div> -->
 
+      <!-- DEBUG URL PARAMS -->
+      <!-- <div
+        v-if="debug"
+        class="columns">
+        <div class="column is-4">
+          activeTab : <br><pre><code>{{ activeTab }}</code></pre>
+        </div>
+        <div class="column is-4">
+          urlParameters : <br><pre><code>{{ urlParameters }}</code></pre>
+        </div>
+      </div> -->
+
       <!-- TITLE AND TAB OPTIONS -->
       <div
         v-if="!hideTitle"
@@ -126,7 +138,8 @@
 
       <!-- TABS : LOOP FILES -->
       <section>
-        <!-- <code>{{ activeTab }}</code> -->
+        <!-- DEBUGGING -->
+        <!-- activeTab :<code>{{ activeTab }}</code> -->
         <b-tabs
           v-model="activeTab"
           :vertical="tabsVertical"
@@ -164,15 +177,16 @@
                 <div
                   :class="`column is-12 pt-0 ${tabsVertical ? 'pr-0' : 'px-0'}`">
                   <!-- DEBUGGING -->
-                  <div v-if="debug">
+                  <!-- <div v-if="debug">
                     fileTab : <br><pre><code>{{ fileTab }}</code><pre/></pre>
-                  </div>
+                  </div> -->
 
                   <!-- CALL DATAMI-FILE COMPONENT HERE -->
                   <DatamiFile
                     v-if="fileTab.gitfile"
                     :file-id-from-multifiles="fileTab.id"
                     :title="fileTab.title"
+                    :creditslogos="fileTab.creditslogos"
                     :gitfile="fileTab.gitfile"
                     :gitfilelocal="fileTab.gitfilelocal"
                     :localdev="fileTab.localdev"
@@ -181,6 +195,7 @@
                     :locale="locale || fileTab.locale"
                     :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
+                    :tab-id="fileTabIdx + 1"
                     :from-multi-files-vertical="tabsVertical"
                     :trackalloutlinks="!fileTabIdx ? trackalloutlinks : false"/>
 
@@ -189,6 +204,7 @@
                     v-if="fileTab.mediawiki"
                     :file-id-from-multifiles="fileTab.id"
                     :title="fileTab.title"
+                    :creditslogos="fileTab.creditslogos"
                     :wikilist="fileTab.wikilist"
                     :wikipages="fileTab.wikipages"
                     :options="fileTab.options"
@@ -196,6 +212,7 @@
                     :locale="fileTab.locale"
                     :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
+                    :tab-id="fileTabIdx + 1"
                     :from-multi-files-vertical="tabsVertical"
                     :trackalloutlinks="!fileTabIdx ? trackalloutlinks : false"/>
                 </div>
@@ -211,7 +228,7 @@
       v-model="isModalActive"
       class="datami-modal-dialog-opener"
       :width="'80%'"
-      @close="resetMultiFilesDialog">
+      @close="resetDialogs">
       <DialogSkeleton
         :file-id="multiFilesId"
         :is-multifile="true"
@@ -225,7 +242,12 @@ import { trimText, booleanFromValue } from '@/utils/globalUtils'
 
 import { mapActions } from 'vuex'
 
-import { mixinTooltip, mixinGlobal, mixinForeignKeys } from '@/utils/mixins.js'
+import {
+  mixinTooltip,
+  mixinClientUrl,
+  mixinGlobal,
+  mixinForeignKeys
+} from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiMultiFiles',
@@ -240,6 +262,7 @@ export default {
   },
   mixins: [
     mixinTooltip,
+    mixinClientUrl,
     mixinGlobal,
     mixinForeignKeys
   ],
@@ -319,6 +342,18 @@ export default {
     }
   },
   watch: {
+    activeTab (next) {
+      // console.log('\nC > DatamiMultiFiles > watch > activeTab > next : ', next)
+      const viewMode = this.getViewMode(next)
+      // console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
+      if (viewMode) {
+        this.changeUrlView(viewMode)
+        this.deleteUrlParam('datami_detail_id')
+        this.deleteUrlParam('datami_lon')
+        this.deleteUrlParam('datami_lat')
+        this.deleteUrlParam('datami_zoom')
+      }
+    },
     hasMultifilesDialogs (next) {
       // console.log('\nC > DatamiMultiFiles > watch > hasMultifilesDialogs > next : ', next)
       if (next) {
@@ -334,11 +369,12 @@ export default {
     // console.log('\nC > DatamiMultiFiles > beforeMount > this.gitfiles : ', this.gitfiles)
     const files = this.gitfiles && JSON.parse(this.gitfiles)
     // console.log('C > DatamiMultiFiles > beforeMount > files : ', files)
-    const filesParsed = files && files.map(file => {
+    const filesParsed = files && files.map((file, idx) => {
       const isMediawiki = file.wikipages || file.wikilist
       const fileSettings = {
         ...file,
         ...{ id: this.uuidv4() },
+        ...{ tabId: idx + 1 },
         ...{ options: JSON.stringify(file.options) },
         ...isMediawiki && { mediawiki: isMediawiki },
         ...isMediawiki && { wikipages: JSON.stringify(file.wikipages) }
@@ -346,7 +382,7 @@ export default {
       return fileSettings
     })
 
-    // console.log('C > DatamiMultiFiles > beforeMount > files : ', files)
+    // console.log('C > DatamiMultiFiles > beforeMount > filesParsed : ', filesParsed)
     this.files = filesParsed || []
 
     // Set up options
@@ -362,9 +398,19 @@ export default {
     this.tabsVertical = this.defaultDisplay === 'vertical'
     this.hideTitle = !!multiFilesOptions.options.hidetitle
 
+    // Get active tab from url if any
+    const activeTabFromUrl = this.urlActiveTab
+    // console.log('C > DatamiMultiFiles > beforeMount > activeTabFromUrl : ', activeTabFromUrl)
+
     // Set default active tab
-    const defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || files[0]
+    let defaultFile = filesParsed.find(file => file.activate && file['default-tab']) || filesParsed[0]
+    if (activeTabFromUrl) {
+      defaultFile = filesParsed[activeTabFromUrl - 1] ? filesParsed[activeTabFromUrl - 1] : defaultFile
+    }
+
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)
+    // console.log('C > DatamiMultiFiles > beforeMount > defaultFile.id : ', defaultFile.id)
+    // set active tab
     this.activeTab = defaultFile.id
     this.changeMultifilesActiveTab(defaultFile)
 
@@ -399,6 +445,12 @@ export default {
     changeMultifilesActiveTab (tab) {
       // console.log('C > DatamiMultiFiles > switchTabsPosition > tab : ', tab)
       this.toggleMultifileActiveTab({ fileId: this.multiFilesId, activeTab: tab.id })
+      this.changeUrlActiveTab(tab.tabId)
+    },
+    resetDialogs () {
+      // console.log('\nC > DatamiMultiFiles > resetDialogs > ... ')
+      this.resetMultiFilesDialog()
+      this.deleteUrlParam('datami_detail_id')
     }
   }
 }

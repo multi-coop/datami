@@ -147,57 +147,76 @@
               <!-- HEADERS -->
               <template #header="{ column }">
                 <div
-                  class="is-flex is-flex-direction-row is-align-items-center datami-nowrap"
-                  style="white-space: nowrap;">
+                  :class="`datami-table-header-${col.type}${col.subtype ? '-' + col.subtype : ''} is-flex is-flex-direction-row ${col.type === 'datami' ? 'is-align-items-center is-justify-content-center' : 'is-align-items-start'}`">
+                  <!-- style="white-space: nowrap;"> -->
                   <!-- EDITION HEADERS-->
-                  <div v-if="currentEditViewMode === 'edit'">
-                    <b-field
-                      v-if="!lockHeaders">
-                      <EditCell
-                        :file-id="fileId"
-                        :is-header="true"
-                        :field="col"
-                        :input-data="column.label"/>
-                    </b-field>
-                    <PreviewField
-                      v-else
+
+                  <!-- FIELD TYPE ICON -->
+                  <div class="table-field-icon">
+                    <PreviewFieldIcon
                       :file-id="fileId"
                       :field="col"
-                      :lock-headers="lockHeaders"
                       :locale="locale"/>
                   </div>
 
-                  <!-- DIFF HEADERS -->
-                  <div v-if="currentEditViewMode === 'diff'">
-                    <div
-                      v-if="isInChanges(true, col.added, col.field)">
-                      <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                  <!-- FIELD INFOS -->
+                  <div
+                    v-if="col.type !== 'datami'"
+                    class="table-field-header has-text-left py-1"
+                    style="flex: auto;">
+                    <!-- EDIT HEADERS -->
+                    <div v-if="currentEditViewMode === 'edit'">
+                      <b-field
+                        v-if="!lockHeaders">
+                        <EditCell
+                          :file-id="fileId"
+                          :is-header="true"
+                          :field="col"
+                          :input-data="column.label"/>
+                      </b-field>
+                      <PreviewField
+                        v-else
+                        :file-id="fileId"
+                        :field="col"
+                        :lock-headers="lockHeaders"
+                        :locale="locale"/>
                     </div>
-                    <span v-else>
+
+                    <!-- DIFF HEADERS -->
+                    <div v-if="currentEditViewMode === 'diff'">
+                      <div
+                        v-if="isInChanges(true, col.added, col.field)">
+                        <span v-html="getDiffHtmlChars (true, col.added, col.field, col.label)"/>
+                      </div>
+                      <span v-else>
+                        <PreviewField
+                          :file-id="fileId"
+                          :field="col"
+                          :lock-headers="lockHeaders"
+                          :locale="locale"/>
+                      </span>
+                    </div>
+
+                    <!-- PREVIEW HEADERS -->
+                    <div v-if="currentEditViewMode === 'preview'">
                       <PreviewField
                         :file-id="fileId"
                         :field="col"
                         :lock-headers="lockHeaders"
                         :locale="locale"/>
-                    </span>
+                    </div>
                   </div>
 
-                  <!-- PREVIEW HEADERS -->
-                  <div v-if="currentEditViewMode === 'preview'">
-                    <PreviewField
+                  <!-- FIELD SORTING -->
+                  <div
+                    v-if="col.type !== 'datami' && !noSortingFields.includes(col.subtype)"
+                    class="table-field-sorting">
+                    <ButtonSortByField
                       :file-id="fileId"
                       :field="col"
-                      :lock-headers="lockHeaders"
-                      :locale="locale"/>
+                      :locale="locale"
+                      @action="processAction"/>
                   </div>
-
-                  <!-- SORTING -->
-                  <ButtonSortByField
-                    v-if="col.type !== 'datami' && !noSortingFields.includes(col.subtype)"
-                    :file-id="fileId"
-                    :field="col"
-                    :locale="locale"
-                    @action="processAction"/>
                 </div>
               </template>
 
@@ -474,6 +493,12 @@
 
 <script>
 import {
+  booleanFromValue
+} from '@/utils/globalUtils.js'
+
+import {
+  mixinTooltip,
+  mixinClientUrl,
   mixinGlobal,
   mixinIcons,
   mixinDiff,
@@ -489,10 +514,11 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'DatamiTable',
   components: {
-    SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/edition/csv/SortAndFiltersSkeleton.vue'),
+    SortAndFiltersSkeleton: () => import(/* webpackChunkName: "SortAndFiltersSkeleton" */ '@/components/filters/SortAndFiltersSkeleton.vue'),
     ButtonSortByField: () => import(/* webpackChunkName: "ButtonSortByField" */ '@/components/sorting/ButtonSortByField.vue'),
     EditCsvSkeleton: () => import(/* webpackChunkName: "EditCsvSkeleton" */ '@/components/edition/csv/EditCsvSkeleton.vue'),
 
+    PreviewFieldIcon: () => import(/* webpackChunkName: "PreviewFieldIcon" */ '@/components/previews/PreviewFieldIcon.vue'),
     PreviewField: () => import(/* webpackChunkName: "PreviewField" */ '@/components/previews/PreviewField.vue'),
     PreviewCell: () => import(/* webpackChunkName: "PreviewCell" */ '@/components/previews/PreviewCell.vue'),
     EditCell: () => import(/* webpackChunkName: "EditCell" */ '@/components/edition/csv/EditCell.vue'),
@@ -505,6 +531,8 @@ export default {
     PagesNavigation: () => import(/* webpackChunkName: "PagesNavigation" */ '@/components/pagination/PagesNavigation.vue')
   },
   mixins: [
+    mixinTooltip,
+    mixinClientUrl,
     mixinGlobal,
     mixinIcons,
     mixinDiff,
@@ -656,7 +684,8 @@ export default {
           originalHeaders: this.columns,
           editedHeaders: this.columnsForView,
           settings: { mini: miniSettings, detail: detailSettings },
-          mapping: mapping
+          mapping: mapping,
+          minivizs: this.cardsSettingsMinivizs
         }
       }
       // console.log('C > DatamiTable > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
@@ -667,6 +696,7 @@ export default {
     },
     mappingsForMini () {
       return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
+        // console.log('C > DatamiTable > mappingsForMini > h : ', h)
         const fieldMap = {
           ...this.trimField(h),
           ...h.mini
@@ -675,12 +705,15 @@ export default {
         if (hasTemplate) {
           fieldMap.templating = h.templating.paragraphs
           fieldMap.ignoreDefinitions = h.templating.ignore_definitions
+          fieldMap.ignoreTrimming = h.templating.use_on_mini
         }
+        // console.log('C > DatamiTable > mappingsForMini > fieldMap : ', fieldMap)
         return fieldMap
       })
     },
     mappingsForDetail () {
       return this.hasCardMappings && this.cardsSettingsFromFileOptions.mapping.map(h => {
+        // console.log('C > DatamiTable > mappingsForDetail > h : ', h)
         const fieldMap = {
           ...this.trimField(h),
           ...h.detail
@@ -690,8 +723,10 @@ export default {
           // console.log('C > DatamiTable > mappingsForDetail > h : ', h)
           fieldMap.templating = h.templating.paragraphs
           fieldMap.ignoreDefinitions = h.templating.ignore_definitions
+          // fieldMap.useOnMini = h.templating.use_on_mini
           // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)
         }
+        // console.log('C > DatamiTable > mappingsForDetail > fieldMap : ', fieldMap)
         return fieldMap
       })
     },
@@ -705,6 +740,10 @@ export default {
         // console.log('C > DatamiTable > itemsPerPageChoices > this.itemsPerRow : ', this.itemsPerRow)
         const itemsPerRow = this.itemsPerRow
         switch (itemsPerRow) {
+          case 1:
+            // console.log('C > DatamiTable > itemsPerPageChoices > case 1 > this.itemsPerRow : ', this.itemsPerRow)
+            result = this.itemsPerPageChoicesCards1perRow
+            break
           case 2:
             // console.log('C > DatamiTable > itemsPerPageChoices > case 2 > this.itemsPerRow : ', this.itemsPerRow)
             result = this.itemsPerPageChoicesCards2perRow
@@ -743,6 +782,7 @@ export default {
           pagination[key] = hasPaginationOptions[key]
         })
       }
+      // console.log('C > DatamiTable > paginationFromFileOptions > pagination : ', pagination)
       // set raw values
       if (pagination.itemsPerPageTable < 1) pagination.itemsPerPageTable = 20
       if (pagination.itemsPerRow < 1) pagination.itemsPerRow = 3
@@ -756,7 +796,10 @@ export default {
       }
       // for cards view
       if (pagination.itemsPerRow) {
-        const itemsPerRow = this.getClosest([2, 3, 4], pagination.itemsPerRow)
+        const itemsPerRow = this.getClosest([1, 2, 3, 4], pagination.itemsPerRow)
+        if (itemsPerRow === 1) {
+          pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards1perRow, goal)
+        }
         if (itemsPerRow === 2) {
           pagination.itemsPerPageCards = this.getClosest(this.itemsPerPageChoicesCards2perRow, goal)
         }
@@ -768,6 +811,7 @@ export default {
         }
         pagination.itemsPerRow = itemsPerRow
       }
+      // console.log('C > DatamiTable > paginationFromFileOptions > pagination (return) : ', pagination)
       return pagination
     },
     dataFiltered () {
@@ -942,13 +986,15 @@ export default {
     // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
     if (this.hasCustomSorting) {
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
+      // console.log('\nC > DatamiTable > beforeMount > this.customSortingConfig : ', this.customSortingConfig)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {
         const fieldName = f.name || f
         const header = this.columns.find(c => c.name === fieldName)
         return {
           field: header && header.field,
           fieldName: fieldName,
-          ascending: !!f.ascending
+          ascending: !!f.ascending,
+          random: !!f.random
         }
       })
       // console.log('C > DatamiTable > beforeMount > settingsSortings : ', settingsSortings)
@@ -979,7 +1025,14 @@ export default {
     this.itemsPerRow = pagination.itemsPerRow
     this.itemsPerPageCards = pagination.itemsPerPageCards
   },
-
+  mounted () {
+    // console.log('\nC > DatamiTable > mounted > this.currentViewMode : ', this.currentViewMode)
+    // console.log('C > DatamiTable > mounted > this.showCardDetails : ', this.showCardDetails)
+    if (this.urlActiveDetailCard && this.currentViewMode !== 'map' && !this.showCardDetails) {
+      // console.log('C > DatamiTable > mounted > this.urlActiveDetailCard : ', this.urlActiveDetailCard)
+      this.toggleDetail({ itemId: this.urlActiveDetailCard })
+    }
+  },
   methods: {
     ...mapActions({
       updateReqErrors: 'git-data/updateReqErrors'
@@ -1003,7 +1056,8 @@ export default {
       // console.log('C > DatamiTable > columnTdAttrs > fieldSubype : ', fieldSubype)
       // const props = fieldTypeIcons.find(ft => ft.type === fieldType && ft.subtype === fieldSubype)
       let classTd = 'datami-table datami-table-td'
-      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''} ${this.isDarkMode ? 'datami-darkmode-grey-shades' : ''}`
+      classTd += ` g-td-${fieldType}${fieldSubype ? '-' + fieldSubype : ''}`
+      classTd += `${this.isDarkMode ? ' datami-darkmode-grey-shades' : ''}`
       classTd += `${this.currentEditViewMode === 'edit' ? ' datami-table-td-edit' : ''}`
       return {
         class: classTd
@@ -1033,6 +1087,9 @@ export default {
           const filterField = this.filterFields.find(f => f.field === activeTag.field)
           regroupedFilterTags.push({
             field: activeTag.field,
+            type: activeTag.type,
+            subtype: activeTag.subtype,
+            tagSeparator: activeTag.tagSeparator,
             filtering: filterField.filtering,
             activeValues: [tagValueLower]
           })
@@ -1040,69 +1097,84 @@ export default {
       })
       // console.log('C > DatamiTable > filterData > regroupedFilterTags : ', regroupedFilterTags)
 
-      // console.log('filtres sélectionnés', filterTags)
-      // const filterTagsFields = filterTags.map(f => f.field) || []
-      // console.log('C > DatamiTable > filterData > filterTagsFields : ', filterTagsFields)
-
-      // const customFiltersConfig = this.customFiltersConfig
-      // console.log('C > DatamiTable > dataEditedFiltered > customFiltersConfig : ', customFiltersConfig)
-
       // filter out data
       data = data.filter(row => {
-        // console.log('\nC > DatamiTable > dataEditedFiltered > row.id : ', row.id)
-        const hasSearchVal = searchStr ? [] : [true]
-        // console.log('\nC > DatamiTable > filterData > row : ', row)
+        // const debug = row.id === '18' // || row.id === '19'
+        // debug && console.log('\nC > DatamiTable > filterData > row.id : ', row.id)
+        // debug && console.log('C > DatamiTable > filterData > row : ', row)
 
-        // FOR SEARCHBAR FILTER
-        for (const field in colFields) {
-          // console.log('C > DatamiTable > filterData > field : ', field)
-          const cellValSearch = row[field] || ''
-          const cellValLowSearch = cellValSearch.toString().toLowerCase()
-          // console.log('C > DatamiTable > filterData > rowVal : ', rowVal)
-          // search text
-          if (searchStr) {
+        // FOR SEARCHBAR FILTER (TEXT SEARCH)
+        let boolSearch
+        const hasSearchVal = searchStr ? [] : [true]
+        if (searchStr) {
+          for (const field in colFields) {
+            // debug && console.log('C > DatamiTable > filterData > field : ', field)
+            const cellValSearch = row[field] || ''
+            const cellValLowSearch = cellValSearch.toString().toLowerCase()
+            // debug && console.log('C > DatamiTable > filterData > rowVal : ', rowVal)
+            // check if text in cell contains search string
             const cellHasSearch = cellValLowSearch.includes(searchStr.toLowerCase())
             hasSearchVal.push(cellHasSearch)
           }
+          boolSearch = hasSearchVal.some(b => b)
+        } else {
+          boolSearch = true
         }
-        const boolSearch = hasSearchVal.some(b => b)
 
         // AND / OR FILTERS
         const boolAndOrFilters = []
 
-        // BEGINNING NEW FILTERING PROCESS
-        regroupedFilterTags.forEach(filterField => {
-          // console.log('C > DatamiTable > dataEditedFiltered > filterField : ', filterField)
-          const cellVal = row[filterField.field] || ''
-          const cellValLow = cellVal.toString().toLowerCase()
-          // console.log('\nC > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
-          // console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
-          // console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+        // FILTERING PROCESS
+        let boolFilters
+        if (regroupedFilterTags.length) {
+          regroupedFilterTags.forEach(filterField => {
+            // debug && console.log('\nC > DatamiTable > dataEditedFiltered > filterField : ', filterField)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.field : ', filterField.field)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.activeValues : ', filterField.activeValues)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > filterField.filtering : ', filterField.filtering)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > row : ', row)
+            let cellVal = row[filterField.field] || ''
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > cellVal : ', cellVal)
+            switch (filterField.type) {
+              case 'boolean':
+                cellVal = booleanFromValue(cellVal, filterField)
+            }
+            const cellValLow = cellVal.toString().toLowerCase()
 
-          // console.log('C > DatamiTable > dataEditedFiltered > cellValLow : ', cellValLow)
-          // const filterVal = filterField.value.toLowerCase()
-          const boolArr = filterField.activeValues.map(activeValue => {
-            return cellValLow.includes(activeValue)
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > cellValLow : ', cellValLow)
+            const boolArr = filterField.activeValues.map(activeValue => {
+              // Check if cell value is equivalent to each active value from filter
+              // return cellValLow.includes(activeValue) // => bad parsing because 'Tag12' contains 'Tag1'
+              if (filterField.subtype === 'tags') {
+                return cellValLow.split(filterField.tagSeparator).some(v => v.trim() === activeValue)
+              } else {
+                return cellValLow === activeValue
+              }
+            })
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
+
+            let fieldBool = true
+            // VERTICAL CONDITION WITHIN TAGS FROM SAME FIELD
+            if (filterField.filtering === 'OR') {
+              fieldBool = boolArr.some(b => b)
+            } else if (filterField.filtering === 'AND') {
+              fieldBool = boolArr.every(b => b)
+            } else if (filterField.filtering === 'RADIO') {
+              fieldBool = boolArr.some(b => b)
+            }
+            boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
+            // debug && console.log('C > DatamiTable > dataEditedFiltered > fieldBool : ', fieldBool)
           })
-          // console.log('C > DatamiTable > dataEditedFiltered > boolArr : ', boolArr)
+          // debug && console.log('\nC > DatamiTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
 
-          let fieldBool = true
-          if (filterField.filtering === 'OR') {
-            fieldBool = boolArr.some(b => b)
-          } else if (filterField.filtering === 'AND') {
-            fieldBool = boolArr.every(b => b)
-          }
-          boolAndOrFilters.push({ field: filterField.field, bool: fieldBool })
-          // console.log('C > DatamiTable > dataEditedFiltered > fieldBool : ', fieldBool)
-        })
-
-        // console.log('\nC > DatamiTable > dataEditedFiltered > boolAndOrFilters : ', boolAndOrFilters)
-
-        const boolFilters = boolAndOrFilters
-          .map(b => b.bool)
-          .every(b => b) // HORIZONTAL "AND" CONDITION
-        // console.log('C > DatamiTable > dataEditedFiltered > boolSearch : ', boolSearch)
-        // console.log('C > DatamiTable > dataEditedFiltered > boolFilters : ', boolFilters)
+          boolFilters = boolAndOrFilters
+            .map(b => b.bool)
+            .every(b => b) // HORIZONTAL "AND" CONDITION
+          // debug && console.log('C > DatamiTable > dataEditedFiltered > boolSearch : ', boolSearch)
+          // debug && console.log('C > DatamiTable > dataEditedFiltered > boolFilters : ', boolFilters)
+        } else {
+          boolFilters = true
+        }
 
         return boolSearch && boolFilters
       })
@@ -1120,6 +1192,7 @@ export default {
             fieldMapping: this.mappingsForDetail,
             item: this.getDetailItem(event.rowId)
           })
+          this.changeUrlDetailId(this.getDetailItem(event.rowId))
           break
 
         // IMPORT DATA
@@ -1203,9 +1276,10 @@ export default {
     processFilterValue (tag, remove = false) {
       // console.log('C > DatamiTable > processFilterValue > tag : ', tag)
       // console.log('C > DatamiTable > processFilterValue > remove : ', remove)
+      const isRadio = tag.type === 'boolean'
       const filterTags = this.filterTags.filter(t => {
         const sameField = t.field === tag.field
-        const sameValue = t.value === tag.value
+        const sameValue = isRadio || t.value === tag.value
         return !(sameField && sameValue)
       })
       if (!remove) {
@@ -1268,7 +1342,7 @@ export default {
       }
     },
     getDetailItem (rowId) {
-      return this.dataEditedPaginated.find(item => item.id === rowId)
+      return this.data.find(item => item.id === rowId)
     },
     getRowConsolidation (rowId) {
       return this.consolidationData.find(data => data.rowId === rowId)
@@ -1288,15 +1362,21 @@ export default {
     },
     toggleDetail (event) {
       // console.log('\nC > DatamiTable > toggleDetail > event : ', event)
-      // console.log('C > DatamiTable > toggleDetail > this.showCardDetails : ', this.showCardDetails)
-      // this.showCardDetails = !event.showDetail
-      const dialogPayload = {
-        fromTable: false,
-        item: this.getDetailItem(event.itemId),
-        fields: this.columns,
-        fieldMapping: this.mappingsForDetail
+      const item = this.getDetailItem(event.itemId)
+      if (item) {
+        const dialogPayload = {
+          fromTable: false,
+          item: item,
+          fields: this.columns,
+          fieldMapping: this.mappingsForDetail
+        }
+        this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
+        this.changeUrlDetailId(item)
+        this.showCardDetails = true
+      } else {
+        this.deleteUrlParam('datami_detail_id')
+        this.showCardDetails = false
       }
-      this.updateFileDialogs('CardDetail', { ...event, ...dialogPayload }, !event.showDetail)
     },
     changePage (event) {
       // console.log('\nC > DatamiTable > changePage > event : ', event)

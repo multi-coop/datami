@@ -100,7 +100,10 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
     return match(line).reduce((acc, cur, i) => {
       //  get corresponding header
       const header = headsEnriched[i]
+      // for debugging
       // console.log('U > csvToJson > header : ', header)
+      // const needDebug = header.name.includes(breaklineDatami)
+      // needDebug && console.log('U > csvToJson > header : ', header)
       const cellType = (header && header.type) || 'string'
       // console.log('U > csvToJson > cellType : ', cellType)
 
