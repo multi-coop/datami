@@ -1025,8 +1025,8 @@ export const mixinTexts = {
     applyTemplate (fields, text, ignoreDefinitions = false) {
       // console.log('\nM > mixinTexts > applyTemplating > text :', text)
       // console.log('M > mixinTexts > applyTemplating > fields :', fields)
-      // replace value fields
       // console.log('M > mixinTexts > applyTemplating > ignoreDefinitions :', ignoreDefinitions)
+      // replace value fields
       const fieldStart = '{{'
       const fieldEnd = '}}'
       const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
@@ -1066,7 +1066,7 @@ export const mixinTexts = {
             customStyle += 'color: white; background-color: black;'
           }
           // specific to booleans
-          if (itemValue && fieldObj && (fieldObj.type === 'boolean' || fieldObj.subtype === 'tags')) {
+          if (itemValue && fieldObj && fieldObj.type === 'boolean') {
             customClass += ' px-1'
             customStyle += 'color: white; background-color: black;'
             const valueAsBoolean = this.booleanFromValue(itemValue, fieldObj)
