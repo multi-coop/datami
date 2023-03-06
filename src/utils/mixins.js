@@ -164,6 +164,7 @@ export const mixinClientUrl = {
       return tabId === this.urlParameters.datami_tab
     },
     updateParams (param, value) {
+      // console.log('M > mixinClientUrl > changeUrlActiveTab > param : ', param)
       const newParams = this.builUrlNewParams(param, value)
       this.updateUrlParams(newParams.str)
       this.updateUrlParamStore(newParams.obj)
@@ -193,6 +194,19 @@ export const mixinClientUrl = {
     deleteUrlParam (param) {
       // console.log('\nM > mixinClientUrl > deleteUrlParam > param : ', param)
       this.updateParams(param, undefined)
+    }
+  }
+}
+
+export const mixinViews = {
+  methods: {
+    ...mapActions({
+      changeViewMode: 'git-data/changeViewMode'
+    }),
+    changeView (code, fileId = undefined) {
+      // console.log(`\nM > mixinViews > changeView > ${this.fileId} > code : `, code)
+      this.changeViewMode({ fileId: fileId || this.fileId, mode: code })
+      this.trackEvent(code)
     }
   }
 }
@@ -1050,8 +1064,24 @@ export const mixinTexts = {
           strClean = itemValue || this.t('global.noValue', this.locale)
           // replace by value defintion if any in fieldObj
           if (itemValue && !ignoreDefinitions && fieldObj && fieldObj.definitions) {
-            const definition = fieldObj.definitions.find(def => def.value === strClean)
-            strClean = (definition && definition.label) || strClean
+            const defs = fieldObj.definitions
+            let definition, itemValues
+            switch (fieldObj.subtype) {
+              case 'tag':
+                definition = defs.find(def => def.value === strClean)
+                strClean = (definition && definition.label) || strClean
+                break
+              case 'tags':
+                // console.log('M > mixinTexts > applyTemplating > itemValue :', itemValue)
+                // console.log('M > mixinTexts > applyTemplating > fieldObj :', fieldObj)
+                itemValues = itemValue.split(fieldObj.tagSeparator)
+                // console.log('M > mixinTexts > applyTemplating > itemValues :', itemValues)
+                strClean = itemValues.map(v => {
+                  definition = defs.find(def => def.value === v.trim())
+                  return (definition && definition.label) || v
+                }).join(', ')
+                break
+            }
           }
           // specific to numbers
           if (itemValue && fieldObj && (fieldObj.type === 'integer' || fieldObj.type === 'number')) {

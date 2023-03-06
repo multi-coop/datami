@@ -144,6 +144,9 @@ export const data = {
       if (state.edit.includes(fileId)) return 'edit'
     },
     getViewMode: (state) => (fileId) => {
+      // console.log('\nS-data > G > getViewMode > fileId : ', fileId)
+      // console.log('S-data > G > getViewMode > state.cards : ', state.cards)
+      // console.log('S-data > G > getViewMode > state.map : ', state.map)
       if (state.loading.includes(fileId)) return 'loading'
       if (state.cards.includes(fileId)) return 'cards'
       if (state.table.includes(fileId)) return 'table'
@@ -152,6 +155,7 @@ export const data = {
       if (state.text.includes(fileId)) return 'text'
       if (state.md.includes(fileId)) return 'md'
       if (state.json.includes(fileId)) return 'json'
+      return undefined
     },
 
     // commits
@@ -398,6 +402,7 @@ export const data = {
       })
     },
     changeViewMode ({ commit }, { fileId, mode }) {
+      // console.log('\nS-data > M > changeViewMode > fileId : ', fileId)
       // console.log('S-data > M > changeViewMode > mode : ', mode)
       commit('addToState', { key: mode, fileId: fileId })
       const switchOffModes = viewModes.filter(v => v !== mode)

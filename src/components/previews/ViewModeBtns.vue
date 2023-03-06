@@ -62,15 +62,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
-import { mixinClientUrl, mixinGlobal } from '@/utils/mixins.js'
+import { mixinClientUrl, mixinViews, mixinGlobal } from '@/utils/mixins.js'
 import { viewsOptions } from '@/utils/fileTypesUtils.js'
 
 export default {
   name: 'ViewModeBtns',
   mixins: [
     mixinClientUrl,
+    mixinViews,
     mixinGlobal
   ],
   props: {
@@ -231,6 +232,7 @@ export default {
     // console.log('C > ViewModeBtns > beforeMount > this.gitObj.filetype : ', this.gitObj.filetype)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
     // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
+    // console.log('C > ViewModeBtns > beforeMount > this.defaultView : ', this.defaultView)
     const availableViews = this.availableViews[this.fileTypeFamily]
     // console.log('C > ViewModeBtns > beforeMount > availableViews : ', availableViews)
     if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
@@ -238,21 +240,20 @@ export default {
       this.changeView(this.urlActiveView)
     } else {
       // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
-      // console.log('C > ViewModeBtns > beforeMount > this.defaultView : ', this.defaultView)
       // this.changeView(this.fileTypeFamily || 'loading')
       this.changeView(this.defaultView || 'loading')
     }
     // this.changeView(this.fileTypeFamily || 'loading')
   },
   methods: {
-    ...mapActions({
-      changeViewMode: 'git-data/changeViewMode'
-    }),
-    changeView (code) {
-      // console.log(`\nC > ViewModeBtns > changeView > ${this.fileId} > code : `, code)
-      this.changeViewMode({ fileId: this.fileId, mode: code })
-      this.trackEvent(code)
-    },
+    // ...mapActions({
+    //   changeViewMode: 'git-data/changeViewMode'
+    // }),
+    // changeView (code) {
+    //   // console.log(`\nC > ViewModeBtns > changeView > ${this.fileId} > code : `, code)
+    //   this.changeViewMode({ fileId: this.fileId, mode: code })
+    //   this.trackEvent(code)
+    // },
     getIcon (code) {
       const btn = this.buttonsView.find(btn => btn.code === code)
       return btn && btn.icon

@@ -382,7 +382,7 @@ export default {
     mediawikiOptions.separator = '\t' // for csv export
     this.mediawikiOptions = mediawikiOptions
 
-    const defaultView = getDefaultViewMode(mediawikiOptions, 'table')
+    const defaultView = getDefaultViewMode(mediawikiOptions, 'table', this.fileId)
     // console.log('C > DatamiExploWiki > beforeMount > defaultView : ', defaultView)
     this.defaultView = defaultView
 

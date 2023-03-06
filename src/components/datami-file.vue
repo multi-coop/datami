@@ -480,6 +480,7 @@ export default {
     }
     // console.log('\nC > DatamiFile > beforeMount > this.cssFiles : ', this.cssFiles)
     this.fileId = this.fileIdFromMultifiles || this.uuidv4()
+    // console.log('\nC > DatamiFile > beforeMount > this.fileId : ', this.fileId)
     this.toggleEditNavbar({ uuid: this.fileId, status: false })
     this.changeEditViewMode({ fileId: this.fileId, mode: 'preview' })
     this.resetReqErrors(this.fileId)
@@ -495,7 +496,8 @@ export default {
     await this.initWidget()
   },
   async mounted () {
-    // console.log('\nC > DatamiFile > mounted > this.gitInfos : ', this.gitInfos)
+    // console.log('\nC > DatamiFile > mounted > this.fileId : ', this.fileId)
+    // console.log('C > DatamiFile > mounted > this.gitInfos : ', this.gitInfos)
     // console.log('C > DatamiFile > mounted > this.gitObj : ', this.gitObj)
     // console.log('C > DatamiFile > mounted > this.usertoken : ', this.usertoken)
     // console.log('C > DatamiFile > mounted > this.fileInfos : ', this.fileInfos)
@@ -531,8 +533,9 @@ export default {
       // console.log('C > DatamiFile > initWidget > this.options : ', this.options)
       // build options object
       let fileOptions = this.options && this.options.length ? JSON.parse(this.options) : {}
+      // console.log('C > DatamiFile > initWidget > this.fileId : ', this.fileId)
       // console.log('C > DatamiFile > initWidget > fileOptions : ', fileOptions)
-      const defaultView = getDefaultViewMode(fileOptions, gitInfosObject.filetype)
+      const defaultView = getDefaultViewMode(fileOptions, gitInfosObject.filetype, this.fileId)
       // console.log('C > DatamiFile > initWidget > defaultView : ', defaultView)
       this.defaultView = defaultView
 

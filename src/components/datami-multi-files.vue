@@ -38,7 +38,7 @@
       </div> -->
 
       <!-- DEBUG URL PARAMS -->
-      <!-- <div
+      <div
         v-if="debug"
         class="columns">
         <div class="column is-4">
@@ -47,7 +47,7 @@
         <div class="column is-4">
           urlParameters : <br><pre><code>{{ urlParameters }}</code></pre>
         </div>
-      </div> -->
+      </div>
 
       <!-- TITLE AND TAB OPTIONS -->
       <div
@@ -245,9 +245,12 @@ import { mapActions } from 'vuex'
 import {
   mixinTooltip,
   mixinClientUrl,
+  mixinViews,
   mixinGlobal,
   mixinForeignKeys
 } from '@/utils/mixins.js'
+
+import { getAvailableViews, getDefaultViewMode } from '@/utils/fileTypesUtils'
 
 export default {
   name: 'DatamiMultiFiles',
@@ -263,6 +266,7 @@ export default {
   mixins: [
     mixinTooltip,
     mixinClientUrl,
+    mixinViews,
     mixinGlobal,
     mixinForeignKeys
   ],
@@ -344,10 +348,26 @@ export default {
   watch: {
     activeTab (next) {
       // console.log('\nC > DatamiMultiFiles > watch > activeTab > next : ', next)
-      const viewMode = this.getViewMode(next)
+      const gitObj = this.getGitInfosObj(next)
+      // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
+      const options = this.getFileOptionsObj(next)
+      // console.log('C > DatamiMultiFiles > watch > activeTab > options : ', options)
+      let viewMode = this.getViewMode(next)
       // console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
-      if (viewMode) {
-        this.changeUrlView(viewMode)
+
+      // check if requested view is available for new tab
+      const availableViews = getAvailableViews(options, gitObj && gitObj.filetype, next)
+      // console.log('C > DatamiMultiFiles > watch > activeTab > availableViews : ', availableViews)
+      if (viewMode && !availableViews.includes(viewMode)) {
+        viewMode = getDefaultViewMode(options, gitObj && gitObj.filetype, next)
+      }
+
+      // set up the view mode
+      // console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
+      this.changeUrlView(viewMode)
+      this.changeView(viewMode, next)
+
+      if (viewMode !== 'map') {
         this.deleteUrlParam('datami_detail_id')
         this.deleteUrlParam('datami_lon')
         this.deleteUrlParam('datami_lat')
@@ -410,13 +430,14 @@ export default {
 
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile.id : ', defaultFile.id)
-    // set active tab
-    this.activeTab = defaultFile.id
-    this.changeMultifilesActiveTab(defaultFile)
-
-    // Set in store
     // console.log('\nC > DatamiMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
     this.addFileOptions(multiFilesOptions)
+
+    // set active tab
+    this.activeTab = defaultFile.id
+
+    // Set in store
+    this.changeMultifilesActiveTab(defaultFile)
     if (this.trackalloutlinks) {
       this.activateTrackAllOutlinks()
     }

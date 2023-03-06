@@ -184,12 +184,39 @@ export const viewsOptions = [
 ]
 export const viewModes = viewsOptions.map(v => v.code)
 
-export const getDefaultViewMode = (options, fileType) => {
-  // console.log('\nU > fileTypesUtils > getDefaultViewMode > options : ', options)
+export const getAvailableViews = (options, fileType, fileId = undefined) => {
+  // console.log('U > fileTypesUtils > getAvailableViews > fileId : ', fileId)
+  // console.log('U > fileTypesUtils > getAvailableViews > options : ', options)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > fileType : ', fileType)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > authorizedFileTypes : ', authorizedFileTypes)
+  let views = []
+  const fileFamily = fileType && authorizedFileTypes[fileType]
+  if (fileFamily && fileFamily.family === 'table') {
+    views = ['table']
+    const cardsView = options.cardsview
+    const datavizView = options.datavizview
+    const mapView = options.mapview
+    if (cardsView && cardsView.activate) { views.push('cards') }
+    if (datavizView && datavizView.activate) { views.push('dataviz') }
+    if (mapView && mapView.activate) { views.push('map') }
+  }
+  if (fileFamily && fileFamily.family === 'json') {
+    views = ['json']
+  }
+  if (fileFamily && fileFamily.family === 'text') {
+    views = ['text']
+  }
+  // console.log('U > fileTypesUtils > getAvailableViews > views : ', views)
+  return views
+}
+
+export const getDefaultViewMode = (options, fileType, fileId = undefined) => {
+  // console.log('U > fileTypesUtils > getDefaultViewMode > fileId : ', fileId)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > options : ', options)
   // console.log('U > fileTypesUtils > getDefaultViewMode > fileType : ', fileType)
   let view
-  const fileFamily = authorizedFileTypes[fileType]
-  if (fileFamily.family === 'table') {
+  const fileFamily = fileType && authorizedFileTypes[fileType]
+  if (fileFamily && fileFamily.family === 'table') {
     const cardsView = options.cardsview
     const datavizView = options.datavizview
     const mapView = options.mapview
@@ -204,10 +231,10 @@ export const getDefaultViewMode = (options, fileType) => {
     // console.log('U > fileTypesUtils > getDefaultViewMode > mapViewDefault : ', mapViewDefault)
     view = cardViewDefault || datavizViewDefault || mapViewDefault || 'table'
   }
-  if (fileFamily.family === 'json') {
+  if (fileFamily && fileFamily.family === 'json') {
     view = 'json'
   }
-  if (fileFamily.family === 'text') {
+  if (fileFamily && fileFamily.family === 'text') {
     view = 'text'
   }
   // console.log('U > fileTypesUtils > getDefaultViewMode > view : ', view)
