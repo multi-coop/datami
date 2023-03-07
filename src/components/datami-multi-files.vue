@@ -251,6 +251,7 @@ import {
 } from '@/utils/mixins.js'
 
 import { getAvailableViews, getDefaultViewMode } from '@/utils/fileTypesUtils'
+import { extractGitInfos } from '@/utils/utilsGitUrl'
 
 export default {
   name: 'DatamiMultiFiles',
@@ -348,18 +349,35 @@ export default {
   watch: {
     activeTab (next) {
       // console.log('\nC > DatamiMultiFiles > watch > activeTab > next : ', next)
-      const gitObj = this.getGitInfosObj(next)
+      // let gitObj = this.getGitInfosObj(next)
       // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
-      const options = this.getFileOptionsObj(next)
+      let gitObj
+      const file = this.files[this.urlActiveTab - 1]
+      // console.log('C > DatamiMultiFiles > watch > activeTab > file : ', file)
+      if (file) {
+        const fileUrl = file.localdev ? file.gitfilelocal : file.gitfile
+        gitObj = extractGitInfos(fileUrl)
+      }
+      // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
+
+      const fileType = gitObj && gitObj.filetype
+      // let options = this.getFileOptionsObj(next)
+      const options = file && JSON.parse(file.options)
       // console.log('C > DatamiMultiFiles > watch > activeTab > options : ', options)
-      let viewMode = this.getViewMode(next)
+
+      // view mode from store
+      let viewMode = this.getViewMode(next) || this.urlActiveView
       // console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
 
+      // if 1st request
+      // const viewModeUrl = this.urlActiveView
+      // console.log('C > DatamiMultiFiles > watch > activeTab > viewModeUrl : ', viewModeUrl)
+
       // check if requested view is available for new tab
-      const availableViews = getAvailableViews(options, gitObj && gitObj.filetype, next)
+      const availableViews = getAvailableViews(options, fileType, next)
       // console.log('C > DatamiMultiFiles > watch > activeTab > availableViews : ', availableViews)
       if (viewMode && !availableViews.includes(viewMode)) {
-        viewMode = getDefaultViewMode(options, gitObj && gitObj.filetype, next)
+        viewMode = getDefaultViewMode(options, fileType, next)
       }
 
       // set up the view mode
@@ -368,10 +386,12 @@ export default {
       this.changeView(viewMode, next)
 
       if (viewMode !== 'map') {
-        this.deleteUrlParam('datami_detail_id')
         this.deleteUrlParam('datami_lon')
         this.deleteUrlParam('datami_lat')
         this.deleteUrlParam('datami_zoom')
+      }
+      if (viewMode === 'dataviz') {
+        this.deleteUrlParam('datami_detail_id')
       }
     },
     hasMultifilesDialogs (next) {
@@ -417,6 +437,8 @@ export default {
     this.defaultDisplay = multiFilesOptions.options.display
     this.tabsVertical = this.defaultDisplay === 'vertical'
     this.hideTitle = !!multiFilesOptions.options.hidetitle
+    // console.log('C > DatamiMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
+    this.addFileOptions(multiFilesOptions)
 
     // Get active tab from url if any
     const activeTabFromUrl = this.urlActiveTab
@@ -427,11 +449,8 @@ export default {
     if (activeTabFromUrl) {
       defaultFile = filesParsed[activeTabFromUrl - 1] ? filesParsed[activeTabFromUrl - 1] : defaultFile
     }
-
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile : ', defaultFile)
     // console.log('C > DatamiMultiFiles > beforeMount > defaultFile.id : ', defaultFile.id)
-    // console.log('\nC > DatamiMultiFiles > beforeMount > multiFilesOptions : ', multiFilesOptions)
-    this.addFileOptions(multiFilesOptions)
 
     // set active tab
     this.activeTab = defaultFile.id
