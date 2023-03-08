@@ -12,12 +12,39 @@ import {
 
 export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined, filefullname = undefined) {
   // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
+  // console.log('U > gitProvidersAPI > getData > A > token : ', token)
   // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
   // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
   const errors = []
 
-  // pure fetch
-  const req = await fetch(url)
+  // build auth headers to get raw data from private repo if any
+  const requestOptions = {
+    method: 'GET'
+  }
+  if (token) {
+    // note => there is already a function to build request options : buildGitRequestOptions()
+    // requestOptions = buildGitRequestOptions('GET', provider, token)
+    switch (provider) {
+      case 'gitlab':
+        requestOptions.headers = { 'PRIVATE-TOKEN': token }
+        break
+      case 'github':
+        // error 403 with github server for preflight OPTION on public files
+        // github docs : https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28
+        // cf issue : https://github.com/orgs/community/discussions/24659
+        // requestOptions.headers = {
+        //   Connection: 'keep-alive',
+        //   Accept: '*/*',
+        //   'Accept-Encoding': 'gzip, deflate, br',
+        //   Authorization: `token ${token}`
+        // }
+        // console.log('U > gitProvidersAPI > getData > A > requestOptions : ', requestOptions)
+        break
+    }
+  }
+  // console.log('U > gitProvidersAPI > getData > A > requestOptions : ', requestOptions)
+  const req = await fetch(url, requestOptions)
+
   // console.log('\nU > gitProvidersAPI > getData > B > url : ', url)
   // console.log('U > gitProvidersAPI > getData > B > req : ', req)
   // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)

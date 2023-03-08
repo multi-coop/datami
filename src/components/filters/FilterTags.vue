@@ -13,16 +13,18 @@
           aria-close-label="Close tag">
           <!-- FIELD LABEL -->
           <b-tag>
-            {{ getFieldLabel(tag.field) }}
+            {{ getFieldLabel(tag.field, currentEditViewMode) }}
             <!-- - tag.field : <pre><code>{{ tag.field }}</code></pre> -->
+            <!-- - getField(tag.field) : <pre><code>{{ getField(tag.field) }}</code></pre> -->
           </b-tag>
           <!-- {{ getFieldForeignKey(tag.field) }} -->
           <!-- <hr> -->
           <!-- {{ item(tag.field, tag.value) }} -->
+          <!-- :tag-style="`color: ${tagColor(tag.value, getFieldBgColor(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getFieldBgColor(tag.field), false)}`" -->
           <PreviewTagValue
             :file-id="fileId"
             :val="tag.value"
-            :tag-style="`color: ${tagColor(tag.value, getFieldBgColor(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getFieldBgColor(tag.field), false)}`"
+            :tag-style="`color: ${tagColor(tag.value, getField(tag.field), false)}; background-color:  ${tagBackgroundColor(tag.value, getField(tag.field), false)}`"
             :field="getField(tag.field)"
             :is-filter-tag="true"
             :locale="locale"/>
@@ -90,14 +92,20 @@ export default {
       const header = this.headers.find(f => f.field === field)
       return header
     },
-    getFieldLabel (field) {
+    getFieldLabel (field, editMode) {
+      // console.log('C > FilterTags > getFieldLabel > field : ', field)
       const header = this.getField(field)
-      return header.label
+      // console.log('C > FilterTags > getFieldLabel > header : ', header)
+      if (editMode !== 'edit') {
+        return header.title || header.label
+      } else {
+        return header.label
+      }
     },
-    getFieldBgColor (field) {
-      const header = this.getField(field)
-      return header && header.bgColor
-    },
+    // getFieldBgColor (field) {
+    //   const header = this.getField(field)
+    //   return header && header.bgColor
+    // },
     getFieldForeignKey (field) {
       const header = this.getField(field)
       return header.foreignKey

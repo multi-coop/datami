@@ -1,6 +1,7 @@
 <template>
   <div
-    class="PreviewField">
+    class="PreviewField"
+    style="line-height: .9em;">
     <!-- FIELD LABEL + INFOS -->
     <!-- :auto-close="isForeignKey ? ['outside', 'escape'] : true" -->
     <!-- :auto-close="isForeignKey ? ['inside', 'outside', 'escape'] : true" -->
@@ -8,32 +9,22 @@
     <!-- :triggers="isForeignKey ? ['click', 'hover'] : ['hover']" -->
     <!-- :auto-close="isForeignKey ? ['inside', 'outside', 'escape'] : true" -->
     <span style="cursor: pointer;">
-
-      <!-- FIELD TYPE ICON -->
-      <b-icon
-        :icon="getIconFieldType(field)"
-        :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
-        :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
-        size="is-small"
-        @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'fieldtype', field: field, icon: getIconFieldType(field) })"
-        @mouseleave.native="hideGlobalTooltip"/>
-
       <!-- FIELD LABEL FOR isDatamiField -->
       <span
-        :class="`${isDarkMode ? 'has-text-white' : ''}`"
+        :class="`is-size-7 ${isDarkMode ? 'has-text-white' : ''}`"
         @mouseover="showGlobalTooltip($event, { position: 'top', type: 'field', field: field, icon: getIconFieldType(field) })"
         @mouseleave="hideGlobalTooltip">
-        <span
+        <!-- <span
           v-if="isDatamiField"
-          class="mr-2">
+          class="mr-2"> -->
         <!-- {{ t(field.label, locale) }} -->
-        </span>
+        <!-- </span> -->
 
         <!-- FIELD LABEL -->
         <span
-          v-else
           :class="`mr-2`">
-          {{ field.label }}
+          {{ trimText(field.title || field.label, textLength) }}
+          <!-- {{ field.label }} -->
         </span>
       </span>
 
@@ -67,6 +58,10 @@
 </template>
 
 <script>
+import {
+  trimText
+} from '@/utils/globalUtils.js'
+
 import {
   mixinTooltip,
   mixinGlobal,
@@ -105,6 +100,42 @@ export default {
       default: false,
       type: Boolean
     }
+  },
+  computed: {
+    textLength () {
+      let length
+      const fieldType = this.field.type
+      const fieldSubtype = this.field.subtype
+      const textLengths = {
+        longtext: 50,
+        tag: 30,
+        tags: 40,
+        timelinetext: 40,
+        image: 10,
+        link: 25,
+        email: 25
+      }
+      switch (fieldType) {
+        case 'string':
+          length = fieldSubtype ? (textLengths[fieldSubtype] || 50) : 35
+          break
+        case 'number':
+          length = 30
+          break
+        case 'integer':
+          length = 30
+          break
+        case 'boolean':
+          length = 25
+          break
+        default:
+          length = 20
+      }
+      return length
+    }
+  },
+  methods: {
+    trimText
   }
 }
 </script>

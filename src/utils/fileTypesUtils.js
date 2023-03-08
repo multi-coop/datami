@@ -77,8 +77,13 @@ export const fieldTypeIcons = [
   },
   {
     type: 'string',
-    subtype: 'steptext',
+    subtype: 'timelinetext',
     icon: 'dots-horizontal'
+  },
+  {
+    type: 'string',
+    subtype: 'image',
+    icon: 'image'
   },
   {
     type: 'uri',
@@ -178,3 +183,60 @@ export const viewsOptions = [
   { code: 'loading', icon: 'sync', textCode: '...' }
 ]
 export const viewModes = viewsOptions.map(v => v.code)
+
+export const getAvailableViews = (options, fileType, fileId = undefined) => {
+  // console.log('U > fileTypesUtils > getAvailableViews > fileId : ', fileId)
+  // console.log('U > fileTypesUtils > getAvailableViews > options : ', options)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > fileType : ', fileType)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > authorizedFileTypes : ', authorizedFileTypes)
+  let views = []
+  const fileFamily = fileType && authorizedFileTypes[fileType]
+  if (fileFamily && fileFamily.family === 'table') {
+    views = ['table']
+    const cardsView = options.cardsview
+    const datavizView = options.datavizview
+    const mapView = options.mapview
+    if (cardsView && cardsView.activate) { views.push('cards') }
+    if (datavizView && datavizView.activate) { views.push('dataviz') }
+    if (mapView && mapView.activate) { views.push('map') }
+  }
+  if (fileFamily && fileFamily.family === 'json') {
+    views = ['json']
+  }
+  if (fileFamily && fileFamily.family === 'text') {
+    views = ['text']
+  }
+  // console.log('U > fileTypesUtils > getAvailableViews > views : ', views)
+  return views
+}
+
+export const getDefaultViewMode = (options, fileType, fileId = undefined) => {
+  // console.log('U > fileTypesUtils > getDefaultViewMode > fileId : ', fileId)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > options : ', options)
+  // console.log('U > fileTypesUtils > getDefaultViewMode > fileType : ', fileType)
+  let view
+  const fileFamily = fileType && authorizedFileTypes[fileType]
+  if (fileFamily && fileFamily.family === 'table') {
+    const cardsView = options.cardsview
+    const datavizView = options.datavizview
+    const mapView = options.mapview
+    // console.log('U > fileTypesUtils > getDefaultViewMode > cardsView : ', cardsView)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > datavizView : ', datavizView)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > mapView : ', mapView)
+    const cardViewDefault = cardsView && cardsView.activate && cardsView.default && 'cards'
+    const datavizViewDefault = datavizView && datavizView.activate && datavizView.default && 'dataviz'
+    const mapViewDefault = mapView && mapView.activate && mapView.default && 'map'
+    // console.log('U > fileTypesUtils > getDefaultViewMode > cardViewDefault : ', cardViewDefault)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > datavizViewDefault : ', datavizViewDefault)
+    // console.log('U > fileTypesUtils > getDefaultViewMode > mapViewDefault : ', mapViewDefault)
+    view = cardViewDefault || datavizViewDefault || mapViewDefault || 'table'
+  }
+  if (fileFamily && fileFamily.family === 'json') {
+    view = 'json'
+  }
+  if (fileFamily && fileFamily.family === 'text') {
+    view = 'text'
+  }
+  // console.log('U > fileTypesUtils > getDefaultViewMode > view : ', view)
+  return view
+}

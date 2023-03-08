@@ -2,7 +2,7 @@
   <div
     v-if="item"
     :class="`DatamiCard datami-component card datami-card ${isHovered || showDetail ? 'hover-effect' : '' }`"
-    :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};${isMini && fromMap ? 'max-height: 500px; overflow: auto;' : ''}`"
+    :style="`background-color: ${showDetail ? '#f6f6f6' : 'white'};${isMini && fromMap ? 'max-height: 500px; overflow: auto; border: 1px solid #363636;' : ''}`"
     @mouseover="isHovered = true"
     @mouseleave="isHovered = false">
     <!-- style="background-color: #f6f6f6" -->
@@ -82,17 +82,17 @@
         v-if="fromMap"
         class="card-header-icon is-align-items-flex-start"
         @click="toggleDetail('closeButton')">
-        <!-- <b-tooltip
-          :label="t(`preview.${showDetail || fromMap ? 'closeCard' : 'showCardDetails'}`, locale)"
-          type="is-dark"
-          position="is-left">
-          <b-icon
-            size="is-small"
-            :icon="showDetail || fromMap ? 'close' : 'eye'"/>
-        </b-tooltip> -->
-        <b-icon
+        <!-- <b-icon
           size="is-small"
-          :icon="showDetail || fromMap ? 'close' : 'eye'"/>
+          icon="close"
+          @mouseover.native="showGlobalTooltip($event, { position: 'right', type: 'info', label: t('preview.closeCard', locale) })"
+          @mouseleave.native="hideGlobalTooltip"/> -->
+        <HoverableIconWithTooltip
+          :size="'is-small'"
+          :icon="'close'"
+          :position="'right'"
+          :type="'info'"
+          :label="t('preview.closeCard', locale)"/>
       </button>
     </header>
 
@@ -144,6 +144,7 @@
         </p>
       </div>
 
+      <!-- VALUES CONTENT -->
       <div class="columns is-8 is-multiline">
         <!-- COLUMN LEFT DETAIL -->
         <div
@@ -152,9 +153,9 @@
             <!-- LEFT - TITLE / SUBTITLE / ADRESS -->
             <div
               v-if="hasAnyContentByPosition(['title', 'subtitle', 'adress', 'logo'])"
-              class="column is-12">
+              :class="`column is-12 ${isMini ? 'pb-1' : ''}`">
               <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <div v-if="showDetail">
                   <!-- TITLE BLOCK : 'title' -->
@@ -215,19 +216,44 @@
 
                 <!-- ADRESS BLOCK : 'adress' -->
                 <div v-if="hasContentByPosition('adress')">
-                  <DatamiCardBlockContent
-                    v-for="(fieldObj, i) in getFieldsByPosition('adress')"
-                    :key="`adress-${i}-${fieldObj.field}`"
-                    :file-id="fileId"
-                    :position="'adress'"
-                    :field="fieldObj"
-                    :field-label="getFieldLabel(fieldObj.field)"
-                    :item-id="item.id"
-                    :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
-                    :item-added="item.added"
-                    :item-value="item[fieldObj.field]"
-                    :is-mini="isMini"
-                    :locale="locale"/>
+                  <div v-if="currentEditViewMode === 'preview' && isMini">
+                    <div class="media">
+                      <div class="media-left mr-2">
+                        <b-icon
+                          icon="map-marker-outline"
+                          size="is-small"/>
+                      </div>
+                      <div class="media-content">
+                        <p
+                          v-for="(fieldObj, i) in getFieldsByPosition('adress')"
+                          :key="`adress-mini-${i}-${fieldObj.field}`"
+                          class="mb-0">
+                          <b-icon
+                            v-if="fieldObj.prefixIcon"
+                            :icon="fieldObj.prefixIcon"
+                            class="mr-2"
+                            size="is-small"/>
+                          {{ item[fieldObj.field] }}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- <code>{{ getFieldsByPosition('adress') }}</code> -->
+                  </div>
+                  <div v-else>
+                    <DatamiCardBlockContent
+                      v-for="(fieldObj, i) in getFieldsByPosition('adress')"
+                      :key="`adress-${i}-${fieldObj.field}`"
+                      :file-id="fileId"
+                      :position="'adress'"
+                      :field="fieldObj"
+                      :field-label="getFieldLabel(fieldObj.field)"
+                      :item-id="item.id"
+                      :templated-values="fieldObj.templating && getTemplatedValues(fieldObj)"
+                      :item-added="item.added"
+                      :item-value="item[fieldObj.field]"
+                      :is-mini="isMini"
+                      :locale="locale"/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -260,7 +286,7 @@
               :class="`column is-12 position-left-${pos} ${hasAnyContentByPosition([pos]) ? '' : 'py-0'}`">
               <div
                 v-if="hasAnyContentByPosition([pos])"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <div v-if="!norTagsNorLinks.includes(pos) && hasContentByPosition(pos) ">
                   <DatamiCardBlockContent
@@ -308,7 +334,7 @@
               </div>
               <div
                 v-if="mapPositions.includes(pos) && showDetail && cardHasMiniMap && cardsSettingsMiniMap.position === pos && !cardsSettingsMiniMap.right_side"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? mapPositionsClasses[pos] : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <DatamiMiniMap
                   :file-id="fileId"
@@ -354,7 +380,7 @@
               :class="`column is-12 position-right-${pos} ${hasAnyContentByPosition([pos], true) ? '' : 'py-0'}`">
               <div
                 v-if="hasAnyContentByPosition([pos], true)"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <div v-if="!norTagsNorLinks.includes(pos) && hasContentByPosition(pos, true) ">
                   <DatamiCardBlockContent
@@ -402,10 +428,11 @@
               </div>
               <div
                 v-if="mapPositions.includes(pos) && showDetail && cardHasMiniMap && cardsSettingsMiniMap.position === pos && cardsSettingsMiniMap.right_side"
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
+                :class="`content ${showDetail ? mapPositionsClasses[pos] : ''}`"
                 :style="`background-color: ${showDetail? 'white' : 'white'}`">
                 <DatamiMiniMap
                   :file-id="fileId"
+                  :position="pos"
                   :map-id="`${fileId}-minimap-${item.id}`"
                   :fields="fields"
                   :item="item"
@@ -420,17 +447,6 @@
                 <br> cardsSettingsMiniMap.right_side : <code>{{ cardsSettingsMiniMap.right_side }}</code>
               </div> -->
             </div>
-
-            <!-- DATAVIZ / TO DO -->
-            <!-- <div
-              v-if="hasAnyContentByPosition(['dataviz'])"
-              class="column is-12">
-              <div
-                :class="`content ${showDetail ? 'px-3 py-3' : ''}`"
-                :style="`background-color: ${showDetail? 'white' : 'white'}`">
-                DATAVIZ
-              </div>
-            </div> -->
           </div>
         </div>
 
@@ -450,11 +466,38 @@
           </p>
         </div>
       </div>
+
+      <!-- MINIVIZS CONTENT -->
+      <div
+        v-if="minivizsSettings"
+        class="columns is-8 is-multiline is-centered mt-3"
+        style="margin-left: -1.5em; margin-right: -1.5em;">
+        <!-- DEBUGGING -->
+        <div
+          v-for="(vizSettings, idx) in minivizsSettings"
+          :key="`card-miniviz-${fileId}-${item.id}-${idx}`"
+          :class="`column is-${showDetail ? (vizSettings.cols || 12) : defaultMiniColumnSize}-tablet`">
+          <!-- <div
+            v-if="debug"
+            class="column is-12">
+            vizSettings: <br><code>{{ vizSettings }}</code>
+          </div> -->
+          <DatamiMiniviz
+            :file-id="fileId"
+            :miniviz-settings="vizSettings"
+            :item="item"
+            :fields="fields"
+            :show-detail="showDetail"
+            :locale="locale"/>
+          <!-- :data="computeMinivizSeries(vizSettings)" -->
+          <!-- :options="computeMinivizOptions(vizSettings)" -->
+        </div>
+      </div>
     </div>
 
     <!-- CARD FOOTER -->
     <footer
-      v-if="isMini"
+      v-if="isMini && !fromMap"
       class="card-footer px-3 py-3">
       <!-- SHOW DETAILS BUTTON -->
       <b-button
@@ -490,20 +533,28 @@
 
 <script>
 
-import { mixinGlobal, mixinValue, mixinDiff } from '@/utils/mixins.js'
+import {
+  mixinGlobal,
+  mixinValue,
+  mixinTexts,
+  mixinDiff
+} from '@/utils/mixins.js'
 
 export default {
   name: 'DatamiCard',
   components: {
+    HoverableIconWithTooltip: () => import(/* webpackChunkName: "HoverableIconWithTooltip" */ '@/components/user/HoverableIconWithTooltip.vue'),
     DatamiCardBlockImage: () => import(/* webpackChunkName: "DatamiCardBlockImage" */ '@/components/previews/cards/DatamiCardBlockImage.vue'),
     DatamiCardBlockContent: () => import(/* webpackChunkName: "DatamiCardBlockContent" */ '@/components/previews/cards/DatamiCardBlockContent.vue'),
     DatamiCardBlockTags: () => import(/* webpackChunkName: "DatamiCardBlockTags" */ '@/components/previews/cards/DatamiCardBlockTags.vue'),
     DatamiCardBlockLinks: () => import(/* webpackChunkName: "DatamiCardBlockLinks" */ '@/components/previews/cards/DatamiCardBlockLinks.vue'),
-    DatamiMiniMap: () => import(/* webpackChunkName: "DatamiMiniMap" */ '@/components/previews/maps/DatamiMiniMap.vue')
+    DatamiMiniMap: () => import(/* webpackChunkName: "DatamiMiniMap" */ '@/components/previews/maps/DatamiMiniMap.vue'),
+    DatamiMiniviz: () => import(/* webpackChunkName: "DatamiMiniviz" */ '@/components/previews/dataviz/DatamiMiniviz.vue')
   },
   mixins: [
     mixinGlobal,
     mixinValue,
+    mixinTexts,
     mixinDiff
   ],
   props: {
@@ -514,6 +565,10 @@ export default {
     item: {
       default: null,
       type: Object
+    },
+    itemsPerRow: {
+      default: 3,
+      type: Number
     },
     fields: {
       default: null,
@@ -567,10 +622,10 @@ export default {
         'logo'
       ],
       positions: [
+        'map_top',
         'resume',
         'infos',
         'links_top',
-        'map_top',
         'tags_top',
         'description',
         'links_middle',
@@ -595,12 +650,40 @@ export default {
         'map_top',
         'map_middle',
         'map_bottom'
-      ]
+      ],
+      mapPositionsClasses: {
+        map_top: 'px-3 py-3 mt-3 mb-2',
+        map_middle: 'px-3 py-3 my-2',
+        map_bottom: 'px-3 py-3 mt-2'
+      }
     }
   },
   computed: {
     norTagsNorLinks () {
       return [...this.linksPositions, ...this.tagsPositions]
+    },
+    minivizsSettings () {
+      return this.cardsSettingsMinivizs && this.cardsSettingsMinivizs.filter(v => {
+        if (!this.showDetail) {
+          return v.activate && v.showOnMiniCard
+        } else {
+          return v.activate
+        }
+      })
+    },
+    defaultMiniColumnSize () {
+      let colSize
+      switch (this.itemsPerRow) {
+        case 1:
+          colSize = 4
+          break
+        case 2:
+          colSize = 6
+          break
+        default:
+          colSize = 12
+      }
+      return colSize
     }
   },
   methods: {
@@ -610,15 +693,30 @@ export default {
     },
     getFieldsByPosition (position, isRight = false) {
       // const debug = this.mapPositions.includes(position)
+      // const debug = position === 'adress'
       // debug && console.log('\nC > DatamiCard > getFieldsByPosition > position :', position)
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.cardsSettingsFromOptions :', this.cardsSettingsFromOptions)
       // debug && console.log('C > DatamiCard > getFieldsByPosition > isRight :', isRight)
       // debug && console.log('C > DatamiCard > getFieldsByPosition > this.fieldMapping :', this.fieldMapping)
-      const fields = this.fieldMapping.filter(f => {
-        if (isRight) {
-          return f.position === position && f.right
-        } else {
-          return f.position === position && (!f.right || typeof f.right === 'undefined')
-        }
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.cardsSettingsEntriesMini :', this.cardsSettingsEntriesMini)
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.cardsSettingsEntriesDetail :', this.cardsSettingsEntriesDetail)
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > this.fieldMapping :', this.fieldMapping)
+      const fields = []
+      let cardsSettings = this.isMini ? this.cardsSettingsEntriesMini : this.cardsSettingsEntriesDetail
+      cardsSettings = Object.entries(cardsSettings)
+        .map(entry => { return { name: entry[0], ...entry[1] } })
+        .filter(f => {
+          if (this.fromMap && this.isMini && f.hide_on_mini_map) return false
+          if (isRight) {
+            return f.position === position && f.right
+          } else {
+            return f.position === position && (!f.right || typeof f.right === 'undefined')
+          }
+        })
+      // debug && console.log('C > DatamiCard > getFieldsByPosition > cardsSettings :', cardsSettings)
+      cardsSettings.forEach(f => {
+        const field = this.fieldMapping.find(fm => fm.name === f.name)
+        if (field) { fields.push(field) }
       })
       // debug && console.log('C > DatamiCard > getFieldsByPosition > fields :', fields)
       return fields
@@ -633,73 +731,6 @@ export default {
         boolArray.push(this.hasContentByPosition(p, isRight))
       })
       return boolArray.some(b => b)
-    },
-    getTemplatedValues (field) {
-      // console.log('\nC > DatamiCard > getTemplatedValues > field :', field)
-      const ignoreDefinitions = field.ignoreDefinitions
-      const templatedArray = field.templating.map(paragraph => {
-        const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
-        return this.applyTemplate(text, ignoreDefinitions)
-      })
-      return templatedArray
-    },
-    applyTemplate (text, ignoreDefinitions = false) {
-      // replace value fields
-      // console.log('\nC > DatamiCard > applyTemplate > text :', text)
-      // console.log('C > DatamiCard > applyTemplate > ignoreDefinitions :', ignoreDefinitions)
-      const fieldStart = '{{'
-      const fieldEnd = '}}'
-      const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
-      // const fieldRegex = /\s*(\{{.}})\s*
-      // console.log('C > DatamiCard > applyTemplate > fieldRegex :', fieldRegex)
-
-      let textArr = text.split(fieldRegex).filter(s => !!s)
-      // console.log('C > DatamiCard > applyTemplate > textArr :', textArr)
-      textArr = textArr.map(str => {
-        // console.log('C > DatamiCard > applyTemplate > str :', str)
-        let strClean = str
-        if (str.startsWith(fieldStart)) {
-          const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
-          // console.log('C > DatamiCard > applyTemplate > fieldName :', fieldName)
-          const fieldObj = this.fields.find(f => f.name === fieldName)
-          // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
-          const itemValue = fieldObj && this.item[fieldObj.field]
-          // console.log('C > DatamiCard > applyTemplate > itemValue :', itemValue)
-          strClean = itemValue || this.t('global.noValue', this.locale)
-          // replace by value defintion if any in fieldObj
-          if (itemValue && !ignoreDefinitions && fieldObj && fieldObj.definitions) {
-            const definition = fieldObj.definitions.find(def => def.value === strClean)
-            strClean = (definition && definition.label) || strClean
-          }
-          if (itemValue && fieldObj && fieldObj.type === 'number') {
-            strClean = this.getNumberByField(strClean, fieldObj)
-          }
-        }
-        return strClean
-      })
-
-      // replace links fields
-      const linksStart = '~~'
-      const linksEnd = '~~'
-      const linksRegex = new RegExp(`(${linksStart}.*?${linksEnd})`)
-      textArr = textArr.join('')
-        .split(linksRegex)
-        .map(str => {
-          let strClean
-          if (str.startsWith(linksStart)) {
-            const fieldName = str.replace(linksStart, '').replace(linksEnd, '').trim()
-            // console.log('\nC > DatamiCard > applyTemplate > fieldName :', fieldName)
-            const fieldObj = this.fields.find(f => f.name === fieldName)
-            // console.log('C > DatamiCard > applyTemplate > fieldObj :', fieldObj)
-            strClean = this.item[fieldObj.field] ? `<a href="${this.item[fieldObj.field]}" style="color: grey; text-decoration: underline;">${this.t('global.link', this.locale)}</a>` : this.t('global.noLinkValue', this.locale)
-          } else {
-            strClean = str
-          }
-          return strClean
-        })
-
-      const textClean = textArr.join('')
-      return textClean
     },
     // closeCard () {
     //   this.$emit('toggleDetail', this.item.id)

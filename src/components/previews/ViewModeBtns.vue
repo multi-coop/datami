@@ -51,26 +51,35 @@
       </div>
     </div>
 
-    <!-- DEBUG -->
-    <div v-if="debug">
+    <!-- DEBUGGING -->
+    <!-- <div v-if="debug">
       <p>
-        currentViewMode: {{ currentViewMode }}
+        currentViewMode: <code>{{ currentViewMode }}</code><br>
+        multifileActiveTab: <code>{{ multifileActiveTab }}</code>
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
-import { mixinGlobal } from '@/utils/mixins.js'
+import { mixinClientUrl, mixinViews, mixinGlobal } from '@/utils/mixins.js'
 import { viewsOptions } from '@/utils/fileTypesUtils.js'
 
 export default {
   name: 'ViewModeBtns',
-  mixins: [mixinGlobal],
+  mixins: [
+    mixinClientUrl,
+    mixinViews,
+    mixinGlobal
+  ],
   props: {
     fileId: {
+      default: undefined,
+      type: String
+    },
+    defaultView: {
       default: undefined,
       type: String
     },
@@ -85,10 +94,18 @@ export default {
   },
   data () {
     return {
-      buttonsView: viewsOptions
+      buttonsView: viewsOptions,
+      availableViews: {
+        table: ['cards', 'dataviz', 'map', 'table'],
+        text: ['md', 'text'],
+        json: ['json']
+      }
     }
   },
   computed: {
+    ...mapState({
+      multifileActiveTab: (state) => state['git-user'].multifileActiveTab
+    }),
     btnsEdit () {
       // console.log('\nC > ViewModeBtns > btnsEdit > this.buttonsView : ', this.buttonsView)
       if (this.fileOptions) {
@@ -123,10 +140,27 @@ export default {
     }
   },
   watch: {
+    currentViewMode (next, prev) {
+      // console.log('\nC > ViewModeBtns > watch > currentViewMode > next : ', next)
+      // console.log('C > ViewModeBtns > watch > currentViewMode > prev : ', prev)
+      // console.log('C > ViewModeBtns > watch > currentViewMode > this.fileId : ', this.fileId)
+      // console.log('C > ViewModeBtns > watch > currentViewMode > this.multifileActiveTab : ', this.multifileActiveTab)
+      if (this.multifileActiveTab === this.fileId) {
+        this.changeUrlView(next)
+        if (prev && next !== 'map') {
+          this.deleteUrlParam('datami_detail_id')
+          this.deleteUrlParam('datami_lon')
+          this.deleteUrlParam('datami_lat')
+          this.deleteUrlParam('datami_zoom')
+        }
+      }
+    },
     fileOptions (next) {
       // console.log('\nC > ViewModeBtns > watch > fileOptions > next : ', next)
       if (next) {
         let defaultViews
+        const availableViews = this.availableViews[this.fileTypeFamily]
+        // console.log('C > ViewModeBtns > watch > fileOptions > this.urlActiveView : ', this.urlActiveView)
         switch (this.fileTypeFamily) {
           case 'table':
             defaultViews = [
@@ -176,8 +210,16 @@ export default {
             ]
             break
         }
+        // overwrite default view if url param
+        if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
+          defaultViews = defaultViews.map(v => {
+            return {
+              ...v,
+              isDefault: v.view === this.urlActiveView
+            }
+          })
+        }
         const defaultView = defaultViews.find(v => v.isDefault)
-        // console.log('C > ViewModeBtns > watch > fileOptions > defaultView : ', defaultView)
         this.changeView(defaultView.view)
       } else {
         this.changeView('loading')
@@ -188,19 +230,30 @@ export default {
     // console.log('\nC > ViewModeBtns > beforeMount > this.fileId : ', this.fileId)
     // console.log('C > ViewModeBtns > beforeMount > this.gitObj : ', this.gitObj)
     // console.log('C > ViewModeBtns > beforeMount > this.gitObj.filetype : ', this.gitObj.filetype)
-    // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
     // console.log('C > ViewModeBtns > beforeMount > this.fileOptions : ', this.fileOptions)
-    // this.changeView('table')
-    this.changeView(this.fileTypeFamily || 'loading')
+    // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
+    // console.log('C > ViewModeBtns > beforeMount > this.defaultView : ', this.defaultView)
+    const availableViews = this.availableViews[this.fileTypeFamily]
+    // console.log('C > ViewModeBtns > beforeMount > availableViews : ', availableViews)
+    if (this.urlActiveView && availableViews.includes(this.urlActiveView)) {
+      // console.log('C > ViewModeBtns > beforeMount > this.urlActiveView : ', this.urlActiveView)
+      this.changeView(this.urlActiveView)
+    } else {
+      // console.log('C > ViewModeBtns > beforeMount > this.fileTypeFamily : ', this.fileTypeFamily)
+      // this.changeView(this.fileTypeFamily || 'loading')
+      this.changeView(this.defaultView || 'loading')
+    }
+    // this.changeView(this.fileTypeFamily || 'loading')
   },
   methods: {
-    ...mapActions({
-      changeViewMode: 'git-data/changeViewMode'
-    }),
-    changeView (code) {
-      this.changeViewMode({ fileId: this.fileId, mode: code })
-      this.trackEvent(code)
-    },
+    // ...mapActions({
+    //   changeViewMode: 'git-data/changeViewMode'
+    // }),
+    // changeView (code) {
+    //   // console.log(`\nC > ViewModeBtns > changeView > ${this.fileId} > code : `, code)
+    //   this.changeViewMode({ fileId: this.fileId, mode: code })
+    //   this.trackEvent(code)
+    // },
     getIcon (code) {
       const btn = this.buttonsView.find(btn => btn.code === code)
       return btn && btn.icon

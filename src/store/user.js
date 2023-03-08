@@ -8,7 +8,8 @@ export const user = {
     userBranches: [],
     multifileActiveTab: '',
     multifileTabsPosition: 1,
-    fullscreens: []
+    fullscreens: [],
+    urlParameters: undefined
   },
   getters: {
     getUserLocale: (state) => {
@@ -80,6 +81,9 @@ export const user = {
       // console.log('\nS-user > M > updateMultifileActiveTab > fileId : ', fileId)
       // console.log('S-user > M > updateMultifileActiveTab > activeTab : ', activeTab)
       state.multifileActiveTab = activeTab
+    },
+    setUrlParameters (state, params) {
+      state.urlParameters = params
     }
   },
   actions: {
@@ -120,6 +124,9 @@ export const user = {
         activeTab: activeTab
       }
       commit('updateMultifileActiveTab', multifileActiveTab)
+    },
+    updateUrlParameters ({ commit }, params) {
+      commit('setUrlParameters', params)
     }
   }
 }

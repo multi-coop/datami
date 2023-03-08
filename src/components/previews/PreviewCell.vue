@@ -90,16 +90,21 @@
     <!-- BOOLEAN -->
     <div
       v-if="isBoolean"
-      :class="`has-text-left is-flex is-align-content-center ml-4`">
+      :class="`has-text-left is-flex is-align-items-center ml-4`">
       <b-icon
         :icon="`checkbox-${booleanFromValue(value, field) ? 'marked' : 'blank-outline'}`"/>
-      <span class="ml-2">
+      <span class="ml-2 is-size-7">
         <span v-if="value === ''">
           {{ t('global.noValue', locale) }}
         </span>
-        <span v-else>
-          {{ value }}
+        <span v-else-if="booleanFromValue(value, field)">
+          {{ t('global.yes', locale) }}
         </span>
+        <span v-else>
+          {{ t('global.no', locale) }}
+        </span>
+        <!-- DEBUGGING -->
+        <!-- <code>{{ value }}</code> -->
       </span>
     </div>
 
@@ -120,7 +125,7 @@
           :key="`tags-${field.field}-${tagIdx}`"
           :file-id="fileId"
           :val="val"
-          :tag-style="`color: ${tagColor(val, field.bgColor, isDiffView)}; background-color:  ${tagBackgroundColor(val, field.bgColor, isDiffView)}`"
+          :tag-style="`color: ${tagColor(val, field, isDiffView)}; background-color:  ${tagBackgroundColor(val, field, isDiffView)}`"
           :field="field"
           :is-mini="isMini"
           :locale="locale"
@@ -168,9 +173,14 @@
       :class="`has-text-right has-text-weight-bold is-size-7`">
       {{ getNumber(value) }}
       <span
-        v-if="isPercent"
+        v-if="value && isPercent"
         class="ml-2">
         %
+      </span>
+      <span
+        v-else-if="value && field.unit"
+        class="ml-2">
+        {{ field.unit }}
       </span>
     </div>
 
@@ -316,7 +326,8 @@ export default {
   },
   methods: {
     getNumber (value) {
-      return this.getNumberByField(value, this.field)
+      const val = this.getNumberByField(value, this.field)
+      return val ? this.localeValue(val, this.locale, this.field.round) : this.t('global.noValue', this.locale)
     },
     linkDomain (value) {
       // console.log('\nC > PreviewCell > linkDomain > value : ', value)

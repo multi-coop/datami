@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   debounce,
   itemsPerPageChoicesTable,
+  itemsPerPageChoicesCards1perRow,
   itemsPerPageChoicesCards2perRow,
   itemsPerPageChoicesCards3perRow,
   itemsPerPageChoicesCards4perRow,
@@ -61,6 +62,14 @@ import {
 import {
   createStyleLink
 } from '@/utils/utilsHtml.js'
+import {
+  getUrlParams,
+  builUrlNewParams,
+  updateUrlParams
+} from '@/utils/utilsUrl.js'
+import {
+  localeValue
+} from '@/utils/utilsTranslations'
 
 // see : https://github.com/kpdecker/jsdiff
 import { createTwoFilesPatch, diffWords } from 'diff'
@@ -100,13 +109,104 @@ export const mixinTooltip = {
         component: this.$options.name,
         ...tooltipOptions,
         cursor: event,
-        // rect: boundingRect,
         rect: boundingRect
       })
     },
     hideGlobalTooltip () {
       // console.log(`\nmixinTooltip > hideGlobalTooltip > ${this.$options.name} > ...`)
       this.hideTooltip()
+    }
+  }
+}
+
+export const mixinClientUrl = {
+  created () {
+    if (!this.fromMultiFiles && this.datamiRoot) {
+      const urlParams = this.getUrlParams()
+      // console.log(`\nM > mixinClientUrl > created > ${this.$options.name} > urlParams : `, urlParams)
+      this.updateUrlParamStore(urlParams)
+    }
+  },
+  computed: {
+    ...mapState({
+      urlParameters: (state) => state['git-user'].urlParameters
+    }),
+    urlActiveTab () {
+      return this.urlParameters && this.urlParameters.datami_tab
+    },
+    urlActiveView () {
+      return this.urlParameters && this.urlParameters.datami_view
+    },
+    urlActiveEditMode () {
+      return this.urlParameters && this.urlParameters.datami_edit
+    },
+    urlActiveDetailCard () {
+      return this.urlParameters && this.urlParameters.datami_detail_id
+    },
+    urlActiveCenter () {
+      const lon = this.urlParameters && this.urlParameters.datami_lon
+      const lat = this.urlParameters && this.urlParameters.datami_lat
+      const zoom = this.urlParameters && this.urlParameters.datami_zoom
+      return {
+        center: lat && lon && [lon, lat],
+        zoom: zoom
+      }
+    }
+  },
+  methods: {
+    getUrlParams,
+    builUrlNewParams,
+    updateUrlParams,
+    ...mapActions({
+      updateUrlParamStore: 'git-user/updateUrlParameters'
+    }),
+    isTabActive (tabId) {
+      return tabId === this.urlParameters.datami_tab
+    },
+    updateParams (param, value) {
+      // console.log('M > mixinClientUrl > changeUrlActiveTab > param : ', param)
+      const newParams = this.builUrlNewParams(param, value)
+      this.updateUrlParams(newParams.str)
+      this.updateUrlParamStore(newParams.obj)
+    },
+    changeUrlActiveTab (tabId) {
+      // console.log('\nM > mixinClientUrl > changeUrlActiveTab > tabId : ', tabId)
+      this.updateParams('datami_tab', tabId)
+    },
+    changeUrlView (code) {
+      // console.log('\nM > mixinClientUrl > changeUrlView > code : ', code)
+      this.updateParams('datami_view', code)
+    },
+    changeUrlDetailId (item, idField = 'id') {
+      // console.log('\nM > mixinClientUrl > changeUrlDetailId > item : ', item)
+      // console.log('M > mixinClientUrl > changeUrlDetailId > idField : ', idField)
+      this.updateParams('datami_detail_id', item[idField])
+    },
+    updateUrlMapCenter (coordinates) {
+      // console.log('\nM > mixinClientUrl > updateUrlMapCenter > coordinates : ', coordinates)
+      this.updateParams('datami_lon', coordinates.lng)
+      this.updateParams('datami_lat', coordinates.lat)
+    },
+    updateUrlMapZoom (zoom) {
+      // console.log('\nM > mixinClientUrl > updateUrlMapZoom > zoom : ', zoom)
+      this.updateParams('datami_zoom', zoom)
+    },
+    deleteUrlParam (param) {
+      // console.log('\nM > mixinClientUrl > deleteUrlParam > param : ', param)
+      this.updateParams(param, undefined)
+    }
+  }
+}
+
+export const mixinViews = {
+  methods: {
+    ...mapActions({
+      changeViewMode: 'git-data/changeViewMode'
+    }),
+    changeView (code, fileId = undefined) {
+      // console.log(`\nM > mixinViews > changeView > ${this.fileId} > code : `, code)
+      this.changeViewMode({ fileId: fileId || this.fileId, mode: code })
+      this.trackEvent(code)
     }
   }
 }
@@ -145,11 +245,32 @@ export const mixinGlobal = {
       getDialogsById: 'git-dialogs/getDialogsById',
       getSignalsByFileId: 'git-signals/getSignalsByFileId'
     }),
+    widgetProvider () {
+      return process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
+    },
+    isLocalDev () {
+      return this.widgetProvider.startsWith('localhost')
+    },
+    fileCreditsLogos () {
+      // console.log('\nM > mixinGlobal > fileCreditsLogos > this.creditslogos : ', this.creditslogos)
+      const hasCreditsLogos = this.creditslogos && this.creditslogos !== ''
+      // console.log('M > mixinGlobal > fileCreditsLogos > hasCreditsLogos : ', hasCreditsLogos)
+      let logosArray
+      if (hasCreditsLogos && Array.isArray(this.creditslogos)) {
+        logosArray = this.creditslogos
+      }
+      if (hasCreditsLogos && typeof (this.creditslogos) === 'string') {
+        logosArray = JSON.parse(this.creditslogos)
+      }
+      if (hasCreditsLogos && this.isLocalDev) {
+        logosArray = logosArray.map(l => { return { ...l, localdev: true } })
+      }
+      // console.log('M > mixinGlobal > fileCreditsLogos > logosArray : ', logosArray)
+      return logosArray
+    },
     getUrlBase () {
-      const widgetProvider = process.env.VUE_APP_DATAMI_DEPLOY_DOMAIN || 'datami-widget.multi.coop'
-      const isLocal = widgetProvider.startsWith('localhost')
-      const Http = isLocal ? 'http' : 'https'
-      const urlBase = `${Http}://${widgetProvider}`
+      const Http = this.isLocalDev ? 'http' : 'https'
+      const urlBase = `${Http}://${this.widgetProvider}`
       return urlBase
     },
     fileToken () {
@@ -255,6 +376,12 @@ export const mixinGlobal = {
     cardsSettingsFromOptions () {
       return this.fileOptions.cardssettings
     },
+    cardsSettingsEntriesMini () {
+      return this.cardsSettingsFromOptions.mini
+    },
+    cardsSettingsEntriesDetail () {
+      return this.cardsSettingsFromOptions.detail
+    },
     cardsSettingsTemplates () {
       return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.templates
     },
@@ -265,6 +392,9 @@ export const mixinGlobal = {
     },
     cardHasMiniMap () {
       return this.cardsSettingsMiniMap && this.cardsSettingsMiniMap.activate
+    },
+    cardsSettingsMinivizs () {
+      return this.cardsSettingsFromOptions && this.cardsSettingsFromOptions.minivizs
     },
 
     // DATAVIZ SETTINGS
@@ -337,6 +467,7 @@ export const mixinGlobal = {
   },
   methods: {
     uuidv4,
+    localeValue,
     findFromPath,
     ...mapActions({
       updateDialogs: 'git-dialogs/updateFileDialog',
@@ -854,25 +985,150 @@ export const mixinValue = {
       const description = definition && definition.description
       return description
     },
-    tagBackgroundColor (value, bgColor = undefined, isDiff = false) {
+    tagBackgroundColor (value, field = undefined, isDiff = false) {
       let color
+
+      // get default background color if any
+      let bgColor = field.bgColor
+
+      // check if definition has a custom color
+      const defaultBgColor = field.bgColor
+      if (field.definitions) {
+        const valDef = field.definitions.find(d => d.value === value)
+        bgColor = (valDef && valDef.bgColor) || defaultBgColor
+      }
+
+      // generate background color
       if (!isDiff) {
-        color = bgColor ?? stringToColor(value)
+        color = bgColor || stringToColor(value)
       } else {
         color = '#363636'
       }
       return color
     },
-
-    tagColor (value, bgColor = undefined, isDiff = false) {
+    tagColor (value, field = undefined, isDiff = false) {
       let textColor
       if (isDiff) {
         textColor = 'white'
       } else {
-        const hex = this.tagBackgroundColor(value, bgColor)
+        const hex = this.tagBackgroundColor(value, field)
         textColor = getContrastYIQ(hex)
       }
       return textColor
+    }
+  }
+}
+
+export const mixinTexts = {
+  methods: {
+    getTemplatedValues (field) {
+      const ignoreDefinitions = field.ignoreDefinitions
+      const ignoreTrimming = field.ignoreTrimming
+      const templating = field.templating.filter(p => p.text)
+      const templatedArray = templating.map(paragraph => {
+        const customClass = paragraph.customClass
+        const text = paragraph.text[this.locale] || this.t('errors.templateMissing', this.locale)
+        return {
+          customClass: customClass,
+          text: this.applyTemplate(this.fields, text, ignoreDefinitions),
+          ignoreTrimming: ignoreTrimming
+        }
+      })
+      return templatedArray
+    },
+    applyTemplate (fields, text, ignoreDefinitions = false) {
+      // console.log('\nM > mixinTexts > applyTemplating > text :', text)
+      // console.log('M > mixinTexts > applyTemplating > fields :', fields)
+      // console.log('M > mixinTexts > applyTemplating > ignoreDefinitions :', ignoreDefinitions)
+      // replace value fields
+      const fieldStart = '{{'
+      const fieldEnd = '}}'
+      const fieldRegex = new RegExp(`(${fieldStart}.*?${fieldEnd})`)
+      // const fieldRegex = /\s*(\{{.}})\s*
+      // console.log('M > mixinTexts > applyTemplating > fieldRegex :', fieldRegex)
+
+      let textArr = text.split(fieldRegex).filter(s => !!s)
+      // console.log('M > mixinTexts > applyTemplating > textArr :', textArr)
+      textArr = textArr.map(str => {
+        // console.log('M > mixinTexts > applyTemplating > str :', str)
+        let strClean = str
+        if (str.startsWith(fieldStart)) {
+          let customClass = 'has-text-weight-semibold'
+          let customStyle = ''
+          const fieldName = str.replace(fieldStart, '').replace(fieldEnd, '').trim()
+          // console.log('M > mixinTexts > applyTemplating > fieldName :', fieldName)
+          const fieldObj = fields.find(f => f.name === fieldName)
+          // console.log('M > mixinTexts > applyTemplating > fieldObj :', fieldObj)
+          const itemValue = fieldObj && this.item[fieldObj.field]
+          // console.log('M > mixinTexts > applyTemplating > itemValue :', itemValue)
+          strClean = itemValue || this.t('global.noValue', this.locale)
+          // replace by value defintion if any in fieldObj
+          if (itemValue && !ignoreDefinitions && fieldObj && fieldObj.definitions) {
+            const defs = fieldObj.definitions
+            let definition, itemValues
+            switch (fieldObj.subtype) {
+              case 'tag':
+                definition = defs.find(def => def.value === strClean)
+                strClean = (definition && definition.label) || strClean
+                break
+              case 'tags':
+                // console.log('M > mixinTexts > applyTemplating > itemValue :', itemValue)
+                // console.log('M > mixinTexts > applyTemplating > fieldObj :', fieldObj)
+                itemValues = itemValue.split(fieldObj.tagSeparator)
+                // console.log('M > mixinTexts > applyTemplating > itemValues :', itemValues)
+                strClean = itemValues.map(v => {
+                  definition = defs.find(def => def.value === v.trim())
+                  return (definition && definition.label) || v
+                }).join(', ')
+                break
+            }
+          }
+          // specific to numbers
+          if (itemValue && fieldObj && (fieldObj.type === 'integer' || fieldObj.type === 'number')) {
+            customClass += ' px-1'
+            customStyle += 'color: white; background-color: black;'
+            const value = this.getNumberByField(strClean, fieldObj)
+            strClean = this.localeValue(value, this.locale, fieldObj.round)
+          }
+          // specific to tags
+          if (itemValue && fieldObj && (fieldObj.subtype === 'tag' || fieldObj.subtype === 'tags')) {
+            customClass += ' px-1'
+            customStyle += 'color: white; background-color: black;'
+          }
+          // specific to booleans
+          if (itemValue && fieldObj && fieldObj.type === 'boolean') {
+            customClass += ' px-1'
+            customStyle += 'color: white; background-color: black;'
+            const valueAsBoolean = this.booleanFromValue(itemValue, fieldObj)
+            strClean = this.t(`global.${valueAsBoolean ? 'yes' : 'no'}`, this.locale)
+          }
+          strClean = `<span class="${customClass}" style="${customStyle}">${strClean}</span>`
+        }
+        return strClean
+      })
+
+      // replace links fields
+      const linksStart = '~~'
+      const linksEnd = '~~'
+      const linksRegex = new RegExp(`(${linksStart}.*?${linksEnd})`)
+      textArr = textArr.join('')
+        .split(linksRegex)
+        .map(str => {
+          let strClean
+          if (str.startsWith(linksStart)) {
+            const fieldName = str.replace(linksStart, '').replace(linksEnd, '').trim()
+            // console.log('\nM > mixinTexts > applyTemplating > fieldName :', fieldName)
+            const fieldObj = fields.find(f => f.name === fieldName)
+            // console.log('M > mixinTexts > applyTemplating > fieldObj :', fieldObj)
+            strClean = this.item[fieldObj.field] ? `<a href="${this.item[fieldObj.field]}" style="color: grey; text-decoration: underline;">${this.t('global.link', this.locale)}</a>` : this.t('global.noLinkValue', this.locale)
+          } else {
+            strClean = str
+          }
+          return strClean
+        })
+
+      const textClean = textArr.join('')
+      return textClean
     }
   }
 }
@@ -984,6 +1240,7 @@ export const mixinPagination = {
   data () {
     return {
       itemsPerPageChoicesTable: itemsPerPageChoicesTable,
+      itemsPerPageChoicesCards1perRow: itemsPerPageChoicesCards1perRow,
       itemsPerPageChoicesCards2perRow: itemsPerPageChoicesCards2perRow,
       itemsPerPageChoicesCards3perRow: itemsPerPageChoicesCards3perRow,
       itemsPerPageChoicesCards4perRow: itemsPerPageChoicesCards4perRow
@@ -992,86 +1249,6 @@ export const mixinPagination = {
   methods: {
     paginate,
     getClosest
-  }
-}
-
-export const mixinCards = {
-  computed: {
-    cardsSettingsFromFileOptions () {
-      let cardsSettings
-      // console.log('\nM > mixinsCsv > cardsSettingsFromFileOptions > this.hasCardsView : ', this.hasCardsView)
-      if (this.hasCardsView && this.cardsViewIsActive) {
-        const settings = this.cardsSettingsFromOptions
-        // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > settings : ', settings)
-        const miniSettings = settings.mini
-        const detailSettings = settings.detail
-        const mapping = this.columns.map(h => {
-          const fieldMap = {
-            ...h,
-            mini: miniSettings[h.name],
-            detail: detailSettings[h.name]
-          }
-          const hasTemplate = this.cardsSettingsTemplates && this.cardsSettingsTemplates[h.name]
-          if (hasTemplate) { fieldMap.templating = hasTemplate }
-          return fieldMap
-        })
-        cardsSettings = {
-          originalHeaders: this.columns,
-          editedHeaders: this.columnsForView,
-          settings: { mini: miniSettings, detail: detailSettings },
-          mapping: mapping
-        }
-      }
-      // console.log('M > mixinsCsv > cardsSettingsFromFileOptions > cardsSettings : ', cardsSettings)
-      return cardsSettings
-    }
-    // mappingForAll () {
-    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
-    //     return {
-    //       field: h.field,
-    //       name: h.name,
-    //       type: h.type,
-    //       subtype: h.subtype,
-    //       enumArr: h.enumArr,
-    //       definitions: h.definitions,
-    //       tagSeparator: h.tagSeparator
-    //     }
-    //   })
-    // },
-    // mappingsForMini () {
-    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
-    //     const fieldMap = {
-    //       field: h.field,
-    //       name: h.name,
-    //       type: h.type,
-    //       subtype: h.subtype,
-    //       enumArr: h.enumArr,
-    //       definitions: h.definitions,
-    //       tagSeparator: h.tagSeparator,
-    //       ...h.mini
-    //     }
-    //     const hasTemplate = h.templating && h.templating.use_on_mini
-    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
-    //     return fieldMap
-    //   })
-    // },
-    // mappingsForDetail () {
-    //   return this.cardsSettingsFromFileOptions.mapping.map(h => {
-    //     const fieldMap = {
-    //       field: h.field,
-    //       name: h.name,
-    //       type: h.type,
-    //       subtype: h.subtype,
-    //       enumArr: h.enumArr,
-    //       definitions: h.definitions,
-    //       tagSeparator: h.tagSeparator,
-    //       ...h.detail
-    //     }
-    //     const hasTemplate = h.templating && h.templating.use_on_detail
-    //     if (hasTemplate) { fieldMap.templating = h.templating.paragraphs }
-    //     return fieldMap
-    //   })
-    // }
   }
 }
 

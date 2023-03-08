@@ -37,6 +37,7 @@
           <!-- USER OPTIONS -->
           <ViewModeBtns
             :file-id="fileId"
+            :default-view="defaultView"
             :locale="locale"/>
           <FileTitle
             :show-file-infos="showFileInfos"
@@ -167,6 +168,7 @@
     <!-- CREDITS -->
     <DatamiCredits
       :file-id="fileId"
+      :logos="fileCreditsLogos"
       :locale="locale"/>
 
     <!-- DIALOG MODAL -->
@@ -174,7 +176,7 @@
       v-model="isModalActive"
       class="datami-modal-dialog-opener"
       :width="'80%'"
-      @close="resetFileDialog">
+      @close="resetDialogs">
       <DialogSkeleton
         :file-id="fileId"
         :locale="locale"/>
@@ -185,7 +187,15 @@
 <script>
 import { mapActions } from 'vuex'
 
-import { mixinTooltip, mixinGlobal, mixinGit, mixinCsv, mixinWiki } from '@/utils/mixins.js'
+import {
+  mixinTooltip,
+  mixinClientUrl,
+  mixinGlobal,
+  mixinGit,
+  mixinCsv,
+  mixinWiki
+} from '@/utils/mixins.js'
+import { getDefaultViewMode } from '@/utils/fileTypesUtils'
 
 export default {
   name: 'DatamiExploWiki',
@@ -203,6 +213,7 @@ export default {
   },
   mixins: [
     mixinTooltip,
+    mixinClientUrl,
     mixinGlobal,
     mixinGit,
     mixinCsv,
@@ -216,6 +227,10 @@ export default {
     title: {
       default: 'datami',
       type: String
+    },
+    creditslogos: {
+      default: '',
+      type: [String, Array]
     },
     wikilist: {
       default: '',
@@ -248,6 +263,10 @@ export default {
     fromMultiFiles: {
       default: false,
       type: Boolean
+    },
+    tabId: {
+      default: 1,
+      type: Number
     },
     fromMultiFilesVertical: {
       default: false,
@@ -299,7 +318,8 @@ export default {
       wikiObj: undefined,
       wikiItems: undefined,
       wikiFields: undefined,
-      wikiPages: undefined
+      wikiPages: undefined,
+      defaultView: undefined
     }
   },
   computed: {
@@ -361,6 +381,10 @@ export default {
     mediawikiOptions.tagseparator = ',' // to parse tags fields
     mediawikiOptions.separator = '\t' // for csv export
     this.mediawikiOptions = mediawikiOptions
+
+    const defaultView = getDefaultViewMode(mediawikiOptions, 'table', this.fileId)
+    // console.log('C > DatamiExploWiki > beforeMount > defaultView : ', defaultView)
+    this.defaultView = defaultView
 
     // add default fields for pages structuration
     // console.log('C > DatamiExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)
@@ -502,6 +526,13 @@ export default {
         }
       })
       // console.log('C > DatamiExploWiki > updateCustomFilters > this.fileFilters : ', this.fileFilters)
+    },
+    resetDialogs () {
+      // console.log('\nC > DatamiExploWiki > resetDialogs > ... ')
+      this.resetFileDialog()
+      if (this.currentViewMode !== 'map') {
+        this.deleteUrlParam('datami_detail_id')
+      }
     }
   }
 }
