@@ -83,3 +83,14 @@ a.is-underlined {
     padding-left: 6.5em;
   }
 }
+
+figure.g-map-legend-symbol {
+  display: inline;
+  margin-right: 0.2em;
+  margin-left: 0;
+}
+
+.g-map-legend-symbol > img {
+  max-height: 1em;
+  width: auto;
+}

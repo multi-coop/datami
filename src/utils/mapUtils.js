@@ -146,11 +146,66 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
 
   const layerConfig = {
     id: layerId,
-    type: 'circle',
+    // type: 'circle',
     source: sourceId,
-    filter: ['==', '$type', 'Point'],
-    paint: {
+    // filter: ['==', '$type', 'Point'],
+    // paint: {
 
+    //   'circle-stroke-width': [
+    //     'interpolate',
+    //     ['linear'],
+    //     ['zoom'],
+    //     9, 0,
+    //     vars.max_zoom, 1
+    //   ],
+
+    //   'circle-stroke-color': vars.circle_stroke_color || '#FFFFFF',
+
+    //   // "circle-color": vars.circle_color,
+    //   'circle-color': [
+    //     'case',
+    //     ['boolean', ['feature-state', 'selected'], false],
+    //     activatedColor,
+    //     circleColor
+    //   ],
+
+    //   // "circle-opacity": vars.circle_opacity,
+    //   'circle-opacity': [
+    //     'case',
+    //     ['boolean', ['feature-state', 'selected'], false],
+    //     1,
+    //     vars.circle_opacity
+    //   ],
+
+    //   'circle-radius': [
+    //     'interpolate',
+    //     ['linear'],
+    //     ['zoom'],
+    //     vars.min_zoom, vars.radius_min,
+    //     vars.max_zoom, vars.radius_max
+    //   ]
+
+    // },
+    layout: {
+      visibility: vars.is_default_visible ? 'visible' : 'none'
+    }
+  }
+
+  if (vars.useSymbols) {
+    layerConfig.type = 'symbol'
+    layerConfig.filter = ['==', '$type', 'Point']
+    const symbolsFieldName = vars.symbolsConfig.field
+    const symbolsField = fields.find(f => f.name === symbolsFieldName)
+    const symbolsConfig = {
+      'icon-image': ['get', symbolsField.field],
+      'icon-size': vars.symbolsConfig.iconSize || 0.1,
+      'icon-overlap': 'always'
+    }
+    layerConfig.layout = { ...layerConfig.layout, ...symbolsConfig }
+  } else {
+    layerConfig.type = 'circle'
+    layerConfig.filter = ['==', '$type', 'Point']
+    const paintConfig = {
       'circle-stroke-width': [
         'interpolate',
         ['linear'],
@@ -184,12 +239,11 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
         vars.min_zoom, vars.radius_min,
         vars.max_zoom, vars.radius_max
       ]
-
-    },
-    layout: {
-      visibility: vars.is_default_visible ? 'visible' : 'none'
     }
+    layerConfig.paint = paintConfig
   }
+
+  console.log('C > mapUtils > createAllPoints > layerConfig : ', layerConfig)
   return layerConfig
 }
 

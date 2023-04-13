@@ -55,7 +55,12 @@
                 v-for="(scale, index) in currentChoroSource.legend.scales"
                 :key="`g-map-scale-${mapId}-${index}`"
                 class="legend-scale">
+                <b-image
+                  v-if="currentChoroSource.legend.useSymbols"
+                  :src="scale.symbol"
+                  class="g-map-legend-symbol"/>
                 <span
+                  v-else
                   class="g-map-scale-circle"
                   :style="`background-color: ${ scale.color }; ${ cssLegendScale.join(';') }`"/>
                 {{ scale.value }}

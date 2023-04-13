@@ -287,12 +287,16 @@ export default {
       nowrap: true,
       defaultMaxTextLength: 30,
       defaultMaxTags: 2,
+      defaultTagMaxLength: 10,
       showTag: undefined
     }
   },
   computed: {
     maxTextLength () {
       return this.field.maxLength || this.defaultMaxTextLength
+    },
+    tagMaxTextLength () {
+      return this.field.tagMaxLength || this.defaultTagMaxLength
     },
     trimmedText () {
       // console.log('\nC > PreviewCell > trimmedText > this.value : ', this.value)
@@ -315,7 +319,7 @@ export default {
       const tagsStr = (!!this.value && this.value.toString()) || ''
       let allTags = (tagsStr && this.fieldSubtype === 'tags' && tagsStr.split(this.tagSeparator)) || [tagsStr]
       allTags = allTags.filter(v => v !== '')
-      if (this.nowrap) {
+      if (this.nowrap && (!this.isMini && !this.isCardView)) {
         tags = allTags.slice(0, this.defaultMaxTags)
         tags = allTags.length > this.defaultMaxTags ? [...tags, '...'] : tags
       } else {

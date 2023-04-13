@@ -1,6 +1,6 @@
 <template>
   <b-tag
-    :class="`PreviewTagValue ${isFilterTag ? '' : 'mr-1'}`"
+    :class="`PreviewTagValue mb-1 ${isFilterTag ? '' : 'mr-1'}`"
     :style="tagStyle">
     <!-- <code>{{ sharedDataIsLoaded }}</code> -->
     <!-- field: <pre><code>{{ field }}</code></pre> -->

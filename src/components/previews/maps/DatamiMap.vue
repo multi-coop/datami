@@ -732,8 +732,42 @@ export default {
         // add navigation control
         const navCtrl = new NavigationControl()
         map.addControl(navCtrl, 'bottom-right')
+
+        const mapLayersOptions = this.mapLayersOptions
+        // console.log('C > DatamiMap > initializeMap > mapLayersOptions : ', mapLayersOptions)
+
+        // SYMBOLS
+        if (mapLayersOptions.all_points_layer && mapLayersOptions.all_points_layer.is_activated) {
+          const allPointsConfigOptions = mapLayersOptions.all_points_layer
+          if (allPointsConfigOptions.useSymbols) {
+            const symbolsConfig = allPointsConfigOptions.symbolsConfig
+            // console.log('C > DatamiMap > initializeMap > symbolsConfig : ', symbolsConfig)
+            const symbolsField = symbolsConfig.field
+            // console.log('C > DatamiMap > initializeMap > symbolsField : ', symbolsField)
+            const field = this.fields.find(f => f.name === symbolsField)
+            // console.log('C > DatamiMap > initializeMap > field : ', field)
+            const fieldDefinitions = field.definitions
+            // console.log('C > DatamiMap > initializeMap > fieldDefinitions : ', fieldDefinitions)
+
+            Promise.all(
+              fieldDefinitions.map(def => new Promise((resolve, reject) => {
+                // console.log(`C > DatamiMap > initializeMap > ${def.value} : ${def.symbol}`)
+                map.loadImage(def.symbol, function (error, image) {
+                  if (error) throw error
+                  map.addImage(def.value, image)
+                  resolve()
+                })
+              }))
+            ).then(
+              // console.log('C > DatamiMap > initializeMap > symbols loaded ')
+              // this.map.addLayer(allPointsConfig)
+            )
+          }
+        }
+
         // Generate geojson from table data and add map items
         this.geoJson = createGeoJsonDataPoints(this.itemsForMap, this.fieldLat, this.fieldLong)
+        // console.log('C > DatamiMap > initializeMap > this.geoJson :', this.geoJson)
         await this.createMapItems(this.geoJson)
 
         // Show detail card if any from url
@@ -771,6 +805,16 @@ export default {
       })
 
       this.map = map
+    },
+
+    // - - - - - - - - - - - - - - - - - - //
+    // MAP ITEMS OTHER THAN GEOJSON
+    // - - - - - - - - - - - - - - - - - - //
+    async createSymbols (map, def) {
+      map.loadImage(def.symbol, function (error, image) {
+        if (error) throw error
+        this.map.addImage(def.value, image)
+      })
     },
 
     // - - - - - - - - - - - - - - - - - - //
@@ -852,6 +896,7 @@ export default {
           clusterMaxZoom: 14,
           clusterRadius: 75
         })
+
         // console.log('C > DatamiMap > createAddGeoJsonSource > allPointsSource :', allPointsSource)
         this.map.addSource(allPointsSourceId, allPointsSource)
 
@@ -1166,6 +1211,7 @@ export default {
       if (mapLayersOptions.all_points_layer && mapLayersOptions.all_points_layer.is_activated) {
         const allPointsConfigOptions = mapLayersOptions.all_points_layer
         const allPointsLayerId = allPointsConfigOptions.layer_id || 'all-points'
+        // console.log('C > DatamiMap > createAddGeoJsonLayers > allPointsConfigOptions : ', allPointsConfigOptions)
 
         const allPointsConfig = createAllPoints(
           geoJsonSourceId.allPointsId,
@@ -1174,6 +1220,7 @@ export default {
           fields
         )
         // console.log('C > DatamiMap > createAddGeoJsonLayers > allPointsConfig : ', allPointsConfig)
+
         this.map.addLayer(allPointsConfig)
         this.updateVisibleLayers(allPointsLayerId, allPointsConfigOptions.is_default_visible)
         if (allPointsConfigOptions.is_clickable) {
