@@ -963,6 +963,23 @@ export default {
               }
             })
 
+            // Generate legend from fields if necessary
+            if (source.legend.scalesFromDefinitions) {
+              const scalesConfig = source.legend.scalesConfig
+              const fieldName = scalesConfig.field
+              const field = this.fields.find(f => f.name === fieldName)
+              // console.log('C > DatamiMap > createChoroplethSource > field : ', field)
+              const scales = field.definitions.map(def => {
+                return {
+                  value: `${def.value} : ${def.label}`,
+                  color: def.bgColor
+                }
+              })
+              // console.log('C > DatamiMap > createChoroplethSource > scales : ', scales)
+              source.legend = { ...source.legend, scales: scales }
+            }
+            // console.log('C > DatamiMap > createChoroplethSource > source.legend : ', source.legend)
+
             this.choroplethGeoJSONS.push({
               source_id: source.source_id,
               legend: source.legend,

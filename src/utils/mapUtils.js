@@ -126,6 +126,8 @@ export const createClusterUnclusteredLayer = (sourceId, vars, layerId = 'unclust
 
 // GEOJSON LAYERS - ALL POINTS CIRCLES
 export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields = undefined) => {
+  const defaultColor = '#363636'
+
   const activatedColor = vars.circle_color_activated ? vars.circle_color_activated : '#e75b0e'
 
   // console.log('\nC > mapUtils > createAllPoints > sourceId : ', sourceId)
@@ -133,8 +135,11 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
   // console.log('C > mapUtils > createAllPoints > layerId : ', layerId)
   // console.log('C > mapUtils > createAllPoints > fields : ', fields)
 
-  let circleColor = vars.circle_color || '#363636'
-  if (typeof circleColor !== 'string') {
+  const circleColorsFromDefinitions = vars.useCircleColorsFromDefinitions
+  let circleColor = vars.circle_color || defaultColor
+
+  // Case circle colors is hard written in config
+  if (!circleColorsFromDefinitions && typeof circleColor !== 'string') {
     circleColor = [...circleColor]
     const getter = circleColor[1][0]
     const fieldName = circleColor[1][1]
@@ -142,6 +147,24 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
     const fieldId = field && field.field | fieldName
     circleColor[1] = [getter, `${fieldId}`]
   }
+
+  // Case circleColorsFromDefinitions
+  if (circleColorsFromDefinitions) {
+    const circleColorsConfig = vars.circleColorsConfig
+    const fieldName = circleColorsConfig.field
+    const field = fields.find(f => f.name === fieldName)
+    // console.log('C > mapUtils > createAllPoints > field : ', field)
+    circleColor = [
+      'match',
+      ['get', field.field]
+    ]
+    field.definitions.forEach(def => {
+      circleColor.push(def.value)
+      circleColor.push(def.bgColor)
+    })
+    circleColor.push(defaultColor)
+  }
+
   // console.log('C > mapUtils > createAllPoints > circleColor : ', circleColor)
 
   const layerConfig = {
@@ -243,7 +266,7 @@ export const createAllPoints = (sourceId, vars, layerId = 'all-points', fields =
     layerConfig.paint = paintConfig
   }
 
-  console.log('C > mapUtils > createAllPoints > layerConfig : ', layerConfig)
+  // console.log('C > mapUtils > createAllPoints > layerConfig : ', layerConfig)
   return layerConfig
 }
 
