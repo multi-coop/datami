@@ -324,9 +324,9 @@ export async function getMediawikiItems (wikiInfosObject, items, wikiFields, opt
   const itemsToSend = []
   for (const item of items) {
     const pageData = await getMediawikitItem(wikiInfosObject, item, options)
-    // console.log('C > DatamiExploWiki > getMediawikiItems > pageData : ', pageData)
+    console.log('C > utilsWikiUrl > getMediawikiItems > pageData : ', pageData)
     pageData.temp = restructurePageData(pageData, wikiFields)
-    // console.log('C > DatamiExploWiki > getMediawikiItems > pageData.temp : ', pageData.temp)
+    console.log('C > utilsWikiUrl > getMediawikiItems > pageData.temp : ', pageData.temp)
     itemsToSend.push(pageData.temp)
   }
   return itemsToSend

@@ -504,9 +504,9 @@ export default {
         //   if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
         // }
         const itemsToLoad = this.wikiItems.filter(item => !item.isLoaded)
-        const items = this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
+        const items = await this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
 
-        this.wikiPages.push(items)
+        this.wikiPages.push(...items)
         if (this.hasCustomFilters) {
           this.wikiPages.forEach(wp => {
             this.updateCustomFilters(wp)
