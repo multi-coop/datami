@@ -495,6 +495,27 @@ export default {
 
         // this.wikiHeaders = new Set()
         const itemsToLoad = this.wikiItems.filter(item => !item.isLoaded)
+
+        // Request items by batches
+        const batchSize = 50 // Maximum for the mediawiki API : 50
+        const batchesToLoad = []
+        let pageIds = []
+        itemsToLoad.forEach((item, index) => {
+          const newBatch = (index % 50 === 0)
+          if (newBatch) {
+            if (pageIds.length) {
+              batchesToLoad.push(pageIds)
+            }
+            pageIds = []
+          }
+          pageIds.push(item.pageid)
+
+          // WARNING Last batch is never pushed to batchesToLoad
+        })
+
+
+
+
         const items = await this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
 
         this.wikiPages.push(...items)
