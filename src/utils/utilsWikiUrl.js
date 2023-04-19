@@ -321,14 +321,15 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
 }
 
 export async function getMediawikiItems (wikiInfosObject, items, wikiFields, options = undefined, extractPage = false) {
+  const itemsToSend = []
   for (const item of items) {
-    const pageData = await getMediawikitItem(this.wikiObj, item, options)
+    const pageData = await getMediawikitItem(wikiInfosObject, item, options)
     // console.log('C > DatamiExploWiki > getMediawikiItems > pageData : ', pageData)
     pageData.temp = restructurePageData(pageData, wikiFields)
     // console.log('C > DatamiExploWiki > getMediawikiItems > pageData.temp : ', pageData.temp)
-    this.wikiPages.push(pageData.temp)
-    if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
+    itemsToSend.push(pageData.temp)
   }
+  return itemsToSend
 }
 
 export async function getMediawikitItem (wikiInfosObject, item, options = undefined, extractPage = false) {

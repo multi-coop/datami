@@ -504,7 +504,14 @@ export default {
         //   if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
         // }
         const itemsToLoad = this.wikiItems.filter(item => !item.isLoaded)
-        this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
+        const items = this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
+
+        this.wikiPages.push(items)
+        if (this.hasCustomFilters) {
+          this.wikiPages.forEach(wp => {
+            this.updateCustomFilters(wp)
+          })
+        }
       }
     },
     updateCustomFilters (data) {
