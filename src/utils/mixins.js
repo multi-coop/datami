@@ -54,7 +54,7 @@ import {
   getMediawikiData,
   getMediaWikiPage,
   getMediawikiItems,
-  getMediawikitItem,
+  getMediawikiItem,
   restructurePageData
 } from '@/utils/utilsWikiUrl.js'
 import {
@@ -1292,7 +1292,7 @@ export const mixinWiki = {
     extractWikiInfos,
     getMediawikiData,
     getMediaWikiPage,
-    getMediawikitItem,
+    getMediawikiItem,
     getMediawikiItems,
     restructurePageData
   }

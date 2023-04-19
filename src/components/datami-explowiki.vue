@@ -496,7 +496,7 @@ export default {
         // this.wikiHeaders = new Set()
         // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pages : ', pages)
         // for (const item of this.wikiItems.filter(item => !item.isLoaded)) {
-        //   const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
+        //   const pageData = await this.getMediawikiItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
         //   // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
         //   pageData.temp = this.restructurePageData(pageData, this.wikiFields)
         //   // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)

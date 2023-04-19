@@ -268,7 +268,7 @@ export async function getMediawikiData (apiUrl, options = undefined) {
 
 //   const results = []
 //   for (const item of items) {
-//     const data = await getMediawikitItem(wikiInfosObject, item, options)
+//     const data = await getMediawikiItem(wikiInfosObject, item, options)
 //     results.push(data)
 //   }
 //   return results
@@ -323,7 +323,7 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
 export async function getMediawikiItems (wikiInfosObject, items, wikiFields, options = undefined, extractPage = false) {
   const itemsToSend = []
   for (const item of items) {
-    const pageData = await getMediawikitItem(wikiInfosObject, item, options)
+    const pageData = await getMediawikiItem(wikiInfosObject, item, options)
     console.log('C > utilsWikiUrl > getMediawikiItems > pageData : ', pageData)
     pageData.temp = restructurePageData(pageData, wikiFields)
     console.log('C > utilsWikiUrl > getMediawikiItems > pageData.temp : ', pageData.temp)
@@ -332,9 +332,9 @@ export async function getMediawikiItems (wikiInfosObject, items, wikiFields, opt
   return itemsToSend
 }
 
-export async function getMediawikitItem (wikiInfosObject, item, options = undefined, extractPage = false) {
-  // console.log('\nU > utilsWikiUrl > getMediawikitItem > item : ', item)
-  // console.log('U > utilsWikiUrl > getMediawikitItem > options : ', options)
+export async function getMediawikiItem (wikiInfosObject, item, options = undefined, extractPage = false) {
+  // console.log('\nU > utilsWikiUrl > getMediawikiItem > item : ', item)
+  // console.log('U > utilsWikiUrl > getMediawikiItem > options : ', options)
   const apiRoot = wikiInfosObject.apiRoot
   let response, responseData, errors
   let urlItemDetail = `${apiRoot}?origin=*`
@@ -353,12 +353,12 @@ export async function getMediawikitItem (wikiInfosObject, item, options = undefi
 
   Object.keys(params)
     .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
-  // console.log('U > utilsWikiUrl > getMediawikitItem > urlItemDetail : ', urlItemDetail)
+  // console.log('U > utilsWikiUrl > getMediawikiItem > urlItemDetail : ', urlItemDetail)
 
   try {
     response = await fetch(urlItemDetail)
     responseData = await response.json()
-    // console.log('U > utilsWikiUrl > getMediawikitItem > responseData : ', responseData)
+    // console.log('U > utilsWikiUrl > getMediawikiItem > responseData : ', responseData)
   } catch (error) {
     // console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
     errors = [error]
