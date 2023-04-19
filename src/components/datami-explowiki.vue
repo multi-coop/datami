@@ -500,25 +500,26 @@ export default {
         const batchSize = 50 // Maximum for the mediawiki API : 50
         const batchesToLoad = []
         let pageIds = []
-        itemsToLoad.forEach((item, index) => {
-          const newBatch = (index % 50 === 0)
-          if (newBatch) {
-            if (pageIds.length) {
-              batchesToLoad.push(pageIds)
-            }
-            pageIds = []
-          }
-          pageIds.push(item.pageid)
+        const itemsIds = itemsToLoad.map(i => i.pageid)
+        // Build batches
+        while (itemsIds.length > 0) {
+          pageIds = itemsIds.splice(0, batchSize)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageIds : ', pageIds)
+          batchesToLoad.push(pageIds)
+        }
+        // console.log('C > DatamiExploWiki > reloadMediawikiRessources > batchesToLoad : ', batchesToLoad)
 
-          // WARNING Last batch is never pushed to batchesToLoad
+        batchesToLoad.forEach(pageidsToLoad => {
+          console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageidsToLoad : ', pageidsToLoad)
+          // TO DO...
+          // await getItemsByBatch
+          // push to wikiPages
+          // updateCustomFilters
         })
 
-
-
-
         const items = await this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
-
         this.wikiPages.push(...items)
+
         if (this.hasCustomFilters) {
           this.wikiPages.forEach(wp => {
             this.updateCustomFilters(wp)
