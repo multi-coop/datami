@@ -320,6 +320,17 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
   return extractWikiContent(wikiInfosObject, responseData, item, errors, options)
 }
 
+export async function getMediawikiItems (wikiInfosObject, items, wikiFields, options = undefined, extractPage = false) {
+  for (const item of items) {
+    const pageData = await getMediawikitItem(this.wikiObj, item, options)
+    // console.log('C > DatamiExploWiki > getMediawikiItems > pageData : ', pageData)
+    pageData.temp = restructurePageData(pageData, wikiFields)
+    // console.log('C > DatamiExploWiki > getMediawikiItems > pageData.temp : ', pageData.temp)
+    this.wikiPages.push(pageData.temp)
+    if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
+  }
+}
+
 export async function getMediawikitItem (wikiInfosObject, item, options = undefined, extractPage = false) {
   // console.log('\nU > utilsWikiUrl > getMediawikitItem > item : ', item)
   // console.log('U > utilsWikiUrl > getMediawikitItem > options : ', options)

@@ -495,14 +495,16 @@ export default {
 
         // this.wikiHeaders = new Set()
         // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pages : ', pages)
-        for (const item of this.wikiItems.filter(item => !item.isLoaded)) {
-          const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
-          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
-          pageData.temp = this.restructurePageData(pageData, this.wikiFields)
-          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)
-          this.wikiPages.push(pageData.temp)
-          if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
-        }
+        // for (const item of this.wikiItems.filter(item => !item.isLoaded)) {
+        //   const pageData = await this.getMediawikitItem(this.wikiObj, item, this.mediawikiOptions.wikisettings)
+        //   // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData : ', pageData)
+        //   pageData.temp = this.restructurePageData(pageData, this.wikiFields)
+        //   // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageData.temp : ', pageData.temp)
+        //   this.wikiPages.push(pageData.temp)
+        //   if (this.hasCustomFilters) { this.updateCustomFilters(pageData.temp) }
+        // }
+        const itemsToLoad = this.wikiItems.filter(item => !item.isLoaded)
+        this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
       }
     },
     updateCustomFilters (data) {
