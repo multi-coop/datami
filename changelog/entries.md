@@ -41,3 +41,13 @@ _Inspired by : https://gitlab.com/bramw/baserow/-/blob/develop/changelog.md_
 ---
 
 ## Entries
+
+### 2023_04_24-Julien_p
+
+#### Author
+
+- Julien_p
+
+#### New features
+
+- Add default template for issues #50 and !50

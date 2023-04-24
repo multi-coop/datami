@@ -15,5 +15,3 @@
   - [ ] Firefox
 - [ ] [Documentation](https://gitlab.com/multi-coop/datami-project/datami-documentation-content) has been updated
 - [ ] Performance
-  <!-- - [ ] The UI/UX has been updated following [UI Style Guide](https://baserow.io/style-guide) -->
-  <!-- - [ ] [Quality Standards](https://gitlab.com/bramw/baserow/-/blob/develop/CONTRIBUTING.md#quality-standards are met -->
