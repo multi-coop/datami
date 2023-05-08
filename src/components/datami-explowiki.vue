@@ -501,30 +501,42 @@ export default {
         const batchesToLoad = []
         let pageIds = []
         const itemsIds = itemsToLoad.map(i => i.pageid)
+
         // Build batches
         while (itemsIds.length > 0) {
           pageIds = itemsIds.splice(0, batchSize)
           // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageIds : ', pageIds)
           batchesToLoad.push(pageIds)
         }
-        // console.log('C > DatamiExploWiki > reloadMediawikiRessources > batchesToLoad : ', batchesToLoad)
+        console.log('C > DatamiExploWiki > reloadMediawikiRessources > batchesToLoad : ', batchesToLoad)
 
-        batchesToLoad.forEach(pageidsToLoad => {
+        // const batchesToLoadTest = [batchesToLoad[0]]
+        // for (const pageidsToLoad of batchesToLoadTest) {
+        for (const pageidsToLoad of batchesToLoad) {
           console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageidsToLoad : ', pageidsToLoad)
-          // TO DO...
-          // await getItemsByBatch
+          // Load items by batch
+          const itemsBatch = await this.getItemsByBatch(this.wikiObj, pageidsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
+          console.log('C > DatamiExploWiki > reloadMediawikiRessources > itemsBatch : ', itemsBatch)
+
           // push to wikiPages
+          this.wikiPages.push(...itemsBatch)
+
           // updateCustomFilters
-        })
-
-        const items = await this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
-        this.wikiPages.push(...items)
-
-        if (this.hasCustomFilters) {
-          this.wikiPages.forEach(wp => {
-            this.updateCustomFilters(wp)
-          })
+          if (this.hasCustomFilters) {
+            this.wikiPages.forEach(wp => {
+              this.updateCustomFilters(wp)
+            })
+          }
         }
+
+        // const items = await this.getMediawikiItems(this.wikiObj, itemsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
+        // this.wikiPages.push(...items)
+
+        // if (this.hasCustomFilters) {
+        //   this.wikiPages.forEach(wp => {
+        //     this.updateCustomFilters(wp)
+        //   })
+        // }
       }
     },
     updateCustomFilters (data) {

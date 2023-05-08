@@ -320,6 +320,7 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
   return extractWikiContent(wikiInfosObject, responseData, item, errors, options)
 }
 
+// Get items one by one
 export async function getMediawikiItems (wikiInfosObject, items, wikiFields, options = undefined, extractPage = false) {
   const itemsToSend = []
   for (const item of items) {
@@ -330,6 +331,100 @@ export async function getMediawikiItems (wikiInfosObject, items, wikiFields, opt
     itemsToSend.push(pageData.temp)
   }
   return itemsToSend
+}
+
+// Get items by batch array
+export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields, options = undefined, extractPage = false) {
+  console.log('\nU > utilsWikiUrl > getItemsByBatch > itemsToLoad : ', itemsToLoad)
+  console.log('U > utilsWikiUrl > getItemsByBatch > options : ', options)
+
+  const apiRoot = wikiInfosObject.apiRoot
+  let response, responseBatchData, errors
+  let urlItemsBatch = `${apiRoot}?origin=*`
+  const params = {
+    action: 'query',
+    prop: 'revisions',
+    pageids: itemsToLoad.join('|'),
+    rvslots: 'main',
+    rvprop: 'content',
+    utf8: '',
+    formatversion: '2',
+    format: 'json'
+  }
+
+  Object.keys(params)
+    .forEach(key => { urlItemsBatch += `&${key}=${params[key]}` })
+  console.log('U > utilsWikiUrl > getItemsByBatch > urlItemsBatch : ', urlItemsBatch)
+
+  // fetch items batch in one request
+  try {
+    response = await fetch(urlItemsBatch)
+    responseBatchData = await response.json()
+    // console.log('U > utilsWikiUrl > getItemsByBatch > responseBatchData : ', responseBatchData)
+  } catch (error) {
+    // console.log('\nU > utilsWikiUrl > getItemsByBatch > error : ', error)
+    errors = [error]
+  }
+
+  const items = responseBatchData.query.pages.map(pageResponse => {
+    console.log('\nU > utilsWikiUrl > getItemsByBatch > pageResponse : ', pageResponse)
+    const pageData = extractWikiBatchContent(wikiInfosObject, pageResponse, errors, options)
+    console.log('\nU > utilsWikiUrl > getItemsByBatch > pageData : ', pageData)
+    pageData.temp = restructurePageData(pageData, wikiFields)
+    return pageData.temp
+    // return pageResponse
+  })
+  console.log('\nU > utilsWikiUrl > getItemsByBatch > items : ', items)
+
+  // debugging
+  // return {
+  //   items: items,
+  //   responseBatchData: responseBatchData,
+  //   errors: errors
+  // }
+  // return await extractWikiContent(wikiInfosObject, responseData, item, errors, options)
+  return items
+}
+
+export function extractWikiBatchContent (wikiInfosObject, pageData, errors, options) {
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > pageData : ', pageData)
+  // let pageData
+  let imageUrl
+
+  const content = pageData && (pageData.revisions[0].content || pageData.revisions[0].slots.main.content)
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > content : ', content)
+
+  // WIKITEXT TO OBJECT - HARD CODEED
+  const fields = options.fields
+  const structured = {}
+  fields.forEach(field => {
+    structured[field] = extractWikitextPart(field, content)
+  })
+
+  // WIKITEXT TO OBJECT - GENERIC
+  const wikiContent = objectFromWikitext(content)
+
+  // build image url
+  if (wikiContent.data.Main_Picture) {
+    const hostName = wikiInfosObject.hostname
+    imageUrl = forgeImageUrl(hostName, wikiContent.data.Main_Picture)
+  }
+
+  return {
+    id: pageData.pageid.toString(),
+    pageId: pageData.pageid,
+    pageUrl: `${wikiInfosObject.pageUrlRoot}${pageData.title.replace(' ', '_')}`,
+    title: pageData.title,
+    imageUrl: imageUrl,
+    // responseData: responseData,
+    item: pageData,
+    content: content,
+    structured: structured,
+    // headers: wikiContent.headers,
+    data: wikiContent.data,
+    // parted: wikiContent.parted,
+    errors: errors
+  }
 }
 
 export async function getMediawikiItem (wikiInfosObject, item, options = undefined, extractPage = false) {
