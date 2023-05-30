@@ -13,6 +13,17 @@ import { authorizedFileTypes as fileTypes } from '@/utils/fileTypesUtils.js'
  *
  **/
 
+export const buildWikiRequestOptions = (method = 'GET') => {
+  const userAgent = window.navigator.userAgent
+  const options = {
+    method: method,
+    headers: {
+      'User-Agent': `${userAgent} Datami/1.0 (https://datami.multi.coop; datami@multi.coop)`
+    }
+  }
+  return options
+}
+
 /**
  * fetchMediaWikiData takes mediawiki URLs, and returns an array of objects with
  * data for each unique mediawiki page.
@@ -56,9 +67,10 @@ export async function fetchMediaWikiData (urls) {
     .forEach(key => { apiUrl += `&${key}=${params[key]}` })
 
   let response, queryResult, pages
+  const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(apiUrl)
+    response = await fetch(apiUrl, reqOpts)
     queryResult = await response.json()
     pages = await queryResult.query.pages
   } catch (error) {
@@ -188,20 +200,44 @@ export const extractWikiInfos = (urlStr, options) => {
   // console.log('U > utilsWikiUrl > extractWikiInfos > apiRoot : ', apiRoot)
 
   let apiUrl = `${apiRoot}`
+  apiUrl += '?origin=*'
+  let uniqueCategApiUrl = ''
+
+  const categoriesApis = []
 
   const params = {
     action: 'query',
-    list: 'categorymembers',
     utf8: '',
-    cmtitle: `Category:${options.category}`,
+    list: 'categorymembers',
+    // cmtitle: `Category:${options.category}`,
     cmlimit: 'max',
     formatversion: '2',
     format: 'json'
   }
-
-  apiUrl += '?origin=*'
   Object.keys(params)
     .forEach(key => { apiUrl += `&${key}=${params[key]}` })
+
+  if (options.category) {
+    params.cmtitle = `Category:${options.category}`
+    uniqueCategApiUrl = `${apiUrl}&cmtitle=${params.cmtitle}`
+    const uniqueCategApi = {
+      category: options.category,
+      apiUrl: `${apiUrl}&cmtitle=Category:${options.category}`
+    }
+    categoriesApis.push(uniqueCategApi)
+  }
+  if (options.categories) {
+    options.categories.forEach(categ => {
+      const categApi = {
+        category: categ,
+        apiUrl: `${apiUrl}&cmtitle=Category:${categ}`
+      }
+      categoriesApis.push(categApi)
+    })
+  }
+
+  // Object.keys(params)
+  //   .forEach(key => { apiUrl += `&${key}=${params[key]}` })
   // console.log('U > utilsWikiUrl > extractWikiInfos > apiUrl : ', apiUrl)
 
   const wikiInfos = {
@@ -213,13 +249,15 @@ export const extractWikiInfos = (urlStr, options) => {
     basename: basename(urlStr),
     pageTitle: extractPageTitle(urlStr),
     apiRoot: apiRoot,
-    apiUrl: apiUrl,
+    apiUrl: uniqueCategApiUrl,
     pageUrlRoot: `https://${hostname(urlStr)}/wiki/`,
 
     filename: hostname(urlStr),
     filefullname: `${hostname(urlStr)} => ${params.cmtitle}`,
     filetype: filetype,
-    filefamily: (fileTypes[filetype] && fileTypes[filetype].family) || 'other'
+    filefamily: (fileTypes[filetype] && fileTypes[filetype].family) || 'other',
+
+    multipleCategories: categoriesApis
 
     // api: api,
     // orga: orga,
@@ -245,9 +283,10 @@ export const extractWikiInfos = (urlStr, options) => {
 
 export async function getMediawikiData (apiUrl, options = undefined) {
   let response, responseData, errors
+  const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(apiUrl)
+    response = await fetch(apiUrl, reqOpts)
     responseData = await response.json()
   } catch (error) {
     console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
@@ -301,9 +340,10 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
   Object.keys(params)
     .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
   // console.log('U > utilsWikiUrl > getMediaWikiPage > urlItemDetail : ', urlItemDetail)
+  const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(urlItemDetail)
+    response = await fetch(urlItemDetail, reqOpts)
     responseData = await response.json()
     // console.log('U > utilsWikiUrl > getMediaWikiPage > responseData : ', responseData)
     const pageData = responseData.query.pages[0]
@@ -335,8 +375,8 @@ export async function getMediawikiItems (wikiInfosObject, items, wikiFields, opt
 
 // Get items by batch array
 export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields, options = undefined, extractPage = false) {
-  console.log('\nU > utilsWikiUrl > getItemsByBatch > itemsToLoad : ', itemsToLoad)
-  console.log('U > utilsWikiUrl > getItemsByBatch > options : ', options)
+  // console.log('\nU > utilsWikiUrl > getItemsByBatch > itemsToLoad : ', itemsToLoad)
+  // console.log('U > utilsWikiUrl > getItemsByBatch > options : ', options)
 
   const apiRoot = wikiInfosObject.apiRoot
   let response, responseBatchData, errors
@@ -354,27 +394,28 @@ export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields,
 
   Object.keys(params)
     .forEach(key => { urlItemsBatch += `&${key}=${params[key]}` })
-  console.log('U > utilsWikiUrl > getItemsByBatch > urlItemsBatch : ', urlItemsBatch)
+  // console.log('U > utilsWikiUrl > getItemsByBatch > urlItemsBatch : ', urlItemsBatch)
+  const reqOpts = buildWikiRequestOptions()
 
   // fetch items batch in one request
   try {
-    response = await fetch(urlItemsBatch)
+    response = await fetch(urlItemsBatch, reqOpts)
     responseBatchData = await response.json()
-    // console.log('U > utilsWikiUrl > getItemsByBatch > responseBatchData : ', responseBatchData)
+    console.log('U > utilsWikiUrl > getItemsByBatch > responseBatchData : ', responseBatchData)
   } catch (error) {
     // console.log('\nU > utilsWikiUrl > getItemsByBatch > error : ', error)
     errors = [error]
   }
 
-  const items = responseBatchData.query.pages.map(pageResponse => {
-    console.log('\nU > utilsWikiUrl > getItemsByBatch > pageResponse : ', pageResponse)
+  const items = responseBatchData?.query.pages.map(pageResponse => {
+    // console.log('\nU > utilsWikiUrl > getItemsByBatch > pageResponse : ', pageResponse)
     const pageData = extractWikiBatchContent(wikiInfosObject, pageResponse, errors, options)
-    console.log('\nU > utilsWikiUrl > getItemsByBatch > pageData : ', pageData)
+    // console.log('\nU > utilsWikiUrl > getItemsByBatch > pageData : ', pageData)
     pageData.temp = restructurePageData(pageData, wikiFields)
     return pageData.temp
     // return pageResponse
   })
-  console.log('\nU > utilsWikiUrl > getItemsByBatch > items : ', items)
+  // console.log('\nU > utilsWikiUrl > getItemsByBatch > items : ', items)
 
   // debugging
   // return {
@@ -449,9 +490,10 @@ export async function getMediawikiItem (wikiInfosObject, item, options = undefin
   Object.keys(params)
     .forEach(key => { urlItemDetail += `&${key}=${params[key]}` })
   // console.log('U > utilsWikiUrl > getMediawikiItem > urlItemDetail : ', urlItemDetail)
+  const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(urlItemDetail)
+    response = await fetch(urlItemDetail, reqOpts)
     responseData = await response.json()
     // console.log('U > utilsWikiUrl > getMediawikiItem > responseData : ', responseData)
   } catch (error) {

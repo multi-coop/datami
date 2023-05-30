@@ -1,5 +1,8 @@
 <template>
   <div class="DatamiCardBlockImage datami-component">
+    itemValue: <code>{{ itemValue }}</code>
+    <br>
+    <!-- imgValue: <code>{{ imgValue }}</code> -->
     <p
       v-if="currentEditViewMode === 'edit'"
       class="is-size-7 has-text-weight-bold mb-2 is-uppercase">
@@ -19,9 +22,7 @@
         :class="`image-constrained ${isMini ? 'image-card-mini' : 'image-card-detail'} ${fromMap ? 'image-card-mini-from-map' : ''}`"
         :style="`${position === 'logo' || (isMini && fromMap) ? 'height: 100%; object-fit: cover; width: 100%;' : ''}`"
         :alt="`image-${itemId}`">
-      <!-- <p v-if="currentEditViewMode !== 'edit' && !itemValue">
-        {{ t('global.noValue', locale) }}
-      </p> -->
+        <!-- :on-error="errorLoadingImg()"> -->
     </figure>
 
     <div
@@ -126,14 +127,29 @@ export default {
       type: Boolean
     }
   },
+  // data () {
+  //   return {
+  //     imgValue: false
+  //   }
+  // },
+  // watch: {
+  //   itemValue (next) {
+  //     this.imgValue = next
+  //   }
+  // },
   // beforeMount () {
-  //   console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemId :', this.itemId)
-  //   console.log('C > DatamiCardBlockImage > beforeMount > this.field :', this.field)
-  //   console.log('C > DatamiCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
-  // }
+  //   // console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemId :', this.itemId)
+  //   // console.log('C > DatamiCardBlockImage > beforeMount > this.field :', this.field)
+  //   console.log('\nC > DatamiCardBlockImage > beforeMount > this.itemValue :', this.itemValue)
+  //   this.imgValue = this.itemValue
+  //   console.log('C > DatamiCardBlockImage > beforeMount > this.imgValue :', this.imgValue)
+  // },
   methods: {
     emitUpdate (event) {
       this.$emit('updateCellValue', event)
+    },
+    errorLoadingImg () {
+      console.log('C > DatamiCardBlockImage > errorLoadingImg > this.itemValue :', this.itemValue)
     }
   }
 }

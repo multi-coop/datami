@@ -406,6 +406,8 @@ export default {
     }
     // get schema if any
     let mediawikiSchema = mediawikiOptions.schema
+    const fileSchemaLocal = mediawikiSchema && mediawikiSchema.localdev
+    if (mediawikiSchema) { mediawikiSchema.file = fileSchemaLocal ? mediawikiSchema.filelocal : mediawikiSchema?.file }
     // console.log('C > DatamiExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
     if (mediawikiSchema && mediawikiSchema.file) {
       const schemaGitObj = this.extractGitInfos(mediawikiSchema.file)
@@ -423,6 +425,8 @@ export default {
 
     // get custom props if any
     let mediawikiCustomProps = mediawikiOptions['fields-custom-properties']
+    const fileCustomPropsLocal = mediawikiCustomProps && mediawikiCustomProps.localdev
+    if (mediawikiCustomProps) { mediawikiCustomProps.file = fileCustomPropsLocal ? mediawikiCustomProps.filelocal : mediawikiCustomProps?.file }
     if (mediawikiCustomProps && mediawikiCustomProps.file) {
       const customPropsGitObj = this.extractGitInfos(mediawikiCustomProps.file)
       // const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
@@ -480,7 +484,13 @@ export default {
         }
       }
 
-      // Request API for wiki pages data
+      // Request API for wiki pages data by category
+      // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > this.wikiObj : ', this.wikiObj)
+      // const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
+
+      // for (const categApi of this.wikiObj.multipleCategories) {
+      // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > categApi.category : ', categApi.category)
+      // const respWikidataRaw = await this.getMediawikiData(categApi.apiUrl, this.mediawikiOptions.wikisettings)
       const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
       // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
       if (respWikidataRaw.data) {
@@ -508,15 +518,15 @@ export default {
           // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageIds : ', pageIds)
           batchesToLoad.push(pageIds)
         }
-        console.log('C > DatamiExploWiki > reloadMediawikiRessources > batchesToLoad : ', batchesToLoad)
+        // console.log('C > DatamiExploWiki > reloadMediawikiRessources > batchesToLoad : ', batchesToLoad)
 
         // const batchesToLoadTest = [batchesToLoad[0]]
         // for (const pageidsToLoad of batchesToLoadTest) {
         for (const pageidsToLoad of batchesToLoad) {
-          console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageidsToLoad : ', pageidsToLoad)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageidsToLoad : ', pageidsToLoad)
           // Load items by batch
           const itemsBatch = await this.getItemsByBatch(this.wikiObj, pageidsToLoad, this.wikiFields, this.mediawikiOptions.wikisettings)
-          console.log('C > DatamiExploWiki > reloadMediawikiRessources > itemsBatch : ', itemsBatch)
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > itemsBatch : ', itemsBatch)
 
           // push to wikiPages
           this.wikiPages.push(...itemsBatch)
@@ -536,6 +546,7 @@ export default {
         //   this.wikiPages.forEach(wp => {
         //     this.updateCustomFilters(wp)
         //   })
+        // }
         // }
       }
     },

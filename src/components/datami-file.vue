@@ -572,7 +572,7 @@ export default {
       // console.log('C > DatamiFile > initWidget > fileSchema : ', fileSchema)
       const fileSchemaLocal = fileSchema && fileSchema.localdev
       // console.log('C > DatamiFile > initWidget > fileSchemaLocal : ', fileSchemaLocal)
-      if (fileSchema) { fileSchema.file = fileSchemaLocal ? fileSchema.filelocal : fileSchema && fileSchema.file }
+      if (fileSchema) { fileSchema.file = fileSchemaLocal ? fileSchema.filelocal : fileSchema?.file }
       if (fileSchema && fileSchema.file) {
         const schemaGitObj = this.extractGitInfos(fileSchema.file)
         // console.log('C > DatamiFile > initWidget > schemaGitObj : ', schemaGitObj)
@@ -592,7 +592,7 @@ export default {
       // console.log('C > DatamiFile > initWidget > fileCustomProps : ', fileCustomProps)
       const fileCustomPropsLocal = fileCustomProps && fileCustomProps.localdev
       // console.log('C > DatamiFile > initWidget > fileCustomPropsLocal : ', fileCustomPropsLocal)
-      if (fileCustomProps) { fileCustomProps.file = fileCustomPropsLocal ? fileCustomProps.filelocal : fileCustomProps && fileCustomProps.file }
+      if (fileCustomProps) { fileCustomProps.file = fileCustomPropsLocal ? fileCustomProps.filelocal : fileCustomProps?.file }
       if (fileCustomProps && fileCustomProps.file) {
         const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
         // console.log('C > DatamiFile > initWidget > customPropsGitObj : ', customPropsGitObj)

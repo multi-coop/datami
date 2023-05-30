@@ -14,85 +14,98 @@
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
   </noscript>
-  <p style="margin: 5em 1em 1em 1em;">
-    Import wikidata content (fabmmob) to display as csv / cards content
-  </P>
+
   <div style="background-color: white; margin: 1em;">
     <datami-explowiki
+      onlypreview="true"
       wikilist="https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags="
       options='{
-          "height": "700px",
-          "schema": {
-            "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
-          },
-          "fields-custom-properties": {
-            "fields": [
-              { 
-                "name": "pageUrl",
-                "subtype": "link",
-                "locked": true
-              },
-              { 
-                "name": "imageUrl",
-                "subtype": "link"
-              },
-              { 
-                "name": "url",
-                "subtype": "link"
-              },
-              {
-                "name": "Tags",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "Theme",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "location",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "from",
-                "subtype": "tags",
-                "tagSeparator": ","
-              },
-              {
-                "name": "challenge",
-                "subtype": "tags",
-                "tagSeparator": ","
-              }
-            ]
-          },
-          "wikisettings": {
-            "category": "projet",
-            "fields": [
-              "url",
-              "description",
-              "shortDescription",
-              "Main_Picture",
-              "Coordonnées géo",
-              "needs",
-              "referent",
-              "communauté d&#39;intérêt",
-              "Titre",
-              "Tags",
-              "etape",
-              "Theme",
-              "location",
-              "from",
-              "challenge"
-            ],
-            "tagfields": [
-              "Tags",
-              "Theme",
-              "location",
-              "from",
-              "challenge"
-            ]
+        "height": "700px",
+        "schema": {
+          "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+        },
+        "fields-custom-properties": {
+          "fields": [
+            { 
+              "name": "pageUrl",
+              "subtype": "link",
+              "locked": true
+            },
+            { 
+              "name": "imageUrl",
+              "subtype": "link"
+            },
+            { 
+              "name": "url",
+              "subtype": "link"
+            },
+            {
+              "name": "Tags",
+              "subtype": "tags",
+              "tagSeparator": ","
+            },
+            {
+              "name": "Theme",
+              "subtype": "tags",
+              "tagSeparator": ","
+            },
+            {
+              "name": "location",
+              "subtype": "tags",
+              "tagSeparator": ","
+            },
+            {
+              "name": "from",
+              "subtype": "tags",
+              "tagSeparator": ","
+            },
+            {
+              "name": "challenge",
+              "subtype": "tags",
+              "tagSeparator": ","
+            }
+          ]
+        },
+        "wikisettings": {
+          "category": "projet",
+          "categories_": [
+            "acteur",
+            "evénement",
+            "formation",
+            "équipe"
+          ],
+          "categories": [
+            "commun",
+            "communauté",
+            "projet",
+            "vehicule",
+            "défi",
+            "référentiel"
+          ],
+          "fields": [
+            "url",
+            "description",
+            "shortDescription",
+            "Main_Picture",
+            "Coordonnées géo",
+            "needs",
+            "referent",
+            "communauté d&#39;intérêt",
+            "Titre",
+            "Tags",
+            "etape",
+            "Theme",
+            "location",
+            "from",
+            "challenge"
+          ],
+          "tagfields": [
+            "Tags",
+            "Theme",
+            "location",
+            "from",
+            "challenge"
+          ]
         },
         "customsorting" : {
           "activate": true,
@@ -124,18 +137,41 @@
             "challenge": {"position": "tags"}
           },
           "detail": {
-            "title": {"position": "title"},
-            "imageUrl": {"position": "image"},
-            "shortDescription": {"position": "resume"},
-            "description": {"position": "description"},
-            "Tags": {"position": "tags"},
-            "Theme": {"position": "tags"},
-            "challenge": {"position": "tags"},
-            "communauté d&#39;intérêt": {"position": "tags"},
-            "url": {"position": "links"}
+            "title": {
+              "position": "title"
+            },
+            "imageUrl": {
+              "position": "image",
+              "right": true
+            },
+            "shortDescription": {
+              "position": "resume"
+            },
+            "description": {
+              "position": "description"
+            },
+            "Tags": {
+              "position": "tags",
+              "right": false
+            },
+            "Theme": {
+              "position": "tags",
+              "right": false
+            },
+            "challenge": {
+              "position": "tags",
+              "right": false
+            },
+            "communauté d&#39;intérêt": {
+              "position": "tags",
+              "right": false
+            },
+            "url": {
+              "position": "links"
+            }
           }
         }
-      }' title="datami for explowiki - fabmob :)" locale="fr"></datami-explowiki>
+      }' title="Explowiki - fabmob" locale="fr"></datami-explowiki>
   </div>
 
   <!-- DATAMI WIDGET'S APP.JS SCRIPT -->

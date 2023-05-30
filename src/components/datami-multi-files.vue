@@ -252,6 +252,7 @@ import {
 
 import { getAvailableViews, getDefaultViewMode } from '@/utils/fileTypesUtils'
 import { extractGitInfos } from '@/utils/utilsGitUrl'
+import { extractWikiInfos } from '@/utils/utilsWikiUrl'
 
 export default {
   name: 'DatamiMultiFiles',
@@ -354,13 +355,23 @@ export default {
       let gitObj
       const file = this.files[this.urlActiveTab - 1]
       // console.log('C > DatamiMultiFiles > watch > activeTab > file : ', file)
+      const isMediaWiki = !!(file.mediawiki)
+      // console.log('C > DatamiMultiFiles > watch > activeTab > isMediaWiki : ', isMediaWiki)
       if (file) {
-        const fileUrl = file.localdev ? file.gitfilelocal : file.gitfile
-        gitObj = extractGitInfos(fileUrl)
+        if (isMediaWiki) {
+          const mediawikiOptions = file.options?.length ? JSON.parse(file.options) : {}
+          // console.log('C > DatamiMultiFiles > watch > activeTab > mediawikiOptions : ', mediawikiOptions)
+          mediawikiOptions.tagseparator = ',' // to parse tags fields
+          mediawikiOptions.separator = '\t' // for csv export
+          gitObj = extractWikiInfos(file.wikilist, mediawikiOptions.wikisettings)
+        } else {
+          const fileUrl = file.localdev ? file.gitfilelocal : file.gitfile
+          gitObj = extractGitInfos(fileUrl)
+        }
       }
       // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
 
-      const fileType = gitObj && gitObj.filetype
+      const fileType = gitObj?.filetype
       // let options = this.getFileOptionsObj(next)
       const options = file && JSON.parse(file.options)
       // console.log('C > DatamiMultiFiles > watch > activeTab > options : ', options)
@@ -464,8 +475,12 @@ export default {
   mounted () {
     // Pre-store files for possible further sharing
     this.files.forEach(file => {
+      const isMediawiki = !!(file.wikipages || file.wikilist)
+      // console.log('C > DatamiMultiFiles > mounted > isMediawiki : ', isMediawiki)
+      // console.log('C > DatamiMultiFiles > mounted > file : ', file)
       // console.log('C > DatamiMultiFiles > mounted > file.gitfile : ', file.gitfile)
-      this.updateShareableFiles({ gitfile: file.gitfile, isSet: false })
+      const filename = isMediawiki ? file.mediawiki : file.gitfile
+      this.updateShareableFiles({ gitfile: filename, isSet: false })
     })
   },
   methods: {

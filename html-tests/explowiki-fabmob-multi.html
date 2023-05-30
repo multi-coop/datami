@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- <script src="../dist/js/app.js"></script> -->
+  <title>Datami - Fabmob</title>
+</head>
+
+<body style="background-color: #D7D7D7; padding: 5em 1em 20em 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+
+  <div style="background-color: white; margin: 1em;">
+
+    <!-- DATAMI WIDGET'S HTML BLOCK-->
+    <datami-multi-files 
+      title="Explowiki - fabmob" 
+      options='{
+        "display": "horizontal"
+      }' 
+      gitfiles='[
+        {
+          "title": "Projets",
+          "activate": true,
+          "default-tab": true,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "projet",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Coordonnées géo",
+                "needs",
+                "referent",
+                "communauté d&#39;intérêt",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {"position": "tags"},
+                "Theme": {"position": "tags"},
+                "challenge": {"position": "tags"}
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "Tags": {
+                  "position": "tags",
+                  "right": false
+                },
+                "Theme": {
+                  "position": "tags",
+                  "right": false
+                },
+                "challenge": {
+                  "position": "tags",
+                  "right": false
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "right": false
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Défis",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "défi",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Coordonnées géo",
+                "needs",
+                "referent",
+                "communauté d&#39;intérêt",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {"position": "tags"},
+                "Theme": {"position": "tags"},
+                "challenge": {"position": "tags"}
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "Tags": {
+                  "position": "tags",
+                  "right": false
+                },
+                "Theme": {
+                  "position": "tags",
+                  "right": false
+                },
+                "challenge": {
+                  "position": "tags",
+                  "right": false
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "right": false
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Véhicules",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "vehicule",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Coordonnées géo",
+                "needs",
+                "referent",
+                "communauté d&#39;intérêt",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {"position": "tags"},
+                "Theme": {"position": "tags"},
+                "challenge": {"position": "tags"}
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "Tags": {
+                  "position": "tags",
+                  "right": false
+                },
+                "Theme": {
+                  "position": "tags",
+                  "right": false
+                },
+                "challenge": {
+                  "position": "tags",
+                  "right": false
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "right": false
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Communs",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "commun",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Coordonnées géo",
+                "needs",
+                "referent",
+                "communauté d&#39;intérêt",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {"position": "tags"},
+                "Theme": {"position": "tags"},
+                "challenge": {"position": "tags"}
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "Tags": {
+                  "position": "tags",
+                  "right": false
+                },
+                "Theme": {
+                  "position": "tags",
+                  "right": false
+                },
+                "challenge": {
+                  "position": "tags",
+                  "right": false
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "right": false
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Référentiels",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "référentiel",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Coordonnées géo",
+                "needs",
+                "referent",
+                "communauté d&#39;intérêt",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {"position": "tags"},
+                "Theme": {"position": "tags"},
+                "challenge": {"position": "tags"}
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "Tags": {
+                  "position": "tags",
+                  "right": false
+                },
+                "Theme": {
+                  "position": "tags",
+                  "right": false
+                },
+                "challenge": {
+                  "position": "tags",
+                  "right": false
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "right": false
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Acteurs",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://github.com/multi-coop/gitribute-content-test/blob/main/data/json/fabmob/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "acteur",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Coordonnées géo",
+                "needs",
+                "referent",
+                "communauté d&#39;intérêt",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {"position": "tags"},
+                "Theme": {"position": "tags"},
+                "challenge": {"position": "tags"}
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "Tags": {
+                  "position": "tags",
+                  "right": false
+                },
+                "Theme": {
+                  "position": "tags",
+                  "right": false
+                },
+                "challenge": {
+                  "position": "tags",
+                  "right": false
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "right": false
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        }
+      ]'
+    >
+    </datami-multi-files>
+
+  </div>
+
+  <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+  <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+  <!-- <script src="https://preprod--datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+  <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+</body>
+
+</html>
