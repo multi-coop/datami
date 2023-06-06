@@ -1,6 +1,6 @@
 <template>
   <div class="DatamiCardBlockImage datami-component">
-    itemValue: <code>{{ itemValue }}</code>
+    <!-- itemValue: <code>{{ itemValue }}</code> -->
     <br>
     <!-- imgValue: <code>{{ imgValue }}</code> -->
     <p

@@ -13,13 +13,28 @@ import { authorizedFileTypes as fileTypes } from '@/utils/fileTypesUtils.js'
  *
  **/
 
+// export function wait(milliseconds) {
+//   return new Promise(resolve => {
+//     setTimeout(resolve, milliseconds)
+//   })
+// }
+
+export async function delayFetch (url, options) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(fetch(url, options))
+    }, options.delay)
+  })
+}
+
 export const buildWikiRequestOptions = (method = 'GET') => {
   const userAgent = window.navigator.userAgent
   const options = {
     method: method,
     headers: {
       'User-Agent': `${userAgent} Datami/1.0 (https://datami.multi.coop; datami@multi.coop)`
-    }
+    },
+    delay: 3000
   }
   return options
 }
@@ -70,7 +85,8 @@ export async function fetchMediaWikiData (urls) {
   const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(apiUrl, reqOpts)
+    response = await delayFetch(apiUrl, reqOpts)
+    // response = await fetch(apiUrl, reqOpts)
     queryResult = await response.json()
     pages = await queryResult.query.pages
   } catch (error) {
@@ -286,7 +302,8 @@ export async function getMediawikiData (apiUrl, options = undefined) {
   const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(apiUrl, reqOpts)
+    // response = await fetch(apiUrl, reqOpts)
+    response = await delayFetch(apiUrl, reqOpts)
     responseData = await response.json()
   } catch (error) {
     console.log('\nU > utilsWikiUrl > getMediawikiData > error : ', error)
@@ -343,7 +360,8 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
   const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(urlItemDetail, reqOpts)
+    // response = await fetch(urlItemDetail, reqOpts)
+    response = await delayFetch(urlItemDetail, reqOpts)
     responseData = await response.json()
     // console.log('U > utilsWikiUrl > getMediaWikiPage > responseData : ', responseData)
     const pageData = responseData.query.pages[0]
@@ -399,7 +417,8 @@ export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields,
 
   // fetch items batch in one request
   try {
-    response = await fetch(urlItemsBatch, reqOpts)
+    // response = await fetch(urlItemsBatch, reqOpts)
+    response = await delayFetch(urlItemsBatch, reqOpts)
     responseBatchData = await response.json()
     console.log('U > utilsWikiUrl > getItemsByBatch > responseBatchData : ', responseBatchData)
   } catch (error) {
@@ -493,7 +512,8 @@ export async function getMediawikiItem (wikiInfosObject, item, options = undefin
   const reqOpts = buildWikiRequestOptions()
 
   try {
-    response = await fetch(urlItemDetail, reqOpts)
+    response = await delayFetch(urlItemDetail, reqOpts)
+    // response = await fetch(urlItemDetail, reqOpts)
     responseData = await response.json()
     // console.log('U > utilsWikiUrl > getMediawikiItem > responseData : ', responseData)
   } catch (error) {
