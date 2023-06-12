@@ -515,7 +515,7 @@ export default {
       // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > categApi.category : ', categApi.category)
       // const respWikidataRaw = await this.getMediawikiData(categApi.apiUrl, this.mediawikiOptions.wikisettings)
       const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
-      // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
+      console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
       if (respWikidataRaw.data) {
         // let wikiItems = respWikidataRaw.data.slice(0, 10)
         wikiItems = respWikidataRaw.data
