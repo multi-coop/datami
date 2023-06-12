@@ -2,7 +2,6 @@
   <div class="DatamiCardBlockImage datami-component">
     <!-- itemValue: <code>{{ itemValue }}</code> -->
     <br>
-    <!-- imgValue: <code>{{ imgValue }}</code> -->
     <p
       v-if="currentEditViewMode === 'edit'"
       class="is-size-7 has-text-weight-bold mb-2 is-uppercase">

@@ -84,7 +84,7 @@
 
       <!-- COPY WIDGET BTN IN HORIZONTAL MODE -->
       <div
-        v-if="!tabsVertical"
+        v-if="!tabsVertical && !multiFilesOptions.options.nocopy"
         class="datami-floating-right">
         <ButtonCopyWidgetHtml
           :file-id="multiFilesId"
@@ -213,6 +213,7 @@
                     :onlypreview="booleanFromValue(fileTab.onlypreview)"
                     :from-multi-files="true"
                     :tab-id="fileTabIdx + 1"
+                    :active-tab="activeTab === fileTab.id"
                     :from-multi-files-vertical="tabsVertical"
                     :trackalloutlinks="!fileTabIdx ? trackalloutlinks : false"/>
                 </div>

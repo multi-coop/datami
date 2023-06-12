@@ -13,12 +13,6 @@ import { authorizedFileTypes as fileTypes } from '@/utils/fileTypesUtils.js'
  *
  **/
 
-// export function wait(milliseconds) {
-//   return new Promise(resolve => {
-//     setTimeout(resolve, milliseconds)
-//   })
-// }
-
 export async function delayFetch (url, options) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -27,14 +21,14 @@ export async function delayFetch (url, options) {
   })
 }
 
-export const buildWikiRequestOptions = (method = 'GET') => {
+export const buildWikiRequestOptions = (method = 'GET', delay = 3000) => {
   const userAgent = window.navigator.userAgent
   const options = {
     method: method,
     headers: {
       'User-Agent': `${userAgent} Datami/1.0 (https://datami.multi.coop; datami@multi.coop)`
     },
-    delay: 3000
+    delay: delay
   }
   return options
 }
@@ -82,7 +76,7 @@ export async function fetchMediaWikiData (urls) {
     .forEach(key => { apiUrl += `&${key}=${params[key]}` })
 
   let response, queryResult, pages
-  const reqOpts = buildWikiRequestOptions()
+  const reqOpts = buildWikiRequestOptions('GET', 0)
 
   try {
     response = await delayFetch(apiUrl, reqOpts)
@@ -108,17 +102,19 @@ export async function fetchMediaWikiData (urls) {
 }
 
 export const objectFromWikitext = (wikitext) => {
+  const rawText = wikitext.replace('{{', '').replace('}}', '')
+  const parted = extractWikitextPartGen(rawText).filter(i => !!i && i !== '')
   const headers = []
   const obj = {}
-  let splitted = wikitext && wikitext.split('\n|')
-  splitted = splitted && splitted.slice(1, splitted.length)
-  splitted && splitted.forEach(i => {
+  let splitted = rawText && rawText.split('\n|')
+  splitted = splitted?.slice(1, splitted.length)
+  splitted?.forEach(i => {
     const iSplit = i.split('=')
     headers.push(iSplit[0])
     obj[iSplit[0]] = iSplit[1]
   })
   return {
-    parted: extractWikitextPartGen(wikitext),
+    parted: parted,
     headers: headers,
     data: obj
   }
@@ -126,14 +122,36 @@ export const objectFromWikitext = (wikitext) => {
 
 export const extractWikitextPartGen = (content) => {
   const regex = /[\n]|(.*)=(.*)/
-  const part = content && content.split(regex)
+  const part = content?.split(regex)
+  // console.log('U > utilsWikiUrl > extractWikitextPartGen > part : ', part)
   return part
 }
 
 export const extractWikitextPart = (key, content) => {
-  const regex = new RegExp(`\\|${key}=(.*)`)
-  const part = content && content.match(regex)
-  return part && part[1]
+  // const txt = content
+  // const txt = content.replace(/\r?\n|\r/g, ' ')
+  // console.log(`...U > utilsWikiUrl > extractWikitextPart > key : ${key} > txt : `, txt)
+  let regex
+  switch (key) {
+    case 'Main_Picture':
+      regex = new RegExp(`(?<=^\\|${key}=)(.*?)(?:\n)`, 'gsm')
+      // regex = new RegExp(`\\|${key}=(.*)`, 'm')
+      break
+    default:
+      regex = new RegExp(`(?<=^\\|${key}=)(.*?)(?=^\\|)`, 'sm')
+  }
+  // const regex = new RegExp(`\\|${key}=(.*)`)
+  // const regex = new RegExp(`(?<=${key}=)((.*))(?=\n)`, 'gm') // set ig flag for global search and case insensitive
+  // const regex = new RegExp(`^\\|${key}=(.*?)^\\|`, 'sm')
+  // const regex = new RegExp(`(?<=^\\|${key}=)(.*?)(?=^\\|)`, 'sm')
+  // const part = txt?.split(regex).filter(s => !!s)
+  // const part = txt?.match(regex)
+  // const part = regex.exec(txt)
+  const part = content?.match(regex)
+  const res = part && part[0]
+  // console.log(`...U > utilsWikiUrl > extractWikitextPart > key : ${key} > part : `, part)
+  // console.log(`...U > utilsWikiUrl > extractWikitextPart > key : ${key} > part : `, res)
+  return res
 }
 
 export const extractDescription = (content) => {
@@ -317,19 +335,6 @@ export async function getMediawikiData (apiUrl, options = undefined) {
   }
 }
 
-// export async function populateMediawikiItem (wikiInfosObject, items, options = undefined) {
-//   console.log('\nU > utilsWikiUrl > populateMediawikiItem > wikiInfosObject : ', wikiInfosObject)
-//   console.log('U > utilsWikiUrl > populateMediawikiItem > items : ', items)
-//   console.log('U > utilsWikiUrl > populateMediawikiItem > options : ', options)
-
-//   const results = []
-//   for (const item of items) {
-//     const data = await getMediawikiItem(wikiInfosObject, item, options)
-//     results.push(data)
-//   }
-//   return results
-// }
-
 export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options = undefined) {
   // console.log('\nU > utilsWikiUrl > getMediaWikiPage > pageUrl : ', pageUrl)
 
@@ -379,17 +384,17 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
 }
 
 // Get items one by one
-export async function getMediawikiItems (wikiInfosObject, items, wikiFields, options = undefined, extractPage = false) {
-  const itemsToSend = []
-  for (const item of items) {
-    const pageData = await getMediawikiItem(wikiInfosObject, item, options)
-    // console.log('C > utilsWikiUrl > getMediawikiItems > pageData : ', pageData)
-    pageData.temp = restructurePageData(pageData, wikiFields)
-    // console.log('C > utilsWikiUrl > getMediawikiItems > pageData.temp : ', pageData.temp)
-    itemsToSend.push(pageData.temp)
-  }
-  return itemsToSend
-}
+// export async function getMediawikiItems (wikiInfosObject, items, wikiFields, options = undefined, extractPage = false) {
+//   const itemsToSend = []
+//   for (const item of items) {
+//     const pageData = await getMediawikiItem(wikiInfosObject, item, options)
+//     // console.log('C > utilsWikiUrl > getMediawikiItems > pageData : ', pageData)
+//     pageData.temp = restructurePageData(pageData, wikiFields)
+//     // console.log('C > utilsWikiUrl > getMediawikiItems > pageData.temp : ', pageData.temp)
+//     itemsToSend.push(pageData.temp)
+//   }
+//   return itemsToSend
+// }
 
 // Get items by batch array
 export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields, options = undefined, extractPage = false) {
@@ -420,7 +425,7 @@ export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields,
     // response = await fetch(urlItemsBatch, reqOpts)
     response = await delayFetch(urlItemsBatch, reqOpts)
     responseBatchData = await response.json()
-    console.log('U > utilsWikiUrl > getItemsByBatch > responseBatchData : ', responseBatchData)
+    // console.log('U > utilsWikiUrl > getItemsByBatch > responseBatchData : ', responseBatchData)
   } catch (error) {
     // console.log('\nU > utilsWikiUrl > getItemsByBatch > error : ', error)
     errors = [error]
@@ -436,39 +441,39 @@ export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields,
   })
   // console.log('\nU > utilsWikiUrl > getItemsByBatch > items : ', items)
 
-  // debugging
-  // return {
-  //   items: items,
-  //   responseBatchData: responseBatchData,
-  //   errors: errors
-  // }
-  // return await extractWikiContent(wikiInfosObject, responseData, item, errors, options)
   return items
 }
 
 export function extractWikiBatchContent (wikiInfosObject, pageData, errors, options) {
-  // console.log('U > utilsWikiUrl > extractWikiBatchContent > pageData : ', pageData)
+  // console.log('\n-----------------------')
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > pageData.title : ', pageData.title)
   // let pageData
   let imageUrl
 
   const content = pageData && (pageData.revisions[0].content || pageData.revisions[0].slots.main.content)
   // console.log('U > utilsWikiUrl > extractWikiBatchContent > content : ', content)
 
-  // WIKITEXT TO OBJECT - HARD CODEED
+  // WIKITEXT TO OBJECT - GENERIC
+  const wikiContent = objectFromWikitext(content)
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > wikiContent : ', wikiContent)
+
+  // WIKITEXT TO OBJECT - FROM FIELDS
   const fields = options.fields
   const structured = {}
   fields.forEach(field => {
     structured[field] = extractWikitextPart(field, content)
   })
-
-  // WIKITEXT TO OBJECT - GENERIC
-  const wikiContent = objectFromWikitext(content)
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > structured : ', structured)
 
   // build image url
-  if (wikiContent.data.Main_Picture) {
+  // const mainPicture = wikiContent.data.Main_Picture
+  const mainPicture = structured.Main_Picture
+  if (mainPicture) {
     const hostName = wikiInfosObject.hostname
-    imageUrl = forgeImageUrl(hostName, wikiContent.data.Main_Picture)
+    imageUrl = forgeImageUrl(hostName, mainPicture)
   }
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > imageUrl : ', imageUrl)
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > pageData : ', pageData)
 
   return {
     id: pageData.pageid.toString(),
@@ -525,7 +530,7 @@ export async function getMediawikiItem (wikiInfosObject, item, options = undefin
 }
 
 export async function extractWikiContent (wikiInfosObject, responseData, item, errors, options) {
-  // console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
+  console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
   // let responseData
   let imageUrl
 
@@ -585,9 +590,10 @@ export const restructurePageData = (pageObj, wikiFields) => {
     id: pageObj.id,
     pageId: pageObj.pageId,
     pageUrl: pageObj.pageUrl,
-    // structured: pageObj.structured,
+    structured: pageObj.structured,
     content: pageObj.content
   }
+  // console.log('U > utilsWikiUrl > restructurePageData > pageData : ', pageData)
   Object.keys(wikiFields).forEach(k => {
     let pageObjValue
     const field = wikiFields[k]

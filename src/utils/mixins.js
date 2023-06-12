@@ -53,7 +53,7 @@ import {
   extractWikiInfos,
   getMediawikiData,
   getMediaWikiPage,
-  getMediawikiItems,
+  // getMediawikiItems,
   getItemsByBatch,
   getMediawikiItem,
   restructurePageData
@@ -1294,7 +1294,7 @@ export const mixinWiki = {
     getMediawikiData,
     getMediaWikiPage,
     getMediawikiItem,
-    getMediawikiItems,
+    // getMediawikiItems,
     getItemsByBatch,
     restructurePageData
   }

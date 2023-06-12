@@ -135,7 +135,7 @@
     <!-- hasCardsView : <code>{{ hasCardsView }}</code><br> -->
     <!-- hasCardsDetail : <code>{{ hasCardsDetail }}</code><br> -->
     <EditNavbarSkeleton
-      v-if="!fileIsLoading"
+      v-if="!fileIsLoading || !wikiItems.length"
       :file-id="fileId"
       :only-preview="true"
       :locale="locale"/>
@@ -146,6 +146,7 @@
       class="container datami-container"
       style="z-index: 1;">
       <PreviewCsv
+        v-show="!fileIsLoading && wikiItems.length"
         :only-preview="true"
         :file-id="fileId"
         :file-is-loading="fileIsLoading"
@@ -159,7 +160,7 @@
     <!-- PROGRESS LOADER -->
     <!-- v-if="wikiItems && wikiItems.length" -->
     <LoaderWikimedia
-      v-if="wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length)"
+      v-if="fileIsLoading || (wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length))"
       :file-id="fileId"
       :items-loaded="wikiPages.length"
       :items-total="wikiItems.length"
@@ -271,6 +272,10 @@ export default {
     fromMultiFilesVertical: {
       default: false,
       type: Boolean
+    },
+    activeTab: {
+      default: undefined,
+      type: Boolean
     }
   },
   data () {
@@ -352,8 +357,15 @@ export default {
       }
     },
     fileIsLoading (next) {
-      // console.log('C > DatamiExploWiki > watch > fileIsLoading > next : ', next)
-      if (next) { this.reloadMediawikiRessources() }
+      console.log(`\nC > DatamiExploWiki > title: ${this.title} > watch > fileIsLoading > next : `, next)
+      if (next) { this.reloadMediawiki() }
+    },
+    activeTab (next) {
+      console.log(`\nC > DatamiExploWiki > title: ${this.title} > watch > activeTab > next : `, next)
+      console.log(`C > DatamiExploWiki > title: ${this.title} > watch > activeTab > this.fileId : `, this.fileId)
+      if (next && !this.fileIsLoading) {
+        this.updateReloading({ fileId: this.fileId, isLoading: true })
+      }
     }
   },
   async beforeMount () {
@@ -447,7 +459,12 @@ export default {
     // console.log('C > DatamiExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
   },
   async mounted () {
-    await this.reloadMediawikiRessources()
+    console.log(`\nC > DatamiExploWiki > title: ${this.title} > mounted > this.fileIsLoading : `, this.fileIsLoading)
+    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.activeTab : `, this.activeTab)
+    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.tabId : `, this.tabId)
+    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.fileId : `, this.fileId)
+    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.wikiItems : `, this.wikiItems)
+    await this.reloadMediawiki()
   },
   methods: {
     ...mapActions({
@@ -460,7 +477,13 @@ export default {
       initializeStorage: 'git-storage/initializeStorage',
       activateTrackAllOutlinks: 'activateTrackAllOutlinks'
     }),
+    async reloadMediawiki () {
+      if (!this.fromMultiFiles || this.activeTab) {
+        await this.reloadMediawikiRessources()
+      }
+    },
     async reloadMediawikiRessources () {
+      console.log(`\nC > DatamiExploWiki > title: ${this.title} > reloadMediawikiRessources > this.tabId : `, this.tabId)
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
 

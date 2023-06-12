@@ -247,6 +247,7 @@ export default {
   },
   editWiki: {
     loadingPages: 'Chargement des pages du mediawiki...',
+    retrieving: 'Requête des ids des pages de cette catégorie',
     results: 'fiches',
     page: 'page',
     pages: 'pages',

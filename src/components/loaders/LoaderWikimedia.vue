@@ -19,10 +19,15 @@
           :value="itemsProgress"
           size="is-medium"
           show-value>
-          {{ itemsLoaded }} / {{ itemsTotal }}
-          {{ t('editWiki.pages', locale) }}
-          &nbsp;
-          ({{ itemsProgress }}%)
+          <span v-if="itemsTotal">
+            {{ itemsLoaded }} / {{ itemsTotal }}
+            {{ t('editWiki.pages', locale) }}
+            &nbsp;
+            ({{ itemsProgress }}%)
+          </span>
+          <span v-else>
+            {{ t('editWiki.retrieving', locale) }}
+          </span>
         </b-progress>
       </div>
     </div>

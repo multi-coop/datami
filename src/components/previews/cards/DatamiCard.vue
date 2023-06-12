@@ -464,6 +464,22 @@
             class="">
             <pre><code>{{ item.content }}</code></pre>
           </p>
+          <div
+            v-if="showRawContent"
+            class="columns is-multiline">
+            <div class="column is-6">
+              fields
+              <p class="">
+                <pre><code>{{ fields }}</code></pre>
+              </p>
+            </div>
+            <div class="column is-6">
+              item
+              <p class="">
+                <pre><code>{{ item }}</code></pre>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

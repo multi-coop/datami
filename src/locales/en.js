@@ -247,6 +247,7 @@ export default {
   },
   editWiki: {
     loadingPages: 'Loading mediawiki pages...',
+    retrieving: 'Fetching the list of page ids for this category',
     results: 'entries',
     page: 'page',
     pages: 'pages',
