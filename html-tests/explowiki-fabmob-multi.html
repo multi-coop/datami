@@ -96,9 +96,18 @@
                 "title": {"position": "title"},
                 "imageUrl": {"position": "image"},
                 "shortDescription": {"position": "resume"},
-                "Tags": {"position": "tags"},
-                "Theme": {"position": "tags"},
-                "challenge": {"position": "tags"}
+                "Tags": {
+                  "position": "tags",
+                  "prefix": "Tag(s) :"
+                },
+                "Theme": {
+                  "position": "tags",
+                  "prefix": "Thème(s) :"
+                },
+                "challenge": {
+                  "position": "tags",
+                  "prefix": "Challenge(s) :"
+                }
               },
               "detail": {
                 "title": {
@@ -114,20 +123,29 @@
                 "description": {
                   "position": "description"
                 },
+                "url": {
+                  "position": "links",
+                  "block_title": "Lien",
+                  "right": false
+                },
                 "Tags": {
                   "position": "tags",
+                  "block_title": "Tags",
                   "right": false
                 },
                 "Theme": {
                   "position": "tags",
+                  "block_title": "Thème",
                   "right": false
                 },
                 "challenge": {
                   "position": "tags",
+                  "block_title": "Challenge",
                   "right": false
                 },
                 "communauté d&#39;intérêt": {
                   "position": "tags",
+                  "block_title": "Communauté d&lsquo;intérêt",
                   "right": false
                 },
                 "url": {
@@ -160,23 +178,12 @@
             "wikisettings": {
               "category": "défi",
               "fields": [
-                "url",
                 "description",
-                "Enjeu",
-                "shortDescription",
                 "Main_Picture",
-                "Coordonnées géo",
-                "needs",
-                "referent",
-                "communauté d&#39;intérêt",
-                "Titre",
                 "Tags",
-                "Caractéristiques",
-                "etape",
                 "Theme",
-                "location",
-                "from",
-                "challenge"
+                "Enjeu",
+                "Caractéristiques"
               ],
               "tagfields": [
                 "Tags",
@@ -207,114 +214,19 @@
               "mini": {
                 "title": {"position": "title"},
                 "imageUrl": {"position": "image"},
-                "Enjeu": {"position": "resume"},
-                "Tags": {"position": "tags"},
-                "Theme": {"position": "tags"}
-              },
-              "detail": {
-                "title": {
-                  "position": "title"
-                },
-                "imageUrl": {
-                  "position": "image",
-                  "right": true
-                },
-                "Enjeu": {
-                  "position": "description"
-                },
-                "description": {
-                  "position": "description"
-                },
-                "Caractéristiques": {
-                  "position": "description"
-                },
+                "shortDescription": {"position": "resume"},
                 "Tags": {
                   "position": "tags",
-                  "right": false
+                  "prefix": "Tag(s) :"
                 },
                 "Theme": {
                   "position": "tags",
-                  "right": false
+                  "prefix": "Thème(s) :"
+                },
+                "challenge": {
+                  "position": "tags",
+                  "prefix": "Challenge(s) :"
                 }
-              }
-            }
-          }
-        },
-        {
-          "title": "Communs",
-          "activate": true,
-          "default-tab": false,
-          "localdev": false,
-          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
-          "onlypreview": true,
-          "locale": "fr",
-          "options": {
-            "height": "700px",
-            "schema": {
-              "localdev": true,
-              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
-              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-schema.json"
-            },
-            "fields-custom-properties": {
-              "localdev": true,
-              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
-              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-fileds-custom-props.json"
-            },
-            "wikisettings": {
-              "category": "commun",
-              "fields": [
-                "url",
-                "description",
-                "shortDescription",
-                "Main_Picture",
-                "Coordonnées géo",
-                "needs",
-                "referent",
-                "communauté d&#39;intérêt",
-                "Titre",
-                "Tags",
-                "etape",
-                "Theme",
-                "location",
-                "from",
-                "challenge"
-              ],
-              "tagfields": [
-                "Tags",
-                "Theme",
-                "location",
-                "from",
-                "challenge"
-              ]
-            },
-            "customsorting" : {
-              "activate": true,
-              "sortfields": [
-                "title"
-              ]
-            },
-            "customfilters" : {
-              "activate": true,
-              "filterfields": [
-                "Tags",
-                "Theme"
-              ]
-            },
-            "pagination": {
-              "itemsPerPage":12
-            },
-            "cardsview": {
-              "activate": true,
-              "default": true
-            },
-            "cardssettings": {
-              "mini": {
-                "title": {"position": "title"},
-                "imageUrl": {"position": "image"},
-                "shortDescription": {"position": "resume"},
-                "Tags": {"position": "tags"},
-                "Theme": {"position": "tags"},
-                "challenge": {"position": "tags"}
               },
               "detail": {
                 "title": {
@@ -332,22 +244,13 @@
                 },
                 "Tags": {
                   "position": "tags",
+                  "block_title": "Tags",
                   "right": false
                 },
                 "Theme": {
                   "position": "tags",
+                  "block_title": "Thème",
                   "right": false
-                },
-                "challenge": {
-                  "position": "tags",
-                  "right": false
-                },
-                "communauté d&#39;intérêt": {
-                  "position": "tags",
-                  "right": false
-                },
-                "url": {
-                  "position": "links"
                 }
               }
             }
@@ -376,28 +279,303 @@
             "wikisettings": {
               "category": "Vehicule",
               "fields": [
+                "Main_Picture",
+                "Tags",
                 "url",
+                "chat",
+                "Coordonnées géo",
+                "typeveh",
+                "categveh",
+                "avancement",
+                "challenge veh",
+                "communauté veh",
+                "dossier_veh",
+                "pays"
+              ],
+              "tagfields": [
+                "Tags",
+                "typeveh",
+                "categveh",
+                "avancement",
+                "challenge veh",
+                "communauté veh"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "typeveh"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "categveh": {
+                  "position": "tags",
+                  "prefix": "Catégorie de véhicule :"
+                },
+                "typeveh": {
+                  "position": "tags",
+                  "prefix": "Type de véhicule :"
+                }
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "url": {
+                  "position": "links",
+                  "block_title": "Lien",
+                  "right": false
+                },
+                "dossier_veh": {
+                  "position": "description",
+                  "block_title": "Dossier véhicule",
+                  "right": false
+                },
+                "Tags": {
+                  "position": "tags",
+                  "block_title": "Tags",
+                  "right": false
+                },
+                "typeveh": {
+                  "position": "tags",
+                  "block_title": "Type de véhicule",
+                  "right": false
+                },
+                "avancement": {
+                  "position": "tags",
+                  "block_title": "Avancement",
+                  "right": false
+                },
+                "categveh": {
+                  "position": "tags",
+                  "block_title": "Catégorie de véhicule",
+                  "right": true
+                },
+                "challenge veh": {
+                  "position": "tags",
+                  "block_title": "Challenge véhicule",
+                  "right": true
+                },
+                "communauté veh": {
+                  "position": "tags",
+                  "block_title": "Communauté véhicule",
+                  "right": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Communs",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "commun",
+              "fields": [
                 "description",
                 "shortDescription",
                 "Main_Picture",
-                "Coordonnées géo",
-                "needs",
-                "referent",
-                "communauté d&#39;intérêt",
-                "Titre",
                 "Tags",
-                "etape",
                 "Theme",
-                "location",
+                "url",
+                "challenge",
+                "chat",
+                "to",
+                "communauté d&lsquo;intérêt",
+                "complement",
                 "from",
-                "challenge"
+                "commonscategory",
+                "type",
+                "OpenChallenge"
               ],
               "tagfields": [
                 "Tags",
                 "Theme",
-                "location",
-                "from",
+                "challenge",
+                "commonscategory",
+                "communauté d&lsquo;intérêt",
                 "challenge"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "title"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "Tags",
+                "challenge",
+                "commonscategory",
+                "communauté d&lsquo;intérêt",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "shortDescription": {"position": "resume"},
+                "Tags": {
+                  "position": "tags",
+                  "prefix": "Tag(s) :"
+                },
+                "Theme": {
+                  "position": "tags",
+                  "prefix": "Thème(s) :"
+                },
+                "challenge": {
+                  "position": "tags",
+                  "prefix": "Challenge(s) :"
+                },
+                "commonscategory": {
+                  "position": "tags",
+                  "prefix": "Catégorie(s) :"
+                }
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "shortDescription": {
+                  "position": "resume"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "url": {
+                  "position": "links",
+                  "block_title": "Lien",
+                  "right": false
+                },
+                "Tags": {
+                  "position": "tags",
+                  "block_title": "Tags",
+                  "right": true
+                },
+                "Theme": {
+                  "position": "tags",
+                  "block_title": "Thème",
+                  "right": true
+                },
+                "challenge": {
+                  "position": "tags",
+                  "block_title": "Challenge",
+                  "right": true
+                },
+                "communauté d&#39;intérêt": {
+                  "position": "tags",
+                  "block_title": "Communauté d&lsquo;intérêt",
+                  "right": true
+                },
+                "commonscategory": {
+                  "position": "tags",
+                  "block_title": "Catégorie de commun",
+                  "right": true
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Référentiels",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-fileds-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "Référentiel",
+              "fields": [
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "Tags",
+                "Theme",
+                "url",
+                "challenge",
+                "name",
+                "communauté",
+                "Richesse"
+              ],
+              "tagfields": [
+                "Tags",
+                "Theme",
+                "communauté",
+                "Richesse"
               ]
             },
             "customsorting" : {
@@ -425,9 +603,18 @@
                 "title": {"position": "title"},
                 "imageUrl": {"position": "image"},
                 "shortDescription": {"position": "resume"},
-                "Tags": {"position": "tags"},
-                "Theme": {"position": "tags"},
-                "challenge": {"position": "tags"}
+                "Tags": {
+                  "position": "tags",
+                  "prefix": "Tag(s) :"
+                },
+                "Theme": {
+                  "position": "tags",
+                  "prefix": "Thème(s) :"
+                },
+                "challenge": {
+                  "position": "tags",
+                  "prefix": "Challenge(s) :"
+                }
               },
               "detail": {
                 "title": {
@@ -443,21 +630,30 @@
                 "description": {
                   "position": "description"
                 },
+                "url": {
+                  "position": "links",
+                  "block_title": "Lien",
+                  "right": false
+                },
                 "Tags": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Tags",
+                  "right": true
                 },
                 "Theme": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Thème",
+                  "right": true
                 },
                 "challenge": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Challenge",
+                  "right": true
                 },
                 "communauté d&#39;intérêt": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Communauté d&lsquo;intérêt",
+                  "right": true
                 },
                 "url": {
                   "position": "links"
@@ -538,9 +734,18 @@
                 "title": {"position": "title"},
                 "imageUrl": {"position": "image"},
                 "shortDescription": {"position": "resume"},
-                "Tags": {"position": "tags"},
-                "Theme": {"position": "tags"},
-                "challenge": {"position": "tags"}
+                "Tags": {
+                  "position": "tags",
+                  "prefix": "Tag(s) :"
+                },
+                "Theme": {
+                  "position": "tags",
+                  "prefix": "Thème(s) :"
+                },
+                "challenge": {
+                  "position": "tags",
+                  "prefix": "Challenge(s) :"
+                }
               },
               "detail": {
                 "title": {
@@ -556,21 +761,30 @@
                 "description": {
                   "position": "description"
                 },
+                "url": {
+                  "position": "links",
+                  "block_title": "Lien",
+                  "right": false
+                },
                 "Tags": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Tags",
+                  "right": true
                 },
                 "Theme": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Thème",
+                  "right": true
                 },
                 "challenge": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Challenge",
+                  "right": true
                 },
                 "communauté d&#39;intérêt": {
                   "position": "tags",
-                  "right": false
+                  "block_title": "Communauté d&lsquo;intérêt",
+                  "right": true
                 },
                 "url": {
                   "position": "links"
@@ -588,8 +802,8 @@
   <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
   <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
   <!-- <script src="https://preprod--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
-  <!-- <script src="https://pj-api-perf--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
-  <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+  <script src="https://pj-api-perf--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
+  <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
 </body>
 
 </html>
