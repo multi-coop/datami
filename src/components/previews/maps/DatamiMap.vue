@@ -751,9 +751,12 @@ export default {
 
             Promise.all(
               fieldDefinitions.map(def => new Promise((resolve, reject) => {
-                // console.log(`C > DatamiMap > initializeMap > ${def.value} : ${def.symbol}`)
+                console.log(`C > DatamiMap > initializeMap > ${def.value} : ${def.symbol}`)
                 map.loadImage(def.symbol, function (error, image) {
-                  if (error) throw error
+                  if (error) {
+                    console.log('C > DatamiMap > initializeMap > error', error)
+                    throw error
+                  }
                   map.addImage(def.value, image)
                   resolve()
                 })
