@@ -509,7 +509,7 @@ export const mixinGlobal = {
             fileUrl = `${urlBase}/${url}`
           }
           // const fileUrl = `${process.env.BASE_URL}${url}`
-          // console.log(`M > mixinGlobal > addStyle > ${this.$options.name} > fileUrl : `, fileUrl)
+          console.log(`M > mixinGlobal > addStyle > ${this.$options.name} > fileUrl : `, fileUrl)
           createStyleLink(node, fileUrl, isFont)
         })
       }
