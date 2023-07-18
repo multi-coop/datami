@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>OBSARM - Nucléaire</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+
+  <div style="background-color: white; margin: 1em;">
+
+    <!-- DATAMI - contribute with GIT ...but without minding it-->
+    <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+    <!-- DATAMI WIDGET'S HTML BLOCK-->
+    <datami-multi-files
+      title="Observatoire des armements"
+      options='{
+        "display": "horizontal"
+      }'
+      gitfiles='[
+      {
+        "title": "BDD sortir du nucléaire",
+        "activate": true,
+        "localdev": false,
+        "gitfilelocal": "http://localhost:8850/statics/csv/data_nucleaire_france_BDD.csv",
+        "gitfile": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-obsarm-nucleaire/-/blob/main/csv/data_nucleaire_france_BDD.csv",
+        "default-tab": true,
+        "creditslogos": [
+          {
+            "localdev": false,
+            "imageUrlLocal": "http://localhost:8850/statics/images/obsarm-logo-02.png",
+            "imageUrl": "https://github.com//multi-coop/multi-coop/obsarm-fr_relance/blob/main/images/clients/obsarm-logo-02.png?raw=true",
+            "url": "https://obsarm.info",
+            "imageHeight": "25px"
+          }
+        ],
+        "options": {
+          "height": "500px",
+          "separator": ";",
+          "lockcolumns": true,
+          "customfilters": {
+            "activate": true,
+            "filterfields": [
+              {
+                "name": "Type",
+                "filtering": "OR"
+              },
+              {
+                "name": "SousType",
+                "filtering": "OR"
+              },
+              {
+                "name": "Status",
+                "filtering": "OR"
+              }
+            ]
+          },
+          "schema": {
+            "localdev": false,
+            "filelocal": "http://localhost:8850/statics/json/obsarm-nucleaire-schema.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-obsarm-nucleaire/-/blob/main/json/obsarm-nucleaire-schema.json"
+          },
+          "fields-custom-properties": {
+            "localdev": false,
+            "filelocal": "http://localhost:8850/statics/json/obsarm-nucleaire-fields-custom-props.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-obsarm-nucleaire/-/blob/main/json/obsarm-nucleaire-fields-custom-props.json"
+          },
+          "pagination":{
+            "itemsPerRow": 4,
+            "itemsPerPage": 40
+          },
+          "cardsview": {
+            "activate": true,
+            "default": false
+          },
+          "cardsdetail": true,
+          "cardssettings": {
+            "mini": {
+              "Lieu": {
+                "position": "title"
+              },
+              "Description": {
+                "position": "description"
+              },
+              "Type": {
+                "position": "tags",
+                "prefix": "Type"
+              },
+              "SousType": {
+                "position": "tags",
+                "prefix": "SousType"
+              },
+              "Status": {
+                "position": "tags",
+                "prefix": "Status"
+              }
+            },
+            "detail": {
+              "Lieu": {
+                "position": "title"
+              },
+              "Description": {
+                "position": "description",
+                "block_title": "Informations"
+              },
+              "Type": {
+                "position": "tags",
+                "block_title": "Type",
+                "right": false
+              },
+              "SousType": {
+                "position": "tags",
+                "block_title": "Sous type",
+                "right": false
+              },
+              "Status": {
+                "position": "tags",
+                "block_title": "Status",
+                "right": false
+              }
+            },
+            "minimap": {
+              "activate": true,
+              "right_side": true,
+              "mapOptions": {
+                "zoom": 5,
+                "maxZoom": 18,
+                "minZoom": 2,
+                "item_geo_fields": {
+                  "latitude": "latitude",
+                  "longitude": "longitude"
+                },
+                "zoom_item": 13,
+                "marker_icon": "map-marker",
+                "marker_height": 45,
+                "marker_width": 45,
+                "marker_color": "#4a4a4a"
+              }
+            }
+          },
+          "datavizview": {
+            "activate": true,
+            "default": false,
+            "localdev": false,
+            "filelocal": "http://localhost:8850/statics/json/obsarm-nucleaire-dataviz-settings.json",
+            "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-obsarm-nucleaire/-/blob/main/json/obsarm-nucleaire-dataviz-settings.json"
+          },
+          "mapview": {
+            "activate": true,
+            "default": true,
+            "maps": [
+              {
+                "title": {
+                  "fr": "CARTOGRAPHIE"
+                },
+                "cols": 12,
+                "localdev": false,
+                "filelocal": "http://localhost:8850/statics/json/obsarm-nucleaire-map-settings.json",
+                "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/datami-obsarm-nucleaire/-/blob/main/json/obsarm-nucleaire-map-settings.json"
+              }
+            ]
+          }
+        },
+        "usertoken": ""
+      }
+    ]'
+      locale="fr"
+    ></datami-multi-files>
+
+    <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+    <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+    <script src="https://deploy-preview-47--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
+    <!-- <script src="https://julien-sprites--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
+    <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
+
+  </div>
+</body>
+
+</html>
