@@ -363,6 +363,7 @@ export default {
       }
     },
     edited (next, prev) {
+      // console.log('C > PreviewCsv > addRowEvent > next : ', next)
       if (next && !prev) {
         this.bufferizeEdited()
       }
@@ -640,6 +641,7 @@ export default {
       let changeId //, isDeleted
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
+      // console.log('C > PreviewCsv > setChanges > action : ', action)
       // console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
       // console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
       if (isHeader) {
@@ -651,6 +653,7 @@ export default {
         changeId = changeObj.id
         // create a filtered copy of changesData
         copyChanges = [...this.dataChanges]
+        // console.log('C > PreviewCsv > setChanges > copyChanges : ', copyChanges)
         if (action === 'diff') {
           copyChanges = copyChanges.filter(ch => {
             const sameId = ch.id === changeId
@@ -684,6 +687,7 @@ export default {
         isFields: isHeader,
         changes: copyChanges
       }
+      // console.log('C > PreviewCsv > setChanges > changesPayload : ', changesPayload)
       this.updateFileChanges(changesPayload)
     },
     addRowEvent (event) {
@@ -701,6 +705,7 @@ export default {
       // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
       // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      this.bufferizeEdited()
 
       // Send signal to switch to last page
       this.addFileSignal('goToLastPage', {})
@@ -708,6 +713,7 @@ export default {
       // update changesData
       const changeObj = {
         action: 'added',
+        row: { ...event.row },
         id: newRow.id
       }
       this.setChanges(changeObj)
@@ -728,6 +734,7 @@ export default {
         }
         this.setChanges(changeObj)
       })
+      this.bufferizeEdited()
     },
     sortEdited (event) {
       // console.log('\nC > PreviewCsv > sortEdited > event : ', event)

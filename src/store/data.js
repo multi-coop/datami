@@ -261,6 +261,7 @@ export const data = {
       // debug && console.log('S-data > A > removeFromState > 2 > state[key] : ', state[key])
     },
     addToBuffer (state, commitData) {
+      // console.log('S-data > M > addToBuffer > commitData : ', commitData)
       const index = state.buffer.findIndex(item => item.uuid === commitData.uuid)
       if (index !== -1) {
         Vue.set(state.buffer, index, commitData)

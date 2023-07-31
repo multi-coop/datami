@@ -371,6 +371,7 @@ export default {
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
       // console.log('C > PreviewJson > setChanges > changeId : ', changeId)
+      // console.log('C > PreviewJson > setChanges > action : ', action)
       let copyChanges = [...this.changesNodes]
       // copyChanges = copyChanges.filter(ch => ch.field !== changeId)
       // console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
@@ -396,6 +397,8 @@ export default {
       // console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
       // set in local store
       this.changesNodes = copyChanges
+
+      this.bufferizeEdited()
 
       // set in global store
       // const changesPayload = {
