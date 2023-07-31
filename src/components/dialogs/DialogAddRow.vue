@@ -153,7 +153,7 @@ export default {
       this.temp[event.colField] = event.val
     },
     confirmAddRow () {
-      // console.log('\nC > DialogAddRow > confirmAddRow > this.temp :', this.temp)
+      console.log('\nC > DialogAddRow > confirmAddRow > this.temp :', this.temp)
       const payload = {
         action: 'addNewRow',
         row: this.temp

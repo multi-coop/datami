@@ -261,13 +261,14 @@ export const data = {
       // debug && console.log('S-data > A > removeFromState > 2 > state[key] : ', state[key])
     },
     addToBuffer (state, commitData) {
+      console.log('S-data > M > addToBuffer > commitData : ', commitData)
       const index = state.buffer.findIndex(item => item.uuid === commitData.uuid)
       if (index !== -1) {
         Vue.set(state.buffer, index, commitData)
       } else {
         state.buffer.push(commitData)
       }
-      // console.log('S-data > M > addToBuffer > state.buffer : ', state.buffer)
+      console.log('S-data > M > addToBuffer > state.buffer : ', state.buffer)
     },
     removeFromBuffer (state, commitData) {
       state.buffer = state.buffer.filter(data => data.uuid !== commitData.uuid)
@@ -304,7 +305,7 @@ export const data = {
       } else {
         storeChanges.push(fileChanges)
       }
-      // console.log('S-data > M > addToChanges > storeChanges : ', storeChanges)
+      console.log('S-data > M > addToChanges > storeChanges : ', storeChanges)
     }
   },
   actions: {
@@ -412,10 +413,10 @@ export const data = {
       })
     },
     updateBuffer ({ commit }, { gitObj, edited, newBranch, token, addToBuffer }) {
-      // console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
-      // console.log('S-data > A > updateBuffer > edited : ', edited)
-      // console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
-      // console.log('S-data > A > updateBuffer > token : ', token)
+      console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
+      console.log('S-data > A > updateBuffer > edited : ', edited)
+      console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
+      console.log('S-data > A > updateBuffer > token : ', token)
       const commitData = { uuid: gitObj.uuid }
       if (addToBuffer) {
         commitData.gitObj = gitObj
@@ -438,7 +439,7 @@ export const data = {
       }
     },
     updateFileChanges ({ commit }, fileChanges) {
-      // console.log('\nS-data > A > updateReqErrors > fileChanges : ', fileChanges)
+      console.log('\nS-data > A > updateReqErrors > fileChanges : ', fileChanges)
       commit('addToChanges', fileChanges)
     }
   }

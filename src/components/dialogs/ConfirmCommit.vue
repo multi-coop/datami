@@ -329,27 +329,27 @@ export default {
       // return true
     },
     async confirmCommit () {
-      // console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
-      // console.log('C > ConfirmCommit > confirmCommit > this.dialogId :', this.dialogId)
+      console.log('\nC > ConfirmCommit > confirmCommit > this.fileId :', this.fileId)
+      console.log('C > ConfirmCommit > confirmCommit > this.dialogId :', this.dialogId)
       this.loading = true
       this.updateCommitting({ fileId: this.fileId, isCommitting: true })
       this.resetReqErrors(this.fileId)
 
       // get commit data
       const commitData = this.getCommitData(this.fileId)
-      // console.log('C > ConfirmCommit > confirmCommit > commitData :', commitData)
+      console.log('C > ConfirmCommit > confirmCommit > commitData :', commitData)
 
       // get file request infos
       const fileReqInfos = this.getFileReqInfosObj(this.fileId)
       commitData.fileReqInfos = fileReqInfos
-      // console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
+      console.log('C > ConfirmCommit > confirmCommit > fileReqInfos :', fileReqInfos)
 
       // get token
       const token = this.fileToken // this.getFileToken(this.fileId)
       commitData.token = token
       commitData.userGit = this.userGit
       commitData.userBranches = this.userBranches
-      // console.log('C > ConfirmCommit > confirmCommit > token :', token)
+      console.log('C > ConfirmCommit > confirmCommit > token :', token)
 
       // append commit message and infos
       commitData.message = this.buildCommitMessage
@@ -365,15 +365,15 @@ export default {
 
       // Send contribution request...
       const respContribution = await sendContribution(commitData)
-      // console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
+      console.log('\nC > ConfirmCommit > confirmCommit > respContribution :', respContribution)
       const respContributionErrors = respContribution.errors
       // const respContributionData = respContribution.data
       const respContributionResume = respContribution.resume
 
       // clean store from committing
-      // console.log('C > ConfirmCommit > confirmCommit > 1 > this.isCommitting : ', this.isCommitting)
+      console.log('C > ConfirmCommit > confirmCommit > 1 > this.isCommitting : ', this.isCommitting)
       this.updateCommitting({ fileId: this.fileId, isCommitting: false, data: respContributionResume })
-      // console.log('C > ConfirmCommit > confirmCommit > 2 > this.isCommitting : ', this.isCommitting)
+      console.log('C > ConfirmCommit > confirmCommit > 2 > this.isCommitting : ', this.isCommitting)
       this.updateFileDialogs('NotificationCommit', { notif: respContributionResume })
 
       // update errors if any

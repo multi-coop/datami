@@ -365,15 +365,16 @@ export default {
       this.updateBuffer({ ...commitData, addToBuffer: true })
     },
     setChanges (changeObj) {
-      // console.log('\nC > PreviewJson > setChanges > changeObj : ', changeObj)
+      console.log('\nC > PreviewJson > setChanges > changeObj : ', changeObj)
       const changeId = changeObj.nodeId
       const changeIsLabel = changeObj.isLabel
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      // console.log('C > PreviewJson > setChanges > changeId : ', changeId)
+      console.log('C > PreviewJson > setChanges > changeId : ', changeId)
+      console.log('C > PreviewJson > setChanges > action : ', action)
       let copyChanges = [...this.changesNodes]
       // copyChanges = copyChanges.filter(ch => ch.field !== changeId)
-      // console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
+      console.log('C > PreviewJson > setChanges > copyChanges : ', copyChanges)
       if (action === 'diff') {
         copyChanges = copyChanges.filter(ch => {
           const sameNode = ch.nodeId === changeId
