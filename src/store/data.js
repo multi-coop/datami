@@ -413,10 +413,10 @@ export const data = {
       })
     },
     updateBuffer ({ commit }, { gitObj, edited, newBranch, token, addToBuffer }) {
-      console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
-      console.log('S-data > A > updateBuffer > edited : ', edited)
-      console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
-      console.log('S-data > A > updateBuffer > token : ', token)
+      // console.log('\nS-data > A > updateBuffer > gitObj : ', gitObj)
+      // console.log('S-data > A > updateBuffer > edited : ', edited)
+      // console.log('S-data > A > updateBuffer > newBranch : ', newBranch)
+      // console.log('S-data > A > updateBuffer > token : ', token)
       const commitData = { uuid: gitObj.uuid }
       if (addToBuffer) {
         commitData.gitObj = gitObj
@@ -439,7 +439,7 @@ export const data = {
       }
     },
     updateFileChanges ({ commit }, fileChanges) {
-      console.log('\nS-data > A > updateReqErrors > fileChanges : ', fileChanges)
+      // console.log('\nS-data > A > updateReqErrors > fileChanges : ', fileChanges)
       commit('addToChanges', fileChanges)
     }
   }
