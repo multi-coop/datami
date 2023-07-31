@@ -641,9 +641,9 @@ export default {
       let changeId //, isDeleted
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      console.log('C > PreviewCsv > setChanges > action : ', action)
-      console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
-      console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
+      // console.log('C > PreviewCsv > setChanges > action : ', action)
+      // console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
+      // console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
       if (isHeader) {
         changeId = changeObj.field
         // create a filtered copy of changesColumns
@@ -673,7 +673,7 @@ export default {
       const isAdded = copyChanges.find(ch => ch.id === changeId && ch.action === 'added')
       if (!isAdded && action === 'diff' && isDiff) copyChanges.push(changeObj)
       if (!isAdded && action !== 'diff') copyChanges.push(changeObj)
-      console.log('C > PreviewCsv > setChanges > copyChanges : ', copyChanges)
+      // console.log('C > PreviewCsv > setChanges > copyChanges : ', copyChanges)
 
       // set in local store
       // if (isHeader) {
@@ -687,11 +687,11 @@ export default {
         isFields: isHeader,
         changes: copyChanges
       }
-      console.log('C > PreviewCsv > setChanges > changesPayload : ', changesPayload)
+      // console.log('C > PreviewCsv > setChanges > changesPayload : ', changesPayload)
       this.updateFileChanges(changesPayload)
     },
     addRowEvent (event) {
-      console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
+      // console.log('\nC > PreviewCsv > addRowEvent > event : ', event)
       // update edited
       const newRowId = this.uuidv4()
       const newRowPosition = `${this.itemsTotal || this.edited.length}`
@@ -701,10 +701,10 @@ export default {
         position: newRowPosition,
         added: true
       }
-      console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
+      // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
       // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.edited.push(newRow)
-      console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
       this.bufferizeEdited()
 
       // Send signal to switch to last page
@@ -753,7 +753,7 @@ export default {
     // BUFFER
     bufferizeEdited () {
       const editedCsv = this.ObjectToCsv(this.editedColumns, this.edited, this.fileOptions)
-      console.log('\nC > PreviewCsv > bufferizeEdited > editedCsv : ', editedCsv)
+      // console.log('\nC > PreviewCsv > bufferizeEdited > editedCsv : ', editedCsv)
 
       const commitData = {
         gitObj: this.gitObj,

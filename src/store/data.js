@@ -261,14 +261,14 @@ export const data = {
       // debug && console.log('S-data > A > removeFromState > 2 > state[key] : ', state[key])
     },
     addToBuffer (state, commitData) {
-      console.log('S-data > M > addToBuffer > commitData : ', commitData)
+      // console.log('S-data > M > addToBuffer > commitData : ', commitData)
       const index = state.buffer.findIndex(item => item.uuid === commitData.uuid)
       if (index !== -1) {
         Vue.set(state.buffer, index, commitData)
       } else {
         state.buffer.push(commitData)
       }
-      console.log('S-data > M > addToBuffer > state.buffer : ', state.buffer)
+      // console.log('S-data > M > addToBuffer > state.buffer : ', state.buffer)
     },
     removeFromBuffer (state, commitData) {
       state.buffer = state.buffer.filter(data => data.uuid !== commitData.uuid)
@@ -305,7 +305,7 @@ export const data = {
       } else {
         storeChanges.push(fileChanges)
       }
-      console.log('S-data > M > addToChanges > storeChanges : ', storeChanges)
+      // console.log('S-data > M > addToChanges > storeChanges : ', storeChanges)
     }
   },
   actions: {
