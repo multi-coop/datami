@@ -1183,7 +1183,7 @@ export default {
       return data
     },
     async processAction (event) {
-      console.log('\nC > DatamiTable > processAction > event : ', event)
+      // console.log('\nC > DatamiTable > processAction > event : ', event)
       switch (event.action) {
         // OPEN CARD
         case 'openCard':
