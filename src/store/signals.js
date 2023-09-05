@@ -7,6 +7,8 @@ export const signals = {
   },
   getters: {
     getSignalsByFileId: (state) => (fileId) => {
+      // console.log('\nS-signals > G > getSignalsByFileId > fileId : ', fileId)
+      // console.log('S-signals > G > getSignalsByFileId > state.fileSignals : ', state.fileSignals)
       const signals = state.fileSignals.filter(signal => signal.fileId === fileId)
       return signals
     }

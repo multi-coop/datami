@@ -288,6 +288,9 @@ export default {
   },
   mounted () {
     this.isMounted = true
+    // get commit data
+    // const commitData = this.getCommitData(this.fileId)
+    // console.log('C > ConfirmCommit > mounted > commitData :', commitData)
   },
   methods: {
     ...mapActions({

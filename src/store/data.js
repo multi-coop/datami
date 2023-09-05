@@ -298,6 +298,7 @@ export const data = {
       state.errors = state.errors.filter(err => err.fileId !== fileId)
     },
     addToChanges (state, fileChanges) {
+      // console.log('\nS-data > M > addToChanges > fileChanges : ', fileChanges)
       const storeChanges = fileChanges.isFields ? state.changesFields : state.changesData
       const index = storeChanges.findIndex(item => item.uuid === fileChanges.uuid)
       if (index !== -1) {

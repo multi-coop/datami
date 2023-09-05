@@ -530,8 +530,7 @@ export const mixinGlobal = {
       this.updateDialogs({ fileId: this.multiFilesId, reset: true })
     },
     addFileSignal (action, event) {
-      // console.log('\nM > mixinGlobal > addFileSignal > component : ', component)
-      // console.log('M > mixinGlobal > addFileSignal > event : ', event)
+      // console.log('\nM > mixinGlobal > addFileSignal > event : ', event)
       // console.log('M > mixinGlobal > addFileSignal > this.fileId : ', this.fileId)
       const signalId = uuidv4()
       this.addSignal({ fileId: this.fileId, signalId: signalId, action: action, event: event })

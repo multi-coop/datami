@@ -363,8 +363,10 @@ export default {
       }
     },
     edited (next, prev) {
-      // console.log('C > PreviewCsv > addRowEvent > next : ', next)
-      if (next && !prev) {
+      // console.log('C > PreviewCsv > watch > edited > next : ', next)
+      // console.log('C > PreviewCsv > watch > edited > prev : ', prev)
+      // if (next && !prev) {
+      if (next) {
         this.bufferizeEdited()
       }
     },
@@ -430,10 +432,13 @@ export default {
       }
     },
     fileSignals (next) {
+      // console.log('\nC > PreviewCsv > watch > fileSignals > next : ', next)
       if (next && next.length) {
         next.forEach(signal => {
+          // console.log('\nC > PreviewCsv > watch > fileSignals > signal : ', signal)
           switch (signal.action) {
             case 'updateCellValue':
+              // console.log('\nC > PreviewCsv > watch > fileSignals > signal : ', signal)
               this.updateEdited(signal.event)
               this.removeFileSignal(signal.signalId)
               break
@@ -641,8 +646,8 @@ export default {
       let changeId //, isDeleted
       const action = changeObj.action
       const isDiff = changeObj.oldVal !== changeObj.val
-      // console.log('C > PreviewCsv > setChanges > action : ', action)
-      // console.log('\nC > PreviewCsv > setChanges > changeObj : ', changeObj)
+      // console.log('\nC > PreviewCsv > setChanges > action : ', action)
+      // console.log('C > PreviewCsv > setChanges > changeObj : ', changeObj)
       // console.log('C > PreviewCsv > setChanges > isDiff : ', isDiff)
       if (isHeader) {
         changeId = changeObj.field
