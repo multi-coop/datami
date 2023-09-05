@@ -966,11 +966,13 @@ export default {
       }
     },
     fileSignals (next) {
+      // console.log('\nC > DatamiTable > watch > fileSignals > next : ', next)
       if (next && next.length) {
         next.forEach(signal => {
+          // console.log('\nC > DatamiTable > watch > fileSignals > signal : ', signal)
           switch (signal.action) {
             case 'changePage':
-              // console.log('\nC > DatamiTable > watch > changePage > signal : ', signal)
+              // console.log('\nC > DatamiTable > watch > fileSignals > signal : ', signal)
               this.changePage(signal.event)
               this.removeFileSignal(signal.signalId)
               break
