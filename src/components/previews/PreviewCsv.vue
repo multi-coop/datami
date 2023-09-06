@@ -451,6 +451,7 @@ export default {
               this.removeFileSignal(signal.signalId)
               break
             case 'addNewRow':
+              // console.log('\nC > PreviewCsv > watch > fileSignals > signal : ', signal)
               this.addRowEvent(signal.event)
               this.removeFileSignal(signal.signalId)
               break
@@ -707,10 +708,10 @@ export default {
         added: true
       }
       // console.log('C > PreviewCsv > addRowEvent > newRow : ', newRow)
-      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
+      // console.log('C > PreviewCsv > addRowEvent > this.edited (A): ', this.edited)
       this.edited.push(newRow)
-      // console.log('C > PreviewCsv > addRowEvent > this.edited : ', this.edited)
-      this.bufferizeEdited()
+      // console.log('C > PreviewCsv > addRowEvent > this.edited (B): ', this.edited)
+      // this.bufferizeEdited()
 
       // Send signal to switch to last page
       this.addFileSignal('goToLastPage', {})
@@ -726,9 +727,9 @@ export default {
     deleteRowsEvent (event) {
       // console.log('\nC > PreviewCsv > deleteRowEvent > event : ', event)
       const toDeleteIndices = event.rows.map(rowToDelete => rowToDelete.id)
-      let edited = [...this.edited]
-      edited = edited.filter(r => !toDeleteIndices.includes(r.id))
-      this.edited = edited
+      let editedTemp = [...this.edited]
+      editedTemp = editedTemp.filter(r => !toDeleteIndices.includes(r.id))
+      this.edited = editedTemp
       // console.log('C > PreviewCsv > deleteRowEvent > this.edited : ', this.edited)
 
       // update changesData
@@ -739,7 +740,7 @@ export default {
         }
         this.setChanges(changeObj)
       })
-      this.bufferizeEdited()
+      // this.bufferizeEdited()
     },
     sortEdited (event) {
       // console.log('\nC > PreviewCsv > sortEdited > event : ', event)
