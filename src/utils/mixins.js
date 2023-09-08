@@ -894,7 +894,7 @@ export const mixinValue = {
       return this.fieldType === 'integer'
     },
     isGeoPoint () {
-      return this.fieldType === 'number' && this.fieldSubtype === 'geopoint'
+      return this.fieldSubtype === 'geopoint'
     },
     isPercent () {
       return this.fieldSubtype === 'percent'
