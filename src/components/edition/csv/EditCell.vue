@@ -47,7 +47,7 @@
         v-else-if="!isHeader && isNumber"
         :custom-class="`g-cell py-0 ${isDarkMode ? 'g-cell-number-darkmode' :''}`"
         :value="input"
-        :step="isInteger ? 1 : 0.01"
+        :step="isInteger ? 1 : (isGeoPoint ? 0.000001 : 0.01)"
         :disabled="isConsolidating"
         controls-position="compact"
         controls-rounded
