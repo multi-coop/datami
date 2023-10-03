@@ -19,7 +19,7 @@ export const filters = {
   },
   mutations: {
     updateFilter (state, { fileId, field, enumArr }) {
-      // console.log('S-filters > M > updateFilter > fileId : ', fileId)
+      // console.log('\nS-filters > M > updateFilter > fileId : ', fileId)
       // console.log('S-filters > M > updateFilter > field : ', field)
       // console.log('S-filters > M > updateFilter > enumArr : ', enumArr)
       // console.log('S-filters > M > updateFilter > state.fileFilters : ', state.fileFilters)
@@ -29,11 +29,17 @@ export const filters = {
       const fileFilter = { ...state.fileFilters[index] }
       // console.log('S-filters > M > updateFilter > fileFilters : ', fileFilter)
 
-      // enumArr.forEach(item => fileFilter.enumArr.add(item))
-      const filterEnumSet = new Set(fileFilter.enumArr)
+      // const filterEnumSet = new Set(fileFilter.enumArr)
+      const filterEnumSet = [...fileFilter.enumArr]
       // console.log('S-filters > M > updateFilter > filterEnumSet : ', filterEnumSet)
-      enumArr.forEach(item => filterEnumSet.add(item))
-      fileFilter.enumArr = Array.from(filterEnumSet)
+      enumArr.forEach(item => {
+        if (!filterEnumSet.includes(item)) {
+          // filterEnumSet.add(item)
+          filterEnumSet.push(item)
+        }
+      })
+      // fileFilter.enumArr = Array.from(filterEnumSet)
+      fileFilter.enumArr = filterEnumSet
 
       Vue.set(state.fileFilters, index, fileFilter)
     },

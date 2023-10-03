@@ -470,7 +470,7 @@ export default {
       const dataParsedSet = new Set()
       dataCopy && dataCopy.forEach(tag => {
         // console.log('...C > PreviewCsv > buildEnumArr > tag : ', tag)
-        const tagStr = tag && tag.toString()
+        const tagStr = tag && tag.toString().trim()
         // console.log('...C > PreviewCsv > buildEnumArr > tagStr : ', tagStr)
         if (tagStr && fieldSubtype === 'tags' && tagStr.includes(separator)) {
           const subArr = tag.split(separator).map(t => t.trim())

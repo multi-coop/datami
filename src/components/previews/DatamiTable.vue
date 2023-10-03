@@ -984,7 +984,9 @@ export default {
     // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
     // console.log('C > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
     // console.log('C > DatamiTable > beforeMount > this.hasCardsView : ', this.hasCardsView)
+    // console.log('\nC > DatamiTable > beforeMount > this.hasCustomSorting : ', this.hasCustomSorting)
     if (this.hasCustomSorting) {
+      // console.log('C > DatamiTable > beforeMount > this.fileOptions : ', this.fileOptions)
       // console.log('\nC > DatamiTable > beforeMount > this.columns : ', this.columns)
       // console.log('\nC > DatamiTable > beforeMount > this.customSortingConfig : ', this.customSortingConfig)
       const settingsSortings = this.customSortingConfig.sortfields.map(f => {

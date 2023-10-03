@@ -318,7 +318,7 @@ export default {
       showFileInfos: false,
 
       // tests for mediawiki fetching
-      mediawikiDefaultFields: ['title', 'imageUrl', 'pageUrl'],
+      mediawikiDefaultFields: ['title', 'imageUrl', 'pageUrl', 'timestamp'],
       mediawikiOptions: undefined,
       wikiObj: undefined,
       wikiItems: undefined,
@@ -357,12 +357,12 @@ export default {
       }
     },
     fileIsLoading (next) {
-      console.log(`\nC > DatamiExploWiki > title: ${this.title} > watch > fileIsLoading > next : `, next)
+      // console.log(`\nC > DatamiExploWiki > title: ${this.title} > watch > fileIsLoading > next : `, next)
       if (next) { this.reloadMediawiki() }
     },
     activeTab (next) {
-      console.log(`\nC > DatamiExploWiki > title: ${this.title} > watch > activeTab > next : `, next)
-      console.log(`C > DatamiExploWiki > title: ${this.title} > watch > activeTab > this.fileId : `, this.fileId)
+      // console.log(`\nC > DatamiExploWiki > title: ${this.title} > watch > activeTab > next : `, next)
+      // console.log(`C > DatamiExploWiki > title: ${this.title} > watch > activeTab > this.fileId : `, this.fileId)
       if (next && !this.fileIsLoading) {
         this.updateReloading({ fileId: this.fileId, isLoading: true })
       }
@@ -401,6 +401,7 @@ export default {
     // add default fields for pages structuration
     // console.log('C > DatamiExploWiki > beforeMount > this.mediawikiOptions : ', this.mediawikiOptions)
     const fields = [...this.mediawikiDefaultFields, ...mediawikiOptions.wikisettings.fields]
+    // console.log('C > DatamiExploWiki > beforeMount > fields : ', fields)
     this.wikiFields = { ...fields }
 
     // get wiki object for further reload infos
@@ -430,9 +431,11 @@ export default {
       const schemaData = schemaRaw && schemaRaw.data
       // console.log('C > DatamiExploWiki > beforeMount > schemaData : ', schemaData)
       const schema = schemaRaw.ok && JSON.parse(schemaData)
+      schema.fields.push({ name: 'timestamp', type: 'string' })
+      // console.log('C > DatamiExploWiki > beforeMount > schema : ', schema)
       mediawikiSchema = schema && { ...schema, file: mediawikiSchema.file }
       // mediawikiOptions.schema = schema
-      // console.log('C > DatamiExploWiki > beforeMount > schema : ', schema)
+      // console.log('C > DatamiExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
     }
 
     // get custom props if any
@@ -459,11 +462,11 @@ export default {
     // console.log('C > DatamiExploWiki > beforeMount > wikiInfosObject : ', wikiInfosObject)
   },
   async mounted () {
-    console.log(`\nC > DatamiExploWiki > title: ${this.title} > mounted > this.fileIsLoading : `, this.fileIsLoading)
-    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.activeTab : `, this.activeTab)
-    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.tabId : `, this.tabId)
-    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.fileId : `, this.fileId)
-    console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.wikiItems : `, this.wikiItems)
+    // console.log(`\nC > DatamiExploWiki > title: ${this.title} > mounted > this.fileIsLoading : `, this.fileIsLoading)
+    // console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.activeTab : `, this.activeTab)
+    // console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.tabId : `, this.tabId)
+    // console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.fileId : `, this.fileId)
+    // console.log(`C > DatamiExploWiki > title: ${this.title} > mounted > this.wikiItems : `, this.wikiItems)
     await this.reloadMediawiki()
   },
   methods: {
@@ -483,7 +486,7 @@ export default {
       }
     },
     async reloadMediawikiRessources () {
-      console.log(`\nC > DatamiExploWiki > title: ${this.title} > reloadMediawikiRessources > this.tabId : `, this.tabId)
+      // console.log(`\nC > DatamiExploWiki > title: ${this.title} > reloadMediawikiRessources > this.tabId : `, this.tabId)
       // Update reloading in store - true
       this.updateReloading({ fileId: this.fileId, isLoading: true })
 
@@ -514,8 +517,9 @@ export default {
       // for (const categApi of this.wikiObj.multipleCategories) {
       // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > categApi.category : ', categApi.category)
       // const respWikidataRaw = await this.getMediawikiData(categApi.apiUrl, this.mediawikiOptions.wikisettings)
+      // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > this.wikiObj.apiUrl : ', this.wikiObj.apiUrl)
       const respWikidataRaw = await this.getMediawikiData(this.wikiObj.apiUrl, this.mediawikiOptions.wikisettings)
-      console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
+      // console.log('\nC > DatamiExploWiki > reloadMediawikiRessources > respWikidataRaw : ', respWikidataRaw)
       if (respWikidataRaw.data) {
         // let wikiItems = respWikidataRaw.data.slice(0, 10)
         wikiItems = respWikidataRaw.data
@@ -530,10 +534,17 @@ export default {
         const itemsToLoad = this.wikiItems.filter(item => !item.isLoaded)
 
         // Request items by batches
+        // cf API doc : https://www.mediawiki.org/wiki/API:Categorymembers
         const batchSize = 50 // Maximum for the mediawiki API : 50
         const batchesToLoad = []
         let pageIds = []
-        const itemsIds = itemsToLoad.map(i => i.pageid)
+        const itemsIds = itemsToLoad.map(i => {
+          return {
+            pageid: i.pageid,
+            title: i.title,
+            timestamp: i.timestamp
+          }
+        })
 
         // Build batches
         while (itemsIds.length > 0) {
@@ -543,8 +554,6 @@ export default {
         }
         // console.log('C > DatamiExploWiki > reloadMediawikiRessources > batchesToLoad : ', batchesToLoad)
 
-        // const batchesToLoadTest = [batchesToLoad[0]]
-        // for (const pageidsToLoad of batchesToLoadTest) {
         for (const pageidsToLoad of batchesToLoad) {
           // console.log('C > DatamiExploWiki > reloadMediawikiRessources > pageidsToLoad : ', pageidsToLoad)
           // Load items by batch
@@ -555,6 +564,7 @@ export default {
           this.wikiPages.push(...itemsBatch)
 
           // updateCustomFilters
+          // console.log('C > DatamiExploWiki > reloadMediawikiRessources > this.hasCustomFilters : ', this.hasCustomFilters)
           if (this.hasCustomFilters) {
             this.wikiPages.forEach(wp => {
               this.updateCustomFilters(wp)
@@ -575,6 +585,8 @@ export default {
     },
     updateCustomFilters (data) {
       // build filters from options config
+      // console.log('\nC > DatamiExploWiki > updateCustomFilters > data : ', data)
+      // console.log('C > DatamiExploWiki > updateCustomFilters > this.fileFilters : ', this.fileFilters)
       this.fileFilters.forEach(filter => {
         // console.log('\n... C > DatamiExploWiki > updateCustomFilters > filter : ', filter)
         const field = filter.field
@@ -585,7 +597,7 @@ export default {
           const dataTagsRaw = data[field]
           // console.log('... C > DatamiExploWiki > updateCustomFilters > dataTagsRaw : ', dataTagsRaw)
           let dataTags = dataTagsRaw.split(this.customFiltersConfig.tagsSeparator)
-          dataTags = dataTags.map(tag => tag.trim())
+          dataTags = dataTags.map(tag => tag.trim().replace('\n', ''))
           this.updateFiltersSettings({
             fileId: this.fileId,
             field: field,

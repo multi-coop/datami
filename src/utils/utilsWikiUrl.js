@@ -239,12 +239,16 @@ export const extractWikiInfos = (urlStr, options) => {
 
   const categoriesApis = []
 
+  // cf API doc : https://www.mediawiki.org/wiki/API:Categorymembers
   const params = {
     action: 'query',
     utf8: '',
     list: 'categorymembers',
     // cmtitle: `Category:${options.category}`,
     cmlimit: 'max',
+    cmsort: 'timestamp',
+    cmprop: 'ids|title|timestamp',
+    cmdir: 'desc', // available options : 'asc', 'desc', 'newer', 'older'
     formatversion: '2',
     format: 'json'
   }
@@ -400,14 +404,16 @@ export async function getMediaWikiPage (wikiInfosObject, pageUrl, uuid, options 
 export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields, options = undefined, extractPage = false) {
   // console.log('\nU > utilsWikiUrl > getItemsByBatch > itemsToLoad : ', itemsToLoad)
   // console.log('U > utilsWikiUrl > getItemsByBatch > options : ', options)
+  const itemsIdsToLoad = itemsToLoad.map(i => i.pageid).join('|')
 
+  // cf API doc : https://www.mediawiki.org/wiki/API:Query
   const apiRoot = wikiInfosObject.apiRoot
   let response, responseBatchData, errors
   let urlItemsBatch = `${apiRoot}?origin=*`
   const params = {
     action: 'query',
     prop: 'revisions',
-    pageids: itemsToLoad.join('|'),
+    pageids: itemsIdsToLoad,
     rvslots: 'main',
     rvprop: 'content',
     utf8: '',
@@ -437,16 +443,25 @@ export async function getItemsByBatch (wikiInfosObject, itemsToLoad, wikiFields,
     // console.log('\nU > utilsWikiUrl > getItemsByBatch > pageData : ', pageData)
     pageData.temp = restructurePageData(pageData, wikiFields)
     return pageData.temp
-    // return pageResponse
   })
   // console.log('\nU > utilsWikiUrl > getItemsByBatch > items : ', items)
 
-  return items
+  // sort back into previous order from itemsToLoad (the API response for query doesn't respect the order of injected pageids)
+  const reorderedItems = itemsToLoad.map(itl => {
+    const itemRaw = items.find(i => itl.pageid === i.pageId)
+    const item = { ...itemRaw, timestamp: itl.timestamp }
+    return item
+  })
+  // console.log('\nU > utilsWikiUrl > getItemsByBatch > reorderedItems : ', reorderedItems)
+
+  return reorderedItems
 }
 
 export function extractWikiBatchContent (wikiInfosObject, pageData, errors, options) {
   // console.log('\n-----------------------')
   // console.log('U > utilsWikiUrl > extractWikiBatchContent > pageData.title : ', pageData.title)
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > pageData : ', pageData)
+  // console.log('U > utilsWikiUrl > extractWikiBatchContent > options : ', options)
   // let pageData
   let imageUrl
 
@@ -481,6 +496,7 @@ export function extractWikiBatchContent (wikiInfosObject, pageData, errors, opti
     pageUrl: `${wikiInfosObject.pageUrlRoot}${pageData.title.replace(' ', '_')}`,
     title: pageData.title,
     imageUrl: imageUrl,
+    timestamp: '',
     // responseData: responseData,
     item: pageData,
     content: content,
@@ -530,8 +546,7 @@ export async function getMediawikiItem (wikiInfosObject, item, options = undefin
 }
 
 export async function extractWikiContent (wikiInfosObject, responseData, item, errors, options) {
-  console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
-  // let responseData
+  // console.log('U > utilsWikiUrl > extractWikiContent > responseData : ', responseData)
   let imageUrl
 
   const content = responseData && (responseData.query.pages[0].revisions[0].content || responseData.query.pages[0].revisions[0].slots.main.content)
