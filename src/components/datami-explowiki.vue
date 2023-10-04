@@ -140,6 +140,14 @@
       :only-preview="true"
       :locale="locale"/>
 
+    <!-- PROGRESS LOADER -->
+    <LoaderWikimedia
+      v-if="fileIsLoading || (wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length))"
+      :file-id="fileId"
+      :items-loaded="wikiPages.length"
+      :items-total="wikiItems.length"
+      :locale="locale"/>
+
     <!-- PREVIEWS CSV / CARDS WIKI -->
     <div
       v-if="wikiItems && fileTypeFamily === 'table'"
@@ -156,15 +164,6 @@
         :locale="locale"
         :debug="debug"/>
     </div>
-
-    <!-- PROGRESS LOADER -->
-    <!-- v-if="wikiItems && wikiItems.length" -->
-    <LoaderWikimedia
-      v-if="fileIsLoading || (wikiItems && wikiItems.length && (wikiPages.length != wikiItems.length))"
-      :file-id="fileId"
-      :items-loaded="wikiPages.length"
-      :items-total="wikiItems.length"
-      :locale="locale"/>
 
     <!-- CREDITS -->
     <DatamiCredits

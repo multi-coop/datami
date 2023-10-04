@@ -358,7 +358,7 @@
 
       <!-- NO RESULTS -->
       <div
-        v-show="dataEditedPaginated && !dataEditedPaginated.length"
+        v-show="!fileIsLoading && dataEditedPaginated && !dataEditedPaginated.length"
         class="column is-12">
         <article
           class="notification my-6 is-light is-flex is-align-items-center is-justify-content-center">
