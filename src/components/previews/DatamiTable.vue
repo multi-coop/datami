@@ -16,39 +16,6 @@
           @action="processAction"/>
       </div>
 
-      <!-- DEBUGGING -->
-      <!-- <div v-if="debug">
-        <div
-          v-if="debug"
-          class="column is-3">
-          fileFilters: <br><pre><code>{{ fileFilters }}</code></pre>
-          consolidating: <br><pre><code>{{ consolidating }}</code></pre><br>
-        </div>
-        <div
-          v-if="debug"
-          class="column is-9">
-          consolidationData: <br><pre><code>{{ consolidationData }}</code></pre><br>
-        </div>
-        <div
-          v-if="debug"
-          class="column is-9">
-          columnsForView: <br>
-          <pre><code>{{ columnsForView }}</code></pre><br>
-        </div>
-        <div
-          v-if="debug"
-          class="column is-9">
-          filterTags: <br>
-          <pre><code>{{ filterTags }}</code></pre><br>
-        </div>
-        <div
-          v-if="debug"
-          class="column is-9">
-          searchText: <br>
-          <pre><code>{{ searchText }}</code></pre><br>
-        </div>
-      </div> -->
-
       <!-- COUNTS & EDIT CSV NAVABAR -->
       <!-- v-show="!isAnyDialogOpen" -->
       <div
@@ -67,48 +34,6 @@
           :locale="locale"
           @action="processAction"/>
       </div>
-
-      <!-- DEBUGGING -->
-      <!-- <div v-if="debug">
-        lockHeaders : <code>{{ lockHeaders }}</code>
-      </div>
-      <div v-if="debug">
-        filterTags : <code>{{ filterTags }}</code>
-      </div>
-      <div v-if="debug">
-        dataChanges: <code>{{ dataChanges }}</code>
-      </div>
-      <div v-if="debug">
-        lockHeaders: <code>{{ lockHeaders }}</code>
-      </div>
-      <div v-if="debug">
-        dataForView: <code>{{ dataForView }}</code>
-      </div> -->
-
-      <!-- <div
-        v-if="debug"
-        class="column is-12">
-        currentViewMode: <code>{{ currentViewMode }}</code><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-4">
-        currentPage: <code>{{ currentPage }}</code><br>
-        itemsPerPage: <code>{{ itemsPerPage }}</code><br>
-        itemsPerPageChoices: <code>{{ itemsPerPageChoices }}</code><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-4">
-        currentPageTable: <code>{{ currentPageTable }}</code><br>
-        itemsPerPageTable: <code>{{ itemsPerPageTable }}</code><br>
-      </div>
-      <div
-        v-if="debug"
-        class="column is-4">
-        currentPageCards: <code>{{ currentPageCards }}</code><br>
-        itemsPerPageCards: <code>{{ itemsPerPageCards }}</code><br>
-      </div> -->
 
       <!-- TABLE / CARDS / DATAVIZ / MAP -->
       <div
