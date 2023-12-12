@@ -80,8 +80,9 @@
       </span>
       <!-- DATETIME -->
       <span v-else-if="field.type === 'datetime'">
-        {{ formatDatetime(itemValue.trim()) || t('global.noValue', locale) }}
+        {{ formatDatetime(itemValue) || t('global.noValue', locale) }}
       </span>
+      <!-- SUBTITLE -->
       <span v-else-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
@@ -276,11 +277,15 @@ export default {
     },
     formatDatetime (value) {
       // console.log('\nC > DatamiCardBlockContent > formatDatetime > value :', value)
-      const date = new Date(value)
-      // console.log('C > DatamiCardBlockContent > formatDatetime > date :', date)
-      // console.log('C > DatamiCardBlockContent > formatDatetime > date.toLocaleDateString() :', date.toLocaleDateString())
-      // console.log('C > DatamiCardBlockContent > formatDatetime > date.toLocaleDateString("FR-fr") :', date.toLocaleDateString('FR-fr'))
-      return date.toLocaleDateString('FR-fr')
+      if (value) {
+        const date = new Date(value.trim())
+        // console.log('C > DatamiCardBlockContent > formatDatetime > date :', date)
+        // console.log('C > DatamiCardBlockContent > formatDatetime > date.toLocaleDateString() :', date.toLocaleDateString())
+        // console.log('C > DatamiCardBlockContent > formatDatetime > date.toLocaleDateString("FR-fr") :', date.toLocaleDateString('FR-fr'))
+        return date.toLocaleDateString('FR-fr')
+      } else {
+        return value
+      }
     }
   }
 }
