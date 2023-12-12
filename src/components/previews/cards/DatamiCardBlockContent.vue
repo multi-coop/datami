@@ -37,6 +37,9 @@
     </p>
 
     <!-- ITEM VALUE IF PREVIEW MODE -->
+    <!-- <div v-if="field.type === 'datetime'">
+      field : <code>{{ field }}</code>
+    </div> -->
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
       class="is-flex is-flex-direction-row is-align-items-center mb-2"
@@ -57,6 +60,7 @@
         class="mr-1 has-text-weight-bold">
         {{ field.prefix }}
       </span>
+
       <span v-if="field.subtype === 'longtext' && field.longtextOptions">
         <!-- DEBUGGING -->
         <!-- <div v-if="field.subtype === 'longtext'">
@@ -74,6 +78,10 @@
             :locale="locale"/>
         </span>
       </span>
+      <!-- DATETIME -->
+      <span v-else-if="field.type === 'datetime'">
+        {{ formatDatetime(itemValue.trim()) || t('global.noValue', locale) }}
+      </span>
       <span v-else-if="isMini && position !== 'subtitle'">
         {{ trimText(itemValue || t('global.noValue', locale), 150) }}
       </span>
@@ -89,7 +97,6 @@
       <!-- NUMBERS -->
       <span v-else-if="field.type === 'number'">
         {{ getNumber(itemValue) || t('global.noValue', locale) }}
-        <!-- {{ field }} -->
         <span v-if="field.subtype === 'percent'">
           &nbsp;%
         </span>
@@ -266,6 +273,14 @@ export default {
   methods: {
     getNumber (value) {
       return this.getNumberByField(value, this.field)
+    },
+    formatDatetime (value) {
+      // console.log('\nC > DatamiCardBlockContent > formatDatetime > value :', value)
+      const date = new Date(value)
+      // console.log('C > DatamiCardBlockContent > formatDatetime > date :', date)
+      // console.log('C > DatamiCardBlockContent > formatDatetime > date.toLocaleDateString() :', date.toLocaleDateString())
+      // console.log('C > DatamiCardBlockContent > formatDatetime > date.toLocaleDateString("FR-fr") :', date.toLocaleDateString('FR-fr'))
+      return date.toLocaleDateString('FR-fr')
     }
   }
 }

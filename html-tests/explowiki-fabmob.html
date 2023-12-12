@@ -792,6 +792,141 @@
               }
             }
           }
+        },
+        {
+          "title": "Évènement",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "wikilist": "https://wiki.lafabriquedesmobilites.fr/wiki/Sp%C3%A9cial:WfExplore?title=Sp%C3%A9cial%3AWfExplore&page=1&wf-expl-Category-Projet=on&wf-expl-Page_creator-fulltext=&wf-expl-Tags=",
+          "onlypreview": true,
+          "locale": "fr",
+          "options": {
+            "height": "700px",
+            "schema": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-schema.json",
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": true,
+              "filelocal": "http://localhost:8888/statics/json/fabmob-projets-fields-custom-props.json",
+              "file": "https://gitlab.com/multi-coop/datami-project/datami-clients/explo-mediawiki/-/blob/main/json/fabmob-projets-fields-custom-props.json"
+            },
+            "wikisettings": {
+              "category": "evénement",
+              "fields": [
+                "url",
+                "description",
+                "shortDescription",
+                "Main_Picture",
+                "communauté",
+                "startDate",
+                "endDate",
+                "needs",
+                "referent",
+                "Titre",
+                "Tags",
+                "etape",
+                "Theme",
+                "location",
+                "from",
+                "challenge"
+              ],
+              "tagfields": [
+                "Theme",
+                "Tags",
+                "communauté"
+              ]
+            },
+            "customsorting" : {
+              "activate": true,
+              "sortfields": [
+                "timestamp"
+              ]
+            },
+            "customfilters" : {
+              "activate": true,
+              "filterfields": [
+                "communauté",
+                "Theme"
+              ]
+            },
+            "pagination": {
+              "itemsPerPage":12
+            },
+            "cardsview": {
+              "activate": true,
+              "default": true
+            },
+            "cardssettings": {
+              "mini": {
+                "title": {"position": "title"},
+                "imageUrl": {"position": "image"},
+                "description": {"position": "resume"},
+                "Theme": {
+                  "position": "tags",
+                  "prefix": "Thème(s) :"
+                },
+                "startDate": {
+                  "position": "date",
+                  "prefix": "Date de début :"
+                },
+                "endDate": {
+                  "position": "date",
+                  "prefix": "Date de fin :"
+                }
+              },
+              "detail": {
+                "title": {
+                  "position": "title"
+                },
+                "imageUrl": {
+                  "position": "image",
+                  "right": true
+                },
+                "startDate": {
+                  "position": "date",
+                  "block_title": "Date de début :"
+                },
+                "endDate": {
+                  "position": "date",
+                  "block_title": "Date de fin :"
+                },
+                "description": {
+                  "position": "description"
+                },
+                "url": {
+                  "position": "links",
+                  "block_title": "Lien",
+                  "right": false
+                },
+                "Tags": {
+                  "position": "tags",
+                  "block_title": "Tags",
+                  "right": true
+                },
+                "Theme": {
+                  "position": "tags",
+                  "block_title": "Thème",
+                  "right": true
+                },
+                "challenge": {
+                  "position": "tags",
+                  "block_title": "Challenge",
+                  "right": true
+                },
+                "communauté": {
+                  "position": "tags",
+                  "block_title": "Communauté",
+                  "right": true
+                },
+                "url": {
+                  "position": "links"
+                }
+              }
+            }
+          }
         }
       ]'
     >
@@ -802,8 +937,8 @@
   <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
   <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
   <!-- <script src="https://preprod--datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
-  <script src="https://pj-api-perf--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script>
-  <!-- <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script> -->
+  <!-- <script src="https://pj-api-perf--datami-widget.netlify.app/js/app.js" type="text/javascript" defer></script> -->
+  <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
 </body>
 
 </html>

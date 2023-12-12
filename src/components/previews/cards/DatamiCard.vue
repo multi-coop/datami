@@ -648,6 +648,7 @@ export default {
         'map_middle',
         'tags_middle',
         'timeline',
+        'date',
         'tags',
         'links',
         'map_bottom'
