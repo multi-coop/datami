@@ -19,7 +19,7 @@
     <p
       v-for="(paragraph, i) in paragraphs"
       :key="`longtext-${fileId}-${fieldId}-${i}-paragraph`"
-      class="">
+      class="is-size-7 mb-1">
       <span v-if="!paragraph.hasBullets">
         {{ paragraph.content }}
       </span>

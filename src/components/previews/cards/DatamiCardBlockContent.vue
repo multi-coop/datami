@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="currentEditViewMode !== 'preview' || (currentEditViewMode === 'preview' && itemValue && itemValue !== '')"
     :class="`DatamiCardBlockContent-${position} datami-component ${classes[position] ? classes[position].content : ''}`">
     <!-- LABEL IF EDIT MODE -->
     <p
@@ -36,6 +37,7 @@
         size="is-small"/>
     </p>
 
+    <!-- <code>{{ itemValue }}</code> -->
     <!-- ITEM VALUE IF PREVIEW MODE -->
     <p
       v-if="currentEditViewMode === 'preview' && !field.templating"
@@ -60,8 +62,8 @@
       <span v-if="field.subtype === 'longtext' && field.longtextOptions">
         <!-- DEBUGGING -->
         <!-- <div v-if="field.subtype === 'longtext'">
-              field : <code>{{ field }}</code>
-            </div> -->
+          field : <code>{{ field }}</code>
+        </div> -->
         <span v-show="showCollapse">
           <PreviewLongText
             :raw-text="itemValue"
