@@ -283,7 +283,8 @@
             <div
               v-for="pos in positions"
               :key="pos"
-              :class="`column is-12 position-left-${pos} ${hasAnyContentByPosition([pos]) ? '' : 'py-0'}`">
+              :class="`column is-12 position-left-${pos} ${hasAnyContentByPosition([pos]) ? 'py-1' : 'py-0'}`">
+              <!-- left : {{  pos  }} -->
               <div
                 v-if="hasAnyContentByPosition([pos])"
                 :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"
@@ -303,7 +304,69 @@
                     :is-mini="isMini"
                     :locale="locale"/>
                 </div>
-                <div v-if="pos === 'tags' && hasContentByPosition('tags')">
+                <div v-if="pos === 'links_top' && hasContentByPosition('links_top')">
+                  <DatamiCardBlockLinks
+                    v-for="(fieldObj, i) in getFieldsByPosition('links_top')"
+                    :key="`links-top-${i}-${fieldObj.field}`"
+                    :file-id="fileId"
+                    :position="'links_top'"
+                    :field="fieldObj"
+                    :field-label="getFieldLabel(fieldObj.field)"
+                    :item-id="item.id"
+                    :item-added="item.added"
+                    :item-value="item[fieldObj.field]"
+                    :is-mini="isMini"
+                    :locale="locale"/>
+                </div>
+                <div
+                  v-if="pos === 'tags_top' && hasContentByPosition('tags_top')"
+                  :class="!showDetail ? 'is-flex' : ''">
+                  <DatamiCardBlockTags
+                    v-for="(fieldObj, i) in getFieldsByPosition('tags_top')"
+                    :key="`tags-top-${i}-${fieldObj.field}`"
+                    :file-id="fileId"
+                    :position="'tags_top'"
+                    :field="fieldObj"
+                    :field-label="getFieldLabel(fieldObj.field)"
+                    :item-id="item.id"
+                    :item-added="item.added"
+                    :item-value="item[fieldObj.field]"
+                    :is-mini="isMini"
+                    :locale="locale"/>
+                </div>
+                <div v-if="pos === 'links_middle' && hasContentByPosition('links_middle')">
+                  <DatamiCardBlockLinks
+                    v-for="(fieldObj, i) in getFieldsByPosition('links_middle')"
+                    :key="`links-middle-${i}-${fieldObj.field}`"
+                    :file-id="fileId"
+                    :position="'links_middle'"
+                    :field="fieldObj"
+                    :field-label="getFieldLabel(fieldObj.field)"
+                    :item-id="item.id"
+                    :item-added="item.added"
+                    :item-value="item[fieldObj.field]"
+                    :is-mini="isMini"
+                    :locale="locale"/>
+                </div>
+                <div
+                  v-if="pos === 'tags_middle' && hasContentByPosition('tags_middle')"
+                  :class="!showDetail ? 'is-flex' : ''">
+                  <DatamiCardBlockTags
+                    v-for="(fieldObj, i) in getFieldsByPosition('tags_middle')"
+                    :key="`tags-middle-${i}-${fieldObj.field}`"
+                    :file-id="fileId"
+                    :position="'tags_middle'"
+                    :field="fieldObj"
+                    :field-label="getFieldLabel(fieldObj.field)"
+                    :item-id="item.id"
+                    :item-added="item.added"
+                    :item-value="item[fieldObj.field]"
+                    :is-mini="isMini"
+                    :locale="locale"/>
+                </div>
+                <div
+                  v-if="pos === 'tags' && hasContentByPosition('tags')"
+                  :class="!showDetail ? 'is-flex' : ''">
                   <DatamiCardBlockTags
                     v-for="(fieldObj, i) in getFieldsByPosition('tags')"
                     :key="`tags-${i}-${fieldObj.field}`"
@@ -378,6 +441,7 @@
               v-for="pos in positions"
               :key="pos"
               :class="`column is-12 position-right-${pos} ${hasAnyContentByPosition([pos], true) ? '' : 'py-0'}`">
+              <!-- right : {{ pos }} -->
               <div
                 v-if="hasAnyContentByPosition([pos], true)"
                 :class="`content ${showDetail ? 'px-3 pt-3 pb-1' : ''}`"

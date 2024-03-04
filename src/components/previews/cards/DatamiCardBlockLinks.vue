@@ -19,9 +19,16 @@
         {{ field.block_title }}
       </span>
     </p>
-    <div v-if="currentEditViewMode === 'preview'">
+    <div
+      v-if="currentEditViewMode === 'preview'"
+      class="is-flex is-align-items-center">
+      <span
+        v-if="field.prefix"
+        class="mr-2 has-text-weight-bold">
+        {{ field.prefix }}
+      </span>
       <b-button
-        v-if="itemValue"
+        v-if="itemValue && !isEmail"
         tag="a"
         size="is-small"
         icon-left="open-in-new"
@@ -30,6 +37,17 @@
         class="outlink"
         @click="trackLink(itemValue)">
         {{ t('global.link', locale) }}
+      </b-button>
+      <b-button
+        v-else-if="itemValue && isEmail"
+        tag="a"
+        size="is-small"
+        icon-left="email"
+        :href="`mailto:${itemValue}`"
+        class="outlink"
+        @click="trackLink(itemValue)">
+        <!-- {{ t('field.email', locale) }} -->
+        {{  itemValue  }}
       </b-button>
       <span v-else>
         <b-icon
