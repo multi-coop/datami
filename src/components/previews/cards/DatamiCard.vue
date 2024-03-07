@@ -320,7 +320,7 @@
                 </div>
                 <div
                   v-if="pos === 'tags_top' && hasContentByPosition('tags_top')"
-                  :class="!showDetail ? 'is-flex' : ''">
+                  :class="!showDetail ? 'is-flex-' : ''">
                   <DatamiCardBlockTags
                     v-for="(fieldObj, i) in getFieldsByPosition('tags_top')"
                     :key="`tags-top-${i}-${fieldObj.field}`"
@@ -350,7 +350,7 @@
                 </div>
                 <div
                   v-if="pos === 'tags_middle' && hasContentByPosition('tags_middle')"
-                  :class="!showDetail ? 'is-flex' : ''">
+                  :class="!showDetail ? 'is-flex-' : ''">
                   <DatamiCardBlockTags
                     v-for="(fieldObj, i) in getFieldsByPosition('tags_middle')"
                     :key="`tags-middle-${i}-${fieldObj.field}`"
@@ -366,7 +366,7 @@
                 </div>
                 <div
                   v-if="pos === 'tags' && hasContentByPosition('tags')"
-                  :class="!showDetail ? 'is-flex' : ''">
+                  :class="!showDetail ? 'is-flex-' : ''">
                   <DatamiCardBlockTags
                     v-for="(fieldObj, i) in getFieldsByPosition('tags')"
                     :key="`tags-${i}-${fieldObj.field}`"
