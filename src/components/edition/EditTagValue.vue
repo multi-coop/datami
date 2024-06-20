@@ -246,20 +246,26 @@ export default {
   },
   methods: {
     addInputTag () {
+      // console.log('\nC > EditTagValue > addInputTag (start) > this.addedInput : ', this.addedInput)
       this.changeValue(this.addedInput)
       if (!this.tagsEnum.includes(this.addedInput)) {
         this.$emit('addTagToEnum', this.addedInput)
       }
       this.clearAddedInput()
+      // console.log('C > EditTagValue > addInputTag (end) > this.addedInput : ', this.addedInput)
     },
     removeInput () {
       this.changeValue(undefined)
     },
     clearAddedInput () {
+      // console.log('\nC > EditTagValue > clearAddedInput (...) > this.addedInput : ', this.addedInput)
       this.addedInput = undefined
+      // console.log('C > EditTagValue > clearAddedInput (...) > this.addedInput : ', this.addedInput)
     },
     changeValue (value) {
       this.showMenu = false
+      // console.log('\nC > EditTagValue > changeValue (...) > this.addedInput : ', this.addedInput)
+      // console.log('C > EditTagValue > changeValue (...) > value : ', value)
       this.$emit('updateInput', value)
     },
     itemDirect (field, val) {

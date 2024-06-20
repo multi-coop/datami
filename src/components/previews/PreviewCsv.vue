@@ -438,11 +438,12 @@ export default {
           // console.log('\nC > PreviewCsv > watch > fileSignals > signal : ', signal)
           switch (signal.action) {
             case 'updateCellValue':
-              // console.log('\nC > PreviewCsv > watch > fileSignals > signal : ', signal)
+              // console.log('\nC > PreviewCsv > watch > fileSignals > updateCellValue > signal : ', signal)
               this.updateEdited(signal.event)
               this.removeFileSignal(signal.signalId)
               break
             case 'addTagToEnum':
+              // console.log('\nC > PreviewCsv > watch > fileSignals > addTagToEnum > signal : ', signal)
               this.addTagToEnum(signal.event)
               this.removeFileSignal(signal.signalId)
               break
@@ -636,7 +637,8 @@ export default {
     addTagToEnum (event) {
       // console.log('\nC > PreviewCsv > addTagToEnum > event : ', event)
       const editedColumns = this.editedColumns.map(col => {
-        return col.field === event.field.field ? event.field : col
+        // console.log('\nC > PreviewCsv > addTagToEnum > col : ', col)
+        return col.field === event.value.field.field ? event.value.field : col
       })
       // console.log('C > PreviewCsv > addTagToEnum > editedColumns : ', editedColumns)
       this.editedColumns = editedColumns
