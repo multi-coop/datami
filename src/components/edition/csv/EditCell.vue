@@ -253,6 +253,8 @@ export default {
       return newInput
     },
     emitAddToEnum (event) {
+      // console.log('\nC > EditCell > emitChange > event : ', event)
+      // console.log('C > EditCell > emitChange > this.field : ', this.field)
       const updatedField = { ...this.field }
       updatedField.enumArr.push(event)
       updatedField.enumArr = updatedField.enumArr.sort((a, b) => a.localeCompare(b))
@@ -275,6 +277,8 @@ export default {
       // console.log('\nC > EditCell > emitChangeDebounced > event : ', event)
       // console.log('C > EditCell > emitChangeDebounced > this.tagsEnumEnriched : ', this.tagsEnumEnriched)
       // console.log('C > EditCell > emitChangeDebounced > this.field : ', this.field)
+      // console.log('C > EditCell > emitChangeDebounced > this.isTag : ', this.isTag)
+      // console.log('C > EditCell > emitChangeDebounced > this.isCategory : ', this.isCategory)
       let value
       if (this.isTag && !this.isCategory) {
         value = event.filter(v => v !== '')
@@ -306,6 +310,7 @@ export default {
         payload.isHeader = true
       }
       // console.log('C > EditCell > emitChangeDebounced > payload : ', payload)
+      // console.log('C > EditCell > emitChangeDebounced > this.fromDialog : ', this.fromDialog)
 
       // Update cell value using store git-data
       // this.$emit('updateCellValue', payload)
