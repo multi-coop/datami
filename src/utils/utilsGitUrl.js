@@ -244,7 +244,15 @@ export const buildGitRequestOptions = (method, provider, token, body = undefined
       }
       break
     case 'github':
-      authHeader = { Authorization: `Token ${token}` }
+      // authHeader = { Authorization: `Token ${token}` }
+      authHeader = {
+        // Accept: '*/*',
+        // Accept: 'application/vnd.github+json',
+        // Accept: 'application/json',
+        // Accept: 'application/vnd.github.v3.raw',
+        // 'X-GitHub-Api-Version': '2022-11-28',
+        Authorization: `Token ${token}`
+      }
       break
   }
   if (method === 'PUT') {

@@ -11,7 +11,8 @@ import {
 // see https://www.atecna.ca/fr/blog/fetch-vs-axios/
 
 export async function getData (url, funcName = undefined, token = undefined, raw = false, provider = undefined, filefullname = undefined) {
-  // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
+  console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
+  console.log('\nU > gitProvidersAPI > getData > A > provider : ', provider)
   // console.log('U > gitProvidersAPI > getData > A > token : ', token)
   // console.log('U > gitProvidersAPI > getData > A > funcName : ', funcName)
   // console.log('U > gitProvidersAPI > getData > A > raw : ', raw)
@@ -38,27 +39,72 @@ export async function getData (url, funcName = undefined, token = undefined, raw
         //   'Accept-Encoding': 'gzip, deflate, br',
         //   Authorization: `token ${token}`
         // }
+        requestOptions.headers = {
+          // Accept: '*/*',
+          // Accept: 'application/vnd.github+json',
+          // Accept: 'application/json',
+          // Accept: 'application/vnd.github.v4.raw'
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          Authorization: `token ${token}`
+          // Authorization: token
+        }
         // console.log('U > gitProvidersAPI > getData > A > requestOptions : ', requestOptions)
         break
     }
   }
-  // console.log('U > gitProvidersAPI > getData > A > requestOptions : ', requestOptions)
+  console.log('U > gitProvidersAPI > getData > A > requestOptions : \n', requestOptions)
   const req = await fetch(url, requestOptions)
 
-  // console.log('\nU > gitProvidersAPI > getData > B > url : ', url)
-  // console.log('U > gitProvidersAPI > getData > B > req : ', req)
-  // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)
-  // console.log('U > gitProvidersAPI > getData > B > raw : ', raw)
+  console.log('\nU > gitProvidersAPI > getData > B > url : \n', url)
   // console.log('U > gitProvidersAPI > getData > B > provider : ', provider)
+  console.log('U > gitProvidersAPI > getData > B > raw : ', raw)
+  console.log('U > gitProvidersAPI > getData > B > req : \n', req)
+  // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)
 
+  let reqBis
+  let reqTer
   let resp
-  if (raw || provider === 'localhost') {
-    // console.log('U > gitProvidersAPI > getData > B > req.text : ', req.text)
-    resp = await req.text()
-  } else {
-    // console.log('U > gitProvidersAPI > getData > B > req.json : ', req.json)
-    resp = await req.json()
+  // let temp
+
+  switch (provider) {
+    case 'localhost':
+      resp = await req.text()
+      break
+    case 'gitlab':
+      resp = raw ? await req.text() : await req.json()
+      break
+    case 'github':
+      console.log('U > gitProvidersAPI > getData > XXX > req.redirected :', req.redirected)
+      reqBis = req.redirected ? await req.json() : req
+      console.log('U > gitProvidersAPI > getData > XXX > reqBis : \n', reqBis)
+      reqTer = reqBis.download_url ? await fetch(reqBis.download_url) : reqBis
+      console.log('U > gitProvidersAPI > getData > XXX > reqTer : \n', reqTer)
+      resp = raw
+        ? await reqTer.text()
+        : { data: await reqTer.text(), url: reqTer.url }
+      break
   }
+
+  // if (raw || provider === 'localhost') {
+  //   // console.log('U > gitProvidersAPI > getData > B > req.text ...')
+  //   resp = await req.text()
+  // } else if (provider === 'github') {
+  //   // resp = await req.text()
+  //   // console.log('U > gitProvidersAPI > getData > XXX > resp : \n', resp)
+  //   resp = {
+  //     data: req.content ? await fetch(req.download_url).text() : await req.text()
+  //   }
+  //   console.log('U > gitProvidersAPI > getData > XXX > resp : \n', resp)
+  //   // const testBis = atob(req.content)
+  //   // console.log('U > gitProvidersAPI > getData > XXX > testBis : \n', testBis)
+  //   // const reqBis = await fetch(req.download_url, requestOptions)
+  //   // console.log('U > gitProvidersAPI > getData > XXX > reqBis : \n', reqBis)
+  // } else {
+  //   console.log('U > gitProvidersAPI > getData > B > req.json ...')
+  //   resp = await req.json()
+  // }
+
   if (provider === 'localhost' && !raw) {
     const filePath = url.split('/')
     resp = {
@@ -67,12 +113,12 @@ export async function getData (url, funcName = undefined, token = undefined, raw
       data: resp
     }
   }
-  // console.log('U > gitProvidersAPI > getData > B > resp : ', resp)
+  console.log('U > gitProvidersAPI > getData > C > resp : \n', resp)
 
   if (!req.ok) {
     const err = {
       url: url,
-      function: funcName,
+      function: `${funcName} / raw : ${raw}`,
       filefullname: filefullname,
       code: req.status,
       resp: resp
@@ -95,14 +141,24 @@ export async function getFileData (gitObj, token = undefined) {
   // get correct API url
   const url = gitObj.apiFile
   const provider = gitObj.provider
+  // console.log('U > gitProvidersAPI > getFileData > gitObj : \n', gitObj)
   const fetched = await getData(url, 'getFileData', token, false, provider, gitObj.filefullname)
   return fetched
 }
 
 export async function getFileDataRaw (gitObj, token = undefined) {
   // get correct API url
-  const url = gitObj.apiFileRaw
+  let url = gitObj.apiFileRaw
   const provider = gitObj.provider
+  // console.log('U > gitProvidersAPI > getFileDataRaw > gitObj : \n', gitObj)
+  if (token) {
+    switch (provider) {
+      case 'github':
+        // url = `${gitObj.apiFile}&$token=${token}`
+        url = `${gitObj.apiFile}`
+        break
+    }
+  }
   const fetched = await getData(url, 'getFileDataRaw', token, true, provider, gitObj.filefullname)
   return fetched
 }
