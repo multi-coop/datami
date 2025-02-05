@@ -325,10 +325,6 @@ export default {
       default: false,
       type: Boolean
     },
-    private: {
-      default: false,
-      type: Boolean
-    },
     gitfile: {
       default: '',
       type: String
@@ -495,7 +491,6 @@ export default {
     this.initializeStorage()
     // console.log('\nC > DatamiFile > beforeMount > this.gitfile : ', this.gitfile)
     // console.log('C > DatamiFile > beforeMount > this.localdev : ', this.localdev)
-    // console.log('C > DatamiFile > beforeMount > this.private : ', this.private)
     // console.log('C > DatamiFile > beforeMount > this.gitfilelocal : ', this.gitfilelocal)
     this.gitfileDatami = this.localdev ? this.gitfilelocal : this.gitfile
     await this.initWidget()
@@ -532,7 +527,7 @@ export default {
       // console.log('\nC > DatamiFile > initWidget > this.trackalloutlinks : ', this.trackalloutlinks)
       this.activateTrackAllOutlinks({ uuid: this.fileId, val: this.trackalloutlinks })
 
-      const gitInfosObject = this.extractGitInfos(this.gitfileDatami, this.private)
+      const gitInfosObject = this.extractGitInfos(this.gitfileDatami)
       // console.log('C > DatamiFile > initWidget > gitInfosObject : ', gitInfosObject)
 
       // console.log('C > DatamiFile > initWidget > this.options : ', this.options)
@@ -579,7 +574,7 @@ export default {
       // console.log('C > DatamiFile > initWidget > fileSchemaLocal : ', fileSchemaLocal)
       if (fileSchema) { fileSchema.file = fileSchemaLocal ? fileSchema.filelocal : fileSchema && fileSchema.file }
       if (fileSchema && fileSchema.file) {
-        const schemaGitObj = this.extractGitInfos(fileSchema.file, fileSchema.private)
+        const schemaGitObj = this.extractGitInfos(fileSchema.file)
         // console.log('C > DatamiFile > initWidget > schemaGitObj : ', schemaGitObj)
         // const schemaRaw = await this.getFileDataRaw(schemaGitObj, this.fileToken)
         // console.log('C > DatamiFile > initWidget > this.fileToken >>> ', this.fileToken)
@@ -600,7 +595,7 @@ export default {
       // console.log('C > DatamiFile > initWidget > fileCustomPropsLocal : ', fileCustomPropsLocal)
       if (fileCustomProps) { fileCustomProps.file = fileCustomPropsLocal ? fileCustomProps.filelocal : fileCustomProps && fileCustomProps.file }
       if (fileCustomProps && fileCustomProps.file) {
-        const customPropsGitObj = this.extractGitInfos(fileCustomProps.file, fileCustomProps.private)
+        const customPropsGitObj = this.extractGitInfos(fileCustomProps.file)
         // console.log('C > DatamiFile > initWidget > customPropsGitObj : ', customPropsGitObj)
         // const customPropsRaw = await this.getFileDataRaw(customPropsGitObj, this.fileToken)
         const customPropsRaw = await this.getFileDataAndErrors(customPropsGitObj, this.fileToken, true)
@@ -621,7 +616,7 @@ export default {
       // console.log('C > DatamiFile > initWidget > fileDatavizLocal : ', fileDatavizLocal)
       if (fileDataviz) { fileDataviz.file = fileDatavizLocal ? fileDataviz.filelocal : fileDataviz && fileDataviz.file }
       if (fileDataviz && fileDataviz.file) {
-        const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file, fileDataviz.private)
+        const datavizPropsGitObj = this.extractGitInfos(fileDataviz.file)
         // const datavizPropsRaw = await this.getFileDataRaw(datavizPropsGitObj, this.fileToken)
         const datavizPropsRaw = await this.getFileDataAndErrors(datavizPropsGitObj, this.fileToken, true)
         const datavizPropsData = datavizPropsRaw && datavizPropsRaw.data
@@ -640,7 +635,7 @@ export default {
           // console.log('C > DatamiFile > initWidget > mapSettingsLocal : ', mapSettingsLocal)
           map.file = mapSettingsLocal ? map.filelocal : map.file
           if (map.file) {
-            const mapPropsGitObj = this.extractGitInfos(map.file, map.private)
+            const mapPropsGitObj = this.extractGitInfos(map.file)
             // const mapPropsRaw = await this.getFileDataRaw(mapPropsGitObj, this.fileToken)
             const mapPropsRaw = await this.getFileDataAndErrors(mapPropsGitObj, this.fileToken, true)
             const mapPropsData = mapPropsRaw && mapPropsRaw.data
@@ -731,9 +726,8 @@ export default {
       for (const resrc of this.readyToLoadExtRessources) {
         // console.log('C >>> DatamiFile > loadExtRessources > resrc : ', resrc)
         const fileUrl = resrc.ressource
-        const fileIsPrivate = resrc.private
         // console.log('... C >>> DatamiFile > loadExtRessources > fileUrl : ', fileUrl)
-        const ressourceGitObj = this.extractGitInfos(fileUrl, fileIsPrivate)
+        const ressourceGitObj = this.extractGitInfos(fileUrl)
         // const ressourceRaw = await this.getFileDataRaw(ressourceGitObj, this.fileToken)
         const ressourceRaw = await this.getFileDataAndErrors(ressourceGitObj, this.fileToken, true)
         // console.log('C >>> DatamiFile > loadExtRessources > ressourceRaw : ', ressourceRaw)

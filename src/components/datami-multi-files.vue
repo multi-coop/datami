@@ -190,7 +190,6 @@
                     :gitfile="fileTab.gitfile"
                     :gitfilelocal="fileTab.gitfilelocal"
                     :localdev="fileTab.localdev"
-                    :private="fileTab.private"
                     :options="fileTab.options"
                     :usertoken="fileTab.usertoken"
                     :locale="locale || fileTab.locale"
@@ -350,30 +349,23 @@ export default {
   watch: {
     activeTab (next) {
       // console.log('\nC > DatamiMultiFiles > watch > activeTab > next : ', next)
-      // let gitObj = this.getGitInfosObj(next)
-      // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
       let gitObj
       const file = this.files[this.urlActiveTab - 1]
       // console.log('C > DatamiMultiFiles > watch > activeTab > file : ', file)
       if (file) {
         const fileUrl = file.localdev ? file.gitfilelocal : file.gitfile
-        const fileIsPrivate = file.private
-        gitObj = extractGitInfos(fileUrl, fileIsPrivate)
+        gitObj = extractGitInfos(fileUrl)
       }
       // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
 
       const fileType = gitObj && gitObj.filetype
-      // let options = this.getFileOptionsObj(next)
-      const options = file && JSON.parse(file.options)
+      // console.log('C > DatamiMultiFiles > watch > activeTab > file : ', file)
+      const options = file && file.options && JSON.parse(file.options)
       // console.log('C > DatamiMultiFiles > watch > activeTab > options : ', options)
 
       // view mode from store
       let viewMode = this.getViewMode(next) || this.urlActiveView
       // console.log('C > DatamiMultiFiles > watch > activeTab > viewMode : ', viewMode)
-
-      // if 1st request
-      // const viewModeUrl = this.urlActiveView
-      // console.log('C > DatamiMultiFiles > watch > activeTab > viewModeUrl : ', viewModeUrl)
 
       // check if requested view is available for new tab
       const availableViews = getAvailableViews(options, fileType, next)

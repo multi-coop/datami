@@ -16,8 +16,7 @@ export async function getData (
   token = undefined,
   raw = false,
   provider = undefined,
-  filefullname = undefined,
-  isPrivate = undefined
+  filefullname = undefined
 ) {
   // console.log('\nU > gitProvidersAPI > getData > A > url : ', url)
   // console.log('\nU > gitProvidersAPI > getData > A > provider : ', provider)
@@ -38,15 +37,8 @@ export async function getData (
         requestOptions.headers = { 'PRIVATE-TOKEN': token }
         break
       case 'github':
-        // error 403 with github server for preflight OPTION on public files
         // github docs : https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28
         // cf issue : https://github.com/orgs/community/discussions/24659
-        // requestOptions.headers = {
-        //   Connection: 'keep-alive',
-        //   Accept: '*/*',
-        //   'Accept-Encoding': 'gzip, deflate, br',
-        //   Authorization: `token ${token}`
-        // }
         requestOptions.headers = {
           // Accept: '*/*',
           // Accept: 'application/vnd.github+json',
@@ -67,12 +59,11 @@ export async function getData (
   // console.log('\nU > gitProvidersAPI > getData > B > url : \n', url)
   // console.log('U > gitProvidersAPI > getData > B > provider : ', provider)
   // console.log('U > gitProvidersAPI > getData > B > raw : ', raw)
-  // console.log('U > gitProvidersAPI > getData > B > isPrivate : ', isPrivate)
   // console.log('U > gitProvidersAPI > getData > B > req : \n', req)
   // console.log('U > gitProvidersAPI > getData > B > funcName : ', funcName)
+  // console.log('U > gitProvidersAPI > getData > B > await req.text() : ', await req.text())
 
   let reqBis
-  let reqTer
   let resp
 
   switch (provider) {
@@ -83,35 +74,14 @@ export async function getData (
       resp = raw ? await req.text() : await req.json()
       break
     case 'github':
-      // console.log('U > gitProvidersAPI > getData > XXX > isPrivate :', isPrivate)
-      reqBis = isPrivate ? req : await req.json()
-      // console.log('U > gitProvidersAPI > getData > XXX > reqBis : \n', reqBis)
-      reqTer = reqBis.download_url ? await fetch(reqBis.download_url) : reqBis
-      // console.log('U > gitProvidersAPI > getData > XXX > reqTer : \n', reqTer)
+      // console.log('U > gitProvidersAPI > getData > XXX 2 > req :', req)
+      reqBis = req.download_url ? await fetch(req.download_url) : req
+      // console.log('U > gitProvidersAPI > getData > XXX 4 > reqBis : \n', reqBis)
       resp = raw
-        ? await reqTer.text()
-        : { data: await reqTer.text(), url: reqTer.url }
+        ? await reqBis.text()
+        : { data: await reqBis.text(), url: reqBis.url }
       break
   }
-
-  // if (raw || provider === 'localhost') {
-  //   // console.log('U > gitProvidersAPI > getData > B > req.text ...')
-  //   resp = await req.text()
-  // } else if (provider === 'github') {
-  //   // resp = await req.text()
-  //   // console.log('U > gitProvidersAPI > getData > XXX > resp : \n', resp)
-  //   resp = {
-  //     data: req.content ? await fetch(req.download_url).text() : await req.text()
-  //   }
-  //   console.log('U > gitProvidersAPI > getData > XXX > resp : \n', resp)
-  //   // const testBis = atob(req.content)
-  //   // console.log('U > gitProvidersAPI > getData > XXX > testBis : \n', testBis)
-  //   // const reqBis = await fetch(req.download_url, requestOptions)
-  //   // console.log('U > gitProvidersAPI > getData > XXX > reqBis : \n', reqBis)
-  // } else {
-  //   console.log('U > gitProvidersAPI > getData > B > req.json ...')
-  //   resp = await req.json()
-  // }
 
   if (provider === 'localhost' && !raw) {
     const filePath = url.split('/')
@@ -121,13 +91,12 @@ export async function getData (
       data: resp
     }
   }
-  console.log('U > gitProvidersAPI > getData > C > isPrivate : ', isPrivate)
-  console.log('U > gitProvidersAPI > getData > C > resp : \n', resp)
+  // console.log('U > gitProvidersAPI > getData > C > resp : \n', resp)
 
   if (!req.ok) {
     const err = {
       url: url,
-      function: `${funcName} / raw : ${raw} / private : ${isPrivate}`,
+      function: `${funcName} / raw : ${raw}`,
       filefullname: filefullname,
       code: req.status,
       resp: resp
@@ -151,7 +120,7 @@ export async function getFileData (gitObj, token = undefined) {
   const url = gitObj.apiFile
   const provider = gitObj.provider
   // console.log('U > gitProvidersAPI > getFileData > gitObj : \n', gitObj)
-  const fetched = await getData(url, 'getFileData', token, false, provider, gitObj.filefullname, gitObj.privateRepo)
+  const fetched = await getData(url, 'getFileData', token, false, provider, gitObj.filefullname)
   return fetched
 }
 
@@ -167,7 +136,7 @@ export async function getFileDataRaw (gitObj, token = undefined) {
         break
     }
   }
-  const fetched = await getData(url, 'getFileDataRaw', token, true, provider, gitObj.filefullname, gitObj.privateRepo)
+  const fetched = await getData(url, 'getFileDataRaw', token, true, provider, gitObj.filefullname)
   return fetched
 }
 
