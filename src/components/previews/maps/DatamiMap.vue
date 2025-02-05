@@ -1847,15 +1847,15 @@ export default {
     // UTILS
     // - - - - - - - - - - - - - - - - - - //
     joinItemsToPolygon (source, dataLoaded, choroRefIdex, noDataProxy = false) {
-      console.log('\nC > DatamiMap > joinItemsToPolygon ...')
-      console.log('C > DatamiMap > joinItemsToPolygon > source : ', source)
-      console.log('C > DatamiMap > joinItemsToPolygon > source.polygon_prop_id : ', source.polygon_prop_id)
-      console.log('C > DatamiMap > joinItemsToPolygon > source.join_polygon_id_to_field : ', source.join_polygon_id_to_field)
-      console.log('C > DatamiMap > joinItemsToPolygon > source.agregated_data_field : ', source.agregated_data_field)
+      // console.log('\nC > DatamiMap > joinItemsToPolygon ...')
+      // console.log('C > DatamiMap > joinItemsToPolygon > source : ', source)
+      // console.log('C > DatamiMap > joinItemsToPolygon > source.polygon_prop_id : ', source.polygon_prop_id)
+      // console.log('C > DatamiMap > joinItemsToPolygon > source.join_polygon_id_to_field : ', source.join_polygon_id_to_field)
+      // console.log('C > DatamiMap > joinItemsToPolygon > source.agregated_data_field : ', source.agregated_data_field)
 
       // console.log('C > DatamiMap > joinItemsToPolygon > this.contentFields : ', this.contentFields)
-      console.log('C > DatamiMap > joinItemsToPolygon > this.fields : ', this.fields)
-      console.log('C > DatamiMap > joinItemsToPolygon > this.items : ', this.items)
+      // console.log('C > DatamiMap > joinItemsToPolygon > this.fields : ', this.fields)
+      // console.log('C > DatamiMap > joinItemsToPolygon > this.items : ', this.items)
 
       // modify > agregate data
       this.showLoader = true
