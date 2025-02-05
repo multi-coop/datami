@@ -733,7 +733,7 @@ export default {
         const navCtrl = new NavigationControl()
         map.addControl(navCtrl, 'bottom-right')
         // Generate geojson from table data and add map items
-        console.log('\nC > DatamiMap > initializeMap > this.itemsForMap : ', this.itemsForMap)
+        // console.log('\nC > DatamiMap > initializeMap > this.itemsForMap : ', this.itemsForMap)
         this.geoJson = createGeoJsonDataPoints(this.itemsForMap, this.fieldLat, this.fieldLong)
         await this.createMapItems(this.geoJson)
 
