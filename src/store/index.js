@@ -92,9 +92,9 @@ export const defaultStore = {
     updateScrolled ({ commit }, scrolled) {
       commit('setScrolled', scrolled)
     },
-    buildGitInfos ({ commit }, gitUrl) {
+    buildGitInfos ({ commit }, gitUrl, isPrivate = false) {
       // console.log('S-index > A > buildGitInfos > gitUrl : ', gitUrl)
-      const gitInfosObject = extractGitInfos(gitUrl)
+      const gitInfosObject = extractGitInfos(gitUrl, isPrivate)
       // console.log('S-index > A > buildGitInfos > gitInfosObject : ', gitInfosObject)
       commit('setState', { key: 'gitInfos', data: gitInfosObject })
     },

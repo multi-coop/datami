@@ -85,7 +85,7 @@ export const buildApiRoots = (gitInfos) => {
   }
 }
 
-export const extractGitInfos = (str) => {
+export const extractGitInfos = (str, privateRepo = undefined) => {
   // console.log('\nU > utilsGitUrl > extractGitInfos > str : ', str)
   let provider, orga, repo, branch, rawRoot, publicRoot, remaining, api
   let subgroups = []
@@ -204,6 +204,7 @@ export const extractGitInfos = (str) => {
     subgroups: subgroups,
     subgroupsStr: subgroupsStr,
     repo: repo,
+    privateRepo: privateRepo,
     branch: branch || 'master',
     repoUrl: publicRootUrl,
     rawRoot: rawRoot,

@@ -190,6 +190,7 @@
                     :gitfile="fileTab.gitfile"
                     :gitfilelocal="fileTab.gitfilelocal"
                     :localdev="fileTab.localdev"
+                    :private="fileTab.private"
                     :options="fileTab.options"
                     :usertoken="fileTab.usertoken"
                     :locale="locale || fileTab.locale"
@@ -356,7 +357,8 @@ export default {
       // console.log('C > DatamiMultiFiles > watch > activeTab > file : ', file)
       if (file) {
         const fileUrl = file.localdev ? file.gitfilelocal : file.gitfile
-        gitObj = extractGitInfos(fileUrl)
+        const fileIsPrivate = file.private
+        gitObj = extractGitInfos(fileUrl, fileIsPrivate)
       }
       // console.log('C > DatamiMultiFiles > watch > activeTab > gitObj : ', gitObj)
 

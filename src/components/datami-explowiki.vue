@@ -408,7 +408,7 @@ export default {
     let mediawikiSchema = mediawikiOptions.schema
     // console.log('C > DatamiExploWiki > beforeMount > mediawikiSchema : ', mediawikiSchema)
     if (mediawikiSchema && mediawikiSchema.file) {
-      const schemaGitObj = this.extractGitInfos(mediawikiSchema.file)
+      const schemaGitObj = this.extractGitInfos(mediawikiSchema.file, mediawikiSchema.private)
       // console.log('C > DatamiExploWiki > beforeMount > schemaGitObj : ', schemaGitObj)
       // const schemaRaw = await this.getFileDataRaw(schemaGitObj)
       const schemaRaw = await this.getFileDataAndErrors(schemaGitObj, undefined, true)
@@ -424,7 +424,7 @@ export default {
     // get custom props if any
     let mediawikiCustomProps = mediawikiOptions['fields-custom-properties']
     if (mediawikiCustomProps && mediawikiCustomProps.file) {
-      const customPropsGitObj = this.extractGitInfos(mediawikiCustomProps.file)
+      const customPropsGitObj = this.extractGitInfos(mediawikiCustomProps.file, mediawikiCustomProps.private)
       // const customPropsRaw = await this.getFileDataRaw(customPropsGitObj)
       const customPropsRaw = await this.getFileDataAndErrors(customPropsGitObj, undefined, true)
       const customPropsData = customPropsRaw && customPropsRaw.data

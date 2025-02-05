@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://gitlab.com/multi-coop/datami/-/raw/main/public/logo-DATAMI-favicon.ico">
+  <title>Interconnectés / Bibliotheque IA</title>
+</head>
+
+<body style="background-color: white; padding: 1em;">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  
+  <div class="has-text-dark">
+
+    <div style="background-color: white; margin: 1em;">
+
+      <!-- DATAMI - contribute with GIT ...but without minding it-->
+      <!-- An open source widget coded with 🤍  by the tech cooperative multi : https://multi.coop -->
+
+      <!-- DATAMI WIDGET'S HTML BLOCK-->
+      <datami-multi-files
+        title="Bibliothèque IA territoriales"
+        options='{
+          "display": "horizontal"
+        }'
+        gitfiles='[
+          {
+            "title": "Contexte",
+            "activate": true,
+            "default-tab": false,
+            "localdev": false,
+            "gitfilelocal": "http://localhost:8810/statics/texts/interconnectes_IA-intro.md",
+            "gitfile": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/texts/interconnectes_IA-intro.md",
+            "onlypreview": true,
+            "usertoken": ""
+          },
+          {
+            "title": "Bibliothèque IA",
+            "activate": true,
+            "localdev": true,
+            "gitfilelocal": "http://localhost:8810/statics/csv/interconnectes-bib_IA-BDD_beta_v1.csv",
+            "gitfile": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/csv/interconnectes-bib_IA-BDD_beta_v1.csv",
+            "default-tab": true, 
+            "options": {
+              "height": "600px",
+              "separator": ";",
+              "lockcolumns": true,
+              "customfilters": {
+                "activate": true,
+                "filterfields": [
+                  {
+                    "name": "coll_type",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "theme",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "sous_theme",
+                    "filtering": "OR"
+                  },
+                  {
+                    "name": "audience_service",
+                    "filtering": "OR"
+                  }
+                ]
+              },
+              "schema": {
+                "localdev": true, 
+                "filelocal": "http://localhost:8810/statics/json/interconnectes_IA-schema.json",
+                "file": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/json/interconnectes_IA-schema.json"
+              },
+              "fields-custom-properties": {
+                "localdev": true,
+                "filelocal": "http://localhost:8810/statics/json/interconnectes_IA-fields-custom-props.json",
+                "file": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/json/interconnectes_IA-fields-custom-props.json"
+              },
+              "pagination":{
+                "itemsPerRow": 3,
+                "itemsPerPage": 20,
+                "itemsPerPageTable": 20,
+                "itemsPerPageCards": 12
+              },
+              "customsorting" : {
+                "activate": true,
+                "sortfields": [
+                  {
+                    "name": "nom_projet",
+                    "ascending": false,
+                    "random": false
+                  }
+                ]
+              },
+              "cardsview": {
+                "activate": true,
+                "default": true
+              },
+              "cardsdetail": true,
+              "cardssettings": {
+                "mini": {
+                  "image_url": {
+                    "position": "image"
+                  },
+                  "nom_projet": {
+                    "position": "title"
+                  },
+                  "coll_nom": {
+                    "position": "adress"
+                  },
+                  "algorithme_description": {
+                    "position": "resume"
+                  },
+                  "usage_description": {
+                    "position": "infos"
+                  },
+                  "coll_type": {
+                    "position": "tags",
+                    "prefix": "Type de collectivité"
+                  },
+                  "theme": {
+                    "position": "tags",
+                    "prefix": "Politique publique visée"
+                  },
+                  "audience_service": {
+                    "position": "tags",
+                    "prefix": "Audience du service"
+                  },
+                  "risque_categorie": {
+                    "position": "tags",
+                    "prefix": "Type de risque"
+                  }
+                },
+                "detail": {
+                  "image_url": {
+                    "position": "image"
+                  },
+                  "nom_projet": {
+                    "position": "title"
+                  },
+                  "coll_nom": {
+                    "position": "adress",
+                    "prefix": "Porteur: "
+                  },
+                  "coll_siret": {
+                    "position": "adress",
+                    "prefix": "SIREN: "
+                  },
+                  "usage_description": {
+                    "position": "subtitle"
+                  },
+                  "algorithme_description": {
+                    "position": "resume",
+                    "block_title": "Description"
+                  },
+                  "projet_contact": {
+                    "position": "links",
+                    "block_title": "Contact"
+                  },
+                  "url_infos": {
+                    "position": "links",
+                    "block_title": "Infos"
+                  },
+                  "url_ressources": {
+                    "position": "links",
+                    "block_title": "Ressources"
+                  },
+                  "partenaires": {
+                    "position": "resume",
+                    "block_title": "Partenaires"
+                  },
+                  "theme": {
+                    "position": "tags_middle",
+                    "block_title": "Politique publique visée",
+                    "right": true
+                  },
+                  "sous_theme": {
+                    "position": "tags_middle",
+                    "block_title": "Sous-thèmes de politique publique visée",
+                    "right": true
+                  },
+                  "projet_status": {
+                    "position": "tags",
+                    "block_title":  "Maturité",
+                    "right": true
+                  },
+                  "usage_description": {
+                    "position": "infos",
+                    "block_title": "Description gobal du service et de ses usages"
+                  },
+                  "coll_type": {
+                    "position": "tags_top",
+                    "block_title": "Type de collectivité",
+                    "right": false
+                  },
+                  "audience_service": {
+                    "position": "tags_top",
+                    "block_title": "Audience du service",
+                    "right": false
+                  },
+                  "risque": {
+                    "position": "resume",
+                    "block_title": "Risques",
+                    "right": true
+                  },
+                  "proportionalite": {
+                    "position": "resume",
+                    "block_title":"Proportionnalité",
+                    "right": true
+                  },
+                  "decision": {
+                    "position": "resume",
+                    "block_title": "Portée de la décision",
+                    "right": true
+                  },
+                  "reversibilite": {
+                    "position": "infos",
+                    "block_title": "Réversibilité des traitements et des services",
+                    "right": true
+                  },
+                  "herbergement": {
+                    "position": "infos",
+                    "block_title": "Hébergement du service",
+                    "right": true
+                  },
+                  "donnees_source": {
+                    "position": "infos",
+                    "block_title": "Source des données",
+                    "right": true
+                  },
+                  "objection": {
+                    "position": "infos",
+                    "block_title": "Procédure d&#39objection",
+                    "right": true
+                  },
+                  "risque_categorie": {
+                    "position": "tags",
+                    "block_title": "Type de risque",
+                    "right": true
+                  },
+                  "type_algorithme": {
+                    "position": "tags",
+                    "block_title": "Type d&#39algorithme",
+                    "right": true
+                  }
+                },
+                "minimap": {
+                  "activate": true,
+                  "right_side": true,
+                  "mapOptions": {
+                    "zoom": 5,
+                    "maxZoom": 18,
+                    "minZoom": 2,
+                    "item_geo_fields": {
+                      "latitude": "latitude",
+                      "longitude": "longitude"
+                    },
+                    "zoom_item": 13,
+                    "marker_icon": "map-marker",
+                    "marker_height": 45,
+                    "marker_width": 45,
+                    "marker_color": "#4a4a4a"
+                  }
+                }
+              },
+              "mapview": {
+                "activate": true,
+                "default": false,
+                "maps": [
+                  {
+                    "title": {
+                      "fr": "CARTOGRAPHIE"
+                    },
+                    "cols": 12,
+                    "localdev": true,
+                    "filelocal": "http://localhost:8810/statics/json/interconnectes_IA-map_settings.json",
+                    "file": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/json/interconnectes_IA-map_settings.json"
+                  }
+                ]
+              }
+            },
+            "usertoken": ""
+          }
+        ]'
+        locale="fr"
+      />
+
+      <!-- DATAMI WIDGET'S APP.JS SCRIPT -->
+      <!-- <script src="https://datami-widget.multi.coop/js/app.js" type="text/javascript" defer></script> -->
+      <script src="http://localhost:8080/js/app.js" type="text/javascript" defer></script>
+
+    </div>
+  </div>
+</body>
+
+</html>

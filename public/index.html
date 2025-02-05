@@ -339,10 +339,10 @@
     ]' locale="fr" />
   </div> -->
 
-  <p id="datami-multifiles-decider-ensemble" style="margin: 1em;">
+  <!-- <p id="datami-multifiles-decider-ensemble" style="margin: 1em;">
     Décider ensemble
-  </p>
-  <div style="background-color: white; margin: 1em;">
+  </p> -->
+  <!-- <div style="background-color: white; margin: 1em;">
     <datami-multi-files title="Ressources Décider ensemble" options='{
        "display": "horizontal"
      }' gitfiles='[
@@ -549,7 +549,7 @@
          "usertoken": ""
        }
      ]' locale="fr" />
-  </div>
+  </div> -->
 
   <!-- <p id="datami-csv-github-cooptech" class="ml-4 pt-6 subtitle has-text-white">
     Liste des coopératives de la tech en France
@@ -625,6 +625,107 @@
   </div> -->
 
   <!-- built files will be auto injected -->
+
+
+  <!-- DATAMI WIDGET'S HTML BLOCK-->
+  <div>
+    <datami-multi-files
+      title="Bibliothèque IA territoriales"
+      options='{
+        "display": "horizontal"
+      }'
+      gitfiles='[
+        {
+          "title": "PUBLIC",
+          "activate": true,
+          "onlypreview": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8810/statics/texts/interconnectes_IA-intro.md",
+
+          "PUBLIC": "PUBLIC",
+          "private": false,
+          "gitfile": "https://github.com/LesInterconnectes/Biblioth-que-IA-territoriale/blob/main/texts/interconnectes_IA-intro.md",
+          
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "PRIVE",
+          "activate": true,
+          "default-tab": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8810/statics/texts/interconnectes_IA-intro.md",
+          
+          "PRIVATE": "PRIVATE",
+          "private": true,
+          "gitfile": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/texts/interconnectes_IA-intro.md",
+          
+          "onlypreview": true,
+          "usertoken": ""
+        },
+        {
+          "title": "PUBLIC - CSV",
+          "activate": true,
+          "onlypreview": false,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8810/statics/csv/interconnectes-bib_IA-BDD_beta_v1.csv",
+          
+          "private": false,
+          "gitfile": "https://github.com/LesInterconnectes/Bibliotheque-IA-territoriale/blob/main/csv/processed_data.csv",
+          "default-tab": true, 
+          "options": {
+            "height": "600px",
+            "separator": ";"
+          },
+          "usertoken": ""
+        },
+        {
+          "title": "PRIVATE - CSV",
+          "activate": true,
+          "localdev": false,
+          "gitfilelocal": "http://localhost:8810/statics/csv/interconnectes-bib_IA-BDD_beta_v1.csv",
+
+          "private": true,
+          "gitfile": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/csv/interconnectes-bib_IA-BDD_beta_v1.csv",
+          "default-tab": true, 
+          "options": {
+            "height": "600px",
+            "separator": ";",
+            "schema": {
+              "localdev": false, 
+              "private": true,
+              "filelocal": "http://localhost:8810/statics/json/interconnectes_IA-schema.json",
+              "file": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/json/interconnectes_IA-schema.json"
+            },
+            "fields-custom-properties": {
+              "localdev": false,
+              "private": true,
+              "filelocal": "http://localhost:8810/statics/json/interconnectes_IA-fields-custom-props.json",
+              "file": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/json/interconnectes_IA-fields-custom-props.json"
+            },
+            "mapview": {
+              "activate": true,
+              "default": false,
+              "maps": [
+                {
+                  "title": {
+                    "fr": "CARTOGRAPHIE"
+                  },
+                  "cols": 12,
+                  "localdev": false,
+                  "private": true,
+                  "filelocal": "http://localhost:8810/statics/json/interconnectes_IA-map_settings.json",
+                  "file": "https://github.com/LesInterconnectes/bibliotheque-IA-privee/blob/main/json/interconnectes_IA-map_settings.json"
+                }
+              ]
+            }
+          },
+          "usertoken": ""
+        }
+      ]'
+    />
+  </div>
 </body>
 
 </html>
