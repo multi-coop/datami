@@ -6,7 +6,7 @@
       <!-- FIELD TYPE ICON -->
       <b-icon
         :icon="getIconFieldType(field)"
-        :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
+        :class="`${isDatamiField ? '' : 'ml-4 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
       {{ field.title.toUpperCase() }}
