@@ -10,7 +10,7 @@
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
       <span class="is-size-7">
-        {{ fieldLabel }}
+        {{ field.title.toUpperCase() }}
       </span>
     </p>
     <p
@@ -55,7 +55,7 @@
     </div>
     <div
       v-if="currentEditViewMode === 'edit'"
-      class="mr-2">
+      class="mr-2 mb-2">
       <!-- {{ field }} -->
       <EditCell
         :file-id="fileId"
@@ -104,10 +104,6 @@ export default {
       default: undefined,
       type: Object
     },
-    fieldLabel: {
-      default: undefined,
-      type: String
-    },
     itemId: {
       default: undefined,
       type: [String, Number]
@@ -144,7 +140,6 @@ export default {
   // beforeMount () {
   //   console.log('\nC > DatamiCardBlockTags > beforeMount > this.itemId :', this.itemId)
   //   console.log('C > DatamiCardBlockTags > beforeMount > this.position :', this.position)
-  //   console.log('C > DatamiCardBlockTags > beforeMount > this.fieldLabel :', this.fieldLabel)
   //   console.log('C > DatamiCardBlockTags > beforeMount > this.field :', this.field)
   //   console.log('C > DatamiCardBlockTags > beforeMount > this.itemValue :', this.itemValue)
   // },

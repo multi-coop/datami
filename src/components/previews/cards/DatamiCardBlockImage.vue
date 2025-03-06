@@ -9,7 +9,7 @@
         :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
-      {{ fieldLabel }}
+      {{ field.title.toUpperCase() }}
     </p>
     <figure
       v-if="currentEditViewMode !== 'edit' && itemValue"
@@ -26,7 +26,7 @@
 
     <div
       v-if="currentEditViewMode === 'edit'"
-      class="px-4">
+      class="px-4 mb-2">
       <EditCell
         :file-id="fileId"
         :field="field"
@@ -88,10 +88,6 @@ export default {
     field: {
       default: undefined,
       type: Object
-    },
-    fieldLabel: {
-      default: undefined,
-      type: String
     },
     itemId: {
       default: undefined,

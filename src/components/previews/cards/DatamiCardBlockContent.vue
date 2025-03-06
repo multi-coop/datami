@@ -12,8 +12,9 @@
         :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
-      {{ fieldLabel }}
-      <!-- <br>field : <code>{{ field }}</code> -->
+      {{ field.title.toUpperCase() }}
+      <!-- {{ field.label }} -->
+      <!-- <br> field: <code>{{ field }}</code> -->
     </p>
 
     <!-- BLOCK TITLE IF ANY -->
@@ -139,7 +140,7 @@
     <!-- ITEM VALUE IF EDIT MODE -->
     <div
       v-if="currentEditViewMode === 'edit'"
-      class="mr-2">
+      class="mr-2 mb-2">
       <EditCell
         :file-id="fileId"
         :field="field"
@@ -183,7 +184,7 @@ export default {
       default: undefined,
       type: Object
     },
-    fieldLabel: {
+    fieldTitle: {
       default: undefined,
       type: String
     },
@@ -261,7 +262,6 @@ export default {
     }
   //   console.log('\nC > DatamiCardBlockContent > beforeMount > this.itemId :', this.itemId)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.position :', this.position)
-  //   console.log('C > DatamiCardBlockContent > beforeMount > this.fieldLabel :', this.fieldLabel)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.field :', this.field)
   //   console.log('C > DatamiCardBlockContent > beforeMount > this.itemValue :', this.itemValue)
   },

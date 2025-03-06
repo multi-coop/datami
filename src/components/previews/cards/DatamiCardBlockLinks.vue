@@ -9,7 +9,7 @@
         :class="`${isDatamiField ? '' : 'ml-2 mr-2'}`"
         :type="`is-${ isPrimaryKey || isForeignKey ? 'dark' : 'grey-light'}`"
         size="is-small"/>
-      {{ fieldLabel }}
+      {{ field.title.toUpperCase() }}
     </p>
     <p
       v-if="field.block_title"
@@ -47,7 +47,7 @@
         class="outlink"
         @click="trackLink(itemValue)">
         <!-- {{ t('field.email', locale) }} -->
-        {{  itemValue  }}
+        {{ itemValue }}
       </b-button>
       <span v-else>
         <b-icon
@@ -76,7 +76,7 @@
     </div>
     <div
       v-if="currentEditViewMode === 'edit'"
-      class="mr-2">
+      class="mr-2 mb-2">
       <EditCell
         :file-id="fileId"
         :field="field"
@@ -121,10 +121,6 @@ export default {
       default: undefined,
       type: Object
     },
-    fieldLabel: {
-      default: undefined,
-      type: String
-    },
     itemId: {
       default: undefined,
       type: [String, Number]
@@ -161,7 +157,6 @@ export default {
   // beforeMount () {
   //   console.log('\nC > DatamiCardBlockLinks > beforeMount > this.itemId :', this.itemId)
   //   console.log('C > DatamiCardBlockLinks > beforeMount > this.position :', this.position)
-  //   console.log('C > DatamiCardBlockLinks > beforeMount > this.fieldLabel :', this.fieldLabel)
   //   console.log('C > DatamiCardBlockLinks > beforeMount > this.field :', this.field)
   //   console.log('C > DatamiCardBlockLinks > beforeMount > this.itemValue :', this.itemValue)
   // },
