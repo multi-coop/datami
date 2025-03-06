@@ -54,6 +54,12 @@
       icon="lock"
       @mouseover.native="showGlobalTooltip($event, { position: 'top', type: 'info', label: t('edit.headerLocked', locale) })"
       @mouseleave.native="hideGlobalTooltip"/>
+
+    <br>
+
+    <span class="is-size-7 has-text-grey">
+      {{ field.description }}
+    </span>
   </div>
 </template>
 
