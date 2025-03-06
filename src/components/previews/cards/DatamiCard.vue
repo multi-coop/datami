@@ -731,10 +731,6 @@ export default {
     }
   },
   methods: {
-    getFieldLabel (field) {
-      const fieldObj = this.fields.find(f => f.field === field)
-      return fieldObj && fieldObj.label
-    },
     getFieldInfos (field) {
       const fieldObj = this.fields.find(f => f.field === field)
       return {
