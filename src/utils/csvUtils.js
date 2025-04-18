@@ -60,10 +60,10 @@ export const csvToJson = (
     quoteChar: quoteChar,
     header: !headers, // If headers not provided, parse header row from CSV
     skipEmptyLines: true
-  };
+  }
 
   // First parse
-  const result = Papa.parse(text, parseOptions);
+  const result = Papa.parse(text, parseOptions)
 
   // Handle custom headers
   const actualHeaders = headers ?? result.meta.fields
