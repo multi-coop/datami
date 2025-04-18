@@ -53,38 +53,38 @@ export const csvToJson = (
   separator = ',',
   quoteChar = '"',
   headers = undefined,
-  schema = undefined,
+  schema = undefined
 ) => {
   const parseOptions = {
     delimiter: separator,
     quoteChar: quoteChar,
     header: !headers, // If headers not provided, parse header row from CSV
-    skipEmptyLines: true,
+    skipEmptyLines: true
   };
 
   // First parse
   const result = Papa.parse(text, parseOptions);
 
   // Handle custom headers
-  const actualHeaders = headers ?? result.meta.fields;
+  const actualHeaders = headers ?? result.meta.fields
 
   // Normalize rows
   return result.data.map((row) => {
     return actualHeaders.reduce((acc, key, i) => {
-      let val = row[key] ?? '';
-      const headerSchema = schema?.fields?.find((f) => f.name === key);
+      let val = row[key] ?? ''
+      const headerSchema = schema?.fields?.find((f) => f.name === key)
 
       if (headerSchema?.type === 'number') {
-        val = Number(val);
+        val = Number(val)
       } else if (headerSchema?.type === 'integer') {
-        val = parseInt(val);
+        val = parseInt(val)
       }
 
-      acc[key] = val;
-      return acc;
-    }, {});
-  });
-};
+      acc[key] = val
+      return acc
+    }, {})
+  })
+}
 
 /**
  * Takes an array of objects and a dict of keys
