@@ -25,6 +25,7 @@
     "gray-matter": "^4.0.3",
     "http-server": "^14.1.1",
     "maplibre-gl": "^2.3.0",
+    "papaparse": "^5.5.2",
     "raw-loader": "^4.0.2",
     "register-service-worker": "^1.7.2",
     "showdown": "^2.0.3",

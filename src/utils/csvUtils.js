@@ -1,25 +1,26 @@
+import Papa from "papaparse";
 export const separators = [
-  { separator: ',', name: 'comma' },
-  { separator: '|', name: 'pipe' },
-  { separator: ';', name: 'semicolon' },
-  { separator: '\t', name: 'tab' }
-]
+  { separator: ",", name: "comma" },
+  { separator: "|", name: "pipe" },
+  { separator: ";", name: "semicolon" },
+  { separator: "\t", name: "tab" },
+];
 
 /**
  * @typedef {Object} options
  * @property {string} separator
  * @property {string} tagseparator
  * @property {boolean} asJson
-**/
+ **/
 
 export const defaultCsvOptions = {
-  separator: ';',
-  tagseparator: '-',
-  asJson: false
-}
+  separator: ";",
+  tagseparator: "-",
+  asJson: false,
+};
 
-export const dblQuotesDatami = '~~datami-quotes~~'
-export const breaklineDatami = '~~datami-br~~'
+export const dblQuotesDatami = "~~datami-quotes~~";
+export const breaklineDatami = "~~datami-br~~";
 
 // cf : https://stackoverflow.com/questions/28543821/convert-csv-lines-into-javascript-objects
 
@@ -28,13 +29,13 @@ export const breaklineDatami = '~~datami-br~~'
  * @param  {string} line string equivalent to a line content encoded as JSON
  * @return {object}      line as an object
  **/
-export const parseLine = (line) => JSON.parse(`[${line}]`)
+export const parseLine = (line) => JSON.parse(`[${line}]`);
 
 /**
  * @typedef {Object} csv
  * @property {Object} headers The csv headers
  * @property {Object} data The csv data
-**/
+ **/
 
 // cf : https://stackoverflow.com/questions/59218548/what-is-the-best-way-to-convert-from-csv-to-json-when-commas-and-quotations-may
 /**
@@ -47,81 +48,43 @@ export const parseLine = (line) => JSON.parse(`[${line}]`)
  * @returns {object[]} An array of JavaScript objects containing headers as keys
  * and row entries as values.
  */
-export const csvToJson = (text, separator = ',', quoteChar = '"', headers = undefined, schema = undefined) => {
-  // console.log('\nU > csvToJson > headers : ', headers)
-  // console.log('U > csvToJson > schema : ', schema)
-  // console.log('U > csvToJson > quoteChar : ', quoteChar)
-  // console.log('U > csvToJson > text : ', text)
+export const csvToJson = (
+  text,
+  separator = ",",
+  quoteChar = '"',
+  headers = undefined,
+  schema = undefined,
+) => {
+  const parseOptions = {
+    delimiter: separator,
+    quoteChar: quoteChar,
+    header: !headers, // If headers not provided, parse header row from CSV
+    skipEmptyLines: true,
+  };
 
-  const dblQuoteChar = quoteChar.repeat(2) // `${quoteChar}${quoteChar}`
+  // First parse
+  const result = Papa.parse(text, parseOptions);
 
-  // replace dblQuotes
-  let textClean = text.replaceAll(dblQuoteChar, dblQuotesDatami)
-  // console.log('U > csvToJson > textClean (start) : ', textClean)
+  // Handle custom headers
+  const actualHeaders = headers ?? result.meta.fields;
 
-  // prepare regex
-  const quotesRegex = new RegExp(`(${quoteChar}.*?${quoteChar})`)
-  const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${separator}|$)`, 'gs')
-  // console.log('\nU > csvToJson > quotesRegex : ', quotesRegex)
+  // Normalize rows
+  return result.data.map((row) => {
+    return actualHeaders.reduce((acc, key, i) => {
+      let val = row[key] ?? "";
+      const headerSchema = schema?.fields?.find((f) => f.name === key);
 
-  // textClean with single quoteChar without linebreaks
-  textClean = textClean.split(quotesRegex)
-  // console.log('\nU > csvToJson > textClean (A) : ', textClean)
-  textClean = textClean.map(item => {
-    const s = item.includes(quoteChar) ? item.replace('\n', breaklineDatami) : item
-    return s
-  })
-  // console.log('\nU > csvToJson > textClean (B) : ', textClean)
-  textClean = textClean.join('')
-  // console.log('\nU > csvToJson > textClean (C) : ', textClean)
-
-  const match = line => {
-    const matches = [...line.matchAll(regex)].map(m => m[2])
-    matches.pop() // cut off blank match at the end
-    return matches
-  }
-
-  let lines = textClean.split('\n')
-  // filter empty lines
-  lines = lines.filter(l => l !== '')
-
-  // get csv headers
-  const heads = headers ?? match(lines.shift())
-  // console.log('U > csvToJson > lines : ', lines)
-  // console.log('U > csvToJson > heads : ', heads)
-  const headsEnriched = heads.map(h => {
-    const headerFromSchema = schema && schema.fields && schema.fields.find(f => f.name === h)
-    const header = headerFromSchema || { name: h }
-    return header
-  })
-  // console.log('U > csvToJson > headsEnriched : ', headsEnriched)
-
-  return lines.map(line => {
-    return match(line).reduce((acc, cur, i) => {
-      //  get corresponding header
-      const header = headsEnriched[i]
-      // for debugging
-      // console.log('U > csvToJson > header : ', header)
-      // const needDebug = header.name.includes(breaklineDatami)
-      // needDebug && console.log('U > csvToJson > header : ', header)
-      const cellType = (header && header.type) || 'string'
-      // console.log('U > csvToJson > cellType : ', cellType)
-
-      // get value according to schema
-      // let val = cur.length === 0 ? null : cur
-      let val = cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n') || cur
-      if (cellType === 'number') {
-        // Attempt to parse as a number
-        val = Number(cur) || val
-      } else if (cellType === 'integer') {
-        // Attempt to parse as an integer
-        val = parseInt(cur) || val
+      if (headerSchema?.type === "number") {
+        val = Number(val);
+      } else if (headerSchema?.type === "integer") {
+        val = parseInt(val);
       }
-      const key = (header && header.name) || `extra_datami_header_${i}`
-      return { ...acc, [key]: val }
-    }, {})
-  })
-}
+
+      acc[key] = val;
+      return acc;
+    }, {});
+  });
+};
 
 /**
  * Takes an array of objects and a dict of keys
@@ -133,70 +96,76 @@ export const csvToJson = (text, separator = ',', quoteChar = '"', headers = unde
 export const changeKeyObjects = (arr, headers) => {
   // console.log('\nU > changeKeyObjects > arr : ', arr)
   // console.log('U > changeKeyObjects > headers : ', headers)
-  return arr.map(item => {
-    const newItem = {}
-    Object.keys(headers).forEach(key => {
-      newItem[key] = item[headers[key]]
-    })
-    return newItem
-  })
-}
+  return arr.map((item) => {
+    const newItem = {};
+    Object.keys(headers).forEach((key) => {
+      newItem[key] = item[headers[key]];
+    });
+    return newItem;
+  });
+};
 
 /**
  * csvToObject takes a string parses it as a lien object
  * @param  {string} csvRaw string equivalent to csv content
  * @param  {options} options object containing the options to parse csv content
  * @return {csv} csv as an object
-**/
+ **/
 export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
   // console.log('\nU > csvToObject > options : ', options)
   // console.log('U > csvToObject > csvRaw : \n', csvRaw)
 
-  const separator = options.separator || ','
-  const quoteChar = options.quoteChar || '"'
-  let headersArr
+  const separator = options.separator || ",";
+  const quoteChar = options.quoteChar || '"';
+  let headersArr;
 
   // split data into lines
-  const headerLine = csvRaw.split('\n')[0].trim()
+  const headerLine = csvRaw.split("\n")[0].trim();
   // console.log('U > csvToObject > headerLine : ', headerLine)
 
   // use csvToJson function
-  let lines = csvToJson(csvRaw, separator, quoteChar, headersArr, options.schema)
+  let lines = csvToJson(
+    csvRaw,
+    separator,
+    quoteChar,
+    headersArr,
+    options.schema,
+  );
   // console.log('U > csvToObject > lines (A) : ', lines)
 
   // get headers
   if (options.asJson) {
-    headersArr = parseLine(headerLine)
+    headersArr = parseLine(headerLine);
   } else {
-    headersArr = headerLine.split(separator)
+    headersArr = headerLine.split(separator);
   }
   // console.log('U > csvToObject > headersArr : ', headersArr)
 
-  const headers = { ...headersArr }
+  const headers = { ...headersArr };
   // console.log('U > csvToObject > headers : ', headers)
 
-  lines = changeKeyObjects(lines, headers)
+  lines = changeKeyObjects(lines, headers);
   // console.log('U > csvToObject > lines (B) : ', lines)
 
   // add id to each line
   const objects = lines.map((line, index) => {
     const lineWithId = {
       ...line,
-      ...{ id: index.toString() }
-    }
-    return lineWithId
-  })
+      ...{ id: index.toString() },
+    };
+    return lineWithId;
+  });
   // console.log('U > csvToObject > headers : ', headers)
   // console.log('U > csvToObject > objects : ', objects)
 
   // return csv object
   const csv = {
     headers: headers,
-    data: objects
-  }
+    data: objects,
+  };
 
-  return csv
-}
+  return csv;
+};
 
 /**
  * ObjectToCsv takes headers infos and data to build a string corresponding to a raw csv
@@ -204,37 +173,42 @@ export const csvToObject = (csvRaw, options = defaultCsvOptions) => {
  * @param  {data} data Array of objects
  * @param  {options} options object containing the options to parse csv content
  * @return {csv} csv as an object
-**/
-export const ObjectToCsv = (headers, data, options = defaultCsvOptions, quoteChar = '"') => {
+ **/
+export const ObjectToCsv = (
+  headers,
+  data,
+  options = defaultCsvOptions,
+  quoteChar = '"',
+) => {
   // console.log('\nU > ObjectToCsv > headers : \n', headers)
   // console.log('U > ObjectToCsv > data : \n', data)
   // console.log('U > ObjectToCsv > options : ', options)
 
-  const dblQuoteChar = quoteChar.repeat(2) // `${quoteChar}${quoteChar}`
-  let csvOut = ''
+  const dblQuoteChar = quoteChar.repeat(2); // `${quoteChar}${quoteChar}`
+  let csvOut = "";
 
   // build headers - 1st line
-  const headersLabels = headers.map(h => h.label).join(options.separator)
-  csvOut += `${headersLabels}\n`
+  const headersLabels = headers.map((h) => h.label).join(options.separator);
+  csvOut += `${headersLabels}\n`;
   // console.log('U > ObjectToCsv > csvOut : ', csvOut)
 
   // build rows
-  data.forEach(d => {
+  data.forEach((d) => {
     // console.log('U > ObjectToCsv > d : ', d)
     const dataStr = headers
-      .map(h => {
-        let val = d[h.field]
-        const hasSep = val && val.toString().includes(options.separator)
-        const hasQuotesIn = val && val.toString().includes(quoteChar)
+      .map((h) => {
+        let val = d[h.field];
+        const hasSep = val && val.toString().includes(options.separator);
+        const hasQuotesIn = val && val.toString().includes(quoteChar);
         // const hasBreaklineIn = val && val.toString().includes('\n')
-        const addQuotesExt = hasSep ? quoteChar : ''
-        val = hasQuotesIn ? val.replaceAll(quoteChar, dblQuoteChar) : val
-        const valStr = `${addQuotesExt}${val}${addQuotesExt}`
-        return valStr
+        const addQuotesExt = hasSep ? quoteChar : "";
+        val = hasQuotesIn ? val.replaceAll(quoteChar, dblQuoteChar) : val;
+        const valStr = `${addQuotesExt}${val}${addQuotesExt}`;
+        return valStr;
       })
-      .join(options.separator)
-    csvOut += `${dataStr}\n`
-  })
+      .join(options.separator);
+    csvOut += `${dataStr}\n`;
+  });
 
-  return csvOut
-}
+  return csvOut;
+};
