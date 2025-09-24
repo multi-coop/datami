@@ -1,3 +1,5 @@
+import Papa from 'papaparse'
+
 export const separators = [
   { separator: ',', name: 'comma' },
   { separator: '|', name: 'pipe' },
@@ -36,7 +38,6 @@ export const parseLine = (line) => JSON.parse(`[${line}]`)
  * @property {Object} data The csv data
 **/
 
-// cf : https://stackoverflow.com/questions/59218548/what-is-the-best-way-to-convert-from-csv-to-json-when-commas-and-quotations-may
 /**
  * Takes a raw CSV string and converts it to a JavaScript object.
  * @param {string} text The raw CSV string.
@@ -47,78 +48,40 @@ export const parseLine = (line) => JSON.parse(`[${line}]`)
  * @returns {object[]} An array of JavaScript objects containing headers as keys
  * and row entries as values.
  */
-export const csvToJson = (text, separator = ',', quoteChar = '"', headers = undefined, schema = undefined) => {
-  // console.log('\nU > csvToJson > headers : ', headers)
-  // console.log('U > csvToJson > schema : ', schema)
-  // console.log('U > csvToJson > quoteChar : ', quoteChar)
-  // console.log('U > csvToJson > text : ', text)
-
-  const dblQuoteChar = quoteChar.repeat(2) // `${quoteChar}${quoteChar}`
-
-  // replace dblQuotes
-  let textClean = text.replaceAll(dblQuoteChar, dblQuotesDatami)
-  // console.log('U > csvToJson > textClean (start) : ', textClean)
-
-  // prepare regex
-  const quotesRegex = new RegExp(`(${quoteChar}.*?${quoteChar})`)
-  const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${separator}|$)`, 'gs')
-  // console.log('\nU > csvToJson > quotesRegex : ', quotesRegex)
-
-  // textClean with single quoteChar without linebreaks
-  textClean = textClean.split(quotesRegex)
-  // console.log('\nU > csvToJson > textClean (A) : ', textClean)
-  textClean = textClean.map(item => {
-    const s = item.includes(quoteChar) ? item.replace('\n', breaklineDatami) : item
-    return s
-  })
-  // console.log('\nU > csvToJson > textClean (B) : ', textClean)
-  textClean = textClean.join('')
-  // console.log('\nU > csvToJson > textClean (C) : ', textClean)
-
-  const match = line => {
-    const matches = [...line.matchAll(regex)].map(m => m[2])
-    matches.pop() // cut off blank match at the end
-    return matches
+export const csvToJson = (
+  text,
+  separator = ',',
+  quoteChar = '"',
+  headers = undefined,
+  schema = undefined
+) => {
+  const parseOptions = {
+    delimiter: separator,
+    quoteChar: quoteChar,
+    header: !headers, // If headers not provided, parse header row from CSV
+    skipEmptyLines: true
   }
 
-  let lines = textClean.split('\n')
-  // filter empty lines
-  lines = lines.filter(l => l !== '')
+  // First parse
+  const result = Papa.parse(text, parseOptions)
 
-  // get csv headers
-  const heads = headers ?? match(lines.shift())
-  // console.log('U > csvToJson > lines : ', lines)
-  // console.log('U > csvToJson > heads : ', heads)
-  const headsEnriched = heads.map(h => {
-    const headerFromSchema = schema && schema.fields && schema.fields.find(f => f.name === h)
-    const header = headerFromSchema || { name: h }
-    return header
-  })
-  // console.log('U > csvToJson > headsEnriched : ', headsEnriched)
+  // Handle custom headers
+  const actualHeaders = headers ?? result.meta.fields
 
-  return lines.map(line => {
-    return match(line).reduce((acc, cur, i) => {
-      //  get corresponding header
-      const header = headsEnriched[i]
-      // for debugging
-      // console.log('U > csvToJson > header : ', header)
-      // const needDebug = header.name.includes(breaklineDatami)
-      // needDebug && console.log('U > csvToJson > header : ', header)
-      const cellType = (header && header.type) || 'string'
-      // console.log('U > csvToJson > cellType : ', cellType)
+  // Normalize rows
+  return result.data.map((row) => {
+    return actualHeaders.reduce((acc, key, i) => {
+      let val = row[key] ?? ''
+      const headerSchema = schema?.fields?.find((f) => f.name === key)
 
-      // get value according to schema
-      // let val = cur.length === 0 ? null : cur
-      let val = cur.replaceAll(dblQuotesDatami, quoteChar).replaceAll(breaklineDatami, '\n') || cur
-      if (cellType === 'number') {
-        // Attempt to parse as a number
-        val = Number(cur) || val
-      } else if (cellType === 'integer') {
-        // Attempt to parse as an integer
-        val = parseInt(cur) || val
+      if (headerSchema?.type === 'number') {
+        val = Number(val)
+      } else if (headerSchema?.type === 'integer') {
+        val = parseInt(val)
       }
-      const key = (header && header.name) || `extra_datami_header_${i}`
-      return { ...acc, [key]: val }
+
+      acc[key] = val
+      return acc
     }, {})
   })
 }
